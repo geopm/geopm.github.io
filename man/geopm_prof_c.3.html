@@ -104,26 +104,27 @@
 
 <p>The functions described here enable application feedback to the
 control algorithm for identifying regions of code, progress within
-regions, and global synchronization points in the application.
-Regions of code define periods in the application during which control
-parameters are tuned with the expectation that control parameters for
-a region can be optimized independently of other regions.  In this way
-a region is associated with a set of control parameters which can be
-optimized, and future time intervals associated with the same region
-will benefit from the application of control parameters which were
-determined from tuning within previous occurrences of the region.
-There are two competing motivations for defining a region within the
-application.  The first is to identify a section of code that has
-distinct compute, memory or network characteristics.  The second is to
-avoid defining these regions such that they are nested within each
-other, as nested regions are ignored, and only the outer most region
-is used for tuning when nesting occurs.  Identifying progress within a
-region can be used to alleviate load imbalance in the application
-under the assumption that the region is bulk synchronous.  Under the
-assumption that the application employs an iterative algorithm which
-synchronizes periodically the user can alleviate load imbalance on
-larger time scales than the regions provide.  This is done by marking
-the end of the outer most loop, or the "epoch."</p>
+regions, and iterations through loops that contain inter-node
+synchronization points in the application.  Regions of code define
+periods in the application during which control parameters are tuned
+with the expectation that control parameters for a region can be
+optimized independently of other regions.  In this way a region is
+associated with a set of control parameters which can be optimized,
+and future time intervals associated with the same region will benefit
+from the application of control parameters which were determined from
+tuning within previous occurrences of the region.  There are two
+competing motivations for defining a region within the application.
+The first is to identify a section of code that has distinct compute,
+memory or network characteristics.  The second is to avoid defining
+these regions such that they are nested within each other, as nested
+regions are ignored, and only the outer most region is used for tuning
+when nesting occurs.  Identifying progress within a region can be used
+to alleviate load imbalance in the application under the assumption
+that the region is bulk synchronous.  Under the assumption that the
+application employs an iterative algorithm which synchronizes
+periodically the user can alleviate load imbalance on larger time
+scales than the regions provide.  This is done by marking iterations
+through an outer loop in the application, the "epoch".</p>
 
 <dl>
 <dt><code>geopm_prof_region</code>()</dt><dd><p>registers an application region.  The <em>region_name</em> and
@@ -155,11 +156,16 @@ required to complete the region where <em>fraction</em> is between 0 and 1.
 If the <em>region_id</em> does not match the <em>region_id</em> of the last
 call to geopm_prof_prof_enter() which was not nested, then this
 call is ignored and an error code is returned.</p></dd>
-<dt><code>geopm_prof_epoch</code>()</dt><dd><p>is called once for each pass through the outer most computational
-loop executed by the application.  This function call should occur
-exactly once in the application source at the beginning of the loop
-that encapsulates the primary computational region of the
-application.</p></dd>
+<dt><code>geopm_prof_epoch</code>()</dt><dd><p>is called once for each pass through a computational loop
+containing inter-node synchronization events.  This call acts as a
+beacon signal emitted by each MPI rank as it begins a loop
+iteration.  The divergence in the elapsed time between calls by
+different MPI ranks is interpreted as an imbalance to be corrected
+by the runtime.  This function may be called at different places
+in an application, but it should not be used to mark a loop that
+is nested inside of another loop which is also marked.  It is
+important to note that this call acts as a barrier between ranks
+running within the same compute node.</p></dd>
 <dt><code>geopm_prof_disable</code>()</dt><dd><p>is called at application start up to disable a profiling feature.
 By default all profiling features available on the system are
 enabled.  The set of all possible values for <em>feature_name</em> are:
@@ -272,7 +278,7 @@ to convert them to strings.</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (C) 2015, 2016, Intel Corporation. All rights reserved.</p>
+<p>Copyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -290,7 +296,7 @@ to convert them to strings.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>November 2016</li>
+    <li class='tc'>March 2017</li>
     <li class='tr'>geopm_prof_c(3)</li>
   </ol>
 
