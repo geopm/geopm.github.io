@@ -81,7 +81,7 @@
 
 <dl>
 <dt><code>int geopm_prof_region(</code></dt><dd><p><code>const char *</code><em>region_name</em>, <br />
-<code>long</code> <em>policy_hint</em>, <br />
+<code>uint64_t</code> <em>hint</em>, <br />
 <code>uint64_t *</code><em>region_id</em>);</p></dd>
 <dt><code>int geopm_prof_enter(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em>);</p></dd>
 <dt><code>int geopm_prof_exit(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em>);</p></dd>
@@ -128,7 +128,7 @@ through an outer loop in the application, the "epoch".</p>
 
 <dl>
 <dt><code>geopm_prof_region</code>()</dt><dd><p>registers an application region.  The <em>region_name</em> and
-<em>policy_hint</em> are input parameters, and the <em>region_id</em> is output.
+<em>hint</em> are input parameters, and the <em>region_id</em> is output.
 The <em>region_id</em> can be used with <code>geopm_prof_enter</code>(),
 <code>geopm_prof_exit</code>(), <code>geopm_prof_progress</code>(), and
 <code>geopm_tprof_progress</code>() to referrence the region.  If the region
@@ -136,12 +136,14 @@ name has been previously registered, a call to this function will
 set the <em>region_id</em> but the state associated with the region is
 unmodified.  The <em>region_name</em> is used to determine the output
 <em>region_id</em> and is also displayed in the profiling report to
-identify the region.  The <em>policy_hint</em> is one of the values given
-by the geopm_prof_hint_e enum defined in <em>geopm_policy.h</em> which
+identify the region.  The <em>hint</em> is one of the values given
+by the geopm_region_hint_e enum defined in <em>geopm.h</em> which
 determines the initial control settings.  The following hints are
-supported: <code>GEOPM_POLICY_HINT_UNKNOWN</code>,
-<code>GEOPM_POLICY_HINT_COMPUTE</code>, <code>GEOPM_POLICY_HINT_MEMORY</code>,
-<code>GEOPM_POLICY_HINT_NETWORK</code>.</p></dd>
+supported: <code>GEOPM_REGION_HINT_UNKNOWN</code>,
+<code>GEOPM_REGION_HINT_COMPUTE</code>, <code>GEOPM_REGION_HINT_MEMORY</code>,
+<code>GEOPM_REGION_HINT_NETWORK</code>, <code>GEOPM_REGION_HINT_IO</code>,
+<code>GEOPM_REGION_HINT_SERIAL</code>, <code>GEOPM_REGION_HINT_PARALLEL</code>,
+<code>GEOPM_REGION_HINT_IGNORE</code>.</p></dd>
 <dt><code>geopm_prof_enter</code>()</dt><dd><p>is called by the compute application to mark the beginning of the
 profiled compute region associated with the <em>region_id</em>. If this
 call is made after entering a different region, but before exiting
@@ -239,7 +241,7 @@ int main(int argc, char **argv)
         err = geopm_tprof_create(num_thread, num_iter, chunk_size, &amp;tprof);
     }
     if (!err) {
-        err = geopm_prof_region("loop_0", GEOPM_POLICY_HINT_UNKNOWN, &amp;region_id);
+        err = geopm_prof_region("loop_0", GEOPM_REGION_HINT_UNKNOWN, &amp;region_id);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     if (!err) {
@@ -288,15 +290,18 @@ to convert them to strings.</p>
 <strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_omp.3.html">geopm_omp<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopmkey.1.html">geopmkey<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_launcher.1.html">geopm_launcher<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geompsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong></p>
+<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmkey.1.html">geopmkey<span class="s">(1)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>March 2017</li>
+    <li class='tc'>April 2017</li>
     <li class='tr'>geopm_prof_c(3)</li>
   </ol>
 
