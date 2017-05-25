@@ -13,7 +13,7 @@ var searchData=
   ['todo_20list',['Todo List',['../todo.html',1,'']]],
   ['topology',['topology',['../classgeopm_1_1_platform.html#ad6d975868dcc4f15b48658a7bb7834f2',1,'geopm::Platform::topology()'],['../classgeopm_1_1_platform_imp.html#a247024a5a154573c164293b2b734cf6d',1,'geopm::PlatformImp::topology()']]],
   ['trace',['trace',['../classgeopm_1_1_environment.html#afe650c650af1a38656e97a80669acb9d',1,'geopm::Environment']]],
-  ['tracer',['Tracer',['../classgeopm_1_1_tracer.html#a3e01c3cefe1350429d542b8278399350',1,'geopm::Tracer']]],
+  ['tracer',['Tracer',['../classgeopm_1_1_tracer.html#ae95276c564e6bb03f1b9ac5bac2fece9',1,'geopm::Tracer']]],
   ['tracer',['Tracer',['../classgeopm_1_1_tracer.html',1,'geopm']]],
   ['tracer_2ecpp',['Tracer.cpp',['../_tracer_8cpp.html',1,'']]],
   ['tracer_2ehpp',['Tracer.hpp',['../_tracer_8hpp.html',1,'']]],

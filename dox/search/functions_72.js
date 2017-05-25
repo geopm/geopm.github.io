@@ -13,7 +13,7 @@ var searchData=
   ['recieve',['recieve',['../classgeopm_1_1_comm.html#a44694fd07ad1fec43708b02ab60f91eb',1,'geopm::Comm::recieve(void *buffer, int count, int buffer_type, int source, int tag)=0'],['../classgeopm_1_1_comm.html#a50e1bd32b076d1863b4630748cdb80d7',1,'geopm::Comm::recieve(void *buffer, int count, int buffer_type, int source, int tag, Request *request)=0']]],
   ['record_5fexit',['record_exit',['../classgeopm_1_1_sample_scheduler.html#ad164fd3522aec45e29878d5245d820c5',1,'geopm::SampleScheduler']]],
   ['reduce',['reduce',['../classgeopm_1_1_comm.html#aea142df69b70a0e97a6f35dc00944ea2',1,'geopm::Comm::reduce(const void *sendbuf, void *recvbuf, int count, int buffer_type, int operation)=0'],['../classgeopm_1_1_comm.html#a8b3e3571ca0dff47618c6df40fc20fce',1,'geopm::Comm::reduce(const void *sendbuf, void *recvbuf, int count, int buffer_type, int operation, int root)=0']]],
-  ['region',['Region',['../classgeopm_1_1_region.html#ad8a746e13fc0e7fd09ff828f515e7969',1,'geopm::Region::Region()'],['../classgeopm_1_1_profile.html#a9814814574f8e2a7f5886571ce17e124',1,'geopm::Profile::region()']]],
+  ['region',['region',['../classgeopm_1_1_profile.html#a9814814574f8e2a7f5886571ce17e124',1,'geopm::Profile::region()'],['../classgeopm_1_1_region.html#ad8a746e13fc0e7fd09ff828f515e7969',1,'geopm::Region::Region()']]],
   ['region_5fid',['region_id',['../classgeopm_1_1_policy.html#a447f35341edbc6225672e2fae4a5d9d2',1,'geopm::Policy']]],
   ['region_5fnames',['region_names',['../classgeopm_1_1_profile_sampler.html#a015f23150cec00cc62e14527830d0c0d',1,'geopm::ProfileSampler']]],
   ['region_5fpolicy',['region_policy',['../classgeopm_1_1_policy.html#ac799adb2cc9d6abbc328268d72e8eb46',1,'geopm::Policy']]],

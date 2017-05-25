@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['ompt_5fpretty_5fname',['ompt_pretty_name',['../namespacegeopm.html#a584d0b06a5d5ffe9b5be7d6348758741',1,'geopm']]],
   ['operation_5ftype',['operation_type',['../classgeopm_1_1_comm.html#a1cb4a11cfcd5c4d7fd68f782535b94c5',1,'geopm::Comm']]],
   ['operator_28_29',['operator()',['../classgeopm_1_1_sample_regulator.html#a45a1324a99b0ba3479f00a3eed136d5f',1,'geopm::SampleRegulator']]],
   ['operator_3c_3c',['operator&lt;&lt;',['../_global_policy_8cpp.html#ac8e6eafa2373f532771cd9f0f08c4a7d',1,'operator&lt;&lt;(std::ostream &amp;os, const geopm::GlobalPolicy *obj):&#160;GlobalPolicy.cpp'],['../_global_policy_8hpp.html#ac8e6eafa2373f532771cd9f0f08c4a7d',1,'operator&lt;&lt;(std::ostream &amp;os, const geopm::GlobalPolicy *obj):&#160;GlobalPolicy.cpp']]],
