@@ -74,7 +74,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm.h">&lt;geopm.h></a></strong></p>
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm_ctl.h">&lt;geopm_ctl.h></a></strong></p>
 
 <p><code>Link with -lgeopm</code></p>
 
@@ -88,7 +88,6 @@
 <dt><code>int geopm_ctl_pthread(</code></dt><dd><p><code>struct geopm_ctl_c *</code><em>ctl</em>, <br />
 <code>const pthread_attr_t *</code><em>attr</em>, <br />
 <code>pthread_t *</code><em>thread</em>);</p></dd>
-<dt><code>int geopm_ctl_spawn(</code></dt><dd><p><code>struct geopm_ctl_c *</code><em>ctl</em>);</p></dd>
 </dl>
 
 
@@ -98,12 +97,10 @@
 extensible open power manager algorithm.  There are several ways to
 enable control: explicit stepping of the control algorithm by the
 application under control, running the control algorithm as a distinct
-processes from the application under control, running the control
+processes from the application under control, or running the control
 algorithm as a separate pthread owned by the application process under
-control, or the application under control can spawn a new MPI
-communicator that runs the control algorithm in conjunction with its
-own distinct MPI_COMM_WORLD.  Each of these methods has different
-requirements and trade offs.</p>
+control.  Each of these methods has different requirements and trade
+offs.</p>
 
 <dl>
 <dt><code>geopm_ctl_create</code>()</dt><dd><p>creates a geopm_ctl_c object, <em>ctl</em> which is an opaque structure
@@ -131,12 +128,6 @@ until the application signals shutdown.  This is equivalent to
 calling <code>geopm_ctl_step</code>() in a loop.  With this method of launch
 the supporting MPI implementation must be enabled for
 <code>MPI_THREAD_MULTIPLE</code> using <code>MPI_Init_thread</code>().</p></dd>
-<dt><code>geopm_ctl_spawn</code>()</dt><dd><p>use <code>MPI_Comm_spawn</code>() to spawn a new communicator with one
-process per compute node.  The geopmctl application will be
-spawned on this communicator and will run until the application
-signals shutdown.  This is equivalent to calling
-<code>geopm_ctl_step</code>() in a loop.  Requires a system that supports
-<code>MPI_Comm_Spawn</code>().</p></dd>
 </dl>
 
 
@@ -153,8 +144,9 @@ to convert them to strings.</p>
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_omp.3.html">geopm_omp<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
@@ -168,7 +160,7 @@ to convert them to strings.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>May 2017</li>
+    <li class='tc'>June 2017</li>
     <li class='tr'>geopm_ctl_c(3)</li>
   </ol>
 

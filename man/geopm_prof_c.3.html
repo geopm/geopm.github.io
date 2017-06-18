@@ -79,25 +79,29 @@
 
 <p><code>Link with -lgeopm</code></p>
 
-<dl>
-<dt><code>int geopm_prof_region(</code></dt><dd><p><code>const char *</code><em>region_name</em>, <br />
+<ul>
+<li><p><code>int geopm_prof_region(</code>:
+<code>const char *</code><em>region_name</em>, <br />
 <code>uint64_t</code> <em>hint</em>, <br />
-<code>uint64_t *</code><em>region_id</em>);</p></dd>
-<dt><code>int geopm_prof_enter(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em>);</p></dd>
-<dt><code>int geopm_prof_exit(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em>);</p></dd>
-<dt><code>int geopm_prof_progress(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em>, <br />
-<code>double</code> <em>fraction</em>);</p></dd>
-<dt><code>int geopm_prof_epoch(</code></dt><dd><p>`void);</p></dd>
-<dt><code>int geopm_prof_disable(</code></dt><dd><p><code>const char *</code><em>feature_name</em>);</p></dd>
-<dt><code>int geopm_tprof_create(</code></dt><dd><p><code>int</code> <em>num_thread</em>, <br />
-<code>size_t</code> <em>num_iter</em>, <br />
-<code>size_t</code> <em>chunk_size</em>, <br />
-<code>struct geopm_tprof_c **</code><em>tprof</em>);</p></dd>
-<dt><code>int geopm_tprof_destroy(</code></dt><dd><p><code>struct geopm_tprof_c *</code><em>tprof</em>);</p></dd>
-<dt><code>int geopm_tprof_increment(</code></dt><dd><p><code>struct geopm_tprof_c *</code><em>tprof</em>, <br />
+<code>uint64_t *</code><em>region_id</em>);</p></li>
+<li><p><code>int geopm_prof_enter(</code>:
+<code>uint64_t</code> <em>region_id</em>);</p></li>
+<li><p><code>int geopm_prof_exit(</code>:
+<code>uint64_t</code> <em>region_id</em>);</p></li>
+<li><p><code>int geopm_prof_progress(</code>:
 <code>uint64_t</code> <em>region_id</em>, <br />
-<code>int</code> <em>thread_idx</em>);</p></dd>
-</dl>
+<code>double</code> <em>fraction</em>);</p></li>
+<li><p><code>int geopm_prof_epoch(</code>:
+`void);</p></li>
+<li><p><code>int geopm_tprof_init(</code>:
+`uint32_t <em>num_work_unit</em>);</p></li>
+<li><p><code>int geopm_tprof_init_loop(</code>:
+<code>int</code> <em>num_thread</em>, <br />
+<code>int</code> <em>thread_idx</em>, <br />
+<code>size_t</code> <em>num_iter</em>, <br />
+<code>size_t</code> <em>chunk_size</em>);</p></li>
+<li><p><code>int geopm_tprof_post();</code></p></li>
+</ul>
 
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
@@ -127,23 +131,21 @@ scales than the regions provide.  This is done by marking iterations
 through an outer loop in the application, the "epoch".</p>
 
 <dl>
-<dt><code>geopm_prof_region</code>()</dt><dd><p>registers an application region.  The <em>region_name</em> and
-<em>hint</em> are input parameters, and the <em>region_id</em> is output.
-The <em>region_id</em> can be used with <code>geopm_prof_enter</code>(),
-<code>geopm_prof_exit</code>(), <code>geopm_prof_progress</code>(), and
-<code>geopm_tprof_progress</code>() to referrence the region.  If the region
+<dt><code>geopm_prof_region</code>()</dt><dd><p>registers an application region.  The <em>region_name</em> and <em>hint</em> are
+input parameters, and the <em>region_id</em> is output.  The <em>region_id</em>
+can be used with <code>geopm_prof_enter</code>(), <code>geopm_prof_exit</code>(), and
+<code>geopm_prof_progress</code>() to reference the region.  If the region
 name has been previously registered, a call to this function will
 set the <em>region_id</em> but the state associated with the region is
 unmodified.  The <em>region_name</em> is used to determine the output
 <em>region_id</em> and is also displayed in the profiling report to
-identify the region.  The <em>hint</em> is one of the values given
-by the geopm_region_hint_e enum defined in <em>geopm.h</em> which
-determines the initial control settings.  The following hints are
-supported: <code>GEOPM_REGION_HINT_UNKNOWN</code>,
-<code>GEOPM_REGION_HINT_COMPUTE</code>, <code>GEOPM_REGION_HINT_MEMORY</code>,
-<code>GEOPM_REGION_HINT_NETWORK</code>, <code>GEOPM_REGION_HINT_IO</code>,
-<code>GEOPM_REGION_HINT_SERIAL</code>, <code>GEOPM_REGION_HINT_PARALLEL</code>,
-<code>GEOPM_REGION_HINT_IGNORE</code>.</p></dd>
+identify the region.  The <em>hint</em> is one of the values given by the
+geopm_region_hint_e enum defined in <em>geopm.h</em> which determines the
+initial control settings.  The following hints are supported:
+<code>GEOPM_REGION_HINT_UNKNOWN</code>, <code>GEOPM_REGION_HINT_COMPUTE</code>,
+<code>GEOPM_REGION_HINT_MEMORY</code>, <code>GEOPM_REGION_HINT_NETWORK</code>,
+<code>GEOPM_REGION_HINT_IO</code>, <code>GEOPM_REGION_HINT_SERIAL</code>,
+<code>GEOPM_REGION_HINT_PARALLEL</code>, <code>GEOPM_REGION_HINT_IGNORE</code>.</p></dd>
 <dt><code>geopm_prof_enter</code>()</dt><dd><p>is called by the compute application to mark the beginning of the
 profiled compute region associated with the <em>region_id</em>. If this
 call is made after entering a different region, but before exiting
@@ -168,38 +170,31 @@ in an application, but it should not be used to mark a loop that
 is nested inside of another loop which is also marked.  It is
 important to note that this call acts as a barrier between ranks
 running within the same compute node.</p></dd>
-<dt><code>geopm_prof_disable</code>()</dt><dd><p>is called at application start up to disable a profiling feature.
-By default all profiling features available on the system are
-enabled.  The set of all possible values for <em>feature_name</em> are:
-"instr", "flop", and "joules".  This API is not currently
-implemented.</p></dd>
-<dt><code>geopm_tprof_create</code>()</dt><dd><p>creates a thread profiling object, <em>tprof</em>, which extends the
-functionality of the profiling interface to report progress within
-threaded regions.  The interface assumes a fixed number of
-threads, <em>num_thread</em>, which are performing work sharing on a list
-of tasks <em>num_iter</em> long (e.g. an omp parallel for loop with
-<em>num_iter</em> loops).  In the specific case of an OpenMP for loop
-statically scheduled with a chunk size then the <em>chunk_size</em>
-arguement can be specified to be non-zero and the work
-distribution amung threads is explicitly calculated while the
-minimum progress of any thread is reported.  In all other
-threading models <em>chunk_size</em> should be specified to be zero and
-progress is aggregated and the mean progress is reported.</p></dd>
-<dt><code>geopm_tprof_destroy</code>()</dt><dd><p>releases all resources associated with the <em>tprof</em> object.  The
-<em>tprof</em> object should be created and destroyed for each process
-entry into a thread parallel region: the <em>tprof</em> object cannot be
-reused.</p></dd>
-<dt><code>geopm_tprof_increment</code>()</dt><dd><p>is called after a thread has completed each work unit to report
-progress.  The <em>tprof</em> thread profiling object is passed as the
-first argument. The region identifier returned by
-<code>geopm_prof_region</code>() is passed as the second argument,
-<em>region_id</em>.  The last argument is the thread index which is in
-the range of [0, 1, ..., <em>num_thread</em> - 1] where <em>num_thread</em> is
-the parameter passed when the <em>tprof</em> was created.  This index
-uniquely identifies the thread that is reporting progress.  When
-using the <code>geopm_tprof_increment</code>() interface to report progress,
-it is incorrect to also call the <code>geopm_prof_progress</code>()
-interface for the same region.</p></dd>
+<dt><code>geopm_tprof_init</code>()</dt><dd><p>resets the thread profile table which extends the functionality of
+the profiling interface to report progress within threaded
+regions.  This should be called by all threads to set up the
+table after entering a thread parallel region.  This interface
+enables each thread to set the the total number work units that
+the thread will be executing.  This corresponds to the number of
+times that the <code>geopm_tprof_post</code>() interface will be called by
+the thread to report progress within the region.  If
+<code>geopm_tprof_init</code>() is called within a parallel region
+<code>geopm_tprof_init_loop</code>() should not be called.</p></dd>
+<dt><code>geopm_tprof_init_loop</code>()</dt><dd><p>resets the thread profile table which extends the functionality of
+the profiling interface to report progress within threaded
+regions.  This should be called by all threads to set up the table
+after entering a thread parallel region.  The interface assumes
+the calling thread is numbered <em>thread_idx</em> from a gang with a fixed
+number of threads, <em>num_thread</em>, which are performing work sharing
+on a list of tasks <em>num_iter</em> long (e.g. an omp parallel for loop
+with <em>num_iter</em> loops).  In the specific case of an OpenMP for
+loop statically scheduled with a chunk size then the <em>chunk_size</em>
+argument can be specified to be non-zero and the work distribution
+among threads is explicitly calculated.  If
+<code>geopm_tprof_init_loop</code>() is called within a parallel region
+<code>geopm_tprof_init</code>() should not be called.</p></dd>
+<dt><code>geopm_tprof_post</code>()</dt><dd><p>is called after a thread has completed each work unit to report
+progress.</p></dd>
 </dl>
 
 
@@ -223,7 +218,6 @@ int main(int argc, char **argv)
     int rank = 0;
     int num_iter = 100000000;
     double sum = 0.0;
-    struct geopm_tprof_c *tprof = NULL;
     int num_thread = 0;
     int thread_idx = 0 ;
     uint64_t region_id = 0;
@@ -238,7 +232,6 @@ int main(int argc, char **argv)
         if (num_iter % num_thread) {
             ++chunk_size;
         }
-        err = geopm_tprof_create(num_thread, num_iter, chunk_size, &amp;tprof);
     }
     if (!err) {
         err = geopm_prof_region("loop_0", GEOPM_REGION_HINT_UNKNOWN, &amp;region_id);
@@ -251,10 +244,11 @@ int main(int argc, char **argv)
 #pragma omp parallel default(shared) private(thread_idx, index)
 {
         thread_idx = omp_get_thread_num();
+        geopm_tprof_init(num_thread, thread_idx, num_iter, chunk_size);
 #pragma omp for reduction(+:sum) schedule(static, chunk_size)
         for (index = 0; index &lt; num_iter; ++index) {
             sum += (double)index;
-            geopm_tprof_increment(tprof, region_id, thread_idx);
+            geopm_tprof_post();
         }
 }
         err = geopm_prof_exit(region_id);
@@ -285,6 +279,7 @@ to convert them to strings.</p>
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
@@ -295,12 +290,12 @@ to convert them to strings.</p>
 <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,</p>
+<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>May 2017</li>
+    <li class='tc'>June 2017</li>
     <li class='tr'>geopm_prof_c(3)</li>
   </ol>
 

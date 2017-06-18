@@ -82,11 +82,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><h2>DISCLAIMER </h2>
 <p>SEE COPYING FILE FOR LICENSE INFORMATION.</p>
 <h2>LAST UPDATE </h2>
-<p>2017 April 3</p>
+<p>2017 June 17</p>
 <p>Christopher Cantalupo <a href="#" onclick="location.href='mai'+'lto:'+'chr'+'is'+'top'+'he'+'r.m'+'.c'+'ant'+'al'+'upo'+'@i'+'nte'+'l.'+'com'; return false;">chris<span style="display: none;">.nosp@m.</span>toph<span style="display: none;">.nosp@m.</span>er.m.<span style="display: none;">.nosp@m.</span>cant<span style="display: none;">.nosp@m.</span>alupo<span style="display: none;">.nosp@m.</span>@int<span style="display: none;">.nosp@m.</span>el.co<span style="display: none;">.nosp@m.</span>m</a> <br/>
  Steve Sylvester <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'ve'+'.s.'+'sy'+'lve'+'st'+'er@'+'in'+'tel'+'.c'+'om'; return false;">steve<span style="display: none;">.nosp@m.</span>.s.s<span style="display: none;">.nosp@m.</span>ylves<span style="display: none;">.nosp@m.</span>ter@<span style="display: none;">.nosp@m.</span>intel<span style="display: none;">.nosp@m.</span>.com</a></p>
-<h2>WEB PAGE </h2>
-<p><a href="http://geopm.github.io/geopm">http://geopm.github.io/geopm</a></p>
+<h2>WEB PAGES </h2>
+<p><a href="http://geopm.github.io/geopm">http://geopm.github.io/geopm</a> <br/>
+ <a href="http://geopm.github.io/geopm/man/geopm.7.html">http://geopm.github.io/geopm/man/geopm.7.html</a></p>
 <h2>SUMMARY </h2>
 <p>Global Extensible Open Power Manager (GEOPM) is an extensible power management framework targeting high performance computing. The library can be extended to support new control algorithms and new hardware power management features. The GEOPM package provides built in features ranging from static management of power policy for each individual compute node, to dynamic coordination of power policy and performance across all of the compute nodes hosting one MPI job on a portion of a distributed computing system. The dynamic coordination is implemented as a hierarchical control system for scalable communication and decentralized control. The hierarchical control system can optimize for various objective functions including maximizing global application performance within a power bound. The root of the control hierarchy tree can communicate through shared memory with the system resource management daemon to extend the hierarchy above the individual MPI job level and enable management of system power resources for multiple MPI jobs and multiple users by the system resource manager. The geopm package provides the libgeopm library, the libgeopmpolicy library, the geopmctl application and the geopmpolicy application. The libgeopm library can be called within MPI applications to enable application feedback for informing the control decisions. If modification of the target application is not desired then the geopmctl application can be run concurrently with the target application. In this case, target application feedback is inferred by querying the hardware through Model Specific Registers (MSRs). With either method (libgeopm or geopmctl), the control hierarchy tree writes processor power policy through MSRs to enact policy decisions. The libgeopmpolicy library is used by a resource manager to set energy policy control parameters for MPI jobs. Some features of libgeopmpolicy are available through the geopmpolicy application including support for static control.</p>
 <h2>TRAVIS CI </h2>
@@ -126,7 +127,11 @@ unset DISTRO BRANCH ROOT REPO
 <pre class="fragment">sudo zypper install geopm # For headers install geopm-devel
 </pre><p>To bring the system up to date with the tip of the public master or dev branch on github (depending on which "BRANCH" was selected when the zypper repository was added: </p>
 <pre class="fragment">sudo zypper update geopm # For headers update geopm-devel
-</pre><h2>BUILD REQUIREMENTS </h2>
+</pre><h2>PYTHON INSTALL </h2>
+<p>The GEOPM python tools are packaged in the RPMs described above, but they are also available from PYPI as the <code>geopmpy</code> package. For example to install the geopmpy package into your home directory run the following command: </p>
+<pre class="fragment">pip install --user geopmpy
+</pre><p>Note this installs only the GEOPM python tools and does not install the full GEOPM runtime.</p>
+<h2>BUILD REQUIREMENTS </h2>
 <p>In order to build the geopm package from source, the below requirements must be met.</p>
 <p>The geopm package requires a compiler that supports the MPI 2.2 and C++11 standards. These requirements can be met by using GCC version 4.7 or greater and installing the openmpi-devel package version 1.7 or greater on RHEL or SLES Linux. Additionally building the geopm package requires the json-c library and the hwloc library. Documentation creation including manpages further requires the rubygems package, and the ruby-devel package.</p>
 <p>RHEL: </p>
@@ -177,100 +182,7 @@ make install
 <h2>TESTING </h2>
 <p>From within the source code directory, tests can be executed with the "make check" target. Some tests must be run as MPI applications, and in order support these tests you must define the "MPIEXEC" environment variable to whatever is appropriate for your your MPI runtime (default is mpiexec). The tests assume that this application will respect the '-n' flag to set the number of MPI processes. Note that '-n' is defined by the MPI standard. Each MPI dependent test is run with 16 MPI processes.</p>
 <h2>STATUS </h2>
-<p>This software is pre-alpha quality and is provided for collaborative purposes. We are very interested in feedback from the community. The static modes are supported by geopmpolicy and libgeopmpolicy. The MPI runtime support of geopmctl and libgeopm is complete. Basic profiling features like creating reports and traces are complete. See TODO file for more information on forthcoming work.</p>
-<p>Test coverage is incomplete. The line coverage results from gcov as reported by gcovr for a recent build are below:</p>
-<p><b>GCC Code Coverage Report</b></p>
-<p><b>Directories: src, plugin</b></p>
-<table class="doxtable">
-<tr>
-<th>File </th><th>Lines </th><th>Exec </th><th>Cover  </th></tr>
-<tr>
-<td><a class="el" href="_circular_buffer_8hpp.html">CircularBuffer.hpp</a> </td><td>27 </td><td>25 </td><td>93% </td></tr>
-<tr>
-<td><a class="el" href="_controller_8cpp.html">Controller.cpp</a> </td><td>462 </td><td>351 </td><td>76% </td></tr>
-<tr>
-<td><a class="el" href="_decider_8cpp.html">Decider.cpp</a> </td><td>21 </td><td>21 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="_decider_8hpp.html">Decider.hpp</a> </td><td>1 </td><td>1 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="_decider_factory_8cpp.html">DeciderFactory.cpp</a> </td><td>34 </td><td>30 </td><td>88% </td></tr>
-<tr>
-<td><a class="el" href="_environment_8cpp.html">Environment.cpp</a> </td><td>72 </td><td>62 </td><td>86% </td></tr>
-<tr>
-<td><a class="el" href="_exception_8cpp.html">Exception.cpp</a> </td><td>127 </td><td>97 </td><td>76% </td></tr>
-<tr>
-<td><a class="el" href="_exception_8hpp.html">Exception.hpp</a> </td><td>1 </td><td>0 </td><td>0% </td></tr>
-<tr>
-<td><a class="el" href="_global_policy_8cpp.html">GlobalPolicy.cpp</a> </td><td>574 </td><td>456 </td><td>79% </td></tr>
-<tr>
-<td><a class="el" href="_k_n_l_platform_imp_8cpp.html">KNLPlatformImp.cpp</a> </td><td>335 </td><td>245 </td><td>73% </td></tr>
-<tr>
-<td><a class="el" href="_platform_8cpp.html">Platform.cpp</a> </td><td>148 </td><td>80 </td><td>54% </td></tr>
-<tr>
-<td><a class="el" href="_platform_factory_8cpp.html">PlatformFactory.cpp</a> </td><td>78 </td><td>63 </td><td>80% </td></tr>
-<tr>
-<td><a class="el" href="_platform_imp_8cpp.html">PlatformImp.cpp</a> </td><td>224 </td><td>197 </td><td>88% </td></tr>
-<tr>
-<td><a class="el" href="_platform_topology_8cpp.html">PlatformTopology.cpp</a> </td><td>33 </td><td>29 </td><td>88% </td></tr>
-<tr>
-<td><a class="el" href="_policy_8cpp.html">Policy.cpp</a> </td><td>130 </td><td>130 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="_policy_flags_8cpp.html">PolicyFlags.cpp</a> </td><td>78 </td><td>67 </td><td>86% </td></tr>
-<tr>
-<td><a class="el" href="_profile_8cpp.html">Profile.cpp</a> </td><td>431 </td><td>356 </td><td>88% </td></tr>
-<tr>
-<td><a class="el" href="_profile_thread_8cpp.html">ProfileThread.cpp</a> </td><td>45 </td><td>0 </td><td>0% </td></tr>
-<tr>
-<td><a class="el" href="_r_a_p_l_platform_8cpp.html">RAPLPlatform.cpp</a> </td><td>149 </td><td>136 </td><td>91% </td></tr>
-<tr>
-<td><a class="el" href="_region_8cpp.html">Region.cpp</a> </td><td>267 </td><td>260 </td><td>97% </td></tr>
-<tr>
-<td><a class="el" href="_sample_regulator_8cpp.html">SampleRegulator.cpp</a> </td><td>77 </td><td>76 </td><td>99% </td></tr>
-<tr>
-<td><a class="el" href="_sample_scheduler_8cpp.html">SampleScheduler.cpp</a> </td><td>39 </td><td>35 </td><td>90% </td></tr>
-<tr>
-<td><a class="el" href="_shared_memory_8cpp.html">SharedMemory.cpp</a> </td><td>101 </td><td>65 </td><td>64% </td></tr>
-<tr>
-<td><a class="el" href="_signal_handler_8cpp.html">SignalHandler.cpp</a> </td><td>57 </td><td>53 </td><td>93% </td></tr>
-<tr>
-<td><a class="el" href="_static_policy_decider_8cpp.html">StaticPolicyDecider.cpp</a> </td><td>13 </td><td>11 </td><td>85% </td></tr>
-<tr>
-<td><a class="el" href="_static_policy_decider_8hpp.html">StaticPolicyDecider.hpp</a> </td><td>1 </td><td>1 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="_tracer_8cpp.html">Tracer.cpp</a> </td><td>39 </td><td>14 </td><td>36% </td></tr>
-<tr>
-<td><a class="el" href="_tree_communicator_8cpp.html">TreeCommunicator.cpp</a> </td><td>286 </td><td>250 </td><td>87% </td></tr>
-<tr>
-<td><a class="el" href="_xeon_platform_imp_8cpp.html">XeonPlatformImp.cpp</a> </td><td>353 </td><td>245 </td><td>69% </td></tr>
-<tr>
-<td><a class="el" href="geopm__ctl__spawn_8c.html">geopm_ctl_spawn.c</a> </td><td>2 </td><td>0 </td><td>0% </td></tr>
-<tr>
-<td><a class="el" href="geopm__hash_8c.html">geopm_hash.c</a> </td><td>13 </td><td>13 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="geopm__hash_8h.html">geopm_hash.h</a> </td><td>2 </td><td>2 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="geopm__message_8c.html">geopm_message.c</a> </td><td>16 </td><td>8 </td><td>50% </td></tr>
-<tr>
-<td><a class="el" href="geopm__omp_8c.html">geopm_omp.c</a> </td><td>11 </td><td>0 </td><td>0% </td></tr>
-<tr>
-<td><a class="el" href="geopm__plugin_8c.html">geopm_plugin.c</a> </td><td>37 </td><td>34 </td><td>92% </td></tr>
-<tr>
-<td><a class="el" href="geopm__pmpi_8c.html">geopm_pmpi.c</a> </td><td>479 </td><td>105 </td><td>22% </td></tr>
-<tr>
-<td><a class="el" href="geopm__time_8h.html">geopm_time.h</a> </td><td>19 </td><td>17 </td><td>90% </td></tr>
-<tr>
-<td><a class="el" href="geopm__version_8c.html">geopm_version.c</a> </td><td>2 </td><td>2 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="_balancing_decider_8cpp.html">BalancingDecider.cpp</a> </td><td>102 </td><td>75 </td><td>74% </td></tr>
-<tr>
-<td><a class="el" href="_balancing_decider_8hpp.html">BalancingDecider.hpp</a> </td><td>1 </td><td>1 </td><td>100% </td></tr>
-<tr>
-<td><a class="el" href="_governing_decider_8cpp.html">GoverningDecider.cpp</a> </td><td>88 </td><td>17 </td><td>19% </td></tr>
-<tr>
-<td><a class="el" href="_governing_decider_8hpp.html">GoverningDecider.hpp</a> </td><td>1 </td><td>1 </td><td>100% </td></tr>
-<tr>
-<td>TOTAL </td><td>4994 </td><td>3631 </td><td>73% </td></tr>
-</table>
+<p>This software is alpha versioned and is provided for early adopters and collaborative development. We are very interested in feedback from the community. The runtime implements the infrastructure and basic features targeted for GEOPM version 1.0. We do not anticipate changes to application facing interfaces of our libraries or the command line interfaces of our executables until after version 1.0. Before the beta release we will change the way signals and controls are interfaced to decider plugins. These changes will enable easier and more efficient extension of signals and controls as well as support for multiple domain definitions where signals and controls pertain. We will also be expanding our integration test feature coverage, and our unit test line coverage before beta release. See TODO file for links to descriptions of forthcoming work.</p>
 <h2>ACKNOWLEDGMENTS </h2>
 <p>Development of the GEOPM software package has been partially funded through contract B609815 with Argonne National Laboratory. </p>
 </div></div><!-- contents -->

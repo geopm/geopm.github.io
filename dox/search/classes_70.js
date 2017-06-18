@@ -10,5 +10,5 @@ var searchData=
   ['profileranksampler',['ProfileRankSampler',['../classgeopm_1_1_profile_rank_sampler.html',1,'geopm']]],
   ['profilesampler',['ProfileSampler',['../classgeopm_1_1_profile_sampler.html',1,'geopm']]],
   ['profiletable',['ProfileTable',['../classgeopm_1_1_profile_table.html',1,'geopm']]],
-  ['profilethread',['ProfileThread',['../classgeopm_1_1_profile_thread.html',1,'geopm']]]
+  ['profilethreadtable',['ProfileThreadTable',['../classgeopm_1_1_profile_thread_table.html',1,'geopm']]]
 ];

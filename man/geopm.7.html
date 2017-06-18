@@ -56,7 +56,9 @@
     <a href="#NAME">NAME</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#INTEGRATION-WITH-PMPI">INTEGRATION WITH PMPI</a>
+    <a href="#INTEGRATION-WITH-OMPT">INTEGRATION WITH OMPT</a>
     <a href="#LAUNCHING-THE-RUNTIME">LAUNCHING THE RUNTIME</a>
+    <a href="#PLOTTING-REPORT-AND-TRACE-DATA">PLOTTING REPORT AND TRACE DATA</a>
     <a href="#INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</a>
     <a href="#INTERPRETING-THE-TRACE">INTERPRETING THE TRACE</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
@@ -123,32 +125,76 @@ of power resources.  The report and trace generation are controlled by
 the environment variables <code>GEOPM_REPORT</code> and <code>GEOPM_TRACE</code>, see
 description below.</p>
 
+<h2 id="INTEGRATION-WITH-OMPT">INTEGRATION WITH OMPT</h2>
+
+<p>When the OpenMP runtime compiled with GEOPM supports the OMPT
+interface GEOPM will use the OMPT callbacks wrap OpenMP parallel
+regions with calls to <code>geopm_prof_enter()</code> and <code>geopm_prof_exit()</code>.
+In this way any OpenMP parallel region not within another application
+defined region will be reported to the GEOPM runtime.  This will
+appear in the report as a region name beginning with "[OMPT]" and
+referencing the object file and function name containing the OpenMP
+parallel region e.g.</p>
+
+<p><code>[OMPT]tutorial_6:geopm::StreamModelRegion::run()</code></p>
+
+<p>To expressly enable this feature pass the <code>--enable-ompt</code> configure
+flag at GEOPM build time.  This will build and install the LLVM OpenMP
+runtime configured to support OMPT if the default OpenMP runtime does
+not support the OMPT callbacks.  Note that your compiler must be
+compatible with the LLVM OpenMP ABI for extending it in this way.</p>
+
 <h2 id="LAUNCHING-THE-RUNTIME">LAUNCHING THE RUNTIME</h2>
 
-<p>There are many ways to launch the geopm runtime programatically (see
-<strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>), or by command line (see
-<strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>). Alternatively the PMPI interposition by geopm
-enables the geopm runtime to be launched implicitly by the MPI
-runtime.  This launch method is enabled by the <code>GEOPM_PMPI_CTL</code>
-environment variable documented below.  The PMPI method for launching
-the geopm runtime is a simple way to get started using geopm and is
-recommended for first time users.</p>
+<p>The recommended methods for launching the geopm runtime are the job
+launch wrapper scripts <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>.  See
+these man pages for details about the command line interface.  If your
+system does not support <code>aprun</code> or <code>srun</code> for job launch, please make
+a change request for support of the job launch method used on your
+system at the github issues page:</p>
+
+<p>https://github.com/geopm/geopm/issues</p>
+
+<p>Also, consider porting your job launch command into the
+geopmpy.launcher module and submitting a change request as described
+in CONTRIBUTING.md.</p>
+
+<p>If the job launch application is not supported by the geopmpy.launcher
+the recommended method is to use the environment variables described
+in this man page including the <code>GEOPM_PMPI_CTL</code> environment variable.
+If using the "application" launch method then the <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>
+application should be launched in parallel.</p>
+
+<p>There are legacy methods for launching the runtime programatically.
+These are documented in <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>, but are deprecated as an
+application facing interface because their use within an application
+is incompatible with the GEOPM launcher script.</p>
+
+<h2 id="PLOTTING-REPORT-AND-TRACE-DATA">PLOTTING REPORT AND TRACE DATA</h2>
+
+<p>Please see the <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong> man page for information about the
+data analysis tools available for visualizing the data contained in
+the GEOPM report and trace files.  The report file is intended to be
+human readable, and the trace file format can be easily parsed by a
+wide variety of analysis applications.</p>
 
 <h2 id="INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</h2>
 
 <p>If the <code>GEOPM_REPORT</code> environment variable is set then a report will
-be generated.  In the current implementation there is a separate
-report file for each compute node.  These report files give
-information about runtime and energy use for each region marked in the
-code.  Additionally time spent in calls to MPI is reported.  In the
-future the report will be aggregated to a single file and may contain
-more data describing the application.</p>
+be generated.  There is one report file generated for each run.  This
+file has a header that describes the geopm version and the policies
+that were used during the run.  This is followed by a breakdown first
+by compute node host name and then by each compute region.  The report
+file gives information about runtime and energy use for each
+identified code region.  Additionally time spent in calls to MPI is
+reported.  In the future the report may contain more data describing
+the application.</p>
 
 <p>It is important to note that per-region accounting in the report
 includes only time spent in the region by all MPI ranks concurrently
 on each compute node.  During the time when two ranks on a compute
 node are not in the same marked region, the data collected is
-attributed to code not marked to be within a region.  See the
+attributed to the "unmarked" code region.  See the
 <code>GEOPM_REGION_BARRIER</code> environment variable for more information about
 debugging issues related region synchronicity.  In the future the
 scope of this requirement may change from all ranks on a node to all
@@ -160,17 +206,31 @@ ranks running within the same domain of control.</p>
 trace file with time ordered information about the application runtime
 is generated.  A separate trace file is generated for each compute
 node and each file is a pipe (the <code>|</code> character) delimited ASCII
-table. The first row of the file gives a description of each field.  A
-simple method for selecting fields from the trace file is with the
+table. The file begins with a header that is marked by lines that
+start with the <code>#</code> character.  The header contains information about
+the geopm version and the policy that was used during the run.</p>
+
+<p>The first row following the header gives a description of each field.
+A simple method for selecting fields from the trace file is with the
 <code>awk</code> command:</p>
 
-<pre><code>$ awk -F\| '{print $1, $2, $11}' &lt; geopm_trace-host0
+<pre><code>$ grep -v '^#' geopm.trace-host0 | awk -F\| '{print $1, $2, $11}'
 </code></pre>
 
 <p>will print a subset of the fields in the trace file called
-"geopm_trace-host0".</p>
+"geopm.trace-host0".</p>
 
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
+
+<p>When using the launcher wrapper scripts <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> or
+<strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>, the interface to the GEOPM runtime is controlled
+exclusively by the launcher command line options.  The launcher script
+sets the environment variables described in this section according to
+the options specified on the command line.  Direct use of these
+environment variables is only recommended when launching the GEOPM
+runtime without <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> or <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>.  The one
+exception is <code>GEOPM_RM</code> which can be used to control the resource
+manager selected by the wrapper script.</p>
 
 <dl>
 <dt><code>LD_DYNAMIC_WEAK</code></dt><dd><p>When dynamically linking an application to libgeopm for any
@@ -186,19 +246,13 @@ LD_DYNAMIC_WEAK environment variable is not required at runtime.</p></dd>
 is destroyed.  The value of the variable determines the name of
 file generated.  The report contains a summary of performance and
 power aggregated over the program execution time and split out by
-each region.</p></dd>
-<dt><code>GEOPM_REPORT_VERBOSITY</code></dt><dd><p>Determines the level of detail included in the report.  Currently
-this feature is not supported and a single report file is
-generated for each compute node.  In the future the information
-from all nodes will be aggregated into a single report file and
-the verbosity level determines how much the per node data is
-retained in the report.</p></dd>
+host compute node and each code region.</p></dd>
 <dt><code>GEOPM_TRACE</code></dt><dd><p>Enables geopm tracing capability.  Setting this variable enables
 the creation of a trace output file. The value of the variable is
-used as the base of the output trace file path.  Currently one
-trace file is generated per compute node.  The file names of each
-trace are constructed by appending the node's hostname to base
-name given by the environment variable (separated by a '-').</p></dd>
+used as the base of the output trace file path.  One trace file is
+generated per compute node.  The file names of each trace are
+constructed by appending the node's hostname to base name given by
+the environment variable (separated by a '-').</p></dd>
 <dt><code>GEOPM_SHMKEY</code></dt><dd><p>Override the default shared memory key base.  The shared memory
 key base prefixes all shared memory keys used by geopm to
 communicate between the compute application and the geopm runtime.
@@ -293,7 +347,8 @@ tests.</p></dd>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
+<p><strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_omp.3.html">geopm_omp<span class="s">(3)</span></a></strong>,
@@ -304,13 +359,13 @@ tests.</p></dd>
 <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>
+<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="http://linux.die.net/man/8/ld.so">ld.so<span class="s">(8)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>May 2017</li>
+    <li class='tc'>June 2017</li>
     <li class='tr'>geopm(7)</li>
   </ol>
 
