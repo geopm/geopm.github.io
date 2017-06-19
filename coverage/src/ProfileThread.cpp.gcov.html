@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - src/ProfileThread.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - ProfileThread.cpp<span style="font-size: 80%;"> (source / <a href="ProfileThread.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">67</td>
+            <td class="headerCovTableEntryLo">19.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-06-18</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntryLo">38.5 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">50</td>
+            <td class="headerCovTableEntryLo">6.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2016, Intel Corporation
+<span class="lineNum">       3 </span>                :            :  *
+<span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
+<span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions
+<span class="lineNum">       6 </span>                :            :  * are met:
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  *     * Redistributions of source code must retain the above copyright
+<span class="lineNum">       9 </span>                :            :  *       notice, this list of conditions and the following disclaimer.
+<span class="lineNum">      10 </span>                :            :  *
+<span class="lineNum">      11 </span>                :            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>                :            :  *       notice, this list of conditions and the following disclaimer in
+<span class="lineNum">      13 </span>                :            :  *       the documentation and/or other materials provided with the
+<span class="lineNum">      14 </span>                :            :  *       distribution.
+<span class="lineNum">      15 </span>                :            :  *
+<span class="lineNum">      16 </span>                :            :  *     * Neither the name of Intel Corporation nor the names of its
+<span class="lineNum">      17 </span>                :            :  *       contributors may be used to endorse or promote products derived
+<span class="lineNum">      18 </span>                :            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>                :            :  *
+<span class="lineNum">      20 </span>                :            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<span class="lineNum">      21 </span>                :            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+<span class="lineNum">      22 </span>                :            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>                :            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>                :            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<span class="lineNum">      25 </span>                :            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+<span class="lineNum">      26 </span>                :            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>                :            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>                :            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE
+<span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>                :            :  */
+<span class="lineNum">      32 </span>                :            : #ifdef __APPLE__
+<span class="lineNum">      33 </span>                :            : #define _DARWIN_C_SOURCE
+<span class="lineNum">      34 </span>                :            : #include &lt;sys/types.h&gt;
+<span class="lineNum">      35 </span>                :            : #include &lt;sys/sysctl.h&gt;
+<span class="lineNum">      36 </span>                :            : #endif
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      39 </span>                :            : #include &lt;float.h&gt;
+<span class="lineNum">      40 </span>                :            : #include &lt;unistd.h&gt;
+<span class="lineNum">      41 </span>                :            : 
+<span class="lineNum">      42 </span>                :            : #include &quot;ProfileThread.hpp&quot;
+<span class="lineNum">      43 </span>                :            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      44 </span>                :            : 
+<a name="45"><span class="lineNum">      45 </span>                :            : namespace geopm</a>
+<span class="lineNum">      46 </span>                :            : {
+<span class="lineNum">      47 </span>                :<span class="lineCov">        329 :     ProfileThreadTable::ProfileThreadTable(size_t buffer_size, void *buffer)</span>
+<span class="lineNum">      48 </span>                :            :         : m_buffer((uint32_t *)buffer)
+<span class="lineNum">      49 </span>        [<span class="branchCov" title="Branch 1 was taken 329 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        329 :         , m_num_cpu(num_cpu_s())</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">        329 :         , m_stride(64 / sizeof(uint32_t))</span>
+<span class="lineNum">      51 </span>                :            :     {
+<span class="lineNum">      52 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 329 times"> + </span>]:<span class="lineCov">        329 :         if (buffer_size &lt; 64 * m_num_cpu) {</span>
+<span class="lineNum">      53 </span>                :            :             throw Exception(&quot;ProfileThreadTable: provided buffer too small&quot;,
+<span class="lineNum">      54 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">      55 </span>                :            :         }
+<a name="56"><span class="lineNum">      56 </span>                :<span class="lineCov">        329 :     }</span></a>
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :<span class="lineNoCov">          0 :     ProfileThreadTable::ProfileThreadTable(const ProfileThreadTable &amp;other)</span>
+<span class="lineNum">      59 </span>                :<span class="lineNoCov">          0 :         : m_buffer(other.m_buffer)</span>
+<span class="lineNum">      60 </span>                :<span class="lineNoCov">          0 :         , m_num_cpu(other.m_num_cpu)</span>
+<span class="lineNum">      61 </span>                :<span class="lineNoCov">          0 :         , m_stride(other.m_stride)</span>
+<span class="lineNum">      62 </span>                :<span class="lineNoCov">          0 :         , m_is_enabled(true)</span>
+<span class="lineNum">      63 </span>                :            :     {
+<span class="lineNum">      64 </span>                :            : 
+<a name="65"><span class="lineNum">      65 </span>                :<span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :<span class="lineCov">        987 :     ProfileThreadTable::~ProfileThreadTable()</span>
+<span class="lineNum">      68 </span>                :            :     {
+<span class="lineNum">      69 </span>                :            : 
+<a name="70"><span class="lineNum">      70 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 329 times"> + </span>]:<span class="lineCov">        658 :     }</span></a>
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :<span class="lineNoCov">          0 :     int ProfileThreadTable::num_cpu(void)</span>
+<span class="lineNum">      73 </span>                :            :     {
+<span class="lineNum">      74 </span>                :<span class="lineNoCov">          0 :         return m_num_cpu;</span>
+<a name="75"><span class="lineNum">      75 </span>                :            :     }</a>
+<span class="lineNum">      76 </span>                :            : 
+<span class="lineNum">      77 </span>                :<span class="lineCov">        402 :     int ProfileThreadTable::num_cpu_s(void)</span>
+<span class="lineNum">      78 </span>                :            :     {
+<span class="lineNum">      79 </span>                :            : #ifdef _SC_NPROCESSORS_ONLN
+<span class="lineNum">      80 </span>                :<span class="lineCov">        402 :         uint32_t result = sysconf(_SC_NPROCESSORS_ONLN);</span>
+<span class="lineNum">      81 </span>                :            : #else
+<span class="lineNum">      82 </span>                :            :         uint32_t result = 1;
+<span class="lineNum">      83 </span>                :            :         size_t len = sizeof(result);
+<span class="lineNum">      84 </span>                :            :         sysctl((int[2]) {CTL_HW, HW_NCPU}, 2, &amp;result, &amp;len, NULL, 0);
+<span class="lineNum">      85 </span>                :            : #endif
+<span class="lineNum">      86 </span>                :<span class="lineCov">        402 :         return result;</span>
+<a name="87"><span class="lineNum">      87 </span>                :            :     }</a>
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :<span class="lineCov">       1322 :     void ProfileThreadTable::enable(bool is_enabled)</span>
+<span class="lineNum">      90 </span>                :            :     {
+<span class="lineNum">      91 </span>                :<span class="lineCov">       1322 :         m_is_enabled = is_enabled;</span>
+<a name="92"><span class="lineNum">      92 </span>                :<span class="lineCov">       1322 :     }</span></a>
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>                :<span class="lineNoCov">          0 :     void ProfileThreadTable::init(const uint32_t num_work_unit)</span>
+<span class="lineNum">      95 </span>                :            :     {
+<span class="lineNum">      96 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!m_is_enabled) {</span>
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">      98 </span>                :            :         }
+<span class="lineNum">      99 </span>                :<span class="lineNoCov">          0 :         m_buffer[cpu_idx() * m_stride] = 0;</span>
+<span class="lineNum">     100 </span>                :<span class="lineNoCov">          0 :         m_buffer[cpu_idx() * m_stride + 1] = num_work_unit;</span>
+<a name="101"><span class="lineNum">     101 </span>                :            :     }</a>
+<span class="lineNum">     102 </span>                :            : 
+<span class="lineNum">     103 </span>                :<span class="lineNoCov">          0 :     void ProfileThreadTable::init(int num_thread, int thread_idx, size_t num_iter, size_t chunk_size)</span>
+<span class="lineNum">     104 </span>                :            :     {
+<span class="lineNum">     105 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     106 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     107 </span>                :            :         }
+<span class="lineNum">     108 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         std::vector&lt;uint32_t&gt; num_work_unit(num_thread);</span>
+<span class="lineNum">     109 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         std::fill(num_work_unit.begin(), num_work_unit.end(), 0);</span>
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :         size_t num_chunk = num_iter / chunk_size;</span>
+<span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 :         size_t unchunked = num_iter % chunk_size;</span>
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :         size_t min_unit = chunk_size * (num_chunk / num_thread);</span>
+<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 :         int last_full_thread = num_chunk % num_thread;</span>
+<span class="lineNum">     115 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (int thread_idx = 0; thread_idx &lt; num_thread; ++thread_idx) {</span>
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :             num_work_unit[thread_idx] = min_unit;</span>
+<span class="lineNum">     117 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (thread_idx &lt; last_full_thread) {</span>
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :                 num_work_unit[thread_idx] += chunk_size;</span>
+<span class="lineNum">     119 </span>                :            :             }
+<span class="lineNum">     120 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             else if (thread_idx == last_full_thread) {</span>
+<span class="lineNum">     121 </span>                :<span class="lineNoCov">          0 :                 num_work_unit[thread_idx] += unchunked;</span>
+<span class="lineNum">     122 </span>                :            :             }
+<span class="lineNum">     123 </span>                :            :         }
+<span class="lineNum">     124 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         init(num_work_unit[thread_idx]);</span>
+<a name="125"><span class="lineNum">     125 </span>                :            :     }</a>
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :     void ProfileThreadTable::init(int num_thread, int thread_idx, size_t num_iter)</span>
+<span class="lineNum">     128 </span>                :            :     {
+<span class="lineNum">     129 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     131 </span>                :            :         }
+<span class="lineNum">     132 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         std::vector&lt;uint32_t&gt; num_work_unit(num_thread);</span>
+<span class="lineNum">     133 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         std::fill(num_work_unit.begin(), num_work_unit.end(), num_iter / num_thread);</span>
+<span class="lineNum">     134 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (int thread_idx = 0; thread_idx &lt; (int)(num_iter % num_thread); ++thread_idx) {</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :             ++num_work_unit[thread_idx];</span>
+<span class="lineNum">     136 </span>                :            :         }
+<span class="lineNum">     137 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         init(num_work_unit[thread_idx]);</span>
+<a name="138"><span class="lineNum">     138 </span>                :            :     }</a>
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :     void ProfileThreadTable::post(void)</span>
+<span class="lineNum">     141 </span>                :            :     {
+<span class="lineNum">     142 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     144 </span>                :            :         }
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :         ++m_buffer[cpu_idx() * m_stride];</span>
+<a name="146"><span class="lineNum">     146 </span>                :            :     }</a>
+<span class="lineNum">     147 </span>                :            : 
+<span class="lineNum">     148 </span>                :<span class="lineNoCov">          0 :     void ProfileThreadTable::dump(std::vector&lt;double&gt; &amp;progress)</span>
+<span class="lineNum">     149 </span>                :            :     {
+<span class="lineNum">     150 </span>                :            :         double numer;
+<span class="lineNum">     151 </span>                :            :         uint32_t denom;
+<span class="lineNum">     152 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (uint32_t cpu = 0; cpu &lt; m_num_cpu; ++cpu) {</span>
+<span class="lineNum">     153 </span>                :<span class="lineNoCov">          0 :             numer = (double)m_buffer[cpu * m_stride];</span>
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :             denom = m_buffer[cpu * m_stride + 1];</span>
+<span class="lineNum">     155 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             progress[cpu] = denom ? numer / denom : -1.0;</span>
+<span class="lineNum">     156 </span>                :            :         }
+<a name="157"><span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     158 </span>                :            : 
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :     int ProfileThreadTable::cpu_idx(void)</span>
+<span class="lineNum">     160 </span>                :            :     {
+<span class="lineNum">     161 </span>                :            :         static thread_local int result = -1;
+<span class="lineNum">     162 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (result == -1) {</span>
+<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :             result = sched_getcpu();</span>
+<span class="lineNum">     164 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (result &gt;= num_cpu_s()) {</span>
+<span class="lineNum">     165 </span>                :            :                 throw Exception(&quot;ProfileThreadTable::cpu_idx(): Number of online CPUs is less than or equal to the value returned by sched_getcpu()&quot;,
+<span class="lineNum">     166 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     167 </span>                :            :             }
+<span class="lineNum">     168 </span>                :            :         }
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :         return result;</span>
+<span class="lineNum">     170 </span>                :            :     }
+<span class="lineNum">     171 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

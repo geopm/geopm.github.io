@@ -1,0 +1,621 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - src/Region.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - Region.cpp<span style="font-size: 80%;"> (source / <a href="Region.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">277</td>
+            <td class="headerCovTableEntry">291</td>
+            <td class="headerCovTableEntryHi">95.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-06-18</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntry">33</td>
+            <td class="headerCovTableEntryHi">93.9 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">244</td>
+            <td class="headerCovTableEntry">366</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, Intel Corporation
+<span class="lineNum">       3 </span>                :            :  *
+<span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
+<span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions
+<span class="lineNum">       6 </span>                :            :  * are met:
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  *     * Redistributions of source code must retain the above copyright
+<span class="lineNum">       9 </span>                :            :  *       notice, this list of conditions and the following disclaimer.
+<span class="lineNum">      10 </span>                :            :  *
+<span class="lineNum">      11 </span>                :            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>                :            :  *       notice, this list of conditions and the following disclaimer in
+<span class="lineNum">      13 </span>                :            :  *       the documentation and/or other materials provided with the
+<span class="lineNum">      14 </span>                :            :  *       distribution.
+<span class="lineNum">      15 </span>                :            :  *
+<span class="lineNum">      16 </span>                :            :  *     * Neither the name of Intel Corporation nor the names of its
+<span class="lineNum">      17 </span>                :            :  *       contributors may be used to endorse or promote products derived
+<span class="lineNum">      18 </span>                :            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>                :            :  *
+<span class="lineNum">      20 </span>                :            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<span class="lineNum">      21 </span>                :            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+<span class="lineNum">      22 </span>                :            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>                :            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>                :            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<span class="lineNum">      25 </span>                :            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+<span class="lineNum">      26 </span>                :            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>                :            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>                :            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE
+<span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>                :            :  */
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      34 </span>                :            : #include &lt;algorithm&gt;
+<span class="lineNum">      35 </span>                :            : #include &lt;iostream&gt;
+<span class="lineNum">      36 </span>                :            : #include &lt;fstream&gt;
+<span class="lineNum">      37 </span>                :            : #include &lt;cmath&gt;
+<span class="lineNum">      38 </span>                :            : #include &lt;sstream&gt;
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :            : #include &quot;Region.hpp&quot;
+<span class="lineNum">      41 </span>                :            : #include &quot;config.h&quot;
+<span class="lineNum">      42 </span>                :            : 
+<a name="43"><span class="lineNum">      43 </span>                :            : namespace geopm</a>
+<span class="lineNum">      44 </span>                :            : {
+<span class="lineNum">      45 </span>                :<span class="lineCov">        541 :     Region::Region(uint64_t identifier, int num_domain, int level, IProfileThreadTable *tprof_table)</span>
+<span class="lineNum">      46 </span>                :            :         : m_identifier(identifier)
+<span class="lineNum">      47 </span>                :            :         , m_num_domain(num_domain)
+<span class="lineNum">      48 </span>                :            :         , m_level(level)
+<span class="lineNum">      49 </span>                :<span class="lineCov">        541 :         , m_num_signal(m_level == 0 ? (int)GEOPM_NUM_TELEMETRY_TYPE : (int)GEOPM_NUM_SAMPLE_TYPE)</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">        541 :         , m_signal_matrix(m_num_signal * m_num_domain)</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">        541 :         , m_entry_telemetry(m_num_domain, {GEOPM_REGION_ID_UNDEFINED, {{0, 0}}, {0}})</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">        541 :         , m_curr_sample({m_identifier, {0.0, 0.0, 0.0, 0.0}})</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">        541 :         , m_domain_sample(m_num_domain, m_curr_sample)</span>
+<span class="lineNum">      54 </span>                :            :         , m_domain_buffer(NULL)
+<span class="lineNum">      55 </span>                :            :         , m_time_buffer(NULL)
+<span class="lineNum">      56 </span>                :<span class="lineCov">        541 :         , m_valid_entries(m_num_signal * m_num_domain, 0)</span>
+<span class="lineNum">      57 </span>                :<span class="lineCov">        541 :         , m_min(m_num_signal * m_num_domain, DBL_MAX)</span>
+<span class="lineNum">      58 </span>                :<span class="lineCov">        541 :         , m_max(m_num_signal * m_num_domain, -DBL_MAX)</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">        541 :         , m_sum(m_num_signal * m_num_domain, 0.0)</span>
+<span class="lineNum">      60 </span>                :<span class="lineCov">        541 :         , m_sum_squares(m_num_signal * m_num_domain, 0.0)</span>
+<span class="lineNum">      61 </span>                :<span class="lineCov">        541 :         , m_derivative_last(m_num_signal * m_num_domain, NAN)</span>
+<span class="lineNum">      62 </span>                :<span class="lineCov">        541 :         , m_agg_stats({m_identifier, {0.0, 0.0, 0.0, 0.0}})</span>
+<span class="lineNum">      63 </span>                :            :         , m_num_entry(0)
+<span class="lineNum">      64 </span>                :<span class="lineCov">        541 :         , m_is_entered(m_num_domain, false)</span>
+<span class="lineNum">      65 </span>                :            :         , m_derivative_num_fit(0)
+<span class="lineNum">      66 </span>                :            :         , m_mpi_time(0.0)
+<span class="lineNum">      67 </span>[<span class="branchCov" title="Branch 1 was taken 485 times"> + </span><span class="branchCov" title="Branch 2 was taken 56 times"> + </span>][<span class="branchCov" title="Branch 5 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        541 :         , m_tprof_table(tprof_table)</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 10 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>][<span class="branchCov" title="Branch 15 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 16 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchCov" title="Branch 25 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 30 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 31 was not taken"> - </span>][<span class="branchCov" title="Branch 35 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 36 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 40 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 41 was not taken"> - </span>][<span class="branchCov" title="Branch 45 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 46 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 50 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 51 was not taken"> - </span>]
+<span class="lineNum">      68 </span>                :            :     {
+<span class="lineNum">      69 </span>[<span class="branchCov" title="Branch 1 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        541 :         m_domain_buffer = new CircularBuffer&lt;std::vector&lt;double&gt; &gt;(M_NUM_SAMPLE_HISTORY);</span>
+<span class="lineNum">      70 </span>[<span class="branchCov" title="Branch 1 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 541 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        541 :         m_time_buffer = new CircularBuffer&lt;struct geopm_time_s&gt;(M_NUM_SAMPLE_HISTORY);</span>
+<a name="71"><span class="lineNum">      71 </span>                :<span class="lineCov">        541 :     }</span></a>
+<span class="lineNum">      72 </span>                :            : 
+<span class="lineNum">      73 </span>                :<span class="lineCov">       1519 :     Region::~Region()</span>
+<span class="lineNum">      74 </span>                :            :     {
+<span class="lineNum">      75 </span>        [<span class="branchCov" title="Branch 0 was taken 509 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        509 :         delete m_time_buffer;</span>
+<span class="lineNum">      76 </span>        [<span class="branchCov" title="Branch 0 was taken 509 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        509 :         delete m_domain_buffer;</span>
+<span class="lineNum">      77 </span>                :            : 
+<a name="78"><span class="lineNum">      78 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 509 times"> + </span>]:<span class="lineCov">       1010 :     }</span></a>
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :<span class="lineCov">       6263 :     void Region::entry(void)</span>
+<span class="lineNum">      81 </span>                :            :     {
+<span class="lineNum">      82 </span>                :<span class="lineCov">       6263 :         ++m_num_entry;</span>
+<a name="83"><span class="lineNum">      83 </span>                :<span class="lineCov">       6263 :     }</span></a>
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :<span class="lineCov">        527 :     int Region::num_entry(void)</span>
+<span class="lineNum">      86 </span>                :            :     {
+<span class="lineNum">      87 </span>                :<span class="lineCov">        527 :         return m_num_entry;</span>
+<a name="88"><span class="lineNum">      88 </span>                :            :     }</a>
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>                :<span class="lineCov">     469808 :     void Region::insert(std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry)</span>
+<span class="lineNum">      91 </span>                :            :     {
+<span class="lineNum">      92 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 469808 times"> + </span>]:<span class="lineCov">     469808 :         if (telemetry.size()!= m_num_domain) {</span>
+<span class="lineNum">      93 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;Region::insert(): telemetry not properly sized&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">      94 </span>                :            :         }
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>                :<span class="lineCov">     469808 :         m_time_buffer-&gt;insert(telemetry[0].timestamp);</span>
+<span class="lineNum">      97 </span>                :<span class="lineCov">     469808 :         unsigned domain_idx = 0;</span>
+<span class="lineNum">      98 </span>        [<span class="branchCov" title="Branch 3 was taken 471200 times"> + </span><span class="branchCov" title="Branch 4 was taken 469808 times"> + </span>]:<span class="lineCov">     941008 :         for (auto it = telemetry.begin(); it != telemetry.end(); ++it, ++domain_idx) {</span>
+<span class="lineNum">      99 </span>                :            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     100 </span>        [<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 471200 times"> + </span>]:<span class="lineCov">     471200 :             if (geopm_time_diff(&amp;((*it).timestamp), &amp;(telemetry[0].timestamp)) != 0.0) {</span>
+<span class="lineNum">     101 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;Region::insert(): input telemetry vector has non-uniform timestamp values&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     102 </span>                :            :             }
+<span class="lineNum">     103 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 471200 times"> + </span>]:<span class="lineCov">     471200 :             if ((*it).region_id != m_identifier) {</span>
+<span class="lineNum">     104 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span>
+<span class="lineNum">     105 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;Region::insert(): input telemetry vector wrong region id, expecting: &quot;  &lt;&lt; m_identifier  &lt;&lt; &quot;, recieved: &quot; &lt;&lt; (*it).region_id;</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">     106 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     107 </span>                :            :             }
+<span class="lineNum">     108 </span>                :            : #endif
+<span class="lineNum">     109 </span>        [<span class="branchCov" title="Branch 2 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     471200 :             update_domain_sample(*it, domain_idx);</span>
+<span class="lineNum">     110 </span>        [<span class="branchCov" title="Branch 2 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     471200 :             update_signal_matrix((*it).signal, domain_idx);</span>
+<span class="lineNum">     111 </span>        [<span class="branchCov" title="Branch 2 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     471200 :             update_valid_entries(*it, domain_idx);</span>
+<span class="lineNum">     112 </span>        [<span class="branchCov" title="Branch 2 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     471200 :             update_stats((*it).signal, domain_idx);</span>
+<span class="lineNum">     113 </span>                :            :         }
+<span class="lineNum">     114 </span>        [<span class="branchCov" title="Branch 2 was taken 469808 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     469808 :         m_domain_buffer-&gt;insert(m_signal_matrix);</span>
+<span class="lineNum">     115 </span>                :            :         // If all ranks have exited the region update current sample
+<span class="lineNum">     116 </span>        [<span class="branchCov" title="Branch 0 was taken 990 times"> + </span><span class="branchCov" title="Branch 1 was taken 469808 times"> + </span>]:<span class="lineCov">     940606 :         for (domain_idx = 0;</span>
+<span class="lineNum">     117 </span>        [<span class="branchCov" title="Branch 0 was taken 990 times"> + </span><span class="branchCov" title="Branch 1 was taken 468822 times"> + </span>]:<span class="lineCov">     469812 :              domain_idx != m_num_domain &amp;&amp;</span>
+<span class="lineNum">     118 </span>[<span class="branchCov" title="Branch 0 was taken 469812 times"> + </span><span class="branchCov" title="Branch 1 was taken 986 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 990 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">     940610 :              telemetry[domain_idx].signal[GEOPM_TELEMETRY_TYPE_PROGRESS] == 1.0 &amp;&amp;</span>
+<span class="lineNum">     119 </span>                :<span class="lineCov">        990 :              telemetry[domain_idx].signal[GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0;</span>
+<span class="lineNum">     120 </span>                :            :              ++domain_idx);
+<span class="lineNum">     121 </span>        [<span class="branchCov" title="Branch 0 was taken 986 times"> + </span><span class="branchCov" title="Branch 1 was taken 468822 times"> + </span>]:<span class="lineCov">     469808 :         if (domain_idx == m_num_domain) {</span>
+<span class="lineNum">     122 </span>                :            :             // All domains have completed so do update
+<span class="lineNum">     123 </span>                :<span class="lineCov">        986 :             update_curr_sample();</span>
+<span class="lineNum">     124 </span>                :            :             /// @fixme Commenting out the following line. It restarts samples after
+<span class="lineNum">     125 </span>                :            :             /// leaving a region, which is the athematically correct thing to do.
+<span class="lineNum">     126 </span>                :            :             /// However we are observing a great deal of run-to-run variance when this
+<span class="lineNum">     127 </span>                :            :             /// line is enabled. Without this line in we are wrapping all energy usage
+<span class="lineNum">     128 </span>                :            :             /// in between instances of a region into a single sample.
+<span class="lineNum">     129 </span>                :            :             //m_derivative_num_fit = 0;
+<span class="lineNum">     130 </span>                :            :         }
+<span class="lineNum">     131 </span>        [<span class="branchCov" title="Branch 0 was taken 2594 times"> + </span><span class="branchCov" title="Branch 1 was taken 466228 times"> + </span>]:<span class="lineCov">     468822 :         else if (m_derivative_num_fit &lt; M_NUM_SAMPLE_HISTORY) {</span>
+<span class="lineNum">     132 </span>                :<span class="lineCov">       2594 :             ++m_derivative_num_fit;</span>
+<span class="lineNum">     133 </span>                :            :         }
+<a name="134"><span class="lineNum">     134 </span>                :<span class="lineCov">     469808 :     }</span></a>
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :<span class="lineCov">        308 :     void Region::insert(const std::vector&lt;struct geopm_sample_message_s&gt; &amp;sample)</span>
+<span class="lineNum">     137 </span>                :            :     {
+<span class="lineNum">     138 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 308 times"> + </span>]:<span class="lineCov">        308 :         if (sample.size() &lt; m_num_domain) {</span>
+<span class="lineNum">     139 </span>                :            :             throw Exception(&quot;Region::insert(): input sample vector too small&quot;,
+<span class="lineNum">     140 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     141 </span>                :            :         }
+<span class="lineNum">     142 </span>        [<span class="branchCov" title="Branch 5 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        308 :         std::copy(sample.begin(), sample.begin() + m_num_domain, m_domain_sample.begin());</span>
+<span class="lineNum">     143 </span>        [<span class="branchCov" title="Branch 1 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        308 :         update_curr_sample();</span>
+<span class="lineNum">     144 </span>                :            :         // Calculate the number of entries *after* we insert the new data: size() + 1 or capacity
+<span class="lineNum">     145 </span>[<span class="branchCov" title="Branch 1 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        308 :         int num_entries = m_domain_buffer-&gt;size() + 1 &lt; m_domain_buffer-&gt;capacity() ?</span>
+<span class="lineNum">     146 </span>[<span class="branchCov" title="Branch 0 was taken 294 times"> + </span><span class="branchCov" title="Branch 1 was taken 14 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 294 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        308 :                           m_domain_buffer-&gt;size() + 1 : m_domain_buffer-&gt;capacity();</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 6 was taken 14 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">     147 </span>                :            :         // This insert is called above leaf level, so all entries are valid
+<span class="lineNum">     148 </span>        [<span class="branchCov" title="Branch 3 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        308 :         std::fill(m_valid_entries.begin(), m_valid_entries.end(), num_entries);</span>
+<span class="lineNum">     149 </span>                :            : 
+<span class="lineNum">     150 </span>                :<span class="lineCov">        308 :         auto it = sample.begin();</span>
+<span class="lineNum">     151 </span>        [<span class="branchCov" title="Branch 0 was taken 2464 times"> + </span><span class="branchCov" title="Branch 1 was taken 308 times"> + </span>]:<span class="lineCov">       2772 :         for (size_t domain_idx = 0; domain_idx != m_num_domain; ++domain_idx, ++it) {</span>
+<span class="lineNum">     152 </span>        [<span class="branchCov" title="Branch 2 was taken 2464 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       2464 :             update_signal_matrix((*it).signal, domain_idx);</span>
+<span class="lineNum">     153 </span>        [<span class="branchCov" title="Branch 2 was taken 2464 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       2464 :             update_stats((*it).signal, domain_idx);</span>
+<span class="lineNum">     154 </span>                :            :         }
+<span class="lineNum">     155 </span>[<span class="branchCov" title="Branch 1 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 308 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        308 :         m_domain_buffer-&gt;insert(m_signal_matrix);</span>
+<a name="156"><span class="lineNum">     156 </span>                :<span class="lineCov">        308 :     }</span></a>
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :<span class="lineCov">          2 :     void Region::clear(void)</span>
+<span class="lineNum">     159 </span>                :            :     {
+<span class="lineNum">     160 </span>                :<span class="lineCov">          2 :         m_derivative_num_fit = 0;</span>
+<span class="lineNum">     161 </span>                :<span class="lineCov">          2 :         m_time_buffer-&gt;clear();</span>
+<span class="lineNum">     162 </span>                :<span class="lineCov">          2 :         m_domain_buffer-&gt;clear();</span>
+<span class="lineNum">     163 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::fill(m_min.begin(), m_min.end(), DBL_MAX);</span>
+<span class="lineNum">     164 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::fill(m_max.begin(), m_max.end(), -DBL_MAX);</span>
+<span class="lineNum">     165 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::fill(m_sum.begin(), m_sum.end(), 0.0);</span>
+<span class="lineNum">     166 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::fill(m_sum_squares.begin(), m_sum_squares.end(), 0.0);</span>
+<span class="lineNum">     167 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::fill(m_valid_entries.begin(), m_valid_entries.end(), 0);</span>
+<a name="168"><span class="lineNum">     168 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>                :<span class="lineCov">        223 :     void Region::increment_mpi_time(double mpi_increment_amount)</span>
+<span class="lineNum">     171 </span>                :            :     {
+<span class="lineNum">     172 </span>                :<span class="lineCov">        223 :         m_mpi_time += mpi_increment_amount;</span>
+<a name="173"><span class="lineNum">     173 </span>                :<span class="lineCov">        223 :     }</span></a>
+<span class="lineNum">     174 </span>                :            : 
+<span class="lineNum">     175 </span>                :<span class="lineCov">      36569 :     uint64_t Region::identifier(void) const</span>
+<span class="lineNum">     176 </span>                :            :     {
+<span class="lineNum">     177 </span>                :<span class="lineCov">      36569 :         return m_identifier;</span>
+<a name="178"><span class="lineNum">     178 </span>                :            :     }</a>
+<span class="lineNum">     179 </span>                :            : 
+<span class="lineNum">     180 </span>                :<span class="lineCov">     467064 :     void Region::sample_message(struct geopm_sample_message_s &amp;sample)</span>
+<span class="lineNum">     181 </span>                :            :     {
+<span class="lineNum">     182 </span>                :<span class="lineCov">     467064 :         sample = m_curr_sample;</span>
+<a name="183"><span class="lineNum">     183 </span>                :<span class="lineCov">     467064 :     }</span></a>
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :<span class="lineCov">         56 :     double Region::signal(int domain_idx, int signal_type)</span>
+<span class="lineNum">     186 </span>                :            :     {
+<span class="lineNum">     187 </span>                :<span class="lineCov">         56 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     188 </span>                :<span class="lineCov">         52 :         double result = NAN;</span>
+<span class="lineNum">     189 </span>[<span class="branchCov" title="Branch 0 was taken 20 times"> + </span><span class="branchCov" title="Branch 1 was taken 32 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         52 :         if (!m_level &amp;&amp;</span>
+<span class="lineNum">     190 </span>        [<span class="branchCov" title="Branch 0 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         20 :             (signal_type == GEOPM_TELEMETRY_TYPE_PROGRESS ||</span>
+<span class="lineNum">     191 </span>                :            :              signal_type == GEOPM_TELEMETRY_TYPE_RUNTIME)) {
+<span class="lineNum">     192 </span>        [<span class="branchCov" title="Branch 1 was taken 156 times"> + </span><span class="branchCov" title="Branch 2 was taken 20 times"> + </span>]:<span class="lineCov">        176 :             for (int i = 0; i &lt; m_domain_buffer-&gt;size(); ++i) {</span>
+<span class="lineNum">     193 </span>        [<span class="branchCov" title="Branch 1 was taken 140 times"> + </span><span class="branchCov" title="Branch 2 was taken 16 times"> + </span>]:<span class="lineCov">        156 :                 if (domain_buffer_value(i, domain_idx, GEOPM_TELEMETRY_TYPE_RUNTIME) != -1) {</span>
+<span class="lineNum">     194 </span>                :<span class="lineCov">        140 :                     result = domain_buffer_value(i, domain_idx, signal_type);</span>
+<span class="lineNum">     195 </span>                :            :                 }
+<span class="lineNum">     196 </span>                :<span class="lineCov">         20 :             }</span>
+<span class="lineNum">     197 </span>                :            :         }
+<span class="lineNum">     198 </span>                :            :         else {
+<span class="lineNum">     199 </span>                :<span class="lineCov">         32 :             result = domain_buffer_value(-1, domain_idx, signal_type);</span>
+<span class="lineNum">     200 </span>                :            :         }
+<span class="lineNum">     201 </span>                :<span class="lineCov">         52 :         return result;</span>
+<a name="202"><span class="lineNum">     202 </span>                :            :     }</a>
+<span class="lineNum">     203 </span>                :            : 
+<span class="lineNum">     204 </span>                :<span class="lineCov">      37081 :     int Region::num_sample(int domain_idx, int signal_type) const</span>
+<span class="lineNum">     205 </span>                :            :     {
+<span class="lineNum">     206 </span>                :<span class="lineCov">      37081 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     207 </span>                :<span class="lineCov">      37077 :         return m_valid_entries[domain_idx * m_num_signal + signal_type];</span>
+<a name="208"><span class="lineNum">     208 </span>                :            :     }</a>
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>                :<span class="lineCov">        108 :     double Region::mean(int domain_idx, int signal_type) const</span>
+<span class="lineNum">     211 </span>                :            :     {
+<span class="lineNum">     212 </span>                :<span class="lineCov">        108 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     213 </span>                :<span class="lineCov">        104 :         return  m_sum[domain_idx * m_num_signal + signal_type] /</span>
+<span class="lineNum">     214 </span>                :<span class="lineCov">        104 :                 num_sample(domain_idx, signal_type);</span>
+<a name="215"><span class="lineNum">     215 </span>                :            :     }</a>
+<span class="lineNum">     216 </span>                :            : 
+<span class="lineNum">     217 </span>                :<span class="lineCov">        104 :     double Region::median(int domain_idx, int signal_type) const</span>
+<span class="lineNum">     218 </span>                :            :     {
+<span class="lineNum">     219 </span>        [<span class="branchCov" title="Branch 1 was taken 100 times"> + </span><span class="branchCov" title="Branch 2 was taken 4 times"> + </span>]:<span class="lineCov">        104 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     220 </span>[<span class="branchCov" title="Branch 2 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        200 :         std::vector&lt;double&gt; median_sort(num_sample(domain_idx, signal_type));</span>
+<span class="lineNum">     221 </span>                :<span class="lineCov">        100 :         int idx = 0;</span>
+<span class="lineNum">     222 </span>                :<span class="lineCov">        100 :         bool is_known_valid = true;</span>
+<span class="lineNum">     223 </span>        [<span class="branchCov" title="Branch 0 was taken 20 times"> + </span><span class="branchCov" title="Branch 1 was taken 80 times"> + </span>]:<span class="lineCov">        100 :         if (!m_level) {</span>
+<span class="lineNum">     224 </span>[<span class="branchCov" title="Branch 0 was taken 20 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 20 times"> + </span>]:<span class="lineCov">         20 :             is_known_valid = signal_type != GEOPM_TELEMETRY_TYPE_PROGRESS &amp;&amp; signal_type != GEOPM_TELEMETRY_TYPE_RUNTIME;</span>
+<span class="lineNum">     225 </span>                :            :         }
+<span class="lineNum">     226 </span>[<span class="branchCov" title="Branch 1 was taken 880 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 780 times"> + </span><span class="branchCov" title="Branch 4 was taken 100 times"> + </span>]:<span class="lineCov">        880 :         for (int i = 0; i &lt; m_domain_buffer-&gt;size(); ++i) {</span>
+<span class="lineNum">     227 </span>  [<span class="branchCov" title="Branch 0 was taken 156 times"> + </span><span class="branchCov" title="Branch 1 was taken 624 times"> + </span><span class="branchCov" title="Branch 2 was taken 140 times"> + </span><span class="branchCov" title="Branch 3 was taken 16 times"> + </span>]:<span class="lineCov">        936 :             if (is_known_valid ||</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 764 times"> + </span><span class="branchCov" title="Branch 5 was taken 16 times"> + </span>]
+<span class="lineNum">     228 </span>        [<span class="branchCov" title="Branch 1 was taken 156 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        156 :                 m_domain_buffer-&gt;value(i)[m_num_signal * domain_idx + GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0) {</span>
+<span class="lineNum">     229 </span>        [<span class="branchCov" title="Branch 2 was taken 764 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        764 :                 median_sort[idx++] = m_domain_buffer-&gt;value(i)[m_num_signal * domain_idx + signal_type];</span>
+<span class="lineNum">     230 </span>                :            :             }
+<span class="lineNum">     231 </span>                :            :         }
+<span class="lineNum">     232 </span>[<span class="branchCov" title="Branch 1 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 7 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]:<span class="lineCov">        100 :         std::sort(median_sort.begin(), median_sort.begin() + num_sample(domain_idx, signal_type));</span>
+<span class="lineNum">     233 </span>        [<span class="branchCov" title="Branch 1 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        200 :         return median_sort[num_sample(domain_idx, signal_type) / 2];</span>
+<a name="234"><span class="lineNum">     234 </span>                :            :     }</a>
+<span class="lineNum">     235 </span>                :            : 
+<span class="lineNum">     236 </span>                :<span class="lineCov">         56 :     double Region::std_deviation(int domain_idx, int signal_type) const</span>
+<span class="lineNum">     237 </span>                :            :     {
+<span class="lineNum">     238 </span>                :<span class="lineCov">         56 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     239 </span>                :<span class="lineCov">         52 :         double ss = m_sum_squares[domain_idx * m_num_signal + signal_type];</span>
+<span class="lineNum">     240 </span>                :<span class="lineCov">         52 :         double nn = num_sample(domain_idx, signal_type);</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">         52 :         double mm = mean(domain_idx, signal_type);</span>
+<span class="lineNum">     242 </span>                :<span class="lineCov">         52 :         return std::sqrt(ss / nn - mm * mm);</span>
+<a name="243"><span class="lineNum">     243 </span>                :            :     }</a>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :<span class="lineCov">         56 :     double Region::min(int domain_idx, int signal_type) const</span>
+<span class="lineNum">     246 </span>                :            :     {
+<span class="lineNum">     247 </span>                :<span class="lineCov">         56 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     248 </span>                :<span class="lineCov">         52 :         return m_min[domain_idx * m_num_signal + signal_type];</span>
+<a name="249"><span class="lineNum">     249 </span>                :            :     }</a>
+<span class="lineNum">     250 </span>                :            : 
+<span class="lineNum">     251 </span>                :<span class="lineCov">         56 :     double Region::max(int domain_idx, int signal_type) const</span>
+<span class="lineNum">     252 </span>                :            :     {
+<span class="lineNum">     253 </span>                :<span class="lineCov">         56 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     254 </span>                :<span class="lineCov">         52 :         return m_max[domain_idx * m_num_signal + signal_type];</span>
+<a name="255"><span class="lineNum">     255 </span>                :            :     }</a>
+<span class="lineNum">     256 </span>                :            : 
+<span class="lineNum">     257 </span>                :<span class="lineCov">      36578 :     double Region::derivative(int domain_idx, int signal_type)</span>
+<span class="lineNum">     258 </span>                :            :     {
+<span class="lineNum">     259 </span>                :<span class="lineCov">      36578 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     260 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 36572 times"> + </span>]:<span class="lineCov">      36574 :         if (m_level) {</span>
+<span class="lineNum">     261 </span>                :            :             throw Exception(&quot;Region::derivative(): Not implemented for non-leaf&quot;,
+<span class="lineNum">     262 </span>[<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">          2 :                             GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
+<span class="lineNum">     263 </span>                :            :         }
+<span class="lineNum">     264 </span>                :            :         // Least squares linear regression to approximate the
+<span class="lineNum">     265 </span>                :            :         // derivative with noisy data.
+<span class="lineNum">     266 </span>                :<span class="lineCov">      36572 :         size_t sig_off = domain_idx * m_num_signal + signal_type;</span>
+<span class="lineNum">     267 </span>                :<span class="lineCov">      36572 :         double result = m_derivative_last[sig_off];</span>
+<span class="lineNum">     268 </span>        [<span class="branchCov" title="Branch 0 was taken 36572 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">      36572 :         if (m_derivative_num_fit &gt;= 2) {</span>
+<span class="lineNum">     269 </span>                :<span class="lineCov">      36572 :             size_t buf_size = m_time_buffer-&gt;size();</span>
+<span class="lineNum">     270 </span>                :<span class="lineCov">      36572 :             double A = 0.0, B = 0.0, C = 0.0, D = 0.0;</span>
+<span class="lineNum">     271 </span>                :<span class="lineCov">      36572 :             double E = 1.0 / m_derivative_num_fit;</span>
+<span class="lineNum">     272 </span>                :<span class="lineCov">      36572 :             const struct geopm_time_s &amp;time_0 = m_time_buffer-&gt;value(buf_size - m_derivative_num_fit);</span>
+<span class="lineNum">     273 </span>                :<span class="lineCov">      36572 :             const double sig_0 = m_domain_buffer-&gt;value(buf_size - m_derivative_num_fit)[sig_off];</span>
+<span class="lineNum">     274 </span>                :<span class="lineCov">     329058 :             for (size_t buf_off = buf_size - m_derivative_num_fit;</span>
+<span class="lineNum">     275 </span>        [<span class="branchCov" title="Branch 0 was taken 292486 times"> + </span><span class="branchCov" title="Branch 1 was taken 36572 times"> + </span>]:<span class="lineCov">     329058 :                  buf_off &lt; buf_size; ++buf_off) {</span>
+<span class="lineNum">     276 </span>                :<span class="lineCov">     292486 :                 const struct geopm_time_s &amp;tt = m_time_buffer-&gt;value(buf_off);</span>
+<span class="lineNum">     277 </span>                :<span class="lineCov">     292486 :                 double time = geopm_time_diff(&amp;time_0, &amp;tt);</span>
+<span class="lineNum">     278 </span>                :<span class="lineCov">     292486 :                 double sig = m_domain_buffer-&gt;value(buf_off)[sig_off] - sig_0;</span>
+<span class="lineNum">     279 </span>                :<span class="lineCov">     292486 :                 A += time * sig;</span>
+<span class="lineNum">     280 </span>                :<span class="lineCov">     292486 :                 B += time;</span>
+<span class="lineNum">     281 </span>                :<span class="lineCov">     292486 :                 C += sig;</span>
+<span class="lineNum">     282 </span>                :<span class="lineCov">     292486 :                 D += time * time;</span>
+<span class="lineNum">     283 </span>                :            :             }
+<span class="lineNum">     284 </span>                :<span class="lineCov">      36572 :             double ssxx = D - B * B * E;</span>
+<span class="lineNum">     285 </span>                :<span class="lineCov">      36572 :             double ssxy = A - B * C * E;</span>
+<span class="lineNum">     286 </span>                :<span class="lineCov">      36572 :             result = ssxy / ssxx;</span>
+<span class="lineNum">     287 </span>                :<span class="lineCov">      36572 :             m_derivative_last[sig_off] = result;</span>
+<span class="lineNum">     288 </span>                :            :         }
+<span class="lineNum">     289 </span>        [<span class="branchCov" title="Branch 0 was taken 36572 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">      36572 :         return result ? result : NAN;</span>
+<a name="290"><span class="lineNum">     290 </span>                :            :     }</a>
+<span class="lineNum">     291 </span>                :            : 
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :     double Region::integral(int domain_idx, int signal_type, double &amp;delta_time, double &amp;integral) const</span>
+<span class="lineNum">     293 </span>                :            :     {
+<span class="lineNum">     294 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :         throw Exception(&quot;Region::integrate_time()&quot;, GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
+<span class="lineNum">     295 </span>                :            :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);
+<span class="lineNum">     296 </span>                :            :         return 0.0;
+<a name="297"><span class="lineNum">     297 </span>                :            :     }</a>
+<span class="lineNum">     298 </span>                :            : 
+<span class="lineNum">     299 </span>                :<span class="lineCov">        349 :     void Region::report(std::ostringstream &amp;string_stream, const std::string &amp;name, int num_rank_per_node) const</span>
+<span class="lineNum">     300 </span>                :            :     {
+<span class="lineNum">     301 </span>                :<span class="lineCov">        349 :         string_stream &lt;&lt; &quot;Region &quot; &lt;&lt; name &lt;&lt; &quot; (&quot; &lt;&lt; m_identifier &lt;&lt; &quot;):&quot; &lt;&lt; std::endl;</span>
+<span class="lineNum">     302 </span>                :<span class="lineCov">        349 :         string_stream &lt;&lt; &quot;\truntime (sec): &quot; &lt;&lt; m_agg_stats.signal[GEOPM_SAMPLE_TYPE_RUNTIME] &lt;&lt; std::endl;</span>
+<span class="lineNum">     303 </span>                :<span class="lineCov">        349 :         string_stream &lt;&lt; &quot;\tenergy (joules): &quot; &lt;&lt; m_agg_stats.signal[GEOPM_SAMPLE_TYPE_ENERGY] &lt;&lt; std::endl;</span>
+<span class="lineNum">     304 </span>                :<span class="lineCov">        349 :         string_stream &lt;&lt; &quot;\tfrequency (%): &quot; &lt;&lt; (m_agg_stats.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM] ? 100 *</span>
+<span class="lineNum">     305 </span>                :<span class="lineCov">        295 :                                                m_agg_stats.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER] /</span>
+<span class="lineNum">     306 </span>                :<span class="lineCov">        295 :                                                m_agg_stats.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM] :</span>
+<span class="lineNum">     307 </span>        [<span class="branchCov" title="Branch 0 was taken 295 times"> + </span><span class="branchCov" title="Branch 1 was taken 54 times"> + </span>]:<span class="lineCov">        698 :                                                0.0) &lt;&lt; std::endl;</span>
+<span class="lineNum">     308 </span>                :<span class="lineCov">        349 :         string_stream &lt;&lt; &quot;\tmpi-runtime (sec): &quot; &lt;&lt; m_mpi_time &lt;&lt; std::endl;</span>
+<span class="lineNum">     309 </span>                :            :         // For epoch, remove two counts: one for startup call and
+<span class="lineNum">     310 </span>                :            :         // one for shutdown call.  For umarked code just print 0
+<span class="lineNum">     311 </span>                :            :         // for count. For other regions normalize by number of
+<span class="lineNum">     312 </span>                :            :         // ranks per node since each rank reports entry
+<span class="lineNum">     313 </span>                :            :         // (unlike epoch which reports once per node).
+<span class="lineNum">     314 </span>                :<span class="lineCov">        349 :         double count = 0.0;</span>
+<span class="lineNum">     315 </span>        [<span class="branchCov" title="Branch 0 was taken 41 times"> + </span><span class="branchCov" title="Branch 1 was taken 308 times"> + </span>]:<span class="lineCov">        349 :         if (m_identifier == GEOPM_REGION_ID_EPOCH) {</span>
+<span class="lineNum">     316 </span>                :<span class="lineCov">         41 :             count = m_num_entry;</span>
+<span class="lineNum">     317 </span>                :            :         }
+<span class="lineNum">     318 </span>        [<span class="branchCov" title="Branch 0 was taken 235 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">        308 :         else if (m_identifier != GEOPM_REGION_ID_UNMARKED) {</span>
+<span class="lineNum">     319 </span>                :<span class="lineCov">        235 :             count = (double)m_num_entry / num_rank_per_node;</span>
+<span class="lineNum">     320 </span>                :            :         }
+<span class="lineNum">     321 </span>                :<span class="lineCov">        349 :         string_stream &lt;&lt; &quot;\tcount: &quot; &lt;&lt; count &lt;&lt; std::endl;</span>
+<a name="322"><span class="lineNum">     322 </span>                :<span class="lineCov">        349 :     }</span></a>
+<span class="lineNum">     323 </span>                :            : 
+<span class="lineNum">     324 </span>                :<span class="lineNoCov">          0 :     void Region::thread_progress(std::vector&lt;double&gt; &amp;progress)</span>
+<span class="lineNum">     325 </span>                :            :     {
+<span class="lineNum">     326 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (m_tprof_table) {</span>
+<span class="lineNum">     327 </span>                :<span class="lineNoCov">          0 :             progress.resize(m_tprof_table-&gt;num_cpu());</span>
+<span class="lineNum">     328 </span>                :<span class="lineNoCov">          0 :             m_tprof_table-&gt;dump(progress);</span>
+<span class="lineNum">     329 </span>                :            :         }
+<span class="lineNum">     330 </span>                :<span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">     331 </span>                :            : 
+<a name="332"><span class="lineNum">     332 </span>                :            :     // Protected function definitions</a>
+<span class="lineNum">     333 </span>                :            : 
+<span class="lineNum">     334 </span>                :<span class="lineCov">      75413 :     void Region::check_bounds(int domain_idx, int signal_type, const char *file, int line) const</span>
+<span class="lineNum">     335 </span>                :            :     {
+<span class="lineNum">     336 </span>[<span class="branchCov" title="Branch 0 was taken 75413 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 75413 times"> + </span>]:<span class="lineCov">      75413 :         if (domain_idx &lt; 0 || domain_idx &gt; (int)m_num_domain) {</span>
+<span class="lineNum">     337 </span>                :            :             throw geopm::Exception(&quot;Region::check_bounds(): the requested domain index is out of bounds.&quot;,
+<span class="lineNum">     338 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                    GEOPM_ERROR_INVALID, file, line);</span>
+<span class="lineNum">     339 </span>                :            :         }
+<span class="lineNum">     340 </span>[<span class="branchCov" title="Branch 0 was taken 75413 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 32 times"> + </span><span class="branchCov" title="Branch 3 was taken 75381 times"> + </span>]:<span class="lineCov">      75413 :         if (signal_type &lt; 0 || signal_type &gt; m_num_signal) {</span>
+<span class="lineNum">     341 </span>                :            :             throw geopm::Exception(&quot;Region::check_bounds(): the requested signal type is invalid.&quot;,
+<span class="lineNum">     342 </span>[<span class="branchCov" title="Branch 3 was taken 32 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 32 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">         32 :                                    GEOPM_ERROR_INVALID, file, line);</span>
+<span class="lineNum">     343 </span>                :            :         }
+<a name="344"><span class="lineNum">     344 </span>                :<span class="lineCov">      75381 :     }</span></a>
+<span class="lineNum">     345 </span>                :            : 
+<span class="lineNum">     346 </span>                :<span class="lineCov">       1318 :     double Region::domain_buffer_value(int buffer_idx, int domain_idx, int signal_type)</span>
+<span class="lineNum">     347 </span>                :            :     {
+<span class="lineNum">     348 </span>                :<span class="lineCov">       1318 :         double result = NAN;</span>
+<span class="lineNum">     349 </span>                :            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     350 </span>                :<span class="lineCov">       1318 :         check_bounds(domain_idx, signal_type, __FILE__, __LINE__);</span>
+<span class="lineNum">     351 </span>                :            : #endif
+<span class="lineNum">     352 </span>                :            :         // If buffer index is negative then wrap around
+<span class="lineNum">     353 </span>        [<span class="branchCov" title="Branch 0 was taken 1022 times"> + </span><span class="branchCov" title="Branch 1 was taken 296 times"> + </span>]:<span class="lineCov">       1318 :         if (buffer_idx &lt; 0) {</span>
+<span class="lineNum">     354 </span>                :<span class="lineCov">       1022 :             buffer_idx += m_domain_buffer-&gt;size();</span>
+<span class="lineNum">     355 </span>                :            :         }
+<span class="lineNum">     356 </span>[<span class="branchCov" title="Branch 0 was taken 1318 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1318 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">       1318 :         if (buffer_idx &gt;= 0 &amp;&amp; buffer_idx &lt; m_domain_buffer-&gt;size()) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 1318 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+<span class="lineNum">     357 </span>                :<span class="lineCov">       1318 :             result = m_domain_buffer-&gt;value(buffer_idx)[domain_idx * m_num_signal + signal_type];</span>
+<span class="lineNum">     358 </span>                :            :         }
+<span class="lineNum">     359 </span>                :<span class="lineCov">       1318 :         return result;</span>
+<a name="360"><span class="lineNum">     360 </span>                :            :     }</a>
+<span class="lineNum">     361 </span>                :            : 
+<span class="lineNum">     362 </span>                :<span class="lineCov">     471200 :     bool Region::is_telemetry_entry(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx)</span>
+<span class="lineNum">     363 </span>                :            :     {
+<span class="lineNum">     364 </span>        [<span class="branchCov" title="Branch 0 was taken 406545 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     406545 :         bool result = telemetry.signal[GEOPM_TELEMETRY_TYPE_PROGRESS] == 0.0 &amp;&amp; // We are entering the region</span>
+<span class="lineNum">     365 </span>  [<span class="branchCov" title="Branch 0 was taken 406545 times"> + </span><span class="branchCov" title="Branch 1 was taken 64655 times"> + </span><span class="branchCov" title="Branch 2 was taken 1208 times"> + </span><span class="branchCov" title="Branch 3 was taken 405337 times"> + </span>]:<span class="lineCov">     877745 :                       telemetry.signal[GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0 &amp;&amp; // The sample is valid</span>
+<span class="lineNum">     366 </span>        [<span class="branchCov" title="Branch 2 was taken 406545 times"> + </span><span class="branchCov" title="Branch 3 was taken 64655 times"> + </span>]:<span class="lineCov">     877745 :                       !m_is_entered[domain_idx]; // We have not already entered region</span>
+<span class="lineNum">     367 </span>        [<span class="branchCov" title="Branch 0 was taken 1208 times"> + </span><span class="branchCov" title="Branch 1 was taken 469992 times"> + </span>]:<span class="lineCov">     471200 :         if (result) {</span>
+<span class="lineNum">     368 </span>                :<span class="lineCov">       1208 :             m_is_entered[domain_idx] = true;</span>
+<span class="lineNum">     369 </span>                :            :         }
+<span class="lineNum">     370 </span>                :<span class="lineCov">     471200 :         return result;</span>
+<a name="371"><span class="lineNum">     371 </span>                :            :     }</a>
+<span class="lineNum">     372 </span>                :            : 
+<span class="lineNum">     373 </span>                :<span class="lineCov">     469982 :     bool Region::is_telemetry_exit(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx)</span>
+<span class="lineNum">     374 </span>                :            :     {
+<span class="lineNum">     375 </span>        [<span class="branchCov" title="Branch 0 was taken 990 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        990 :         bool result = telemetry.signal[GEOPM_TELEMETRY_TYPE_PROGRESS] == 1.0 &amp;&amp; // We are exiting the region</span>
+<span class="lineNum">     376 </span>  [<span class="branchCov" title="Branch 0 was taken 990 times"> + </span><span class="branchCov" title="Branch 1 was taken 468992 times"> + </span><span class="branchCov" title="Branch 2 was taken 990 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     470972 :                       telemetry.signal[GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0 &amp;&amp; // The sample is valid</span>
+<span class="lineNum">     377 </span>                :<span class="lineCov">        990 :                       domain_buffer_value(-1, domain_idx, GEOPM_TELEMETRY_TYPE_PROGRESS) != 1.0; // We have not already exited region</span>
+<span class="lineNum">     378 </span>        [<span class="branchCov" title="Branch 0 was taken 990 times"> + </span><span class="branchCov" title="Branch 1 was taken 468992 times"> + </span>]:<span class="lineCov">     469982 :         if (result) {</span>
+<span class="lineNum">     379 </span>                :<span class="lineCov">        990 :             m_is_entered[domain_idx] = false;</span>
+<span class="lineNum">     380 </span>                :            :         }
+<span class="lineNum">     381 </span>                :<span class="lineCov">     469982 :         return result;</span>
+<a name="382"><span class="lineNum">     382 </span>                :            :     }</a>
+<span class="lineNum">     383 </span>                :            : 
+<span class="lineNum">     384 </span>                :<span class="lineCov">     471200 :     void Region::update_domain_sample(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx)</span>
+<span class="lineNum">     385 </span>                :            :     {
+<span class="lineNum">     386 </span>        [<span class="branchCov" title="Branch 1 was taken 1208 times"> + </span><span class="branchCov" title="Branch 2 was taken 469992 times"> + </span>]:<span class="lineCov">     471200 :         if (is_telemetry_entry(telemetry, domain_idx) ) {</span>
+<span class="lineNum">     387 </span>                :<span class="lineCov">       1208 :             m_entry_telemetry[domain_idx] = telemetry;</span>
+<span class="lineNum">     388 </span>                :            :         }
+<span class="lineNum">     389 </span>  [<span class="branchCov" title="Branch 1 was taken 469982 times"> + </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span><span class="branchCov" title="Branch 3 was taken 990 times"> + </span><span class="branchCov" title="Branch 4 was taken 468992 times"> + </span>]:<span class="lineCov">     939974 :         else if (m_entry_telemetry[domain_idx].region_id != GEOPM_REGION_ID_UNDEFINED &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 990 times"> + </span><span class="branchCov" title="Branch 6 was taken 469002 times"> + </span>]
+<span class="lineNum">     390 </span>                :<span class="lineCov">     469982 :                  is_telemetry_exit(telemetry, domain_idx)) {</span>
+<span class="lineNum">     391 </span>                :<span class="lineCov">        990 :             m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_RUNTIME] =</span>
+<span class="lineNum">     392 </span>                :<span class="lineCov">        990 :                 geopm_time_diff(&amp;(m_entry_telemetry[domain_idx].timestamp), &amp;(telemetry.timestamp));</span>
+<span class="lineNum">     393 </span>                :<span class="lineCov">        990 :             m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_ENERGY] =</span>
+<span class="lineNum">     394 </span>                :<span class="lineCov">       1980 :                 (telemetry.signal[GEOPM_TELEMETRY_TYPE_PKG_ENERGY] +</span>
+<span class="lineNum">     395 </span>                :<span class="lineCov">       1980 :                  telemetry.signal[GEOPM_TELEMETRY_TYPE_DRAM_ENERGY]) -</span>
+<span class="lineNum">     396 </span>                :<span class="lineCov">        990 :                 (m_entry_telemetry[domain_idx].signal[GEOPM_TELEMETRY_TYPE_PKG_ENERGY] +</span>
+<span class="lineNum">     397 </span>                :<span class="lineCov">        990 :                  m_entry_telemetry[domain_idx].signal[GEOPM_TELEMETRY_TYPE_DRAM_ENERGY]);</span>
+<span class="lineNum">     398 </span>                :<span class="lineCov">        990 :             m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER] +=</span>
+<span class="lineNum">     399 </span>                :<span class="lineCov">        990 :                 telemetry.signal[GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_CORE] -</span>
+<span class="lineNum">     400 </span>                :<span class="lineCov">        990 :                 m_entry_telemetry[domain_idx].signal[GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_CORE];</span>
+<span class="lineNum">     401 </span>                :<span class="lineCov">        990 :             m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM] +=</span>
+<span class="lineNum">     402 </span>                :<span class="lineCov">        990 :                 telemetry.signal[GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_REF] -</span>
+<span class="lineNum">     403 </span>                :<span class="lineCov">        990 :                 m_entry_telemetry[domain_idx].signal[GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_REF];</span>
+<span class="lineNum">     404 </span>                :<span class="lineCov">        990 :             m_entry_telemetry[domain_idx].region_id = GEOPM_REGION_ID_UNDEFINED;</span>
+<span class="lineNum">     405 </span>                :            :         }
+<a name="406"><span class="lineNum">     406 </span>                :<span class="lineCov">     471200 :     }</span></a>
+<span class="lineNum">     407 </span>                :            : 
+<span class="lineNum">     408 </span>                :<span class="lineCov">     473664 :     void Region::update_signal_matrix(const double *signal, int domain_idx)</span>
+<span class="lineNum">     409 </span>                :            :     {
+<span class="lineNum">     410 </span>                :<span class="lineCov">     473664 :         memcpy(m_signal_matrix.data() + domain_idx * m_num_signal, signal, m_num_signal * sizeof(double));</span>
+<a name="411"><span class="lineNum">     411 </span>                :<span class="lineCov">     473664 :     }</span></a>
+<span class="lineNum">     412 </span>                :            : 
+<span class="lineNum">     413 </span>                :<span class="lineCov">     471200 :     void Region::update_valid_entries(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx)</span>
+<span class="lineNum">     414 </span>                :            :     {
+<span class="lineNum">     415 </span>                :<span class="lineCov">     471200 :         int offset = domain_idx * m_num_signal;</span>
+<span class="lineNum">     416 </span>                :            :         // Calculate the number of entries *after* we insert the new data: size() + 1 or capacity
+<span class="lineNum">     417 </span>[<span class="branchCov" title="Branch 1 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">     471200 :         int num_entries = m_domain_buffer-&gt;size() + 1 &lt; m_domain_buffer-&gt;capacity() ?</span>
+<span class="lineNum">     418 </span>[<span class="branchCov" title="Branch 0 was taken 2988 times"> + </span><span class="branchCov" title="Branch 1 was taken 468212 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 2988 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">     471200 :                           m_domain_buffer-&gt;size() + 1 : m_domain_buffer-&gt;capacity();</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 6 was taken 468212 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">     419 </span>                :            :         // Fill in the number of valid entries for other signals which are always valid
+<span class="lineNum">     420 </span>        [<span class="branchCov" title="Branch 6 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">     471200 :         std::fill(m_valid_entries.begin() + offset, m_valid_entries.begin() + offset + GEOPM_TELEMETRY_TYPE_PROGRESS, num_entries);</span>
+<span class="lineNum">     421 </span>                :            : 
+<span class="lineNum">     422 </span>                :            :         // Account for invalid progress or runtime being inserted or dropped off the end of the buffer
+<span class="lineNum">     423 </span>        [<span class="branchCov" title="Branch 1 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     941868 :         bool is_oldest_valid = m_domain_buffer-&gt;size() &amp;&amp;</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 3 was taken 470668 times"> + </span><span class="branchCov" title="Branch 4 was taken 532 times"> + </span><span class="branchCov" title="Branch 5 was taken 470664 times"> + </span><span class="branchCov" title="Branch 6 was taken 4 times"> + </span>]
+<span class="lineNum">     424 </span>        [<span class="branchCov" title="Branch 1 was taken 470668 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     470668 :                                m_domain_buffer-&gt;value(0)[offset + GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0;</span>
+<span class="lineNum">     425 </span>                :<span class="lineCov">     471200 :         bool is_signal_valid = telemetry.signal[GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0;</span>
+<span class="lineNum">     426 </span>[<span class="branchCov" title="Branch 1 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 471200 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">     471200 :         bool is_full = m_domain_buffer-&gt;size() == m_domain_buffer-&gt;capacity();</span>
+<span class="lineNum">     427 </span>                :            : 
+<span class="lineNum">     428 </span>[<span class="branchCov" title="Branch 0 was taken 467895 times"> + </span><span class="branchCov" title="Branch 1 was taken 3305 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 4 times"> + </span><span class="branchCov" title="Branch 3 was taken 467891 times"> + </span>]:<span class="lineCov">     471200 :         if ((is_full &amp;&amp; !is_oldest_valid &amp;&amp; is_signal_valid) ||</span>
+<span class="lineNum">         </span>[<span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 5 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 6 was taken 3305 times"> + </span><span class="branchCov" title="Branch 7 was taken 467891 times"> + </span>]
+<span class="lineNum">     429 </span>        [<span class="branchCov" title="Branch 0 was taken 3301 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">       3305 :             (!is_full &amp;&amp; is_signal_valid)) {</span>
+<span class="lineNum">     430 </span>                :<span class="lineCov">       3305 :             ++m_valid_entries[offset + GEOPM_TELEMETRY_TYPE_PROGRESS];</span>
+<span class="lineNum">     431 </span>                :<span class="lineCov">       3305 :             ++m_valid_entries[offset + GEOPM_TELEMETRY_TYPE_RUNTIME];</span>
+<span class="lineNum">     432 </span>                :            :         }
+<span class="lineNum">     433 </span>[<span class="branchCov" title="Branch 0 was taken 467891 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 467891 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     467895 :         else if (is_full &amp;&amp; is_oldest_valid &amp;&amp; !is_signal_valid) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 4 times"> + </span><span class="branchCov" title="Branch 5 was taken 467887 times"> + </span>]
+<span class="lineNum">     434 </span>                :<span class="lineCov">          4 :             --m_valid_entries[offset + GEOPM_TELEMETRY_TYPE_PROGRESS];</span>
+<span class="lineNum">     435 </span>                :<span class="lineCov">          4 :             --m_valid_entries[offset + GEOPM_TELEMETRY_TYPE_RUNTIME];</span>
+<span class="lineNum">     436 </span>                :            :         }
+<a name="437"><span class="lineNum">     437 </span>                :<span class="lineCov">     471200 :     }</span></a>
+<span class="lineNum">     438 </span>                :            : 
+<span class="lineNum">     439 </span>                :<span class="lineCov">     473664 :     void Region::update_stats(const double *signal, int domain_idx)</span>
+<span class="lineNum">     440 </span>                :            :     {
+<span class="lineNum">     441 </span>                :<span class="lineCov">     473664 :         int offset = domain_idx * m_num_signal;</span>
+<span class="lineNum">     442 </span>                :<span class="lineCov">     473664 :         bool is_full = m_domain_buffer-&gt;size() == m_domain_buffer-&gt;capacity();</span>
+<span class="lineNum">     443 </span>        [<span class="branchCov" title="Branch 0 was taken 4250656 times"> + </span><span class="branchCov" title="Branch 1 was taken 473664 times"> + </span>]:<span class="lineCov">    4724320 :         for (int i = 0; i &lt; m_num_signal; ++i) {</span>
+<span class="lineNum">     444 </span>[<span class="branchCov" title="Branch 0 was taken 4240800 times"> + </span><span class="branchCov" title="Branch 1 was taken 9856 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 4240728 times"> + </span><span class="branchCov" title="Branch 3 was taken 72 times"> + </span>]:<span class="lineCov">    4250656 :             bool is_signal_valid = m_level ? true : signal[GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0;</span>
+<span class="lineNum">     445 </span>                :            : 
+<span class="lineNum">     446 </span>                :            :             // CALCULATE THE MIN
+<span class="lineNum">     447 </span>[<span class="branchCov" title="Branch 0 was taken 4250584 times"> + </span><span class="branchCov" title="Branch 1 was taken 72 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 6624 times"> + </span><span class="branchCov" title="Branch 4 was taken 4243960 times"> + </span>]:<span class="lineCov">    4250656 :             if (is_signal_valid &amp;&amp; signal[i] &lt; m_min[offset + i]) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 6624 times"> + </span><span class="branchCov" title="Branch 6 was taken 4244032 times"> + </span>]
+<span class="lineNum">     448 </span>                :<span class="lineCov">       6624 :                 m_min[offset + i] = signal[i];</span>
+<span class="lineNum">     449 </span>                :            :             }
+<span class="lineNum">     450 </span>[<span class="branchCov" title="Branch 0 was taken 4210658 times"> + </span><span class="branchCov" title="Branch 1 was taken 33374 times"> + </span>][<span class="branchCov" title="Branch 5 was taken 4206262 times"> + </span><span class="branchCov" title="Branch 6 was taken 4396 times"> + </span>]:<span class="lineCov">    4244032 :             else if (is_full &amp;&amp; m_min[offset + i] == m_domain_buffer-&gt;value(0)[offset + i]) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 4206262 times"> + </span><span class="branchCov" title="Branch 8 was taken 37770 times"> + </span>]
+<span class="lineNum">     451 </span>                :            :                 // We are about to throw out the current min
+<span class="lineNum">     452 </span>                :            :                 // Find the new one
+<span class="lineNum">     453 </span>        [<span class="branchCov" title="Branch 1 was taken 4206226 times"> + </span><span class="branchCov" title="Branch 2 was taken 36 times"> + </span>]:<span class="lineCov">    4206262 :                 m_min[offset + i] = is_signal_valid ? signal[i] : DBL_MAX;</span>
+<span class="lineNum">     454 </span>        [<span class="branchCov" title="Branch 1 was taken 29443834 times"> + </span><span class="branchCov" title="Branch 2 was taken 4206262 times"> + </span>]:<span class="lineCov">   33650096 :                 for (int entry = 1; entry &lt; m_domain_buffer-&gt;size(); ++entry) {</span>
+<span class="lineNum">     455 </span>[<span class="branchCov" title="Branch 0 was taken 29443386 times"> + </span><span class="branchCov" title="Branch 1 was taken 448 times"> + </span>][<span class="branchCov" title="Branch 4 was taken 29443326 times"> + </span><span class="branchCov" title="Branch 5 was taken 60 times"> + </span>]:<span class="lineCov">   29443834 :                     bool is_old_value_valid = m_level ? true : m_domain_buffer-&gt;value(entry)[offset + GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0;</span>
+<span class="lineNum">     456 </span>  [<span class="branchCov" title="Branch 0 was taken 29443774 times"> + </span><span class="branchCov" title="Branch 1 was taken 60 times"> + </span><span class="branchCov" title="Branch 2 was taken 2406918 times"> + </span><span class="branchCov" title="Branch 3 was taken 27036856 times"> + </span>]:<span class="lineCov">   58887608 :                     if (is_old_value_valid &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 2406918 times"> + </span><span class="branchCov" title="Branch 5 was taken 27036916 times"> + </span>]
+<span class="lineNum">     457 </span>                :<span class="lineCov">   29443774 :                         m_domain_buffer-&gt;value(entry)[offset + i] &lt; m_min[offset + i]) {</span>
+<span class="lineNum">     458 </span>                :<span class="lineCov">    2406918 :                         m_min[offset + i] = m_domain_buffer-&gt;value(entry)[offset + i];</span>
+<span class="lineNum">     459 </span>                :            :                     }
+<span class="lineNum">     460 </span>                :            :                 }
+<span class="lineNum">     461 </span>                :            :             }
+<span class="lineNum">     462 </span>                :            : 
+<span class="lineNum">     463 </span>                :            :             // CALCULATE THE MAX
+<span class="lineNum">     464 </span>[<span class="branchCov" title="Branch 0 was taken 4250584 times"> + </span><span class="branchCov" title="Branch 1 was taken 72 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 2435986 times"> + </span><span class="branchCov" title="Branch 4 was taken 1814598 times"> + </span>]:<span class="lineCov">    4250656 :             if (is_signal_valid &amp;&amp; signal[i] &gt; m_max[offset + i]) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 2435986 times"> + </span><span class="branchCov" title="Branch 6 was taken 1814670 times"> + </span>]
+<span class="lineNum">     465 </span>                :<span class="lineCov">    2435986 :                 m_max[offset + i] = signal[i];</span>
+<span class="lineNum">     466 </span>                :            :             }
+<span class="lineNum">     467 </span>[<span class="branchCov" title="Branch 0 was taken 1806538 times"> + </span><span class="branchCov" title="Branch 1 was taken 8132 times"> + </span>][<span class="branchCov" title="Branch 5 was taken 1800819 times"> + </span><span class="branchCov" title="Branch 6 was taken 5719 times"> + </span>]:<span class="lineCov">    1814670 :             else if (is_full &amp;&amp; m_max[offset + i] == m_domain_buffer-&gt;value(0)[offset + i]) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 1800819 times"> + </span><span class="branchCov" title="Branch 8 was taken 13851 times"> + </span>]
+<span class="lineNum">     468 </span>                :            :                 // We are about to throw out the current max
+<span class="lineNum">     469 </span>                :            :                 // Find the new one
+<span class="lineNum">     470 </span>        [<span class="branchCov" title="Branch 1 was taken 1800819 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    1800819 :                 m_max[offset + i] = is_signal_valid ? signal[i] : -DBL_MAX;</span>
+<span class="lineNum">     471 </span>        [<span class="branchCov" title="Branch 1 was taken 12605733 times"> + </span><span class="branchCov" title="Branch 2 was taken 1800819 times"> + </span>]:<span class="lineCov">   14406552 :                 for (int entry = 1; entry &lt; m_domain_buffer-&gt;size(); ++entry) {</span>
+<span class="lineNum">     472 </span>[<span class="branchCov" title="Branch 0 was taken 12605733 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 12605669 times"> + </span><span class="branchCov" title="Branch 5 was taken 64 times"> + </span>]:<span class="lineCov">   12605733 :                     bool is_old_value_valid = m_level ? true : m_domain_buffer-&gt;value(entry)[offset + GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0;</span>
+<span class="lineNum">     473 </span>  [<span class="branchCov" title="Branch 0 was taken 12605669 times"> + </span><span class="branchCov" title="Branch 1 was taken 64 times"> + </span><span class="branchCov" title="Branch 2 was taken 1090 times"> + </span><span class="branchCov" title="Branch 3 was taken 12604579 times"> + </span>]:<span class="lineCov">   25211402 :                     if (is_old_value_valid &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 1090 times"> + </span><span class="branchCov" title="Branch 5 was taken 12604643 times"> + </span>]
+<span class="lineNum">     474 </span>                :<span class="lineCov">   12605669 :                         m_domain_buffer-&gt;value(entry)[offset + i] &gt; m_max[offset + i]) {</span>
+<span class="lineNum">     475 </span>                :<span class="lineCov">       1090 :                         m_max[offset +i] = m_domain_buffer-&gt;value(entry)[offset + i];</span>
+<span class="lineNum">     476 </span>                :            :                     }
+<span class="lineNum">     477 </span>                :            :                 }
+<span class="lineNum">     478 </span>                :            :             }
+<span class="lineNum">     479 </span>                :            : 
+<span class="lineNum">     480 </span>                :            :             // CALCULATE SUM AND SUM OF SQUARES
+<span class="lineNum">     481 </span>        [<span class="branchCov" title="Branch 0 was taken 4240800 times"> + </span><span class="branchCov" title="Branch 1 was taken 9856 times"> + </span>]:<span class="lineCov">    8486668 :             bool is_oldest_valid = m_level || (m_domain_buffer-&gt;size() &amp;&amp;</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 3 was taken 4236012 times"> + </span><span class="branchCov" title="Branch 4 was taken 4788 times"> + </span><span class="branchCov" title="Branch 5 was taken 4235976 times"> + </span><span class="branchCov" title="Branch 6 was taken 36 times"> + </span>]
+<span class="lineNum">     482 </span>                :<span class="lineCov">    4236012 :                                                m_domain_buffer-&gt;value(0)[offset + GEOPM_TELEMETRY_TYPE_RUNTIME] != -1.0);</span>
+<span class="lineNum">     483 </span>                :            : 
+<span class="lineNum">     484 </span>        [<span class="branchCov" title="Branch 0 was taken 4250584 times"> + </span><span class="branchCov" title="Branch 1 was taken 72 times"> + </span>]:<span class="lineCov">    4250656 :             if (is_signal_valid) {</span>
+<span class="lineNum">     485 </span>                :            :                 // sum the values
+<span class="lineNum">     486 </span>                :<span class="lineCov">    4250584 :                 m_sum[offset + i] += signal[i];</span>
+<span class="lineNum">     487 </span>                :            :                 // sum the square of the values
+<span class="lineNum">     488 </span>                :<span class="lineCov">    4250584 :                 m_sum_squares[offset + i] += signal[i] * signal[i];</span>
+<span class="lineNum">     489 </span>                :            :             }
+<span class="lineNum">     490 </span>[<span class="branchCov" title="Branch 0 was taken 4211119 times"> + </span><span class="branchCov" title="Branch 1 was taken 39537 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 4211083 times"> + </span><span class="branchCov" title="Branch 3 was taken 36 times"> + </span>]:<span class="lineCov">    4250656 :             if (is_full &amp;&amp; is_oldest_valid) {</span>
+<span class="lineNum">     491 </span>                :            :                 // We need to subtract the value of the signal we are removing
+<span class="lineNum">     492 </span>                :<span class="lineCov">    4211083 :                 m_sum[offset + i] -= m_domain_buffer-&gt;value(0)[offset + i];</span>
+<span class="lineNum">     493 </span>                :<span class="lineCov">    4211083 :                 m_sum_squares[offset + i] -= m_domain_buffer-&gt;value(0)[offset + i] * m_domain_buffer-&gt;value(0)[offset + i];</span>
+<span class="lineNum">     494 </span>                :            :             }
+<span class="lineNum">     495 </span>                :            :         }
+<a name="496"><span class="lineNum">     496 </span>                :<span class="lineCov">     473664 :     }</span></a>
+<span class="lineNum">     497 </span>                :            : 
+<span class="lineNum">     498 </span>                :<span class="lineCov">       1294 :     void Region::update_curr_sample(void)</span>
+<span class="lineNum">     499 </span>                :            :     {
+<span class="lineNum">     500 </span>        [<span class="branchCov" title="Branch 1 was taken 1294 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1294 :         std::fill(m_curr_sample.signal, m_curr_sample.signal + GEOPM_NUM_SAMPLE_TYPE, 0.0);</span>
+<span class="lineNum">     501 </span>        [<span class="branchCov" title="Branch 0 was taken 3452 times"> + </span><span class="branchCov" title="Branch 1 was taken 1294 times"> + </span>]:<span class="lineCov">       4746 :         for (unsigned domain_idx = 0; domain_idx != m_num_domain; ++domain_idx) {</span>
+<span class="lineNum">     502 </span>                :            :             m_curr_sample.signal[GEOPM_SAMPLE_TYPE_RUNTIME] =
+<span class="lineNum">     503 </span>                :<span class="lineCov">       3452 :                 m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_RUNTIME] &gt; m_curr_sample.signal[GEOPM_SAMPLE_TYPE_RUNTIME] ?</span>
+<span class="lineNum">     504 </span>        [<span class="branchCov" title="Branch 0 was taken 3378 times"> + </span><span class="branchCov" title="Branch 1 was taken 74 times"> + </span>]:<span class="lineCov">       3452 :                 m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_RUNTIME] : m_curr_sample.signal[GEOPM_SAMPLE_TYPE_RUNTIME];</span>
+<span class="lineNum">     505 </span>                :<span class="lineCov">       3452 :             m_curr_sample.signal[GEOPM_SAMPLE_TYPE_ENERGY] += m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_ENERGY];</span>
+<span class="lineNum">     506 </span>                :<span class="lineCov">       3452 :             m_curr_sample.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER] += m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER];</span>
+<span class="lineNum">     507 </span>                :<span class="lineCov">       3452 :             m_curr_sample.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM] += m_domain_sample[domain_idx].signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM];</span>
+<span class="lineNum">     508 </span>                :            :         }
+<span class="lineNum">     509 </span>                :<span class="lineCov">       1294 :         m_agg_stats.signal[GEOPM_SAMPLE_TYPE_RUNTIME] += m_curr_sample.signal[GEOPM_SAMPLE_TYPE_RUNTIME];</span>
+<span class="lineNum">     510 </span>                :<span class="lineCov">       1294 :         m_agg_stats.signal[GEOPM_SAMPLE_TYPE_ENERGY] += m_curr_sample.signal[GEOPM_SAMPLE_TYPE_ENERGY];</span>
+<span class="lineNum">     511 </span>                :<span class="lineCov">       1294 :         m_agg_stats.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER] += m_curr_sample.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER];</span>
+<span class="lineNum">     512 </span>                :<span class="lineCov">       1294 :         m_agg_stats.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM] += m_curr_sample.signal[GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM];</span>
+<a name="513"><span class="lineNum">     513 </span>                :<span class="lineCov">       1294 :     }</span></a>
+<span class="lineNum">     514 </span>                :            : 
+<span class="lineNum">     515 </span>[<span class="branchCov" title="Branch 1 was taken 1489 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1489 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">       5956 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

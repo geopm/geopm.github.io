@@ -1,0 +1,1118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - src/Profile.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - Profile.cpp<span style="font-size: 80%;"> (source / <a href="Profile.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">394</td>
+            <td class="headerCovTableEntry">469</td>
+            <td class="headerCovTableEntryMed">84.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-06-18</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">44</td>
+            <td class="headerCovTableEntry">51</td>
+            <td class="headerCovTableEntryMed">86.3 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">350</td>
+            <td class="headerCovTableEntry">654</td>
+            <td class="headerCovTableEntryLo">53.5 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, Intel Corporation
+<span class="lineNum">       3 </span>                :            :  *
+<span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
+<span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions
+<span class="lineNum">       6 </span>                :            :  * are met:
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  *     * Redistributions of source code must retain the above copyright
+<span class="lineNum">       9 </span>                :            :  *       notice, this list of conditions and the following disclaimer.
+<span class="lineNum">      10 </span>                :            :  *
+<span class="lineNum">      11 </span>                :            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>                :            :  *       notice, this list of conditions and the following disclaimer in
+<span class="lineNum">      13 </span>                :            :  *       the documentation and/or other materials provided with the
+<span class="lineNum">      14 </span>                :            :  *       distribution.
+<span class="lineNum">      15 </span>                :            :  *
+<span class="lineNum">      16 </span>                :            :  *     * Neither the name of Intel Corporation nor the names of its
+<span class="lineNum">      17 </span>                :            :  *       contributors may be used to endorse or promote products derived
+<span class="lineNum">      18 </span>                :            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>                :            :  *
+<span class="lineNum">      20 </span>                :            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<span class="lineNum">      21 </span>                :            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+<span class="lineNum">      22 </span>                :            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>                :            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>                :            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<span class="lineNum">      25 </span>                :            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+<span class="lineNum">      26 </span>                :            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>                :            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>                :            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE
+<span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>                :            :  */
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : #ifdef __APPLE__
+<span class="lineNum">      34 </span>                :            : #define _DARWIN_C_SOURCE
+<span class="lineNum">      35 </span>                :            : #include &lt;sys/types.h&gt;
+<span class="lineNum">      36 </span>                :            : #include &lt;sys/sysctl.h&gt;
+<span class="lineNum">      37 </span>                :            : #endif
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :            : #include &lt;algorithm&gt;
+<span class="lineNum">      40 </span>                :            : #include &lt;iostream&gt;
+<span class="lineNum">      41 </span>                :            : #include &lt;sstream&gt;
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :            : #include &lt;float.h&gt;
+<span class="lineNum">      44 </span>                :            : #include &lt;unistd.h&gt;
+<span class="lineNum">      45 </span>                :            : #include &lt;hwloc.h&gt;
+<span class="lineNum">      46 </span>                :            : #include &lt;errno.h&gt;
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :            : #include &quot;geopm.h&quot;
+<span class="lineNum">      49 </span>                :            : #include &quot;geopm_sched.h&quot;
+<span class="lineNum">      50 </span>                :            : #include &quot;geopm_message.h&quot;
+<span class="lineNum">      51 </span>                :            : #include &quot;geopm_time.h&quot;
+<span class="lineNum">      52 </span>                :            : #include &quot;geopm_signal_handler.h&quot;
+<span class="lineNum">      53 </span>                :            : #include &quot;Profile.hpp&quot;
+<span class="lineNum">      54 </span>                :            : #include &quot;ProfileThread.hpp&quot;
+<span class="lineNum">      55 </span>                :            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      56 </span>                :            : #include &quot;geopm_env.h&quot;
+<span class="lineNum">      57 </span>                :            : #include &quot;ProfileTable.hpp&quot;
+<a name="58"><span class="lineNum">      58 </span>                :            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      59 </span>                :            : 
+<span class="lineNum">      60 </span>                :<span class="lineCov">      12483 : static bool geopm_prof_compare(const std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &amp;aa, const std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &amp;bb)</span>
+<span class="lineNum">      61 </span>                :            : {
+<span class="lineNum">      62 </span>                :<span class="lineCov">      12483 :     return geopm_time_comp(&amp;(aa.second.timestamp), &amp;(bb.second.timestamp));</span>
+<a name="63"><span class="lineNum">      63 </span>                :            : }</a>
+<span class="lineNum">      64 </span>                :            : 
+<span class="lineNum">      65 </span>                :<span class="lineCov"> 1535967599 : static geopm::Profile &amp;geopm_default_prof(void)</span>
+<span class="lineNum">      66 </span>                :            : {
+<span class="lineNum">      67 </span>[<span class="branchCov" title="Branch 0 was taken 410 times"> + </span><span class="branchCov" title="Branch 1 was taken 1535967189 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov"> 1535967599 :     static geopm::Profile default_prof(geopm_env_profile(), MPI_COMM_WORLD);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 13 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span>][<span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span>]
+<span class="lineNum">      68 </span>                :<span class="lineCov"> 1535967599 :     return default_prof;</span>
+<span class="lineNum">      69 </span>                :            : }
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            : extern &quot;C&quot;
+<span class="lineNum">      72 </span>                :            : {
+<span class="lineNum">      73 </span>                :            :     // defined in geopm_pmpi.c and used only here
+<a name="74"><span class="lineNum">      74 </span>                :            :     void geopm_pmpi_prof_enable(int do_profile);</a>
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :<span class="lineCov">        256 :     int geopm_prof_init(void)</span>
+<span class="lineNum">      77 </span>                :            :     {
+<span class="lineNum">      78 </span>                :<span class="lineCov">        256 :         int err = 0;</span>
+<span class="lineNum">      79 </span>                :            :         try {
+<span class="lineNum">      80 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :             geopm_default_prof();</span>
+<span class="lineNum">      81 </span>                :            :         }
+<span class="lineNum">      82 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">      83 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">      84 </span>                :            :         }
+<span class="lineNum">      85 </span>                :<span class="lineCov">        256 :         return err;</span>
+<a name="86"><span class="lineNum">      86 </span>                :            :     }</a>
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :<span class="lineCov">       1648 :     int geopm_prof_region(const char *region_name, uint64_t hint, uint64_t *region_id)</span>
+<span class="lineNum">      89 </span>                :            :     {
+<span class="lineNum">      90 </span>                :<span class="lineCov">       1648 :         int err = 0;</span>
+<span class="lineNum">      91 </span>                :            :         try {
+<span class="lineNum">      92 </span>[<span class="branchCov" title="Branch 1 was taken 1648 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 1648 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">       1648 :             *region_id = geopm_default_prof().region(std::string(region_name), hint);</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 1648 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">      93 </span>                :            :         }
+<span class="lineNum">      94 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">      95 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">      96 </span>                :            :         }
+<span class="lineNum">      97 </span>                :<span class="lineCov">       1648 :         return err;</span>
+<a name="98"><span class="lineNum">      98 </span>                :            :     }</a>
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :<span class="lineCov">       6827 :     int geopm_prof_enter(uint64_t region_id)</span>
+<span class="lineNum">     101 </span>                :            :     {
+<span class="lineNum">     102 </span>                :<span class="lineCov">       6827 :         int err = 0;</span>
+<span class="lineNum">     103 </span>                :            :         try {
+<span class="lineNum">     104 </span>[<span class="branchCov" title="Branch 1 was taken 6827 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 6827 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">       6827 :             geopm_default_prof().enter(region_id);</span>
+<span class="lineNum">     105 </span>                :            :         }
+<span class="lineNum">     106 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     107 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     108 </span>                :            :         }
+<span class="lineNum">     109 </span>                :<span class="lineCov">       6827 :         return err;</span>
+<a name="110"><span class="lineNum">     110 </span>                :            :     }</a>
+<span class="lineNum">     111 </span>                :            : 
+<span class="lineNum">     112 </span>                :<span class="lineCov">       6827 :     int geopm_prof_exit(uint64_t region_id)</span>
+<span class="lineNum">     113 </span>                :            :     {
+<span class="lineNum">     114 </span>                :<span class="lineCov">       6827 :         int err = 0;</span>
+<span class="lineNum">     115 </span>                :            :         try {
+<span class="lineNum">     116 </span>[<span class="branchCov" title="Branch 1 was taken 6827 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 6827 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">       6827 :             geopm_default_prof().exit(region_id);</span>
+<span class="lineNum">     117 </span>                :            :         }
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     119 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     120 </span>                :            :         }
+<span class="lineNum">     121 </span>                :<span class="lineCov">       6827 :         return err;</span>
+<a name="122"><span class="lineNum">     122 </span>                :            :     }</a>
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>                :<span class="lineCov"> 1535949456 :     int geopm_prof_progress(uint64_t region_id, double fraction)</span>
+<span class="lineNum">     125 </span>                :            :     {
+<span class="lineNum">     126 </span>                :<span class="lineCov"> 1535949456 :         int err = 0;</span>
+<span class="lineNum">     127 </span>                :            :         try {
+<span class="lineNum">     128 </span>[<span class="branchCov" title="Branch 1 was taken 1535949456 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1535949456 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov"> 1535949456 :             geopm_default_prof().progress(region_id, fraction);</span>
+<span class="lineNum">     129 </span>                :            :         }
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     131 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     132 </span>                :            :         }
+<span class="lineNum">     133 </span>                :<span class="lineCov"> 1535949456 :         return err;</span>
+<a name="134"><span class="lineNum">     134 </span>                :            :     }</a>
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :<span class="lineCov">       2179 :     int geopm_prof_epoch(void)</span>
+<span class="lineNum">     137 </span>                :            :     {
+<span class="lineNum">     138 </span>                :<span class="lineCov">       2179 :         int err = 0;</span>
+<span class="lineNum">     139 </span>                :            :         try {
+<span class="lineNum">     140 </span>[<span class="branchCov" title="Branch 1 was taken 2179 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2179 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">       2179 :             geopm_default_prof().epoch();</span>
+<span class="lineNum">     141 </span>                :            :         }
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     143 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     144 </span>                :            :         }
+<span class="lineNum">     145 </span>                :<span class="lineCov">       2179 :         return err;</span>
+<a name="146"><span class="lineNum">     146 </span>                :            :     }</a>
+<span class="lineNum">     147 </span>                :            : 
+<span class="lineNum">     148 </span>                :<span class="lineNoCov">          0 :     int geopm_prof_disable(const char *feature_name)</span>
+<span class="lineNum">     149 </span>                :            :     {
+<span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :         int err = 0;</span>
+<span class="lineNum">     151 </span>                :            :         try {
+<span class="lineNum">     152 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             geopm_default_prof().disable(std::string(feature_name));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     153 </span>                :            :         }
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     155 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     156 </span>                :            :         }
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 :         return err;</span>
+<a name="158"><span class="lineNum">     158 </span>                :            :     }</a>
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :<span class="lineCov">        406 :     int geopm_prof_shutdown(void)</span>
+<span class="lineNum">     161 </span>                :            :     {
+<span class="lineNum">     162 </span>                :<span class="lineCov">        406 :         int err = 0;</span>
+<span class="lineNum">     163 </span>                :            :         try {
+<span class="lineNum">     164 </span>[<span class="branchCov" title="Branch 1 was taken 406 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 406 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        406 :             geopm_default_prof().shutdown();</span>
+<span class="lineNum">     165 </span>                :            :         }
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     167 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     168 </span>                :            :         }
+<span class="lineNum">     169 </span>                :<span class="lineCov">        406 :         return err;</span>
+<a name="170"><span class="lineNum">     170 </span>                :            :     }</a>
+<span class="lineNum">     171 </span>                :            : 
+<span class="lineNum">     172 </span>                :<span class="lineNoCov">          0 :     int geopm_tprof_init(uint32_t num_work_unit)</span>
+<span class="lineNum">     173 </span>                :            :     {
+<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :         int err = 0;</span>
+<span class="lineNum">     175 </span>                :            :         try {
+<span class="lineNum">     176 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             geopm_default_prof().tprof_table()-&gt;init(num_work_unit);</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">     177 </span>                :            :         }
+<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     179 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     180 </span>                :            :         }
+<span class="lineNum">     181 </span>                :<span class="lineNoCov">          0 :         return err;</span>
+<span class="lineNum">     182 </span>                :            : 
+<a name="183"><span class="lineNum">     183 </span>                :            :     }</a>
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :     int geopm_tprof_init_loop(int num_thread, int thread_idx, size_t num_iter, size_t chunk_size)</span>
+<span class="lineNum">     186 </span>                :            :     {
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :         int err = 0;</span>
+<span class="lineNum">     188 </span>                :            :         try {
+<span class="lineNum">     189 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             geopm::IProfileThreadTable *table_ptr = geopm_default_prof().tprof_table();</span>
+<span class="lineNum">     190 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (chunk_size) {</span>
+<span class="lineNum">     191 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 table_ptr-&gt;init(num_thread, thread_idx, num_iter, chunk_size);</span>
+<span class="lineNum">     192 </span>                :            :             }
+<span class="lineNum">     193 </span>                :            :             else {
+<span class="lineNum">     194 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 table_ptr-&gt;init(num_thread, thread_idx, num_iter);</span>
+<span class="lineNum">     195 </span>                :            :             }
+<span class="lineNum">     196 </span>                :            :         }
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     198 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     199 </span>                :            :         }
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :         return err;</span>
+<a name="201"><span class="lineNum">     201 </span>                :            :     }</a>
+<span class="lineNum">     202 </span>                :            : 
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :     int geopm_tprof_post(void)</span>
+<span class="lineNum">     204 </span>                :            :     {
+<span class="lineNum">     205 </span>                :<span class="lineNoCov">          0 :         int err = 0;</span>
+<span class="lineNum">     206 </span>                :            :         try {
+<span class="lineNum">     207 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             geopm_default_prof().tprof_table()-&gt;post();</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">     208 </span>                :            :         }
+<span class="lineNum">     209 </span>                :<span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     210 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     211 </span>                :            :         }
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 :         return err;</span>
+<span class="lineNum">     213 </span>                :            :     }
+<span class="lineNum">     214 </span>                :            : 
+<span class="lineNum">     215 </span>                :            : }
+<span class="lineNum">     216 </span>                :            : 
+<span class="lineNum">     217 </span>                :            : namespace geopm
+<a name="218"><span class="lineNum">     218 </span>                :            : {</a>
+<span class="lineNum">     219 </span>                :            : 
+<span class="lineNum">     220 </span>                :<span class="lineCov">        410 :     Profile::Profile(const std::string prof_name, MPI_Comm comm)</span>
+<span class="lineNum">     221 </span>                :            :         : m_is_enabled(true)
+<span class="lineNum">     222 </span>                :            :         , m_prof_name(prof_name)
+<span class="lineNum">     223 </span>                :            :         , m_curr_region_id(0)
+<span class="lineNum">     224 </span>                :            :         , m_num_enter(0)
+<span class="lineNum">     225 </span>                :            :         , m_num_progress(0)
+<span class="lineNum">     226 </span>                :            :         , m_progress(0.0)
+<span class="lineNum">     227 </span>                :            :         , m_table_buffer(NULL)
+<span class="lineNum">     228 </span>                :            :         , m_ctl_shmem(NULL)
+<span class="lineNum">     229 </span>                :            :         , m_ctl_msg(NULL)
+<span class="lineNum">     230 </span>                :            :         , m_table_shmem(NULL)
+<span class="lineNum">     231 </span>                :            :         , m_table(NULL)
+<span class="lineNum">     232 </span>                :            :         , m_tprof_shmem(NULL)
+<span class="lineNum">     233 </span>                :            :         , m_tprof_table(NULL)
+<span class="lineNum">     234 </span>                :            :         , M_OVERHEAD_FRAC(0.01)
+<span class="lineNum">     235 </span>                :            :         , m_scheduler(NULL)
+<span class="lineNum">     236 </span>                :            :         , m_shm_comm(MPI_COMM_NULL)
+<span class="lineNum">     237 </span>                :            :         , m_rank(0)
+<span class="lineNum">     238 </span>                :            :         , m_shm_rank(0)
+<span class="lineNum">     239 </span>                :            :         , m_is_first_sync(true)
+<span class="lineNum">     240 </span>                :            :         , m_parent_region(0)
+<span class="lineNum">     241 </span>                :            :         , m_parent_progress(0.0)
+<span class="lineNum">     242 </span>                :            :         , m_parent_num_enter(0)
+<span class="lineNum">     243 </span>                :            :         , m_overhead_time(0.0)
+<span class="lineNum">     244 </span>                :            :         , m_overhead_time_startup(0.0)
+<span class="lineNum">     245 </span>        [<span class="branchCov" title="Branch 2 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        410 :         , m_overhead_time_shutdown(0.0)</span>
+<span class="lineNum">     246 </span>                :            :     {
+<span class="lineNum">     247 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     248 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     249 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     250 </span>                :            : #endif
+<span class="lineNum">     251 </span>                :<span class="lineCov">        410 :         int shm_num_rank = 0;</span>
+<span class="lineNum">     252 </span>                :            : 
+<span class="lineNum">     253 </span>[<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        410 :         m_scheduler = new SampleScheduler(M_OVERHEAD_FRAC);</span>
+<span class="lineNum">     254 </span>        [<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        410 :         MPI_Comm_rank(comm, &amp;m_rank);</span>
+<span class="lineNum">     255 </span>        [<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        410 :         geopm_comm_split_shared(comm, &quot;prof&quot;, &amp;m_shm_comm);</span>
+<span class="lineNum">     256 </span>        [<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        410 :         PMPI_Comm_rank(m_shm_comm, &amp;m_shm_rank);</span>
+<span class="lineNum">     257 </span>        [<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        410 :         PMPI_Comm_size(m_shm_comm, &amp;shm_num_rank);</span>
+<span class="lineNum">     258 </span>        [<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        410 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     259 </span>                :            : 
+<span class="lineNum">     260 </span>[<span class="branchCov" title="Branch 2 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        820 :         std::string key(geopm_env_shmkey());</span>
+<span class="lineNum">     261 </span>        [<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        410 :         key += &quot;-sample&quot;;</span>
+<span class="lineNum">     262 </span>                :            :         try {
+<span class="lineNum">     263 </span>[<span class="branchCov" title="Branch 1 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        410 :             m_ctl_shmem = new SharedMemoryUser(key, geopm_env_profile_timeout()); // 5 second timeout</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 256 times"> + </span><span class="branchCov" title="Branch 8 was taken 154 times"> + </span>][<span class="branchNoCov" title="Branch 10 was not taken"> - </span><span class="branchCov" title="Branch 11 was taken 154 times"> + </span>]
+<span class="lineNum">     264 </span>                :            :         }
+<span class="lineNum">     265 </span>        [<span class="branchCov" title="Branch 5 was taken 154 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        308 :         catch (Exception ex) {</span>
+<span class="lineNum">     266 </span>[<span class="branchCov" title="Branch 1 was taken 154 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 154 times"> + </span>]:<span class="lineCov">        154 :             if (ex.err_value() != ENOENT) {</span>
+<span class="lineNum">     267 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw ex;</span>
+<span class="lineNum">     268 </span>                :            :             }
+<span class="lineNum">     269 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 154 times"> + </span>]:<span class="lineCov">        154 :             if (!m_rank) {</span>
+<span class="lineNum">     270 </span>  [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 std::cerr &lt;&lt; &quot;Warning: &lt;geopm&gt; Controller not found, running without geopm.&quot; &lt;&lt; std::endl;</span>
+<span class="lineNum">     271 </span>                :            :             }
+<span class="lineNum">     272 </span>                :<span class="lineCov">        154 :             m_is_enabled = false;</span>
+<span class="lineNum">     273 </span>                :<span class="lineCov">        154 :             return;</span>
+<span class="lineNum">     274 </span>                :            :         }
+<span class="lineNum">     275 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     276 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     277 </span>        [<span class="branchCov" title="Branch 1 was taken 63 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         63 :             m_ctl_shmem-&gt;unlink();</span>
+<span class="lineNum">     278 </span>                :            :         }
+<span class="lineNum">     279 </span>                :            : 
+<span class="lineNum">     280 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         m_ctl_msg = (struct geopm_ctl_message_s *)m_ctl_shmem-&gt;pointer();</span>
+<span class="lineNum">     281 </span>                :            : 
+<span class="lineNum">     282 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         init_cpu_list();</span>
+<span class="lineNum">     283 </span>                :            : 
+<span class="lineNum">     284 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     285 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     286 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_MAP_BEGIN;</span>
+<span class="lineNum">     287 </span>                :            :         }
+<span class="lineNum">     288 </span>        [<span class="branchCov" title="Branch 0 was taken 176 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        432 :         while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_MAP_BEGIN) {</span>
+<span class="lineNum">     289 </span>        [<span class="branchCov" title="Branch 1 was taken 176 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        176 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     290 </span>                :            :         }
+<span class="lineNum">     291 </span>                :            : 
+<span class="lineNum">     292 </span>        [<span class="branchCov" title="Branch 0 was taken 1182 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">       1438 :         for (int i = 0 ; i &lt; shm_num_rank; ++i) {</span>
+<span class="lineNum">     293 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 926 times"> + </span>]:<span class="lineCov">       1182 :             if (i == m_shm_rank) {</span>
+<span class="lineNum">     294 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :                 if (i == 0) {</span>
+<span class="lineNum">     295 </span>        [<span class="branchCov" title="Branch 0 was taken 48384 times"> + </span><span class="branchCov" title="Branch 1 was taken 63 times"> + </span>]:<span class="lineCov">      48447 :                     for (int i = 0; i &lt; GEOPM_MAX_NUM_CPU; ++i) {</span>
+<span class="lineNum">     296 </span>                :<span class="lineCov">      48384 :                         m_ctl_msg-&gt;cpu_rank[i] = -1;</span>
+<span class="lineNum">     297 </span>                :            :                     }
+<span class="lineNum">     298 </span>        [<span class="branchCov" title="Branch 3 was taken 483 times"> + </span><span class="branchCov" title="Branch 4 was taken 63 times"> + </span>]:<span class="lineCov">        546 :                     for (auto it = m_cpu_list.begin(); it != m_cpu_list.end(); ++it) {</span>
+<span class="lineNum">     299 </span>                :<span class="lineCov">        483 :                         m_ctl_msg-&gt;cpu_rank[*it] = m_rank;</span>
+<span class="lineNum">     300 </span>                :            :                     }
+<span class="lineNum">     301 </span>                :            :                 }
+<span class="lineNum">     302 </span>                :            :                 else {
+<span class="lineNum">     303 </span>        [<span class="branchCov" title="Branch 3 was taken 1873 times"> + </span><span class="branchCov" title="Branch 4 was taken 193 times"> + </span>]:<span class="lineCov">       2129 :                     for (auto it = m_cpu_list.begin(); it != m_cpu_list.end(); ++it) {</span>
+<span class="lineNum">     304 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 1873 times"> + </span>]:<span class="lineCov">       1873 :                         if (m_ctl_msg-&gt;cpu_rank[*it] != -1) {</span>
+<span class="lineNum">     305 </span>                :<span class="lineNoCov">          0 :                             m_ctl_msg-&gt;cpu_rank[*it] = -2;</span>
+<span class="lineNum">     306 </span>                :            :                         }
+<span class="lineNum">     307 </span>                :            :                         else {
+<span class="lineNum">     308 </span>                :<span class="lineCov">       1873 :                             m_ctl_msg-&gt;cpu_rank[*it] = m_rank;</span>
+<span class="lineNum">     309 </span>                :            :                         }
+<span class="lineNum">     310 </span>                :            :                     }
+<span class="lineNum">     311 </span>                :            :                 }
+<span class="lineNum">     312 </span>                :            :             }
+<span class="lineNum">     313 </span>        [<span class="branchCov" title="Branch 1 was taken 1182 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1182 :             PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     314 </span>                :            :         }
+<span class="lineNum">     315 </span>                :            : 
+<span class="lineNum">     316 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     317 </span>        [<span class="branchCov" title="Branch 0 was taken 48384 times"> + </span><span class="branchCov" title="Branch 1 was taken 63 times"> + </span>]:<span class="lineCov">      48447 :             for (int i = 0; i &lt; GEOPM_MAX_NUM_CPU; ++i) {</span>
+<span class="lineNum">     318 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 48384 times"> + </span>]:<span class="lineCov">      48384 :                 if (m_ctl_msg-&gt;cpu_rank[i] == -2) {</span>
+<span class="lineNum">     319 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (geopm_env_do_ignore_affinity()) {</span>
+<span class="lineNum">     320 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         for (int j = 0; j &lt; shm_num_rank; ++j) {</span>
+<span class="lineNum">     321 </span>                :<span class="lineNoCov">          0 :                             m_ctl_msg-&gt;cpu_rank[j] = j;</span>
+<span class="lineNum">     322 </span>                :            :                         }
+<span class="lineNum">     323 </span>                :<span class="lineNoCov">          0 :                         break;</span>
+<span class="lineNum">     324 </span>                :            :                     }
+<span class="lineNum">     325 </span>                :            :                     else {
+<span class="lineNum">     326 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         throw Exception(&quot;Profile: set GEOPM_ERROR_AFFINITY_IGNORE to ignore error&quot;, GEOPM_ERROR_AFFINITY, __FILE__, __LINE__);</span>
+<span class="lineNum">     327 </span>                :            :                     }
+<span class="lineNum">     328 </span>                :            :                 }
+<span class="lineNum">     329 </span>                :            :             }
+<span class="lineNum">     330 </span>                :            :         }
+<span class="lineNum">     331 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     332 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     333 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_MAP_END;</span>
+<span class="lineNum">     334 </span>                :            :         }
+<span class="lineNum">     335 </span>                :            : 
+<span class="lineNum">     336 </span>        [<span class="branchCov" title="Branch 0 was taken 7599335 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">    7599591 :         while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_MAP_END) {</span>
+<span class="lineNum">     337 </span>        [<span class="branchCov" title="Branch 1 was taken 7599335 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    7599335 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     338 </span>                :            :         }
+<span class="lineNum">     339 </span>                :            : 
+<span class="lineNum">     340 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 256 times"> + </span><span class="branchCov" title="Branch 6 was taken 154 times"> + </span>]:<span class="lineCov">        666 :         std::ostringstream table_shm_key;</span>
+<span class="lineNum">     341 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        256 :         table_shm_key &lt;&lt; key &lt;&lt;  &quot;-&quot;  &lt;&lt; m_rank;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]
+<span class="lineNum">     342 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        256 :         m_table_shmem = new SharedMemoryUser(table_shm_key.str(), 3.0);</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]
+<span class="lineNum">     343 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     344 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         m_table_shmem-&gt;unlink();</span>
+<span class="lineNum">     345 </span>                :            : 
+<span class="lineNum">     346 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         m_table_buffer = m_table_shmem-&gt;pointer();</span>
+<span class="lineNum">     347 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        256 :         m_table = new ProfileTable(m_table_shmem-&gt;size(), m_table_buffer);</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]
+<span class="lineNum">     348 </span>                :            : 
+<span class="lineNum">     349 </span>[<span class="branchCov" title="Branch 2 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        512 :         std::string tprof_key(geopm_env_shmkey());</span>
+<span class="lineNum">     350 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         tprof_key += &quot;-tprof&quot;;</span>
+<span class="lineNum">     351 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        256 :         m_tprof_shmem = new SharedMemoryUser(tprof_key, 3.0);</span>
+<span class="lineNum">     352 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     353 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     354 </span>        [<span class="branchCov" title="Branch 1 was taken 63 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         63 :             m_tprof_shmem-&gt;unlink();</span>
+<span class="lineNum">     355 </span>                :            :         }
+<span class="lineNum">     356 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        256 :         m_tprof_table = new ProfileThreadTable(m_tprof_shmem-&gt;size(), m_tprof_shmem-&gt;pointer());</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">     357 </span>                :            : 
+<span class="lineNum">     358 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     359 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     360 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_SAMPLE_BEGIN;</span>
+<span class="lineNum">     361 </span>                :            :         }
+<span class="lineNum">     362 </span>        [<span class="branchCov" title="Branch 0 was taken 2652 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">       2908 :         while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_SAMPLE_BEGIN) {</span>
+<span class="lineNum">     363 </span>        [<span class="branchCov" title="Branch 1 was taken 2652 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2652 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     364 </span>                :            :         }
+<span class="lineNum">     365 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         geopm_pmpi_prof_enable(1);</span>
+<span class="lineNum">     366 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     367 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     368 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     369 </span>                :            :         m_overhead_time_startup = geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     370 </span>                :            : #endif
+<a name="371"><span class="lineNum">     371 </span>                :            :     }</a>
+<span class="lineNum">     372 </span>                :            : 
+<span class="lineNum">     373 </span>                :<span class="lineCov">        820 :     Profile::~Profile()</span>
+<span class="lineNum">     374 </span>                :            :     {
+<span class="lineNum">     375 </span>                :<span class="lineCov">        410 :         shutdown();</span>
+<span class="lineNum">     376 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 154 times"> + </span>]:<span class="lineCov">        410 :         delete m_tprof_table;</span>
+<span class="lineNum">     377 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 154 times"> + </span>]:<span class="lineCov">        410 :         delete m_tprof_shmem;</span>
+<span class="lineNum">     378 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 154 times"> + </span>]:<span class="lineCov">        410 :         delete m_table;</span>
+<span class="lineNum">     379 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 154 times"> + </span>]:<span class="lineCov">        410 :         delete m_table_shmem;</span>
+<span class="lineNum">     380 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 154 times"> + </span>]:<span class="lineCov">        410 :         delete m_ctl_shmem;</span>
+<span class="lineNum">     381 </span>        [<span class="branchCov" title="Branch 0 was taken 410 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        410 :         delete m_scheduler;</span>
+<a name="382"><span class="lineNum">     382 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 410 times"> + </span>]:<span class="lineCov">        410 :     }</span></a>
+<span class="lineNum">     383 </span>                :            : 
+<span class="lineNum">     384 </span>                :<span class="lineCov">        816 :     void Profile::shutdown(void)</span>
+<span class="lineNum">     385 </span>                :            :     {
+<span class="lineNum">     386 </span>        [<span class="branchCov" title="Branch 0 was taken 560 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        816 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     387 </span>                :<span class="lineCov">        560 :             return;</span>
+<span class="lineNum">     388 </span>                :            :         }
+<span class="lineNum">     389 </span>                :            : 
+<span class="lineNum">     390 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     391 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     392 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     393 </span>                :            : #endif
+<span class="lineNum">     394 </span>                :            : 
+<span class="lineNum">     395 </span>                :<span class="lineCov">        256 :         geopm_pmpi_prof_enable(0);</span>
+<span class="lineNum">     396 </span>                :<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     397 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     398 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_SAMPLE_END;</span>
+<span class="lineNum">     399 </span>                :            :         }
+<span class="lineNum">     400 </span>        [<span class="branchCov" title="Branch 0 was taken 57017640 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">   57017896 :         while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_SAMPLE_END) {</span>
+<span class="lineNum">     401 </span>                :<span class="lineCov">   57017640 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     402 </span>                :            :         }
+<span class="lineNum">     403 </span>                :            : 
+<span class="lineNum">     404 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     405 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     406 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     407 </span>                :            :         m_overhead_time_shutdown = geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     408 </span>                :            : #endif
+<span class="lineNum">     409 </span>                :            : 
+<span class="lineNum">     410 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         if (geopm_env_report_verbosity()) {</span>
+<span class="lineNum">     411 </span>[<span class="branchCov" title="Branch 3 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">        256 :             print(geopm_env_report(), geopm_env_report_verbosity());</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 9 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">     412 </span>                :            :         }
+<span class="lineNum">     413 </span>                :<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     414 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     415 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_SHUTDOWN;</span>
+<span class="lineNum">     416 </span>                :            :         }
+<span class="lineNum">     417 </span>                :<span class="lineCov">        816 :         m_is_enabled = false;</span>
+<a name="418"><span class="lineNum">     418 </span>                :            :     }</a>
+<span class="lineNum">     419 </span>                :            : 
+<span class="lineNum">     420 </span>                :<span class="lineCov">       1648 :     uint64_t Profile::region(const std::string region_name, long hint)</span>
+<span class="lineNum">     421 </span>                :            :     {
+<span class="lineNum">     422 </span>        [<span class="branchCov" title="Branch 0 was taken 314 times"> + </span><span class="branchCov" title="Branch 1 was taken 1334 times"> + </span>]:<span class="lineCov">       1648 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     423 </span>                :<span class="lineCov">        314 :             return 0;</span>
+<span class="lineNum">     424 </span>                :            :         }
+<span class="lineNum">     425 </span>                :            : 
+<span class="lineNum">     426 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     427 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     428 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     429 </span>                :            : #endif
+<span class="lineNum">     430 </span>                :            : 
+<span class="lineNum">     431 </span>                :<span class="lineCov">       1334 :         uint64_t result = m_table-&gt;key(region_name);</span>
+<span class="lineNum">     432 </span>                :            :         /// Record hint when registering a region.
+<span class="lineNum">     433 </span>                :<span class="lineCov">       1334 :         result = geopm_region_id_set_hint(hint, result);</span>
+<span class="lineNum">     434 </span>                :            : 
+<span class="lineNum">     435 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     436 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     437 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     438 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     439 </span>                :            : #endif
+<span class="lineNum">     440 </span>                :            : 
+<span class="lineNum">     441 </span>                :<span class="lineCov">       1334 :         return result;</span>
+<a name="442"><span class="lineNum">     442 </span>                :            :     }</a>
+<span class="lineNum">     443 </span>                :            : 
+<span class="lineNum">     444 </span>                :<span class="lineCov">       6827 :     void Profile::enter(uint64_t region_id)</span>
+<span class="lineNum">     445 </span>                :            :     {
+<span class="lineNum">     446 </span>        [<span class="branchCov" title="Branch 0 was taken 244 times"> + </span><span class="branchCov" title="Branch 1 was taken 6583 times"> + </span>]:<span class="lineCov">       6827 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     447 </span>                :<span class="lineCov">        244 :             return;</span>
+<span class="lineNum">     448 </span>                :            :         }
+<span class="lineNum">     449 </span>                :            : 
+<span class="lineNum">     450 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     451 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     452 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     453 </span>                :            : #endif
+<span class="lineNum">     454 </span>                :            : 
+<span class="lineNum">     455 </span>                :            :         // if we are not currently in a region
+<span class="lineNum">     456 </span>[<span class="branchCov" title="Branch 0 was taken 5599 times"> + </span><span class="branchCov" title="Branch 1 was taken 984 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 5599 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       6583 :         if (!m_curr_region_id &amp;&amp; region_id) {</span>
+<span class="lineNum">     457 </span>  [<span class="branchCov" title="Branch 1 was taken 4759 times"> + </span><span class="branchCov" title="Branch 2 was taken 840 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 4759 times"> + </span>]:<span class="lineCov">      10358 :             if (!geopm_region_id_is_mpi(region_id) &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 5599 times"> + </span>]
+<span class="lineNum">     458 </span>                :<span class="lineCov">       4759 :                 geopm_env_do_region_barrier()) {</span>
+<span class="lineNum">     459 </span>                :<span class="lineNoCov">          0 :                 PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     460 </span>                :            :             }
+<span class="lineNum">     461 </span>                :<span class="lineCov">       5599 :             m_curr_region_id = region_id;</span>
+<span class="lineNum">     462 </span>                :<span class="lineCov">       5599 :             m_num_enter = 0;</span>
+<span class="lineNum">     463 </span>                :<span class="lineCov">       5599 :             m_progress = 0.0;</span>
+<span class="lineNum">     464 </span>                :<span class="lineCov">       5599 :             sample();</span>
+<span class="lineNum">     465 </span>                :            :         }
+<span class="lineNum">     466 </span>                :            :         else
+<span class="lineNum">     467 </span>                :            :         {
+<span class="lineNum">     468 </span>                :<span class="lineCov">        984 :             m_tprof_table-&gt;enable(false);</span>
+<span class="lineNum">     469 </span>                :            :             // Allow nesting of one MPI region within a non-mpi region
+<span class="lineNum">     470 </span>[<span class="branchCov" title="Branch 0 was taken 984 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 646 times"> + </span><span class="branchCov" title="Branch 3 was taken 338 times"> + </span>]:<span class="lineCov">       1968 :             if (m_curr_region_id &amp;&amp;</span>
+<span class="lineNum">     471 </span>[<span class="branchCov" title="Branch 0 was taken 984 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 646 times"> + </span><span class="branchCov" title="Branch 4 was taken 338 times"> + </span>]:<span class="lineCov">       1968 :                 !geopm_region_id_is_mpi(m_curr_region_id) &amp;&amp;</span>
+<span class="lineNum">     472 </span>                :<span class="lineCov">        984 :                 geopm_region_id_is_mpi(region_id)) {</span>
+<span class="lineNum">     473 </span>                :<span class="lineCov">        646 :                 m_parent_num_enter = m_num_enter;</span>
+<span class="lineNum">     474 </span>                :<span class="lineCov">        646 :                 m_num_enter = 0;</span>
+<span class="lineNum">     475 </span>                :<span class="lineCov">        646 :                 m_parent_region = m_curr_region_id;</span>
+<span class="lineNum">     476 </span>                :<span class="lineCov">        646 :                 m_parent_progress = m_progress;</span>
+<span class="lineNum">     477 </span>                :<span class="lineCov">        646 :                 m_curr_region_id = geopm_region_id_set_mpi(m_curr_region_id);</span>
+<span class="lineNum">     478 </span>                :<span class="lineCov">        646 :                 m_progress = 0.0;</span>
+<span class="lineNum">     479 </span>                :<span class="lineCov">        646 :                 sample();</span>
+<span class="lineNum">     480 </span>                :            :             }
+<span class="lineNum">     481 </span>                :            :         }
+<span class="lineNum">     482 </span>                :            :         // keep track of number of entries to account for nesting
+<span class="lineNum">     483 </span>  [<span class="branchCov" title="Branch 0 was taken 984 times"> + </span><span class="branchCov" title="Branch 1 was taken 5599 times"> + </span><span class="branchCov" title="Branch 2 was taken 646 times"> + </span><span class="branchCov" title="Branch 3 was taken 338 times"> + </span>]:<span class="lineCov">       8213 :         if (m_curr_region_id == region_id ||</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 6245 times"> + </span><span class="branchCov" title="Branch 5 was taken 338 times"> + </span>]
+<span class="lineNum">     484 </span>        [<span class="branchCov" title="Branch 1 was taken 646 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1630 :             (geopm_region_id_is_mpi(m_curr_region_id) &amp;&amp;</span>
+<span class="lineNum">     485 </span>                :<span class="lineCov">        646 :              geopm_region_id_is_mpi(region_id))) {</span>
+<span class="lineNum">     486 </span>                :<span class="lineCov">       6245 :             ++m_num_enter;</span>
+<span class="lineNum">     487 </span>                :            :         }
+<span class="lineNum">     488 </span>                :            : 
+<span class="lineNum">     489 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     490 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     491 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     492 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     493 </span>                :            : #endif
+<span class="lineNum">     494 </span>                :            : 
+<a name="495"><span class="lineNum">     495 </span>                :            :     }</a>
+<span class="lineNum">     496 </span>                :            : 
+<span class="lineNum">     497 </span>                :<span class="lineCov">       6827 :     void Profile::exit(uint64_t region_id)</span>
+<span class="lineNum">     498 </span>                :            :     {
+<span class="lineNum">     499 </span>        [<span class="branchCov" title="Branch 0 was taken 244 times"> + </span><span class="branchCov" title="Branch 1 was taken 6583 times"> + </span>]:<span class="lineCov">       6827 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     500 </span>                :<span class="lineCov">        244 :             return;</span>
+<span class="lineNum">     501 </span>                :            :         }
+<span class="lineNum">     502 </span>                :            : 
+<span class="lineNum">     503 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     504 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     505 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     506 </span>                :            : #endif
+<span class="lineNum">     507 </span>                :            : 
+<span class="lineNum">     508 </span>                :            :         // keep track of number of exits to account for nesting
+<span class="lineNum">     509 </span>  [<span class="branchCov" title="Branch 0 was taken 984 times"> + </span><span class="branchCov" title="Branch 1 was taken 5599 times"> + </span><span class="branchCov" title="Branch 2 was taken 646 times"> + </span><span class="branchCov" title="Branch 3 was taken 338 times"> + </span>]:<span class="lineCov">       8213 :         if (m_curr_region_id == region_id ||</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 6245 times"> + </span><span class="branchCov" title="Branch 5 was taken 338 times"> + </span>]
+<span class="lineNum">     510 </span>        [<span class="branchCov" title="Branch 1 was taken 646 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1630 :             (geopm_region_id_is_mpi(m_curr_region_id) &amp;&amp;</span>
+<span class="lineNum">     511 </span>                :<span class="lineCov">        646 :              geopm_region_id_is_mpi(region_id))) {</span>
+<span class="lineNum">     512 </span>                :<span class="lineCov">       6245 :             --m_num_enter;</span>
+<span class="lineNum">     513 </span>                :            :         }
+<span class="lineNum">     514 </span>        [<span class="branchCov" title="Branch 0 was taken 338 times"> + </span><span class="branchCov" title="Branch 1 was taken 6245 times"> + </span>]:<span class="lineCov">       6583 :         if (m_num_enter == 1) {</span>
+<span class="lineNum">     515 </span>                :<span class="lineCov">        338 :             m_tprof_table-&gt;enable(true);</span>
+<span class="lineNum">     516 </span>                :            :         }
+<span class="lineNum">     517 </span>                :            : 
+<span class="lineNum">     518 </span>                :            :         // if we are leaving the outer most nesting of our current region
+<span class="lineNum">     519 </span>        [<span class="branchCov" title="Branch 0 was taken 6245 times"> + </span><span class="branchCov" title="Branch 1 was taken 338 times"> + </span>]:<span class="lineCov">       6583 :         if (!m_num_enter) {</span>
+<span class="lineNum">     520 </span>  [<span class="branchCov" title="Branch 1 was taken 4759 times"> + </span><span class="branchCov" title="Branch 2 was taken 1486 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 4759 times"> + </span>]:<span class="lineCov">      11004 :             if (!geopm_region_id_is_mpi(region_id) &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 6245 times"> + </span>]
+<span class="lineNum">     521 </span>                :<span class="lineCov">       4759 :                 geopm_env_do_region_barrier()) {</span>
+<span class="lineNum">     522 </span>                :<span class="lineNoCov">          0 :                 PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     523 </span>                :            :             }
+<span class="lineNum">     524 </span>        [<span class="branchCov" title="Branch 1 was taken 1486 times"> + </span><span class="branchCov" title="Branch 2 was taken 4759 times"> + </span>]:<span class="lineCov">       6245 :             if (geopm_region_id_is_mpi(region_id)) {</span>
+<span class="lineNum">     525 </span>                :<span class="lineCov">       1486 :                 m_curr_region_id = geopm_region_id_set_mpi(m_parent_region);</span>
+<span class="lineNum">     526 </span>                :            :             }
+<span class="lineNum">     527 </span>                :<span class="lineCov">       6245 :             m_progress = 1.0;</span>
+<span class="lineNum">     528 </span>                :<span class="lineCov">       6245 :             sample();</span>
+<span class="lineNum">     529 </span>                :<span class="lineCov">       6245 :             m_curr_region_id = 0;</span>
+<span class="lineNum">     530 </span>                :<span class="lineCov">       6245 :             m_scheduler-&gt;clear();</span>
+<span class="lineNum">     531 </span>        [<span class="branchCov" title="Branch 1 was taken 1486 times"> + </span><span class="branchCov" title="Branch 2 was taken 4759 times"> + </span>]:<span class="lineCov">       6245 :             if (geopm_region_id_is_mpi(region_id)) {</span>
+<span class="lineNum">     532 </span>                :<span class="lineCov">       1486 :                 m_curr_region_id = m_parent_region;</span>
+<span class="lineNum">     533 </span>                :<span class="lineCov">       1486 :                 m_progress = m_parent_progress;</span>
+<span class="lineNum">     534 </span>                :<span class="lineCov">       1486 :                 m_num_enter = m_parent_num_enter;</span>
+<span class="lineNum">     535 </span>                :<span class="lineCov">       1486 :                 m_parent_region = 0;</span>
+<span class="lineNum">     536 </span>                :<span class="lineCov">       1486 :                 m_parent_progress = 0.0;</span>
+<span class="lineNum">     537 </span>                :<span class="lineCov">       1486 :                 m_parent_num_enter = 0;</span>
+<span class="lineNum">     538 </span>                :            :             }
+<span class="lineNum">     539 </span>                :            :         }
+<span class="lineNum">     540 </span>                :            : 
+<span class="lineNum">     541 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     542 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     543 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     544 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     545 </span>                :            : #endif
+<span class="lineNum">     546 </span>                :            : 
+<a name="547"><span class="lineNum">     547 </span>                :            :     }</a>
+<span class="lineNum">     548 </span>                :            : 
+<span class="lineNum">     549 </span>                :<span class="lineCov"> 1535949456 :     void Profile::progress(uint64_t region_id, double fraction)</span>
+<span class="lineNum">     550 </span>                :            :     {
+<span class="lineNum">     551 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1535949456 times"> + </span>]:<span class="lineCov"> 1535949456 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     553 </span>                :            :         }
+<span class="lineNum">     554 </span>                :            : 
+<span class="lineNum">     555 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     556 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     557 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     558 </span>                :            : #endif
+<span class="lineNum">     559 </span>                :            : 
+<span class="lineNum">     560 </span>[<span class="branchCov" title="Branch 0 was taken 849141791 times"> + </span><span class="branchCov" title="Branch 1 was taken 686807665 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 849138587 times"> + </span><span class="branchCov" title="Branch 3 was taken 3204 times"> + </span>]:<span class="lineCov"> 3071898912 :         if (m_num_enter == 1 &amp;&amp; m_curr_region_id == region_id &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 16136257 times"> + </span><span class="branchCov" title="Branch 5 was taken 1519813199 times"> + </span>]
+<span class="lineNum">     561 </span>        [<span class="branchCov" title="Branch 0 was taken 1535949456 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov"> 3921037229 :             fraction &gt; 0.0 &amp;&amp; fraction &lt; 1.0 &amp;&amp;</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 2 was taken 849138317 times"> + </span><span class="branchCov" title="Branch 3 was taken 270 times"> + </span><span class="branchCov" title="Branch 4 was taken 16136257 times"> + </span><span class="branchCov" title="Branch 5 was taken 833002060 times"> + </span>]
+<span class="lineNum">     562 </span>                :<span class="lineCov">  849138317 :             m_scheduler-&gt;do_sample()) {</span>
+<span class="lineNum">     563 </span>                :<span class="lineCov">   16136257 :             m_progress = fraction;</span>
+<span class="lineNum">     564 </span>                :<span class="lineCov">   16136257 :             sample();</span>
+<span class="lineNum">     565 </span>                :<span class="lineCov">   16136257 :             m_scheduler-&gt;record_exit();</span>
+<span class="lineNum">     566 </span>                :            :         }
+<span class="lineNum">     567 </span>                :            : 
+<span class="lineNum">     568 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     569 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     570 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     571 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     572 </span>                :            : #endif
+<span class="lineNum">     573 </span>                :            : 
+<a name="574"><span class="lineNum">     574 </span>                :            :     }</a>
+<span class="lineNum">     575 </span>                :            : 
+<span class="lineNum">     576 </span>                :<span class="lineCov">       2179 :     void Profile::epoch(void)</span>
+<span class="lineNum">     577 </span>                :            :     {
+<span class="lineNum">     578 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2179 times"> + </span>]:<span class="lineCov">       2179 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     579 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     580 </span>                :            :         }
+<span class="lineNum">     581 </span>                :            : 
+<span class="lineNum">     582 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     583 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     584 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     585 </span>                :            : #endif
+<span class="lineNum">     586 </span>                :            : 
+<span class="lineNum">     587 </span>                :            :         struct geopm_prof_message_s sample;
+<span class="lineNum">     588 </span>        [<span class="branchCov" title="Branch 1 was taken 2179 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2179 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     589 </span>        [<span class="branchCov" title="Branch 0 was taken 252 times"> + </span><span class="branchCov" title="Branch 1 was taken 1927 times"> + </span>]:<span class="lineCov">       2179 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     590 </span>                :<span class="lineCov">        252 :             sample.rank = m_rank;</span>
+<span class="lineNum">     591 </span>                :<span class="lineCov">        252 :             sample.region_id = GEOPM_REGION_ID_EPOCH;</span>
+<span class="lineNum">     592 </span>                :<span class="lineCov">        252 :             (void) geopm_time(&amp;(sample.timestamp));</span>
+<span class="lineNum">     593 </span>                :<span class="lineCov">        252 :             sample.progress = 0.0;</span>
+<span class="lineNum">     594 </span>        [<span class="branchCov" title="Branch 1 was taken 252 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2179 :             m_table-&gt;insert(sample.region_id, sample);</span>
+<span class="lineNum">     595 </span>                :            :         }
+<span class="lineNum">     596 </span>                :            : 
+<span class="lineNum">     597 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     598 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     599 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     600 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     601 </span>                :            : #endif
+<span class="lineNum">     602 </span>                :            : 
+<a name="603"><span class="lineNum">     603 </span>                :            :     }</a>
+<span class="lineNum">     604 </span>                :            : 
+<span class="lineNum">     605 </span>                :<span class="lineCov">   16148747 :     void Profile::sample(void)</span>
+<span class="lineNum">     606 </span>                :            :     {
+<span class="lineNum">     607 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 16148747 times"> + </span>]:<span class="lineCov">   16148747 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     608 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     609 </span>                :            :         }
+<span class="lineNum">     610 </span>                :            : 
+<span class="lineNum">     611 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     612 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     613 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     614 </span>                :            : #endif
+<span class="lineNum">     615 </span>                :            : 
+<span class="lineNum">     616 </span>                :            :         struct geopm_prof_message_s sample;
+<span class="lineNum">     617 </span>                :<span class="lineCov">   16148747 :         sample.rank = m_rank;</span>
+<span class="lineNum">     618 </span>                :<span class="lineCov">   16148747 :         sample.region_id = m_curr_region_id;</span>
+<span class="lineNum">     619 </span>                :<span class="lineCov">   16148747 :         (void) geopm_time(&amp;(sample.timestamp));</span>
+<span class="lineNum">     620 </span>                :<span class="lineCov">   16148747 :         sample.progress = m_progress;</span>
+<span class="lineNum">     621 </span>        [<span class="branchCov" title="Branch 1 was taken 16148747 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">   16148747 :         m_table-&gt;insert(m_curr_region_id, sample);</span>
+<span class="lineNum">     622 </span>                :            : 
+<span class="lineNum">     623 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     624 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     625 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     626 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     627 </span>                :            : #endif
+<span class="lineNum">     628 </span>                :            : 
+<a name="629"><span class="lineNum">     629 </span>                :            :     }</a>
+<span class="lineNum">     630 </span>                :            : 
+<span class="lineNum">     631 </span>                :<span class="lineNoCov">          0 :     void Profile::disable(const std::string feature_name)</span>
+<span class="lineNum">     632 </span>                :            :     {
+<span class="lineNum">     633 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     634 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     635 </span>                :            :         }
+<span class="lineNum">     636 </span>                :            : 
+<span class="lineNum">     637 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :         throw geopm::Exception(&quot;Profile::disable()&quot;, GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
+<a name="638"><span class="lineNum">     638 </span>                :            :     }</a>
+<span class="lineNum">     639 </span>                :            : 
+<span class="lineNum">     640 </span>                :<span class="lineCov">        256 :     void Profile::print(const std::string file_name, int depth)</span>
+<span class="lineNum">     641 </span>                :            :     {
+<span class="lineNum">     642 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        256 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     643 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     644 </span>                :            :         }
+<span class="lineNum">     645 </span>                :            : 
+<span class="lineNum">     646 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     647 </span>                :            :         struct geopm_time_s overhead_entry;
+<span class="lineNum">     648 </span>                :            :         geopm_time(&amp;overhead_entry);
+<span class="lineNum">     649 </span>                :            : #endif
+<span class="lineNum">     650 </span>                :            : 
+<span class="lineNum">     651 </span>                :<span class="lineCov">        256 :         int is_done = 0;</span>
+<span class="lineNum">     652 </span>                :<span class="lineCov">        256 :         int is_all_done = 0;</span>
+<span class="lineNum">     653 </span>                :            : 
+<span class="lineNum">     654 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     655 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     656 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_NAME_BEGIN;</span>
+<span class="lineNum">     657 </span>                :            :         }
+<span class="lineNum">     658 </span>        [<span class="branchCov" title="Branch 0 was taken 3315 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">       3571 :         while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_NAME_BEGIN) {</span>
+<span class="lineNum">     659 </span>        [<span class="branchCov" title="Branch 1 was taken 3315 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       3315 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     660 </span>                :            :         }
+<span class="lineNum">     661 </span>                :            : 
+<span class="lineNum">     662 </span>                :<span class="lineCov">        256 :         size_t buffer_offset = 0;</span>
+<span class="lineNum">     663 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         char *buffer_ptr = (char *)(m_table_shmem-&gt;pointer());</span>
+<span class="lineNum">     664 </span>                :            : 
+<span class="lineNum">     665 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 256 times"> + </span>]:<span class="lineCov">        256 :         if (m_table_shmem-&gt;size() &lt; file_name.length() + 1 + m_prof_name.length() + 1) {</span>
+<span class="lineNum">     666 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;Profile:print() profile file name and profile name are too long to fit in a table buffer&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     667 </span>                :            :         }
+<span class="lineNum">     668 </span>                :            : 
+<span class="lineNum">     669 </span>                :<span class="lineCov">        256 :         strcpy(buffer_ptr, file_name.c_str());</span>
+<span class="lineNum">     670 </span>                :<span class="lineCov">        256 :         buffer_ptr += file_name.length() + 1;</span>
+<span class="lineNum">     671 </span>                :<span class="lineCov">        256 :         buffer_offset += file_name.length() + 1;</span>
+<span class="lineNum">     672 </span>                :<span class="lineCov">        256 :         strcpy(buffer_ptr, m_prof_name.c_str());</span>
+<span class="lineNum">     673 </span>                :<span class="lineCov">        256 :         buffer_offset += m_prof_name.length() + 1;</span>
+<span class="lineNum">     674 </span>        [<span class="branchCov" title="Branch 0 was taken 256 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        512 :         while (!is_all_done) {</span>
+<span class="lineNum">     675 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :             PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     676 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :             if (!m_shm_rank) {</span>
+<span class="lineNum">     677 </span>                :<span class="lineCov">         63 :                 m_ctl_msg-&gt;app_status = GEOPM_STATUS_NAME_LOOP_BEGIN;</span>
+<span class="lineNum">     678 </span>                :            :             }
+<span class="lineNum">     679 </span>        [<span class="branchCov" title="Branch 0 was taken 1320 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">       1576 :             while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_NAME_LOOP_BEGIN) {</span>
+<span class="lineNum">     680 </span>        [<span class="branchCov" title="Branch 1 was taken 1320 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1320 :                 geopm_signal_handler_check();</span>
+<span class="lineNum">     681 </span>                :            :             }
+<span class="lineNum">     682 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :             is_done = m_table-&gt;name_fill(buffer_offset);</span>
+<span class="lineNum">     683 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :             PMPI_Allreduce(&amp;is_done, &amp;is_all_done, 1, MPI_INT, MPI_LAND, m_shm_comm);</span>
+<span class="lineNum">     684 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :             if (!m_shm_rank) {</span>
+<span class="lineNum">     685 </span>                :<span class="lineCov">         63 :                 m_ctl_msg-&gt;app_status = GEOPM_STATUS_NAME_LOOP_END;</span>
+<span class="lineNum">     686 </span>                :            :             }
+<span class="lineNum">     687 </span>        [<span class="branchCov" title="Branch 0 was taken 2260925 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">    2261181 :             while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_NAME_LOOP_END) {</span>
+<span class="lineNum">     688 </span>        [<span class="branchCov" title="Branch 1 was taken 2260925 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    2260925 :                 geopm_signal_handler_check();</span>
+<span class="lineNum">     689 </span>                :            :             }
+<span class="lineNum">     690 </span>                :<span class="lineCov">        256 :             buffer_offset = 0;</span>
+<span class="lineNum">     691 </span>                :            :         }
+<span class="lineNum">     692 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         PMPI_Barrier(m_shm_comm);</span>
+<span class="lineNum">     693 </span>        [<span class="branchCov" title="Branch 0 was taken 63 times"> + </span><span class="branchCov" title="Branch 1 was taken 193 times"> + </span>]:<span class="lineCov">        256 :         if (!m_shm_rank) {</span>
+<span class="lineNum">     694 </span>                :<span class="lineCov">         63 :             m_ctl_msg-&gt;app_status = GEOPM_STATUS_NAME_END;</span>
+<span class="lineNum">     695 </span>                :            :         }
+<span class="lineNum">     696 </span>        [<span class="branchCov" title="Branch 0 was taken 54319 times"> + </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">      54575 :         while (m_ctl_msg-&gt;ctl_status != GEOPM_STATUS_NAME_END) {</span>
+<span class="lineNum">     697 </span>        [<span class="branchCov" title="Branch 1 was taken 54319 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">      54319 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     698 </span>                :            :         }
+<span class="lineNum">     699 </span>                :            : 
+<span class="lineNum">     700 </span>                :            : #ifdef GEOPM_OVERHEAD
+<span class="lineNum">     701 </span>                :            :         struct geopm_time_s overhead_exit;
+<span class="lineNum">     702 </span>                :            :         geopm_time(&amp;overhead_exit);
+<span class="lineNum">     703 </span>                :            :         m_overhead_time += geopm_time_diff(&amp;overhead_entry, &amp;overhead_exit);
+<span class="lineNum">     704 </span>                :            :         double overhead_buffer[3] = {m_overhead_time_startup,
+<span class="lineNum">     705 </span>                :            :                                      m_overhead_time,
+<span class="lineNum">     706 </span>                :            :                                      m_overhead_time_shutdown};
+<span class="lineNum">     707 </span>                :            :         double max_overhead[3] = {};
+<span class="lineNum">     708 </span>                :            :         MPI_Reduce(overhead_buffer, max_overhead, 3,
+<span class="lineNum">     709 </span>                :            :                    MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+<span class="lineNum">     710 </span>                :            :         if (!m_rank) {
+<span class="lineNum">     711 </span>                :            :             std::cout &lt;&lt; &quot;GEOPM startup (seconds):  &quot; &lt;&lt; max_overhead[0] &lt;&lt; std::endl;
+<span class="lineNum">     712 </span>                :            :             std::cout &lt;&lt; &quot;GEOPM runtime (seconds):  &quot; &lt;&lt; max_overhead[1] &lt;&lt; std::endl;
+<span class="lineNum">     713 </span>                :            :             std::cout &lt;&lt; &quot;GEOPM shutdown (seconds): &quot; &lt;&lt; max_overhead[2] &lt;&lt; std::endl;
+<span class="lineNum">     714 </span>                :            :         }
+<span class="lineNum">     715 </span>                :            : #endif
+<span class="lineNum">     716 </span>                :            : 
+<a name="717"><span class="lineNum">     717 </span>                :            :     }</a>
+<span class="lineNum">     718 </span>                :            : 
+<span class="lineNum">     719 </span>                :<span class="lineCov">        256 :     void Profile::init_cpu_list(void)</span>
+<span class="lineNum">     720 </span>                :            :     {
+<span class="lineNum">     721 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        256 :         if (!m_is_enabled) {</span>
+<span class="lineNum">     722 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     723 </span>                :            :         }
+<span class="lineNum">     724 </span>                :            : 
+<span class="lineNum">     725 </span>                :<span class="lineCov">        256 :         int err = 0;</span>
+<span class="lineNum">     726 </span>                :<span class="lineCov">        256 :         unsigned int i = 0;</span>
+<span class="lineNum">     727 </span>                :            : 
+<span class="lineNum">     728 </span>                :            :         hwloc_topology_t topology;
+<span class="lineNum">     729 </span>                :            :         hwloc_cpuset_t set;
+<span class="lineNum">     730 </span>                :            : 
+<span class="lineNum">     731 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         err = hwloc_topology_init(&amp;topology);</span>
+<span class="lineNum">     732 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        256 :         if (err) {</span>
+<span class="lineNum">     733 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;Profile: unable to initialize hwloc&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     734 </span>                :            :         }
+<span class="lineNum">     735 </span>                :            : 
+<span class="lineNum">     736 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         err = hwloc_topology_load(topology);</span>
+<span class="lineNum">     737 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        256 :         if (err) {</span>
+<span class="lineNum">     738 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;Profile: unable to load topology in hwloc&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     739 </span>                :            :         }
+<span class="lineNum">     740 </span>                :            : 
+<span class="lineNum">     741 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         set = hwloc_bitmap_alloc();</span>
+<span class="lineNum">     742 </span>                :            : 
+<span class="lineNum">     743 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         err = hwloc_get_cpubind(topology, set, HWLOC_CPUBIND_PROCESS);</span>
+<span class="lineNum">     744 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 256 times"> + </span>]:<span class="lineCov">        256 :         if (err) {</span>
+<span class="lineNum">     745 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (!geopm_env_do_ignore_affinity()) {</span>
+<span class="lineNum">     746 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;Profile: unable to get process binding from hwloc, set GEOPM_ERROR_AFFINITY_IGNORE to ignore error&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     747 </span>                :            :             }
+<span class="lineNum">     748 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             m_cpu_list.push_front(0);</span>
+<span class="lineNum">     749 </span>                :            :         }
+<span class="lineNum">     750 </span>                :            :         else {
+<span class="lineNum">     751 </span>[<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 256 times"> + </span>]:<span class="lineCov">       2612 :             hwloc_bitmap_foreach_begin(i, set) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 2356 times"> + </span><span class="branchCov" title="Branch 10 was taken 256 times"> + </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 12 was taken 2356 times"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>]
+<span class="lineNum">     752 </span>        [<span class="branchCov" title="Branch 1 was taken 2356 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2356 :                 m_cpu_list.push_front(i);</span>
+<span class="lineNum">     753 </span>                :            :             }
+<span class="lineNum">     754 </span>                :            :             hwloc_bitmap_foreach_end();
+<span class="lineNum">     755 </span>                :            :         }
+<span class="lineNum">     756 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         hwloc_bitmap_free(set);</span>
+<span class="lineNum">     757 </span>        [<span class="branchCov" title="Branch 1 was taken 256 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        256 :         hwloc_topology_destroy(topology);</span>
+<a name="758"><span class="lineNum">     758 </span>                :            :     }</a>
+<span class="lineNum">     759 </span>                :            : 
+<span class="lineNum">     760 </span>                :<span class="lineNoCov">          0 :     IProfileThreadTable *Profile::tprof_table(void)</span>
+<span class="lineNum">     761 </span>                :            :     {
+<span class="lineNum">     762 </span>                :<span class="lineNoCov">          0 :         return m_tprof_table;</span>
+<span class="lineNum">     763 </span>                :            :     }
+<span class="lineNum">     764 </span>                :            : 
+<span class="lineNum">     765 </span>                :            : 
+<a name="766"><span class="lineNum">     766 </span>                :            :     const struct geopm_prof_message_s GEOPM_INVALID_PROF_MSG = {-1, 0, {{0, 0}}, -1.0};</a>
+<span class="lineNum">     767 </span>                :            : 
+<span class="lineNum">     768 </span>                :<span class="lineCov">         73 :     ProfileSampler::ProfileSampler(size_t table_size)</span>
+<span class="lineNum">     769 </span>                :            :         : m_table_size(table_size)
+<span class="lineNum">     770 </span>                :            :         , m_do_report(false)
+<span class="lineNum">     771 </span>                :            :         , m_tprof_shmem(NULL)
+<span class="lineNum">     772 </span>        [<span class="branchCov" title="Branch 3 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">         73 :         , m_tprof_table(NULL)</span>
+<span class="lineNum">     773 </span>                :            :     {
+<span class="lineNum">     774 </span>[<span class="branchCov" title="Branch 2 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        146 :         std::string sample_key(geopm_env_shmkey());</span>
+<span class="lineNum">     775 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         73 :         sample_key += &quot;-sample&quot;;</span>
+<span class="lineNum">     776 </span>[<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         73 :         m_ctl_shmem = new SharedMemory(sample_key, table_size);</span>
+<span class="lineNum">     777 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         73 :         m_ctl_msg = (struct geopm_ctl_message_s *)m_ctl_shmem-&gt;pointer();</span>
+<span class="lineNum">     778 </span>                :            : 
+<span class="lineNum">     779 </span>[<span class="branchCov" title="Branch 2 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        146 :         std::string tprof_key(geopm_env_shmkey());</span>
+<span class="lineNum">     780 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         73 :         tprof_key += &quot;-tprof&quot;;</span>
+<span class="lineNum">     781 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         73 :         size_t tprof_size = 64 * ProfileThreadTable::num_cpu_s();</span>
+<span class="lineNum">     782 </span>[<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         73 :         m_tprof_shmem = new SharedMemory(tprof_key, tprof_size);</span>
+<span class="lineNum">     783 </span>[<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         73 :         m_tprof_table = new ProfileThreadTable(tprof_size, m_tprof_shmem-&gt;pointer());</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]
+<a name="784"><span class="lineNum">     784 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     785 </span>                :            : 
+<span class="lineNum">     786 </span>                :<span class="lineCov">        219 :     ProfileSampler::~ProfileSampler(void)</span>
+<span class="lineNum">     787 </span>                :            :     {
+<span class="lineNum">     788 </span>        [<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         73 :         delete m_tprof_table;</span>
+<span class="lineNum">     789 </span>        [<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         73 :         delete m_tprof_shmem;</span>
+<span class="lineNum">     790 </span>        [<span class="branchCov" title="Branch 3 was taken 266 times"> + </span><span class="branchCov" title="Branch 4 was taken 73 times"> + </span>]:<span class="lineCov">        339 :         for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span>
+<span class="lineNum">     791 </span>        [<span class="branchCov" title="Branch 1 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        266 :             delete (*it);</span>
+<span class="lineNum">     792 </span>                :            :         }
+<span class="lineNum">     793 </span>        [<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         73 :         delete m_ctl_shmem;</span>
+<a name="794"><span class="lineNum">     794 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 73 times"> + </span>]:<span class="lineCov">        146 :     }</span></a>
+<span class="lineNum">     795 </span>                :            : 
+<span class="lineNum">     796 </span>                :<span class="lineCov">         73 :     void ProfileSampler::initialize(int &amp;rank_per_node)</span>
+<span class="lineNum">     797 </span>                :            :     {
+<span class="lineNum">     798 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        146 :         std::ostringstream shm_key;</span>
+<span class="lineNum">     799 </span>                :            : 
+<span class="lineNum">     800 </span>        [<span class="branchCov" title="Branch 0 was taken 1639692890 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov"> 1639692963 :         while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_MAP_BEGIN) {</span>
+<span class="lineNum">     801 </span>        [<span class="branchCov" title="Branch 1 was taken 1639692890 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov"> 1639692890 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     802 </span>                :            :         }
+<span class="lineNum">     803 </span>                :<span class="lineCov">         73 :         m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_MAP_BEGIN;</span>
+<span class="lineNum">     804 </span>        [<span class="branchCov" title="Branch 0 was taken 1864950 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">    1865023 :         while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_MAP_END) {</span>
+<span class="lineNum">     805 </span>        [<span class="branchCov" title="Branch 1 was taken 1864950 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    1864950 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     806 </span>                :            :         }
+<span class="lineNum">     807 </span>                :            : 
+<span class="lineNum">     808 </span>                :<span class="lineCov">        146 :         std::set&lt;int&gt; rank_set;</span>
+<span class="lineNum">     809 </span>        [<span class="branchCov" title="Branch 0 was taken 56064 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">      56137 :         for (int i = 0; i &lt; GEOPM_MAX_NUM_CPU; i++) {</span>
+<span class="lineNum">     810 </span>        [<span class="branchCov" title="Branch 0 was taken 2506 times"> + </span><span class="branchCov" title="Branch 1 was taken 53558 times"> + </span>]:<span class="lineCov">      56064 :             if (m_ctl_msg-&gt;cpu_rank[i] &gt;= 0) {</span>
+<span class="lineNum">     811 </span>        [<span class="branchCov" title="Branch 1 was taken 2506 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2506 :                 (void) rank_set.insert(m_ctl_msg-&gt;cpu_rank[i]);</span>
+<span class="lineNum">     812 </span>                :            :             }
+<span class="lineNum">     813 </span>                :            :         }
+<span class="lineNum">     814 </span>                :            : 
+<span class="lineNum">     815 </span>        [<span class="branchCov" title="Branch 3 was taken 266 times"> + </span><span class="branchCov" title="Branch 4 was taken 73 times"> + </span>]:<span class="lineCov">        339 :         for (auto it = rank_set.begin(); it != rank_set.end(); ++it) {</span>
+<span class="lineNum">     816 </span>[<span class="branchCov" title="Branch 2 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        266 :             shm_key.str(&quot;&quot;);</span>
+<span class="lineNum">     817 </span>[<span class="branchCov" title="Branch 2 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">        266 :             shm_key &lt;&lt; m_ctl_shmem-&gt;key() &lt;&lt;  &quot;-&quot;  &lt;&lt; *it;</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>][<span class="branchCov" title="Branch 11 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>]
+<span class="lineNum">     818 </span>[<span class="branchCov" title="Branch 1 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        266 :             m_rank_sampler.push_front(new ProfileRankSampler(shm_key.str(), m_table_size));</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">     819 </span>                :            :         }
+<span class="lineNum">     820 </span>                :<span class="lineCov">         73 :         rank_per_node = rank_set.size();</span>
+<span class="lineNum">     821 </span>                :<span class="lineCov">         73 :         m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_MAP_END;</span>
+<span class="lineNum">     822 </span>        [<span class="branchCov" title="Branch 0 was taken 985149 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">     985222 :         while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_SAMPLE_BEGIN) {</span>
+<span class="lineNum">     823 </span>        [<span class="branchCov" title="Branch 1 was taken 985149 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     985149 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     824 </span>                :            :         }
+<span class="lineNum">     825 </span>                :<span class="lineCov">         73 :         m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_SAMPLE_BEGIN;</span>
+<a name="826"><span class="lineNum">     826 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     827 </span>                :            : 
+<span class="lineNum">     828 </span>                :<span class="lineCov">         73 :     void ProfileSampler::cpu_rank(std::vector&lt;int&gt; &amp;cpu_rank)</span>
+<span class="lineNum">     829 </span>                :            :     {
+<span class="lineNum">     830 </span>                :            : #ifdef _SC_NPROCESSORS_ONLN
+<span class="lineNum">     831 </span>                :<span class="lineCov">         73 :         uint32_t num_cpu = sysconf(_SC_NPROCESSORS_ONLN);</span>
+<span class="lineNum">     832 </span>                :            : #else
+<span class="lineNum">     833 </span>                :            :         uint32_t num_cpu = 1;
+<span class="lineNum">     834 </span>                :            :         size_t len = sizeof(num_cpu);
+<span class="lineNum">     835 </span>                :            :         sysctl((int[2]) {CTL_HW, HW_NCPU}, 2, &amp;num_cpu, &amp;len, NULL, 0);
+<span class="lineNum">     836 </span>                :            : #endif
+<span class="lineNum">     837 </span>                :<span class="lineCov">         73 :         cpu_rank.resize(num_cpu);</span>
+<span class="lineNum">     838 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">         73 :         if (num_cpu &gt; GEOPM_MAX_NUM_CPU) {</span>
+<span class="lineNum">     839 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileSampler::cpu_rank: Number of online CPUs is greater than GEOPM_MAX_NUM_CPU&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     840 </span>                :            :         }
+<span class="lineNum">     841 </span>                :<span class="lineCov">         73 :         std::copy(m_ctl_msg-&gt;cpu_rank, m_ctl_msg-&gt;cpu_rank + num_cpu, cpu_rank.begin());</span>
+<a name="842"><span class="lineNum">     842 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     843 </span>                :            : 
+<span class="lineNum">     844 </span>                :<span class="lineCov">         73 :     size_t ProfileSampler::capacity(void)</span>
+<span class="lineNum">     845 </span>                :            :     {
+<span class="lineNum">     846 </span>                :<span class="lineCov">         73 :         size_t result = 0;</span>
+<span class="lineNum">     847 </span>        [<span class="branchCov" title="Branch 3 was taken 266 times"> + </span><span class="branchCov" title="Branch 4 was taken 73 times"> + </span>]:<span class="lineCov">        339 :         for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span>
+<span class="lineNum">     848 </span>        [<span class="branchCov" title="Branch 2 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        266 :             result += (*it)-&gt;capacity();</span>
+<span class="lineNum">     849 </span>                :            :         }
+<span class="lineNum">     850 </span>                :<span class="lineCov">         73 :         return result;</span>
+<a name="851"><span class="lineNum">     851 </span>                :            :     }</a>
+<span class="lineNum">     852 </span>                :            : 
+<span class="lineNum">     853 </span>                :<span class="lineCov">     467056 :     void ProfileSampler::sample(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt; &amp;content, size_t &amp;length, MPI_Comm comm)</span>
+<span class="lineNum">     854 </span>                :            :     {
+<span class="lineNum">     855 </span>                :<span class="lineCov">     467056 :         length = 0;</span>
+<span class="lineNum">     856 </span>[<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchCov" title="Branch 1 was taken 466983 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     467056 :         if (m_ctl_msg-&gt;app_status == GEOPM_STATUS_SAMPLE_BEGIN ||</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 467056 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<span class="lineNum">     857 </span>                :<span class="lineCov">         73 :             m_ctl_msg-&gt;app_status == GEOPM_STATUS_SAMPLE_END) {</span>
+<span class="lineNum">     858 </span>                :<span class="lineCov">     467056 :             auto content_it = content.begin();</span>
+<span class="lineNum">     859 </span>        [<span class="branchCov" title="Branch 2 was taken 2375232 times"> + </span><span class="branchCov" title="Branch 3 was taken 467056 times"> + </span>]:<span class="lineCov">    5684576 :             for (auto rank_sampler_it = m_rank_sampler.begin();</span>
+<span class="lineNum">     860 </span>                :<span class="lineCov">    2842288 :                  rank_sampler_it != m_rank_sampler.end();</span>
+<span class="lineNum">     861 </span>                :            :                  ++rank_sampler_it) {
+<span class="lineNum">     862 </span>                :<span class="lineCov">    2375232 :                 size_t rank_length = 0;</span>
+<span class="lineNum">     863 </span>        [<span class="branchCov" title="Branch 2 was taken 2375232 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">    2375232 :                 (*rank_sampler_it)-&gt;sample(content_it, rank_length);</span>
+<span class="lineNum">     864 </span>                :<span class="lineCov">    2375232 :                 content_it += rank_length;</span>
+<span class="lineNum">     865 </span>                :<span class="lineCov">    2375232 :                 length += rank_length;</span>
+<span class="lineNum">     866 </span>                :            :             }
+<span class="lineNum">     867 </span>        [<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchCov" title="Branch 1 was taken 466983 times"> + </span>]:<span class="lineCov">     467056 :             if (m_ctl_msg-&gt;app_status == GEOPM_STATUS_SAMPLE_END) {</span>
+<span class="lineNum">     868 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         73 :                 PMPI_Barrier(comm);</span>
+<span class="lineNum">     869 </span>                :<span class="lineCov">         73 :                 m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_SAMPLE_END;</span>
+<span class="lineNum">     870 </span>[<span class="branchCov" title="Branch 0 was taken 68148 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 68148 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">      68221 :                 while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_NAME_BEGIN &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 68148 times"> + </span><span class="branchCov" title="Branch 5 was taken 73 times"> + </span>]
+<span class="lineNum">     871 </span>                :<span class="lineCov">      68148 :                        m_ctl_msg-&gt;app_status != GEOPM_STATUS_SHUTDOWN) {</span>
+<span class="lineNum">     872 </span>        [<span class="branchCov" title="Branch 1 was taken 68148 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">      68148 :                     geopm_signal_handler_check();</span>
+<span class="lineNum">     873 </span>                :            :                 }
+<span class="lineNum">     874 </span>        [<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         73 :                 if (m_ctl_msg-&gt;app_status == GEOPM_STATUS_NAME_BEGIN) {</span>
+<span class="lineNum">     875 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">     467056 :                     region_names();</span>
+<span class="lineNum">     876 </span>                :            :                 }
+<span class="lineNum">     877 </span>                :            :             }
+<span class="lineNum">     878 </span>                :            :         }
+<span class="lineNum">     879 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         else if (m_ctl_msg-&gt;app_status != GEOPM_STATUS_SHUTDOWN) {</span>
+<span class="lineNum">     880 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::ostringstream ex_str;</span>
+<span class="lineNum">     881 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;ProfileSampler: invalid application status: &quot; &lt;&lt; m_ctl_msg-&gt;app_status;</span>
+<span class="lineNum">     882 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     883 </span>                :            :         }
+<a name="884"><span class="lineNum">     884 </span>                :<span class="lineCov">     467056 :     }</span></a>
+<span class="lineNum">     885 </span>                :            : 
+<span class="lineNum">     886 </span>                :<span class="lineCov">     467056 :     bool ProfileSampler::do_shutdown(void)</span>
+<span class="lineNum">     887 </span>                :            :     {
+<span class="lineNum">     888 </span>                :<span class="lineCov">     467056 :         return (m_ctl_msg-&gt;app_status == GEOPM_STATUS_SHUTDOWN);</span>
+<a name="889"><span class="lineNum">     889 </span>                :            :     }</a>
+<span class="lineNum">     890 </span>                :            : 
+<span class="lineNum">     891 </span>                :<span class="lineCov">         73 :     bool ProfileSampler::do_report(void)</span>
+<span class="lineNum">     892 </span>                :            :     {
+<span class="lineNum">     893 </span>                :<span class="lineCov">         73 :         return m_do_report;</span>
+<a name="894"><span class="lineNum">     894 </span>                :            :     }</a>
+<span class="lineNum">     895 </span>                :            : 
+<span class="lineNum">     896 </span>                :<span class="lineCov">         73 :     void ProfileSampler::region_names(void)</span>
+<span class="lineNum">     897 </span>                :            :     {
+<span class="lineNum">     898 </span>                :<span class="lineCov">         73 :         m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_NAME_BEGIN;</span>
+<span class="lineNum">     899 </span>                :            : 
+<span class="lineNum">     900 </span>                :<span class="lineCov">         73 :         bool is_all_done = false;</span>
+<span class="lineNum">     901 </span>        [<span class="branchCov" title="Branch 0 was taken 73 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">        146 :         while (!is_all_done) {</span>
+<span class="lineNum">     902 </span>        [<span class="branchCov" title="Branch 0 was taken 78733 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">      78806 :             while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_NAME_LOOP_BEGIN) {</span>
+<span class="lineNum">     903 </span>                :<span class="lineCov">      78733 :                 geopm_signal_handler_check();</span>
+<span class="lineNum">     904 </span>                :            :             }
+<span class="lineNum">     905 </span>                :<span class="lineCov">         73 :             m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_NAME_LOOP_BEGIN;</span>
+<span class="lineNum">     906 </span>        [<span class="branchCov" title="Branch 0 was taken 270586 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">     270659 :             while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_NAME_LOOP_END) {</span>
+<span class="lineNum">     907 </span>                :<span class="lineCov">     270586 :                 geopm_signal_handler_check();</span>
+<span class="lineNum">     908 </span>                :            :             }
+<span class="lineNum">     909 </span>                :<span class="lineCov">         73 :             is_all_done = true;</span>
+<span class="lineNum">     910 </span>        [<span class="branchCov" title="Branch 3 was taken 266 times"> + </span><span class="branchCov" title="Branch 4 was taken 73 times"> + </span>]:<span class="lineCov">        339 :             for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span>
+<span class="lineNum">     911 </span>[<span class="branchCov" title="Branch 2 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 5 was taken 266 times"> + </span>]:<span class="lineCov">        266 :                 if (!(*it)-&gt;name_fill(m_name_set)) {</span>
+<span class="lineNum">     912 </span>                :<span class="lineNoCov">          0 :                     is_all_done = false;</span>
+<span class="lineNum">     913 </span>                :            :                 }
+<span class="lineNum">     914 </span>                :            :             }
+<span class="lineNum">     915 </span>                :<span class="lineCov">         73 :             m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_NAME_LOOP_END;</span>
+<span class="lineNum">     916 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         73 :             if (!is_all_done &amp;&amp; m_ctl_msg-&gt;app_status == GEOPM_STATUS_SHUTDOWN) {</span>
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 5 was taken 73 times"> + </span>]
+<span class="lineNum">     917 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileSampler::region_names(): Application shutdown while report was being generated&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     918 </span>                :            :             }
+<span class="lineNum">     919 </span>                :            :         }
+<span class="lineNum">     920 </span>                :<span class="lineCov">         73 :         m_rank_sampler.front()-&gt;report_name(m_report_name);</span>
+<span class="lineNum">     921 </span>                :<span class="lineCov">         73 :         m_rank_sampler.front()-&gt;profile_name(m_profile_name);</span>
+<span class="lineNum">     922 </span>                :<span class="lineCov">         73 :         m_do_report = true;</span>
+<span class="lineNum">     923 </span>                :            : 
+<span class="lineNum">     924 </span>        [<span class="branchCov" title="Branch 0 was taken 123 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">        196 :         while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_NAME_END) {</span>
+<span class="lineNum">     925 </span>                :<span class="lineCov">        123 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     926 </span>                :            :         }
+<span class="lineNum">     927 </span>                :<span class="lineCov">         73 :         m_ctl_msg-&gt;ctl_status = GEOPM_STATUS_NAME_END;</span>
+<span class="lineNum">     928 </span>        [<span class="branchCov" title="Branch 0 was taken 7176 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">       7249 :         while (m_ctl_msg-&gt;app_status != GEOPM_STATUS_SHUTDOWN) {</span>
+<span class="lineNum">     929 </span>                :<span class="lineCov">       7176 :             geopm_signal_handler_check();</span>
+<span class="lineNum">     930 </span>                :            :         }
+<a name="931"><span class="lineNum">     931 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     932 </span>                :            : 
+<span class="lineNum">     933 </span>                :<span class="lineCov">         73 :     void ProfileSampler::name_set(std::set&lt;std::string&gt; &amp;region_name)</span>
+<span class="lineNum">     934 </span>                :            :     {
+<span class="lineNum">     935 </span>                :<span class="lineCov">         73 :         region_name = m_name_set;</span>
+<a name="936"><span class="lineNum">     936 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     937 </span>                :            : 
+<span class="lineNum">     938 </span>                :<span class="lineCov">         73 :     void ProfileSampler::report_name(std::string &amp;report_str)</span>
+<span class="lineNum">     939 </span>                :            :     {
+<span class="lineNum">     940 </span>                :<span class="lineCov">         73 :         report_str = m_report_name;</span>
+<a name="941"><span class="lineNum">     941 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     942 </span>                :            : 
+<span class="lineNum">     943 </span>                :<span class="lineCov">         73 :     void ProfileSampler::profile_name(std::string &amp;prof_str)</span>
+<span class="lineNum">     944 </span>                :            :     {
+<span class="lineNum">     945 </span>                :<span class="lineCov">         73 :         prof_str = m_profile_name;</span>
+<a name="946"><span class="lineNum">     946 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">     947 </span>                :            : 
+<span class="lineNum">     948 </span>                :<span class="lineCov">        308 :     IProfileThreadTable *ProfileSampler::tprof_table(void)</span>
+<span class="lineNum">     949 </span>                :            :     {
+<span class="lineNum">     950 </span>                :<span class="lineCov">        308 :         return m_tprof_table;</span>
+<a name="951"><span class="lineNum">     951 </span>                :            :     }</a>
+<span class="lineNum">     952 </span>                :            : 
+<span class="lineNum">     953 </span>                :<span class="lineCov">        266 :     ProfileRankSampler::ProfileRankSampler(const std::string shm_key, size_t table_size)</span>
+<span class="lineNum">     954 </span>                :            :         : m_table_shmem(NULL)
+<span class="lineNum">     955 </span>                :            :         , m_table(NULL)
+<span class="lineNum">     956 </span>                :            :         , m_region_entry(GEOPM_INVALID_PROF_MSG)
+<span class="lineNum">     957 </span>                :<span class="lineCov">        266 :         , m_is_name_finished(false)</span>
+<span class="lineNum">     958 </span>                :            :     {
+<span class="lineNum">     959 </span>[<span class="branchCov" title="Branch 1 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        266 :         m_table_shmem = new SharedMemory(shm_key, table_size);</span>
+<span class="lineNum">     960 </span>[<span class="branchCov" title="Branch 1 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        266 :         m_table = new ProfileTable(m_table_shmem-&gt;size(), m_table_shmem-&gt;pointer());</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<a name="961"><span class="lineNum">     961 </span>                :<span class="lineCov">        266 :     }</span></a>
+<span class="lineNum">     962 </span>                :            : 
+<span class="lineNum">     963 </span>                :<span class="lineCov">        798 :     ProfileRankSampler::~ProfileRankSampler()</span>
+<span class="lineNum">     964 </span>                :            :     {
+<span class="lineNum">     965 </span>        [<span class="branchCov" title="Branch 0 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        266 :         delete m_table;</span>
+<span class="lineNum">     966 </span>        [<span class="branchCov" title="Branch 0 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        266 :         delete m_table_shmem;</span>
+<a name="967"><span class="lineNum">     967 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 266 times"> + </span>]:<span class="lineCov">        532 :     }</span></a>
+<span class="lineNum">     968 </span>                :            : 
+<span class="lineNum">     969 </span>                :<span class="lineCov">        266 :     size_t ProfileRankSampler::capacity(void)</span>
+<span class="lineNum">     970 </span>                :            :     {
+<span class="lineNum">     971 </span>                :<span class="lineCov">        266 :         return m_table-&gt;capacity();</span>
+<a name="972"><span class="lineNum">     972 </span>                :            :     }</a>
+<span class="lineNum">     973 </span>                :            : 
+<span class="lineNum">     974 </span>                :<span class="lineCov">    2375232 :     void ProfileRankSampler::sample(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content_begin, size_t &amp;length)</span>
+<span class="lineNum">     975 </span>                :            :     {
+<span class="lineNum">     976 </span>                :<span class="lineCov">    2375232 :         m_table-&gt;dump(content_begin, length);</span>
+<span class="lineNum">     977 </span>                :<span class="lineCov">    2375232 :         std::stable_sort(content_begin, content_begin + length, geopm_prof_compare);</span>
+<a name="978"><span class="lineNum">     978 </span>                :<span class="lineCov">    2375232 :     }</span></a>
+<span class="lineNum">     979 </span>                :            : 
+<span class="lineNum">     980 </span>                :<span class="lineCov">        266 :     bool ProfileRankSampler::name_fill(std::set&lt;std::string&gt; &amp;name_set)</span>
+<span class="lineNum">     981 </span>                :            :     {
+<span class="lineNum">     982 </span>                :<span class="lineCov">        266 :         size_t header_offset = 0;</span>
+<span class="lineNum">     983 </span>                :            : 
+<span class="lineNum">     984 </span>        [<span class="branchCov" title="Branch 0 was taken 266 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        266 :         if (!m_is_name_finished) {</span>
+<span class="lineNum">     985 </span>        [<span class="branchCov" title="Branch 1 was taken 73 times"> + </span><span class="branchCov" title="Branch 2 was taken 193 times"> + </span>]:<span class="lineCov">        266 :             if (name_set.empty()) {</span>
+<span class="lineNum">     986 </span>                :<span class="lineCov">         73 :                 m_report_name = (char *)m_table_shmem-&gt;pointer();</span>
+<span class="lineNum">     987 </span>                :<span class="lineCov">         73 :                 header_offset += m_report_name.length() + 1;</span>
+<span class="lineNum">     988 </span>                :<span class="lineCov">         73 :                 m_prof_name = (char *)m_table_shmem-&gt;pointer() + header_offset;</span>
+<span class="lineNum">     989 </span>                :<span class="lineCov">         73 :                 header_offset += m_prof_name.length() + 1;</span>
+<span class="lineNum">     990 </span>                :            :             }
+<span class="lineNum">     991 </span>                :<span class="lineCov">        266 :             m_is_name_finished = m_table-&gt;name_set(header_offset, name_set);</span>
+<span class="lineNum">     992 </span>                :            :         }
+<span class="lineNum">     993 </span>                :            : 
+<span class="lineNum">     994 </span>                :<span class="lineCov">        266 :         return m_is_name_finished;</span>
+<a name="995"><span class="lineNum">     995 </span>                :            :     }</a>
+<span class="lineNum">     996 </span>                :            : 
+<span class="lineNum">     997 </span>                :<span class="lineCov">         73 :     void ProfileRankSampler::report_name(std::string &amp;report_str)</span>
+<span class="lineNum">     998 </span>                :            :     {
+<span class="lineNum">     999 </span>                :<span class="lineCov">         73 :         report_str = m_report_name;</span>
+<a name="1000"><span class="lineNum">    1000 </span>                :<span class="lineCov">         73 :     }</span></a>
+<span class="lineNum">    1001 </span>                :            : 
+<span class="lineNum">    1002 </span>                :<span class="lineCov">         73 :     void ProfileRankSampler::profile_name(std::string &amp;prof_str)</span>
+<span class="lineNum">    1003 </span>                :            :     {
+<a name="1004"><span class="lineNum">    1004 </span>                :<span class="lineCov">         73 :         prof_str = m_prof_name;</span></a>
+<span class="lineNum">    1005 </span>                :<span class="lineCov">         73 :     }</span>
+<span class="lineNum">    1006 </span>[<span class="branchCov" title="Branch 1 was taken 1245 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1245 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">       4980 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

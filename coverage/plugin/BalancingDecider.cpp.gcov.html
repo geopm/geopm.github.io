@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - plugin/BalancingDecider.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">plugin</a> - BalancingDecider.cpp<span style="font-size: 80%;"> (source / <a href="BalancingDecider.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">85</td>
+            <td class="headerCovTableEntry">112</td>
+            <td class="headerCovTableEntryMed">75.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-06-18</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntryHi">91.7 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">51</td>
+            <td class="headerCovTableEntry">114</td>
+            <td class="headerCovTableEntryLo">44.7 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, Intel Corporation
+<span class="lineNum">       3 </span>                :            :  *
+<span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
+<span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions
+<span class="lineNum">       6 </span>                :            :  * are met:
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  *     * Redistributions of source code must retain the above copyright
+<span class="lineNum">       9 </span>                :            :  *       notice, this list of conditions and the following disclaimer.
+<span class="lineNum">      10 </span>                :            :  *
+<span class="lineNum">      11 </span>                :            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>                :            :  *       notice, this list of conditions and the following disclaimer in
+<span class="lineNum">      13 </span>                :            :  *       the documentation and/or other materials provided with the
+<span class="lineNum">      14 </span>                :            :  *       distribution.
+<span class="lineNum">      15 </span>                :            :  *
+<span class="lineNum">      16 </span>                :            :  *     * Neither the name of Intel Corporation nor the names of its
+<span class="lineNum">      17 </span>                :            :  *       contributors may be used to endorse or promote products derived
+<span class="lineNum">      18 </span>                :            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>                :            :  *
+<span class="lineNum">      20 </span>                :            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<span class="lineNum">      21 </span>                :            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+<span class="lineNum">      22 </span>                :            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>                :            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>                :            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<span class="lineNum">      25 </span>                :            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+<span class="lineNum">      26 </span>                :            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>                :            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>                :            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE
+<span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>                :            :  */
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : #include &lt;hwloc.h&gt;
+<span class="lineNum">      34 </span>                :            : #include &lt;algorithm&gt;
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :            : #include &quot;geopm_message.h&quot;
+<span class="lineNum">      37 </span>                :            : #include &quot;geopm_plugin.h&quot;
+<span class="lineNum">      38 </span>                :            : #include &quot;BalancingDecider.hpp&quot;
+<a name="39"><span class="lineNum">      39 </span>                :            : #include &quot;Exception.hpp&quot;</a>
+<span class="lineNum">      40 </span>                :            : 
+<span class="lineNum">      41 </span>                :<span class="lineCov">        275 : int geopm_plugin_register(int plugin_type, struct geopm_factory_c *factory, void *dl_ptr)</span>
+<span class="lineNum">      42 </span>                :            : {
+<span class="lineNum">      43 </span>                :<span class="lineCov">        275 :     int err = 0;</span>
+<span class="lineNum">      44 </span>                :            : 
+<span class="lineNum">      45 </span>                :            :     try {
+<span class="lineNum">      46 </span>        [<span class="branchCov" title="Branch 0 was taken 129 times"> + </span><span class="branchCov" title="Branch 1 was taken 146 times"> + </span>]:<span class="lineCov">        275 :         if (plugin_type == GEOPM_PLUGIN_TYPE_DECIDER) {</span>
+<span class="lineNum">      47 </span>[<span class="branchCov" title="Branch 1 was taken 129 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 129 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        129 :             geopm::IDecider *decider = new geopm::BalancingDecider;</span>
+<span class="lineNum">      48 </span>        [<span class="branchCov" title="Branch 1 was taken 129 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        129 :             geopm_factory_register(factory, decider, dl_ptr);</span>
+<span class="lineNum">      49 </span>                :            :         }
+<span class="lineNum">      50 </span>                :            :     }
+<span class="lineNum">      51 </span>                :<span class="lineNoCov">          0 :     catch(...) {</span>
+<span class="lineNum">      52 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">      53 </span>                :            :     }
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>                :<span class="lineCov">        275 :     return err;</span>
+<span class="lineNum">      56 </span>                :            : }
+<a name="57"><span class="lineNum">      57 </span>                :            : </a>
+<span class="lineNum">      58 </span>                :            : struct {
+<span class="lineNum">      59 </span>                :<span class="lineCov">         28 :     bool operator()(std::pair&lt;int,double&gt; a, std::pair&lt;int,double&gt; b)</span>
+<span class="lineNum">      60 </span>                :            :     {
+<span class="lineNum">      61 </span>                :<span class="lineCov">         28 :         return a.second &lt; b.second;</span>
+<span class="lineNum">      62 </span>                :            :     }
+<span class="lineNum">      63 </span>                :            : } pair_greater;
+<span class="lineNum">      64 </span>                :            : 
+<a name="65"><span class="lineNum">      65 </span>                :            : namespace geopm</a>
+<span class="lineNum">      66 </span>                :            : {
+<span class="lineNum">      67 </span>                :<span class="lineCov">        129 :     BalancingDecider::BalancingDecider()</span>
+<span class="lineNum">      68 </span>                :            :         : m_name(&quot;power_balancing&quot;)
+<span class="lineNum">      69 </span>                :            :         , m_convergence_target(0.01)
+<span class="lineNum">      70 </span>                :            :         , m_min_num_converged(7)
+<span class="lineNum">      71 </span>                :            :         , m_num_converged(0)
+<span class="lineNum">      72 </span>                :            :         , m_last_power_budget(DBL_MIN)
+<span class="lineNum">      73 </span>                :            :         , m_num_sample(3)
+<span class="lineNum">      74 </span>                :            :         , m_num_out_of_range(0)
+<span class="lineNum">      75 </span>                :            :         , m_slope_modifier(3.0)
+<span class="lineNum">      76 </span>        [<span class="branchCov" title="Branch 3 was taken 129 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">        129 :         , M_GUARD_BAND(1.15)</span>
+<span class="lineNum">      77 </span>                :            :     {
+<span class="lineNum">      78 </span>                :            : 
+<a name="79"><span class="lineNum">      79 </span>                :<span class="lineCov">        129 :     }</span></a>
+<span class="lineNum">      80 </span>                :            : 
+<span class="lineNum">      81 </span>                :<span class="lineCov">         12 :     BalancingDecider::BalancingDecider(const BalancingDecider &amp;other)</span>
+<span class="lineNum">      82 </span>                :            :         : Decider(other)
+<span class="lineNum">      83 </span>                :            :         , m_name(other.m_name)
+<span class="lineNum">      84 </span>                :<span class="lineCov">         12 :         , m_convergence_target(other.m_convergence_target)</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">         12 :         , m_min_num_converged(other.m_min_num_converged)</span>
+<span class="lineNum">      86 </span>                :<span class="lineCov">         12 :         , m_num_converged(other.m_num_converged)</span>
+<span class="lineNum">      87 </span>                :<span class="lineCov">         12 :         , m_last_power_budget(other.m_last_power_budget)</span>
+<span class="lineNum">      88 </span>                :<span class="lineCov">         12 :         , m_num_sample(other.m_num_sample)</span>
+<span class="lineNum">      89 </span>                :<span class="lineCov">         12 :         , m_num_out_of_range(other.m_num_out_of_range)</span>
+<span class="lineNum">      90 </span>                :<span class="lineCov">         12 :         , m_slope_modifier(other.m_slope_modifier)</span>
+<span class="lineNum">      91 </span>        [<span class="branchCov" title="Branch 2 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         12 :         , M_GUARD_BAND(other.M_GUARD_BAND)</span>
+<span class="lineNum">      92 </span>                :            :     {
+<span class="lineNum">      93 </span>                :            : 
+<a name="94"><span class="lineNum">      94 </span>                :<span class="lineCov">         12 :     }</span></a>
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>                :<span class="lineCov">        423 :     BalancingDecider::~BalancingDecider()</span>
+<span class="lineNum">      97 </span>                :            :     {
+<span class="lineNum">      98 </span>                :            : 
+<a name="99"><span class="lineNum">      99 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 141 times"> + </span>]:<span class="lineCov">        282 :     }</span></a>
+<span class="lineNum">     100 </span>                :            : 
+<span class="lineNum">     101 </span>                :<span class="lineCov">         12 :     IDecider *BalancingDecider::clone(void) const</span>
+<span class="lineNum">     102 </span>                :            :     {
+<span class="lineNum">     103 </span>        [<span class="branchCov" title="Branch 2 was taken 12 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         12 :         return (IDecider*)(new BalancingDecider(*this));</span>
+<a name="104"><span class="lineNum">     104 </span>                :            :     }</a>
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :<span class="lineCov">        143 :     bool BalancingDecider::decider_supported(const std::string &amp;description)</span>
+<span class="lineNum">     107 </span>                :            :     {
+<span class="lineNum">     108 </span>                :<span class="lineCov">        143 :         return (description == m_name);</span>
+<a name="109"><span class="lineNum">     109 </span>                :            :     }</a>
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineCov">          4 :     const std::string&amp; BalancingDecider::name(void) const</span>
+<span class="lineNum">     112 </span>                :            :     {
+<span class="lineNum">     113 </span>                :<span class="lineCov">          4 :         return m_name;</span>
+<a name="114"><span class="lineNum">     114 </span>                :            :     }</a>
+<span class="lineNum">     115 </span>                :            : 
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :     void BalancingDecider::bound(double upper_bound, double lower_bound)</span>
+<span class="lineNum">     117 </span>                :            :     {
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :         m_upper_bound = upper_bound / M_GUARD_BAND;</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :         m_lower_bound = lower_bound * M_GUARD_BAND;</span>
+<a name="120"><span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>                :<span class="lineCov">          6 :     bool BalancingDecider::update_policy(const struct geopm_policy_message_s &amp;policy_msg, IPolicy &amp;curr_policy)</span>
+<span class="lineNum">     123 </span>                :            :     {
+<span class="lineNum">     124 </span>                :<span class="lineCov">          6 :         bool result = false;</span>
+<span class="lineNum">     125 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          6 :         if (policy_msg.power_budget != m_last_power_budget) {</span>
+<span class="lineNum">     126 </span>                :<span class="lineCov">          6 :             curr_policy.is_converged(GEOPM_REGION_ID_EPOCH, false);</span>
+<span class="lineNum">     127 </span>                :<span class="lineCov">          6 :             int num_domain = curr_policy.num_domain();</span>
+<span class="lineNum">     128 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          6 :             if (m_last_power_budget != DBL_MIN) {</span>
+<span class="lineNum">     129 </span>                :            :                 // Split the budget up by the same ratio we split the old budget.
+<span class="lineNum">     130 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">         18 :                 for (int i = 0; i &lt; num_domain; ++i) {</span>
+<span class="lineNum">     131 </span>                :            :                     double curr_target;
+<span class="lineNum">     132 </span>        [<span class="branchCov" title="Branch 1 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         16 :                     curr_policy.target(GEOPM_REGION_ID_EPOCH, i, curr_target);</span>
+<span class="lineNum">     133 </span>                :<span class="lineCov">         16 :                     double split_budget = policy_msg.power_budget * (curr_target / m_last_power_budget);</span>
+<span class="lineNum">     134 </span>        [<span class="branchCov" title="Branch 1 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         16 :                     curr_policy.update(GEOPM_REGION_ID_EPOCH, i, split_budget);</span>
+<span class="lineNum">     135 </span>                :            :                 }
+<span class="lineNum">     136 </span>                :            :             }
+<span class="lineNum">     137 </span>                :            :             else {
+<span class="lineNum">     138 </span>                :            :                 // Split the budget up evenly to start.
+<span class="lineNum">     139 </span>                :<span class="lineCov">          4 :                 double split_budget = policy_msg.power_budget / num_domain;</span>
+<span class="lineNum">     140 </span>        [<span class="branchCov" title="Branch 2 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          8 :                 std::vector&lt;double&gt; domain_budget(num_domain);</span>
+<span class="lineNum">     141 </span>        [<span class="branchCov" title="Branch 3 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 :                 std::fill(domain_budget.begin(), domain_budget.end(), split_budget);</span>
+<span class="lineNum">     142 </span>        [<span class="branchCov" title="Branch 1 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          4 :                 curr_policy.update(GEOPM_REGION_ID_EPOCH, domain_budget);</span>
+<span class="lineNum">     143 </span>                :            :             }
+<span class="lineNum">     144 </span>                :<span class="lineCov">          6 :             m_last_power_budget = policy_msg.power_budget;</span>
+<span class="lineNum">     145 </span>                :<span class="lineCov">          6 :             result = true;</span>
+<span class="lineNum">     146 </span>                :            :         }
+<span class="lineNum">     147 </span>                :<span class="lineCov">          6 :         return result;</span>
+<a name="148"><span class="lineNum">     148 </span>                :            :     }</a>
+<span class="lineNum">     149 </span>                :            : 
+<span class="lineNum">     150 </span>                :<span class="lineCov">          2 :     bool BalancingDecider::update_policy(IRegion &amp;curr_region, IPolicy &amp;curr_policy)</span>
+<span class="lineNum">     151 </span>                :            :     {
+<span class="lineNum">     152 </span>                :<span class="lineCov">          2 :         bool is_updated = false;</span>
+<span class="lineNum">     153 </span>                :            : 
+<span class="lineNum">     154 </span>                :            :         // Don't do anything if we have already converged.
+<span class="lineNum">     155 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         if (curr_region.num_sample(0, GEOPM_SAMPLE_TYPE_RUNTIME) &gt;= m_num_sample) {</span>
+<span class="lineNum">     156 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :             int num_domain = curr_policy.num_domain();</span>
+<span class="lineNum">     157 </span>        [<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          4 :             std::vector&lt;std::pair&lt;int,double&gt; &gt; runtime(num_domain);</span>
+<span class="lineNum">     158 </span>                :<span class="lineCov">          2 :             double sum = 0.0;</span>
+<span class="lineNum">     159 </span>                :<span class="lineCov">          2 :             double sum_sqr = 0.0;</span>
+<span class="lineNum">     160 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">         18 :             for (int i = 0; i &lt; num_domain; ++i) {</span>
+<span class="lineNum">     161 </span>                :<span class="lineCov">         16 :                 runtime[i].first = i;</span>
+<span class="lineNum">     162 </span>        [<span class="branchCov" title="Branch 2 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         16 :                 runtime[i].second = curr_region.median(i, GEOPM_SAMPLE_TYPE_RUNTIME);</span>
+<span class="lineNum">     163 </span>                :<span class="lineCov">         16 :                 sum += runtime[i].second;</span>
+<span class="lineNum">     164 </span>                :<span class="lineCov">         16 :                 sum_sqr += runtime[i].second * runtime[i].second;</span>
+<span class="lineNum">     165 </span>                :            :             }
+<span class="lineNum">     166 </span>                :<span class="lineCov">          2 :             double mean = sum / num_domain;</span>
+<span class="lineNum">     167 </span>                :<span class="lineCov">          2 :             double rel_stddev = sqrt(sum_sqr / num_domain - (mean * mean)) / mean;</span>
+<span class="lineNum">     168 </span>                :            :             // We are not within bounds. Redistribute power.
+<span class="lineNum">     169 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :             if (!curr_policy.is_converged(curr_region.identifier()) &amp;&amp; (rel_stddev &gt; m_convergence_target)) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 10 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">     170 </span>                :<span class="lineCov">          2 :                 m_num_converged = 0;</span>
+<span class="lineNum">     171 </span>                :<span class="lineCov">          2 :                 double total = 0.0;</span>
+<span class="lineNum">     172 </span>        [<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          4 :                 std::vector&lt;double&gt; percentage(num_domain);</span>
+<span class="lineNum">     173 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :                 std::sort(runtime.begin(), runtime.end(), pair_greater);</span>
+<span class="lineNum">     174 </span>        [<span class="branchCov" title="Branch 3 was taken 16 times"> + </span><span class="branchCov" title="Branch 4 was taken 2 times"> + </span>]:<span class="lineCov">         18 :                 for (auto iter = runtime.begin(); iter != runtime.end(); ++iter) {</span>
+<span class="lineNum">     175 </span>                :            :                     double median;
+<span class="lineNum">     176 </span>                :            :                     double curr_target;
+<span class="lineNum">     177 </span>        [<span class="branchCov" title="Branch 2 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         16 :                     curr_policy.target(GEOPM_REGION_ID_EPOCH, (*iter).first, curr_target);</span>
+<span class="lineNum">     178 </span>                :<span class="lineCov">         16 :                     double last_percentage = curr_target / m_last_power_budget;</span>
+<span class="lineNum">     179 </span>        [<span class="branchCov" title="Branch 2 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         16 :                     median = curr_region.median((*iter).first, GEOPM_SAMPLE_TYPE_RUNTIME);</span>
+<span class="lineNum">     180 </span>                :<span class="lineCov">         16 :                     percentage[(*iter).first] = (((mean * m_slope_modifier) + median) * last_percentage) / sum;</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">         16 :                     total += percentage[(*iter).first];</span>
+<span class="lineNum">     182 </span>                :            :                 }
+<span class="lineNum">     183 </span>                :            : 
+<span class="lineNum">     184 </span>                :<span class="lineCov">          2 :                 int pool = m_last_power_budget;</span>
+<span class="lineNum">     185 </span>                :<span class="lineCov">          2 :                 int power_sum = 0;</span>
+<span class="lineNum">     186 </span>                :<span class="lineCov">          2 :                 double runtime_sum = 0.0;</span>
+<span class="lineNum">     187 </span>        [<span class="branchCov" title="Branch 3 was taken 16 times"> + </span><span class="branchCov" title="Branch 4 was taken 2 times"> + </span>]:<span class="lineCov">         18 :                 for (auto iter = runtime.begin(); iter != runtime.end(); ++iter) {</span>
+<span class="lineNum">     188 </span>                :<span class="lineCov">         16 :                     double target = (percentage[(*iter).first] / total) * pool;</span>
+<span class="lineNum">     189 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 16 times"> + </span>]:<span class="lineCov">         16 :                     if (target &lt; m_lower_bound) {</span>
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :                         target = m_lower_bound;</span>
+<span class="lineNum">     191 </span>                :<span class="lineNoCov">          0 :                         pool -= (target + power_sum);</span>
+<span class="lineNum">     192 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         sum -= (curr_region.median((*iter).first, GEOPM_SAMPLE_TYPE_RUNTIME) + runtime_sum);</span>
+<span class="lineNum">     193 </span>                :<span class="lineNoCov">          0 :                         power_sum = 0;</span>
+<span class="lineNum">     194 </span>                :<span class="lineNoCov">          0 :                         runtime_sum = 0.0;</span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :                         total = 0.0;</span>
+<span class="lineNum">     196 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         for (auto it = (iter + 1); it != runtime.end(); ++it) {</span>
+<span class="lineNum">     197 </span>                :            :                             double median;
+<span class="lineNum">     198 </span>                :            :                             double curr_target;
+<span class="lineNum">     199 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                             curr_policy.target(GEOPM_REGION_ID_EPOCH, (*it).first, curr_target);</span>
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :                             double last_percentage = curr_target / m_last_power_budget;</span>
+<span class="lineNum">     201 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                             median = curr_region.median((*it).first, GEOPM_SAMPLE_TYPE_RUNTIME);</span>
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :                             percentage[(*it).first] = (((mean * m_slope_modifier) + median) * last_percentage) / sum;</span>
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :                             total += percentage[(*it).first];</span>
+<span class="lineNum">     204 </span>                :            :                         }
+<span class="lineNum">     205 </span>                :            :                     }
+<span class="lineNum">     206 </span>                :            :                     else {
+<span class="lineNum">     207 </span>                :<span class="lineCov">         16 :                         power_sum += target;</span>
+<span class="lineNum">     208 </span>        [<span class="branchCov" title="Branch 2 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         16 :                         runtime_sum += curr_region.median((*iter).first, GEOPM_SAMPLE_TYPE_RUNTIME);</span>
+<span class="lineNum">     209 </span>                :            :                     }
+<span class="lineNum">     210 </span>        [<span class="branchCov" title="Branch 2 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         16 :                     curr_policy.update(GEOPM_REGION_ID_EPOCH, (*iter).first, target);</span>
+<span class="lineNum">     211 </span>                :            :                 }
+<span class="lineNum">     212 </span>                :            :                 // clear out stale sample data
+<span class="lineNum">     213 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :                 curr_region.clear();</span>
+<span class="lineNum">     214 </span>                :<span class="lineCov">          2 :                 is_updated = true;</span>
+<span class="lineNum">     215 </span>                :            :             }
+<span class="lineNum">     216 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :             if (curr_policy.is_converged(curr_region.identifier()) &amp;&amp; (rel_stddev &gt; m_convergence_target)) {</span>
+<span class="lineNum">         </span>[<span class="branchNoCov" title="Branch 6 was not taken"> - </span><span class="branchCov" title="Branch 7 was taken 2 times"> + </span>][<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 10 was not taken"> - </span><span class="branchCov" title="Branch 11 was taken 2 times"> + </span>]
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :                 ++m_num_out_of_range;</span>
+<span class="lineNum">     218 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (m_num_out_of_range &gt;= m_min_num_converged) {</span>
+<span class="lineNum">     219 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     curr_policy.is_converged(curr_region.identifier(), false);</span>
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 :                     m_num_converged = 0;</span>
+<span class="lineNum">     221 </span>                :<span class="lineNoCov">          0 :                     m_num_out_of_range = 0;</span>
+<span class="lineNum">     222 </span>                :            :                 }
+<span class="lineNum">     223 </span>                :            :             }
+<span class="lineNum">     224 </span>                :            :             // We are within bounds.
+<span class="lineNum">     225 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :             else if (!curr_policy.is_converged(curr_region.identifier()) &amp;&amp; (rel_stddev &lt; m_convergence_target)) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 2 times"> + </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 10 was not taken"> - </span><span class="branchCov" title="Branch 11 was taken 2 times"> + </span>]
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :                 m_num_out_of_range = 0;</span>
+<span class="lineNum">     227 </span>                :<span class="lineNoCov">          0 :                 ++m_num_converged;</span>
+<span class="lineNum">     228 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (m_num_converged &gt;= m_min_num_converged) {</span>
+<span class="lineNum">     229 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     curr_policy.is_converged(curr_region.identifier(), true);</span>
+<span class="lineNum">     230 </span>                :            :                 }
+<span class="lineNum">     231 </span>                :            :             }
+<span class="lineNum">     232 </span>                :            :         }
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>                :<span class="lineCov">          2 :         return is_updated;</span>
+<span class="lineNum">     235 </span>                :            :     }
+<span class="lineNum">     236 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
