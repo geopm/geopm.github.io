@@ -37,12 +37,12 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-06-21</td>
+            <td class="headerValue">2017-06-27</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">12</td>
-            <td class="headerCovTableEntry">13</td>
-            <td class="headerCovTableEntryHi">92.3 %</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntryHi">93.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">98</td>
-            <td class="headerCovTableEntry">232</td>
-            <td class="headerCovTableEntryLo">42.2 %</td>
+            <td class="headerCovTableEntry">145</td>
+            <td class="headerCovTableEntry">319</td>
+            <td class="headerCovTableEntryLo">45.5 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -124,115 +124,117 @@
 <span class="lineNum">      46 </span>                :            : 
 <a name="47"><span class="lineNum">      47 </span>                :            : namespace geopm</a>
 <span class="lineNum">      48 </span>                :            : {
-<a name="49"><span class="lineNum">      49 </span>                :<span class="lineCov">        407 :     ProfileTable::ProfileTable(size_t size, void *buffer)</span></a>
+<a name="49"><span class="lineNum">      49 </span>                :<span class="lineCov">        570 :     ProfileTable::ProfileTable(size_t size, void *buffer)</span></a>
 <span class="lineNum">      50 </span>                :            :         : m_buffer_size(size)
-<span class="lineNum">      51 </span>        [<span class="branchCov" title="Branch 1 was taken 405 times"> + </span><span class="branchCov" title="Branch 2 was taken 2 times"> + </span>]:<span class="lineCov">        407 :         , m_table_length(table_length(m_buffer_size))</span>
-<span class="lineNum">      52 </span>                :<span class="lineCov">        405 :         , m_mask(m_table_length - GEOPM_NUM_REGION_ID_PRIVATE - 1)</span>
+<span class="lineNum">      51 </span>[<span class="branchCov" title="Branch 1 was taken 405 times"> + </span><span class="branchCov" title="Branch 2 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 1 was taken 161 times"> + </span><span class="branchCov" title="Branch 2 was taken 2 times"> + </span>]:<span class="lineCov">        570 :         , m_table_length(table_length(m_buffer_size))</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">        566 :         , m_mask(m_table_length - GEOPM_NUM_REGION_ID_PRIVATE - 1)</span>
 <a name="53"><span class="lineNum">      53 </span>                :            :         , m_table((struct table_entry_s *)buffer)</a>
 <span class="lineNum">      54 </span>                :            :         , m_key_map_lock(PTHREAD_MUTEX_INITIALIZER)
 <span class="lineNum">      55 </span>                :            :         , m_is_pshared(true)
-<span class="lineNum">      56 </span>                :<span class="lineCov">        814 :         , m_key_map_last(m_key_map.end())</span>
+<span class="lineNum">      56 </span>[<span class="branchCov" title="Branch 2 was taken 161 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 161 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">       1140 :         , m_key_map_last(m_key_map.end())</span>
 <a name="57"><span class="lineNum">      57 </span>                :            :     {</a>
-<span class="lineNum">      58 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">        405 :         if (buffer == NULL) {</span>
+<span class="lineNum">      58 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 161 times"> + </span>]:<span class="lineCov">        566 :         if (buffer == NULL) {</span>
 <span class="lineNum">      59 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable: Buffer pointer is NULL&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
 <span class="lineNum">      60 </span>                :            :         }
 <a name="61"><span class="lineNum">      61 </span>                :            :         if (M_TABLE_DEPTH_MAX &lt; 4) {</a>
 <span class="lineNum">      62 </span>                :            :             throw Exception(&quot;ProfileTable: Table depth must be at least 4&quot;, GEOPM_ERROR_LOGIC, __FILE__, __LINE__);
 <span class="lineNum">      63 </span>                :            :         }
 <span class="lineNum">      64 </span>                :            :         struct table_entry_s table_init;
-<a name="65"><span class="lineNum">      65 </span>                :<span class="lineCov">        405 :         memset((void *)&amp;table_init, 0, sizeof(struct table_entry_s));</span></a>
+<a name="65"><span class="lineNum">      65 </span>                :<span class="lineCov">        566 :         memset((void *)&amp;table_init, 0, sizeof(struct table_entry_s));</span></a>
 <span class="lineNum">      66 </span>                :            :         pthread_mutexattr_t lock_attr;
-<span class="lineNum">      67 </span>                :<span class="lineCov">        405 :         int err = pthread_mutexattr_init(&amp;lock_attr);</span>
-<span class="lineNum">      68 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">        405 :         if (err) {</span>
+<span class="lineNum">      67 </span>                :<span class="lineCov">        566 :         int err = pthread_mutexattr_init(&amp;lock_attr);</span>
+<span class="lineNum">      68 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 161 times"> + </span>]:<span class="lineCov">        566 :         if (err) {</span>
 <a name="69"><span class="lineNum">      69 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
 <span class="lineNum">      70 </span>                :            :         }
-<span class="lineNum">      71 </span>        [<span class="branchCov" title="Branch 0 was taken 405 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        405 :         if (m_is_pshared) {</span>
-<span class="lineNum">      72 </span>                :<span class="lineCov">        405 :             err = pthread_mutexattr_setpshared(&amp;lock_attr, PTHREAD_PROCESS_SHARED);</span>
-<a name="73"><span class="lineNum">      73 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">        405 :             if (err) {</span></a>
+<span class="lineNum">      71 </span>        [<span class="branchCov" title="Branch 0 was taken 566 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        566 :         if (m_is_pshared) {</span>
+<span class="lineNum">      72 </span>                :<span class="lineCov">        566 :             err = pthread_mutexattr_setpshared(&amp;lock_attr, PTHREAD_PROCESS_SHARED);</span>
+<a name="73"><span class="lineNum">      73 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 161 times"> + </span>]:<span class="lineCov">        566 :             if (err) {</span></a>
 <span class="lineNum">      74 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <span class="lineNum">      75 </span>                :            :             }
 <span class="lineNum">      76 </span>                :            :         }
-<a name="77"><span class="lineNum">      77 </span>        [<span class="branchCov" title="Branch 0 was taken 4419 times"> + </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">       4824 :         for (size_t i = 0; i &lt; m_table_length; ++i) {</span></a>
-<span class="lineNum">      78 </span>                :<span class="lineCov">       4419 :             m_table[i] = table_init;</span>
-<span class="lineNum">      79 </span>                :<span class="lineCov">       4419 :             err = pthread_mutex_init(&amp;(m_table[i].lock), &amp;lock_attr);</span>
-<span class="lineNum">      80 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4419 times"> + </span>]:<span class="lineCov">       4419 :             if (err) {</span>
+<a name="77"><span class="lineNum">      77 </span>[<span class="branchCov" title="Branch 0 was taken 4419 times"> + </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 1735 times"> + </span><span class="branchCov" title="Branch 1 was taken 161 times"> + </span>]:<span class="lineCov">       6720 :         for (size_t i = 0; i &lt; m_table_length; ++i) {</span></a>
+<span class="lineNum">      78 </span>                :<span class="lineCov">       6154 :             m_table[i] = table_init;</span>
+<span class="lineNum">      79 </span>                :<span class="lineCov">       6154 :             err = pthread_mutex_init(&amp;(m_table[i].lock), &amp;lock_attr);</span>
+<span class="lineNum">      80 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4419 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1735 times"> + </span>]:<span class="lineCov">       6154 :             if (err) {</span>
 <a name="81"><span class="lineNum">      81 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
 <span class="lineNum">      82 </span>                :            :             }
 <span class="lineNum">      83 </span>                :            :         }
-<a name="84"><span class="lineNum">      84 </span>                :<span class="lineCov">        405 :     }</span></a>
+<a name="84"><span class="lineNum">      84 </span>                :<span class="lineCov">        566 :     }</span></a>
 <a name="85"><span class="lineNum">      85 </span>                :            : </a>
-<span class="lineNum">      86 </span>                :<span class="lineCov">       1215 :     ProfileTable::~ProfileTable()</span>
+<span class="lineNum">      86 </span>                :<span class="lineCov">       1698 :     ProfileTable::~ProfileTable()</span>
 <span class="lineNum">      87 </span>                :            :     {
 <span class="lineNum">      88 </span>                :            : 
-<a name="89"><span class="lineNum">      89 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 405 times"> + </span>]:<span class="lineCov">        810 :     }</span></a>
+<a name="89"><span class="lineNum">      89 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 566 times"> + </span>]:<span class="lineCov">       1132 :     }</span></a>
 <span class="lineNum">      90 </span>                :            : 
-<span class="lineNum">      91 </span>                :<span class="lineCov">        407 :     size_t ProfileTable::table_length(size_t buffer_size) const</span>
+<span class="lineNum">      91 </span>                :<span class="lineCov">        570 :     size_t ProfileTable::table_length(size_t buffer_size) const</span>
 <span class="lineNum">      92 </span>                :            :     {
-<a name="93"><span class="lineNum">      93 </span>                :<span class="lineCov">        407 :         size_t private_size = GEOPM_NUM_REGION_ID_PRIVATE * sizeof(struct table_entry_s);</span></a>
-<span class="lineNum">      94 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">        407 :         if (buffer_size &lt; private_size + sizeof(struct table_entry_s)) {</span>
+<a name="93"><span class="lineNum">      93 </span>                :<span class="lineCov">        570 :         size_t private_size = GEOPM_NUM_REGION_ID_PRIVATE * sizeof(struct table_entry_s);</span></a>
+<span class="lineNum">      94 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchCov" title="Branch 1 was taken 566 times"> + </span>]:<span class="lineCov">        570 :         if (buffer_size &lt; private_size + sizeof(struct table_entry_s)) {</span>
 <span class="lineNum">      95 </span>                :            :             throw Exception(&quot;ProfileTable: Buffer size too small&quot;,
-<span class="lineNum">      96 </span>[<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">      96 </span>[<span class="branchCov" title="Branch 3 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]:<span class="lineCov">          4 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
 <a name="97"><span class="lineNum">      97 </span>                :            :         }</a>
-<span class="lineNum">      98 </span>                :<span class="lineCov">        405 :         size_t result = (buffer_size - private_size) / sizeof(struct table_entry_s);</span>
+<span class="lineNum">      98 </span>                :<span class="lineCov">        566 :         size_t result = (buffer_size - private_size) / sizeof(struct table_entry_s);</span>
 <span class="lineNum">      99 </span>                :            :         // The closest power of two small enough to fit in the buffer
-<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 405 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        405 :         if (result) {</span>
-<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">        405 :             result--;</span></a>
-<span class="lineNum">     102 </span>                :<span class="lineCov">        405 :             result |= result &gt;&gt; 1;</span>
-<span class="lineNum">     103 </span>                :<span class="lineCov">        405 :             result |= result &gt;&gt; 2;</span>
-<span class="lineNum">     104 </span>                :<span class="lineCov">        405 :             result |= result &gt;&gt; 4;</span>
-<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">        405 :             result |= result &gt;&gt; 8;</span></a>
-<span class="lineNum">     106 </span>                :<span class="lineCov">        405 :             result |= result &gt;&gt; 16;</span>
-<span class="lineNum">     107 </span>                :<span class="lineCov">        405 :             result |= result &gt;&gt; 32;</span>
-<span class="lineNum">     108 </span>                :<span class="lineCov">        405 :             result++;</span>
-<a name="109"><span class="lineNum">     109 </span>                :<span class="lineCov">        405 :             result = result &gt;&gt; 1;</span></a>
+<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 566 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        566 :         if (result) {</span>
+<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">        566 :             result--;</span></a>
+<span class="lineNum">     102 </span>                :<span class="lineCov">        566 :             result |= result &gt;&gt; 1;</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">        566 :             result |= result &gt;&gt; 2;</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">        566 :             result |= result &gt;&gt; 4;</span>
+<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">        566 :             result |= result &gt;&gt; 8;</span></a>
+<span class="lineNum">     106 </span>                :<span class="lineCov">        566 :             result |= result &gt;&gt; 16;</span>
+<span class="lineNum">     107 </span>                :<span class="lineCov">        566 :             result |= result &gt;&gt; 32;</span>
+<span class="lineNum">     108 </span>                :<span class="lineCov">        566 :             result++;</span>
+<a name="109"><span class="lineNum">     109 </span>                :<span class="lineCov">        566 :             result = result &gt;&gt; 1;</span></a>
 <span class="lineNum">     110 </span>                :            :         }
-<span class="lineNum">     111 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">        405 :         if (result * sizeof(struct table_entry_s) + private_size &gt; buffer_size) {</span>
+<span class="lineNum">     111 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 566 times"> + </span>]:<span class="lineCov">        566 :         if (result * sizeof(struct table_entry_s) + private_size &gt; buffer_size) {</span>
 <span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 :             result /= 2;</span>
 <a name="113"><span class="lineNum">     113 </span>                :            :         }</a>
-<span class="lineNum">     114 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 405 times"> + </span>]:<span class="lineCov">        405 :         if (result &lt;= 0) {</span>
+<span class="lineNum">     114 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 566 times"> + </span>]:<span class="lineCov">        566 :         if (result &lt;= 0) {</span>
 <span class="lineNum">     115 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable: Failing to created empty table, increase size&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <span class="lineNum">     116 </span>                :            :         }
-<a name="117"><span class="lineNum">     117 </span>                :<span class="lineCov">        405 :         result += GEOPM_NUM_REGION_ID_PRIVATE;</span></a>
-<span class="lineNum">     118 </span>                :<span class="lineCov">        405 :         return result;</span>
+<a name="117"><span class="lineNum">     117 </span>                :<span class="lineCov">        566 :         result += GEOPM_NUM_REGION_ID_PRIVATE;</span></a>
+<span class="lineNum">     118 </span>                :<span class="lineCov">        566 :         return result;</span>
 <a name="119"><span class="lineNum">     119 </span>                :            :     }</a>
 <span class="lineNum">     120 </span>                :            : 
-<a name="121"><span class="lineNum">     121 </span>                :<span class="lineCov">    8054015 :     size_t ProfileTable::hash(uint64_t key) const</span></a>
+<a name="121"><span class="lineNum">     121 </span>                :<span class="lineCov">   22019047 :     size_t ProfileTable::hash(uint64_t key) const</span></a>
 <span class="lineNum">     122 </span>                :            :     {
-<span class="lineNum">     123 </span>                :<span class="lineCov">    8054015 :         size_t result = 0;</span>
-<span class="lineNum">     124 </span>        [<span class="branchCov" title="Branch 1 was taken 2046 times"> + </span><span class="branchCov" title="Branch 2 was taken 8051969 times"> + </span>]:<span class="lineCov">    8054015 :         if (geopm_region_id_is_mpi(key)) {</span>
-<a name="125"><span class="lineNum">     125 </span>                :<span class="lineCov">       2046 :             result = m_mask + 1;</span></a>
+<span class="lineNum">     123 </span>                :<span class="lineCov">   22019047 :         size_t result = 0;</span>
+<span class="lineNum">     124 </span>        [<span class="branchCov" title="Branch 1 was taken 3036 times"> + </span><span class="branchCov" title="Branch 2 was taken 22016011 times"> + </span>]:<span class="lineCov">   22019047 :         if (geopm_region_id_is_mpi(key)) {</span>
+<a name="125"><span class="lineNum">     125 </span>                :<span class="lineCov">       3036 :             result = m_mask + 1;</span></a>
 <span class="lineNum">     126 </span>                :            :         }
-<span class="lineNum">     127 </span>        [<span class="branchCov" title="Branch 1 was taken 247 times"> + </span><span class="branchCov" title="Branch 2 was taken 8051722 times"> + </span>]:<span class="lineCov">    8051969 :         else if (geopm_region_id_is_epoch(key)) {</span>
+<span class="lineNum">     127 </span>        [<span class="branchCov" title="Branch 1 was taken 247 times"> + </span><span class="branchCov" title="Branch 2 was taken 22015764 times"> + </span>]:<span class="lineCov">   22016011 :         else if (geopm_region_id_is_epoch(key)) {</span>
 <span class="lineNum">     128 </span>                :<span class="lineCov">        247 :             result = m_mask + 2;</span>
 <a name="129"><span class="lineNum">     129 </span>                :            :         }</a>
 <span class="lineNum">     130 </span>                :            :         else {
-<span class="lineNum">     131 </span>                :<span class="lineCov">    8051722 :             result = geopm_crc32_u64(0, key) &amp; m_mask;</span>
+<span class="lineNum">     131 </span>                :<span class="lineCov">   22015764 :             result = geopm_crc32_u64(0, key) &amp; m_mask;</span>
 <span class="lineNum">     132 </span>                :            :         }
-<a name="133"><span class="lineNum">     133 </span>                :<span class="lineCov">    8054015 :         return result;</span></a>
+<a name="133"><span class="lineNum">     133 </span>                :<span class="lineCov">   22019047 :         return result;</span></a>
 <a name="134"><span class="lineNum">     134 </span>                :            :     }</a>
 <span class="lineNum">     135 </span>                :            : 
-<span class="lineNum">     136 </span>                :<span class="lineCov">    8054015 :     void ProfileTable::insert(uint64_t key, const struct geopm_prof_message_s &amp;value)</span>
+<span class="lineNum">     136 </span>                :<span class="lineCov">   22019047 :     void ProfileTable::insert(uint64_t key, const struct geopm_prof_message_s &amp;value)</span>
 <a name="137"><span class="lineNum">     137 </span>                :            :     {</a>
-<span class="lineNum">     138 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8054015 times"> + </span>]:<span class="lineCov">    8054015 :         if (key == 0) {</span>
+<span class="lineNum">     138 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 22019047 times"> + </span>]:<span class="lineCov">   22019047 :         if (key == 0) {</span>
 <span class="lineNum">     139 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable::insert(): zero is not a valid key&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
 <span class="lineNum">     140 </span>                :            :         }
-<a name="141"><span class="lineNum">     141 </span>                :<span class="lineCov">    8054015 :         size_t table_idx = hash(key);</span></a>
-<span class="lineNum">     142 </span>                :<span class="lineCov">    8054015 :         int err = pthread_mutex_lock(&amp;(m_table[table_idx].lock));</span>
-<span class="lineNum">     143 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8054015 times"> + </span>]:<span class="lineCov">    8054015 :         if (err) {</span>
+<a name="141"><span class="lineNum">     141 </span>                :<span class="lineCov">   22019047 :         size_t table_idx = hash(key);</span></a>
+<span class="lineNum">     142 </span>                :<span class="lineCov">   22019047 :         int err = pthread_mutex_lock(&amp;(m_table[table_idx].lock));</span>
+<span class="lineNum">     143 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8054015 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13965032 times"> + </span>]:<span class="lineCov">   22019047 :         if (err) {</span>
 <span class="lineNum">     144 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable::insert(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
 <a name="145"><span class="lineNum">     145 </span>                :            :         }</a>
-<span class="lineNum">     146 </span>                :<span class="lineCov">    8054015 :         bool is_stored = false;</span>
-<span class="lineNum">     147 </span>[<span class="branchCov" title="Branch 0 was taken 8089146 times"> + </span><span class="branchCov" title="Branch 1 was taken 8053965 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 8089096 times"> + </span><span class="branchCov" title="Branch 3 was taken 50 times"> + </span>]:<span class="lineCov">   16143111 :         for (size_t i = 0; !is_stored &amp;&amp; i != M_TABLE_DEPTH_MAX; ++i) {</span>
-<span class="lineNum">     148 </span>[<span class="branchCov" title="Branch 0 was taken 7852547 times"> + </span><span class="branchCov" title="Branch 1 was taken 236549 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 7852124 times"> + </span><span class="branchCov" title="Branch 3 was taken 423 times"> + </span>]:<span class="lineCov">   15941220 :             if (m_table[table_idx].key[i] == 0 ||</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 8053965 times"> + </span><span class="branchCov" title="Branch 5 was taken 35131 times"> + </span>]
-<a name="149"><span class="lineNum">     149 </span>        [<span class="branchCov" title="Branch 0 was taken 7817416 times"> + </span><span class="branchCov" title="Branch 1 was taken 34708 times"> + </span>]:<span class="lineCov">    7852124 :                 (m_table[table_idx].key[i] == key &amp;&amp;</span></a>
-<span class="lineNum">     150 </span>                :<span class="lineCov">    7852124 :                  !sticky(m_table[table_idx].value[i]))) {</span>
-<span class="lineNum">     151 </span>                :<span class="lineCov">    8053965 :                 m_table[table_idx].key[i] = key;</span>
-<span class="lineNum">     152 </span>                :<span class="lineCov">    8053965 :                 m_table[table_idx].value[i] = value;</span>
-<a name="153"><span class="lineNum">     153 </span>                :<span class="lineCov">    8053965 :                 is_stored = true;</span></a>
+<span class="lineNum">     146 </span>                :<span class="lineCov">   22019047 :         bool is_stored = false;</span>
+<span class="lineNum">     147 </span>        [<span class="branchCov" title="Branch 0 was taken 8089146 times"> + </span><span class="branchCov" title="Branch 1 was taken 8053965 times"> + </span>]:<span class="lineCov">   44097014 :         for (size_t i = 0; !is_stored &amp;&amp; i != M_TABLE_DEPTH_MAX; ++i) {</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 13988871 times"> + </span><span class="branchCov" title="Branch 1 was taken 13965032 times"> + </span><span class="branchCov" title="Branch 2 was taken 8089096 times"> + </span><span class="branchCov" title="Branch 3 was taken 50 times"> + </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 2 was taken 13988871 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]
+<span class="lineNum">     148 </span>[<span class="branchCov" title="Branch 0 was taken 21776780 times"> + </span><span class="branchCov" title="Branch 1 was taken 301187 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 21774855 times"> + </span><span class="branchCov" title="Branch 3 was taken 1925 times"> + </span>]:<span class="lineCov">   43852822 :             if (m_table[table_idx].key[i] == 0 ||</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 22018997 times"> + </span><span class="branchCov" title="Branch 5 was taken 58970 times"> + </span>]
+<a name="149"><span class="lineNum">     149 </span>[<span class="branchCov" title="Branch 0 was taken 7817416 times"> + </span><span class="branchCov" title="Branch 1 was taken 34708 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 13900394 times"> + </span><span class="branchCov" title="Branch 1 was taken 22337 times"> + </span>]:<span class="lineCov">   21774855 :                 (m_table[table_idx].key[i] == key &amp;&amp;</span></a>
+<span class="lineNum">     150 </span>                :<span class="lineCov">   21774855 :                  !sticky(m_table[table_idx].value[i]))) {</span>
+<span class="lineNum">     151 </span>                :<span class="lineCov">   22018997 :                 m_table[table_idx].key[i] = key;</span>
+<span class="lineNum">     152 </span>                :<span class="lineCov">   22018997 :                 m_table[table_idx].value[i] = value;</span>
+<a name="153"><span class="lineNum">     153 </span>                :<span class="lineCov">   22018997 :                 is_stored = true;</span></a>
 <span class="lineNum">     154 </span>                :            :             }
 <span class="lineNum">     155 </span>                :            :         }
-<span class="lineNum">     156 </span>        [<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 8053965 times"> + </span>]:<span class="lineCov">    8054015 :         if (!is_stored) {</span>
+<span class="lineNum">     156 </span>        [<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 22018997 times"> + </span>]:<span class="lineCov">   22019047 :         if (!is_stored) {</span>
 <a name="157"><span class="lineNum">     157 </span>                :            :             // Overwrite all sequential entry/exit pairs in array and</a>
 <span class="lineNum">     158 </span>                :            :             // move others to head of the array, then insert new value.
 <span class="lineNum">     159 </span>                :<span class="lineCov">         50 :             uint64_t *key_ptr = m_table[table_idx].key;</span>
@@ -240,7 +242,7 @@
 <a name="161"><span class="lineNum">     161 </span>                :<span class="lineCov">         50 :             struct geopm_prof_message_s *value_ptr = m_table[table_idx].value;</span></a>
 <span class="lineNum">     162 </span>                :<span class="lineCov">         50 :             struct geopm_prof_message_s *value_insert_ptr = m_table[table_idx].value;</span>
 <span class="lineNum">     163 </span>                :<span class="lineCov">         50 :             int i = 0;</span>
-<span class="lineNum">     164 </span>        [<span class="branchCov" title="Branch 0 was taken 400 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">        450 :             while (i &lt; M_TABLE_DEPTH_MAX - 1) {</span>
+<span class="lineNum">     164 </span>[<span class="branchCov" title="Branch 0 was taken 400 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">        450 :             while (i &lt; M_TABLE_DEPTH_MAX - 1) {</span>
 <a name="165"><span class="lineNum">     165 </span>[<span class="branchCov" title="Branch 0 was taken 400 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 400 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">        400 :                 if (key_ptr[0] == key_ptr[1] &amp;&amp;</span></a>
 <span class="lineNum">     166 </span>        [<span class="branchCov" title="Branch 0 was taken 357 times"> + </span><span class="branchCov" title="Branch 1 was taken 43 times"> + </span>]:<span class="lineCov">        400 :                     value_ptr[0].region_id == value_ptr[1].region_id &amp;&amp;</span>
 <span class="lineNum">     167 </span>        [<span class="branchCov" title="Branch 0 was taken 357 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        357 :                     value_ptr[0].progress == 0.0 &amp;&amp;</span>
@@ -268,7 +270,7 @@
 <a name="189"><span class="lineNum">     189 </span>                :            : </a>
 <span class="lineNum">     190 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">         50 :             if (key_insert_ptr &gt;= m_table[table_idx].key + M_TABLE_DEPTH_MAX - 1) {</span>
 <span class="lineNum">     191 </span>                :<span class="lineNoCov">          0 :                 (void) pthread_mutex_unlock(&amp;(m_table[table_idx].lock));</span>
-<span class="lineNum">     192 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (m_table[table_idx].value[0].region_id == GEOPM_REGION_ID_EPOCH) {</span>
+<span class="lineNum">     192 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (m_table[table_idx].value[0].region_id == GEOPM_REGION_ID_EPOCH) {</span>
 <a name="193"><span class="lineNum">     193 </span>                :            :                     throw Exception(&quot;ProfileTable::insert(): controller unresponsive or epoch time interval too short.&quot;,</a>
 <span class="lineNum">     194 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                     GEOPM_ERROR_TOO_MANY_COLLISIONS, __FILE__, __LINE__);</span>
 <span class="lineNum">     195 </span>                :            :                 }
@@ -278,166 +280,175 @@
 <span class="lineNum">     199 </span>                :<span class="lineCov">         50 :             *key_insert_ptr = key;</span>
 <span class="lineNum">     200 </span>                :<span class="lineCov">         50 :             *value_insert_ptr = value;</span>
 <a name="201"><span class="lineNum">     201 </span>                :<span class="lineCov">         50 :             ++key_insert_ptr;</span></a>
-<span class="lineNum">     202 </span>        [<span class="branchCov" title="Branch 0 was taken 664 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">        714 :             while (key_insert_ptr &lt; m_table[table_idx].key + M_TABLE_DEPTH_MAX) {</span>
+<span class="lineNum">     202 </span>[<span class="branchCov" title="Branch 0 was taken 664 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">        714 :             while (key_insert_ptr &lt; m_table[table_idx].key + M_TABLE_DEPTH_MAX) {</span>
 <span class="lineNum">     203 </span>                :<span class="lineCov">        664 :                 *key_insert_ptr = 0;</span>
 <span class="lineNum">     204 </span>                :<span class="lineCov">        664 :                 ++key_insert_ptr;</span>
 <a name="205"><span class="lineNum">     205 </span>                :            :             }</a>
 <span class="lineNum">     206 </span>                :            :         }
-<span class="lineNum">     207 </span>                :<span class="lineCov">    8054015 :         err = pthread_mutex_unlock(&amp;(m_table[table_idx].lock));</span>
-<span class="lineNum">     208 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8054015 times"> + </span>]:<span class="lineCov">    8054015 :         if (err) {</span>
+<span class="lineNum">     207 </span>                :<span class="lineCov">   22019047 :         err = pthread_mutex_unlock(&amp;(m_table[table_idx].lock));</span>
+<span class="lineNum">     208 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8054015 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13965032 times"> + </span>]:<span class="lineCov">   22019047 :         if (err) {</span>
 <a name="209"><span class="lineNum">     209 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable::insert(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span></a>
 <span class="lineNum">     210 </span>                :            :         }
-<a name="211"><span class="lineNum">     211 </span>                :<span class="lineCov">    8054015 :     }</span></a>
+<a name="211"><span class="lineNum">     211 </span>                :<span class="lineCov">   22019047 :     }</span></a>
 <span class="lineNum">     212 </span>                :            : 
-<a name="213"><span class="lineNum">     213 </span>                :<span class="lineCov">       1627 :     uint64_t ProfileTable::key(const std::string &amp;name)</span></a>
+<a name="213"><span class="lineNum">     213 </span>                :<span class="lineCov">       2848 :     uint64_t ProfileTable::key(const std::string &amp;name)</span></a>
 <span class="lineNum">     214 </span>                :            :     {
-<span class="lineNum">     215 </span>                :<span class="lineCov">       1627 :         uint64_t result = 0;</span>
-<span class="lineNum">     216 </span>                :<span class="lineCov">       1627 :         int err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
-<a name="217"><span class="lineNum">     217 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1627 times"> + </span>]:<span class="lineCov">       1627 :         if (err) {</span></a>
+<span class="lineNum">     215 </span>                :<span class="lineCov">       2848 :         uint64_t result = 0;</span>
+<span class="lineNum">     216 </span>                :<span class="lineCov">       2848 :         int err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
+<a name="217"><span class="lineNum">     217 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1627 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1221 times"> + </span>]:<span class="lineCov">       2848 :         if (err) {</span></a>
 <span class="lineNum">     218 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable::key(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
 <span class="lineNum">     219 </span>                :            :         }
-<span class="lineNum">     220 </span>        [<span class="branchCov" title="Branch 1 was taken 1627 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1627 :         auto key_map_it = m_key_map.find(name);</span>
-<a name="221"><span class="lineNum">     221 </span>                :<span class="lineCov">       1627 :         err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span></a>
-<span class="lineNum">     222 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1627 times"> + </span>]:<span class="lineCov">       1627 :         if (err) {</span>
+<span class="lineNum">     220 </span>        [<span class="branchCov" title="Branch 1 was taken 2848 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2848 :         auto key_map_it = m_key_map.find(name);</span>
+<a name="221"><span class="lineNum">     221 </span>                :<span class="lineCov">       2848 :         err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span></a>
+<span class="lineNum">     222 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1627 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1221 times"> + </span>]:<span class="lineCov">       2848 :         if (err) {</span>
 <span class="lineNum">     223 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTable::key(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
 <span class="lineNum">     224 </span>                :            :         }
 <a name="225"><span class="lineNum">     225 </span>                :            : </a>
-<span class="lineNum">     226 </span>        [<span class="branchCov" title="Branch 2 was taken 196 times"> + </span><span class="branchCov" title="Branch 3 was taken 1431 times"> + </span>]:<span class="lineCov">       1627 :         if (key_map_it != m_key_map.end()) {</span>
-<span class="lineNum">     227 </span>                :<span class="lineCov">        196 :             result = key_map_it-&gt;second;</span>
+<span class="lineNum">     226 </span>[<span class="branchCov" title="Branch 2 was taken 1417 times"> + </span><span class="branchCov" title="Branch 3 was taken 1431 times"> + </span>][<span class="branchCov" title="Branch 4 was taken 196 times"> + </span><span class="branchCov" title="Branch 5 was taken 1025 times"> + </span>]:<span class="lineCov">       2848 :         if (key_map_it != m_key_map.end()) {</span>
+<span class="lineNum">     227 </span>        [<span class="branchCov" title="Branch 1 was taken 196 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        392 :             result = key_map_it-&gt;second;</span>
 <span class="lineNum">     228 </span>                :            :         }
 <a name="229"><span class="lineNum">     229 </span>                :            :         else {</a>
-<span class="lineNum">     230 </span>        [<span class="branchCov" title="Branch 2 was taken 1431 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       1431 :             result = geopm_crc32_str(0, (char *)(&amp;name.front()));</span>
-<span class="lineNum">     231 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1431 times"> + </span>]:<span class="lineCov">       1431 :             if (!result) {</span>
+<span class="lineNum">     230 </span>     [<span class="branchCov" title="Branch 1 was taken 1025 times"> + </span><span class="branchCov" title="Branch 2 was taken 1431 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       2456 :             result = geopm_crc32_str(0, (char *)(&amp;name.front()));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 1025 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<span class="lineNum">     231 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2456 times"> + </span>]:<span class="lineCov">       2456 :             if (!result) {</span>
 <span class="lineNum">     232 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::key(): CRC 32 hashed to zero!&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <a name="233"><span class="lineNum">     233 </span>                :            :             }</a>
-<span class="lineNum">     234 </span>                :<span class="lineCov">       1431 :             err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
-<span class="lineNum">     235 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1431 times"> + </span>]:<span class="lineCov">       1431 :             if (err) {</span>
+<span class="lineNum">     234 </span>                :<span class="lineCov">       2456 :             err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
+<span class="lineNum">     235 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1431 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1025 times"> + </span>]:<span class="lineCov">       2456 :             if (err) {</span>
 <span class="lineNum">     236 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::key(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
 <a name="237"><span class="lineNum">     237 </span>                :            :             }</a>
-<span class="lineNum">     238 </span>[<span class="branchCov" title="Branch 2 was taken 1431 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 1431 times"> + </span>]:<span class="lineCov">       1431 :             if (m_key_set.find(result) != m_key_set.end()) {</span>
+<span class="lineNum">     238 </span>[<span class="branchCov" title="Branch 2 was taken 2456 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 1025 times"> + </span><span class="branchCov" title="Branch 6 was taken 1431 times"> + </span>]:<span class="lineCov">       2456 :             if (m_key_set.find(result) != m_key_set.end()) {</span>
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 7 was not taken"> - </span><span class="branchCov" title="Branch 8 was taken 1025 times"> + </span>]
 <span class="lineNum">     239 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::key(): String hash collision&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <span class="lineNum">     240 </span>                :            :             }
-<a name="241"><span class="lineNum">     241 </span>        [<span class="branchCov" title="Branch 1 was taken 1431 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       1431 :             m_key_set.insert(result);</span></a>
-<span class="lineNum">     242 </span>[<span class="branchCov" title="Branch 1 was taken 1431 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1431 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">       1431 :             m_key_map.insert(std::pair&lt;const std::string, uint64_t&gt;(name, result));</span>
-<span class="lineNum">     243 </span>                :<span class="lineCov">       1431 :             m_key_map_last = m_key_map.begin();</span>
-<span class="lineNum">     244 </span>                :<span class="lineCov">       1431 :             err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span>
-<a name="245"><span class="lineNum">     245 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1431 times"> + </span>]:<span class="lineCov">       1431 :             if (err) {</span></a>
+<a name="241"><span class="lineNum">     241 </span>        [<span class="branchCov" title="Branch 1 was taken 2456 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2456 :             m_key_set.insert(result);</span></a>
+<span class="lineNum">     242 </span>[<span class="branchCov" title="Branch 1 was taken 2456 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 2456 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">       2456 :             m_key_map.insert(std::pair&lt;const std::string, uint64_t&gt;(name, result));</span>
+<span class="lineNum">     243 </span>                :<span class="lineCov">       2456 :             m_key_map_last = m_key_map.begin();</span>
+<span class="lineNum">     244 </span>                :<span class="lineCov">       2456 :             err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span>
+<a name="245"><span class="lineNum">     245 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1431 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1025 times"> + </span>]:<span class="lineCov">       2456 :             if (err) {</span></a>
 <span class="lineNum">     246 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::key(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
 <span class="lineNum">     247 </span>                :            :             }
 <span class="lineNum">     248 </span>                :            :         }
-<a name="249"><span class="lineNum">     249 </span>                :<span class="lineCov">       1627 :         return result;</span></a>
+<a name="249"><span class="lineNum">     249 </span>                :<span class="lineCov">       2848 :         return result;</span></a>
 <a name="250"><span class="lineNum">     250 </span>                :            :     }</a>
 <span class="lineNum">     251 </span>                :            : 
-<span class="lineNum">     252 </span>                :<span class="lineCov">        202 :     size_t ProfileTable::capacity(void) const</span>
+<span class="lineNum">     252 </span>                :<span class="lineCov">        282 :     size_t ProfileTable::capacity(void) const</span>
 <a name="253"><span class="lineNum">     253 </span>                :            :     {</a>
-<span class="lineNum">     254 </span>                :<span class="lineCov">        202 :         return m_table_length * M_TABLE_DEPTH_MAX;</span>
+<span class="lineNum">     254 </span>                :<span class="lineCov">        282 :         return m_table_length * M_TABLE_DEPTH_MAX;</span>
 <a name="255"><span class="lineNum">     255 </span>                :            :     }</a>
 <span class="lineNum">     256 </span>                :            : 
 <a name="257"><span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :     size_t ProfileTable::size(void) const</span></a>
 <span class="lineNum">     258 </span>                :            :     {
 <span class="lineNum">     259 </span>                :            :         int err;
 <span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :         size_t result = 0;</span>
-<a name="261"><span class="lineNum">     261 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (size_t table_idx = 0; table_idx &lt; m_table_length; ++table_idx) {</span></a>
+<a name="261"><span class="lineNum">     261 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (size_t table_idx = 0; table_idx &lt; m_table_length; ++table_idx) {</span></a>
 <span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :             err = pthread_mutex_lock(&amp;(m_table[table_idx].lock));</span>
-<span class="lineNum">     263 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (err) {</span>
+<span class="lineNum">     263 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (err) {</span>
 <span class="lineNum">     264 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::size(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
 <a name="265"><span class="lineNum">     265 </span>                :            :             }</a>
-<span class="lineNum">     266 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (int depth = 0; depth &lt; M_TABLE_DEPTH_MAX &amp;&amp; m_table[table_idx].key[depth]; ++depth) {</span>
+<span class="lineNum">     266 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (int depth = 0; depth &lt; M_TABLE_DEPTH_MAX &amp;&amp; m_table[table_idx].key[depth]; ++depth) {</span>
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]
 <span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :                 ++result;</span>
 <span class="lineNum">     268 </span>                :            :             }
 <a name="269"><span class="lineNum">     269 </span>                :<span class="lineNoCov">          0 :             err = pthread_mutex_unlock(&amp;(m_table[table_idx].lock));</span></a>
-<span class="lineNum">     270 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (err) {</span>
+<span class="lineNum">     270 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (err) {</span>
 <span class="lineNum">     271 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::size(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
 <span class="lineNum">     272 </span>                :            :             }
 <a name="273"><span class="lineNum">     273 </span>                :            :         }</a>
 <span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :         return result;</span>
 <a name="275"><span class="lineNum">     275 </span>                :            :     }</a>
 <span class="lineNum">     276 </span>                :            : 
-<a name="277"><span class="lineNum">     277 </span>                :<span class="lineCov">    2752744 :     void ProfileTable::dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length)</span></a>
+<a name="277"><span class="lineNum">     277 </span>                :<span class="lineCov">    2944185 :     void ProfileTable::dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length)</span></a>
 <span class="lineNum">     278 </span>                :            :     {
 <span class="lineNum">     279 </span>                :            :         int err;
-<span class="lineNum">     280 </span>                :<span class="lineCov">    2752744 :         length = 0;</span>
-<a name="281"><span class="lineNum">     281 </span>        [<span class="branchCov" title="Branch 0 was taken 30280178 times"> + </span><span class="branchCov" title="Branch 1 was taken 2752744 times"> + </span>]:<span class="lineCov">   33032922 :         for (size_t table_idx = 0; table_idx &lt; m_table_length; ++table_idx) {</span></a>
-<span class="lineNum">     282 </span>                :<span class="lineCov">   30280178 :             err = pthread_mutex_lock(&amp;(m_table[table_idx].lock));</span>
-<span class="lineNum">     283 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 30280178 times"> + </span>]:<span class="lineCov">   30280178 :             if (err) {</span>
+<span class="lineNum">     280 </span>                :<span class="lineCov">    2944185 :         length = 0;</span>
+<a name="281"><span class="lineNum">     281 </span>[<span class="branchCov" title="Branch 0 was taken 30280178 times"> + </span><span class="branchCov" title="Branch 1 was taken 2752744 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 2105845 times"> + </span><span class="branchCov" title="Branch 1 was taken 191441 times"> + </span>]:<span class="lineCov">   35330208 :         for (size_t table_idx = 0; table_idx &lt; m_table_length; ++table_idx) {</span></a>
+<span class="lineNum">     282 </span>                :<span class="lineCov">   32386023 :             err = pthread_mutex_lock(&amp;(m_table[table_idx].lock));</span>
+<span class="lineNum">     283 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 30280178 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2105845 times"> + </span>]:<span class="lineCov">   32386023 :             if (err) {</span>
 <span class="lineNum">     284 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::dump(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
 <a name="285"><span class="lineNum">     285 </span>                :            :             }</a>
-<span class="lineNum">     286 </span>[<span class="branchCov" title="Branch 0 was taken 30520374 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchCov" title="Branch 2 was taken 240197 times"> + </span><span class="branchCov" title="Branch 3 was taken 30280177 times"> + </span>]:<span class="lineCov">   30520375 :             for (int depth = 0; depth != M_TABLE_DEPTH_MAX &amp;&amp; m_table[table_idx].key[depth]; ++depth) {</span>
-<span class="lineNum">     287 </span>                :<span class="lineCov">     240197 :                 content-&gt;first = m_table[table_idx].key[depth];</span>
-<span class="lineNum">     288 </span>                :<span class="lineCov">     240197 :                 content-&gt;second = m_table[table_idx].value[depth];</span>
-<a name="289"><span class="lineNum">     289 </span>                :<span class="lineCov">     240197 :                 m_table[table_idx].key[depth] = 0;</span></a>
-<span class="lineNum">     290 </span>                :<span class="lineCov">     240197 :                 ++content;</span>
-<span class="lineNum">     291 </span>                :<span class="lineCov">     240197 :                 ++length;</span>
+<span class="lineNum">     286 </span>[<span class="branchCov" title="Branch 0 was taken 32695169 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchCov" title="Branch 2 was taken 309147 times"> + </span><span class="branchCov" title="Branch 3 was taken 32386022 times"> + </span>]:<span class="lineCov">   32695170 :             for (int depth = 0; depth != M_TABLE_DEPTH_MAX &amp;&amp; m_table[table_idx].key[depth]; ++depth) {</span>
+<span class="lineNum">     287 </span>                :<span class="lineCov">     309147 :                 content-&gt;first = m_table[table_idx].key[depth];</span>
+<span class="lineNum">     288 </span>                :<span class="lineCov">     309147 :                 content-&gt;second = m_table[table_idx].value[depth];</span>
+<a name="289"><span class="lineNum">     289 </span>                :<span class="lineCov">     309147 :                 m_table[table_idx].key[depth] = 0;</span></a>
+<span class="lineNum">     290 </span>                :<span class="lineCov">     309147 :                 ++content;</span>
+<span class="lineNum">     291 </span>                :<span class="lineCov">     309147 :                 ++length;</span>
 <span class="lineNum">     292 </span>                :            :             }
-<a name="293"><span class="lineNum">     293 </span>                :<span class="lineCov">   30280178 :             err = pthread_mutex_unlock(&amp;(m_table[table_idx].lock));</span></a>
-<span class="lineNum">     294 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 30280178 times"> + </span>]:<span class="lineCov">   30280178 :             if (err) {</span>
+<a name="293"><span class="lineNum">     293 </span>                :<span class="lineCov">   32386023 :             err = pthread_mutex_unlock(&amp;(m_table[table_idx].lock));</span></a>
+<span class="lineNum">     294 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 30280178 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2105845 times"> + </span>]:<span class="lineCov">   32386023 :             if (err) {</span>
 <span class="lineNum">     295 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::dump(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
 <span class="lineNum">     296 </span>                :            :             }
 <a name="297"><span class="lineNum">     297 </span>                :            :         }</a>
-<a name="298"><span class="lineNum">     298 </span>                :<span class="lineCov">    2752744 :     }</span></a>
+<a name="298"><span class="lineNum">     298 </span>                :<span class="lineCov">    2944185 :     }</span></a>
 <span class="lineNum">     299 </span>                :            : 
-<span class="lineNum">     300 </span>                :<span class="lineCov">        200 :     bool ProfileTable::name_fill(size_t header_offset)</span>
+<span class="lineNum">     300 </span>                :<span class="lineCov">        278 :     bool ProfileTable::name_fill(size_t header_offset)</span>
 <a name="301"><span class="lineNum">     301 </span>                :            :     {</a>
-<span class="lineNum">     302 </span>                :<span class="lineCov">        200 :         bool result = false;</span>
-<span class="lineNum">     303 </span>                :<span class="lineCov">        200 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span>
-<span class="lineNum">     304 </span>                :<span class="lineCov">        200 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
-<a name="305"><span class="lineNum">     305 </span>  [<span class="branchCov" title="Branch 2 was taken 1430 times"> + </span><span class="branchCov" title="Branch 3 was taken 199 times"> + </span><span class="branchCov" title="Branch 4 was taken 1429 times"> + </span><span class="branchCov" title="Branch 5 was taken 1 time"> + </span>]:<span class="lineCov">       3059 :         while (m_key_map_last != m_key_map.end() &amp;&amp;</span></a>
-<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1629 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 1429 times"> + </span><span class="branchCov" title="Branch 9 was taken 200 times"> + </span>]
-<span class="lineNum">     306 </span>                :<span class="lineCov">       1430 :                buffer_remain &gt; (*m_key_map_last).first.length()) {</span>
-<span class="lineNum">     307 </span>                :<span class="lineCov">       1429 :             strncpy(buffer_ptr, (*m_key_map_last).first.c_str(), buffer_remain);</span>
-<span class="lineNum">     308 </span>                :<span class="lineCov">       1429 :             buffer_remain -= (*m_key_map_last).first.length() + 1;</span>
-<a name="309"><span class="lineNum">     309 </span>                :<span class="lineCov">       1429 :             buffer_ptr += (*m_key_map_last).first.length() + 1;</span></a>
-<span class="lineNum">     310 </span>                :<span class="lineCov">       1429 :             ++m_key_map_last;</span>
+<span class="lineNum">     302 </span>                :<span class="lineCov">        278 :         bool result = false;</span>
+<span class="lineNum">     303 </span>                :<span class="lineCov">        278 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span>
+<span class="lineNum">     304 </span>                :<span class="lineCov">        278 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
+<a name="305"><span class="lineNum">     305 </span>  [<span class="branchCov" title="Branch 2 was taken 1430 times"> + </span><span class="branchCov" title="Branch 3 was taken 199 times"> + </span><span class="branchCov" title="Branch 4 was taken 1429 times"> + </span><span class="branchCov" title="Branch 5 was taken 1 time"> + </span>]:<span class="lineCov">       5184 :         while (m_key_map_last != m_key_map.end() &amp;&amp;</span></a>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 2 was taken 1101 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 4 was taken 1024 times"> + </span><span class="branchCov" title="Branch 5 was taken 77 times"> + </span><span class="branchCov" title="Branch 6 was taken 1023 times"> + </span><span class="branchCov" title="Branch 7 was taken 1 time"> + </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1629 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 2530 times"> + </span><span class="branchCov" title="Branch 9 was taken 200 times"> + </span>]
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 10 was taken 1023 times"> + </span><span class="branchCov" title="Branch 11 was taken 78 times"> + </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">     306 </span>        [<span class="branchCov" title="Branch 1 was taken 1024 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       2454 :                buffer_remain &gt; (*m_key_map_last).first.length()) {</span>
+<span class="lineNum">     307 </span>                :<span class="lineCov">       2452 :             strncpy(buffer_ptr, (*m_key_map_last).first.c_str(), buffer_remain);</span>
+<span class="lineNum">     308 </span>                :<span class="lineCov">       2452 :             buffer_remain -= (*m_key_map_last).first.length() + 1;</span>
+<a name="309"><span class="lineNum">     309 </span>                :<span class="lineCov">       2452 :             buffer_ptr += (*m_key_map_last).first.length() + 1;</span></a>
+<span class="lineNum">     310 </span>                :<span class="lineCov">       2452 :             ++m_key_map_last;</span>
 <span class="lineNum">     311 </span>                :            :         }
-<span class="lineNum">     312 </span>                :<span class="lineCov">        200 :         memset(buffer_ptr, 0, buffer_remain);</span>
-<a name="313"><span class="lineNum">     313 </span>[<span class="branchCov" title="Branch 2 was taken 199 times"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>][<span class="branchCov" title="Branch 4 was taken 199 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">        200 :         if (m_key_map_last == m_key_map.end() &amp;&amp; buffer_remain) {</span></a>
-<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 200 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 199 times"> + </span><span class="branchCov" title="Branch 9 was taken 1 time"> + </span>]
+<span class="lineNum">     312 </span>                :<span class="lineCov">        278 :         memset(buffer_ptr, 0, buffer_remain);</span>
+<a name="313"><span class="lineNum">     313 </span>[<span class="branchCov" title="Branch 2 was taken 277 times"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>][<span class="branchCov" title="Branch 4 was taken 276 times"> + </span><span class="branchCov" title="Branch 5 was taken 1 time"> + </span>]:<span class="lineCov">        278 :         if (m_key_map_last == m_key_map.end() &amp;&amp; buffer_remain) {</span></a>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 77 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 200 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 8 was taken 78 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 199 times"> + </span><span class="branchCov" title="Branch 9 was taken 1 time"> + </span>]
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 10 was taken 77 times"> + </span><span class="branchCov" title="Branch 11 was taken 1 time"> + </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
 <span class="lineNum">     314 </span>                :            :             // We are done, set last character to -1
-<span class="lineNum">     315 </span>                :<span class="lineCov">        199 :             buffer_ptr[buffer_remain] = (char) 1;</span>
-<span class="lineNum">     316 </span>                :<span class="lineCov">        199 :             m_key_map_last = m_key_map.begin();</span>
-<a name="317"><span class="lineNum">     317 </span>                :<span class="lineCov">        199 :             result = true;</span></a>
+<span class="lineNum">     315 </span>                :<span class="lineCov">        276 :             buffer_ptr[buffer_remain] = (char) 1;</span>
+<span class="lineNum">     316 </span>                :<span class="lineCov">        276 :             m_key_map_last = m_key_map.begin();</span>
+<a name="317"><span class="lineNum">     317 </span>                :<span class="lineCov">        276 :             result = true;</span></a>
 <span class="lineNum">     318 </span>                :            :         }
 <span class="lineNum">     319 </span>                :            :         else {
-<span class="lineNum">     320 </span>                :<span class="lineCov">          1 :             buffer_ptr[buffer_remain] = '\0';</span>
+<span class="lineNum">     320 </span>                :<span class="lineCov">          2 :             buffer_ptr[buffer_remain] = '\0';</span>
 <a name="321"><span class="lineNum">     321 </span>                :            :         }</a>
-<span class="lineNum">     322 </span>                :<span class="lineCov">        200 :         return result;</span>
+<span class="lineNum">     322 </span>                :<span class="lineCov">        278 :         return result;</span>
 <a name="323"><span class="lineNum">     323 </span>                :            :     }</a>
 <span class="lineNum">     324 </span>                :            : 
-<a name="325"><span class="lineNum">     325 </span>                :<span class="lineCov">        205 :     bool ProfileTable::name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name)</span></a>
+<a name="325"><span class="lineNum">     325 </span>                :<span class="lineCov">        288 :     bool ProfileTable::name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name)</span></a>
 <span class="lineNum">     326 </span>                :            :     {
 <span class="lineNum">     327 </span>                :            :         char tmp_name[NAME_MAX];
-<span class="lineNum">     328 </span>                :<span class="lineCov">        205 :         bool result = false;</span>
-<a name="329"><span class="lineNum">     329 </span>                :<span class="lineCov">        205 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span></a>
-<span class="lineNum">     330 </span>                :<span class="lineCov">        205 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
+<span class="lineNum">     328 </span>                :<span class="lineCov">        288 :         bool result = false;</span>
+<a name="329"><span class="lineNum">     329 </span>                :<span class="lineCov">        288 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span></a>
+<span class="lineNum">     330 </span>                :<span class="lineCov">        288 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
 <span class="lineNum">     331 </span>                :            : 
-<span class="lineNum">     332 </span>        [<span class="branchCov" title="Branch 0 was taken 1943 times"> + </span><span class="branchCov" title="Branch 1 was taken 205 times"> + </span>]:<span class="lineCov">       2148 :         while (buffer_remain) {</span>
-<a name="333"><span class="lineNum">     333 </span>                :<span class="lineCov">       1943 :             tmp_name[NAME_MAX - 1] = '\0';</span></a>
-<span class="lineNum">     334 </span>                :<span class="lineCov">       1943 :             strncpy(tmp_name, buffer_ptr, NAME_MAX);</span>
-<span class="lineNum">     335 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1943 times"> + </span>]:<span class="lineCov">       1943 :             if (tmp_name[NAME_MAX - 1] != '\0') {</span>
+<span class="lineNum">     332 </span>[<span class="branchCov" title="Branch 0 was taken 1943 times"> + </span><span class="branchCov" title="Branch 1 was taken 205 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 1275 times"> + </span><span class="branchCov" title="Branch 1 was taken 83 times"> + </span>]:<span class="lineCov">       3506 :         while (buffer_remain) {</span>
+<a name="333"><span class="lineNum">     333 </span>                :<span class="lineCov">       3218 :             tmp_name[NAME_MAX - 1] = '\0';</span></a>
+<span class="lineNum">     334 </span>                :<span class="lineCov">       3218 :             strncpy(tmp_name, buffer_ptr, NAME_MAX);</span>
+<span class="lineNum">     335 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3218 times"> + </span>]:<span class="lineCov">       3218 :             if (tmp_name[NAME_MAX - 1] != '\0') {</span>
 <span class="lineNum">     336 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTable::name_set(): key string is too long&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <a name="337"><span class="lineNum">     337 </span>                :            :             }</a>
-<span class="lineNum">     338 </span>        [<span class="branchCov" title="Branch 0 was taken 1738 times"> + </span><span class="branchCov" title="Branch 1 was taken 205 times"> + </span>]:<span class="lineCov">       1943 :             if (strlen(tmp_name)) {</span>
-<span class="lineNum">     339 </span>[<span class="branchCov" title="Branch 2 was taken 1738 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 1738 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">       1738 :                 name.insert(std::string(tmp_name));</span>
-<span class="lineNum">     340 </span>                :<span class="lineCov">       1738 :                 buffer_remain -= strlen(tmp_name) + 1;</span>
-<a name="341"><span class="lineNum">     341 </span>                :<span class="lineCov">       1738 :                 buffer_ptr += strlen(tmp_name) + 1;</span></a>
+<span class="lineNum">     338 </span>        [<span class="branchCov" title="Branch 0 was taken 2930 times"> + </span><span class="branchCov" title="Branch 1 was taken 288 times"> + </span>]:<span class="lineCov">       3218 :             if (strlen(tmp_name)) {</span>
+<span class="lineNum">     339 </span>[<span class="branchCov" title="Branch 2 was taken 2930 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 5 was taken 2930 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]:<span class="lineCov">       2930 :                 name.insert(std::string(tmp_name));</span>
+<span class="lineNum">     340 </span>                :<span class="lineCov">       2930 :                 buffer_remain -= strlen(tmp_name) + 1;</span>
+<a name="341"><span class="lineNum">     341 </span>                :<span class="lineCov">       2930 :                 buffer_ptr += strlen(tmp_name) + 1;</span></a>
 <span class="lineNum">     342 </span>                :            :             }
 <span class="lineNum">     343 </span>                :            :             else {
-<span class="lineNum">     344 </span>        [<span class="branchCov" title="Branch 0 was taken 204 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">        205 :                 if (buffer_ptr[buffer_remain] == (char) 1) {</span>
-<a name="345"><span class="lineNum">     345 </span>                :<span class="lineCov">        204 :                     result = true;</span></a>
+<span class="lineNum">     344 </span>        [<span class="branchCov" title="Branch 0 was taken 286 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">        288 :                 if (buffer_ptr[buffer_remain] == (char) 1) {</span>
+<a name="345"><span class="lineNum">     345 </span>                :<span class="lineCov">        286 :                     result = true;</span></a>
 <span class="lineNum">     346 </span>                :            :                 }
-<span class="lineNum">     347 </span>                :<span class="lineCov">        205 :                 buffer_remain = 0;</span>
+<span class="lineNum">     347 </span>                :<span class="lineCov">        288 :                 buffer_remain = 0;</span>
 <span class="lineNum">     348 </span>                :            :             }
 <a name="349"><span class="lineNum">     349 </span>                :            :         }</a>
-<span class="lineNum">     350 </span>                :<span class="lineCov">        205 :         return result;</span>
+<span class="lineNum">     350 </span>                :<span class="lineCov">        288 :         return result;</span>
 <a name="351"><span class="lineNum">     351 </span>                :            :     }</a>
 <span class="lineNum">     352 </span>                :            : 
-<a name="353"><span class="lineNum">     353 </span>                :<span class="lineCov">    7852124 :     bool ProfileTable::sticky(const struct geopm_prof_message_s &amp;value)</span></a>
+<a name="353"><span class="lineNum">     353 </span>                :<span class="lineCov">   21774855 :     bool ProfileTable::sticky(const struct geopm_prof_message_s &amp;value)</span></a>
 <span class="lineNum">     354 </span>                :            :     {
-<span class="lineNum">     355 </span>                :<span class="lineCov">    7852124 :         bool result = false;</span>
-<span class="lineNum">     356 </span>[<span class="branchCov" title="Branch 0 was taken 7822458 times"> + </span><span class="branchCov" title="Branch 1 was taken 29666 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 5042 times"> + </span><span class="branchCov" title="Branch 3 was taken 7817416 times"> + </span>]:<span class="lineCov">    7852124 :         if (value.progress == 0.0 || value.progress == 1.0) {</span>
-<a name="357"><span class="lineNum">     357 </span>                :<span class="lineCov">      34708 :             result = true;</span></a>
+<span class="lineNum">     355 </span>                :<span class="lineCov">   21774855 :         bool result = false;</span>
+<span class="lineNum">     356 </span>[<span class="branchCov" title="Branch 0 was taken 21724352 times"> + </span><span class="branchCov" title="Branch 1 was taken 50503 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 6542 times"> + </span><span class="branchCov" title="Branch 3 was taken 21717810 times"> + </span>]:<span class="lineCov">   21774855 :         if (value.progress == 0.0 || value.progress == 1.0) {</span>
+<a name="357"><span class="lineNum">     357 </span>                :<span class="lineCov">      57045 :             result = true;</span></a>
 <span class="lineNum">     358 </span>                :            :         }
-<span class="lineNum">     359 </span>                :<span class="lineCov">    7852124 :         return result;</span>
+<span class="lineNum">     359 </span>                :<span class="lineCov">   21774855 :         return result;</span>
 <span class="lineNum">     360 </span>                :            :     }
 <a name="361"><span class="lineNum">     361 </span>                :            : }</a>
 </pre>

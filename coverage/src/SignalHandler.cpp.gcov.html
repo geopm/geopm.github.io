@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-06-21</td>
+            <td class="headerValue">2017-06-27</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">8</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">20</td>
-            <td class="headerCovTableEntry">64</td>
-            <td class="headerCovTableEntryLo">31.2 %</td>
+            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntry">105</td>
+            <td class="headerCovTableEntryLo">35.2 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -146,103 +146,108 @@
 <span class="lineNum">      68 </span>                :            :             std::vector&lt;struct sigaction&gt; m_old_action;
 <a name="69"><span class="lineNum">      69 </span>                :            :     };</a>
 <span class="lineNum">      70 </span>                :            : 
-<span class="lineNum">      71 </span>                :<span class="lineCov">        254 :     SignalHandler::SignalHandler()</span>
+<span class="lineNum">      71 </span>                :<span class="lineCov">        334 :     SignalHandler::SignalHandler()</span>
 <span class="lineNum">      72 </span>                :            :         : m_signals({SIGHUP, SIGINT, SIGQUIT, SIGILL,
 <a name="73"><span class="lineNum">      73 </span>                :            :                      SIGTRAP, SIGABRT, SIGFPE, SIGUSR1,</a>
 <span class="lineNum">      74 </span>                :            :                      SIGSEGV, SIGUSR2, SIGPIPE, SIGALRM,
 <span class="lineNum">      75 </span>                :            :                      SIGTERM, SIGCHLD, SIGCONT, SIGTSTP,
 <span class="lineNum">      76 </span>                :            :                      SIGTTIN, SIGTTOU})
-<a name="77"><span class="lineNum">      77 </span>[<span class="branchCov" title="Branch 2 was taken 254 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 254 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]:<span class="lineCov">        254 :         , m_old_action(m_signals.size())</span></a>
+<a name="77"><span class="lineNum">      77 </span>[<span class="branchCov" title="Branch 2 was taken 334 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 334 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]:<span class="lineCov">        334 :         , m_old_action(m_signals.size())</span></a>
 <span class="lineNum">      78 </span>                :            :     {
 <span class="lineNum">      79 </span>                :            :         int err;
-<span class="lineNum">      80 </span>                :<span class="lineCov">        254 :         g_signal_action.sa_handler = geopm_signal_handler;</span>
-<a name="81"><span class="lineNum">      81 </span>                :<span class="lineCov">        254 :         sigemptyset(&amp;g_signal_action.sa_mask);</span></a>
-<span class="lineNum">      82 </span>                :<span class="lineCov">        254 :         g_signal_action.sa_flags = 0;</span>
-<span class="lineNum">      83 </span>                :<span class="lineCov">        254 :         auto act_it = m_old_action.begin();</span>
-<span class="lineNum">      84 </span>        [<span class="branchCov" title="Branch 3 was taken 4572 times"> + </span><span class="branchCov" title="Branch 4 was taken 254 times"> + </span>]:<span class="lineCov">       4826 :         for (auto sig_it = m_signals.begin(); sig_it != m_signals.end(); ++sig_it, ++act_it) {</span>
-<a name="85"><span class="lineNum">      85 </span>                :<span class="lineCov">       4572 :             err = sigaction(*sig_it, NULL, &amp;(*act_it));</span></a>
-<span class="lineNum">      86 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4572 times"> + </span>]:<span class="lineCov">       4572 :             if (err) {</span>
+<span class="lineNum">      80 </span>                :<span class="lineCov">        334 :         g_signal_action.sa_handler = geopm_signal_handler;</span>
+<a name="81"><span class="lineNum">      81 </span>                :<span class="lineCov">        334 :         sigemptyset(&amp;g_signal_action.sa_mask);</span></a>
+<span class="lineNum">      82 </span>                :<span class="lineCov">        334 :         g_signal_action.sa_flags = 0;</span>
+<span class="lineNum">      83 </span>                :<span class="lineCov">        334 :         auto act_it = m_old_action.begin();</span>
+<span class="lineNum">      84 </span>     [<span class="branchCov" title="Branch 2 was taken 1440 times"> + </span><span class="branchCov" title="Branch 3 was taken 4572 times"> + </span><span class="branchCov" title="Branch 4 was taken 254 times"> + </span>]:<span class="lineCov">       6346 :         for (auto sig_it = m_signals.begin(); sig_it != m_signals.end(); ++sig_it, ++act_it) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 5 was taken 1440 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1520 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 11 was taken 1440 times"> + </span><span class="branchCov" title="Branch 12 was taken 80 times"> + </span>]
+<a name="85"><span class="lineNum">      85 </span>[<span class="branchCov" title="Branch 1 was taken 1440 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1440 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">       6012 :             err = sigaction(*sig_it, NULL, &amp;(*act_it));</span></a>
+<span class="lineNum">      86 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4572 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1440 times"> + </span>]:<span class="lineCov">       6012 :             if (err) {</span>
 <span class="lineNum">      87 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;SignalHandler: Could not retrieve original handler&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
 <span class="lineNum">      88 </span>                :            :             }
 <a name="89"><span class="lineNum">      89 </span>                :            :         }</a>
-<span class="lineNum">      90 </span>        [<span class="branchCov" title="Branch 1 was taken 254 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        254 :         init();</span>
-<a name="91"><span class="lineNum">      91 </span>                :<span class="lineCov">        254 :     }</span></a>
+<span class="lineNum">      90 </span>        [<span class="branchCov" title="Branch 1 was taken 334 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">        334 :         init();</span>
+<a name="91"><span class="lineNum">      91 </span>                :<span class="lineCov">        334 :     }</span></a>
 <span class="lineNum">      92 </span>                :            : 
-<a name="93"><span class="lineNum">      93 </span>                :<span class="lineCov">        508 :     SignalHandler::~SignalHandler()</span></a>
+<a name="93"><span class="lineNum">      93 </span>                :<span class="lineCov">        668 :     SignalHandler::~SignalHandler()</span></a>
 <span class="lineNum">      94 </span>                :            :     {
 <span class="lineNum">      95 </span>                :            :         // As a singleton, the destructor never gets called.
-<span class="lineNum">      96 </span>                :<span class="lineCov">        254 :         revert();</span>
-<a name="97"><span class="lineNum">      97 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 254 times"> + </span>]:<span class="lineCov">        254 :     }</span></a>
+<span class="lineNum">      96 </span>                :<span class="lineCov">        334 :         revert();</span>
+<a name="97"><span class="lineNum">      97 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 334 times"> + </span>]:<span class="lineCov">        334 :     }</span></a>
 <span class="lineNum">      98 </span>                :            : 
-<span class="lineNum">      99 </span>                :<span class="lineCov">        311 :     void SignalHandler::init(void) const</span>
+<span class="lineNum">      99 </span>                :<span class="lineCov">        396 :     void SignalHandler::init(void) const</span>
 <span class="lineNum">     100 </span>                :            :     {
 <a name="101"><span class="lineNum">     101 </span>                :            :         int err;</a>
-<span class="lineNum">     102 </span>        [<span class="branchCov" title="Branch 0 was taken 254 times"> + </span><span class="branchCov" title="Branch 1 was taken 57 times"> + </span>]:<span class="lineCov">        311 :         if (g_signal_number == -1) {</span>
-<span class="lineNum">     103 </span>                :<span class="lineCov">        254 :             g_signal_number = 0;</span>
+<span class="lineNum">     102 </span>        [<span class="branchCov" title="Branch 0 was taken 334 times"> + </span><span class="branchCov" title="Branch 1 was taken 62 times"> + </span>]:<span class="lineCov">        396 :         if (g_signal_number == -1) {</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">        334 :             g_signal_number = 0;</span>
 <span class="lineNum">     104 </span>                :            :             struct sigaction old_action;
-<a name="105"><span class="lineNum">     105 </span>        [<span class="branchCov" title="Branch 3 was taken 4572 times"> + </span><span class="branchCov" title="Branch 4 was taken 254 times"> + </span>]:<span class="lineCov">       4826 :             for (auto sig_it = m_signals.begin(); sig_it != m_signals.end(); ++sig_it) {</span></a>
-<span class="lineNum">     106 </span>                :<span class="lineCov">       4572 :                 err = sigaction(*sig_it, NULL, &amp;old_action);</span>
-<span class="lineNum">     107 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4572 times"> + </span>]:<span class="lineCov">       4572 :                 if (err) {</span>
+<a name="105"><span class="lineNum">     105 </span>     [<span class="branchCov" title="Branch 2 was taken 1440 times"> + </span><span class="branchCov" title="Branch 3 was taken 4572 times"> + </span><span class="branchCov" title="Branch 4 was taken 254 times"> + </span>]:<span class="lineCov">       6346 :             for (auto sig_it = m_signals.begin(); sig_it != m_signals.end(); ++sig_it) {</span></a>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1520 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 1440 times"> + </span><span class="branchCov" title="Branch 9 was taken 80 times"> + </span>]
+<span class="lineNum">     106 </span>        [<span class="branchCov" title="Branch 1 was taken 1440 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       6012 :                 err = sigaction(*sig_it, NULL, &amp;old_action);</span>
+<span class="lineNum">     107 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4572 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1440 times"> + </span>]:<span class="lineCov">       6012 :                 if (err) {</span>
 <span class="lineNum">     108 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     throw Exception(&quot;SignalHandler: Could not retrieve original handler&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
 <a name="109"><span class="lineNum">     109 </span>                :            :                 }</a>
-<span class="lineNum">     110 </span>        [<span class="branchCov" title="Branch 0 was taken 4572 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       4572 :                 if (old_action.sa_handler != SIG_IGN) {</span>
-<span class="lineNum">     111 </span>                :<span class="lineCov">       4572 :                     err = sigaction(*sig_it, &amp;g_signal_action, NULL);</span>
-<span class="lineNum">     112 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4572 times"> + </span>]:<span class="lineCov">       4572 :                     if (err) {</span>
+<span class="lineNum">     110 </span>        [<span class="branchCov" title="Branch 0 was taken 5932 times"> + </span><span class="branchCov" title="Branch 1 was taken 80 times"> + </span>]:<span class="lineCov">       6012 :                 if (old_action.sa_handler != SIG_IGN) {</span>
+<span class="lineNum">     111 </span>        [<span class="branchCov" title="Branch 1 was taken 1360 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">       5932 :                     err = sigaction(*sig_it, &amp;g_signal_action, NULL);</span>
+<span class="lineNum">     112 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4572 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1360 times"> + </span>]:<span class="lineCov">       5932 :                     if (err) {</span>
 <a name="113"><span class="lineNum">     113 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         throw Exception(&quot;SignalHandler: Could not replace original handler&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
 <span class="lineNum">     114 </span>                :            :                     }
 <span class="lineNum">     115 </span>                :            :                 }
 <span class="lineNum">     116 </span>                :            :             }
 <a name="117"><span class="lineNum">     117 </span>                :            :         }</a>
-<a name="118"><span class="lineNum">     118 </span>                :<span class="lineCov">        311 :     }</span></a>
+<a name="118"><span class="lineNum">     118 </span>                :<span class="lineCov">        396 :     }</span></a>
 <span class="lineNum">     119 </span>                :            : 
-<span class="lineNum">     120 </span>                :<span class="lineCov">        254 :     void SignalHandler::revert(void) const</span>
+<span class="lineNum">     120 </span>                :<span class="lineCov">        334 :     void SignalHandler::revert(void) const</span>
 <a name="121"><span class="lineNum">     121 </span>                :            :     {</a>
 <span class="lineNum">     122 </span>                :            :         int err;
-<span class="lineNum">     123 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 254 times"> + </span>]:<span class="lineCov">        254 :         if (g_signal_number &gt; 0) {</span>
+<span class="lineNum">     123 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 334 times"> + </span>]:<span class="lineCov">        334 :         if (g_signal_number &gt; 0) {</span>
 <span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :             g_signal_number = -1;</span>
 <a name="125"><span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :             auto act_it = m_old_action.begin();</span></a>
-<span class="lineNum">     126 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (auto sig_it = m_signals.begin(); sig_it != m_signals.end(); ++sig_it, ++act_it) {</span>
-<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :                 err = sigaction(*sig_it, &amp;(*act_it), NULL);</span>
-<span class="lineNum">     128 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (err) {</span>
+<span class="lineNum">     126 </span>     [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (auto sig_it = m_signals.begin(); sig_it != m_signals.end(); ++sig_it, ++act_it) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>][<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">     127 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 err = sigaction(*sig_it, &amp;(*act_it), NULL);</span>
+<span class="lineNum">     128 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (err) {</span>
 <a name="129"><span class="lineNum">     129 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     throw Exception(&quot;SignalHandler: Could not restore original handler&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
 <span class="lineNum">     130 </span>                :            :                 }
 <span class="lineNum">     131 </span>                :            :             }
 <span class="lineNum">     132 </span>                :            :         }
-<a name="133"><span class="lineNum">     133 </span>                :<span class="lineCov">        254 :     }</span></a>
+<a name="133"><span class="lineNum">     133 </span>                :<span class="lineCov">        334 :     }</span></a>
 <span class="lineNum">     134 </span>                :            : 
-<span class="lineNum">     135 </span>                :<span class="lineCov"> 1992750608 :     void SignalHandler::check(void) const</span>
+<span class="lineNum">     135 </span>                :<span class="lineCov"> 2388108603 :     void SignalHandler::check(void) const</span>
 <span class="lineNum">     136 </span>                :            :     {
-<a name="137"><span class="lineNum">     137 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1992750608 times"> + </span>]:<span class="lineCov"> 1992750608 :         if (g_signal_number &gt; 0) {</span></a>
+<a name="137"><span class="lineNum">     137 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2388108603 times"> + </span>]:<span class="lineCov"> 2388108603 :         if (g_signal_number &gt; 0) {</span></a>
 <span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :             int old_signal = g_signal_number;</span>
 <span class="lineNum">     139 </span>                :<span class="lineNoCov">          0 :             geopm_signal_handler_revert();</span>
-<span class="lineNum">     140 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw SignalException(old_signal);</span>
+<span class="lineNum">     140 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw SignalException(old_signal);</span>
 <a name="141"><span class="lineNum">     141 </span>                :            :         }</a>
-<a name="142"><span class="lineNum">     142 </span>                :<span class="lineCov"> 1992750608 :     }</span></a>
+<a name="142"><span class="lineNum">     142 </span>                :<span class="lineCov"> 2388108603 :     }</span></a>
 <span class="lineNum">     143 </span>                :            : 
-<span class="lineNum">     144 </span>                :<span class="lineCov"> 1992750665 :     static const SignalHandler &amp;signal_handler(void)</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov"> 2388108665 :     static const SignalHandler &amp;signal_handler(void)</span>
 <a name="145"><span class="lineNum">     145 </span>                :            :     {</a>
-<span class="lineNum">     146 </span>[<span class="branchCov" title="Branch 0 was taken 254 times"> + </span><span class="branchCov" title="Branch 1 was taken 1992750411 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 254 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov"> 1992750665 :         static const SignalHandler instance;</span>
-<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 254 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
-<span class="lineNum">     147 </span>                :<span class="lineCov"> 1992750665 :         return instance;</span>
+<span class="lineNum">     146 </span>[<span class="branchCov" title="Branch 0 was taken 334 times"> + </span><span class="branchCov" title="Branch 1 was taken 2388108331 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 334 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov"> 2388108665 :         static const SignalHandler instance;</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 334 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">     147 </span>                :<span class="lineCov"> 2388108665 :         return instance;</span>
 <span class="lineNum">     148 </span>                :            :     }
 <a name="149"><span class="lineNum">     149 </span>                :            : </a>
 <span class="lineNum">     150 </span>                :            : }
 <span class="lineNum">     151 </span>                :            : 
 <a name="152"><span class="lineNum">     152 </span>                :            : extern &quot;C&quot;</a>
 <a name="153"><span class="lineNum">     153 </span>                :            : {</a>
-<span class="lineNum">     154 </span>                :<span class="lineCov">         57 :     void geopm_signal_handler_register(void)</span>
+<span class="lineNum">     154 </span>                :<span class="lineCov">         62 :     void geopm_signal_handler_register(void)</span>
 <span class="lineNum">     155 </span>                :            :     {
-<span class="lineNum">     156 </span>                :<span class="lineCov">         57 :         geopm::signal_handler().init();</span>
-<a name="157"><span class="lineNum">     157 </span>                :<span class="lineCov">         57 :     }</span></a>
+<span class="lineNum">     156 </span>                :<span class="lineCov">         62 :         geopm::signal_handler().init();</span>
+<a name="157"><span class="lineNum">     157 </span>                :<span class="lineCov">         62 :     }</span></a>
 <span class="lineNum">     158 </span>                :            : 
-<span class="lineNum">     159 </span>                :<span class="lineCov"> 1992750608 :     void geopm_signal_handler_check(void)</span>
+<span class="lineNum">     159 </span>                :<span class="lineCov"> 2388108603 :     void geopm_signal_handler_check(void)</span>
 <span class="lineNum">     160 </span>                :            :     {
-<a name="161"><span class="lineNum">     161 </span>                :<span class="lineCov"> 1992750608 :         geopm::signal_handler().check();</span></a>
-<a name="162"><span class="lineNum">     162 </span>                :<span class="lineCov"> 1992750608 :     }</span></a>
+<a name="161"><span class="lineNum">     161 </span>                :<span class="lineCov"> 2388108603 :         geopm::signal_handler().check();</span></a>
+<a name="162"><span class="lineNum">     162 </span>                :<span class="lineCov"> 2388108603 :     }</span></a>
 <span class="lineNum">     163 </span>                :            : 
 <span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :     void geopm_signal_handler_revert(void)</span>
 <a name="165"><span class="lineNum">     165 </span>                :            :     {</a>
