@@ -1,7 +1,8 @@
 var searchData=
 [
   ['enable',['enable',['../classgeopm_1_1_i_profile_thread_table.html#a870f4ac22538331fbf617d8affbd4af1',1,'geopm::IProfileThreadTable::enable()'],['../classgeopm_1_1_profile_thread_table.html#ab8b434de8d014c03619a956d46b1fff2',1,'geopm::ProfileThreadTable::enable()']]],
-  ['enforce_5fpolicy',['enforce_policy',['../classgeopm_1_1_i_platform.html#ae3fa22fdb956e86ee207710d1947db5c',1,'geopm::IPlatform::enforce_policy()'],['../classgeopm_1_1_platform.html#ae8ee3ca012690b46f42ec684775b1b96',1,'geopm::Platform::enforce_policy()'],['../classgeopm_1_1_r_a_p_l_platform.html#af67acedbbebdca12fe6943ccda76bb55',1,'geopm::RAPLPlatform::enforce_policy()']]],
+  ['encode',['encode',['../classgeopm_1_1_m_s_r_encode.html#a0063a6a62c626855bdada0bc18b5edb3',1,'geopm::MSREncode']]],
+  ['enforce_5fpolicy',['enforce_policy',['../classgeopm_1_1_i_platform.html#a40a26177b02147b5c3a3a2934e7a5e03',1,'geopm::IPlatform::enforce_policy()'],['../classgeopm_1_1_platform.html#a1e80b3e681f4e680c24c85963aa03f3a',1,'geopm::Platform::enforce_policy()'],['../classgeopm_1_1_r_a_p_l_platform.html#af67acedbbebdca12fe6943ccda76bb55',1,'geopm::RAPLPlatform::enforce_policy()']]],
   ['enforce_5fstatic_5fmode',['enforce_static_mode',['../classgeopm_1_1_i_global_policy.html#abd114ac0a141f6e472dcc60fef948c04',1,'geopm::IGlobalPolicy::enforce_static_mode()'],['../classgeopm_1_1_global_policy.html#aaa2f7aea07dd37d6e795058ef68a65ec',1,'geopm::GlobalPolicy::enforce_static_mode()']]],
   ['enter',['enter',['../classgeopm_1_1_i_profile.html#a396b61f1509022eaa3d463f9a9b0ce26',1,'geopm::IProfile::enter()'],['../classgeopm_1_1_profile.html#a9485c2f86fc044b68bb10ffd1472210d',1,'geopm::Profile::enter()']]],
   ['entry',['entry',['../classgeopm_1_1_i_region.html#ae1469dfce13875200d6f19d9b57614c6',1,'geopm::IRegion::entry()'],['../classgeopm_1_1_region.html#afec26c05d7657373240b4281bef04544',1,'geopm::Region::entry()']]],

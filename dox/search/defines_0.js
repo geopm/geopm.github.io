@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['geopm_5fpmpi_5fenter_5fmacro',['GEOPM_PMPI_ENTER_MACRO',['../geopm__pmpi_8h.html#a825086aa9672ca611feaebcf3d1c3720',1,'geopm_pmpi.h']]],
-  ['geopm_5fpmpi_5fexit_5fmacro',['GEOPM_PMPI_EXIT_MACRO',['../geopm__pmpi_8h.html#ab6811f361518500e3baac990509d2efd',1,'geopm_pmpi.h']]]
+  ['_5fgnu_5fsource',['_GNU_SOURCE',['../geopm__pmpi_8c.html#a369266c24eacffb87046522897a570d5',1,'_GNU_SOURCE():&#160;geopm_pmpi.c'],['../geopm__sched_8c.html#a369266c24eacffb87046522897a570d5',1,'_GNU_SOURCE():&#160;geopm_sched.c'],['../_profile_8cpp.html#a369266c24eacffb87046522897a570d5',1,'_GNU_SOURCE():&#160;Profile.cpp'],['../_profile_thread_8cpp.html#a369266c24eacffb87046522897a570d5',1,'_GNU_SOURCE():&#160;ProfileThread.cpp']]]
 ];

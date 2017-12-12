@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopmanalysis(1) - geopm analysis application</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopmanalysis(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopmanalysis(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopmanalysis</code> - <span class="man-whatis">geopm analysis application</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>geopmanalysis</code> -t <em>ANALYSIS_TYPE</em> -n <em>NUM_RANK</em> -N <em>NUM_NODE</em> [<em>OPTIONS</em>] -- <em>EXEC</em> [<em>EXEC_ARGS</em>]</p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>Used to run applications and analyze results for specific GEOPM use cases.
+An application must be launched at least once to generate report files. When using
+geopmanalysis to launch applications, it must be run within an allocation to
+ensure that all runs use the same set of nodes. Once all the required reports
+have been generated, the analysis can be rerun without needing an allocation
+using the <code>--skip-launch</code> option.</p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<dl>
+<dt><code>-h</code>, <code>--help</code></dt><dd><p>Show help message and exit.</p></dd>
+<dt><code>-t</code>, <code>--analysis_type</code> <em>freq_sweep</em>|<em>balancer</em>|<em>offline</em>|<em>online</em>|<em>stream_mix</em></dt><dd><p>The type of analysis to perform. <em>balancer</em> analysis is not yet implemented.</p></dd>
+<dt><code>-n</code>, <code>--num_rank</code> <em>NUM_RANKS</em></dt><dd><p>Total number of application ranks to launch with.</p></dd>
+<dt><code>-N</code>, <code>--num_node</code> <em>NUM_NODES</em></dt><dd><p>Number of compute nodes to launch onto.</p></dd>
+<dt><code>-o</code>, <code>--output_dir</code> <em>OUTPUT_DIR</em></dt><dd><p>The output directory for reports, traces, and plots (default: '.').</p></dd>
+<dt><code>-p</code>, <code>--profile_prefix</code> <em>PREFIX</em></dt><dd><p>Prefix to prepend to profile name when launching.</p></dd>
+<dt><code>-l</code>, <code>--level</code> 0|1|2</dt><dd><p>Controls the level of detail provided in the analysis. <br />
+  level 0: run application and generate reports and traces only <br />
+  level 1: print analysis of report and trace data (default) <br />
+  level 2: create plots from report and trace data</p></dd>
+<dt><code>-s</code>, <code>--skip_launch</code></dt><dd><p>Do not launch jobs, only analyze existing data.</p></dd>
+<dt><code>--version</code></dt><dd><p>Show the GEOPM version number and exit.</p></dd>
+</dl>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>  Once the geopmpy modules are installed, you can invoke this utility directly from
+  the command line.  You can either run the utility from inside a directory containing
+  data, or from a remote directory.  Some examples follow:</p>
+
+<p>  The <em>freq_sweep</em> analysis type runs the application once at each available frequency
+  on the platform. The reports generated from this analysis can be used for other types
+  of analysis. The output from the frequency sweep is a mapping of the best-fit frequency
+  for each region that saves energy while not letting the runtime increase more than 10%.</p>
+
+<pre><code>geopmanalysis -n1 -N1 -t freq_sweep -p myprof -o myprof -- ./build/bin/geopmbench config.json
+</code></pre>
+
+<p>  The <em>offline</em> analysis type runs a frequency sweep (if reports are not already present)
+  to determine the best-fit frequency for each region of the application. Then it runs the
+  application using the SimpleFreqDecider plugin, which uses this mapping to change the
+  frequency when entering each reagion. The <em>online</em> analysis type is similar except that
+  it determines the best-fit frequency through online training.</p>
+
+<pre><code>geopmanalysis -n1 -N1 -t offline -p myprof -o myprof -- ./build/bin/geopmbench config.json
+</code></pre>
+
+<p>  The <em>stream_mix</em> analysis type uses the geopmbench application and varies the ratio
+  between the runtimes of the stream and dgemm regions from around 20% stream to around 80%
+  stream. For each ratio, it launches a frequency sweep and the offline and online analysis
+  modes described above. The resulting analysis produces plots comparing the runtime and
+  energy savings of the different plugin modes at each stream mix ratio.</p>
+
+<pre><code>geopmanalysis -n1 -N1 -t stream_mix -p myprof -o myprof -- ./build/bin/geopmbench config.json
+</code></pre>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_sched.3.html">geopm_sched<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmbench.1.html">geopmbench<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Intel Corporation</li>
+    <li class='tc'>December 2017</li>
+    <li class='tr'>geopmanalysis(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

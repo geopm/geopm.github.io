@@ -57,6 +57,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
@@ -75,9 +76,9 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>geopmsrun</code> [<em>srun-options</em>] [<em>OPTIONS</em>] executable [<em>exec-args</em>]</p>
+<p><code>geopmsrun</code> [<em>srun-options</em>] [<em>OPTIONS</em>] <code>--</code> executable [<em>exec-args</em>]</p>
 
-<p><code>geopmaprun</code> [<em>aprun-options</em>] [<em>OPTIONS</em>] executable [<em>exec-args</em>]</p>
+<p><code>geopmaprun</code> [<em>aprun-options</em>] [<em>OPTIONS</em>] <code>--</code> executable [<em>exec-args</em>]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -90,8 +91,8 @@ the <code>geopmsrun</code> and <code>geopmaprun</code> executables which run the
 geopmpy.launcher.main() method in the geopmpy python package.  These
 interfaces extend the resource manager's job launch application with
 GEOPM specific flags.  All application launch options accepted by the
-underlying application (e.g. <code>srun</code> or <code>aprun</code>) can be passed to the
-GEOPM launch wrapper with the exception of CPU affinity related
+underlying launch application (e.g. <code>srun</code> or <code>aprun</code>) can be passed
+to the GEOPM launch wrapper with the exception of CPU affinity related
 options.  The wrapper script reinterprets the command line to set
 environment variables and pass modified options to the underlying job
 launch application.  The reinterpreted command line is echoed to
@@ -101,9 +102,26 @@ environment variables used by GEOPM which are described in
 GEOPM and extends the allocation to have reserved CPUs and extra
 processes as required by the GEOPM runtime.</p>
 
+<p>Note: the primary compute executable and its command line options must
+appear at the end of the command line and be preceded by two dashes:
+<code>--</code>. The GEOPM launcher will stop parsing arguments following the <code>--</code>
+sequence and pass the arguments that follow unaltered while removing
+the first <code>--</code> from the command line.</p>
+
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
+<dt><code>--geopm-rm</code> rm</dt><dd><p>Use resource manager "rm" for the underlying launch mechanism.
+Valid values of "rm" are "SLURM", "ALPS", "IMPI", "SrunLauncher",
+"AlpsLauncher", or "IMPIExecLauncher".  This command line option
+overrides other methods of determining the resource manager.  If
+this option is not provided the environment variable GEOPM_RM is
+used instead.  If neither of these options are set by the user then
+the resource manager is inferred by the executable name: geopmsrun
+implies the SLURM resource manager and geopmaprun implies the ALPS
+resource manager.  If none of these methods can be used to select
+the resource manager, the hostname is checked against a list of
+hosts with known resource managers in use.</p></dd>
 <dt><code>--geopm-ctl</code> <em>process</em>|<em>pthread</em>|<em>application</em></dt><dd><p>Use GEOPM runtime and launch GEOPM with one of three methods:
 <em>process</em>, <em>pthread</em> or <em>application</em>.  The <em>process</em> method
 allocates one extra MPI process per node for the GEOPM controller.
@@ -131,7 +149,7 @@ for more information about how to create this input file and
 <strong><span class="man-ref">geopm_policy<span class="s">(3)</span></span></strong> to learn about creating the shared memory
 region.  If the option begins with a leading "/" character with no
 other occurrence of the "/" character, it is interpreted as a shared
-memory key, otherwise it is interpreted as a path to a GEOPM json
+memory key, otherwise it is interpreted as a path to a GEOPM JSON
 policy file.</p></dd>
 <dt><code>--geopm-report</code> file</dt><dd><p>The GEOPM report output file describing the profiling information
 collected by GEOPM.  This file is generated at the conclusion of the
@@ -167,7 +185,7 @@ The runtime will print a message explaining the hostname and process
 ID that the debugger should attach to.</p></dd>
 <dt><code>--geopm-barrier</code></dt><dd><p>Enables a node local MPI_Barrier() at time of calling
 <code>geopm_region_enter</code>() or <code>geopm_region_exit</code>() for all application
-ranks that share a node.  Since the geopm controller only considers
+ranks that share a node.  Since the GEOPM controller only considers
 a region to be entered when all ranks on a node have entered the
 region, enabling this feature forces control throughout all of the
 time every rank spends in a region.  This feature is primarily used
@@ -181,11 +199,28 @@ against libgeopm.so.</p></dd>
 </dl>
 
 
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Use geopmsrun to launch the GEOPM tutorial6 on two nodes using 32
+application MPI process each with four threads:</p>
+
+<pre><code>geopmsrun -N 2 -n 32 -c 4 --geopm-ctl=process --geopm-report=tutorial6.report -- ./tutorial6 tutorial6_config.json
+</code></pre>
+
+<p>Use geopomaprun to launch the miniFE executable with the same
+configuration:</p>
+
+<pre><code>geopmaprun -N 16 -n 32 --cpus-per-pe 4 --geopm-ctl process --geopm-report miniFE.report -- ./miniFE.x -nx 256 -nz 256
+</code></pre>
+
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
 <p>The <code>GEOPM_RM</code> environment variable can be used to select which
-underlying resource manager to use.  Valid values are "SLURM" and
-"ALPS".</p>
+underlying resource manager to use.  Valid values are "SLURM", "ALPS"
+and "IMPI".  Additionally the python Launcher object may be selected
+by name through this environment variable.  Currently supported python
+Launcher objects are "SrunLauncher", "AprunLauncher" and
+"IMPIExecLauncher".</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
@@ -198,18 +233,20 @@ underlying resource manager to use.  Valid values are "SLURM" and
 <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_omp.3.html">geopm_omp<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_sched.3.html">geopm_sched<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmbench.1.html">geopmbench<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>June 2017</li>
+    <li class='tc'>December 2017</li>
     <li class='tr'>geopmpy_launcher(1)</li>
   </ol>
 
