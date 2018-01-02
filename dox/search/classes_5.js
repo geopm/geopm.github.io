@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['geopm',['geopm',['../classgeopm.html',1,'']]],
   ['geopm_5fctl_5fcreate',['geopm_ctl_create',['../interfacegeopm_1_1geopm__ctl__create.html',1,'geopm']]],
   ['geopm_5fctl_5fdestroy',['geopm_ctl_destroy',['../interfacegeopm_1_1geopm__ctl__destroy.html',1,'geopm']]],
   ['geopm_5fctl_5fmessage_5fs',['geopm_ctl_message_s',['../structgeopm__ctl__message__s.html',1,'']]],

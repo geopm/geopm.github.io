@@ -67,6 +67,7 @@ var searchData=
   ['_7eraplplatform',['~RAPLPlatform',['../classgeopm_1_1_r_a_p_l_platform.html#a561b0acbf340a66b46802eef5ec03ada',1,'geopm::RAPLPlatform']]],
   ['_7eregion',['~Region',['../classgeopm_1_1_region.html#a6a89eda6d9924b07b03fe017565e860e',1,'geopm::Region']]],
   ['_7eregionpolicy',['~RegionPolicy',['../classgeopm_1_1_region_policy.html#a8d49ab472624b51dc0258f9c79a65c4b',1,'geopm::RegionPolicy']]],
+  ['_7eruntimeregulator',['~RuntimeRegulator',['../classgeopm_1_1_runtime_regulator.html#a460ecdbeec6985fe4ce3cdc562d056cf',1,'geopm::RuntimeRegulator']]],
   ['_7esampleregulator',['~SampleRegulator',['../classgeopm_1_1_sample_regulator.html#ac64ebb52d6c03f8226c413da0c2becdb',1,'geopm::SampleRegulator']]],
   ['_7esamplescheduler',['~SampleScheduler',['../classgeopm_1_1_sample_scheduler.html#ae1973bf5f1f2656848570a304fb0515f',1,'geopm::SampleScheduler']]],
   ['_7esharedmemory',['~SharedMemory',['../classgeopm_1_1_shared_memory.html#a6e0409f616ef3925aefd658bb8292398',1,'geopm::SharedMemory']]],

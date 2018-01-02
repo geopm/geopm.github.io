@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-1-g190bfc7 - src/geopm_omp.c</title>
+  <title>LCOV - v0.3.0-122-g63534b7 - src/TimeSignal.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - geopm_omp.c<span style="font-size: 80%;"> (source / <a href="geopm_omp.c.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - TimeSignal.cpp<span style="font-size: 80%;"> (source / <a href="TimeSignal.cpp.func.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-1-g190bfc7</td>
+            <td class="headerValue">v0.3.0-122-g63534b7</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">11</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-06-27</td>
+            <td class="headerValue">2017-12-30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">2</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">10</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryLo">12.5 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -107,43 +107,50 @@
 <a name="29"><span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
 <span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>                :            :  */
-<span class="lineNum">      32 </span>                :            : #include &quot;geopm_omp.h&quot;
-<a name="33"><span class="lineNum">      33 </span>                :            : #include &quot;geopm_error.h&quot;</a>
-<span class="lineNum">      34 </span>                :            : #include &quot;config.h&quot;
+<span class="lineNum">      32 </span>                :            : 
+<a name="33"><span class="lineNum">      33 </span>                :            : #include &quot;TimeSignal.hpp&quot;</a>
+<span class="lineNum">      34 </span>                :            : #include &quot;Exception.hpp&quot;
 <span class="lineNum">      35 </span>                :            : 
-<span class="lineNum">      36 </span>                :            : #ifdef _OPENMP
-<a name="37"><span class="lineNum">      37 </span>                :            : #include &lt;omp.h&gt;</a>
-<span class="lineNum">      38 </span>                :            : 
-<span class="lineNum">      39 </span>                :<span class="lineNoCov">          0 : int geopm_no_omp_cpu(int num_cpu, cpu_set_t *no_omp)</span>
-<span class="lineNum">      40 </span>                :            : {
-<a name="41"><span class="lineNum">      41 </span>                :<span class="lineNoCov">          0 :     int err = 0;</span></a>
-<span class="lineNum">      42 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for (int i = 0; i &lt; num_cpu; ++i) {</span>
-<a name="43"><span class="lineNum">      43 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         CPU_SET(i, no_omp);</span></a>
-<span class="lineNum">      44 </span>                :            :     }
-<a name="45"><span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     #pragma omp parallel default(shared)</span></a>
-<span class="lineNum">      46 </span>                :            :     {
-<span class="lineNum">      47 </span>                :<span class="lineNoCov">          0 :         #pragma omp critical</span>
-<span class="lineNum">      48 </span>                :            :         {
-<a name="49"><span class="lineNum">      49 </span>                :<span class="lineNoCov">          0 :             int cpu_index = sched_getcpu();</span></a>
-<span class="lineNum">      50 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (cpu_index &lt; num_cpu)</span>
-<span class="lineNum">      51 </span>                :            :             {
-<span class="lineNum">      52 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 CPU_CLR(cpu_index, no_omp);</span>
-<a name="53"><span class="lineNum">      53 </span>                :            :             }</a>
-<span class="lineNum">      54 </span>                :            :             else {
-<span class="lineNum">      55 </span>                :<span class="lineNoCov">          0 :                 err = GEOPM_ERROR_RUNTIME;</span>
-<span class="lineNum">      56 </span>                :            :             }
-<a name="57"><span class="lineNum">      57 </span>                :            :         } /* end pragma omp critical */</a>
-<span class="lineNum">      58 </span>                :            :     } /* end pragma omp parallel */
-<span class="lineNum">      59 </span>                :<span class="lineNoCov">          0 :     return err;</span>
-<span class="lineNum">      60 </span>                :            : }
-<a name="61"><span class="lineNum">      61 </span>                :            : #else</a>
+<a name="36"><span class="lineNum">      36 </span>                :            : namespace geopm</a>
+<a name="37"><span class="lineNum">      37 </span>                :            : {</a>
+<span class="lineNum">      38 </span>                :<span class="lineCov">          4 :     TimeSignal::TimeSignal()</span>
+<span class="lineNum">      39 </span>                :            :     {
+<span class="lineNum">      40 </span>                :<span class="lineCov">          2 :         geopm_time(&amp;m_time_zero);</span>
+<a name="41"><span class="lineNum">      41 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :<span class="lineCov">          6 :     TimeSignal::~TimeSignal()</span>
+<span class="lineNum">      44 </span>                :            :     {
+<a name="45"><span class="lineNum">      45 </span>                :            : </a>
+<a name="46"><span class="lineNum">      46 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          4 :     }</span></a>
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :<span class="lineNoCov">          0 :     std::string TimeSignal::name(void) const</span>
+<a name="49"><span class="lineNum">      49 </span>                :            :     {</a>
+<span class="lineNum">      50 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return &quot;TIME&quot;;</span>
+<a name="51"><span class="lineNum">      51 </span>                :            :     }</a>
+<span class="lineNum">      52 </span>                :            : 
+<a name="53"><span class="lineNum">      53 </span>                :<span class="lineNoCov">          0 :     int TimeSignal::domain_type(void) const</span></a>
+<span class="lineNum">      54 </span>                :            :     {
+<span class="lineNum">      55 </span>                :<span class="lineNoCov">          0 :         return IPlatformIO::M_DOMAIN_BOARD;</span>
+<a name="56"><span class="lineNum">      56 </span>                :            :     }</a>
+<a name="57"><span class="lineNum">      57 </span>                :            : </a>
+<span class="lineNum">      58 </span>                :<span class="lineNoCov">          0 :     int TimeSignal::domain_idx(void) const</span>
+<span class="lineNum">      59 </span>                :            :     {
+<span class="lineNum">      60 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<a name="61"><span class="lineNum">      61 </span>                :            :     }</a>
 <span class="lineNum">      62 </span>                :            : 
-<span class="lineNum">      63 </span>                :            : int geopm_no_omp_cpu(int num_cpu, cpu_set_t *no_omp)
-<span class="lineNum">      64 </span>                :            : {
-<a name="65"><span class="lineNum">      65 </span>                :            :     return GEOPM_ERROR_OPENMP_UNSUPPORTED;</a>
-<span class="lineNum">      66 </span>                :            : }
-<span class="lineNum">      67 </span>                :            : 
-<span class="lineNum">      68 </span>                :            : #endif
+<span class="lineNum">      63 </span>                :<span class="lineCov">          2 :     double TimeSignal::sample(void) const</span>
+<span class="lineNum">      64 </span>                :            :     {
+<a name="65"><span class="lineNum">      65 </span>                :            :         struct geopm_time_s tt;</a>
+<span class="lineNum">      66 </span>                :<span class="lineCov">          2 :         geopm_time(&amp;tt);</span>
+<span class="lineNum">      67 </span>                :<span class="lineCov">          2 :         return geopm_time_diff(&amp;m_time_zero, &amp;tt);</span>
+<a name="68"><span class="lineNum">      68 </span>                :            :     }</a>
+<a name="69"><span class="lineNum">      69 </span>                :            : </a>
+<span class="lineNum">      70 </span>                :<span class="lineNoCov">          0 :     std::string TimeSignal::log(double sample) const</span>
+<span class="lineNum">      71 </span>                :            :     {
+<span class="lineNum">      72 </span>                :            :         throw Exception(&quot;TimeSignal::log() not yet implemented&quot;,
+<a name="73"><span class="lineNum">      73 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      74 </span>                :            :     }
+<span class="lineNum">      75 </span>                :            : }
 </pre>
       </td>
     </tr>

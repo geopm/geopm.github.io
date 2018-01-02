@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-1-g190bfc7 - src/geopmctl_main.c</title>
+  <title>LCOV - v0.3.0-122-g63534b7 - src/geopmctl_main.c</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-1-g190bfc7</td>
+            <td class="headerValue">v0.3.0-122-g63534b7</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">84</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">50</td>
+            <td class="headerCovTableEntry">79</td>
+            <td class="headerCovTableEntryLo">63.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-06-27</td>
+            <td class="headerValue">2017-12-30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">0</td>
             <td class="headerCovTableEntry">1</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">30</td>
+            <td class="headerCovTableEntry">57</td>
+            <td class="headerCovTableEntryLo">52.6 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -125,162 +125,147 @@
 <span class="lineNum">      47 </span>                :            :     GEOPMCTL_STRING_LENGTH = 128,
 <span class="lineNum">      48 </span>                :            : };
 <a name="49"><span class="lineNum">      49 </span>                :            : </a>
-<a name="50"><span class="lineNum">      50 </span>                :            : int geopmctl_main(const char *policy_path, const char *sample_key);</a>
+<a name="50"><span class="lineNum">      50 </span>                :            : int geopmctl_main(const char *policy_path);</a>
 <span class="lineNum">      51 </span>                :            : 
-<span class="lineNum">      52 </span>                :<span class="lineNoCov">          0 : int main(int argc, char **argv)</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">          4 : int main(int argc, char **argv)</span>
 <a name="53"><span class="lineNum">      53 </span>                :            : {</a>
 <span class="lineNum">      54 </span>                :            :     int opt;
-<span class="lineNum">      55 </span>                :<span class="lineNoCov">          0 :     int world_size = 1, my_rank = 0, i;</span>
-<span class="lineNum">      56 </span>                :<span class="lineNoCov">          0 :     int err0 = 0;</span>
-<a name="57"><span class="lineNum">      57 </span>                :<span class="lineNoCov">          0 :     int err_mpi = 0;</span></a>
-<span class="lineNum">      58 </span>                :<span class="lineNoCov">          0 :     char error_str[MPI_MAX_ERROR_STRING] = {0};</span>
-<span class="lineNum">      59 </span>                :<span class="lineNoCov">          0 :     char policy_config[GEOPMCTL_STRING_LENGTH] = {0};</span>
-<span class="lineNum">      60 </span>                :<span class="lineNoCov">          0 :     char policy_key[GEOPMCTL_STRING_LENGTH] = {0};</span>
-<a name="61"><span class="lineNum">      61 </span>                :<span class="lineNoCov">          0 :     char *policy_ptr = NULL;</span></a>
-<span class="lineNum">      62 </span>                :<span class="lineNoCov">          0 :     char sample_key[GEOPMCTL_STRING_LENGTH] = {0};</span>
-<span class="lineNum">      63 </span>                :<span class="lineNoCov">          0 :     char *arg_ptr = NULL;</span>
-<span class="lineNum">      64 </span>                :<span class="lineNoCov">          0 :     MPI_Comm comm_world = MPI_COMM_NULL;</span>
-<a name="65"><span class="lineNum">      65 </span>                :<span class="lineNoCov">          0 :     const char *usage = &quot;    %s [--help] [--version]\n&quot;</span></a>
-<span class="lineNum">      66 </span>                :            :                         &quot;              -c policy_config\n&quot;
-<span class="lineNum">      67 </span>                :            :                         &quot;              [-s sample_key]\n&quot;
-<span class="lineNum">      68 </span>                :            :                         &quot;\n&quot;
-<a name="69"><span class="lineNum">      69 </span>                :            :                         &quot;DESCRIPTION\n&quot;</a>
-<span class="lineNum">      70 </span>                :            :                         &quot;       The geopmctl application runs concurrently with a computational MPI\n&quot;
-<span class="lineNum">      71 </span>                :            :                         &quot;       application to manage power settings on compute nodes allocated to the\n&quot;
-<span class="lineNum">      72 </span>                :            :                         &quot;       computation MPI application.\n&quot;
-<a name="73"><span class="lineNum">      73 </span>                :            :                         &quot;\n&quot;</a>
-<span class="lineNum">      74 </span>                :            :                         &quot;OPTIONS\n&quot;
-<span class="lineNum">      75 </span>                :            :                         &quot;       --help\n&quot;
-<span class="lineNum">      76 </span>                :            :                         &quot;              Print  brief summary of the command line usage information, then\n&quot;
-<a name="77"><span class="lineNum">      77 </span>                :            :                         &quot;              exit.\n&quot;</a>
-<span class="lineNum">      78 </span>                :            :                         &quot;\n&quot;
-<span class="lineNum">      79 </span>                :            :                         &quot;       --version\n&quot;
-<span class="lineNum">      80 </span>                :            :                         &quot;              Print version of geopm to standard output, then exit.\n&quot;
-<a name="81"><span class="lineNum">      81 </span>                :            :                         &quot;\n&quot;</a>
-<span class="lineNum">      82 </span>                :            :                         &quot;       -c policy_config\n&quot;
-<span class="lineNum">      83 </span>                :            :                         &quot;              Policy configuration file or POSIX shared memory key  which  may\n&quot;
-<span class="lineNum">      84 </span>                :            :                         &quot;              be created with the geopm_policy_c(3) interface or the geopmpol‐\n&quot;
-<a name="85"><span class="lineNum">      85 </span>                :            :                         &quot;              icy(3) application.\n&quot;</a>
-<span class="lineNum">      86 </span>                :            :                         &quot;\n&quot;
-<span class="lineNum">      87 </span>                :            :                         &quot;       -s sample_key\n&quot;
-<span class="lineNum">      88 </span>                :            :                         &quot;              POSIX shared memory key referencing memory  written  to  by  the\n&quot;
-<a name="89"><span class="lineNum">      89 </span>                :            :                         &quot;              compute  application  to  provide  the geopmctl application with\n&quot;</a>
-<span class="lineNum">      90 </span>                :            :                         &quot;              performance profile information. See geopm_ctl_c(3) for informa‐\n&quot;
-<span class="lineNum">      91 </span>                :            :                         &quot;              tion  on  how to create the sample shared memory region for pro‐\n&quot;
-<span class="lineNum">      92 </span>                :            :                         &quot;              file feedback.\n&quot;
-<a name="93"><span class="lineNum">      93 </span>                :            :                         &quot;\n&quot;</a>
-<span class="lineNum">      94 </span>                :            :                         &quot;    Copyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.\n&quot;
-<span class="lineNum">      95 </span>                :            :                         &quot;\n&quot;;
-<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :     if (argc &gt; 1 &amp;&amp;</span>
-<a name="97"><span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :         strncmp(argv[1], &quot;--version&quot;, strlen(&quot;--version&quot;) + 1) == 0) {</span></a>
-<span class="lineNum">      98 </span>                :<span class="lineNoCov">          0 :         printf(&quot;%s\n&quot;, geopm_version());</span>
-<span class="lineNum">      99 </span>                :<span class="lineNoCov">          0 :         printf(&quot;\n\nCopyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.\n\n&quot;);</span>
-<span class="lineNum">     100 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
-<a name="101"><span class="lineNum">     101 </span>                :            :     }</a>
-<span class="lineNum">     102 </span>                :<span class="lineNoCov">          0 :     if (argc &gt; 1 &amp;&amp; (</span>
-<span class="lineNum">     103 </span>                :<span class="lineNoCov">          0 :             strncmp(argv[1], &quot;--help&quot;, strlen(&quot;--help&quot;) + 1) == 0 ||</span>
-<span class="lineNum">     104 </span>                :<span class="lineNoCov">          0 :             strncmp(argv[1], &quot;-h&quot;, strlen(&quot;-h&quot;) + 1) == 0)) {</span>
-<a name="105"><span class="lineNum">     105 </span>                :<span class="lineNoCov">          0 :         printf(usage, argv[0]);</span></a>
-<span class="lineNum">     106 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
-<span class="lineNum">     107 </span>                :            :     }
-<span class="lineNum">     108 </span>                :            : 
-<a name="109"><span class="lineNum">     109 </span>                :<span class="lineNoCov">          0 :     while (!err0 &amp;&amp; (opt = getopt(argc, argv, &quot;c:k:s:&quot;)) != -1) {</span></a>
-<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 :         arg_ptr = NULL;</span>
-<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :         switch (opt) {</span>
-<span class="lineNum">     112 </span>                :            :             case 'c':
-<a name="113"><span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :                 arg_ptr = policy_config;</span></a>
-<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 :                 break;</span>
-<span class="lineNum">     115 </span>                :            :             case 'k':
-<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :                 arg_ptr = policy_key;</span>
-<a name="117"><span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 :                 break;</span></a>
-<span class="lineNum">     118 </span>                :            :             case 's':
-<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :                 arg_ptr = sample_key;</span>
-<span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 :                 break;</span>
-<a name="121"><span class="lineNum">     121 </span>                :            :             default:</a>
-<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :                 fprintf(stderr, &quot;Error: unknown parameter \&quot;%c\&quot;\n&quot;, opt);</span>
-<span class="lineNum">     123 </span>                :<span class="lineNoCov">          0 :                 fprintf(stderr, usage, argv[0]);</span>
-<span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :                 err0 = EINVAL;</span>
-<a name="125"><span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :                 break;</span></a>
-<span class="lineNum">     126 </span>                :            :         }
-<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :         if (!err0) {</span>
-<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :             strncpy(arg_ptr, optarg, GEOPMCTL_STRING_LENGTH);</span>
-<a name="129"><span class="lineNum">     129 </span>                :<span class="lineNoCov">          0 :             if (arg_ptr[GEOPMCTL_STRING_LENGTH - 1] != '\0') {</span></a>
-<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :                 fprintf(stderr, &quot;Error: config_file name too long\n&quot;);</span>
-<span class="lineNum">     131 </span>                :<span class="lineNoCov">          0 :                 err0 = EINVAL;</span>
-<span class="lineNum">     132 </span>                :            :             }
-<a name="133"><span class="lineNum">     133 </span>                :            :         }</a>
-<span class="lineNum">     134 </span>                :            :     }
-<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :     if (!err0 &amp;&amp; optind != argc) {</span>
-<span class="lineNum">     136 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, &quot;Error: %s does not take positional arguments\n&quot;, argv[0]);</span>
-<a name="137"><span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, usage, argv[0]);</span></a>
-<span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :         err0 = EINVAL;</span>
-<span class="lineNum">     139 </span>                :            :     }
-<span class="lineNum">     140 </span>                :            : 
-<a name="141"><span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :     if (!err0) {</span></a>
-<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :         err_mpi = PMPI_Init(&amp;argc, &amp;argv);</span>
-<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :         comm_world = MPI_COMM_WORLD;</span>
-<span class="lineNum">     144 </span>                :<span class="lineNoCov">          0 :         if (!err_mpi) {</span>
-<a name="145"><span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :             err_mpi = PMPI_Comm_size(comm_world, &amp;world_size);</span></a>
-<span class="lineNum">     146 </span>                :            :         }
-<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 :         if (!err_mpi) {</span>
-<span class="lineNum">     148 </span>                :<span class="lineNoCov">          0 :             err_mpi = PMPI_Comm_rank(comm_world, &amp;my_rank);</span>
-<a name="149"><span class="lineNum">     149 </span>                :            :         }</a>
-<span class="lineNum">     150 </span>                :            :     }
-<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :     if (err_mpi) {</span>
-<span class="lineNum">     152 </span>                :<span class="lineNoCov">          0 :         i = MPI_MAX_ERROR_STRING;</span>
-<a name="153"><span class="lineNum">     153 </span>                :<span class="lineNoCov">          0 :         PMPI_Error_string(err_mpi, error_str, &amp;i);</span></a>
-<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, &quot;Error: %s\n&quot;, error_str);</span>
-<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :         err0 = err_mpi;</span>
-<span class="lineNum">     156 </span>                :            :     }
-<a name="157"><span class="lineNum">     157 </span>                :            : </a>
-<span class="lineNum">     158 </span>                :            : 
-<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :     if (!err0 &amp;&amp;</span>
-<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :         strlen(policy_config) != 0 &amp;&amp;</span>
-<a name="161"><span class="lineNum">     161 </span>                :<span class="lineNoCov">          0 :         strlen(policy_key) != 0) {</span></a>
-<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :         err0 = EINVAL;</span>
-<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, &quot;Error: %s either -c and -k cannot both be specified\n&quot;, argv[0]);</span>
-<span class="lineNum">     164 </span>                :            :     }
-<a name="165"><span class="lineNum">     165 </span>                :            : </a>
-<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :     if (!err0 &amp;&amp; !my_rank) {</span>
-<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :         if (policy_config[0]) {</span>
-<span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 :             printf(&quot;    Policy config: %s\n&quot;, policy_config);</span>
-<a name="169"><span class="lineNum">     169 </span>                :            :         }</a>
-<span class="lineNum">     170 </span>                :<span class="lineNoCov">          0 :         if (policy_key[0]) {</span>
-<span class="lineNum">     171 </span>                :<span class="lineNoCov">          0 :             printf(&quot;    Policy key:    %s\n&quot;, policy_key);</span>
-<span class="lineNum">     172 </span>                :            :         }
-<a name="173"><span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :         if (sample_key[0]) {</span></a>
-<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :             printf(&quot;    Sample key:    %s\n&quot;, sample_key);</span>
+<span class="lineNum">      55 </span>                :<span class="lineCov">          4 :     int world_size = 1, my_rank = 0, i;</span>
+<span class="lineNum">      56 </span>                :<span class="lineCov">          4 :     int err0 = 0;</span>
+<a name="57"><span class="lineNum">      57 </span>                :<span class="lineCov">          4 :     int err_mpi = 0;</span></a>
+<span class="lineNum">      58 </span>                :<span class="lineCov">          4 :     char error_str[MPI_MAX_ERROR_STRING] = {0};</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">          4 :     char policy_config[GEOPMCTL_STRING_LENGTH] = {0};</span>
+<span class="lineNum">      60 </span>                :<span class="lineCov">          4 :     char policy_key[GEOPMCTL_STRING_LENGTH] = {0};</span>
+<a name="61"><span class="lineNum">      61 </span>                :<span class="lineCov">          4 :     char *policy_ptr = NULL;</span></a>
+<span class="lineNum">      62 </span>                :<span class="lineCov">          4 :     char *arg_ptr = NULL;</span>
+<span class="lineNum">      63 </span>                :<span class="lineCov">          4 :     MPI_Comm comm_world = MPI_COMM_NULL;</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">          4 :     const char *usage = &quot;    %s [--help] [--version]\n&quot;</span>
+<a name="65"><span class="lineNum">      65 </span>                :            :                         &quot;              -c policy_config\n&quot;</a>
+<span class="lineNum">      66 </span>                :            :                         &quot;\n&quot;
+<span class="lineNum">      67 </span>                :            :                         &quot;DESCRIPTION\n&quot;
+<span class="lineNum">      68 </span>                :            :                         &quot;       The geopmctl application runs concurrently with a computational MPI\n&quot;
+<a name="69"><span class="lineNum">      69 </span>                :            :                         &quot;       application to manage power settings on compute nodes allocated to the\n&quot;</a>
+<span class="lineNum">      70 </span>                :            :                         &quot;       computation MPI application.\n&quot;
+<span class="lineNum">      71 </span>                :            :                         &quot;\n&quot;
+<span class="lineNum">      72 </span>                :            :                         &quot;OPTIONS\n&quot;
+<a name="73"><span class="lineNum">      73 </span>                :            :                         &quot;       --help\n&quot;</a>
+<span class="lineNum">      74 </span>                :            :                         &quot;              Print  brief summary of the command line usage information, then\n&quot;
+<span class="lineNum">      75 </span>                :            :                         &quot;              exit.\n&quot;
+<span class="lineNum">      76 </span>                :            :                         &quot;\n&quot;
+<a name="77"><span class="lineNum">      77 </span>                :            :                         &quot;       --version\n&quot;</a>
+<span class="lineNum">      78 </span>                :            :                         &quot;              Print version of geopm to standard output, then exit.\n&quot;
+<span class="lineNum">      79 </span>                :            :                         &quot;\n&quot;
+<span class="lineNum">      80 </span>                :            :                         &quot;       -c policy_config\n&quot;
+<a name="81"><span class="lineNum">      81 </span>                :            :                         &quot;              Policy configuration file or POSIX shared memory key  which  may\n&quot;</a>
+<span class="lineNum">      82 </span>                :            :                         &quot;              be created with the geopm_policy_c(3) interface or the geopmpol‐\n&quot;
+<span class="lineNum">      83 </span>                :            :                         &quot;              icy(3) application.\n&quot;
+<span class="lineNum">      84 </span>                :            :                         &quot;\n&quot;
+<a name="85"><span class="lineNum">      85 </span>                :            :                         &quot;    Copyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.\n&quot;</a>
+<span class="lineNum">      86 </span>                :            :                         &quot;\n&quot;;
+<span class="lineNum">      87 </span>[<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 4 times"> + </span>]:<span class="lineCov">          4 :     if (argc &gt; 1 &amp;&amp;</span>
+<span class="lineNum">      88 </span>                :<span class="lineCov">          4 :         strncmp(argv[1], &quot;--version&quot;, strlen(&quot;--version&quot;) + 1) == 0) {</span>
+<a name="89"><span class="lineNum">      89 </span>                :<span class="lineNoCov">          0 :         printf(&quot;%s\n&quot;, geopm_version());</span></a>
+<span class="lineNum">      90 </span>                :<span class="lineNoCov">          0 :         printf(&quot;\n\nCopyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.\n\n&quot;);</span>
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">      92 </span>                :            :     }
+<a name="93"><span class="lineNum">      93 </span>[<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          4 :     if (argc &gt; 1 &amp;&amp; (</span></a>
+<span class="lineNum">      94 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :             strncmp(argv[1], &quot;--help&quot;, strlen(&quot;--help&quot;) + 1) == 0 ||</span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">          4 :             strncmp(argv[1], &quot;-h&quot;, strlen(&quot;-h&quot;) + 1) == 0)) {</span>
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :         printf(usage, argv[0]);</span>
+<a name="97"><span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :         return 0;</span></a>
+<span class="lineNum">      98 </span>                :            :     }
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>[<span class="branchCov" title="Branch 0 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 4 times"> + </span><span class="branchCov" title="Branch 4 was taken 4 times"> + </span>]:<span class="lineCov">          8 :     while (!err0 &amp;&amp; (opt = getopt(argc, argv, &quot;c:k:&quot;)) != -1) {</span>
+<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">          4 :         arg_ptr = NULL;</span></a>
+<span class="lineNum">     102 </span>     [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          4 :         switch (opt) {</span>
+<span class="lineNum">     103 </span>                :            :             case 'c':
+<span class="lineNum">     104 </span>                :<span class="lineCov">          4 :                 arg_ptr = policy_config;</span>
+<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">          4 :                 break;</span></a>
+<span class="lineNum">     106 </span>                :            :             case 'k':
+<span class="lineNum">     107 </span>                :<span class="lineNoCov">          0 :                 arg_ptr = policy_key;</span>
+<span class="lineNum">     108 </span>                :<span class="lineNoCov">          0 :                 break;</span>
+<a name="109"><span class="lineNum">     109 </span>                :            :             default:</a>
+<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 :                 fprintf(stderr, &quot;Error: unknown parameter \&quot;%c\&quot;\n&quot;, opt);</span>
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :                 fprintf(stderr, usage, argv[0]);</span>
+<span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 :                 err0 = EINVAL;</span>
+<a name="113"><span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :                 break;</span></a>
+<span class="lineNum">     114 </span>                :            :         }
+<span class="lineNum">     115 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :         if (!err0) {</span>
+<span class="lineNum">     116 </span>                :<span class="lineCov">          4 :             strncpy(arg_ptr, optarg, GEOPMCTL_STRING_LENGTH);</span>
+<a name="117"><span class="lineNum">     117 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :             if (arg_ptr[GEOPMCTL_STRING_LENGTH - 1] != '\0') {</span></a>
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :                 fprintf(stderr, &quot;Error: config_file name too long\n&quot;);</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :                 err0 = EINVAL;</span>
+<span class="lineNum">     120 </span>                :            :             }
+<a name="121"><span class="lineNum">     121 </span>                :            :         }</a>
+<span class="lineNum">     122 </span>                :            :     }
+<span class="lineNum">     123 </span>[<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 4 times"> + </span>]:<span class="lineCov">          4 :     if (!err0 &amp;&amp; optind != argc) {</span>
+<span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, &quot;Error: %s does not take positional arguments\n&quot;, argv[0]);</span>
+<a name="125"><span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, usage, argv[0]);</span></a>
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :         err0 = EINVAL;</span>
+<span class="lineNum">     127 </span>                :            :     }
+<span class="lineNum">     128 </span>                :            : 
+<a name="129"><span class="lineNum">     129 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :     if (!err0) {</span></a>
+<span class="lineNum">     130 </span>                :<span class="lineCov">          4 :         err_mpi = PMPI_Init(&amp;argc, &amp;argv);</span>
+<span class="lineNum">     131 </span>                :<span class="lineCov">          4 :         comm_world = MPI_COMM_WORLD;</span>
+<span class="lineNum">     132 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :         if (!err_mpi) {</span>
+<a name="133"><span class="lineNum">     133 </span>                :<span class="lineCov">          4 :             err_mpi = PMPI_Comm_size(comm_world, &amp;world_size);</span></a>
+<span class="lineNum">     134 </span>                :            :         }
+<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :         if (!err_mpi) {</span>
+<span class="lineNum">     136 </span>                :<span class="lineCov">          4 :             err_mpi = PMPI_Comm_rank(comm_world, &amp;my_rank);</span>
+<a name="137"><span class="lineNum">     137 </span>                :            :         }</a>
+<span class="lineNum">     138 </span>                :            :     }
+<span class="lineNum">     139 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :     if (err_mpi) {</span>
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :         i = MPI_MAX_ERROR_STRING;</span>
+<a name="141"><span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :         PMPI_Error_string(err_mpi, error_str, &amp;i);</span></a>
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, &quot;Error: %s\n&quot;, error_str);</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :         err0 = err_mpi;</span>
+<span class="lineNum">     144 </span>                :            :     }
+<a name="145"><span class="lineNum">     145 </span>                :            : </a>
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>[<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          4 :     if (!err0 &amp;&amp;</span>
+<span class="lineNum">     148 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :         strlen(policy_config) != 0 &amp;&amp;</span>
+<a name="149"><span class="lineNum">     149 </span>                :<span class="lineCov">          4 :         strlen(policy_key) != 0) {</span></a>
+<span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :         err0 = EINVAL;</span>
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr, &quot;Error: %s either -c and -k cannot both be specified\n&quot;, argv[0]);</span>
+<span class="lineNum">     152 </span>                :            :     }
+<a name="153"><span class="lineNum">     153 </span>                :            : </a>
+<span class="lineNum">     154 </span>[<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 3 times"> + </span>]:<span class="lineCov">          4 :     if (!err0 &amp;&amp; !my_rank) {</span>
+<span class="lineNum">     155 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         if (policy_config[0]) {</span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">          1 :             printf(&quot;    Policy config: %s\n&quot;, policy_config);</span>
+<a name="157"><span class="lineNum">     157 </span>                :            :         }</a>
+<span class="lineNum">     158 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :         if (policy_key[0]) {</span>
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :             printf(&quot;    Policy key:    %s\n&quot;, policy_key);</span>
+<span class="lineNum">     160 </span>                :            :         }
+<a name="161"><span class="lineNum">     161 </span>                :<span class="lineCov">          1 :         printf(&quot;\n&quot;);</span></a>
+<span class="lineNum">     162 </span>                :            :     }
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :     if (!err0) {</span>
+<a name="165"><span class="lineNum">     165 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :         if (strlen(policy_config)) {</span></a>
+<span class="lineNum">     166 </span>                :<span class="lineCov">          4 :             policy_ptr = policy_config;</span>
+<span class="lineNum">     167 </span>                :            :         }
+<span class="lineNum">     168 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         else if (strlen(policy_key)) {</span>
+<a name="169"><span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :             policy_ptr = policy_key;</span></a>
+<span class="lineNum">     170 </span>                :            :         }
+<span class="lineNum">     171 </span>                :            :         else {
+<span class="lineNum">     172 </span>                :            :             /* reusing the policy_config buffer to pass environment variables */
+<a name="173"><span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :             strncpy(policy_config, geopm_env_policy(),GEOPMCTL_STRING_LENGTH-1);</span></a>
+<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :             policy_ptr = policy_config;</span>
 <span class="lineNum">     175 </span>                :            :         }
-<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 :         printf(&quot;\n&quot;);</span>
-<a name="177"><span class="lineNum">     177 </span>                :            :     }</a>
-<span class="lineNum">     178 </span>                :            : 
-<span class="lineNum">     179 </span>                :<span class="lineNoCov">          0 :     if (!err0) {</span>
-<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :         if (strlen(policy_config)) {</span>
-<a name="181"><span class="lineNum">     181 </span>                :<span class="lineNoCov">          0 :             policy_ptr = policy_config;</span></a>
-<span class="lineNum">     182 </span>                :            :         }
-<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :         else if (strlen(policy_key)) {</span>
-<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :             policy_ptr = policy_key;</span>
+<span class="lineNum">     176 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          4 :         if (!my_rank) {</span>
+<a name="177"><span class="lineNum">     177 </span>                :<span class="lineCov">          1 :             err0 = geopmctl_main(policy_ptr);</span></a>
+<span class="lineNum">     178 </span>                :            :         }
+<span class="lineNum">     179 </span>                :            :         else {
+<span class="lineNum">     180 </span>                :<span class="lineCov">          3 :             err0 = geopmctl_main(NULL);</span>
+<a name="181"><span class="lineNum">     181 </span>                :            :         }</a>
+<span class="lineNum">     182 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :         if (err0) {</span>
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :             geopm_error_message(err0, error_str, GEOPMCTL_STRING_LENGTH);</span>
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :             fprintf(stderr, &quot;Error: %s\n&quot;, error_str);</span>
 <a name="185"><span class="lineNum">     185 </span>                :            :         }</a>
-<span class="lineNum">     186 </span>                :            :         else {
-<span class="lineNum">     187 </span>                :            :             /* reusing the policy_config buffer to pass environment variables */
-<span class="lineNum">     188 </span>                :<span class="lineNoCov">          0 :             strncpy(policy_config, geopm_env_policy(),GEOPMCTL_STRING_LENGTH-1);</span>
-<a name="189"><span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :             policy_ptr = policy_config;</span></a>
-<span class="lineNum">     190 </span>                :            :         }
-<span class="lineNum">     191 </span>                :<span class="lineNoCov">          0 :         if (!my_rank) {</span>
-<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :             err0 = geopmctl_main(policy_ptr, sample_key);</span>
-<a name="193"><span class="lineNum">     193 </span>                :            :         }</a>
-<span class="lineNum">     194 </span>                :            :         else {
-<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :             err0 = geopmctl_main(NULL, sample_key);</span>
-<span class="lineNum">     196 </span>                :            :         }
-<a name="197"><span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :         if (err0) {</span></a>
-<span class="lineNum">     198 </span>                :<span class="lineNoCov">          0 :             geopm_error_message(err0, error_str, GEOPMCTL_STRING_LENGTH);</span>
-<span class="lineNum">     199 </span>                :<span class="lineNoCov">          0 :             fprintf(stderr, &quot;Error: %s\n&quot;, error_str);</span>
-<span class="lineNum">     200 </span>                :            :         }
-<a name="201"><span class="lineNum">     201 </span>                :            :     }</a>
-<span class="lineNum">     202 </span>                :            : 
-<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :     PMPI_Finalize();</span>
-<span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 :     return err0;</span>
-<a name="205"><span class="lineNum">     205 </span>                :            : }</a>
+<span class="lineNum">     186 </span>                :            :     }
+<span class="lineNum">     187 </span>                :            : 
+<span class="lineNum">     188 </span>                :<span class="lineCov">          4 :     PMPI_Finalize();</span>
+<a name="189"><span class="lineNum">     189 </span>                :<span class="lineCov">          4 :     return err0;</span></a>
+<span class="lineNum">     190 </span>                :            : }
 </pre>
       </td>
     </tr>

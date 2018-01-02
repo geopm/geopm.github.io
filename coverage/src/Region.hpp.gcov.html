@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-1-g190bfc7 - src/Region.hpp</title>
+  <title>LCOV - v0.3.0-122-g63534b7 - src/Region.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-1-g190bfc7</td>
+            <td class="headerValue">v0.3.0-122-g63534b7</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">2</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-06-27</td>
+            <td class="headerValue">2017-12-30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -56,8 +56,8 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">1</td>
             <td class="headerCovTableEntry">2</td>
-            <td class="headerCovTableEntry">4</td>
             <td class="headerCovTableEntryLo">50.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -126,8 +126,8 @@
 <span class="lineNum">      48 </span>                :            :     class IRegion
 <a name="49"><span class="lineNum">      49 </span>                :            :     {</a>
 <a name="50"><span class="lineNum">      50 </span>                :            :         public:</a>
-<span class="lineNum">      51 </span>                :<span class="lineCov">        469 :             IRegion() {}</span>
-<span class="lineNum">      52 </span>[<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 352 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 85 times"> + </span>]:<span class="lineCov">        874 :             virtual ~IRegion() {}</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">        225 :             IRegion() {}</span>
+<span class="lineNum">      52 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 208 times"> + </span>]:<span class="lineCov">        416 :             virtual ~IRegion() {}</span>
 <a name="53"><span class="lineNum">      53 </span>                :            :             /// @brief Record an entry into the region.</a>
 <span class="lineNum">      54 </span>                :            :             virtual void entry(void) = 0;
 <span class="lineNum">      55 </span>                :            :             /// @brief Return the number of entries into the region.
@@ -154,256 +154,264 @@
 <span class="lineNum">      76 </span>                :            :             /// @brief Retrieve the unique region identifier.
 <a name="77"><span class="lineNum">      77 </span>                :            :             /// @return 64 bit region identifier.</a>
 <span class="lineNum">      78 </span>                :            :             virtual uint64_t identifier(void) const = 0;
-<span class="lineNum">      79 </span>                :            :             /// @brief Add increment amount to the total time spent in MPI calls
-<span class="lineNum">      80 </span>                :            :             //  during this region.
-<a name="81"><span class="lineNum">      81 </span>                :            :             //  @param [in] mpi_increment_amout Value to add to the MPI time total.</a>
-<span class="lineNum">      82 </span>                :            :             virtual void increment_mpi_time(double mpi_increment_amount) = 0;
-<span class="lineNum">      83 </span>                :            :             /// @brief Return an aggregated sample to send up the tree.
-<span class="lineNum">      84 </span>                :            :             /// Called once this region has converged to send a sample
-<a name="85"><span class="lineNum">      85 </span>                :            :             /// up to the next level of the tree.</a>
-<span class="lineNum">      86 </span>                :            :             /// @param [out] Sample message structure to fill in.
-<span class="lineNum">      87 </span>                :            :             virtual void sample_message(struct geopm_sample_message_s &amp;sample) = 0;
-<span class="lineNum">      88 </span>                :            :             /// @brief Returns the latest value
-<a name="89"><span class="lineNum">      89 </span>                :            :             virtual double signal(int domain_idx, int signal_type) = 0;</a>
-<span class="lineNum">      90 </span>                :            :             /// @brief Retrieve the number of valid samples for a domain of control.
-<span class="lineNum">      91 </span>                :            :             ///
-<span class="lineNum">      92 </span>                :            :             /// Get the number of valid samples  for a given domain of control and
-<a name="93"><span class="lineNum">      93 </span>                :            :             /// a signal type for the buffered data associated with the application</a>
-<span class="lineNum">      94 </span>                :            :             /// region. This is the number of samples used to calculate the other
-<span class="lineNum">      95 </span>                :            :             /// statistics.
-<span class="lineNum">      96 </span>                :            :             ///
-<a name="97"><span class="lineNum">      97 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">      98 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">      99 </span>                :            :             ///        Policy.
-<span class="lineNum">     100 </span>                :            :             ///
-<a name="101"><span class="lineNum">     101 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     102 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     103 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     104 </span>                :            :             ///
-<a name="105"><span class="lineNum">     105 </span>                :            :             /// @return The number of valid samples.</a>
-<span class="lineNum">     106 </span>                :            :             virtual int num_sample(int domain_idx, int signal_type) const = 0;
-<span class="lineNum">     107 </span>                :            :             /// @brief Retrieve the mean signal value for a domain of control.
-<span class="lineNum">     108 </span>                :            :             ///
-<a name="109"><span class="lineNum">     109 </span>                :            :             /// Get the mean signal value for a given domain of control and</a>
-<span class="lineNum">     110 </span>                :            :             /// a signal type for the buffered data associated with the application
-<span class="lineNum">     111 </span>                :            :             /// region.
-<span class="lineNum">     112 </span>                :            :             ///
-<a name="113"><span class="lineNum">     113 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">     114 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">     115 </span>                :            :             ///        Policy.
-<span class="lineNum">     116 </span>                :            :             ///
-<a name="117"><span class="lineNum">     117 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     118 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     119 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     120 </span>                :            :             ///
-<a name="121"><span class="lineNum">     121 </span>                :            :             /// @return The mean signal value.</a>
-<span class="lineNum">     122 </span>                :            :             virtual double mean(int domain_idx, int signal_type) const = 0;
-<span class="lineNum">     123 </span>                :            :             /// @brief Retrieve the median signal value for a domain of control.
-<span class="lineNum">     124 </span>                :            :             ///
-<a name="125"><span class="lineNum">     125 </span>                :            :             /// Get the median signal value for a given domain of control and</a>
-<span class="lineNum">     126 </span>                :            :             /// a signal type for the buffered data associated with the application
-<span class="lineNum">     127 </span>                :            :             /// region.
-<span class="lineNum">     128 </span>                :            :             ///
-<a name="129"><span class="lineNum">     129 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">     130 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">     131 </span>                :            :             ///        Policy.
-<span class="lineNum">     132 </span>                :            :             ///
-<a name="133"><span class="lineNum">     133 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     134 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     135 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     136 </span>                :            :             ///
-<a name="137"><span class="lineNum">     137 </span>                :            :             /// @return The median signal value.</a>
-<span class="lineNum">     138 </span>                :            :             virtual double median(int domain_idx, int signal_type) const = 0;
-<span class="lineNum">     139 </span>                :            :             /// @brief Retrieve the standard deviation of the signal values for a domain of control.
-<span class="lineNum">     140 </span>                :            :             ///
-<a name="141"><span class="lineNum">     141 </span>                :            :             /// Get the standard deviation of the signal values for a given domain of</a>
-<span class="lineNum">     142 </span>                :            :             /// control and a signal type for the buffered data associated with the
-<span class="lineNum">     143 </span>                :            :             /// application region.
-<span class="lineNum">     144 </span>                :            :             ///
-<a name="145"><span class="lineNum">     145 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">     146 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">     147 </span>                :            :             ///        Policy.
-<span class="lineNum">     148 </span>                :            :             ///
-<a name="149"><span class="lineNum">     149 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     150 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     151 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     152 </span>                :            :             ///
-<a name="153"><span class="lineNum">     153 </span>                :            :             /// @return The standard deviation of the signal values.</a>
-<span class="lineNum">     154 </span>                :            :             virtual double std_deviation(int domain_idx, int signal_type) const = 0;
-<span class="lineNum">     155 </span>                :            :             /// @brief Retrieve the min signal value for a domain of control.
-<span class="lineNum">     156 </span>                :            :             ///
-<a name="157"><span class="lineNum">     157 </span>                :            :             /// Get the min signal value for a given domain of control and</a>
-<span class="lineNum">     158 </span>                :            :             /// a signal type for the buffered data associated with the application
-<span class="lineNum">     159 </span>                :            :             /// region.
-<span class="lineNum">     160 </span>                :            :             ///
-<a name="161"><span class="lineNum">     161 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">     162 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">     163 </span>                :            :             ///        Policy.
-<span class="lineNum">     164 </span>                :            :             ///
-<a name="165"><span class="lineNum">     165 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     166 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     167 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     168 </span>                :            :             ///
-<a name="169"><span class="lineNum">     169 </span>                :            :             /// @return The min signal value.</a>
-<span class="lineNum">     170 </span>                :            :             virtual double min(int domain_idx, int signal_type) const = 0;
-<span class="lineNum">     171 </span>                :            :             /// @brief Retrieve the max signal value for a domain of control.
-<span class="lineNum">     172 </span>                :            :             ///
-<a name="173"><span class="lineNum">     173 </span>                :            :             /// Get the max signal value for a given domain of control and</a>
-<span class="lineNum">     174 </span>                :            :             /// a signal type for the buffered data associated with the application
-<span class="lineNum">     175 </span>                :            :             /// region.
-<span class="lineNum">     176 </span>                :            :             ///
-<a name="177"><span class="lineNum">     177 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">     178 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">     179 </span>                :            :             ///        Policy.
-<span class="lineNum">     180 </span>                :            :             ///
-<a name="181"><span class="lineNum">     181 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     182 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     183 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     184 </span>                :            :             ///
-<a name="185"><span class="lineNum">     185 </span>                :            :             /// @return The max signal value.</a>
-<span class="lineNum">     186 </span>                :            :             virtual double max(int domain_idx, int signal_type) const = 0;
-<span class="lineNum">     187 </span>                :            :             /// @brief Retrieve the derivative of the signal values for a domain of control.
-<span class="lineNum">     188 </span>                :            :             ///
-<a name="189"><span class="lineNum">     189 </span>                :            :             /// Get the derivative of the signal values for a given domain of control and</a>
-<span class="lineNum">     190 </span>                :            :             /// a signal type for the buffered data associated with the application
-<span class="lineNum">     191 </span>                :            :             /// region. There must be at least 2 valid samples recorded.
-<span class="lineNum">     192 </span>                :            :             ///
-<a name="193"><span class="lineNum">     193 </span>                :            :             /// @param [in] domain_idx The index to the domain of</a>
-<span class="lineNum">     194 </span>                :            :             ///        control as ordered in the Platform and the
-<span class="lineNum">     195 </span>                :            :             ///        Policy.
-<span class="lineNum">     196 </span>                :            :             ///
-<a name="197"><span class="lineNum">     197 </span>                :            :             /// @param [in] signal_type The signal type requested as</a>
-<span class="lineNum">     198 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<span class="lineNum">     199 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     200 </span>                :            :             ///
-<a name="201"><span class="lineNum">     201 </span>                :            :             /// @return If there are 2 valid samples then return he derivative of the</a>
-<span class="lineNum">     202 </span>                :            :             /// signal values, else return NAN.
-<span class="lineNum">     203 </span>                :            :             virtual double derivative(int domain_idx, int signal_type) = 0;
-<span class="lineNum">     204 </span>                :            :             /// @brief Integrate a signal over time.
-<a name="205"><span class="lineNum">     205 </span>                :            :             ///</a>
-<span class="lineNum">     206 </span>                :            :             /// Computes the integral of the signal over the interval
-<span class="lineNum">     207 </span>                :            :             /// of time spanned by the samples stored in the region
-<span class="lineNum">     208 </span>                :            :             /// which where gathered since the applications most
-<a name="209"><span class="lineNum">     209 </span>                :            :             /// recent entry into the region.</a>
-<span class="lineNum">     210 </span>                :            :             ///
-<span class="lineNum">     211 </span>                :            :             /// @param [in] domain_idx The index to the domain of
-<span class="lineNum">     212 </span>                :            :             ///        control as ordered in the Platform and the
-<a name="213"><span class="lineNum">     213 </span>                :            :             ///        Policy.</a>
-<span class="lineNum">     214 </span>                :            :             ///
-<span class="lineNum">     215 </span>                :            :             /// @param [in] signal_type The signal type requested as
-<span class="lineNum">     216 </span>                :            :             ///        enumerated in geopm_signal_type_e in
-<a name="217"><span class="lineNum">     217 </span>                :            :             ///        geopm_message.h.</a>
-<span class="lineNum">     218 </span>                :            :             ///
-<span class="lineNum">     219 </span>                :            :             virtual double integral(int domain_idx, int signal_type, double &amp;delta_time, double &amp;integral) const = 0;
-<span class="lineNum">     220 </span>                :            :             virtual void report(std::ostringstream &amp;string_stream, const std::string &amp;name, int rank_per_node) const = 0;
-<a name="221"><span class="lineNum">     221 </span>                :            :             virtual void thread_progress(std::vector&lt;double&gt; &amp;progress) = 0;</a>
-<span class="lineNum">     222 </span>                :            :     };
-<span class="lineNum">     223 </span>                :            : 
-<span class="lineNum">     224 </span>                :            :     class Region : public IRegion
-<a name="225"><span class="lineNum">     225 </span>                :            :     {</a>
-<span class="lineNum">     226 </span>                :            :         public:
-<span class="lineNum">     227 </span>                :            :             enum m_const_e {
-<span class="lineNum">     228 </span>                :            :                 // If number of samples stored is large, we need to
-<a name="229"><span class="lineNum">     229 </span>                :            :                 // modify the derivative method to just use the last</a>
-<span class="lineNum">     230 </span>                :            :                 // few samples.
-<span class="lineNum">     231 </span>                :            :                 M_NUM_SAMPLE_HISTORY = 8,
-<span class="lineNum">     232 </span>                :            :             };
-<a name="233"><span class="lineNum">     233 </span>                :            :             /// @brief Default constructor.</a>
-<span class="lineNum">     234 </span>                :            :             /// @param [in] identifier Unique 64 bit region identifier.
-<span class="lineNum">     235 </span>                :            :             /// @param [in] num_domain Number of control domains.
-<span class="lineNum">     236 </span>                :            :             Region(uint64_t identifier, int num_domain, int level, IProfileThreadTable *tprof_table);
-<a name="237"><span class="lineNum">     237 </span>                :            :             /// @brief Default destructor.</a>
-<span class="lineNum">     238 </span>                :            :             virtual ~Region();
-<span class="lineNum">     239 </span>                :            :             void entry(void);
-<span class="lineNum">     240 </span>                :            :             int num_entry(void);
-<a name="241"><span class="lineNum">     241 </span>                :            :             void insert(std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry);</a>
-<span class="lineNum">     242 </span>                :            :             void insert(const std::vector&lt;struct geopm_sample_message_s&gt; &amp;sample);
-<span class="lineNum">     243 </span>                :            :             void clear(void);
-<span class="lineNum">     244 </span>                :            :             uint64_t identifier(void) const;
-<a name="245"><span class="lineNum">     245 </span>                :            :             void increment_mpi_time(double mpi_increment_amount);</a>
-<span class="lineNum">     246 </span>                :            :             void sample_message(struct geopm_sample_message_s &amp;sample);
-<span class="lineNum">     247 </span>                :            :             double signal(int domain_idx, int signal_type);
-<span class="lineNum">     248 </span>                :            :             int num_sample(int domain_idx, int signal_type) const;
-<a name="249"><span class="lineNum">     249 </span>                :            :             double mean(int domain_idx, int signal_type) const;</a>
-<span class="lineNum">     250 </span>                :            :             double median(int domain_idx, int signal_type) const;
-<span class="lineNum">     251 </span>                :            :             double std_deviation(int domain_idx, int signal_type) const;
-<span class="lineNum">     252 </span>                :            :             double min(int domain_idx, int signal_type) const;
-<a name="253"><span class="lineNum">     253 </span>                :            :             double max(int domain_idx, int signal_type) const;</a>
-<span class="lineNum">     254 </span>                :            :             double derivative(int domain_idx, int signal_type);
-<span class="lineNum">     255 </span>                :            :             double integral(int domain_idx, int signal_type, double &amp;delta_time, double &amp;integral) const;
-<span class="lineNum">     256 </span>                :            :             void report(std::ostringstream &amp;string_stream, const std::string &amp;name, int rank_per_node) const;
-<a name="257"><span class="lineNum">     257 </span>                :            :             void thread_progress(std::vector&lt;double&gt; &amp;progress);</a>
-<span class="lineNum">     258 </span>                :            :         protected:
-<span class="lineNum">     259 </span>                :            :             /// @brief Bound testing of input parameters.
-<span class="lineNum">     260 </span>                :            :             ///
-<a name="261"><span class="lineNum">     261 </span>                :            :             /// Checks the requested domain index and signal type to make sure thay are within</a>
-<span class="lineNum">     262 </span>                :            :             /// bounds of our internal data structures. If they are not an exception is thrown.
-<span class="lineNum">     263 </span>                :            :             ///
-<span class="lineNum">     264 </span>                :            :             /// @param [in] domain_idx The index to the domain of
-<a name="265"><span class="lineNum">     265 </span>                :            :             ///        control as ordered in the Platform and the</a>
-<span class="lineNum">     266 </span>                :            :             ///        Policy.
+<span class="lineNum">      79 </span>                :            :             /// @brief Retrieve the region hint.
+<span class="lineNum">      80 </span>                :            :             /// @return Hint based on geopm_region_hint_e enums.
+<a name="81"><span class="lineNum">      81 </span>                :            :             virtual uint64_t hint(void) const = 0;</a>
+<span class="lineNum">      82 </span>                :            :             /// @brief Add increment amount to the total time spent in MPI calls
+<span class="lineNum">      83 </span>                :            :             /// during this region.
+<span class="lineNum">      84 </span>                :            :             /// @param [in] mpi_increment_amout Value to add to the MPI time total.
+<a name="85"><span class="lineNum">      85 </span>                :            :             virtual void increment_mpi_time(double mpi_increment_amount) = 0;</a>
+<span class="lineNum">      86 </span>                :            :             /// @brief Return an aggregated sample to send up the tree.
+<span class="lineNum">      87 </span>                :            :             /// Called once this region has converged to send a sample
+<span class="lineNum">      88 </span>                :            :             /// up to the next level of the tree.
+<a name="89"><span class="lineNum">      89 </span>                :            :             /// @param [out] Sample message structure to fill in.</a>
+<span class="lineNum">      90 </span>                :            :             virtual void sample_message(struct geopm_sample_message_s &amp;sample) = 0;
+<span class="lineNum">      91 </span>                :            :             /// @brief Returns the latest value
+<span class="lineNum">      92 </span>                :            :             virtual double signal(int domain_idx, int signal_type) = 0;
+<a name="93"><span class="lineNum">      93 </span>                :            :             /// @brief Retrieve the number of valid samples for a domain of control.</a>
+<span class="lineNum">      94 </span>                :            :             ///
+<span class="lineNum">      95 </span>                :            :             /// Get the number of valid samples  for a given domain of control and
+<span class="lineNum">      96 </span>                :            :             /// a signal type for the buffered data associated with the application
+<a name="97"><span class="lineNum">      97 </span>                :            :             /// region. This is the number of samples used to calculate the other</a>
+<span class="lineNum">      98 </span>                :            :             /// statistics.
+<span class="lineNum">      99 </span>                :            :             ///
+<span class="lineNum">     100 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="101"><span class="lineNum">     101 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     102 </span>                :            :             ///        Policy.
+<span class="lineNum">     103 </span>                :            :             ///
+<span class="lineNum">     104 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="105"><span class="lineNum">     105 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     106 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     107 </span>                :            :             ///
+<span class="lineNum">     108 </span>                :            :             /// @return The number of valid samples.
+<a name="109"><span class="lineNum">     109 </span>                :            :             virtual int num_sample(int domain_idx, int signal_type) const = 0;</a>
+<span class="lineNum">     110 </span>                :            :             /// @brief Retrieve the mean signal value for a domain of control.
+<span class="lineNum">     111 </span>                :            :             ///
+<span class="lineNum">     112 </span>                :            :             /// Get the mean signal value for a given domain of control and
+<a name="113"><span class="lineNum">     113 </span>                :            :             /// a signal type for the buffered data associated with the application</a>
+<span class="lineNum">     114 </span>                :            :             /// region.
+<span class="lineNum">     115 </span>                :            :             ///
+<span class="lineNum">     116 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="117"><span class="lineNum">     117 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     118 </span>                :            :             ///        Policy.
+<span class="lineNum">     119 </span>                :            :             ///
+<span class="lineNum">     120 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="121"><span class="lineNum">     121 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     122 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     123 </span>                :            :             ///
+<span class="lineNum">     124 </span>                :            :             /// @return The mean signal value.
+<a name="125"><span class="lineNum">     125 </span>                :            :             virtual double mean(int domain_idx, int signal_type) const = 0;</a>
+<span class="lineNum">     126 </span>                :            :             /// @brief Retrieve the median signal value for a domain of control.
+<span class="lineNum">     127 </span>                :            :             ///
+<span class="lineNum">     128 </span>                :            :             /// Get the median signal value for a given domain of control and
+<a name="129"><span class="lineNum">     129 </span>                :            :             /// a signal type for the buffered data associated with the application</a>
+<span class="lineNum">     130 </span>                :            :             /// region.
+<span class="lineNum">     131 </span>                :            :             ///
+<span class="lineNum">     132 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="133"><span class="lineNum">     133 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     134 </span>                :            :             ///        Policy.
+<span class="lineNum">     135 </span>                :            :             ///
+<span class="lineNum">     136 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="137"><span class="lineNum">     137 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     138 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     139 </span>                :            :             ///
+<span class="lineNum">     140 </span>                :            :             /// @return The median signal value.
+<a name="141"><span class="lineNum">     141 </span>                :            :             virtual double median(int domain_idx, int signal_type) const = 0;</a>
+<span class="lineNum">     142 </span>                :            :             /// @brief Retrieve the standard deviation of the signal values for a domain of control.
+<span class="lineNum">     143 </span>                :            :             ///
+<span class="lineNum">     144 </span>                :            :             /// Get the standard deviation of the signal values for a given domain of
+<a name="145"><span class="lineNum">     145 </span>                :            :             /// control and a signal type for the buffered data associated with the</a>
+<span class="lineNum">     146 </span>                :            :             /// application region.
+<span class="lineNum">     147 </span>                :            :             ///
+<span class="lineNum">     148 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="149"><span class="lineNum">     149 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     150 </span>                :            :             ///        Policy.
+<span class="lineNum">     151 </span>                :            :             ///
+<span class="lineNum">     152 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="153"><span class="lineNum">     153 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     154 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     155 </span>                :            :             ///
+<span class="lineNum">     156 </span>                :            :             /// @return The standard deviation of the signal values.
+<a name="157"><span class="lineNum">     157 </span>                :            :             virtual double std_deviation(int domain_idx, int signal_type) const = 0;</a>
+<span class="lineNum">     158 </span>                :            :             /// @brief Retrieve the min signal value for a domain of control.
+<span class="lineNum">     159 </span>                :            :             ///
+<span class="lineNum">     160 </span>                :            :             /// Get the min signal value for a given domain of control and
+<a name="161"><span class="lineNum">     161 </span>                :            :             /// a signal type for the buffered data associated with the application</a>
+<span class="lineNum">     162 </span>                :            :             /// region.
+<span class="lineNum">     163 </span>                :            :             ///
+<span class="lineNum">     164 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="165"><span class="lineNum">     165 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     166 </span>                :            :             ///        Policy.
+<span class="lineNum">     167 </span>                :            :             ///
+<span class="lineNum">     168 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="169"><span class="lineNum">     169 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     170 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     171 </span>                :            :             ///
+<span class="lineNum">     172 </span>                :            :             /// @return The min signal value.
+<a name="173"><span class="lineNum">     173 </span>                :            :             virtual double min(int domain_idx, int signal_type) const = 0;</a>
+<span class="lineNum">     174 </span>                :            :             /// @brief Retrieve the max signal value for a domain of control.
+<span class="lineNum">     175 </span>                :            :             ///
+<span class="lineNum">     176 </span>                :            :             /// Get the max signal value for a given domain of control and
+<a name="177"><span class="lineNum">     177 </span>                :            :             /// a signal type for the buffered data associated with the application</a>
+<span class="lineNum">     178 </span>                :            :             /// region.
+<span class="lineNum">     179 </span>                :            :             ///
+<span class="lineNum">     180 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="181"><span class="lineNum">     181 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     182 </span>                :            :             ///        Policy.
+<span class="lineNum">     183 </span>                :            :             ///
+<span class="lineNum">     184 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="185"><span class="lineNum">     185 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     186 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     187 </span>                :            :             ///
+<span class="lineNum">     188 </span>                :            :             /// @return The max signal value.
+<a name="189"><span class="lineNum">     189 </span>                :            :             virtual double max(int domain_idx, int signal_type) const = 0;</a>
+<span class="lineNum">     190 </span>                :            :             /// @brief Retrieve the derivative of the signal values for a domain of control.
+<span class="lineNum">     191 </span>                :            :             ///
+<span class="lineNum">     192 </span>                :            :             /// Get the derivative of the signal values for a given domain of control and
+<a name="193"><span class="lineNum">     193 </span>                :            :             /// a signal type for the buffered data associated with the application</a>
+<span class="lineNum">     194 </span>                :            :             /// region. There must be at least 2 valid samples recorded.
+<span class="lineNum">     195 </span>                :            :             ///
+<span class="lineNum">     196 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<a name="197"><span class="lineNum">     197 </span>                :            :             ///        control as ordered in the Platform and the</a>
+<span class="lineNum">     198 </span>                :            :             ///        Policy.
+<span class="lineNum">     199 </span>                :            :             ///
+<span class="lineNum">     200 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<a name="201"><span class="lineNum">     201 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
+<span class="lineNum">     202 </span>                :            :             ///        geopm_message.h.
+<span class="lineNum">     203 </span>                :            :             ///
+<span class="lineNum">     204 </span>                :            :             /// @return If there are 2 valid samples then return he derivative of the
+<a name="205"><span class="lineNum">     205 </span>                :            :             /// signal values, else return NAN.</a>
+<span class="lineNum">     206 </span>                :            :             virtual double derivative(int domain_idx, int signal_type) = 0;
+<span class="lineNum">     207 </span>                :            :             /// @brief Integrate a signal over time.
+<span class="lineNum">     208 </span>                :            :             ///
+<a name="209"><span class="lineNum">     209 </span>                :            :             /// Computes the integral of the signal over the interval</a>
+<span class="lineNum">     210 </span>                :            :             /// of time spanned by the samples stored in the region
+<span class="lineNum">     211 </span>                :            :             /// which where gathered since the applications most
+<span class="lineNum">     212 </span>                :            :             /// recent entry into the region.
+<a name="213"><span class="lineNum">     213 </span>                :            :             ///</a>
+<span class="lineNum">     214 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<span class="lineNum">     215 </span>                :            :             ///        control as ordered in the Platform and the
+<span class="lineNum">     216 </span>                :            :             ///        Policy.
+<a name="217"><span class="lineNum">     217 </span>                :            :             ///</a>
+<span class="lineNum">     218 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<span class="lineNum">     219 </span>                :            :             ///        enumerated in geopm_signal_type_e in
+<span class="lineNum">     220 </span>                :            :             ///        geopm_message.h.
+<a name="221"><span class="lineNum">     221 </span>                :            :             ///</a>
+<span class="lineNum">     222 </span>                :            :             virtual double integral(int domain_idx, int signal_type, double &amp;delta_time, double &amp;integral) const = 0;
+<span class="lineNum">     223 </span>                :            :             virtual void report(std::ostringstream &amp;string_stream, const std::string &amp;name, int rank_per_node) const = 0;
+<span class="lineNum">     224 </span>                :            :             virtual void thread_progress(std::vector&lt;double&gt; &amp;progress) = 0;
+<a name="225"><span class="lineNum">     225 </span>                :            :             /// @brief Return the timestamp of the sample at a given index.</a>
+<span class="lineNum">     226 </span>                :            :             virtual struct geopm_time_s telemetry_timestamp(size_t sample_idx) = 0;
+<span class="lineNum">     227 </span>                :            :     };
+<span class="lineNum">     228 </span>                :            : 
+<a name="229"><span class="lineNum">     229 </span>                :            :     class Region : public IRegion</a>
+<span class="lineNum">     230 </span>                :            :     {
+<span class="lineNum">     231 </span>                :            :         public:
+<span class="lineNum">     232 </span>                :            :             enum m_const_e {
+<a name="233"><span class="lineNum">     233 </span>                :            :                 // If number of samples stored is large, we need to</a>
+<span class="lineNum">     234 </span>                :            :                 // modify the derivative method to just use the last
+<span class="lineNum">     235 </span>                :            :                 // few samples.
+<span class="lineNum">     236 </span>                :            :                 M_NUM_SAMPLE_HISTORY = 8,
+<a name="237"><span class="lineNum">     237 </span>                :            :             };</a>
+<span class="lineNum">     238 </span>                :            :             /// @brief Default constructor.
+<span class="lineNum">     239 </span>                :            :             /// @param [in] identifier Unique 64 bit region identifier.
+<span class="lineNum">     240 </span>                :            :             /// @param [in] num_domain Number of control domains.
+<a name="241"><span class="lineNum">     241 </span>                :            :             Region(uint64_t identifier, int num_domain, int level, IProfileThreadTable *tprof_table);</a>
+<span class="lineNum">     242 </span>                :            :             /// @brief Default destructor.
+<span class="lineNum">     243 </span>                :            :             virtual ~Region();
+<span class="lineNum">     244 </span>                :            :             void entry(void);
+<a name="245"><span class="lineNum">     245 </span>                :            :             int num_entry(void);</a>
+<span class="lineNum">     246 </span>                :            :             void insert(std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry);
+<span class="lineNum">     247 </span>                :            :             void insert(const std::vector&lt;struct geopm_sample_message_s&gt; &amp;sample);
+<span class="lineNum">     248 </span>                :            :             void clear(void);
+<a name="249"><span class="lineNum">     249 </span>                :            :             uint64_t identifier(void) const;</a>
+<span class="lineNum">     250 </span>                :            :             uint64_t hint(void) const;
+<span class="lineNum">     251 </span>                :            :             void increment_mpi_time(double mpi_increment_amount);
+<span class="lineNum">     252 </span>                :            :             void sample_message(struct geopm_sample_message_s &amp;sample);
+<a name="253"><span class="lineNum">     253 </span>                :            :             double signal(int domain_idx, int signal_type);</a>
+<span class="lineNum">     254 </span>                :            :             int num_sample(int domain_idx, int signal_type) const;
+<span class="lineNum">     255 </span>                :            :             double mean(int domain_idx, int signal_type) const;
+<span class="lineNum">     256 </span>                :            :             double median(int domain_idx, int signal_type) const;
+<a name="257"><span class="lineNum">     257 </span>                :            :             double std_deviation(int domain_idx, int signal_type) const;</a>
+<span class="lineNum">     258 </span>                :            :             double min(int domain_idx, int signal_type) const;
+<span class="lineNum">     259 </span>                :            :             double max(int domain_idx, int signal_type) const;
+<span class="lineNum">     260 </span>                :            :             double derivative(int domain_idx, int signal_type);
+<a name="261"><span class="lineNum">     261 </span>                :            :             double integral(int domain_idx, int signal_type, double &amp;delta_time, double &amp;integral) const;</a>
+<span class="lineNum">     262 </span>                :            :             void report(std::ostringstream &amp;string_stream, const std::string &amp;name, int rank_per_node) const;
+<span class="lineNum">     263 </span>                :            :             void thread_progress(std::vector&lt;double&gt; &amp;progress);
+<span class="lineNum">     264 </span>                :            :             struct geopm_time_s telemetry_timestamp(size_t sample_idx) override;
+<a name="265"><span class="lineNum">     265 </span>                :            :         protected:</a>
+<span class="lineNum">     266 </span>                :            :             /// @brief Bound testing of input parameters.
 <span class="lineNum">     267 </span>                :            :             ///
-<span class="lineNum">     268 </span>                :            :             /// @param [in] signal_type The signal type requested as
-<a name="269"><span class="lineNum">     269 </span>                :            :             ///        enumerated in geopm_signal_type_e in</a>
-<span class="lineNum">     270 </span>                :            :             ///        geopm_message.h.
-<span class="lineNum">     271 </span>                :            :             ///
-<span class="lineNum">     272 </span>                :            :             /// @param [in] file Name of source file where exception
-<a name="273"><span class="lineNum">     273 </span>                :            :             ///        was thrown, e.g. preprocessor __FILE__.</a>
+<span class="lineNum">     268 </span>                :            :             /// Checks the requested domain index and signal type to make sure thay are within
+<a name="269"><span class="lineNum">     269 </span>                :            :             /// bounds of our internal data structures. If they are not an exception is thrown.</a>
+<span class="lineNum">     270 </span>                :            :             ///
+<span class="lineNum">     271 </span>                :            :             /// @param [in] domain_idx The index to the domain of
+<span class="lineNum">     272 </span>                :            :             ///        control as ordered in the Platform and the
+<a name="273"><span class="lineNum">     273 </span>                :            :             ///        Policy.</a>
 <span class="lineNum">     274 </span>                :            :             ///
-<span class="lineNum">     275 </span>                :            :             /// @param [in] line Line number in source file where
-<span class="lineNum">     276 </span>                :            :             ///        exception was thrown, e.g. preprocessor
-<a name="277"><span class="lineNum">     277 </span>                :            :             ///        __LINE__.</a>
+<span class="lineNum">     275 </span>                :            :             /// @param [in] signal_type The signal type requested as
+<span class="lineNum">     276 </span>                :            :             ///        enumerated in geopm_signal_type_e in
+<a name="277"><span class="lineNum">     277 </span>                :            :             ///        geopm_message.h.</a>
 <span class="lineNum">     278 </span>                :            :             ///
-<span class="lineNum">     279 </span>                :            :             void check_bounds(int domain_idx, int signal_type, const char *file, int line) const;
-<span class="lineNum">     280 </span>                :            :             double domain_buffer_value(int buffer_idx, int domain_idx, int signal_type);
-<a name="281"><span class="lineNum">     281 </span>                :            :             bool is_telemetry_entry(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);</a>
-<span class="lineNum">     282 </span>                :            :             bool is_telemetry_exit(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);
-<span class="lineNum">     283 </span>                :            :             void update_domain_sample(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);
-<span class="lineNum">     284 </span>                :            :             void update_signal_matrix(const double *signal, int domain_idx);
-<a name="285"><span class="lineNum">     285 </span>                :            :             void update_valid_entries(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);</a>
-<span class="lineNum">     286 </span>                :            :             void update_stats(const double *signal, int domain_idx);
-<span class="lineNum">     287 </span>                :            :             void update_curr_sample(void);
-<span class="lineNum">     288 </span>                :            :             /// @brief Holds a unique 64 bit region identifier.
-<a name="289"><span class="lineNum">     289 </span>                :            :             const uint64_t m_identifier;</a>
-<span class="lineNum">     290 </span>                :            :             /// @brief Numnber of domains reporting to the region.
-<span class="lineNum">     291 </span>                :            :             const unsigned m_num_domain;
-<span class="lineNum">     292 </span>                :            :             /// @brief The level of the tree where the region resides
-<a name="293"><span class="lineNum">     293 </span>                :            :             const unsigned m_level;</a>
-<span class="lineNum">     294 </span>                :            :             /// @brief The number of distinct signal in a single domain.
-<span class="lineNum">     295 </span>                :            :             int m_num_signal;
-<span class="lineNum">     296 </span>                :            :             /// @brief Temporary signal matrix storeage used before insertion.
-<a name="297"><span class="lineNum">     297 </span>                :            :             std::vector&lt;double&gt; m_signal_matrix;</a>
-<span class="lineNum">     298 </span>                :            :             /// @brief Holder for telemerty state on region entry.
-<span class="lineNum">     299 </span>                :            :             std::vector&lt;struct geopm_telemetry_message_s&gt; m_entry_telemetry;
-<span class="lineNum">     300 </span>                :            :             /// @brief the current sample message to be sent up the tree.
-<a name="301"><span class="lineNum">     301 </span>                :            :             struct geopm_sample_message_s m_curr_sample;</a>
-<span class="lineNum">     302 </span>                :            :             /// @brief Holder for sample data calculated after a domain exits a region.
-<span class="lineNum">     303 </span>                :            :             std::vector&lt;struct geopm_sample_message_s&gt; m_domain_sample;
-<span class="lineNum">     304 </span>                :            :             /// @brief Circular buffer is over time, vector is indexed over both domains and signals.
-<a name="305"><span class="lineNum">     305 </span>                :            :             ICircularBuffer&lt;std::vector&lt;double&gt; &gt; *m_domain_buffer;</a>
-<span class="lineNum">     306 </span>                :            :             /// @brief time stamp for each entry in the m_domain_buffer.
-<span class="lineNum">     307 </span>                :            :             ICircularBuffer&lt;struct geopm_time_s&gt; *m_time_buffer;
-<span class="lineNum">     308 </span>                :            :             /// @brief the number of valid samples per domain and signal type.
-<a name="309"><span class="lineNum">     309 </span>                :            :             std::vector&lt;int&gt; m_valid_entries;</a>
-<span class="lineNum">     310 </span>                :            :             /// @brief the current minimum signal value per domain and signal type.
-<span class="lineNum">     311 </span>                :            :             std::vector&lt;double&gt; m_min;
-<span class="lineNum">     312 </span>                :            :             /// @brief the current maximum signal value per domain and signal type.
-<a name="313"><span class="lineNum">     313 </span>                :            :             std::vector&lt;double&gt; m_max;</a>
-<span class="lineNum">     314 </span>                :            :             /// @brief the current sum of signal values per domain and signal type.
-<span class="lineNum">     315 </span>                :            :             std::vector&lt;double&gt; m_sum;
-<span class="lineNum">     316 </span>                :            :             /// @brief the current sum of squares of signal values per domain and signal type.
-<a name="317"><span class="lineNum">     317 </span>                :            :             std::vector&lt;double&gt; m_sum_squares;</a>
-<span class="lineNum">     318 </span>                :            :             std::vector&lt;double&gt; m_derivative_last;
-<span class="lineNum">     319 </span>                :            :             struct geopm_sample_message_s m_agg_stats;
-<span class="lineNum">     320 </span>                :            :             uint64_t m_num_entry;
-<a name="321"><span class="lineNum">     321 </span>                :            :             std::vector&lt;bool&gt; m_is_entered;</a>
-<span class="lineNum">     322 </span>                :            :             int m_derivative_num_fit;
-<span class="lineNum">     323 </span>                :            :             double m_mpi_time;
-<span class="lineNum">     324 </span>                :            :             IProfileThreadTable *m_tprof_table;
-<a name="325"><span class="lineNum">     325 </span>                :            :     };</a>
-<span class="lineNum">     326 </span>                :            : }
-<span class="lineNum">     327 </span>                :            : 
-<span class="lineNum">     328 </span>                :            : #endif
+<span class="lineNum">     279 </span>                :            :             /// @param [in] file Name of source file where exception
+<span class="lineNum">     280 </span>                :            :             ///        was thrown, e.g. preprocessor __FILE__.
+<a name="281"><span class="lineNum">     281 </span>                :            :             ///</a>
+<span class="lineNum">     282 </span>                :            :             /// @param [in] line Line number in source file where
+<span class="lineNum">     283 </span>                :            :             ///        exception was thrown, e.g. preprocessor
+<span class="lineNum">     284 </span>                :            :             ///        __LINE__.
+<a name="285"><span class="lineNum">     285 </span>                :            :             ///</a>
+<span class="lineNum">     286 </span>                :            :             void check_bounds(int domain_idx, int signal_type, const char *file, int line) const;
+<span class="lineNum">     287 </span>                :            :             double domain_buffer_value(int buffer_idx, int domain_idx, int signal_type);
+<span class="lineNum">     288 </span>                :            :             geopm_time_s time_buffer_value(int buffer_idx);
+<a name="289"><span class="lineNum">     289 </span>                :            :             bool is_telemetry_entry(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);</a>
+<span class="lineNum">     290 </span>                :            :             bool is_telemetry_exit(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);
+<span class="lineNum">     291 </span>                :            :             void update_domain_sample(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);
+<span class="lineNum">     292 </span>                :            :             void update_signal_matrix(const double *signal, int domain_idx);
+<a name="293"><span class="lineNum">     293 </span>                :            :             void update_valid_entries(const struct geopm_telemetry_message_s &amp;telemetry, int domain_idx);</a>
+<span class="lineNum">     294 </span>                :            :             void update_stats(const double *signal, int domain_idx);
+<span class="lineNum">     295 </span>                :            :             void update_curr_sample(void);
+<span class="lineNum">     296 </span>                :            :             /// @brief Holds a unique 64 bit region identifier.
+<a name="297"><span class="lineNum">     297 </span>                :            :             const uint64_t m_identifier;</a>
+<span class="lineNum">     298 </span>                :            :             /// @brief Numnber of domains reporting to the region.
+<span class="lineNum">     299 </span>                :            :             const unsigned m_num_domain;
+<span class="lineNum">     300 </span>                :            :             /// @brief The level of the tree where the region resides
+<a name="301"><span class="lineNum">     301 </span>                :            :             const unsigned m_level;</a>
+<span class="lineNum">     302 </span>                :            :             /// @brief The number of distinct signal in a single domain.
+<span class="lineNum">     303 </span>                :            :             int m_num_signal;
+<span class="lineNum">     304 </span>                :            :             /// @brief Temporary signal matrix storeage used before insertion.
+<a name="305"><span class="lineNum">     305 </span>                :            :             std::vector&lt;double&gt; m_signal_matrix;</a>
+<span class="lineNum">     306 </span>                :            :             /// @brief Holder for telemerty state on region entry.
+<span class="lineNum">     307 </span>                :            :             std::vector&lt;struct geopm_telemetry_message_s&gt; m_entry_telemetry;
+<span class="lineNum">     308 </span>                :            :             /// @brief the current sample message to be sent up the tree.
+<a name="309"><span class="lineNum">     309 </span>                :            :             struct geopm_sample_message_s m_curr_sample;</a>
+<span class="lineNum">     310 </span>                :            :             /// @brief Holder for sample data calculated after a domain exits a region.
+<span class="lineNum">     311 </span>                :            :             std::vector&lt;struct geopm_sample_message_s&gt; m_domain_sample;
+<span class="lineNum">     312 </span>                :            :             /// @brief Circular buffer is over time, vector is indexed over both domains and signals.
+<a name="313"><span class="lineNum">     313 </span>                :            :             ICircularBuffer&lt;std::vector&lt;double&gt; &gt; *m_domain_buffer;</a>
+<span class="lineNum">     314 </span>                :            :             /// @brief time stamp for each entry in the m_domain_buffer.
+<span class="lineNum">     315 </span>                :            :             ICircularBuffer&lt;struct geopm_time_s&gt; *m_time_buffer;
+<span class="lineNum">     316 </span>                :            :             /// @brief the number of valid samples per domain and signal type.
+<a name="317"><span class="lineNum">     317 </span>                :            :             std::vector&lt;int&gt; m_valid_entries;</a>
+<span class="lineNum">     318 </span>                :            :             /// @brief the current minimum signal value per domain and signal type.
+<span class="lineNum">     319 </span>                :            :             std::vector&lt;double&gt; m_min;
+<span class="lineNum">     320 </span>                :            :             /// @brief the current maximum signal value per domain and signal type.
+<a name="321"><span class="lineNum">     321 </span>                :            :             std::vector&lt;double&gt; m_max;</a>
+<span class="lineNum">     322 </span>                :            :             /// @brief the current sum of signal values per domain and signal type.
+<span class="lineNum">     323 </span>                :            :             std::vector&lt;double&gt; m_sum;
+<span class="lineNum">     324 </span>                :            :             /// @brief the current sum of squares of signal values per domain and signal type.
+<a name="325"><span class="lineNum">     325 </span>                :            :             std::vector&lt;double&gt; m_sum_squares;</a>
+<span class="lineNum">     326 </span>                :            :             std::vector&lt;double&gt; m_derivative_last;
+<span class="lineNum">     327 </span>                :            :             struct geopm_sample_message_s m_agg_stats;
+<span class="lineNum">     328 </span>                :            :             uint64_t m_num_entry;
+<a name="329"><span class="lineNum">     329 </span>                :            :             std::vector&lt;bool&gt; m_is_entered;</a>
+<span class="lineNum">     330 </span>                :            :             int m_derivative_num_fit;
+<span class="lineNum">     331 </span>                :            :             double m_mpi_time;
+<span class="lineNum">     332 </span>                :            :             IProfileThreadTable *m_tprof_table;
+<a name="333"><span class="lineNum">     333 </span>                :            :     };</a>
+<span class="lineNum">     334 </span>                :            : }
+<span class="lineNum">     335 </span>                :            : 
+<span class="lineNum">     336 </span>                :            : #endif
 </pre>
       </td>
     </tr>

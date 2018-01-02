@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-1-g190bfc7 - src/geopm_message.h</title>
+  <title>LCOV - v0.3.0-122-g63534b7 - src/geopm_message.h</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,20 +28,20 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-1-g190bfc7</td>
+            <td class="headerValue">v0.3.0-122-g63534b7</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">12</td>
-            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">16</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-06-27</td>
+            <td class="headerValue">2017-12-30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">6</td>
-            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">7</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
@@ -56,8 +56,8 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">6</td>
-            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">10</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -134,149 +134,158 @@
 <span class="lineNum">      56 </span>                :            :     GEOPM_NUM_REGION_ID_PRIVATE =  3,          // Number table entries reserved for GEOPM defined regions (ignoring UNMARKED)
 <a name="57"><span class="lineNum">      57 </span>                :            : };</a>
 <span class="lineNum">      58 </span>                :            : 
-<span class="lineNum">      59 </span>                :<span class="lineCov">   22358086 : static inline int geopm_region_id_is_mpi(uint64_t rid)</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">      16292 : static inline int geopm_region_id_is_mpi(uint64_t rid)</span>
 <span class="lineNum">      60 </span>                :            : {
-<a name="61"><span class="lineNum">      61 </span>        [<span class="branchCov" title="Branch 0 was taken 14210 times"> + </span><span class="branchCov" title="Branch 1 was taken 22343876 times"> + </span>]:<span class="lineCov">   22358086 :     return (rid &amp; GEOPM_REGION_ID_MPI) ? 1 : 0;</span></a>
+<a name="61"><span class="lineNum">      61 </span>        [<span class="branchCov" title="Branch 0 was taken 5234 times"> + </span><span class="branchCov" title="Branch 1 was taken 11058 times"> + </span>]:<span class="lineCov">      16292 :     return (rid &amp; GEOPM_REGION_ID_MPI) ? 1 : 0;</span></a>
 <a name="62"><span class="lineNum">      62 </span>                :            : }</a>
 <span class="lineNum">      63 </span>                :            : 
-<span class="lineNum">      64 </span>                :<span class="lineCov">   23003649 : static inline int geopm_region_id_is_epoch(uint64_t rid)</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">      53896 : static inline int geopm_region_id_is_epoch(uint64_t rid)</span>
 <a name="65"><span class="lineNum">      65 </span>                :            : {</a>
-<span class="lineNum">      66 </span>        [<span class="branchCov" title="Branch 0 was taken 1078 times"> + </span><span class="branchCov" title="Branch 1 was taken 23002571 times"> + </span>]:<span class="lineCov">   23003649 :     return (rid &amp; GEOPM_REGION_ID_EPOCH) ? 1 : 0;</span>
-<span class="lineNum">      67 </span>                :            : }
+<span class="lineNum">      66 </span>        [<span class="branchCov" title="Branch 0 was taken 745 times"> + </span><span class="branchCov" title="Branch 1 was taken 53151 times"> + </span>]:<span class="lineCov">      53896 :     return (rid &amp; GEOPM_REGION_ID_EPOCH) ? 1 : 0;</span>
+<a name="67"><span class="lineNum">      67 </span>                :            : }</a>
 <span class="lineNum">      68 </span>                :            : 
-<a name="69"><span class="lineNum">      69 </span>                :            : static inline int geopm_region_id_is_nested(uint64_t rid)</a>
+<a name="69"><span class="lineNum">      69 </span>                :<span class="lineCov">     379924 : static inline uint64_t geopm_region_id_hash(uint64_t rid)</span></a>
 <span class="lineNum">      70 </span>                :            : {
-<span class="lineNum">      71 </span>                :            :     return (geopm_region_id_is_mpi(rid) &amp;&amp; (rid &lt;&lt; 32));
-<span class="lineNum">      72 </span>                :            : }
-<a name="73"><span class="lineNum">      73 </span>                :            : </a>
-<span class="lineNum">      74 </span>                :            : static inline uint64_t geopm_region_id_parent(uint64_t rid)
-<span class="lineNum">      75 </span>                :            : {
-<span class="lineNum">      76 </span>                :            :     return (geopm_region_id_is_nested(rid) ? ((rid &lt;&lt; 32) &gt;&gt; 32) : 0);
-<a name="77"><span class="lineNum">      77 </span>                :            : }</a>
-<span class="lineNum">      78 </span>                :            : 
-<span class="lineNum">      79 </span>                :<span class="lineCov">       2180 : static inline uint64_t geopm_region_id_set_mpi(uint64_t rid)</span>
-<span class="lineNum">      80 </span>                :            : {
-<a name="81"><span class="lineNum">      81 </span>                :<span class="lineCov">       2180 :     return (rid | GEOPM_REGION_ID_MPI);</span></a>
-<a name="82"><span class="lineNum">      82 </span>                :            : }</a>
-<span class="lineNum">      83 </span>                :            : 
-<span class="lineNum">      84 </span>                :<span class="lineCov">       2454 : static inline uint64_t geopm_region_id_unset_mpi(uint64_t rid)</span>
-<a name="85"><span class="lineNum">      85 </span>                :            : {</a>
-<span class="lineNum">      86 </span>                :<span class="lineCov">       2454 :     return (rid &amp; (~GEOPM_REGION_ID_MPI));</span>
-<a name="87"><span class="lineNum">      87 </span>                :            : }</a>
-<span class="lineNum">      88 </span>                :            : 
-<a name="89"><span class="lineNum">      89 </span>                :<span class="lineCov">     606609 : static inline int geopm_region_id_hint_is_equal(uint64_t hint_type, uint64_t rid)</span></a>
-<span class="lineNum">      90 </span>                :            : {
-<span class="lineNum">      91 </span>        [<span class="branchCov" title="Branch 0 was taken 802 times"> + </span><span class="branchCov" title="Branch 1 was taken 605807 times"> + </span>]:<span class="lineCov">     606609 :     return (rid &amp; hint_type) ? 1 : 0;</span>
-<a name="92"><span class="lineNum">      92 </span>                :            : }</a>
-<a name="93"><span class="lineNum">      93 </span>                :            : </a>
-<span class="lineNum">      94 </span>                :<span class="lineCov">       1366 : static inline uint64_t geopm_region_id_set_hint(uint64_t hint_type, uint64_t rid)</span>
-<span class="lineNum">      95 </span>                :            : {
-<span class="lineNum">      96 </span>                :<span class="lineCov">       1366 :     return (rid | hint_type);</span>
-<a name="97"><span class="lineNum">      97 </span>                :            : }</a>
-<span class="lineNum">      98 </span>                :            : 
-<span class="lineNum">      99 </span>                :            : enum geopm_control_e {
-<span class="lineNum">     100 </span>                :            :     GEOPM_CONTROL_DOMAIN_POWER = 0,
-<a name="101"><span class="lineNum">     101 </span>                :            :     GEOPM_CONTROL_DOMAIN_FREQUENCY = 1,</a>
-<span class="lineNum">     102 </span>                :            : };
-<span class="lineNum">     103 </span>                :            : 
-<span class="lineNum">     104 </span>                :            : enum geopm_sample_type_e {
-<a name="105"><span class="lineNum">     105 </span>                :            :     GEOPM_SAMPLE_TYPE_RUNTIME,</a>
-<span class="lineNum">     106 </span>                :            :     GEOPM_SAMPLE_TYPE_ENERGY,
-<span class="lineNum">     107 </span>                :            :     GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER,
-<span class="lineNum">     108 </span>                :            :     GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM,
-<a name="109"><span class="lineNum">     109 </span>                :            :     GEOPM_NUM_SAMPLE_TYPE // Sample counter, must be last</a>
-<span class="lineNum">     110 </span>                :            : };
-<span class="lineNum">     111 </span>                :            : 
-<span class="lineNum">     112 </span>                :            : /// @brief Enum encompassing msr data types.
-<a name="113"><span class="lineNum">     113 </span>                :            : enum geopm_telemetry_type_e {</a>
-<span class="lineNum">     114 </span>                :            :     GEOPM_TELEMETRY_TYPE_PKG_ENERGY,
-<span class="lineNum">     115 </span>                :            :     GEOPM_TELEMETRY_TYPE_DRAM_ENERGY,
-<span class="lineNum">     116 </span>                :            :     GEOPM_TELEMETRY_TYPE_FREQUENCY,
-<a name="117"><span class="lineNum">     117 </span>                :            :     GEOPM_TELEMETRY_TYPE_INST_RETIRED,</a>
-<span class="lineNum">     118 </span>                :            :     GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_CORE,
-<span class="lineNum">     119 </span>                :            :     GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_REF,
-<span class="lineNum">     120 </span>                :            :     GEOPM_TELEMETRY_TYPE_READ_BANDWIDTH,
-<a name="121"><span class="lineNum">     121 </span>                :            :     GEOPM_TELEMETRY_TYPE_PROGRESS,</a>
-<span class="lineNum">     122 </span>                :            :     GEOPM_TELEMETRY_TYPE_RUNTIME,
-<span class="lineNum">     123 </span>                :            :     GEOPM_NUM_TELEMETRY_TYPE // Signal counter, must be last
-<span class="lineNum">     124 </span>                :            : };
-<a name="125"><span class="lineNum">     125 </span>                :            : </a>
-<span class="lineNum">     126 </span>                :            : /// @brief MPI message structure for sending
-<span class="lineNum">     127 </span>                :            : /// power policies down the tree.
-<span class="lineNum">     128 </span>                :            : struct geopm_policy_message_s {
-<a name="129"><span class="lineNum">     129 </span>                :            :     /// @brief Enum power management mode.</a>
-<span class="lineNum">     130 </span>                :            :     int mode;
-<span class="lineNum">     131 </span>                :            :     /// @brief Power policy attribute bitmask
-<span class="lineNum">     132 </span>                :            :     unsigned long flags;
-<a name="133"><span class="lineNum">     133 </span>                :            :     /// @brief Number of samples to collect before sending</a>
-<span class="lineNum">     134 </span>                :            :     /// a sample up the tree.
-<span class="lineNum">     135 </span>                :            :     int num_sample;
-<span class="lineNum">     136 </span>                :            :     /// @brief Power budget in Watts.
-<a name="137"><span class="lineNum">     137 </span>                :            :     double power_budget;</a>
-<span class="lineNum">     138 </span>                :            : };
-<span class="lineNum">     139 </span>                :            : 
-<span class="lineNum">     140 </span>                :            : /// @brief MPI message structure for sending
-<a name="141"><span class="lineNum">     141 </span>                :            : /// sample telemetry data up the tree.</a>
-<span class="lineNum">     142 </span>                :            : struct geopm_sample_message_s {
-<span class="lineNum">     143 </span>                :            :     /// @brief 64-bit unique application region identifier.
-<span class="lineNum">     144 </span>                :            :     uint64_t region_id;
-<a name="145"><span class="lineNum">     145 </span>                :            :     double signal[GEOPM_NUM_SAMPLE_TYPE];</a>
-<span class="lineNum">     146 </span>                :            : };
-<span class="lineNum">     147 </span>                :            : 
-<span class="lineNum">     148 </span>                :            : /// @brief Structure used to hold single profiling
-<a name="149"><span class="lineNum">     149 </span>                :            : /// messages obtained from the application.</a>
-<span class="lineNum">     150 </span>                :            : struct geopm_prof_message_s {
-<span class="lineNum">     151 </span>                :            :     /// @brief Rank identifier.
-<span class="lineNum">     152 </span>                :            :     int rank;
-<a name="153"><span class="lineNum">     153 </span>                :            :     /// @brief 64-bit unique application region identifier.</a>
-<span class="lineNum">     154 </span>                :            :     uint64_t region_id;
-<span class="lineNum">     155 </span>                :            :     /// @brief Time stamp of when the sample was taken.
-<span class="lineNum">     156 </span>                :            :     struct geopm_time_s timestamp;
-<a name="157"><span class="lineNum">     157 </span>                :            :     /// @brief Progress of the rank within the current region.</a>
-<span class="lineNum">     158 </span>                :            :     double progress;
-<span class="lineNum">     159 </span>                :            : };
-<span class="lineNum">     160 </span>                :            : 
-<a name="161"><span class="lineNum">     161 </span>                :            : /// @brief Structure used to hold MSR telemetry data</a>
-<span class="lineNum">     162 </span>                :            : /// collected by the platform.
-<span class="lineNum">     163 </span>                :            : struct geopm_msr_message_s {
-<span class="lineNum">     164 </span>                :            :     /// @brief geopm_domain_type_e.
-<a name="165"><span class="lineNum">     165 </span>                :            :     int domain_type;</a>
-<span class="lineNum">     166 </span>                :            :     /// @brief Index within this domain type.
-<span class="lineNum">     167 </span>                :            :     int domain_index;
-<span class="lineNum">     168 </span>                :            :     /// @brief Timestamp of when the sample was taken.
-<a name="169"><span class="lineNum">     169 </span>                :            :     struct geopm_time_s timestamp;</a>
-<span class="lineNum">     170 </span>                :            :     /// @brief geopm_telemetry_type_e.
-<span class="lineNum">     171 </span>                :            :     int signal_type;
-<span class="lineNum">     172 </span>                :            :     /// @brief Value read from the MSR.
-<a name="173"><span class="lineNum">     173 </span>                :            :     double signal;</a>
-<span class="lineNum">     174 </span>                :            : };
-<span class="lineNum">     175 </span>                :            : 
-<span class="lineNum">     176 </span>                :            : /// @brief Structure used to hold aligned telemetry data from
-<a name="177"><span class="lineNum">     177 </span>                :            : /// application profiling and msr data.</a>
-<span class="lineNum">     178 </span>                :            : struct geopm_telemetry_message_s {
-<span class="lineNum">     179 </span>                :            :     uint64_t region_id;
-<span class="lineNum">     180 </span>                :            :     struct geopm_time_s timestamp;
-<a name="181"><span class="lineNum">     181 </span>                :            :     double signal[GEOPM_NUM_TELEMETRY_TYPE]; // see geopm_telemetry_type_e for ordering.</a>
-<span class="lineNum">     182 </span>                :            : };
-<span class="lineNum">     183 </span>                :            : 
-<span class="lineNum">     184 </span>                :            : extern const struct geopm_policy_message_s GEOPM_POLICY_UNKNOWN;
-<a name="185"><span class="lineNum">     185 </span>                :            : extern const struct geopm_sample_message_s GEOPM_SAMPLE_INVALID;</a>
-<span class="lineNum">     186 </span>                :            : 
-<span class="lineNum">     187 </span>                :            : /// @brief Check if two policy messages are equal.
-<span class="lineNum">     188 </span>                :            : /// @param [in] a Pointer to a policy message.
-<a name="189"><span class="lineNum">     189 </span>                :            : /// @param [in] b Pointer to a policy message.</a>
-<span class="lineNum">     190 </span>                :            : /// @return 1 if policies are equal, else 0
-<span class="lineNum">     191 </span>                :            : int geopm_is_policy_equal(const struct geopm_policy_message_s *a, const struct geopm_policy_message_s *b);
-<span class="lineNum">     192 </span>                :            : /// @brief Check if two sample messages are equal.
-<a name="193"><span class="lineNum">     193 </span>                :            : /// @param [in] a Pointer to a sample message.</a>
-<span class="lineNum">     194 </span>                :            : /// @param [in] b Pointer to a sample message.
-<span class="lineNum">     195 </span>                :            : /// @return 1 if samples are equal, else 0
-<span class="lineNum">     196 </span>                :            : int geopm_is_sample_equal(const struct geopm_sample_message_s *a, const struct geopm_sample_message_s *b);
-<a name="197"><span class="lineNum">     197 </span>                :            : </a>
-<span class="lineNum">     198 </span>                :            : #ifdef __cplusplus
-<span class="lineNum">     199 </span>                :            : }
-<span class="lineNum">     200 </span>                :            : #endif
-<a name="201"><span class="lineNum">     201 </span>                :            : #endif</a>
+<span class="lineNum">      71 </span>[<span class="branchCov" title="Branch 0 was taken 379487 times"> + </span><span class="branchCov" title="Branch 1 was taken 437 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 355598 times"> + </span><span class="branchCov" title="Branch 3 was taken 23889 times"> + </span>]:<span class="lineCov">     379924 :     if (rid != GEOPM_REGION_ID_EPOCH &amp;&amp;</span>
+<span class="lineNum">      72 </span>                :            :         rid != GEOPM_REGION_ID_UNMARKED) {
+<a name="73"><span class="lineNum">      73 </span>                :<span class="lineCov">     355598 :         rid = ((rid &lt;&lt; 32) &gt;&gt; 32);</span></a>
+<span class="lineNum">      74 </span>                :            :     }
+<span class="lineNum">      75 </span>                :<span class="lineCov">     379924 :     return rid;</span>
+<span class="lineNum">      76 </span>                :            : }
+<a name="77"><span class="lineNum">      77 </span>                :            : </a>
+<span class="lineNum">      78 </span>                :            : static inline int geopm_region_id_is_nested(uint64_t rid)
+<span class="lineNum">      79 </span>                :            : {
+<span class="lineNum">      80 </span>                :            :     return (geopm_region_id_is_mpi(rid) &amp;&amp; geopm_region_id_hash(rid));
+<a name="81"><span class="lineNum">      81 </span>                :            : }</a>
+<span class="lineNum">      82 </span>                :            : 
+<span class="lineNum">      83 </span>                :            : static inline uint64_t geopm_region_id_parent(uint64_t rid)
+<span class="lineNum">      84 </span>                :            : {
+<a name="85"><span class="lineNum">      85 </span>                :            :     return (geopm_region_id_is_nested(rid) ? geopm_region_id_hash(rid) : 0);</a>
+<a name="86"><span class="lineNum">      86 </span>                :            : }</a>
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :<span class="lineCov">        992 : static inline uint64_t geopm_region_id_set_mpi(uint64_t rid)</span>
+<a name="89"><span class="lineNum">      89 </span>                :            : {</a>
+<span class="lineNum">      90 </span>                :<span class="lineCov">        992 :     return (rid | GEOPM_REGION_ID_MPI);</span>
+<a name="91"><span class="lineNum">      91 </span>                :            : }</a>
+<span class="lineNum">      92 </span>                :            : 
+<a name="93"><span class="lineNum">      93 </span>                :<span class="lineCov">     402960 : static inline uint64_t geopm_region_id_unset_mpi(uint64_t rid)</span></a>
+<span class="lineNum">      94 </span>                :            : {
+<span class="lineNum">      95 </span>                :<span class="lineCov">     402960 :     return (rid &amp; (~GEOPM_REGION_ID_MPI));</span>
+<a name="96"><span class="lineNum">      96 </span>                :            : }</a>
+<a name="97"><span class="lineNum">      97 </span>                :            : </a>
+<span class="lineNum">      98 </span>                :<span class="lineCov">     380747 : static inline int geopm_region_id_hint_is_equal(uint64_t hint_type, uint64_t rid)</span>
+<span class="lineNum">      99 </span>                :            : {
+<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 833 times"> + </span><span class="branchCov" title="Branch 1 was taken 379914 times"> + </span>]:<span class="lineCov">     380747 :     return (rid &amp; hint_type) ? 1 : 0;</span>
+<a name="101"><span class="lineNum">     101 </span>                :            : }</a>
+<span class="lineNum">     102 </span>                :            : 
+<span class="lineNum">     103 </span>                :<span class="lineCov">        361 : static inline uint64_t geopm_region_id_set_hint(uint64_t hint_type, uint64_t rid)</span>
+<span class="lineNum">     104 </span>                :            : {
+<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">        361 :     return (rid | hint_type);</span></a>
+<span class="lineNum">     106 </span>                :            : }
+<span class="lineNum">     107 </span>                :            : 
+<span class="lineNum">     108 </span>                :            : enum geopm_control_e {
+<a name="109"><span class="lineNum">     109 </span>                :            :     GEOPM_CONTROL_DOMAIN_POWER = 0,</a>
+<span class="lineNum">     110 </span>                :            :     GEOPM_CONTROL_DOMAIN_FREQUENCY = 1,
+<span class="lineNum">     111 </span>                :            : };
+<span class="lineNum">     112 </span>                :            : 
+<a name="113"><span class="lineNum">     113 </span>                :            : enum geopm_sample_type_e {</a>
+<span class="lineNum">     114 </span>                :            :     GEOPM_SAMPLE_TYPE_RUNTIME,
+<span class="lineNum">     115 </span>                :            :     GEOPM_SAMPLE_TYPE_ENERGY,
+<span class="lineNum">     116 </span>                :            :     GEOPM_SAMPLE_TYPE_FREQUENCY_NUMER,
+<a name="117"><span class="lineNum">     117 </span>                :            :     GEOPM_SAMPLE_TYPE_FREQUENCY_DENOM,</a>
+<span class="lineNum">     118 </span>                :            :     GEOPM_NUM_SAMPLE_TYPE // Sample counter, must be last
+<span class="lineNum">     119 </span>                :            : };
+<span class="lineNum">     120 </span>                :            : 
+<a name="121"><span class="lineNum">     121 </span>                :            : /// @brief Enum encompassing msr data types.</a>
+<span class="lineNum">     122 </span>                :            : enum geopm_telemetry_type_e {
+<span class="lineNum">     123 </span>                :            :     GEOPM_TELEMETRY_TYPE_PKG_ENERGY,
+<span class="lineNum">     124 </span>                :            :     GEOPM_TELEMETRY_TYPE_DRAM_ENERGY,
+<a name="125"><span class="lineNum">     125 </span>                :            :     GEOPM_TELEMETRY_TYPE_FREQUENCY,</a>
+<span class="lineNum">     126 </span>                :            :     GEOPM_TELEMETRY_TYPE_INST_RETIRED,
+<span class="lineNum">     127 </span>                :            :     GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_CORE,
+<span class="lineNum">     128 </span>                :            :     GEOPM_TELEMETRY_TYPE_CLK_UNHALTED_REF,
+<a name="129"><span class="lineNum">     129 </span>                :            :     GEOPM_TELEMETRY_TYPE_READ_BANDWIDTH,</a>
+<span class="lineNum">     130 </span>                :            :     GEOPM_TELEMETRY_TYPE_PROGRESS,
+<span class="lineNum">     131 </span>                :            :     GEOPM_TELEMETRY_TYPE_RUNTIME,
+<span class="lineNum">     132 </span>                :            :     GEOPM_NUM_TELEMETRY_TYPE // Signal counter, must be last
+<a name="133"><span class="lineNum">     133 </span>                :            : };</a>
+<span class="lineNum">     134 </span>                :            : 
+<span class="lineNum">     135 </span>                :            : /// @brief MPI message structure for sending
+<span class="lineNum">     136 </span>                :            : /// power policies down the tree.
+<a name="137"><span class="lineNum">     137 </span>                :            : struct geopm_policy_message_s {</a>
+<span class="lineNum">     138 </span>                :            :     /// @brief Enum power management mode.
+<span class="lineNum">     139 </span>                :            :     int mode;
+<span class="lineNum">     140 </span>                :            :     /// @brief Power policy attribute bitmask
+<a name="141"><span class="lineNum">     141 </span>                :            :     unsigned long flags;</a>
+<span class="lineNum">     142 </span>                :            :     /// @brief Number of samples to collect before sending
+<span class="lineNum">     143 </span>                :            :     /// a sample up the tree.
+<span class="lineNum">     144 </span>                :            :     int num_sample;
+<a name="145"><span class="lineNum">     145 </span>                :            :     /// @brief Power budget in Watts.</a>
+<span class="lineNum">     146 </span>                :            :     double power_budget;
+<span class="lineNum">     147 </span>                :            : };
+<span class="lineNum">     148 </span>                :            : 
+<a name="149"><span class="lineNum">     149 </span>                :            : /// @brief MPI message structure for sending</a>
+<span class="lineNum">     150 </span>                :            : /// sample telemetry data up the tree.
+<span class="lineNum">     151 </span>                :            : struct geopm_sample_message_s {
+<span class="lineNum">     152 </span>                :            :     /// @brief 64-bit unique application region identifier.
+<a name="153"><span class="lineNum">     153 </span>                :            :     uint64_t region_id;</a>
+<span class="lineNum">     154 </span>                :            :     double signal[GEOPM_NUM_SAMPLE_TYPE];
+<span class="lineNum">     155 </span>                :            : };
+<span class="lineNum">     156 </span>                :            : 
+<a name="157"><span class="lineNum">     157 </span>                :            : /// @brief Structure used to hold single profiling</a>
+<span class="lineNum">     158 </span>                :            : /// messages obtained from the application.
+<span class="lineNum">     159 </span>                :            : struct geopm_prof_message_s {
+<span class="lineNum">     160 </span>                :            :     /// @brief Rank identifier.
+<a name="161"><span class="lineNum">     161 </span>                :            :     int rank;</a>
+<span class="lineNum">     162 </span>                :            :     /// @brief 64-bit unique application region identifier.
+<span class="lineNum">     163 </span>                :            :     uint64_t region_id;
+<span class="lineNum">     164 </span>                :            :     /// @brief Time stamp of when the sample was taken.
+<a name="165"><span class="lineNum">     165 </span>                :            :     struct geopm_time_s timestamp;</a>
+<span class="lineNum">     166 </span>                :            :     /// @brief Progress of the rank within the current region.
+<span class="lineNum">     167 </span>                :            :     double progress;
+<span class="lineNum">     168 </span>                :            : };
+<a name="169"><span class="lineNum">     169 </span>                :            : </a>
+<span class="lineNum">     170 </span>                :            : /// @brief Structure used to hold MSR telemetry data
+<span class="lineNum">     171 </span>                :            : /// collected by the platform.
+<span class="lineNum">     172 </span>                :            : struct geopm_msr_message_s {
+<a name="173"><span class="lineNum">     173 </span>                :            :     /// @brief geopm_domain_type_e.</a>
+<span class="lineNum">     174 </span>                :            :     int domain_type;
+<span class="lineNum">     175 </span>                :            :     /// @brief Index within this domain type.
+<span class="lineNum">     176 </span>                :            :     int domain_index;
+<a name="177"><span class="lineNum">     177 </span>                :            :     /// @brief Timestamp of when the sample was taken.</a>
+<span class="lineNum">     178 </span>                :            :     struct geopm_time_s timestamp;
+<span class="lineNum">     179 </span>                :            :     /// @brief geopm_telemetry_type_e.
+<span class="lineNum">     180 </span>                :            :     int signal_type;
+<a name="181"><span class="lineNum">     181 </span>                :            :     /// @brief Value read from the MSR.</a>
+<span class="lineNum">     182 </span>                :            :     double signal;
+<span class="lineNum">     183 </span>                :            : };
+<span class="lineNum">     184 </span>                :            : 
+<a name="185"><span class="lineNum">     185 </span>                :            : /// @brief Structure used to hold aligned telemetry data from</a>
+<span class="lineNum">     186 </span>                :            : /// application profiling and msr data.
+<span class="lineNum">     187 </span>                :            : struct geopm_telemetry_message_s {
+<span class="lineNum">     188 </span>                :            :     uint64_t region_id;
+<a name="189"><span class="lineNum">     189 </span>                :            :     struct geopm_time_s timestamp;</a>
+<span class="lineNum">     190 </span>                :            :     double signal[GEOPM_NUM_TELEMETRY_TYPE]; // see geopm_telemetry_type_e for ordering.
+<span class="lineNum">     191 </span>                :            : };
+<span class="lineNum">     192 </span>                :            : 
+<a name="193"><span class="lineNum">     193 </span>                :            : extern const struct geopm_policy_message_s GEOPM_POLICY_UNKNOWN;</a>
+<span class="lineNum">     194 </span>                :            : extern const struct geopm_sample_message_s GEOPM_SAMPLE_INVALID;
+<span class="lineNum">     195 </span>                :            : 
+<span class="lineNum">     196 </span>                :            : /// @brief Check if two policy messages are equal.
+<a name="197"><span class="lineNum">     197 </span>                :            : /// @param [in] a Pointer to a policy message.</a>
+<span class="lineNum">     198 </span>                :            : /// @param [in] b Pointer to a policy message.
+<span class="lineNum">     199 </span>                :            : /// @return 1 if policies are equal, else 0
+<span class="lineNum">     200 </span>                :            : int geopm_is_policy_equal(const struct geopm_policy_message_s *a, const struct geopm_policy_message_s *b);
+<a name="201"><span class="lineNum">     201 </span>                :            : /// @brief Check if two sample messages are equal.</a>
+<span class="lineNum">     202 </span>                :            : /// @param [in] a Pointer to a sample message.
+<span class="lineNum">     203 </span>                :            : /// @param [in] b Pointer to a sample message.
+<span class="lineNum">     204 </span>                :            : /// @return 1 if samples are equal, else 0
+<a name="205"><span class="lineNum">     205 </span>                :            : int geopm_is_sample_equal(const struct geopm_sample_message_s *a, const struct geopm_sample_message_s *b);</a>
+<span class="lineNum">     206 </span>                :            : 
+<span class="lineNum">     207 </span>                :            : #ifdef __cplusplus
+<span class="lineNum">     208 </span>                :            : }
+<a name="209"><span class="lineNum">     209 </span>                :            : #endif</a>
+<span class="lineNum">     210 </span>                :            : #endif
 </pre>
       </td>
     </tr>
