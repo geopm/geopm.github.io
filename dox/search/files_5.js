@@ -27,5 +27,6 @@ var searchData=
   ['globalpolicy_2ecpp',['GlobalPolicy.cpp',['../_global_policy_8cpp.html',1,'']]],
   ['globalpolicy_2ehpp',['GlobalPolicy.hpp',['../_global_policy_8hpp.html',1,'']]],
   ['governingdecider_2ecpp',['GoverningDecider.cpp',['../_governing_decider_8cpp.html',1,'']]],
-  ['governingdecider_2ehpp',['GoverningDecider.hpp',['../_governing_decider_8hpp.html',1,'']]]
+  ['governingdecider_2ehpp',['GoverningDecider.hpp',['../_governing_decider_8hpp.html',1,'']]],
+  ['governingdeciderregister_2ecpp',['GoverningDeciderRegister.cpp',['../_governing_decider_register_8cpp.html',1,'']]]
 ];

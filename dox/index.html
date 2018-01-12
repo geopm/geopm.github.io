@@ -68,9 +68,9 @@ $(function() {
 <div class="textblock"><h2>DISCLAIMER </h2>
 <p class="">SEE COPYING FILE FOR LICENSE INFORMATION.</p>
 <h2>LAST UPDATE </h2>
-<p class="">2017 June 17</p>
+<p class="">2018 January 2</p>
 <p class="">Christopher Cantalupo <a href="#" onclick="location.href='mai'+'lto:'+'chr'+'is'+'top'+'he'+'r.m'+'.c'+'ant'+'al'+'upo'+'@i'+'nte'+'l.'+'com'; return false;">chris<span style="display: none;">.nosp@m.</span>toph<span style="display: none;">.nosp@m.</span>er.m.<span style="display: none;">.nosp@m.</span>cant<span style="display: none;">.nosp@m.</span>alupo<span style="display: none;">.nosp@m.</span>@int<span style="display: none;">.nosp@m.</span>el.co<span style="display: none;">.nosp@m.</span>m</a> <br />
- Steve Sylvester <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'ve'+'.s.'+'sy'+'lve'+'st'+'er@'+'in'+'tel'+'.c'+'om'; return false;">steve<span style="display: none;">.nosp@m.</span>.s.s<span style="display: none;">.nosp@m.</span>ylves<span style="display: none;">.nosp@m.</span>ter@<span style="display: none;">.nosp@m.</span>intel<span style="display: none;">.nosp@m.</span>.com</a></p>
+</p>
 <h2>WEB PAGES </h2>
 <p class=""><a href="http://geopm.github.io/geopm">http://geopm.github.io/geopm</a> <br />
  <a href="http://geopm.github.io/geopm/man/geopm.7.html">http://geopm.github.io/geopm/man/geopm.7.html</a></p>
@@ -145,6 +145,8 @@ make install
 <p class="">The GEOPM runtime requires that each MPI process of the application under control is affinitized to distinct CPUs. This is a strict requirement for the runtime and must be enforced by the MPI launch command.</p>
 <p class="">Affinitizing the GEOPM control thread to a CPU that is distinct from the application CPUs may improve performance of the application, but this is not a requirement. On systems where an application achieves highest performance when leaving a CPU unused by the application so that this CPU can be dedicated to the operating system, it is usually best to affinitize the GEOPM control thread to this CPU designated for system threads.</p>
 <p class="">There are many ways to launch an MPI application, and there is no single uniform way of enforcing MPI rank CPU affinities across different job launch mechanisms. Additionally, OpenMP runtimes, which are associated with the compiler choice, have different mechanisms for affinitizing OpenMP threads within CPUs available to each MPI process. To complicate things further the GEOPM control thread can be launched as an application thread or a process that may be part of the primary MPI application or a completely separate MPI application. For these reasons it is difficult to document how to correctly affinitize processes in all configurations. Please refer to your site documentation about CPU affinity for the best solution on the system you are using.</p>
+<h2>MPI LIBRARY PATH</h2>
+<p class="">On some systems it has been observed that if the path to libmpi.so is not in the LD_LIBRARY_PATH or in the default load library path (e.g. /usr/lib64), then the loading of plugins can fail on the dlopen(3) call. In the future we will be changing the way that plugins are loaded to leverage library init functions instead of using dlopen(3)/dlsym(3). To work-around this problem, simply add the path to libmpi.so to the LD_LIBRARY_PATH environment variable at runtime.</p>
 <h2>TESTING </h2>
 <p class="">From within the source code directory, tests can be executed with the "make check" target. Some tests must be run as MPI applications, and in order support these tests you must define the "MPIEXEC" environment variable to whatever is appropriate for your your MPI runtime (default is mpiexec). The tests assume that this application will respect the '-n' flag to set the number of MPI processes. Note that '-n' is defined by the MPI standard. Each MPI dependent test is run with 16 MPI processes.</p>
 <h2>STATUS </h2>

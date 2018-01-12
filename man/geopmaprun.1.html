@@ -112,12 +112,16 @@ the first <code>--</code> from the command line.</p>
 
 <dl>
 <dt><code>--geopm-rm</code> rm</dt><dd><p>Use resource manager "rm" for the underlying launch mechanism.
-Valid values of "rm" are "SLURM", "ALPS", "IMPI", "SrunLauncher",
-"AlpsLauncher", or "IMPIExecLauncher".  This command line option
-overrides other methods of determining the resource manager.  If
-this option is not provided the environment variable GEOPM_RM is
-used instead.  If neither of these options are set by the user then
-the resource manager is inferred by the executable name: geopmsrun
+Valid values of "rm" are "SLURM", "ALPS", or "IMPI".  Additionally
+the launcher class that supports the resource manager can be
+selected by name; available launcher classes are "SrunLauncher"
+(SLURM), "AlpsLauncher" (ALPS), "IMPIExecLauncher" (IMPI), or
+"SrunTOSSLauncher" (specialization of SLURM for the tri-lab
+operating system stack).  This command line option overrides other
+methods of determining the resource manager / launcher.  If this
+option is not provided the environment variable GEOPM_RM is used
+instead.  If neither of these options are set by the user then the
+resource manager is inferred by the executable name: geopmsrun
 implies the SLURM resource manager and geopmaprun implies the ALPS
 resource manager.  If none of these methods can be used to select
 the resource manager, the hostname is checked against a list of
@@ -196,6 +200,11 @@ will hang.</p></dd>
 <dt><code>--geopm-preload</code></dt><dd><p>Use LD_PRELOAD to link libgeopm.so at runtime.  This can be used to
 enable the GEOPM runtime when an application has not been compiled
 against libgeopm.so.</p></dd>
+<dt><code>--geopm-disable-hyperthreads</code></dt><dd><p>Prevent the launcher from trying to use hyperthreads for pinning
+purposes when attempting to satisfy the MPI ranks / OMP threads
+configuration specified.  This is done for both the controller and
+the application.  An error is raised if the launcher cannot satisfy
+the current request without hyperthreads.</p></dd>
 </dl>
 
 
@@ -216,15 +225,13 @@ configuration:</p>
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
 <p>The <code>GEOPM_RM</code> environment variable can be used to select which
-underlying resource manager to use.  Valid values are "SLURM", "ALPS"
-and "IMPI".  Additionally the python Launcher object may be selected
-by name through this environment variable.  Currently supported python
-Launcher objects are "SrunLauncher", "AprunLauncher" and
-"IMPIExecLauncher".</p>
+underlying resource manager to use.  See documentation for the
+--geopm-rm command line option for valid values.  Note that the
+command line option overrides the environment variable.</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (C) 2015, 2016, 2017, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -246,7 +253,7 @@ Launcher objects are "SrunLauncher", "AprunLauncher" and
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2017</li>
+    <li class='tc'>January 2018</li>
     <li class='tr'>geopmpy_launcher(1)</li>
   </ol>
 

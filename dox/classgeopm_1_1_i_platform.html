@@ -385,6 +385,7 @@ Public Member Functions</h2></td></tr>
 <p>Enforce a static power management mode including tdp_balance_static, freq_uniform_static, and freq_hybrid_static. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">region_id</td><td>The ID of the region to target. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">policy</td><td>A <a class="el" href="classgeopm_1_1_policy.html">Policy</a> object containing the policy information to be enforced. </td></tr>
   </table>
   </dd>
@@ -419,7 +420,26 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>initialize the signal transformation matrix. Initialize the matrix that transforms the per package, per-cpu, and per-rank signals into the domain of control. </p>
-<p class="">signals are expected as follows: /// per socket signals /// PKG_ENERGY /// DRAM_ENERGY /// followed by per cpu signals /// FREQUENCY /// INST_RETIRED /// CLK_UNHALTED_CORE /// CLK_UNHALTED_REF /// LLC_VICTIMS /// followed by per rank signals /// PROGRESS /// RUNTIME ///</p>
+<p class="">signals are expected as follows:</p><ul>
+<li>per socket signals<ul>
+<li>PKG_ENERGY</li>
+<li>DRAM_ENERGY</li>
+</ul>
+</li>
+<li>followed by per cpu signals<ul>
+<li>FREQUENCY</li>
+<li>INST_RETIRED</li>
+<li>CLK_UNHALTED_CORE</li>
+<li>CLK_UNHALTED_REF</li>
+<li>LLC_VICTIMS</li>
+</ul>
+</li>
+<li>followed by per rank signals<ul>
+<li>PROGRESS</li>
+<li>RUNTIME</li>
+</ul>
+</li>
+</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">cpu_rank</td><td>The mapping from cpu index to rank id. </td></tr>
@@ -553,7 +573,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">platform_id</td><td><a class="el" href="classgeopm_1_1_platform.html">Platform</a> identifier specific to the underlying hardware. On x86 platforms this can be obtained by the cpuid instruction. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>description string that can be used to determine if the platform can fulfill the requirements of the request. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">description</td><td>A description string that can be used to determine if the platform can fulfill the requirements of the request. </td></tr>
   </table>
   </dd>
 </dl>
@@ -832,7 +852,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">platform_imp</td><td>A <a class="el" href="classgeopm_1_1_platform_imp.html" title="This class provides an abstraction of specific functionality and attributes of different hardware imp...">PlatformImp</a> object that is compatible with this platform and the underlying hardware. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">do_initialize</td><td>Choose whether or not to initialize the <a class="el" href="classgeopm_1_1_platform.html">Platform</a>. This also initialized the underlying <a class="el" href="classgeopm_1_1_platform_imp.html" title="This class provides an abstraction of specific functionality and attributes of different hardware imp...">PlatformImp</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">do_initialize</td><td>Choose whether or not to initialize the <a class="el" href="classgeopm_1_1_platform.html">Platform</a>. This also initializes the underlying <a class="el" href="classgeopm_1_1_platform_imp.html" title="This class provides an abstraction of specific functionality and attributes of different hardware imp...">PlatformImp</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -902,7 +922,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Return the frequency limit where throttling occurs. </p>
-<dl class="section return"><dt>Returns</dt><dd>frequency limit where anything &lt;= is considered throttling. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>frequency Value that defines the upper bound of frequencies where the processor is considered to be throttled. </dd></dl>
 
 <p>Implemented in <a class="el" href="classgeopm_1_1_platform.html#a7902a0967bf4ab8b118b0eae74977d9c">geopm::Platform</a>.</p>
 
