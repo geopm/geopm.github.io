@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-122-g63534b7 - src/Platform.hpp</title>
+  <title>LCOV - v0.4.0-1-g973044a - src/Platform.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-122-g63534b7</td>
+            <td class="headerValue">v0.4.0-1-g973044a</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">2</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-12-30</td>
+            <td class="headerValue">2018-01-25</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -56,8 +56,8 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">1</td>
             <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">4</td>
             <td class="headerCovTableEntryLo">50.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -77,7 +77,7 @@
 <pre class="sourceHeading">           Branch data     Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
-<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, Intel Corporation
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
 <span class="lineNum">       3 </span>                :            :  *
 <span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions</a>
@@ -125,13 +125,13 @@
 <span class="lineNum">      47 </span>                :            :     class IPlatform
 <a name="48"><span class="lineNum">      48 </span>                :            :     {</a>
 <a name="49"><span class="lineNum">      49 </span>                :            :         public:</a>
-<span class="lineNum">      50 </span>                :<span class="lineCov">         28 :             IPlatform() {}</span>
-<span class="lineNum">      51 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 28 times"> + </span>]:<span class="lineCov">         56 :             virtual ~IPlatform() {}</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">         63 :             IPlatform() {}</span>
+<span class="lineNum">      51 </span>[<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 28 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 21 times"> + </span>]:<span class="lineCov">         98 :             virtual ~IPlatform() {}</span>
 <span class="lineNum">      52 </span>                :            :             /// @brief Set our member variable pointing to a PlatformImp object.
 <a name="53"><span class="lineNum">      53 </span>                :            :             /// @param [in] platform_imp A PlatformImp object that is compatible</a>
 <span class="lineNum">      54 </span>                :            :             ///        with this platform and the underlying hardware.
 <span class="lineNum">      55 </span>                :            :             /// @param [in] do_initialize Choose whether or not to initialize the Platform.
-<span class="lineNum">      56 </span>                :            :             ///        This also initialized the underlying PlatformImp.
+<span class="lineNum">      56 </span>                :            :             ///        This also initializes the underlying PlatformImp.
 <a name="57"><span class="lineNum">      57 </span>                :            :             virtual void set_implementation(PlatformImp* platform_imp, bool do_initialize) = 0;</a>
 <span class="lineNum">      58 </span>                :            :             /// @brief Retrieve the number of power domains.
 <span class="lineNum">      59 </span>                :            :             /// @return Number of power domains.
@@ -176,7 +176,7 @@
 <span class="lineNum">      98 </span>                :            :             /// @param [in] platform_id Platform identifier specific to the
 <span class="lineNum">      99 </span>                :            :             ///        underlying hardware. On x86 platforms this can be obtained by
 <span class="lineNum">     100 </span>                :            :             ///        the cpuid instruction.
-<a name="101"><span class="lineNum">     101 </span>                :            :             /// @param [in] A description string that can be used to determine if the</a>
+<a name="101"><span class="lineNum">     101 </span>                :            :             /// @param [in] description A description string that can be used to determine if the</a>
 <span class="lineNum">     102 </span>                :            :             ///        platform can fulfill the requirements of the request.
 <span class="lineNum">     103 </span>                :            :             /// @return true if this Platform supports platform_id,
 <span class="lineNum">     104 </span>                :            :             ///         else false.
@@ -184,113 +184,115 @@
 <span class="lineNum">     106 </span>                :            :             /// @brief Enforce a static power management mode including
 <span class="lineNum">     107 </span>                :            :             /// tdp_balance_static, freq_uniform_static, and
 <span class="lineNum">     108 </span>                :            :             /// freq_hybrid_static.
-<a name="109"><span class="lineNum">     109 </span>                :            :             /// @param [in] policy A Policy object containing the policy information</a>
-<span class="lineNum">     110 </span>                :            :             ///        to be enforced.
-<span class="lineNum">     111 </span>                :            :             virtual void enforce_policy(uint64_t region_id, IPolicy &amp;policy) const = 0;
-<span class="lineNum">     112 </span>                :            :             /// @brief Return the upper and lower bounds of the control.
-<a name="113"><span class="lineNum">     113 </span>                :            :             ///</a>
-<span class="lineNum">     114 </span>                :            :             /// For a RAPL platform this would be the package power limit,
-<span class="lineNum">     115 </span>                :            :             /// for a frequency platform this would be the p-state bounds.
-<span class="lineNum">     116 </span>                :            :             ///
-<a name="117"><span class="lineNum">     117 </span>                :            :             /// @param [out] upper_bound The upper control bound.</a>
-<span class="lineNum">     118 </span>                :            :             ///
-<span class="lineNum">     119 </span>                :            :             /// @param [out] lower_bound The lower control bound.
-<span class="lineNum">     120 </span>                :            :             ///
-<a name="121"><span class="lineNum">     121 </span>                :            :             virtual void bound(double &amp;upper_bound, double &amp;lower_bound) = 0;</a>
-<span class="lineNum">     122 </span>                :            :             /// @brief Retrieve the topology of the current platform.
-<span class="lineNum">     123 </span>                :            :             /// @return PlatformTopology object containing the current
-<span class="lineNum">     124 </span>                :            :             ///         topology information.
-<a name="125"><span class="lineNum">     125 </span>                :            :             virtual const PlatformTopology *topology(void) const = 0;</a>
-<span class="lineNum">     126 </span>                :            :             ////////////////////////////////////////
-<span class="lineNum">     127 </span>                :            :             /// signals are expected as follows: ///
-<span class="lineNum">     128 </span>                :            :             /// per socket signals               ///
-<a name="129"><span class="lineNum">     129 </span>                :            :             ///     PKG_ENERGY                   ///</a>
-<span class="lineNum">     130 </span>                :            :             ///     DRAM_ENERGY                  ///
-<span class="lineNum">     131 </span>                :            :             /// followed by per cpu signals      ///
-<span class="lineNum">     132 </span>                :            :             ///     FREQUENCY                    ///
-<a name="133"><span class="lineNum">     133 </span>                :            :             ///     INST_RETIRED                 ///</a>
-<span class="lineNum">     134 </span>                :            :             ///     CLK_UNHALTED_CORE            ///
-<span class="lineNum">     135 </span>                :            :             ///     CLK_UNHALTED_REF             ///
-<span class="lineNum">     136 </span>                :            :             ///     LLC_VICTIMS                  ///
-<a name="137"><span class="lineNum">     137 </span>                :            :             /// followed by per rank signals     ///</a>
-<span class="lineNum">     138 </span>                :            :             ///     PROGRESS                     ///
-<span class="lineNum">     139 </span>                :            :             ///     RUNTIME                      ///
-<span class="lineNum">     140 </span>                :            :             ////////////////////////////////////////
-<a name="141"><span class="lineNum">     141 </span>                :            :             /// @brief initialize the signal transformation matrix.</a>
-<span class="lineNum">     142 </span>                :            :             /// Initialize the matrix that transforms the per package,
-<span class="lineNum">     143 </span>                :            :             /// per-cpu, and per-rank signals into the domain of control.
-<span class="lineNum">     144 </span>                :            :             /// @param [in] cpu_rank The mapping from cpu index to rank id.
-<a name="145"><span class="lineNum">     145 </span>                :            :             virtual void init_transform(const std::vector&lt;int&gt; &amp;cpu_rank) = 0;</a>
-<span class="lineNum">     146 </span>                :            :             /// @brief Retrieve the number of control domains
-<span class="lineNum">     147 </span>                :            :             /// @return The number of control domains on the hw platform.
-<span class="lineNum">     148 </span>                :            :             virtual int num_control_domain(void) const = 0;
-<a name="149"><span class="lineNum">     149 </span>                :            :             virtual double control_latency_ms(void) const = 0;</a>
-<span class="lineNum">     150 </span>                :            :             /// @brief Return the frequency limit where throttling occurs.
-<span class="lineNum">     151 </span>                :            :             ///
-<span class="lineNum">     152 </span>                :            :             /// @return frequency limit where anything &lt;= is considered throttling.
-<a name="153"><span class="lineNum">     153 </span>                :            :             virtual double throttle_limit_mhz(void) const = 0;</a>
-<span class="lineNum">     154 </span>                :            :             /// @brief Has the trigger msr of the platform changed value since last call.
-<span class="lineNum">     155 </span>                :            :             virtual bool is_updated(void) = 0;
-<span class="lineNum">     156 </span>                :            :             virtual void transform_rank_data(uint64_t region_id, const struct geopm_time_s &amp;aligned_time,
-<a name="157"><span class="lineNum">     157 </span>                :            :                                              const std::vector&lt;double&gt; &amp;aligned_data,</a>
-<span class="lineNum">     158 </span>                :            :                                              std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry) = 0;
-<span class="lineNum">     159 </span>                :            :     };
-<span class="lineNum">     160 </span>                :            : 
-<a name="161"><span class="lineNum">     161 </span>                :            :     class Platform : public IPlatform</a>
-<span class="lineNum">     162 </span>                :            :     {
-<span class="lineNum">     163 </span>                :            :         public:
-<span class="lineNum">     164 </span>                :            :             /// @brief Default constructor.
-<a name="165"><span class="lineNum">     165 </span>                :            :             Platform();</a>
-<span class="lineNum">     166 </span>                :            :             /// @param [in] control_domain_type enum geopm_domain_type_e
-<span class="lineNum">     167 </span>                :            :             ///        describing the finest grain domain of control.
-<span class="lineNum">     168 </span>                :            :             Platform(int control_domain_type);
-<a name="169"><span class="lineNum">     169 </span>                :            :             /// @brief Default destructor.</a>
-<span class="lineNum">     170 </span>                :            :             virtual ~Platform();
-<span class="lineNum">     171 </span>                :            :             void set_implementation(PlatformImp* platform_imp, bool do_initialize);
-<span class="lineNum">     172 </span>                :            :             int num_domain(void) const;
-<a name="173"><span class="lineNum">     173 </span>                :            :             void name(std::string &amp;plat_name) const;</a>
-<span class="lineNum">     174 </span>                :            :             void tdp_limit(double percentage) const;
-<span class="lineNum">     175 </span>                :            :             void manual_frequency(int frequency, int num_cpu_max_perf, int affinity) const;
-<span class="lineNum">     176 </span>                :            :             void save_msr_state(const char *path) const;
-<a name="177"><span class="lineNum">     177 </span>                :            :             void restore_msr_state(const char *path) const;</a>
-<span class="lineNum">     178 </span>                :            :             void write_msr_whitelist(FILE *file_desc) const;
-<span class="lineNum">     179 </span>                :            :             void revert_msr_state(void) const;
-<span class="lineNum">     180 </span>                :            :             virtual int control_domain(void) = 0;
-<a name="181"><span class="lineNum">     181 </span>                :            :             virtual size_t capacity(void) = 0;</a>
-<span class="lineNum">     182 </span>                :            :             virtual void sample(std::vector&lt;struct geopm_msr_message_s&gt; &amp;msr_values) = 0;
-<span class="lineNum">     183 </span>                :            :             virtual bool model_supported(int platform_id, const std::string &amp;description) const = 0;
-<span class="lineNum">     184 </span>                :            :             virtual void enforce_policy(uint64_t region_id, IPolicy &amp;policy) const = 0;
-<a name="185"><span class="lineNum">     185 </span>                :            :             virtual void bound(double &amp;upper_bound, double &amp;lower_bound) = 0;</a>
-<span class="lineNum">     186 </span>                :            :             const PlatformTopology *topology(void) const;
-<span class="lineNum">     187 </span>                :            :             void init_transform(const std::vector&lt;int&gt; &amp;cpu_rank);
-<span class="lineNum">     188 </span>                :            :             int num_control_domain(void) const;
-<a name="189"><span class="lineNum">     189 </span>                :            :             double control_latency_ms(void) const;</a>
-<span class="lineNum">     190 </span>                :            :             double throttle_limit_mhz(void) const;
-<span class="lineNum">     191 </span>                :            :             virtual bool is_updated(void);
-<span class="lineNum">     192 </span>                :            :             void transform_rank_data(uint64_t region_id, const struct geopm_time_s &amp;aligned_time,
-<a name="193"><span class="lineNum">     193 </span>                :            :                                      const std::vector&lt;double&gt; &amp;aligned_data,</a>
-<span class="lineNum">     194 </span>                :            :                                      std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry);
-<span class="lineNum">     195 </span>                :            :         protected:
-<span class="lineNum">     196 </span>                :            :             /// @brief Platform specific initialization code.
-<a name="197"><span class="lineNum">     197 </span>                :            :             virtual void initialize(void) = 0;</a>
-<span class="lineNum">     198 </span>                :            :             /// @brief Pointer to a PlatformImp object that supports the target
-<span class="lineNum">     199 </span>                :            :             /// hardware platform.
-<span class="lineNum">     200 </span>                :            :             PlatformImp *m_imp;
-<a name="201"><span class="lineNum">     201 </span>                :            :             /// @brief The number of power domains</a>
-<span class="lineNum">     202 </span>                :            :             int m_num_domain;
-<span class="lineNum">     203 </span>                :            :             /// @brief The geopm_domain_type_e of the finest domain of control
-<span class="lineNum">     204 </span>                :            :             /// on the hw platform.
-<a name="205"><span class="lineNum">     205 </span>                :            :             int m_control_domain_type;</a>
-<span class="lineNum">     206 </span>                :            :             int m_num_energy_domain;
-<span class="lineNum">     207 </span>                :            :             int m_num_counter_domain;
-<span class="lineNum">     208 </span>                :            :             /// @brief The matrix that transforms the per package,
-<a name="209"><span class="lineNum">     209 </span>                :            :             /// per-cpu, and per-rank signals into the domain of control.</a>
-<span class="lineNum">     210 </span>                :            :             std::vector&lt;std::vector&lt;int&gt; &gt; m_rank_cpu;
-<span class="lineNum">     211 </span>                :            :             int m_num_rank;
-<span class="lineNum">     212 </span>                :            :     };
-<a name="213"><span class="lineNum">     213 </span>                :            : }</a>
-<span class="lineNum">     214 </span>                :            : 
-<span class="lineNum">     215 </span>                :            : #endif
+<a name="109"><span class="lineNum">     109 </span>                :            :             /// @param [in] region_id The ID of the region to target.</a>
+<span class="lineNum">     110 </span>                :            :             /// @param [in] policy A Policy object containing the policy information
+<span class="lineNum">     111 </span>                :            :             ///        to be enforced.
+<span class="lineNum">     112 </span>                :            :             virtual void enforce_policy(uint64_t region_id, IPolicy &amp;policy) const = 0;
+<a name="113"><span class="lineNum">     113 </span>                :            :             /// @brief Return the upper and lower bounds of the control.</a>
+<span class="lineNum">     114 </span>                :            :             ///
+<span class="lineNum">     115 </span>                :            :             /// For a RAPL platform this would be the package power limit,
+<span class="lineNum">     116 </span>                :            :             /// for a frequency platform this would be the p-state bounds.
+<a name="117"><span class="lineNum">     117 </span>                :            :             ///</a>
+<span class="lineNum">     118 </span>                :            :             /// @param [out] upper_bound The upper control bound.
+<span class="lineNum">     119 </span>                :            :             ///
+<span class="lineNum">     120 </span>                :            :             /// @param [out] lower_bound The lower control bound.
+<a name="121"><span class="lineNum">     121 </span>                :            :             ///</a>
+<span class="lineNum">     122 </span>                :            :             virtual void bound(double &amp;upper_bound, double &amp;lower_bound) = 0;
+<span class="lineNum">     123 </span>                :            :             /// @brief Retrieve the topology of the current platform.
+<span class="lineNum">     124 </span>                :            :             /// @return PlatformTopology object containing the current
+<a name="125"><span class="lineNum">     125 </span>                :            :             ///         topology information.</a>
+<span class="lineNum">     126 </span>                :            :             virtual const PlatformTopology *topology(void) const = 0;
+<span class="lineNum">     127 </span>                :            :             /// @brief initialize the signal transformation matrix.
+<span class="lineNum">     128 </span>                :            :             /// Initialize the matrix that transforms the per package,
+<a name="129"><span class="lineNum">     129 </span>                :            :             /// per-cpu, and per-rank signals into the domain of control.</a>
+<span class="lineNum">     130 </span>                :            :             ////////////////////////////////////////
+<span class="lineNum">     131 </span>                :            :             /// signals are expected as follows:
+<span class="lineNum">     132 </span>                :            :             /// - per socket signals
+<a name="133"><span class="lineNum">     133 </span>                :            :             ///     + PKG_ENERGY</a>
+<span class="lineNum">     134 </span>                :            :             ///     + DRAM_ENERGY
+<span class="lineNum">     135 </span>                :            :             /// - followed by per cpu signals
+<span class="lineNum">     136 </span>                :            :             ///     + FREQUENCY
+<a name="137"><span class="lineNum">     137 </span>                :            :             ///     + INST_RETIRED</a>
+<span class="lineNum">     138 </span>                :            :             ///     + CLK_UNHALTED_CORE
+<span class="lineNum">     139 </span>                :            :             ///     + CLK_UNHALTED_REF
+<span class="lineNum">     140 </span>                :            :             ///     + LLC_VICTIMS
+<a name="141"><span class="lineNum">     141 </span>                :            :             /// - followed by per rank signals</a>
+<span class="lineNum">     142 </span>                :            :             ///     + PROGRESS
+<span class="lineNum">     143 </span>                :            :             ///     + RUNTIME
+<span class="lineNum">     144 </span>                :            :             /////////////////////////////////////////
+<a name="145"><span class="lineNum">     145 </span>                :            :             /// @param [in] cpu_rank The mapping from cpu index to rank id.</a>
+<span class="lineNum">     146 </span>                :            :             virtual void init_transform(const std::vector&lt;int&gt; &amp;cpu_rank) = 0;
+<span class="lineNum">     147 </span>                :            :             /// @brief Retrieve the number of control domains
+<span class="lineNum">     148 </span>                :            :             /// @return The number of control domains on the hw platform.
+<a name="149"><span class="lineNum">     149 </span>                :            :             virtual int num_control_domain(void) const = 0;</a>
+<span class="lineNum">     150 </span>                :            :             virtual double control_latency_ms(void) const = 0;
+<span class="lineNum">     151 </span>                :            :             /// @brief Return the frequency limit where throttling occurs.
+<span class="lineNum">     152 </span>                :            :             ///
+<a name="153"><span class="lineNum">     153 </span>                :            :             /// @return frequency Value that defines the upper bound of frequencies</a>
+<span class="lineNum">     154 </span>                :            :             /// where the processor is considered to be throttled.
+<span class="lineNum">     155 </span>                :            :             virtual double throttle_limit_mhz(void) const = 0;
+<span class="lineNum">     156 </span>                :            :             /// @brief Has the trigger msr of the platform changed value since last call.
+<a name="157"><span class="lineNum">     157 </span>                :            :             virtual bool is_updated(void) = 0;</a>
+<span class="lineNum">     158 </span>                :            :             virtual void transform_rank_data(uint64_t region_id, const struct geopm_time_s &amp;aligned_time,
+<span class="lineNum">     159 </span>                :            :                                              const std::vector&lt;double&gt; &amp;aligned_data,
+<span class="lineNum">     160 </span>                :            :                                              std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry) = 0;
+<a name="161"><span class="lineNum">     161 </span>                :            :     };</a>
+<span class="lineNum">     162 </span>                :            : 
+<span class="lineNum">     163 </span>                :            :     class Platform : public IPlatform
+<span class="lineNum">     164 </span>                :            :     {
+<a name="165"><span class="lineNum">     165 </span>                :            :         public:</a>
+<span class="lineNum">     166 </span>                :            :             /// @brief Default constructor.
+<span class="lineNum">     167 </span>                :            :             Platform();
+<span class="lineNum">     168 </span>                :            :             /// @param [in] control_domain_type enum geopm_domain_type_e
+<a name="169"><span class="lineNum">     169 </span>                :            :             ///        describing the finest grain domain of control.</a>
+<span class="lineNum">     170 </span>                :            :             Platform(int control_domain_type);
+<span class="lineNum">     171 </span>                :            :             /// @brief Default destructor.
+<span class="lineNum">     172 </span>                :            :             virtual ~Platform();
+<a name="173"><span class="lineNum">     173 </span>                :            :             void set_implementation(PlatformImp* platform_imp, bool do_initialize);</a>
+<span class="lineNum">     174 </span>                :            :             int num_domain(void) const;
+<span class="lineNum">     175 </span>                :            :             void name(std::string &amp;plat_name) const;
+<span class="lineNum">     176 </span>                :            :             void tdp_limit(double percentage) const;
+<a name="177"><span class="lineNum">     177 </span>                :            :             void manual_frequency(int frequency, int num_cpu_max_perf, int affinity) const;</a>
+<span class="lineNum">     178 </span>                :            :             void save_msr_state(const char *path) const;
+<span class="lineNum">     179 </span>                :            :             void restore_msr_state(const char *path) const;
+<span class="lineNum">     180 </span>                :            :             void write_msr_whitelist(FILE *file_desc) const;
+<a name="181"><span class="lineNum">     181 </span>                :            :             void revert_msr_state(void) const;</a>
+<span class="lineNum">     182 </span>                :            :             virtual int control_domain(void) = 0;
+<span class="lineNum">     183 </span>                :            :             virtual size_t capacity(void) = 0;
+<span class="lineNum">     184 </span>                :            :             virtual void sample(std::vector&lt;struct geopm_msr_message_s&gt; &amp;msr_values) = 0;
+<a name="185"><span class="lineNum">     185 </span>                :            :             virtual bool model_supported(int platform_id, const std::string &amp;description) const = 0;</a>
+<span class="lineNum">     186 </span>                :            :             virtual void enforce_policy(uint64_t region_id, IPolicy &amp;policy) const = 0;
+<span class="lineNum">     187 </span>                :            :             virtual void bound(double &amp;upper_bound, double &amp;lower_bound) = 0;
+<span class="lineNum">     188 </span>                :            :             const PlatformTopology *topology(void) const;
+<a name="189"><span class="lineNum">     189 </span>                :            :             void init_transform(const std::vector&lt;int&gt; &amp;cpu_rank);</a>
+<span class="lineNum">     190 </span>                :            :             int num_control_domain(void) const;
+<span class="lineNum">     191 </span>                :            :             double control_latency_ms(void) const;
+<span class="lineNum">     192 </span>                :            :             double throttle_limit_mhz(void) const;
+<a name="193"><span class="lineNum">     193 </span>                :            :             virtual bool is_updated(void);</a>
+<span class="lineNum">     194 </span>                :            :             void transform_rank_data(uint64_t region_id, const struct geopm_time_s &amp;aligned_time,
+<span class="lineNum">     195 </span>                :            :                                      const std::vector&lt;double&gt; &amp;aligned_data,
+<span class="lineNum">     196 </span>                :            :                                      std::vector&lt;struct geopm_telemetry_message_s&gt; &amp;telemetry);
+<a name="197"><span class="lineNum">     197 </span>                :            :         protected:</a>
+<span class="lineNum">     198 </span>                :            :             /// @brief Platform specific initialization code.
+<span class="lineNum">     199 </span>                :            :             virtual void initialize(void) = 0;
+<span class="lineNum">     200 </span>                :            :             /// @brief Pointer to a PlatformImp object that supports the target
+<a name="201"><span class="lineNum">     201 </span>                :            :             /// hardware platform.</a>
+<span class="lineNum">     202 </span>                :            :             PlatformImp *m_imp;
+<span class="lineNum">     203 </span>                :            :             /// @brief The number of power domains
+<span class="lineNum">     204 </span>                :            :             int m_num_domain;
+<a name="205"><span class="lineNum">     205 </span>                :            :             /// @brief The geopm_domain_type_e of the finest domain of control</a>
+<span class="lineNum">     206 </span>                :            :             /// on the hw platform.
+<span class="lineNum">     207 </span>                :            :             int m_control_domain_type;
+<span class="lineNum">     208 </span>                :            :             int m_num_energy_domain;
+<a name="209"><span class="lineNum">     209 </span>                :            :             int m_num_counter_domain;</a>
+<span class="lineNum">     210 </span>                :            :             /// @brief The matrix that transforms the per package,
+<span class="lineNum">     211 </span>                :            :             /// per-cpu, and per-rank signals into the domain of control.
+<span class="lineNum">     212 </span>                :            :             std::vector&lt;std::vector&lt;int&gt; &gt; m_rank_cpu;
+<a name="213"><span class="lineNum">     213 </span>                :            :             int m_num_rank;</a>
+<span class="lineNum">     214 </span>                :            :     };
+<span class="lineNum">     215 </span>                :            : }
+<span class="lineNum">     216 </span>                :            : 
+<a name="217"><span class="lineNum">     217 </span>                :            : #endif</a>
 </pre>
       </td>
     </tr>

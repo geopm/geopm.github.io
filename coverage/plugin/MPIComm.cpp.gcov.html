@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-122-g63534b7 - plugin/MPIComm.cpp</title>
+  <title>LCOV - v0.4.0-1-g973044a - plugin/MPIComm.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-122-g63534b7</td>
+            <td class="headerValue">v0.4.0-1-g973044a</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">139</td>
-            <td class="headerCovTableEntry">197</td>
-            <td class="headerCovTableEntryLo">70.6 %</td>
+            <td class="headerCovTableEntry">136</td>
+            <td class="headerCovTableEntry">191</td>
+            <td class="headerCovTableEntryLo">71.2 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-12-30</td>
+            <td class="headerValue">2018-01-25</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">32</td>
-            <td class="headerCovTableEntry">42</td>
-            <td class="headerCovTableEntryMed">76.2 %</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntry">45</td>
+            <td class="headerCovTableEntryLo">68.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">51</td>
-            <td class="headerCovTableEntry">262</td>
-            <td class="headerCovTableEntryLo">19.5 %</td>
+            <td class="headerCovTableEntry">80</td>
+            <td class="headerCovTableEntry">333</td>
+            <td class="headerCovTableEntryLo">24.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -77,7 +77,7 @@
 <pre class="sourceHeading">           Branch data     Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
-<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, Intel Corporation
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
 <span class="lineNum">       3 </span>                :            :  *
 <span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions</a>
@@ -121,387 +121,386 @@
 <span class="lineNum">      43 </span>                :            : #include &quot;geopm_mpi_comm_split.h&quot;
 <span class="lineNum">      44 </span>                :            : #include &quot;config.h&quot;
 <a name="45"><span class="lineNum">      45 </span>                :            : </a>
-<a name="46"><span class="lineNum">      46 </span>                :            : extern &quot;C&quot;</a>
-<span class="lineNum">      47 </span>                :            : {
-<span class="lineNum">      48 </span>                :<span class="lineCov">         98 :     int geopm_plugin_register(int plugin_type, struct geopm_factory_c *factory, void *dl_ptr)</span>
-<a name="49"><span class="lineNum">      49 </span>                :            :     {</a>
-<span class="lineNum">      50 </span>                :<span class="lineCov">         98 :         int err = 0;</span>
-<span class="lineNum">      51 </span>                :            : 
-<span class="lineNum">      52 </span>                :            :         try {
-<a name="53"><span class="lineNum">      53 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 98 times"> + </span>]:<span class="lineCov">         98 :             if (plugin_type == GEOPM_PLUGIN_TYPE_COMM) {</span></a>
-<span class="lineNum">      54 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 geopm_factory_register(factory, geopm::MPIComm::get_comm(), dl_ptr);</span>
-<span class="lineNum">      55 </span>                :            :             }
-<span class="lineNum">      56 </span>                :            :         }
-<a name="57"><span class="lineNum">      57 </span>                :<span class="lineNoCov">          0 :         catch(...) {</span></a>
-<span class="lineNum">      58 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
-<span class="lineNum">      59 </span>                :            :         }
-<span class="lineNum">      60 </span>                :            : 
-<a name="61"><span class="lineNum">      61 </span>                :<span class="lineCov">         98 :         return err;</span></a>
-<span class="lineNum">      62 </span>                :            :     }
-<span class="lineNum">      63 </span>                :            : }
-<span class="lineNum">      64 </span>                :            : 
-<a name="65"><span class="lineNum">      65 </span>                :            : namespace geopm</a>
-<span class="lineNum">      66 </span>                :            : {
-<span class="lineNum">      67 </span>                :            :     const char *MPICOMM_DESCRIPTION = &quot;MPIComm&quot;;
-<span class="lineNum">      68 </span>                :            :     class CommWindow
-<a name="69"><span class="lineNum">      69 </span>                :            :     {</a>
-<span class="lineNum">      70 </span>                :            :         public:
-<span class="lineNum">      71 </span>                :            :             CommWindow(MPI_Comm comm, void *base, size_t size);
-<span class="lineNum">      72 </span>                :            :             virtual ~CommWindow();
-<a name="73"><span class="lineNum">      73 </span>                :            :             void lock(bool is_exclusive, int rank, int assert);</a>
-<span class="lineNum">      74 </span>                :            :             void unlock(int rank);
-<span class="lineNum">      75 </span>                :            :             void put(const void *send_buf, size_t send_size, int rank, off_t disp);
-<span class="lineNum">      76 </span>                :            : #ifndef GEOPM_TEST
-<a name="77"><span class="lineNum">      77 </span>                :            :         protected:</a>
-<span class="lineNum">      78 </span>                :            : #endif
-<span class="lineNum">      79 </span>                :            :             MPI_Win m_window;
-<span class="lineNum">      80 </span>                :            :     };
-<a name="81"><span class="lineNum">      81 </span>                :            :     ///////////////////////////////</a>
-<a name="82"><span class="lineNum">      82 </span>                :            :     // Helper for MPI exceptions //</a>
-<span class="lineNum">      83 </span>                :            :     ///////////////////////////////
-<span class="lineNum">      84 </span>                :<span class="lineCov">         23 :     static void check_mpi(int err)</span>
-<a name="85"><span class="lineNum">      85 </span>                :            :     {</a>
-<span class="lineNum">      86 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 23 times"> + </span>]:<span class="lineCov">         23 :         if (err) {</span>
-<span class="lineNum">      87 </span>                :            :             char error_str[MPI_MAX_ERROR_STRING];
-<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 :             int name_max = MPI_MAX_ERROR_STRING;</span>
-<a name="89"><span class="lineNum">      89 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             MPI_Error_string(err, error_str, &amp;name_max);</span></a>
-<span class="lineNum">      90 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::ostringstream ex_str;</span>
-<span class="lineNum">      91 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;MPI Error: &quot; &lt;&lt; error_str;</span>
-<span class="lineNum">      92 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="93"><span class="lineNum">      93 </span>                :            :         }</a>
-<a name="94"><span class="lineNum">      94 </span>                :<span class="lineCov">         23 :     }</span></a>
-<span class="lineNum">      95 </span>                :            : 
-<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :     const IComm * MPIComm::get_comm()</span>
-<a name="97"><span class="lineNum">      97 </span>                :            :     {</a>
-<span class="lineNum">      98 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         static MPIComm const instance;</span>
-<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
-<span class="lineNum">      99 </span>                :<span class="lineNoCov">          0 :         return &amp;instance;</span>
-<a name="100"><span class="lineNum">     100 </span>                :            :     }</a>
-<a name="101"><span class="lineNum">     101 </span>                :            : </a>
-<span class="lineNum">     102 </span>                :<span class="lineCov">         11 :     MPIComm::MPIComm()</span>
-<span class="lineNum">     103 </span>                :            :         : m_comm(MPI_COMM_WORLD)
-<span class="lineNum">     104 </span>                :            :         , m_maxdims(1)
-<a name="105"><span class="lineNum">     105 </span>        [<span class="branchCov" title="Branch 4 was taken 11 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         11 :         , m_description(MPICOMM_DESCRIPTION)</span></a>
-<span class="lineNum">     106 </span>                :            :     {
-<a name="107"><span class="lineNum">     107 </span>                :<span class="lineCov">         11 :     }</span></a>
-<span class="lineNum">     108 </span>                :            : 
-<a name="109"><span class="lineNum">     109 </span>                :<span class="lineCov">          1 :     MPIComm::MPIComm(const MPIComm *in_comm)</span></a>
-<span class="lineNum">     110 </span>                :            :         : m_comm(MPI_COMM_NULL)
-<span class="lineNum">     111 </span>                :            :         , m_maxdims(1)
-<span class="lineNum">     112 </span>        [<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         , m_description(in_comm-&gt;m_description)</span>
-<a name="113"><span class="lineNum">     113 </span>                :            :     {</a>
-<span class="lineNum">     114 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (in_comm-&gt;is_valid()) {</span>
-<span class="lineNum">     115 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Comm_dup(in_comm-&gt;m_comm, &amp;m_comm));</span>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
-<span class="lineNum">     116 </span>                :            :         }
-<a name="117"><span class="lineNum">     117 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     118 </span>                :            : 
-<span class="lineNum">     119 </span>                :<span class="lineCov">          1 :     MPIComm::MPIComm(const MPIComm *in_comm, std::vector&lt;int&gt; dimension, std::vector&lt;int&gt; periods, bool is_reorder)</span>
-<span class="lineNum">     120 </span>                :            :         : m_comm(MPI_COMM_NULL)
-<a name="121"><span class="lineNum">     121 </span>                :<span class="lineCov">          1 :         , m_maxdims(dimension.size())</span></a>
-<span class="lineNum">     122 </span>        [<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         , m_description(in_comm-&gt;m_description)</span>
-<span class="lineNum">     123 </span>                :            :     {
-<span class="lineNum">     124 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (in_comm-&gt;is_valid()) {</span>
-<a name="125"><span class="lineNum">     125 </span>     [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Cart_create(in_comm-&gt;m_comm, m_maxdims, dimension.data(), periods.data(), (int) is_reorder, &amp;m_comm));</span></a>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
-<span class="lineNum">     126 </span>                :            :         }
-<a name="127"><span class="lineNum">     127 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     128 </span>                :            : 
-<a name="129"><span class="lineNum">     129 </span>                :<span class="lineCov">          1 :     MPIComm::MPIComm(const MPIComm *in_comm, int color, int key)</span></a>
-<span class="lineNum">     130 </span>                :            :         : m_comm(MPI_COMM_NULL)
-<span class="lineNum">     131 </span>                :            :         , m_maxdims(1)
-<span class="lineNum">     132 </span>        [<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         , m_description(in_comm-&gt;m_description)</span>
-<a name="133"><span class="lineNum">     133 </span>                :            :     {</a>
-<span class="lineNum">     134 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         static std::map&lt;int, int&gt; color_map = {{M_SPLIT_COLOR_UNDEFINED, MPI_UNDEFINED}};</span>
-<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>]
-<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         auto it = color_map.find(color);</span>
-<span class="lineNum">     136 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :         if (it != color_map.end()) {</span>
-<a name="137"><span class="lineNum">     137 </span>                :<span class="lineCov">          1 :             color = it-&gt;second;</span></a>
-<span class="lineNum">     138 </span>                :            :         }
-<span class="lineNum">     139 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (in_comm-&gt;is_valid()) {</span>
-<span class="lineNum">     140 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Comm_split(in_comm-&gt;m_comm, color, key, &amp;m_comm));</span>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
-<a name="141"><span class="lineNum">     141 </span>                :            :         }</a>
-<a name="142"><span class="lineNum">     142 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     143 </span>                :            : 
-<span class="lineNum">     144 </span>                :<span class="lineNoCov">          0 :     MPIComm::MPIComm(const MPIComm *in_comm, std::string tag, int split_type)</span>
-<a name="145"><span class="lineNum">     145 </span>                :            :         : m_comm(MPI_COMM_NULL)</a>
-<span class="lineNum">     146 </span>                :            :         , m_maxdims(1)
-<span class="lineNum">     147 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         , m_description(in_comm-&gt;m_description)</span>
-<span class="lineNum">     148 </span>                :            :     {
-<a name="149"><span class="lineNum">     149 </span>                :<span class="lineNoCov">          0 :         int err = 0;</span></a>
-<span class="lineNum">     150 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!in_comm-&gt;is_valid()) {</span>
-<span class="lineNum">     151 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;in_comm is invalid&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     152 </span>                :            :         }
-<a name="153"><span class="lineNum">     153 </span>     [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         switch (split_type) {</span></a>
-<span class="lineNum">     154 </span>                :            :             case M_COMM_SPLIT_TYPE_PPN1:
-<span class="lineNum">     155 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 err = geopm_comm_split_ppn1(in_comm-&gt;m_comm, tag.c_str(), &amp;m_comm);</span>
-<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :                 break;</span>
-<a name="157"><span class="lineNum">     157 </span>                :            :             case M_COMM_SPLIT_TYPE_SHARED:</a>
-<span class="lineNum">     158 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 err = geopm_comm_split_shared(in_comm-&gt;m_comm, tag.c_str(), &amp;m_comm);</span>
-<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :                 break;</span>
-<span class="lineNum">     160 </span>                :            :             default:
-<a name="161"><span class="lineNum">     161 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span></a>
-<span class="lineNum">     162 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;Invalid split_type.&quot;;</span>
-<span class="lineNum">     163 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     164 </span>                :            :         }
-<a name="165"><span class="lineNum">     165 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (err) {</span></a>
-<span class="lineNum">     166 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw geopm::Exception(&quot;geopm_comm_split_ppn1()&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">     167 </span>                :            :         }
-<a name="168"><span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 :     }</span></a>
-<a name="169"><span class="lineNum">     169 </span>                :            : </a>
-<span class="lineNum">     170 </span>                :<span class="lineNoCov">          0 :     MPIComm::MPIComm(const MPIComm *in_comm, std::string tag,  bool &amp;is_ctl)</span>
-<span class="lineNum">     171 </span>                :            :         : m_comm(MPI_COMM_NULL)
-<span class="lineNum">     172 </span>                :            :         , m_maxdims(1)
-<a name="173"><span class="lineNum">     173 </span>        [<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         , m_description(in_comm-&gt;m_description)</span></a>
-<span class="lineNum">     174 </span>                :            :     {
-<span class="lineNum">     175 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (in_comm-&gt;is_valid()) {</span>
-<span class="lineNum">     176 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             geopm_comm_split_ppn1(in_comm-&gt;m_comm, tag.c_str(), &amp;m_comm);</span>
-<a name="177"><span class="lineNum">     177 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (!is_valid()) {</span></a>
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>                :            : namespace geopm
+<span class="lineNum">      48 </span>                :            : {
+<a name="49"><span class="lineNum">      49 </span>                :            :     const char *MPICOMM_DESCRIPTION = &quot;MPIComm&quot;;</a>
+<span class="lineNum">      50 </span>                :            :     class CommWindow
+<span class="lineNum">      51 </span>                :            :     {
+<span class="lineNum">      52 </span>                :            :         public:
+<a name="53"><span class="lineNum">      53 </span>                :            :             CommWindow(MPI_Comm comm, void *base, size_t size);</a>
+<span class="lineNum">      54 </span>                :            :             virtual ~CommWindow();
+<span class="lineNum">      55 </span>                :            :             void lock(bool is_exclusive, int rank, int assert);
+<span class="lineNum">      56 </span>                :            :             void unlock(int rank);
+<a name="57"><span class="lineNum">      57 </span>                :            :             void put(const void *send_buf, size_t send_size, int rank, off_t disp);</a>
+<span class="lineNum">      58 </span>                :            : #ifndef GEOPM_TEST
+<span class="lineNum">      59 </span>                :            :         protected:
+<span class="lineNum">      60 </span>                :            : #endif
+<a name="61"><span class="lineNum">      61 </span>                :            :             MPI_Win m_window;</a>
+<span class="lineNum">      62 </span>                :            :     };
+<span class="lineNum">      63 </span>                :            :     ///////////////////////////////
+<a name="64"><span class="lineNum">      64 </span>                :            :     // Helper for MPI exceptions //</a>
+<a name="65"><span class="lineNum">      65 </span>                :            :     ///////////////////////////////</a>
+<span class="lineNum">      66 </span>                :<span class="lineCov">         46 :     static void check_mpi(int err)</span>
+<span class="lineNum">      67 </span>                :            :     {
+<span class="lineNum">      68 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 46 times"> + </span>]:<span class="lineCov">         46 :         if (err) {</span>
+<a name="69"><span class="lineNum">      69 </span>                :            :             char error_str[MPI_MAX_ERROR_STRING];</a>
+<span class="lineNum">      70 </span>                :<span class="lineNoCov">          0 :             int name_max = MPI_MAX_ERROR_STRING;</span>
+<span class="lineNum">      71 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             MPI_Error_string(err, error_str, &amp;name_max);</span>
+<span class="lineNum">      72 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::ostringstream ex_str;</span>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]
-<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :                 is_ctl = false;</span>
-<span class="lineNum">     179 </span>                :            :             } else {
-<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :                 is_ctl = true;</span>
-<a name="181"><span class="lineNum">     181 </span>                :            :             }</a>
-<span class="lineNum">     182 </span>                :            :         }
-<a name="183"><span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :     }</span></a>
-<span class="lineNum">     184 </span>                :            : 
-<a name="185"><span class="lineNum">     185 </span>                :<span class="lineCov">         28 :     MPIComm::~MPIComm()</span></a>
-<span class="lineNum">     186 </span>                :            :     {
-<span class="lineNum">     187 </span>        [<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 14 times"> + </span>]:<span class="lineCov">         14 :         for (auto it = m_windows.begin(); it != m_windows.end(); ++it) {</span>
-<span class="lineNum">     188 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             delete (CommWindow *) *it;</span>
-<a name="189"><span class="lineNum">     189 </span>                :            :         }</a>
-<span class="lineNum">     190 </span>[<span class="branchCov" title="Branch 1 was taken 14 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 12 times"> + </span><span class="branchCov" title="Branch 4 was taken 2 times"> + </span>]:<span class="lineCov">         14 :         if (is_valid() &amp;&amp; m_comm != MPI_COMM_WORLD) {</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 12 times"> + </span><span class="branchCov" title="Branch 6 was taken 2 times"> + </span>]
-<span class="lineNum">     191 </span>                :<span class="lineCov">         12 :             MPI_Comm_free(&amp;m_comm);</span>
-<span class="lineNum">     192 </span>                :            :         }
-<a name="193"><span class="lineNum">     193 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 14 times"> + </span>]:<span class="lineCov">         14 :     }</span></a>
-<span class="lineNum">     194 </span>                :            : 
-<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split() const</span>
-<span class="lineNum">     196 </span>                :            :     {
-<a name="197"><span class="lineNum">     197 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this);</span></a>
-<a name="198"><span class="lineNum">     198 </span>                :            :     }</a>
-<span class="lineNum">     199 </span>                :            : 
-<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split(int color, int key) const</span>
-<a name="201"><span class="lineNum">     201 </span>                :            :     {</a>
-<span class="lineNum">     202 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this, color, key);</span>
-<a name="203"><span class="lineNum">     203 </span>                :            :     }</a>
-<span class="lineNum">     204 </span>                :            : 
-<a name="205"><span class="lineNum">     205 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split(const std::string &amp;tag, int split_type) const</span></a>
-<span class="lineNum">     206 </span>                :            :     {
-<span class="lineNum">     207 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this, tag, split_type);</span>
-<a name="208"><span class="lineNum">     208 </span>                :            :     }</a>
-<a name="209"><span class="lineNum">     209 </span>                :            : </a>
-<span class="lineNum">     210 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split(std::vector&lt;int&gt; dimensions, std::vector&lt;int&gt; periods, bool is_reorder) const</span>
-<span class="lineNum">     211 </span>                :            :     {
-<span class="lineNum">     212 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this, dimensions, periods, is_reorder);</span>
+<a name="73"><span class="lineNum">      73 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;MPI Error: &quot; &lt;&lt; error_str;</span></a>
+<span class="lineNum">      74 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">      75 </span>                :            :         }
+<a name="76"><span class="lineNum">      76 </span>                :<span class="lineCov">         46 :     }</span></a>
+<a name="77"><span class="lineNum">      77 </span>                :            : </a>
+<span class="lineNum">      78 </span>                :<span class="lineNoCov">          0 :     const IComm * MPIComm::get_comm()</span>
+<span class="lineNum">      79 </span>                :            :     {
+<span class="lineNum">      80 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         static MPIComm const instance;</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<a name="81"><span class="lineNum">      81 </span>                :<span class="lineNoCov">          0 :         return &amp;instance;</span></a>
+<a name="82"><span class="lineNum">      82 </span>                :            :     }</a>
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :<span class="lineCov">         22 :     MPIComm::MPIComm()</span>
+<a name="85"><span class="lineNum">      85 </span>                :            :         : m_comm(MPI_COMM_WORLD)</a>
+<span class="lineNum">      86 </span>                :            :         , m_maxdims(1)
+<span class="lineNum">      87 </span>  [<span class="branchCov" title="Branch 2 was taken 11 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 11 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         22 :         , m_description(MPICOMM_DESCRIPTION)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 6 was taken 11 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">      88 </span>                :            :     {
+<a name="89"><span class="lineNum">      89 </span>                :<span class="lineCov">         22 :     }</span></a>
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>                :<span class="lineCov">          2 :     MPIComm::MPIComm(const MPIComm *in_comm)</span>
+<span class="lineNum">      92 </span>                :            :         : m_comm(MPI_COMM_NULL)
+<a name="93"><span class="lineNum">      93 </span>                :            :         , m_maxdims(1)</a>
+<span class="lineNum">      94 </span>     [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         , m_description(in_comm-&gt;m_description)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+<span class="lineNum">      95 </span>                :            :     {
+<span class="lineNum">      96 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (in_comm-&gt;is_valid()) {</span>
+<a name="97"><span class="lineNum">      97 </span>     [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Comm_dup(in_comm-&gt;m_comm, &amp;m_comm));</span></a>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<span class="lineNum">      98 </span>                :            :         }
+<a name="99"><span class="lineNum">      99 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     100 </span>                :            : 
+<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">          2 :     MPIComm::MPIComm(const MPIComm *in_comm, std::vector&lt;int&gt; dimension, std::vector&lt;int&gt; periods, bool is_reorder)</span></a>
+<span class="lineNum">     102 </span>                :            :         : m_comm(MPI_COMM_NULL)
+<span class="lineNum">     103 </span>                :<span class="lineCov">          2 :         , m_maxdims(dimension.size())</span>
+<span class="lineNum">     104 </span>     [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 :         , m_description(in_comm-&gt;m_description)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+<a name="105"><span class="lineNum">     105 </span>                :            :     {</a>
+<span class="lineNum">     106 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (in_comm-&gt;is_valid()) {</span>
+<span class="lineNum">     107 </span>     [<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Cart_create(in_comm-&gt;m_comm, m_maxdims, dimension.data(), periods.data(), (int) is_reorder, &amp;m_comm));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">     108 </span>                :            :         }
+<a name="109"><span class="lineNum">     109 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineCov">          2 :     MPIComm::MPIComm(const MPIComm *in_comm, int color, int key)</span>
+<span class="lineNum">     112 </span>                :            :         : m_comm(MPI_COMM_NULL)
+<a name="113"><span class="lineNum">     113 </span>                :            :         , m_maxdims(1)</a>
+<span class="lineNum">     114 </span>     [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         , m_description(in_comm-&gt;m_description)</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+<span class="lineNum">     115 </span>                :            :     {
+<span class="lineNum">     116 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         static std::map&lt;int, int&gt; color_map = {{M_SPLIT_COLOR_UNDEFINED, MPI_UNDEFINED}};</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 1 time"> + </span><span class="branchCov" title="Branch 8 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span> 
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<a name="117"><span class="lineNum">     117 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         auto it = color_map.find(color);</span></a>
+<span class="lineNum">     118 </span>[<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">          2 :         if (it != color_map.end()) {</span>
+<span class="lineNum">     119 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineCov">          2 :             color = it-&gt;second;</span>
+<span class="lineNum">     120 </span>                :            :         }
+<a name="121"><span class="lineNum">     121 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (in_comm-&gt;is_valid()) {</span></a>
+<span class="lineNum">     122 </span>     [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Comm_split(in_comm-&gt;m_comm, color, key, &amp;m_comm));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<span class="lineNum">     123 </span>                :            :         }
+<a name="124"><span class="lineNum">     124 </span>                :<span class="lineCov">          2 :     }</span></a>
+<a name="125"><span class="lineNum">     125 </span>                :            : </a>
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :     MPIComm::MPIComm(const MPIComm *in_comm, std::string tag, int split_type)</span>
+<span class="lineNum">     127 </span>                :            :         : m_comm(MPI_COMM_NULL)
+<span class="lineNum">     128 </span>                :            :         , m_maxdims(1)
+<a name="129"><span class="lineNum">     129 </span>     [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         , m_description(in_comm-&gt;m_description)</span></a>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     130 </span>                :            :     {
+<span class="lineNum">     131 </span>                :<span class="lineNoCov">          0 :         int err = 0;</span>
+<span class="lineNum">     132 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (!in_comm-&gt;is_valid()) {</span>
+<a name="133"><span class="lineNum">     133 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(&quot;in_comm is invalid&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     134 </span>                :            :         }
+<span class="lineNum">     135 </span>     [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         switch (split_type) {</span>
+<span class="lineNum">     136 </span>                :            :             case M_COMM_SPLIT_TYPE_PPN1:
+<a name="137"><span class="lineNum">     137 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 err = geopm_comm_split_ppn1(in_comm-&gt;m_comm, tag.c_str(), &amp;m_comm);</span></a>
+<span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :                 break;</span>
+<span class="lineNum">     139 </span>                :            :             case M_COMM_SPLIT_TYPE_SHARED:
+<span class="lineNum">     140 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 err = geopm_comm_split_shared(in_comm-&gt;m_comm, tag.c_str(), &amp;m_comm);</span>
+<a name="141"><span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :                 break;</span></a>
+<span class="lineNum">     142 </span>                :            :             default:
+<span class="lineNum">     143 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span>
+<span class="lineNum">     144 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;Invalid split_type.&quot;;</span>
+<a name="145"><span class="lineNum">     145 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     146 </span>                :            :         }
+<span class="lineNum">     147 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (err) {</span>
+<span class="lineNum">     148 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw geopm::Exception(&quot;geopm_comm_split_ppn1()&quot;, err, __FILE__, __LINE__);</span>
+<a name="149"><span class="lineNum">     149 </span>                :            :         }</a>
+<a name="150"><span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>                :<span class="lineNoCov">          0 :     MPIComm::MPIComm(const MPIComm *in_comm, std::string tag,  bool &amp;is_ctl)</span>
+<a name="153"><span class="lineNum">     153 </span>                :            :         : m_comm(MPI_COMM_NULL)</a>
+<span class="lineNum">     154 </span>                :            :         , m_maxdims(1)
+<span class="lineNum">     155 </span>     [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         , m_description(in_comm-&gt;m_description)</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     156 </span>                :            :     {
+<a name="157"><span class="lineNum">     157 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (in_comm-&gt;is_valid()) {</span></a>
+<span class="lineNum">     158 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             geopm_comm_split_ppn1(in_comm-&gt;m_comm, tag.c_str(), &amp;m_comm);</span>
+<span class="lineNum">     159 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (!is_valid()) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :                 is_ctl = false;</span>
+<a name="161"><span class="lineNum">     161 </span>                :            :             } else {</a>
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :                 is_ctl = true;</span>
+<span class="lineNum">     163 </span>                :            :             }
+<span class="lineNum">     164 </span>                :            :         }
+<a name="165"><span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :<span class="lineCov">         56 :     MPIComm::~MPIComm()</span>
+<span class="lineNum">     168 </span>                :            :     {
+<a name="169"><span class="lineNum">     169 </span>[<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 14 times"> + </span>][<span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 5 was taken 14 times"> + </span>]:<span class="lineCov">         28 :         for (auto it = m_windows.begin(); it != m_windows.end(); ++it) {</span></a>
+<span class="lineNum">     170 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             delete (CommWindow *) *it;</span>
+<span class="lineNum">     171 </span>                :            :         }
+<span class="lineNum">     172 </span>[<span class="branchCov" title="Branch 1 was taken 28 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 24 times"> + </span><span class="branchCov" title="Branch 4 was taken 4 times"> + </span>]:<span class="lineCov">         28 :         if (is_valid() &amp;&amp; m_comm != MPI_COMM_WORLD) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 24 times"> + </span><span class="branchCov" title="Branch 6 was taken 4 times"> + </span>]
+<a name="173"><span class="lineNum">     173 </span>                :<span class="lineCov">         24 :             MPI_Comm_free(&amp;m_comm);</span></a>
+<span class="lineNum">     174 </span>                :            :         }
+<a name="175"><span class="lineNum">     175 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 28 times"> + </span>]:<span class="lineCov">         28 :     }</span></a>
+<span class="lineNum">     176 </span>                :            : 
+<a name="177"><span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split() const</span></a>
+<span class="lineNum">     178 </span>                :            :     {
+<span class="lineNum">     179 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this);</span>
+<a name="180"><span class="lineNum">     180 </span>                :            :     }</a>
+<a name="181"><span class="lineNum">     181 </span>                :            : </a>
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split(int color, int key) const</span>
+<span class="lineNum">     183 </span>                :            :     {
+<span class="lineNum">     184 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this, color, key);</span>
+<a name="185"><span class="lineNum">     185 </span>                :            :     }</a>
+<span class="lineNum">     186 </span>                :            : 
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split(const std::string &amp;tag, int split_type) const</span>
+<span class="lineNum">     188 </span>                :            :     {
+<a name="189"><span class="lineNum">     189 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this, tag, split_type);</span></a>
+<a name="190"><span class="lineNum">     190 </span>                :            :     }</a>
+<span class="lineNum">     191 </span>                :            : 
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :     IComm* MPIComm::split(std::vector&lt;int&gt; dimensions, std::vector&lt;int&gt; periods, bool is_reorder) const</span>
+<a name="193"><span class="lineNum">     193 </span>                :            :     {</a>
+<span class="lineNum">     194 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :         return new MPIComm(this, dimensions, periods, is_reorder);</span>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
-<a name="213"><span class="lineNum">     213 </span>                :            :     }</a>
-<span class="lineNum">     214 </span>                :            : 
-<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :     bool MPIComm::comm_supported(const std::string &amp;description) const</span>
-<span class="lineNum">     216 </span>                :            :     {
-<a name="217"><span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :         return description == m_description;</span></a>
+<a name="195"><span class="lineNum">     195 </span>                :            :     }</a>
+<span class="lineNum">     196 </span>                :            : 
+<a name="197"><span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :     bool MPIComm::comm_supported(const std::string &amp;description) const</span></a>
+<span class="lineNum">     198 </span>                :            :     {
+<span class="lineNum">     199 </span>                :<span class="lineNoCov">          0 :         return description == m_description;</span>
+<a name="200"><span class="lineNum">     200 </span>                :            :     }</a>
+<a name="201"><span class="lineNum">     201 </span>                :            : </a>
+<span class="lineNum">     202 </span>                :<span class="lineCov">          2 :     int MPIComm::cart_rank(const std::vector&lt;int&gt; &amp;coords) const</span>
+<span class="lineNum">     203 </span>                :            :     {
+<span class="lineNum">     204 </span>                :<span class="lineCov">          2 :         int rank = -1;</span>
+<a name="205"><span class="lineNum">     205 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span></a>
+<span class="lineNum">     206 </span>     [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Cart_rank(m_comm, GEOPM_MPI_CONST_CAST(int *)(coords.data()), &amp;rank));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+<span class="lineNum">     207 </span>                :            :         }
+<span class="lineNum">     208 </span>                :<span class="lineCov">          2 :         return rank;</span>
+<a name="209"><span class="lineNum">     209 </span>                :            :     }</a>
+<span class="lineNum">     210 </span>                :            : 
+<span class="lineNum">     211 </span>                :<span class="lineCov">          2 :     int MPIComm::rank(void) const</span>
+<span class="lineNum">     212 </span>                :            :     {
+<a name="213"><span class="lineNum">     213 </span>                :<span class="lineCov">          2 :         int tmp_rank = -1;</span></a>
+<span class="lineNum">     214 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<span class="lineNum">     215 </span>     [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Comm_rank(m_comm, &amp;tmp_rank));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<span class="lineNum">     216 </span>                :            :         }
+<a name="217"><span class="lineNum">     217 </span>                :<span class="lineCov">          2 :         return tmp_rank;</span></a>
 <a name="218"><span class="lineNum">     218 </span>                :            :     }</a>
 <span class="lineNum">     219 </span>                :            : 
-<span class="lineNum">     220 </span>                :<span class="lineCov">          1 :     int MPIComm::cart_rank(const std::vector&lt;int&gt; &amp;coords) const</span>
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 :     int MPIComm::num_rank(void) const</span>
 <a name="221"><span class="lineNum">     221 </span>                :            :     {</a>
-<span class="lineNum">     222 </span>                :<span class="lineCov">          1 :         int rank = -1;</span>
-<span class="lineNum">     223 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<span class="lineNum">     224 </span>     [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Cart_rank(m_comm, GEOPM_MPI_CONST_CAST(int *)(coords.data()), &amp;rank));</span>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     222 </span>                :<span class="lineNoCov">          0 :         int tmp_size = 0;</span>
+<span class="lineNum">     223 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (is_valid()) {</span>
+<span class="lineNum">     224 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             check_mpi(PMPI_Comm_size(m_comm, &amp;tmp_size));</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
 <a name="225"><span class="lineNum">     225 </span>                :            :         }</a>
-<span class="lineNum">     226 </span>                :<span class="lineCov">          1 :         return rank;</span>
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :         return tmp_size;</span>
 <a name="227"><span class="lineNum">     227 </span>                :            :     }</a>
 <span class="lineNum">     228 </span>                :            : 
-<a name="229"><span class="lineNum">     229 </span>                :<span class="lineCov">          1 :     int MPIComm::rank(void) const</span></a>
+<a name="229"><span class="lineNum">     229 </span>                :<span class="lineCov">          2 :     void MPIComm::dimension_create(int num_ranks, std::vector&lt;int&gt; &amp;dimension) const</span></a>
 <span class="lineNum">     230 </span>                :            :     {
-<span class="lineNum">     231 </span>                :<span class="lineCov">          1 :         int tmp_rank = -1;</span>
-<span class="lineNum">     232 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<a name="233"><span class="lineNum">     233 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Comm_rank(m_comm, &amp;tmp_rank));</span></a>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
-<span class="lineNum">     234 </span>                :            :         }
-<span class="lineNum">     235 </span>                :<span class="lineCov">          1 :         return tmp_rank;</span>
-<a name="236"><span class="lineNum">     236 </span>                :            :     }</a>
-<a name="237"><span class="lineNum">     237 </span>                :            : </a>
-<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :     int MPIComm::num_rank(void) const</span>
-<span class="lineNum">     239 </span>                :            :     {
-<span class="lineNum">     240 </span>                :<span class="lineNoCov">          0 :         int tmp_size = 0;</span>
-<a name="241"><span class="lineNum">     241 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (is_valid()) {</span></a>
-<span class="lineNum">     242 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             check_mpi(PMPI_Comm_size(m_comm, &amp;tmp_size));</span>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
-<span class="lineNum">     243 </span>                :            :         }
-<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :         return tmp_size;</span>
-<a name="245"><span class="lineNum">     245 </span>                :            :     }</a>
-<span class="lineNum">     246 </span>                :            : 
-<span class="lineNum">     247 </span>                :<span class="lineCov">          1 :     void MPIComm::dimension_create(int num_ranks, std::vector&lt;int&gt; &amp;dimension) const</span>
-<span class="lineNum">     248 </span>                :            :     {
-<a name="249"><span class="lineNum">     249 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Dims_create(num_ranks, dimension.size(), dimension.data()));</span></a>
-<a name="250"><span class="lineNum">     250 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     251 </span>                :            : 
-<span class="lineNum">     252 </span>                :<span class="lineCov">          7 :     void MPIComm::check_window(size_t win_handle) const</span>
-<a name="253"><span class="lineNum">     253 </span>                :            :     {</a>
-<span class="lineNum">     254 </span>[<span class="branchCov" title="Branch 2 was taken 7 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 7 times"> + </span>]:<span class="lineCov">          7 :         if (m_windows.find(win_handle) == m_windows.end()) {</span>
-<span class="lineNum">     255 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::ostringstream ex_str;</span>
-<span class="lineNum">     256 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;requested window handle &quot; &lt;&lt; win_handle &lt;&lt; &quot; invalid&quot;;</span>
+<span class="lineNum">     231 </span>                :<span class="lineCov">          2 :         check_mpi(PMPI_Dims_create(num_ranks, dimension.size(), dimension.data()));</span>
+<a name="232"><span class="lineNum">     232 </span>                :<span class="lineCov">          2 :     }</span></a>
+<a name="233"><span class="lineNum">     233 </span>                :            : </a>
+<span class="lineNum">     234 </span>                :<span class="lineCov">         14 :     void MPIComm::check_window(size_t win_handle) const</span>
+<span class="lineNum">     235 </span>                :            :     {
+<span class="lineNum">     236 </span>[<span class="branchCov" title="Branch 2 was taken 14 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>][<span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 14 times"> + </span>]:<span class="lineCov">         14 :         if (m_windows.find(win_handle) == m_windows.end()) {</span>
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
-<a name="257"><span class="lineNum">     257 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     258 </span>                :            :         }
-<a name="259"><span class="lineNum">     259 </span>                :<span class="lineCov">          7 :     }</span></a>
-<span class="lineNum">     260 </span>                :            : 
-<a name="261"><span class="lineNum">     261 </span>                :<span class="lineCov">         26 :     bool MPIComm::is_valid() const</span></a>
-<span class="lineNum">     262 </span>                :            :     {
-<span class="lineNum">     263 </span>                :<span class="lineCov">         26 :         return m_comm != MPI_COMM_NULL;</span>
-<a name="264"><span class="lineNum">     264 </span>                :            :     }</a>
-<a name="265"><span class="lineNum">     265 </span>                :            : </a>
-<span class="lineNum">     266 </span>                :<span class="lineCov">          1 :     void MPIComm::alloc_mem(size_t size, void **base)</span>
-<span class="lineNum">     267 </span>                :            :     {
-<span class="lineNum">     268 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Alloc_mem(size, MPI_INFO_NULL, base));</span>
-<a name="269"><span class="lineNum">     269 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     270 </span>                :            : 
-<span class="lineNum">     271 </span>                :<span class="lineCov">          1 :     void MPIComm::free_mem(void *base)</span>
-<span class="lineNum">     272 </span>                :            :     {
-<a name="273"><span class="lineNum">     273 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Free_mem(base));</span></a>
-<a name="274"><span class="lineNum">     274 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     275 </span>                :            : 
-<span class="lineNum">     276 </span>                :<span class="lineCov">          1 :     size_t MPIComm::window_create(size_t size, void *base)</span>
-<a name="277"><span class="lineNum">     277 </span>                :            :     {</a>
-<span class="lineNum">     278 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :         CommWindow *win_handle = new CommWindow(m_comm, base, size);</span>
-<span class="lineNum">     279 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         m_windows.insert((size_t) win_handle);</span>
-<span class="lineNum">     280 </span>                :<span class="lineCov">          1 :         return (size_t ) win_handle;</span>
-<a name="281"><span class="lineNum">     281 </span>                :            :     }</a>
-<span class="lineNum">     282 </span>                :            : 
-<span class="lineNum">     283 </span>                :<span class="lineCov">          1 :     void MPIComm::window_destroy(size_t win_handle)</span>
-<span class="lineNum">     284 </span>                :            :     {
-<a name="285"><span class="lineNum">     285 </span>                :<span class="lineCov">          1 :         check_window(win_handle);</span></a>
-<span class="lineNum">     286 </span>                :<span class="lineCov">          1 :         m_windows.erase(win_handle);</span>
-<span class="lineNum">     287 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         delete (CommWindow *) win_handle;</span>
-<a name="288"><span class="lineNum">     288 </span>                :<span class="lineCov">          1 :     }</span></a>
-<a name="289"><span class="lineNum">     289 </span>                :            : </a>
-<span class="lineNum">     290 </span>                :<span class="lineCov">          4 :     void MPIComm::window_lock(size_t window_id, bool is_exclusive, int rank, int assert) const</span>
-<span class="lineNum">     291 </span>                :            :     {
-<span class="lineNum">     292 </span>                :<span class="lineCov">          4 :         check_window(window_id);</span>
-<a name="293"><span class="lineNum">     293 </span>                :<span class="lineCov">          4 :         ((CommWindow *) window_id)-&gt;lock(is_exclusive, rank, assert);</span></a>
-<a name="294"><span class="lineNum">     294 </span>                :<span class="lineCov">          4 :     }</span></a>
-<span class="lineNum">     295 </span>                :            : 
-<span class="lineNum">     296 </span>                :<span class="lineCov">          1 :     void MPIComm::window_unlock(size_t window_id, int rank) const</span>
-<a name="297"><span class="lineNum">     297 </span>                :            :     {</a>
-<span class="lineNum">     298 </span>                :<span class="lineCov">          1 :         check_window(window_id);</span>
-<span class="lineNum">     299 </span>                :<span class="lineCov">          1 :         ((CommWindow *) window_id)-&gt;unlock(rank);</span>
-<a name="300"><span class="lineNum">     300 </span>                :<span class="lineCov">          1 :     }</span></a>
-<a name="301"><span class="lineNum">     301 </span>                :            : </a>
-<span class="lineNum">     302 </span>                :<span class="lineCov">          1 :     void MPIComm::coordinate(int rank, std::vector&lt;int&gt; &amp;coord) const</span>
-<span class="lineNum">     303 </span>                :            :     {
-<span class="lineNum">     304 </span>                :<span class="lineCov">          1 :         size_t in_size = coord.size();</span>
-<a name="305"><span class="lineNum">     305 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :         if (m_maxdims != in_size) {</span></a>
-<span class="lineNum">     306 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::stringstream ex_str;</span>
-<span class="lineNum">     307 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;input coord size (&quot; &lt;&lt; in_size &lt;&lt; &quot;) != m_maxdims (&quot; &lt;&lt; m_maxdims &lt;&lt; &quot;)&quot;;</span>
+<a name="237"><span class="lineNum">     237 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::ostringstream ex_str;</span></a>
+<span class="lineNum">     238 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;requested window handle &quot; &lt;&lt; win_handle &lt;&lt; &quot; invalid&quot;;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">     239 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     240 </span>                :            :         }
+<a name="241"><span class="lineNum">     241 </span>                :<span class="lineCov">         14 :     }</span></a>
+<span class="lineNum">     242 </span>                :            : 
+<span class="lineNum">     243 </span>                :<span class="lineCov">         52 :     bool MPIComm::is_valid() const</span>
+<span class="lineNum">     244 </span>                :            :     {
+<a name="245"><span class="lineNum">     245 </span>                :<span class="lineCov">         52 :         return m_comm != MPI_COMM_NULL;</span></a>
+<a name="246"><span class="lineNum">     246 </span>                :            :     }</a>
+<span class="lineNum">     247 </span>                :            : 
+<span class="lineNum">     248 </span>                :<span class="lineCov">          2 :     void MPIComm::alloc_mem(size_t size, void **base)</span>
+<a name="249"><span class="lineNum">     249 </span>                :            :     {</a>
+<span class="lineNum">     250 </span>                :<span class="lineCov">          2 :         check_mpi(PMPI_Alloc_mem(size, MPI_INFO_NULL, base));</span>
+<a name="251"><span class="lineNum">     251 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     252 </span>                :            : 
+<a name="253"><span class="lineNum">     253 </span>                :<span class="lineCov">          2 :     void MPIComm::free_mem(void *base)</span></a>
+<span class="lineNum">     254 </span>                :            :     {
+<span class="lineNum">     255 </span>                :<span class="lineCov">          2 :         check_mpi(PMPI_Free_mem(base));</span>
+<a name="256"><span class="lineNum">     256 </span>                :<span class="lineCov">          2 :     }</span></a>
+<a name="257"><span class="lineNum">     257 </span>                :            : </a>
+<span class="lineNum">     258 </span>                :<span class="lineCov">          2 :     size_t MPIComm::window_create(size_t size, void *base)</span>
+<span class="lineNum">     259 </span>                :            :     {
+<span class="lineNum">     260 </span>        [<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :         CommWindow *win_handle = new CommWindow(m_comm, base, size);</span>
+<a name="261"><span class="lineNum">     261 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         m_windows.insert((size_t) win_handle);</span></a>
+<span class="lineNum">     262 </span>                :<span class="lineCov">          2 :         return (size_t ) win_handle;</span>
+<a name="263"><span class="lineNum">     263 </span>                :            :     }</a>
+<span class="lineNum">     264 </span>                :            : 
+<a name="265"><span class="lineNum">     265 </span>                :<span class="lineCov">          2 :     void MPIComm::window_destroy(size_t win_handle)</span></a>
+<span class="lineNum">     266 </span>                :            :     {
+<span class="lineNum">     267 </span>                :<span class="lineCov">          2 :         check_window(win_handle);</span>
+<span class="lineNum">     268 </span>                :<span class="lineCov">          2 :         m_windows.erase(win_handle);</span>
+<a name="269"><span class="lineNum">     269 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :         delete (CommWindow *) win_handle;</span></a>
+<a name="270"><span class="lineNum">     270 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     271 </span>                :            : 
+<span class="lineNum">     272 </span>                :<span class="lineCov">          8 :     void MPIComm::window_lock(size_t window_id, bool is_exclusive, int rank, int assert) const</span>
+<a name="273"><span class="lineNum">     273 </span>                :            :     {</a>
+<span class="lineNum">     274 </span>                :<span class="lineCov">          8 :         check_window(window_id);</span>
+<span class="lineNum">     275 </span>                :<span class="lineCov">          8 :         ((CommWindow *) window_id)-&gt;lock(is_exclusive, rank, assert);</span>
+<a name="276"><span class="lineNum">     276 </span>                :<span class="lineCov">          8 :     }</span></a>
+<a name="277"><span class="lineNum">     277 </span>                :            : </a>
+<span class="lineNum">     278 </span>                :<span class="lineCov">          2 :     void MPIComm::window_unlock(size_t window_id, int rank) const</span>
+<span class="lineNum">     279 </span>                :            :     {
+<span class="lineNum">     280 </span>                :<span class="lineCov">          2 :         check_window(window_id);</span>
+<a name="281"><span class="lineNum">     281 </span>                :<span class="lineCov">          2 :         ((CommWindow *) window_id)-&gt;unlock(rank);</span></a>
+<a name="282"><span class="lineNum">     282 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     283 </span>                :            : 
+<span class="lineNum">     284 </span>                :<span class="lineCov">          2 :     void MPIComm::coordinate(int rank, std::vector&lt;int&gt; &amp;coord) const</span>
+<a name="285"><span class="lineNum">     285 </span>                :            :     {</a>
+<span class="lineNum">     286 </span>                :<span class="lineCov">          2 :         size_t in_size = coord.size();</span>
+<span class="lineNum">     287 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          2 :         if (m_maxdims != in_size) {</span>
+<span class="lineNum">     288 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             std::stringstream ex_str;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<a name="289"><span class="lineNum">     289 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;input coord size (&quot; &lt;&lt; in_size &lt;&lt; &quot;) != m_maxdims (&quot; &lt;&lt; m_maxdims &lt;&lt; &quot;)&quot;;</span></a>
 <span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
 <span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>]
-<span class="lineNum">     308 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw geopm::Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="309"><span class="lineNum">     309 </span>                :            :         }</a>
-<span class="lineNum">     310 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<span class="lineNum">     311 </span>                :<span class="lineCov">          1 :             check_mpi(PMPI_Cart_coords(m_comm, rank, m_maxdims, coord.data()));</span>
-<span class="lineNum">     312 </span>                :            :         }
-<a name="313"><span class="lineNum">     313 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     314 </span>                :            : 
-<span class="lineNum">     315 </span>                :<span class="lineCov">          1 :     void MPIComm::barrier(void) const</span>
-<span class="lineNum">     316 </span>                :            :     {
-<a name="317"><span class="lineNum">     317 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span></a>
-<span class="lineNum">     318 </span>                :<span class="lineCov">          1 :             check_mpi(PMPI_Barrier(m_comm));</span>
-<span class="lineNum">     319 </span>                :            :         }
-<a name="320"><span class="lineNum">     320 </span>                :<span class="lineCov">          1 :     }</span></a>
-<a name="321"><span class="lineNum">     321 </span>                :            : </a>
-<span class="lineNum">     322 </span>                :<span class="lineCov">          1 :     void MPIComm::broadcast(void *buffer, size_t size, int root) const</span>
-<span class="lineNum">     323 </span>                :            :     {
-<span class="lineNum">     324 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<a name="325"><span class="lineNum">     325 </span>                :<span class="lineCov">          1 :             check_mpi(PMPI_Bcast(buffer, size, MPI_BYTE, root, m_comm));</span></a>
-<span class="lineNum">     326 </span>                :            :         }
-<span class="lineNum">     327 </span>                :<span class="lineCov">          1 :     }</span>
-<a name="328"><span class="lineNum">     328 </span>                :            : </a>
-<a name="329"><span class="lineNum">     329 </span>                :            : </a>
-<span class="lineNum">     330 </span>                :<span class="lineCov">          1 :     void MPIComm::reduce_max(double *send_buf, double *recv_buf, size_t count, int root) const</span>
+<span class="lineNum">     290 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]:<span class="lineNoCov">          0 :             throw geopm::Exception(ex_str.str(), GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     291 </span>                :            :         }
+<span class="lineNum">     292 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<a name="293"><span class="lineNum">     293 </span>                :<span class="lineCov">          2 :             check_mpi(PMPI_Cart_coords(m_comm, rank, m_maxdims, coord.data()));</span></a>
+<span class="lineNum">     294 </span>                :            :         }
+<a name="295"><span class="lineNum">     295 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     296 </span>                :            : 
+<a name="297"><span class="lineNum">     297 </span>                :<span class="lineCov">          2 :     void MPIComm::barrier(void) const</span></a>
+<span class="lineNum">     298 </span>                :            :     {
+<span class="lineNum">     299 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<span class="lineNum">     300 </span>                :<span class="lineCov">          2 :             check_mpi(PMPI_Barrier(m_comm));</span>
+<a name="301"><span class="lineNum">     301 </span>                :            :         }</a>
+<a name="302"><span class="lineNum">     302 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     303 </span>                :            : 
+<span class="lineNum">     304 </span>                :<span class="lineCov">          2 :     void MPIComm::broadcast(void *buffer, size_t size, int root) const</span>
+<a name="305"><span class="lineNum">     305 </span>                :            :     {</a>
+<span class="lineNum">     306 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<span class="lineNum">     307 </span>                :<span class="lineCov">          2 :             check_mpi(PMPI_Bcast(buffer, size, MPI_BYTE, root, m_comm));</span>
+<span class="lineNum">     308 </span>                :            :         }
+<a name="309"><span class="lineNum">     309 </span>                :<span class="lineCov">          2 :     }</span></a>
+<a name="310"><span class="lineNum">     310 </span>                :            : </a>
+<span class="lineNum">     311 </span>                :            : 
+<span class="lineNum">     312 </span>                :<span class="lineCov">          2 :     void MPIComm::reduce_max(double *send_buf, double *recv_buf, size_t count, int root) const</span>
+<a name="313"><span class="lineNum">     313 </span>                :            :     {</a>
+<span class="lineNum">     314 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<span class="lineNum">     315 </span>                :<span class="lineCov">          2 :             check_mpi(PMPI_Reduce(send_buf, recv_buf, count, MPI_DOUBLE, MPI_MAX, root, m_comm));</span>
+<span class="lineNum">     316 </span>                :            :         }
+<a name="317"><span class="lineNum">     317 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     318 </span>                :            : 
+<span class="lineNum">     319 </span>                :<span class="lineCov">          2 :     bool MPIComm::test(bool is_true) const</span>
+<span class="lineNum">     320 </span>                :            :     {
+<a name="321"><span class="lineNum">     321 </span>                :<span class="lineCov">          2 :         int is_all_true = 0;</span></a>
+<span class="lineNum">     322 </span>                :<span class="lineCov">          2 :         int tmp_is_true = (int) is_true;</span>
+<span class="lineNum">     323 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<span class="lineNum">     324 </span>     [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Allreduce(&amp;tmp_is_true, &amp;is_all_true, 1, MPI_INT, MPI_LAND, m_comm));</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<a name="325"><span class="lineNum">     325 </span>                :            :         }</a>
+<span class="lineNum">     326 </span>                :<span class="lineCov">          2 :         return (bool) is_all_true;</span>
+<a name="327"><span class="lineNum">     327 </span>                :            :     }</a>
+<span class="lineNum">     328 </span>                :            : 
+<a name="329"><span class="lineNum">     329 </span>                :<span class="lineCov">          2 :     void MPIComm::gather(const void *send_buf, size_t send_size, void *recv_buf,</span></a>
+<span class="lineNum">     330 </span>                :            :             size_t recv_size, int root) const
 <span class="lineNum">     331 </span>                :            :     {
-<span class="lineNum">     332 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<a name="333"><span class="lineNum">     333 </span>                :<span class="lineCov">          1 :             check_mpi(PMPI_Reduce(send_buf, recv_buf, count, MPI_DOUBLE, MPI_MAX, root, m_comm));</span></a>
+<span class="lineNum">     332 </span>        [<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<a name="333"><span class="lineNum">     333 </span>                :<span class="lineCov">          2 :             check_mpi(PMPI_Gather(GEOPM_MPI_CONST_CAST(void *)(send_buf), send_size, MPI_BYTE, recv_buf, recv_size, MPI_BYTE, root, m_comm));</span></a>
 <span class="lineNum">     334 </span>                :            :         }
-<a name="335"><span class="lineNum">     335 </span>                :<span class="lineCov">          1 :     }</span></a>
+<a name="335"><span class="lineNum">     335 </span>                :<span class="lineCov">          2 :     }</span></a>
 <span class="lineNum">     336 </span>                :            : 
-<a name="337"><span class="lineNum">     337 </span>                :<span class="lineCov">          1 :     bool MPIComm::test(bool is_true) const</span></a>
-<span class="lineNum">     338 </span>                :            :     {
-<span class="lineNum">     339 </span>                :<span class="lineCov">          1 :         int is_all_true = 0;</span>
-<span class="lineNum">     340 </span>                :<span class="lineCov">          1 :         int tmp_is_true = (int) is_true;</span>
-<a name="341"><span class="lineNum">     341 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span></a>
-<span class="lineNum">     342 </span>     [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Allreduce(&amp;tmp_is_true, &amp;is_all_true, 1, MPI_INT, MPI_LAND, m_comm));</span>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
-<span class="lineNum">     343 </span>                :            :         }
-<span class="lineNum">     344 </span>                :<span class="lineCov">          1 :         return (bool) is_all_true;</span>
-<a name="345"><span class="lineNum">     345 </span>                :            :     }</a>
+<a name="337"><span class="lineNum">     337 </span>                :<span class="lineCov">          2 :     void MPIComm::gatherv(const void *send_buf, size_t send_size, void *recv_buf,</span></a>
+<span class="lineNum">     338 </span>                :            :                     const std::vector&lt;size_t&gt; &amp;recv_sizes, const std::vector&lt;off_t&gt; &amp;rank_offset, int root) const
+<span class="lineNum">     339 </span>                :            :     {
+<span class="lineNum">     340 </span>        [<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          3 :         std::vector&lt;int&gt; sizes(recv_sizes.size(), 0);</span>
+<a name="341"><span class="lineNum">     341 </span>[<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 :         std::vector&lt;int&gt; offsets(rank_offset.size(), 0);</span></a>
+<span class="lineNum">     342 </span>                :<span class="lineCov">          2 :         auto in_size_it = recv_sizes.begin();</span>
+<span class="lineNum">     343 </span>                :<span class="lineCov">          2 :         auto out_size_it = sizes.begin();</span>
+<span class="lineNum">     344 </span>                :<span class="lineCov">          2 :         auto in_off_it = rank_offset.begin();</span>
+<a name="345"><span class="lineNum">     345 </span>                :<span class="lineCov">          2 :         auto out_off_it = offsets.begin();</span></a>
 <span class="lineNum">     346 </span>                :            : 
-<span class="lineNum">     347 </span>                :<span class="lineCov">          1 :     void MPIComm::gather(const void *send_buf, size_t send_size, void *recv_buf,</span>
-<span class="lineNum">     348 </span>                :            :             size_t recv_size, int root) const
-<a name="349"><span class="lineNum">     349 </span>                :            :     {</a>
-<span class="lineNum">     350 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<span class="lineNum">     351 </span>                :<span class="lineCov">          1 :             check_mpi(PMPI_Gather(GEOPM_MPI_CONST_CAST(void *)(send_buf), send_size, MPI_BYTE, recv_buf, recv_size, MPI_BYTE, root, m_comm));</span>
-<span class="lineNum">     352 </span>                :            :         }
-<a name="353"><span class="lineNum">     353 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     354 </span>                :            : 
-<span class="lineNum">     355 </span>                :<span class="lineCov">          1 :     void MPIComm::gatherv(const void *send_buf, size_t send_size, void *recv_buf,</span>
-<span class="lineNum">     356 </span>                :            :                     const std::vector&lt;size_t&gt; &amp;recv_sizes, const std::vector&lt;off_t&gt; &amp;rank_offset, int root) const
-<a name="357"><span class="lineNum">     357 </span>                :            :     {</a>
-<span class="lineNum">     358 </span>        [<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::vector&lt;int&gt; sizes(recv_sizes.size(), 0);</span>
-<span class="lineNum">     359 </span>        [<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         std::vector&lt;int&gt; offsets(rank_offset.size(), 0);</span>
-<span class="lineNum">     360 </span>                :<span class="lineCov">          1 :         auto in_size_it = recv_sizes.begin();</span>
-<a name="361"><span class="lineNum">     361 </span>                :<span class="lineCov">          1 :         auto out_size_it = sizes.begin();</span></a>
-<span class="lineNum">     362 </span>                :<span class="lineCov">          1 :         auto in_off_it = rank_offset.begin();</span>
-<span class="lineNum">     363 </span>                :<span class="lineCov">          1 :         auto out_off_it = offsets.begin();</span>
-<span class="lineNum">     364 </span>                :            : 
-<a name="365"><span class="lineNum">     365 </span>        [<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          2 :         for (;in_size_it != recv_sizes.end();</span></a>
-<span class="lineNum">     366 </span>                :            :              ++in_size_it, ++out_size_it,
-<span class="lineNum">     367 </span>                :            :              ++in_off_it, ++out_off_it) {
-<span class="lineNum">     368 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span>]:<span class="lineCov">          1 :             if (*in_size_it &gt; INT_MAX) {</span>
-<a name="369"><span class="lineNum">     369 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;Overflow detected in gatherv&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     370 </span>                :            :             }
-<span class="lineNum">     371 </span>                :<span class="lineCov">          1 :             *out_size_it = *in_size_it;</span>
-<span class="lineNum">     372 </span>                :<span class="lineCov">          1 :             *out_off_it = *in_off_it;</span>
-<a name="373"><span class="lineNum">     373 </span>                :            :         }</a>
-<span class="lineNum">     374 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          1 :         if (is_valid()) {</span>
-<span class="lineNum">     375 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">          1 :             check_mpi(PMPI_Gatherv(GEOPM_MPI_CONST_CAST(void *)(send_buf), send_size, MPI_BYTE, recv_buf, sizes.data(),</span>
-<span class="lineNum">     376 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :                                    offsets.data(), MPI_BYTE, root, m_comm));</span>
-<a name="377"><span class="lineNum">     377 </span>                :            :         }</a>
-<a name="378"><span class="lineNum">     378 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     379 </span>                :            : 
-<span class="lineNum">     380 </span>                :<span class="lineCov">          1 :     void MPIComm::window_put(const void *send_buf, size_t send_size, int rank, off_t disp, size_t window_id) const</span>
-<a name="381"><span class="lineNum">     381 </span>                :            :     {</a>
-<span class="lineNum">     382 </span>                :<span class="lineCov">          1 :         check_window(window_id);</span>
-<span class="lineNum">     383 </span>                :<span class="lineCov">          1 :         ((CommWindow *) window_id)-&gt;put(send_buf, send_size, rank, disp);</span>
-<a name="384"><span class="lineNum">     384 </span>                :<span class="lineCov">          1 :     }</span></a>
-<a name="385"><span class="lineNum">     385 </span>                :            : </a>
-<span class="lineNum">     386 </span>                :<span class="lineCov">          1 :     CommWindow::CommWindow(MPI_Comm comm, void *base, size_t size)</span>
-<span class="lineNum">     387 </span>                :            :     {
-<span class="lineNum">     388 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Win_create(base, (MPI_Aint) size, 1, MPI_INFO_NULL, comm, &amp;m_window));</span>
-<a name="389"><span class="lineNum">     389 </span>                :<span class="lineCov">          1 :     }</span></a>
-<span class="lineNum">     390 </span>                :            : 
-<span class="lineNum">     391 </span>                :<span class="lineCov">          2 :     CommWindow::~CommWindow()</span>
-<span class="lineNum">     392 </span>                :            :     {
-<a name="393"><span class="lineNum">     393 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Win_free(&amp;m_window));</span></a>
-<a name="394"><span class="lineNum">     394 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          2 :     }</span></a>
-<span class="lineNum">     395 </span>                :            : 
-<span class="lineNum">     396 </span>                :<span class="lineCov">          4 :     void CommWindow::lock(bool is_exclusive, int rank, int assert)</span>
-<a name="397"><span class="lineNum">     397 </span>                :            :     {</a>
-<span class="lineNum">     398 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          4 :         check_mpi(PMPI_Win_lock(is_exclusive ? MPI_LOCK_EXCLUSIVE : MPI_LOCK_SHARED, rank, assert, m_window));</span>
-<a name="399"><span class="lineNum">     399 </span>                :<span class="lineCov">          4 :     }</span></a>
-<span class="lineNum">     400 </span>                :            : 
-<a name="401"><span class="lineNum">     401 </span>                :<span class="lineCov">          1 :     void CommWindow::unlock(int rank)</span></a>
-<span class="lineNum">     402 </span>                :            :     {
-<span class="lineNum">     403 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Win_unlock(rank, m_window));</span>
-<a name="404"><span class="lineNum">     404 </span>                :<span class="lineCov">          1 :     }</span></a>
-<a name="405"><span class="lineNum">     405 </span>                :            : </a>
-<span class="lineNum">     406 </span>                :<span class="lineCov">          1 :     void CommWindow::put(const void *send_buf, size_t send_size, int rank, off_t disp)</span>
-<span class="lineNum">     407 </span>                :            :     {
-<span class="lineNum">     408 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Put(GEOPM_MPI_CONST_CAST(void *)(send_buf), send_size, MPI_BYTE, rank, disp,</span>
-<a name="409"><span class="lineNum">     409 </span>                :<span class="lineCov">          1 :                     send_size, MPI_BYTE, m_window));</span></a>
-<span class="lineNum">     410 </span>                :<span class="lineCov">          1 :     }</span>
-<span class="lineNum">     411 </span>                :            : }
+<span class="lineNum">     347 </span>  [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchCov" title="Branch 6 was taken 2 times"> + </span> :<span class="lineCov">          4 :         for (;in_size_it != recv_sizes.end();</span>
+<span class="lineNum">         </span>            <span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchCov" title="Branch 8 was taken 1 time"> + </span><span class="branchCov" title="Branch 9 was taken 1 time"> + </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>][<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>]
+<span class="lineNum">     348 </span>                :            :              ++in_size_it, ++out_size_it,
+<a name="349"><span class="lineNum">     349 </span>                :            :              ++in_off_it, ++out_off_it) {</a>
+<span class="lineNum">     350 </span>[<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 2 times"> + </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :             if (*in_size_it &gt; INT_MAX) {</span>
+<span class="lineNum">     351 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;Overflow detected in gatherv&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     352 </span>                :            :             }
+<a name="353"><span class="lineNum">     353 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">          2 :             *out_size_it = *in_size_it;</span></a>
+<span class="lineNum">     354 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]:<span class="lineCov">          2 :             *out_off_it = *in_off_it;</span>
+<span class="lineNum">     355 </span>                :            :         }
+<span class="lineNum">     356 </span>[<span class="branchCov" title="Branch 1 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">          2 :         if (is_valid()) {</span>
+<a name="357"><span class="lineNum">     357 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">          2 :             check_mpi(PMPI_Gatherv(GEOPM_MPI_CONST_CAST(void *)(send_buf), send_size, MPI_BYTE, recv_buf, sizes.data(),</span></a>
+<span class="lineNum">     358 </span>  [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">          2 :                                    offsets.data(), MPI_BYTE, root, m_comm));</span>
+<span class="lineNum">         </span>  [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]
+<span class="lineNum">     359 </span>                :<span class="lineCov">          1 :         }</span>
+<a name="360"><span class="lineNum">     360 </span>                :<span class="lineCov">          2 :     }</span></a>
+<a name="361"><span class="lineNum">     361 </span>                :            : </a>
+<span class="lineNum">     362 </span>                :<span class="lineCov">          2 :     void MPIComm::window_put(const void *send_buf, size_t send_size, int rank, off_t disp, size_t window_id) const</span>
+<span class="lineNum">     363 </span>                :            :     {
+<span class="lineNum">     364 </span>                :<span class="lineCov">          2 :         check_window(window_id);</span>
+<a name="365"><span class="lineNum">     365 </span>                :<span class="lineCov">          2 :         ((CommWindow *) window_id)-&gt;put(send_buf, send_size, rank, disp);</span></a>
+<a name="366"><span class="lineNum">     366 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     367 </span>                :            : 
+<span class="lineNum">     368 </span>                :<span class="lineCov">          2 :     CommWindow::CommWindow(MPI_Comm comm, void *base, size_t size)</span>
+<a name="369"><span class="lineNum">     369 </span>                :            :     {</a>
+<span class="lineNum">     370 </span>                :<span class="lineCov">          2 :         check_mpi(PMPI_Win_create(base, (MPI_Aint) size, 1, MPI_INFO_NULL, comm, &amp;m_window));</span>
+<a name="371"><span class="lineNum">     371 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     372 </span>                :            : 
+<a name="373"><span class="lineNum">     373 </span>                :<span class="lineCov">          4 :     CommWindow::~CommWindow()</span></a>
+<span class="lineNum">     374 </span>                :            :     {
+<span class="lineNum">     375 </span>                :<span class="lineCov">          2 :         check_mpi(PMPI_Win_free(&amp;m_window));</span>
+<a name="376"><span class="lineNum">     376 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          4 :     }</span></a>
+<a name="377"><span class="lineNum">     377 </span>                :            : </a>
+<span class="lineNum">     378 </span>                :<span class="lineCov">          8 :     void CommWindow::lock(bool is_exclusive, int rank, int assert)</span>
+<span class="lineNum">     379 </span>                :            :     {
+<span class="lineNum">     380 </span>        [<span class="branchCov" title="Branch 0 was taken 4 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          8 :         check_mpi(PMPI_Win_lock(is_exclusive ? MPI_LOCK_EXCLUSIVE : MPI_LOCK_SHARED, rank, assert, m_window));</span>
+<a name="381"><span class="lineNum">     381 </span>                :<span class="lineCov">          8 :     }</span></a>
+<span class="lineNum">     382 </span>                :            : 
+<span class="lineNum">     383 </span>                :<span class="lineCov">          2 :     void CommWindow::unlock(int rank)</span>
+<span class="lineNum">     384 </span>                :            :     {
+<a name="385"><span class="lineNum">     385 </span>                :<span class="lineCov">          2 :         check_mpi(PMPI_Win_unlock(rank, m_window));</span></a>
+<a name="386"><span class="lineNum">     386 </span>                :<span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     387 </span>                :            : 
+<span class="lineNum">     388 </span>                :<span class="lineCov">          2 :     void CommWindow::put(const void *send_buf, size_t send_size, int rank, off_t disp)</span>
+<a name="389"><span class="lineNum">     389 </span>                :            :     {</a>
+<span class="lineNum">     390 </span>                :<span class="lineCov">          1 :         check_mpi(PMPI_Put(GEOPM_MPI_CONST_CAST(void *)(send_buf), send_size, MPI_BYTE, rank, disp,</span>
+<span class="lineNum">     391 </span>                :<span class="lineCov">          2 :                     send_size, MPI_BYTE, m_window));</span>
+<span class="lineNum">     392 </span>                :<span class="lineCov">          2 :     }</span>
+<a name="393"><span class="lineNum">     393 </span>                :            : }</a>
 </pre>
       </td>
     </tr>

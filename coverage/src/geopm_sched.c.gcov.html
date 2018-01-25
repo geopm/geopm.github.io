@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.3.0-122-g63534b7 - src/geopm_sched.c</title>
+  <title>LCOV - v0.4.0-1-g973044a - src/geopm_sched.c</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.3.0-122-g63534b7</td>
+            <td class="headerValue">v0.4.0-1-g973044a</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">64</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-12-30</td>
+            <td class="headerValue">2018-01-25</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -56,9 +56,9 @@
 </td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">32</td>
-            <td class="headerCovTableEntry">82</td>
-            <td class="headerCovTableEntryLo">39.0 %</td>
+            <td class="headerCovTableEntry">35</td>
+            <td class="headerCovTableEntry">92</td>
+            <td class="headerCovTableEntryLo">38.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -77,7 +77,7 @@
 <pre class="sourceHeading">           Branch data     Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
-<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, Intel Corporation
+<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
 <span class="lineNum">       3 </span>                :            :  *
 <span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions</a>
@@ -136,9 +136,9 @@
 <span class="lineNum">      58 </span>                :            : 
 <a name="59"><span class="lineNum">      59 </span>                :            : #ifndef __APPLE__</a>
 <span class="lineNum">      60 </span>                :            : 
-<a name="61"><span class="lineNum">      61 </span>                :<span class="lineCov">       1840 : int geopm_sched_num_cpu(void)</span></a>
+<a name="61"><span class="lineNum">      61 </span>                :<span class="lineCov">       2792 : int geopm_sched_num_cpu(void)</span></a>
 <span class="lineNum">      62 </span>                :            : {
-<span class="lineNum">      63 </span>                :<span class="lineCov">       1840 :     return sysconf(_SC_NPROCESSORS_ONLN);</span>
+<span class="lineNum">      63 </span>                :<span class="lineCov">       2792 :     return sysconf(_SC_NPROCESSORS_ONLN);</span>
 <a name="64"><span class="lineNum">      64 </span>                :            : }</a>
 <a name="65"><span class="lineNum">      65 </span>                :            : </a>
 <span class="lineNum">      66 </span>                :<span class="lineNoCov">          0 : int geopm_sched_get_cpu(void)</span>
@@ -153,107 +153,107 @@
 <span class="lineNum">      75 </span>                :            :    determine the process affinity. */
 <a name="76"><span class="lineNum">      76 </span>                :            : #ifdef GEOPM_PROCFS</a>
 <a name="77"><span class="lineNum">      77 </span>                :            : </a>
-<span class="lineNum">      78 </span>                :<span class="lineCov">        112 : int geopm_sched_proc_cpuset_helper(int num_cpu, uint32_t *proc_cpuset, FILE *fid)</span>
+<span class="lineNum">      78 </span>                :<span class="lineCov">        208 : int geopm_sched_proc_cpuset_helper(int num_cpu, uint32_t *proc_cpuset, FILE *fid)</span>
 <span class="lineNum">      79 </span>                :            : {
-<span class="lineNum">      80 </span>                :<span class="lineCov">        112 :     const char *key = &quot;Cpus_allowed:&quot;;</span>
-<a name="81"><span class="lineNum">      81 </span>                :<span class="lineCov">        112 :     const size_t key_len = strlen(key);</span></a>
-<span class="lineNum">      82 </span>                :<span class="lineCov">        112 :     const int num_read = num_cpu / 32 + (num_cpu % 32 ? 1 : 0);</span>
-<span class="lineNum">      83 </span>                :<span class="lineCov">        112 :     int err = 0;</span>
-<span class="lineNum">      84 </span>                :<span class="lineCov">        112 :     char *line = NULL;</span>
-<a name="85"><span class="lineNum">      85 </span>                :<span class="lineCov">        112 :     size_t line_len = 0;</span></a>
+<span class="lineNum">      80 </span>                :<span class="lineCov">        208 :     const char *key = &quot;Cpus_allowed:&quot;;</span>
+<a name="81"><span class="lineNum">      81 </span>                :<span class="lineCov">        208 :     const size_t key_len = strlen(key);</span></a>
+<span class="lineNum">      82 </span>                :<span class="lineCov">        208 :     const int num_read = num_cpu / 32 + (num_cpu % 32 ? 1 : 0);</span>
+<span class="lineNum">      83 </span>                :<span class="lineCov">        208 :     int err = 0;</span>
+<span class="lineNum">      84 </span>                :<span class="lineCov">        208 :     char *line = NULL;</span>
+<a name="85"><span class="lineNum">      85 </span>                :<span class="lineCov">        208 :     size_t line_len = 0;</span></a>
 <span class="lineNum">      86 </span>                :            : 
-<span class="lineNum">      87 </span>                :<span class="lineCov">        112 :     int read_idx = 0;</span>
-<span class="lineNum">      88 </span>        [<span class="branchCov" title="Branch 1 was taken 4592 times"> + </span><span class="branchCov" title="Branch 2 was taken 112 times"> + </span>]:<span class="lineCov">       4704 :     while ((getline(&amp;line, &amp;line_len, fid)) != -1) {</span>
-<a name="89"><span class="lineNum">      89 </span>        [<span class="branchCov" title="Branch 0 was taken 112 times"> + </span><span class="branchCov" title="Branch 1 was taken 4480 times"> + </span>]:<span class="lineCov">       4592 :         if (strncmp(line, key, key_len) == 0) {</span></a>
-<span class="lineNum">      90 </span>                :<span class="lineCov">        112 :             char *line_ptr = line + key_len;</span>
+<span class="lineNum">      87 </span>                :<span class="lineCov">        208 :     int read_idx = 0;</span>
+<span class="lineNum">      88 </span>        [<span class="branchCov" title="Branch 1 was taken 8963 times"> + </span><span class="branchCov" title="Branch 2 was taken 208 times"> + </span>]:<span class="lineCov">       9171 :     while ((getline(&amp;line, &amp;line_len, fid)) != -1) {</span>
+<a name="89"><span class="lineNum">      89 </span>        [<span class="branchCov" title="Branch 0 was taken 208 times"> + </span><span class="branchCov" title="Branch 1 was taken 8755 times"> + </span>]:<span class="lineCov">       8963 :         if (strncmp(line, key, key_len) == 0) {</span></a>
+<span class="lineNum">      90 </span>                :<span class="lineCov">        208 :             char *line_ptr = line + key_len;</span>
 <span class="lineNum">      91 </span>                :            :             /* On some systems we have seen the mask padded with zeros
 <span class="lineNum">      92 </span>                :            :                beyond the number of online CPUs.  Deal with this by
 <a name="93"><span class="lineNum">      93 </span>                :            :                skipping extra leading 32 bit masks */</a>
-<span class="lineNum">      94 </span>                :<span class="lineCov">        112 :             int num_comma = 0;</span>
-<span class="lineNum">      95 </span>                :<span class="lineCov">        112 :             char *comma_ptr = line_ptr;</span>
-<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 0 was taken 785 times"> + </span><span class="branchCov" title="Branch 1 was taken 112 times"> + </span>]:<span class="lineCov">        897 :             while ((comma_ptr = strchr(comma_ptr, ','))) {</span>
-<a name="97"><span class="lineNum">      97 </span>                :<span class="lineCov">        785 :                ++comma_ptr;</span></a>
-<span class="lineNum">      98 </span>                :<span class="lineCov">        785 :                ++num_comma;</span>
+<span class="lineNum">      94 </span>                :<span class="lineCov">        208 :             int num_comma = 0;</span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">        208 :             char *comma_ptr = line_ptr;</span>
+<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 0 was taken 1284 times"> + </span><span class="branchCov" title="Branch 1 was taken 208 times"> + </span>]:<span class="lineCov">       1492 :             while ((comma_ptr = strchr(comma_ptr, ','))) {</span>
+<a name="97"><span class="lineNum">      97 </span>                :<span class="lineCov">       1284 :                 ++comma_ptr;</span></a>
+<span class="lineNum">      98 </span>                :<span class="lineCov">       1284 :                 ++num_comma;</span>
 <span class="lineNum">      99 </span>                :            :             }
-<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 111 times"> + </span>]:<span class="lineCov">        112 :             if (num_comma &gt; num_read - 1) {</span>
-<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">          1 :                 num_comma -= num_read - 1;</span></a>
-<span class="lineNum">     102 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          2 :                 for (int i = 0; !err &amp;&amp; i &lt; num_comma; ++i) {</span>
-<span class="lineNum">     103 </span>                :<span class="lineCov">          1 :                     line_ptr = strchr(line_ptr, ',');</span>
-<span class="lineNum">     104 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :                     if (!line_ptr) {</span>
+<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 89 times"> + </span><span class="branchCov" title="Branch 1 was taken 119 times"> + </span>]:<span class="lineCov">        208 :             if (num_comma &gt; num_read - 1) {</span>
+<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">         89 :                 num_comma -= num_read - 1;</span></a>
+<span class="lineNum">     102 </span>[<span class="branchCov" title="Branch 0 was taken 352 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 263 times"> + </span><span class="branchCov" title="Branch 3 was taken 89 times"> + </span>]:<span class="lineCov">        352 :                 for (int i = 0; !err &amp;&amp; i &lt; num_comma; ++i) {</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">        263 :                     line_ptr = strchr(line_ptr, ',');</span>
+<span class="lineNum">     104 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 263 times"> + </span>]:<span class="lineCov">        263 :                     if (!line_ptr) {</span>
 <a name="105"><span class="lineNum">     105 </span>                :<span class="lineNoCov">          0 :                         err = GEOPM_ERROR_LOGIC;</span></a>
 <span class="lineNum">     106 </span>                :            :                     }
 <span class="lineNum">     107 </span>                :            :                     else {
-<span class="lineNum">     108 </span>                :<span class="lineCov">          1 :                         ++line_ptr;</span>
+<span class="lineNum">     108 </span>                :<span class="lineCov">        263 :                         ++line_ptr;</span>
 <a name="109"><span class="lineNum">     109 </span>                :            :                     }</a>
 <span class="lineNum">     110 </span>                :            :                 }
 <span class="lineNum">     111 </span>                :            :             }
-<span class="lineNum">     112 </span>[<span class="branchCov" title="Branch 0 was taken 1008 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 896 times"> + </span><span class="branchCov" title="Branch 3 was taken 112 times"> + </span>]:<span class="lineCov">       1008 :             for (read_idx = num_read - 1; !err &amp;&amp; read_idx &gt;= 0; --read_idx) {</span>
-<a name="113"><span class="lineNum">     113 </span>                :<span class="lineCov">        896 :                 int num_match = sscanf(line_ptr, &quot;%x&quot;, proc_cpuset + read_idx);</span></a>
-<span class="lineNum">     114 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 896 times"> + </span>]:<span class="lineCov">        896 :                 if (num_match != 1) {</span>
+<span class="lineNum">     112 </span>[<span class="branchCov" title="Branch 0 was taken 1437 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1229 times"> + </span><span class="branchCov" title="Branch 3 was taken 208 times"> + </span>]:<span class="lineCov">       1437 :             for (read_idx = num_read - 1; !err &amp;&amp; read_idx &gt;= 0; --read_idx) {</span>
+<a name="113"><span class="lineNum">     113 </span>                :<span class="lineCov">       1229 :                 int num_match = sscanf(line_ptr, &quot;%x&quot;, proc_cpuset + read_idx);</span></a>
+<span class="lineNum">     114 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1229 times"> + </span>]:<span class="lineCov">       1229 :                 if (num_match != 1) {</span>
 <span class="lineNum">     115 </span>                :<span class="lineNoCov">          0 :                     err = GEOPM_ERROR_RUNTIME;</span>
 <span class="lineNum">     116 </span>                :            :                 }
 <a name="117"><span class="lineNum">     117 </span>                :            :                 else {</a>
-<span class="lineNum">     118 </span>                :<span class="lineCov">        896 :                     line_ptr = strchr(line_ptr, ',');</span>
-<span class="lineNum">     119 </span>[<span class="branchCov" title="Branch 0 was taken 784 times"> + </span><span class="branchCov" title="Branch 1 was taken 112 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 784 times"> + </span>]:<span class="lineCov">        896 :                     if (read_idx != 0 &amp;&amp; line_ptr == NULL) {</span>
+<span class="lineNum">     118 </span>                :<span class="lineCov">       1229 :                     line_ptr = strchr(line_ptr, ',');</span>
+<span class="lineNum">     119 </span>[<span class="branchCov" title="Branch 0 was taken 1021 times"> + </span><span class="branchCov" title="Branch 1 was taken 208 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1021 times"> + </span>]:<span class="lineCov">       1229 :                     if (read_idx != 0 &amp;&amp; line_ptr == NULL) {</span>
 <span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 :                         err = GEOPM_ERROR_RUNTIME;</span>
 <a name="121"><span class="lineNum">     121 </span>                :            :                     }</a>
 <span class="lineNum">     122 </span>                :            :                     else {
-<span class="lineNum">     123 </span>                :<span class="lineCov">        896 :                         ++line_ptr;</span>
+<span class="lineNum">     123 </span>                :<span class="lineCov">       1229 :                         ++line_ptr;</span>
 <span class="lineNum">     124 </span>                :            :                     }
 <a name="125"><span class="lineNum">     125 </span>                :            :                 }</a>
 <span class="lineNum">     126 </span>                :            :             }
 <span class="lineNum">     127 </span>                :            :         }
 <span class="lineNum">     128 </span>                :            :     }
-<a name="129"><span class="lineNum">     129 </span>        [<span class="branchCov" title="Branch 0 was taken 112 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        112 :     if (line) {</span></a>
-<span class="lineNum">     130 </span>                :<span class="lineCov">        112 :         free(line);</span>
+<a name="129"><span class="lineNum">     129 </span>        [<span class="branchCov" title="Branch 0 was taken 208 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        208 :     if (line) {</span></a>
+<span class="lineNum">     130 </span>                :<span class="lineCov">        208 :         free(line);</span>
 <span class="lineNum">     131 </span>                :            :     }
-<span class="lineNum">     132 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 112 times"> + </span>]:<span class="lineCov">        112 :     if (read_idx != -1) {</span>
+<span class="lineNum">     132 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 208 times"> + </span>]:<span class="lineCov">        208 :     if (read_idx != -1) {</span>
 <a name="133"><span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :         err = GEOPM_ERROR_RUNTIME;</span></a>
 <span class="lineNum">     134 </span>                :            :     }
-<span class="lineNum">     135 </span>                :<span class="lineCov">        112 :     return err;</span>
+<span class="lineNum">     135 </span>                :<span class="lineCov">        208 :     return err;</span>
 <a name="136"><span class="lineNum">     136 </span>                :            : }</a>
 <a name="137"><span class="lineNum">     137 </span>                :            : </a>
-<span class="lineNum">     138 </span>                :<span class="lineCov">        103 : static void geopm_proc_cpuset_once(void)</span>
+<span class="lineNum">     138 </span>                :<span class="lineCov">        190 : static void geopm_proc_cpuset_once(void)</span>
 <span class="lineNum">     139 </span>                :            : {
-<span class="lineNum">     140 </span>                :<span class="lineCov">        103 :     const char *status_path = &quot;/proc/self/status&quot;;</span>
-<a name="141"><span class="lineNum">     141 </span>                :<span class="lineCov">        103 :     const int num_cpu = geopm_sched_num_cpu();</span></a>
-<span class="lineNum">     142 </span>                :<span class="lineCov">        103 :     const int num_read = num_cpu / 32 + (num_cpu % 32 ? 1 : 0);</span>
+<span class="lineNum">     140 </span>                :<span class="lineCov">        190 :     const char *status_path = &quot;/proc/self/status&quot;;</span>
+<a name="141"><span class="lineNum">     141 </span>                :<span class="lineCov">        190 :     const int num_cpu = geopm_sched_num_cpu();</span></a>
+<span class="lineNum">     142 </span>                :<span class="lineCov">        190 :     const int num_read = num_cpu / 32 + (num_cpu % 32 ? 1 : 0);</span>
 <span class="lineNum">     143 </span>                :            : 
-<span class="lineNum">     144 </span>                :<span class="lineCov">        103 :     int err = 0;</span>
-<a name="145"><span class="lineNum">     145 </span>                :<span class="lineCov">        103 :     uint32_t *proc_cpuset = NULL;</span></a>
-<span class="lineNum">     146 </span>                :<span class="lineCov">        103 :     FILE *fid = NULL;</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov">        190 :     int err = 0;</span>
+<a name="145"><span class="lineNum">     145 </span>                :<span class="lineCov">        190 :     uint32_t *proc_cpuset = NULL;</span></a>
+<span class="lineNum">     146 </span>                :<span class="lineCov">        190 :     FILE *fid = NULL;</span>
 <span class="lineNum">     147 </span>                :            : 
-<span class="lineNum">     148 </span>                :<span class="lineCov">        103 :     g_proc_cpuset = CPU_ALLOC(num_cpu);</span>
-<a name="149"><span class="lineNum">     149 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 103 times"> + </span>]:<span class="lineCov">        103 :     if (g_proc_cpuset == NULL) {</span></a>
+<span class="lineNum">     148 </span>                :<span class="lineCov">        190 :     g_proc_cpuset = CPU_ALLOC(num_cpu);</span>
+<a name="149"><span class="lineNum">     149 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 103 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 87 times"> + </span>]:<span class="lineCov">        190 :     if (g_proc_cpuset == NULL) {</span></a>
 <span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :         err = ENOMEM;</span>
 <span class="lineNum">     151 </span>                :            :     }
-<span class="lineNum">     152 </span>                :<span class="lineCov">        103 :     proc_cpuset = calloc(num_read, sizeof(uint32_t));</span>
-<a name="153"><span class="lineNum">     153 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 103 times"> + </span>]:<span class="lineCov">        103 :     if (proc_cpuset == NULL) {</span></a>
+<span class="lineNum">     152 </span>                :<span class="lineCov">        190 :     proc_cpuset = calloc(num_read, sizeof(uint32_t));</span>
+<a name="153"><span class="lineNum">     153 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 190 times"> + </span>]:<span class="lineCov">        190 :     if (proc_cpuset == NULL) {</span></a>
 <span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :         err = ENOMEM;</span>
 <span class="lineNum">     155 </span>                :            :     }
 <span class="lineNum">     156 </span>                :            : 
-<a name="157"><span class="lineNum">     157 </span>        [<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        103 :     if (!err) {</span></a>
-<span class="lineNum">     158 </span>                :<span class="lineCov">        103 :         fid = fopen(status_path, &quot;r&quot;);</span>
-<span class="lineNum">     159 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 103 times"> + </span>]:<span class="lineCov">        103 :         if (!fid) {</span>
+<a name="157"><span class="lineNum">     157 </span>        [<span class="branchCov" title="Branch 0 was taken 190 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        190 :     if (!err) {</span></a>
+<span class="lineNum">     158 </span>                :<span class="lineCov">        190 :         fid = fopen(status_path, &quot;r&quot;);</span>
+<span class="lineNum">     159 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 103 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 87 times"> + </span>]:<span class="lineCov">        190 :         if (!fid) {</span>
 <span class="lineNum">     160 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = errno ? errno : GEOPM_ERROR_RUNTIME;</span>
 <a name="161"><span class="lineNum">     161 </span>                :            :         }</a>
 <span class="lineNum">     162 </span>                :            :     }
-<span class="lineNum">     163 </span>        [<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        103 :     if (!err) {</span>
-<span class="lineNum">     164 </span>                :<span class="lineCov">        103 :         err = geopm_sched_proc_cpuset_helper(num_cpu, proc_cpuset, fid);</span>
-<a name="165"><span class="lineNum">     165 </span>                :<span class="lineCov">        103 :         fclose(fid);</span></a>
+<span class="lineNum">     163 </span>        [<span class="branchCov" title="Branch 0 was taken 190 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        190 :     if (!err) {</span>
+<span class="lineNum">     164 </span>                :<span class="lineCov">        190 :         err = geopm_sched_proc_cpuset_helper(num_cpu, proc_cpuset, fid);</span>
+<a name="165"><span class="lineNum">     165 </span>                :<span class="lineCov">        190 :         fclose(fid);</span></a>
 <span class="lineNum">     166 </span>                :            :     }
-<span class="lineNum">     167 </span>        [<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        103 :     if (!err) {</span>
-<span class="lineNum">     168 </span>                :<span class="lineCov">        103 :         memcpy(g_proc_cpuset, proc_cpuset, CPU_ALLOC_SIZE(num_cpu));</span>
+<span class="lineNum">     167 </span>        [<span class="branchCov" title="Branch 0 was taken 190 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        190 :     if (!err) {</span>
+<span class="lineNum">     168 </span>                :<span class="lineCov">        190 :         memcpy(g_proc_cpuset, proc_cpuset, CPU_ALLOC_SIZE(num_cpu));</span>
 <a name="169"><span class="lineNum">     169 </span>                :            :     }</a>
 <span class="lineNum">     170 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     else if (g_proc_cpuset) {</span>
 <span class="lineNum">     171 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (int i = 0; i &lt; num_cpu; ++i) {</span>
 <span class="lineNum">     172 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_SET(i, g_proc_cpuset);</span>
 <a name="173"><span class="lineNum">     173 </span>                :            :         }</a>
 <span class="lineNum">     174 </span>                :            :     }
-<span class="lineNum">     175 </span>        [<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        103 :     if (proc_cpuset) {</span>
-<span class="lineNum">     176 </span>                :<span class="lineCov">        103 :         free(proc_cpuset);</span>
+<span class="lineNum">     175 </span>        [<span class="branchCov" title="Branch 0 was taken 190 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        190 :     if (proc_cpuset) {</span>
+<span class="lineNum">     176 </span>                :<span class="lineCov">        190 :         free(proc_cpuset);</span>
 <a name="177"><span class="lineNum">     177 </span>                :            :     }</a>
-<span class="lineNum">     178 </span>                :<span class="lineCov">        103 : }</span>
+<span class="lineNum">     178 </span>                :<span class="lineCov">        190 : }</span>
 <span class="lineNum">     179 </span>                :            : 
 <span class="lineNum">     180 </span>                :            : /* If /proc/self/status is not available spawn a pthread requesting an
 <a name="181"><span class="lineNum">     181 </span>                :            :    open affinity mask and then have the thread query the affinity mask</a>
@@ -302,118 +302,118 @@
 <span class="lineNum">     224 </span>                :            :             err = (int)(size_t)result;
 <a name="225"><span class="lineNum">     225 </span>                :            :         }</a>
 <span class="lineNum">     226 </span>                :            :     }
-<span class="lineNum">     227 </span>                :            :     if (err &amp;&amp; err != ENOMEM)
-<span class="lineNum">     228 </span>                :            :     {
-<a name="229"><span class="lineNum">     229 </span>                :            :         for (int i = 0; i &lt; num_cpu; ++i) {</a>
-<span class="lineNum">     230 </span>                :            :             CPU_SET(i, g_proc_cpuset);
-<span class="lineNum">     231 </span>                :            :         }
-<span class="lineNum">     232 </span>                :            :     }
-<a name="233"><span class="lineNum">     233 </span>                :            :     if (!err) {</a>
-<span class="lineNum">     234 </span>                :            :         err = pthread_attr_destroy(&amp;attr);
-<span class="lineNum">     235 </span>                :            :     }
-<span class="lineNum">     236 </span>                :            : }
-<a name="237"><span class="lineNum">     237 </span>                :            : </a>
-<a name="238"><span class="lineNum">     238 </span>                :            : #endif /* GEOPM_PROCFS */</a>
-<span class="lineNum">     239 </span>                :            : 
-<span class="lineNum">     240 </span>                :<span class="lineCov">        103 : int geopm_sched_proc_cpuset(int num_cpu, cpu_set_t *proc_cpuset)</span>
-<a name="241"><span class="lineNum">     241 </span>                :            : {</a>
-<span class="lineNum">     242 </span>                :<span class="lineCov">        103 :     int err = pthread_once(&amp;g_proc_cpuset_once, geopm_proc_cpuset_once);</span>
-<span class="lineNum">     243 </span>                :<span class="lineCov">        103 :     int sched_num_cpu = geopm_sched_num_cpu();</span>
-<span class="lineNum">     244 </span>[<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 103 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        103 :     if (!err &amp;&amp; sched_num_cpu &gt; num_cpu) {</span>
-<a name="245"><span class="lineNum">     245 </span>                :<span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span></a>
-<span class="lineNum">     246 </span>                :            :     }
-<span class="lineNum">     247 </span>        [<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        103 :     if (!err) {</span>
-<span class="lineNum">     248 </span>                :<span class="lineCov">        103 :         memcpy(proc_cpuset, g_proc_cpuset, CPU_ALLOC_SIZE(sched_num_cpu));</span>
-<a name="249"><span class="lineNum">     249 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 103 times"> + </span>]:<span class="lineCov">        103 :         for (int i = sched_num_cpu; i &lt; num_cpu; ++i) {</span></a>
-<span class="lineNum">     250 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_CLR(i, proc_cpuset);</span>
-<span class="lineNum">     251 </span>                :            :         }
-<span class="lineNum">     252 </span>                :            :     }
-<a name="253"><span class="lineNum">     253 </span>                :<span class="lineCov">        103 :     return err;</span></a>
-<a name="254"><span class="lineNum">     254 </span>                :            : }</a>
-<span class="lineNum">     255 </span>                :            : 
-<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 : int geopm_sched_woomp(int num_cpu, cpu_set_t *woomp)</span>
-<a name="257"><span class="lineNum">     257 </span>                :            : {</a>
-<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :     int err = pthread_once(&amp;g_proc_cpuset_once, geopm_proc_cpuset_once);</span>
-<span class="lineNum">     259 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (!g_proc_cpuset) {</span>
-<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :         err = ENOMEM;</span>
-<a name="261"><span class="lineNum">     261 </span>                :            :     }</a>
-<span class="lineNum">     262 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (!err) {</span>
-<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :         memcpy(woomp, g_proc_cpuset, CPU_ALLOC_SIZE(num_cpu));</span>
-<span class="lineNum">     264 </span>                :            :     }
-<a name="265"><span class="lineNum">     265 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (!err) {</span></a>
-<span class="lineNum">     266 </span>                :            : #ifdef _OPENMP
-<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 : #pragma omp parallel default(shared)</span>
-<span class="lineNum">     268 </span>                :            : {
-<a name="269"><span class="lineNum">     269 </span>                :<span class="lineNoCov">          0 : #pragma omp critical</span></a>
-<span class="lineNum">     270 </span>                :            : {
-<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :         int cpu_index = sched_getcpu();</span>
-<span class="lineNum">     272 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (cpu_index != -1 &amp;&amp; cpu_index &lt; num_cpu)</span>
-<a name="273"><span class="lineNum">     273 </span>                :            :         {</a>
-<span class="lineNum">     274 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_CLR(cpu_index, woomp);</span>
-<span class="lineNum">     275 </span>                :            :         }
-<span class="lineNum">     276 </span>                :            :         else {
-<a name="277"><span class="lineNum">     277 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = errno ? errno : GEOPM_ERROR_LOGIC;</span></a>
-<span class="lineNum">     278 </span>                :            :         }
-<span class="lineNum">     279 </span>                :            : } /* end pragma omp critical */
-<span class="lineNum">     280 </span>                :            : } /* end pragma omp parallel */
-<a name="281"><span class="lineNum">     281 </span>                :            : #endif /* _OPENMP */</a>
-<span class="lineNum">     282 </span>                :            :     }
-<span class="lineNum">     283 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (err || CPU_COUNT(woomp) == 0) {</span>
-<span class="lineNum">     284 </span>                :            :         /* If all CPUs are used by the OpenMP gang, then leave the
-<a name="285"><span class="lineNum">     285 </span>                :            :            mask open and allow the Linux scheduler to choose. */</a>
-<span class="lineNum">     286 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (int i = 0; i &lt; num_cpu; ++i) {</span>
-<span class="lineNum">     287 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_SET(i, woomp);</span>
-<span class="lineNum">     288 </span>                :            :         }
-<a name="289"><span class="lineNum">     289 </span>                :            :     }</a>
-<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :     return err;</span>
-<span class="lineNum">     291 </span>                :            : }
+<span class="lineNum">     227 </span>                :            :     if (err &amp;&amp; err != ENOMEM) {
+<span class="lineNum">     228 </span>                :            :         for (int i = 0; i &lt; num_cpu; ++i) {
+<a name="229"><span class="lineNum">     229 </span>                :            :             CPU_SET(i, g_proc_cpuset);</a>
+<span class="lineNum">     230 </span>                :            :         }
+<span class="lineNum">     231 </span>                :            :     }
+<span class="lineNum">     232 </span>                :            :     if (!err) {
+<a name="233"><span class="lineNum">     233 </span>                :            :         err = pthread_attr_destroy(&amp;attr);</a>
+<span class="lineNum">     234 </span>                :            :     }
+<span class="lineNum">     235 </span>                :            : }
+<span class="lineNum">     236 </span>                :            : 
+<a name="237"><span class="lineNum">     237 </span>                :            : #endif /* GEOPM_PROCFS */</a>
+<span class="lineNum">     238 </span>                :            : 
+<span class="lineNum">     239 </span>                :<span class="lineCov">        190 : int geopm_sched_proc_cpuset(int num_cpu, cpu_set_t *proc_cpuset)</span>
+<span class="lineNum">     240 </span>                :            : {
+<a name="241"><span class="lineNum">     241 </span>                :<span class="lineCov">        190 :     int err = pthread_once(&amp;g_proc_cpuset_once, geopm_proc_cpuset_once);</span></a>
+<span class="lineNum">     242 </span>                :<span class="lineCov">        190 :     int sched_num_cpu = geopm_sched_num_cpu();</span>
+<span class="lineNum">     243 </span>[<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 190 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 103 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        190 :     if (!err &amp;&amp; sched_num_cpu &gt; num_cpu) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 0 was taken 87 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span>
+<a name="245"><span class="lineNum">     245 </span>                :            :     }</a>
+<span class="lineNum">     246 </span>        [<span class="branchCov" title="Branch 0 was taken 190 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        190 :     if (!err) {</span>
+<span class="lineNum">     247 </span>                :<span class="lineCov">        190 :         memcpy(proc_cpuset, g_proc_cpuset, CPU_ALLOC_SIZE(sched_num_cpu));</span>
+<span class="lineNum">     248 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 190 times"> + </span>]:<span class="lineCov">        190 :         for (int i = sched_num_cpu; i &lt; num_cpu; ++i) {</span>
+<a name="249"><span class="lineNum">     249 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_CLR(i, proc_cpuset);</span></a>
+<span class="lineNum">     250 </span>                :            :         }
+<span class="lineNum">     251 </span>                :            :     }
+<span class="lineNum">     252 </span>                :<span class="lineCov">        190 :     return err;</span>
+<a name="253"><span class="lineNum">     253 </span>                :            : }</a>
+<span class="lineNum">     254 </span>                :            : 
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 : int geopm_sched_woomp(int num_cpu, cpu_set_t *woomp)</span>
+<span class="lineNum">     256 </span>                :            : {
+<a name="257"><span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :     int err = pthread_once(&amp;g_proc_cpuset_once, geopm_proc_cpuset_once);</span></a>
+<span class="lineNum">     258 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (!g_proc_cpuset) {</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :         err = ENOMEM;</span>
+<span class="lineNum">     260 </span>                :            :     }
+<a name="261"><span class="lineNum">     261 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (!err) {</span></a>
+<span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :         memcpy(woomp, g_proc_cpuset, CPU_ALLOC_SIZE(num_cpu));</span>
+<span class="lineNum">     263 </span>                :            :     }
+<a name="264"><span class="lineNum">     264 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (!err) {</span></a>
+<a name="265"><span class="lineNum">     265 </span>                :            : #ifdef _OPENMP</a>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 : #pragma omp parallel default(shared)</span>
+<span class="lineNum">     267 </span>                :            : {
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 : #pragma omp critical</span>
+<a name="269"><span class="lineNum">     269 </span>                :            : {</a>
+<span class="lineNum">     270 </span>                :<span class="lineNoCov">          0 :         int cpu_index = sched_getcpu();</span>
+<span class="lineNum">     271 </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if (cpu_index != -1 &amp;&amp; cpu_index &lt; num_cpu) {</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]
+<span class="lineNum">     272 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_CLR(cpu_index, woomp);</span>
+<a name="273"><span class="lineNum">     273 </span>                :            :         }</a>
+<span class="lineNum">     274 </span>                :            :         else {
+<span class="lineNum">     275 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :             err = errno ? errno : GEOPM_ERROR_LOGIC;</span>
+<span class="lineNum">     276 </span>                :            :         }
+<a name="277"><span class="lineNum">     277 </span>                :            : } /* end pragma omp critical */</a>
+<span class="lineNum">     278 </span>                :            : } /* end pragma omp parallel */
+<span class="lineNum">     279 </span>                :            : #endif /* _OPENMP */
+<span class="lineNum">     280 </span>                :            :     }
+<a name="281"><span class="lineNum">     281 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if (err || CPU_COUNT(woomp) == 0) {</span></a>
+<span class="lineNum">     282 </span>                :            :         /* If all CPUs are used by the OpenMP gang, then leave the
+<span class="lineNum">     283 </span>                :            :            mask open and allow the Linux scheduler to choose. */
+<span class="lineNum">     284 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for (int i = 0; i &lt; num_cpu; ++i) {</span>
+<a name="285"><span class="lineNum">     285 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             CPU_SET(i, woomp);</span></a>
+<span class="lineNum">     286 </span>                :            :         }
+<span class="lineNum">     287 </span>                :            :     }
+<span class="lineNum">     288 </span>                :<span class="lineNoCov">          0 :     return err;</span>
+<a name="289"><span class="lineNum">     289 </span>                :            : }</a>
+<span class="lineNum">     290 </span>                :            : 
+<span class="lineNum">     291 </span>                :            : #else /* __APPLE__ */
 <span class="lineNum">     292 </span>                :            : 
-<a name="293"><span class="lineNum">     293 </span>                :            : #else /* __APPLE__ */</a>
+<a name="293"><span class="lineNum">     293 </span>                :            : void __cpuid(uint32_t*, int);</a>
 <span class="lineNum">     294 </span>                :            : 
-<span class="lineNum">     295 </span>                :            : void __cpuid(uint32_t*, int);
-<span class="lineNum">     296 </span>                :            : 
-<a name="297"><span class="lineNum">     297 </span>                :            : int geopm_sched_num_cpu(void)</a>
-<span class="lineNum">     298 </span>                :            : {
-<span class="lineNum">     299 </span>                :            :     uint32_t result = 1;
-<span class="lineNum">     300 </span>                :            :     size_t len = sizeof(result);
-<a name="301"><span class="lineNum">     301 </span>                :            :     sysctl((int[2]) {CTL_HW, HW_NCPU}, 2, &amp;result, &amp;len, NULL, 0);</a>
-<span class="lineNum">     302 </span>                :            :     return result;
-<span class="lineNum">     303 </span>                :            : }
-<span class="lineNum">     304 </span>                :            : 
-<a name="305"><span class="lineNum">     305 </span>                :            : </a>
-<span class="lineNum">     306 </span>                :            : int geopm_sched_get_cpu(void)
-<span class="lineNum">     307 </span>                :            : {
-<span class="lineNum">     308 </span>                :            :     int result = -1;
-<a name="309"><span class="lineNum">     309 </span>                :            :     uint32_t cpu_info[4];</a>
-<span class="lineNum">     310 </span>                :            :     __cpuid(cpu_info, 1);
-<span class="lineNum">     311 </span>                :            :     // Check APIC
-<span class="lineNum">     312 </span>                :            :     if (cpu_info[3] &amp; (1 &lt;&lt; 9)) {
-<a name="313"><span class="lineNum">     313 </span>                :            :         result = (int)(cpu_info[1] &gt;&gt; 24);</a>
-<span class="lineNum">     314 </span>                :            :     }
-<span class="lineNum">     315 </span>                :            :     return result;
-<span class="lineNum">     316 </span>                :            : }
-<a name="317"><span class="lineNum">     317 </span>                :            : </a>
-<span class="lineNum">     318 </span>                :            : // On Mac OS just fill in all bits for the cpuset for both the process
-<span class="lineNum">     319 </span>                :            : // mask and woomp to get the tests passing.
-<span class="lineNum">     320 </span>                :            : static void geopm_cpuset_fill(int num_cpu, cpu_set_t *proc_cpuset)
-<a name="321"><span class="lineNum">     321 </span>                :            : {</a>
-<span class="lineNum">     322 </span>                :            :     for (int i = 0; i &lt; num_cpu; ++i) {
-<span class="lineNum">     323 </span>                :            :         CPU_SET(i, woomp);
-<span class="lineNum">     324 </span>                :            :     }
-<a name="325"><span class="lineNum">     325 </span>                :            : }</a>
-<span class="lineNum">     326 </span>                :            : int geopm_sched_proc_cpuset(int num_cpu, cpu_set_t *proc_cpuset)
-<span class="lineNum">     327 </span>                :            : {
-<span class="lineNum">     328 </span>                :            :     geopm_cpuset_fill(num_cpu, proc_cpuset);
-<a name="329"><span class="lineNum">     329 </span>                :            :     return 0;</a>
-<span class="lineNum">     330 </span>                :            : }
-<span class="lineNum">     331 </span>                :            : 
-<span class="lineNum">     332 </span>                :            : int geopm_sched_woomp(int num_cpu, cpu_set_t *woomp)
-<a name="333"><span class="lineNum">     333 </span>                :            : {</a>
-<span class="lineNum">     334 </span>                :            :     geopm_cpuset_fill(num_cpu, woomp);
-<span class="lineNum">     335 </span>                :            :     return 0;
-<span class="lineNum">     336 </span>                :            : }
-<a name="337"><span class="lineNum">     337 </span>                :            : </a>
-<span class="lineNum">     338 </span>                :            : #endif /* __APPLE__ */
+<span class="lineNum">     295 </span>                :            : int geopm_sched_num_cpu(void)
+<span class="lineNum">     296 </span>                :            : {
+<a name="297"><span class="lineNum">     297 </span>                :            :     uint32_t result = 1;</a>
+<span class="lineNum">     298 </span>                :            :     size_t len = sizeof(result);
+<span class="lineNum">     299 </span>                :            :     sysctl((int[2]) {CTL_HW, HW_NCPU}, 2, &amp;result, &amp;len, NULL, 0);
+<span class="lineNum">     300 </span>                :            :     return result;
+<a name="301"><span class="lineNum">     301 </span>                :            : }</a>
+<span class="lineNum">     302 </span>                :            : 
+<span class="lineNum">     303 </span>                :            : 
+<span class="lineNum">     304 </span>                :            : int geopm_sched_get_cpu(void)
+<a name="305"><span class="lineNum">     305 </span>                :            : {</a>
+<span class="lineNum">     306 </span>                :            :     int result = -1;
+<span class="lineNum">     307 </span>                :            :     uint32_t cpu_info[4];
+<span class="lineNum">     308 </span>                :            :     __cpuid(cpu_info, 1);
+<a name="309"><span class="lineNum">     309 </span>                :            :     // Check APIC</a>
+<span class="lineNum">     310 </span>                :            :     if (cpu_info[3] &amp; (1 &lt;&lt; 9)) {
+<span class="lineNum">     311 </span>                :            :         result = (int)(cpu_info[1] &gt;&gt; 24);
+<span class="lineNum">     312 </span>                :            :     }
+<a name="313"><span class="lineNum">     313 </span>                :            :     return result;</a>
+<span class="lineNum">     314 </span>                :            : }
+<span class="lineNum">     315 </span>                :            : 
+<span class="lineNum">     316 </span>                :            : // On Mac OS just fill in all bits for the cpuset for both the process
+<a name="317"><span class="lineNum">     317 </span>                :            : // mask and woomp to get the tests passing.</a>
+<span class="lineNum">     318 </span>                :            : static void geopm_cpuset_fill(int num_cpu, cpu_set_t *proc_cpuset)
+<span class="lineNum">     319 </span>                :            : {
+<span class="lineNum">     320 </span>                :            :     for (int i = 0; i &lt; num_cpu; ++i) {
+<a name="321"><span class="lineNum">     321 </span>                :            :         CPU_SET(i, woomp);</a>
+<span class="lineNum">     322 </span>                :            :     }
+<span class="lineNum">     323 </span>                :            : }
+<span class="lineNum">     324 </span>                :            : int geopm_sched_proc_cpuset(int num_cpu, cpu_set_t *proc_cpuset)
+<a name="325"><span class="lineNum">     325 </span>                :            : {</a>
+<span class="lineNum">     326 </span>                :            :     geopm_cpuset_fill(num_cpu, proc_cpuset);
+<span class="lineNum">     327 </span>                :            :     return 0;
+<span class="lineNum">     328 </span>                :            : }
+<a name="329"><span class="lineNum">     329 </span>                :            : </a>
+<span class="lineNum">     330 </span>                :            : int geopm_sched_woomp(int num_cpu, cpu_set_t *woomp)
+<span class="lineNum">     331 </span>                :            : {
+<span class="lineNum">     332 </span>                :            :     geopm_cpuset_fill(num_cpu, woomp);
+<a name="333"><span class="lineNum">     333 </span>                :            :     return 0;</a>
+<span class="lineNum">     334 </span>                :            : }
+<span class="lineNum">     335 </span>                :            : 
+<span class="lineNum">     336 </span>                :            : #endif /* __APPLE__ */
 </pre>
       </td>
     </tr>
