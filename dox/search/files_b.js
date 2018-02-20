@@ -7,8 +7,6 @@ var searchData=
   ['sharedmemory_2ecpp',['SharedMemory.cpp',['../_shared_memory_8cpp.html',1,'']]],
   ['sharedmemory_2ehpp',['SharedMemory.hpp',['../_shared_memory_8hpp.html',1,'']]],
   ['signalhandler_2ecpp',['SignalHandler.cpp',['../_signal_handler_8cpp.html',1,'']]],
-  ['simplefreqdecider_2ecpp',['SimpleFreqDecider.cpp',['../_simple_freq_decider_8cpp.html',1,'']]],
-  ['simplefreqdecider_2ehpp',['SimpleFreqDecider.hpp',['../_simple_freq_decider_8hpp.html',1,'']]],
   ['staticpolicydecider_2ecpp',['StaticPolicyDecider.cpp',['../_static_policy_decider_8cpp.html',1,'']]],
   ['staticpolicydecider_2ehpp',['StaticPolicyDecider.hpp',['../_static_policy_decider_8hpp.html',1,'']]]
 ];
