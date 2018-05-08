@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value',['value',['../structgeopm_1_1geopm__signal__descriptor.html#abd519fb364fd4fc825c6b6295ba155f1',1,'geopm::geopm_signal_descriptor::value()'],['../structgeopm_1_1_profile_table_1_1table__entry__s.html#a43ea8e36cf84191c62a03aa3273acbd8',1,'geopm::ProfileTable::table_entry_s::value()']]]
+  ['wmask',['wmask',['../structgeopm_1_1_platform_imp_1_1m__msr__batch__op.html#ad6e4cf21f4876956ce33749b8b1eced2',1,'geopm::PlatformImp::m_msr_batch_op']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['balancingagent',['BalancingAgent',['../classgeopm_1_1_balancing_agent.html#a7682c60129c70ef0a3ced02944aec68b',1,'geopm::BalancingAgent']]],
   ['balancingdecider',['BalancingDecider',['../classgeopm_1_1_balancing_decider.html#a9bb99d84644283c77f523cfeebd8c592',1,'geopm::BalancingDecider::BalancingDecider()'],['../classgeopm_1_1_balancing_decider.html#a6af28df5475b48dfe6a28de2236269ee',1,'geopm::BalancingDecider::BalancingDecider(const BalancingDecider &amp;other)=delete']]],
   ['barrier',['barrier',['../classgeopm_1_1_i_comm.html#a17670081305ade081fe9950fbef9f819',1,'geopm::IComm::barrier()'],['../classgeopm_1_1_m_p_i_comm.html#ad0faf18f6d6b71ffdc2f88b7f679d9d3',1,'geopm::MPIComm::barrier()']]],
   ['batch_5fmsr_5fread',['batch_msr_read',['../classgeopm_1_1_platform_imp.html#a582a9ed7ad116c89f49e9ce3505172a9',1,'geopm::PlatformImp']]],

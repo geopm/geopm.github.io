@@ -1,12 +1,8 @@
 var searchData=
 [
-  ['sampleregulator',['SampleRegulator',['../classgeopm_1_1_sample_regulator.html',1,'geopm']]],
-  ['samplescheduler',['SampleScheduler',['../classgeopm_1_1_sample_scheduler.html',1,'geopm']]],
-  ['sharedmemory',['SharedMemory',['../classgeopm_1_1_shared_memory.html',1,'geopm']]],
-  ['sharedmemoryuser',['SharedMemoryUser',['../classgeopm_1_1_shared_memory_user.html',1,'geopm']]],
-  ['signalexception',['SignalException',['../classgeopm_1_1_signal_exception.html',1,'geopm']]],
-  ['signalhandler',['SignalHandler',['../classgeopm_1_1_signal_handler.html',1,'geopm']]],
-  ['singletreecommunicator',['SingleTreeCommunicator',['../classgeopm_1_1_single_tree_communicator.html',1,'geopm']]],
-  ['snbplatformimp',['SNBPlatformImp',['../classgeopm_1_1_s_n_b_platform_imp.html',1,'geopm']]],
-  ['staticpolicydecider',['StaticPolicyDecider',['../classgeopm_1_1_static_policy_decider.html',1,'geopm']]]
+  ['raplplatform',['RAPLPlatform',['../classgeopm_1_1_r_a_p_l_platform.html',1,'geopm']]],
+  ['region',['Region',['../classgeopm_1_1_region.html',1,'geopm']]],
+  ['regionpolicy',['RegionPolicy',['../classgeopm_1_1_region_policy.html',1,'geopm']]],
+  ['reporter',['Reporter',['../classgeopm_1_1_reporter.html',1,'geopm']]],
+  ['runtimeregulator',['RuntimeRegulator',['../classgeopm_1_1_runtime_regulator.html',1,'geopm']]]
 ];
