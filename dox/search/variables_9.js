@@ -29,6 +29,7 @@ var searchData=
   ['m_5fimp',['m_imp',['../classgeopm_1_1_platform.html#acead0dfa84c0a25b51d6e68566625459',1,'geopm::Platform']]],
   ['m_5fis_5fbatch_5fenabled',['m_is_batch_enabled',['../classgeopm_1_1_platform_imp.html#a2a3785b7aa98db8f2454d9dc6b3b98d6',1,'geopm::PlatformImp']]],
   ['m_5fis_5fctl',['m_is_ctl',['../classgeopm_1_1_control_message.html#a3b09c2bc4ab0ae8bba969150239b9d00',1,'geopm::ControlMessage']]],
+  ['m_5fis_5ftorn_5fdown',['m_is_torn_down',['../classgeopm_1_1_m_p_i_comm.html#a4cbb1e74223ddc901d001f7c96bad43c',1,'geopm::MPIComm']]],
   ['m_5fis_5fwriter',['m_is_writer',['../classgeopm_1_1_control_message.html#a6593323b153c76b17e63d18718b7cb90',1,'geopm::ControlMessage']]],
   ['m_5fivt_5fid',['M_IVT_ID',['../classgeopm_1_1_r_a_p_l_platform.html#a16e927801554bada6762ecec0095c7b9',1,'geopm::RAPLPlatform']]],
   ['m_5fknl_5fid',['M_KNL_ID',['../classgeopm_1_1_r_a_p_l_platform.html#a8284e9df4c171bd3821e51bcc01ebdbd',1,'geopm::RAPLPlatform']]],

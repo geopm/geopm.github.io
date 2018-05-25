@@ -11,6 +11,7 @@ var searchData=
   ['msr_2ehpp',['MSR.hpp',['../_m_s_r_8hpp.html',1,'']]],
   ['msr_5fhsx_2ecpp',['msr_hsx.cpp',['../msr__hsx_8cpp.html',1,'']]],
   ['msr_5fknl_2ecpp',['msr_knl.cpp',['../msr__knl_8cpp.html',1,'']]],
+  ['msr_5fskx_2ecpp',['msr_skx.cpp',['../msr__skx_8cpp.html',1,'']]],
   ['msr_5fsnb_2ecpp',['msr_snb.cpp',['../msr__snb_8cpp.html',1,'']]],
   ['msrio_2ecpp',['MSRIO.cpp',['../_m_s_r_i_o_8cpp.html',1,'']]],
   ['msrio_2ehpp',['MSRIO.hpp',['../_m_s_r_i_o_8hpp.html',1,'']]],

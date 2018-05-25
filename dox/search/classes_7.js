@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['iagent',['IAgent',['../classgeopm_1_1_i_agent.html',1,'geopm']]],
   ['iapplicationio',['IApplicationIO',['../classgeopm_1_1_i_application_i_o.html',1,'geopm']]],
   ['icircularbuffer',['ICircularBuffer',['../classgeopm_1_1_i_circular_buffer.html',1,'geopm']]],
-  ['icomm',['IComm',['../classgeopm_1_1_i_comm.html',1,'geopm']]],
   ['icontrolmessage',['IControlMessage',['../classgeopm_1_1_i_control_message.html',1,'geopm']]],
   ['idecider',['IDecider',['../classgeopm_1_1_i_decider.html',1,'geopm']]],
   ['iepochruntimeregulator',['IEpochRuntimeRegulator',['../classgeopm_1_1_i_epoch_runtime_regulator.html',1,'geopm']]],

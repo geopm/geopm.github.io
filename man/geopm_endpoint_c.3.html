@@ -79,9 +79,14 @@
 <p><code>Link with -lgeopmpolicy</code></p>
 
 <dl>
-<dt><code>int geopm_endpoint_create(</code></dt><dd><p><code>const char *</code><em>endpoint_name</em>, <br />
-<code>struct geopm_endpoint_c **</code><em>endpoint</em><code>);</code></p></dd>
+<dt><code>int geopm_endpoint_create(</code></dt><dd><p><code>struct geopm_endpoint_c **</code><em>endpoint</em><code>);</code></p></dd>
 <dt><code>int geopm_endpoint_destroy(</code></dt><dd><p><code>struct geopm_endpoint_c *</code><em>endpoint</em><code>);</code></p></dd>
+<dt><code>int geopm_endpoint_shmem_create(</code></dt><dd><p><code>struct geopm_endpoint_c *</code><em>endpoint</em>, <br />
+<code>const char *</code><em>endpoint_name</em><code>);</code></p></dd>
+<dt><code>int geopm_endpoint_shmem_destroy(</code></dt><dd><p><code>struct geopm_endpoint_c *</code><em>endpoint</em>, <br />
+<code>const char *</code><em>endpoint_name</em><code>);</code></p></dd>
+<dt><code>int geopm_endpoint_shmem_attach(</code></dt><dd><p><code>struct geopm_endpoint_c *</code><em>endpoint</em>, <br />
+<code>const char *</code><em>endpoint_name</em><code>);</code></p></dd>
 <dt><code>int geopm_endpoint_agent(</code></dt><dd><p><code>struct geopm_endpoint_c *</code><em>endpoint</em>, <br />
 <code>size_t</code> <em>agent_name_max</em>, <br />
 <code>char *</code><em>agent_name</em><code>);</code></p></dd>
@@ -122,21 +127,33 @@ agent.</p>
 zero upon success; see <a href="#ERRORS" title="ERRORS" data-bare-link="true">ERRORS</a> section below for details.</p>
 
 <dl>
-<dt><code>geopm_endpoint_create</code>()</dt><dd><p>will create an endpoint in shared memory for an attaching agent.
-<em>endpoint_name</em> specifies a substring that is used in the shared memory
-key.  The endpoint is stored in <em>endpoint</em> and will be used with other
-functions in this interface.  This will return zero on success indicating
-that the <em>endpoint</em> struct can now be used.  <em>endpoint</em> will also be NULL
-if an error occurs.</p></dd>
-<dt><code>geopm_endpoint_destroy</code>()</dt><dd><p>will release resources associated with <em>endpoint</em>.  This will
-additionally send a signal to the agent that the manager is detaching and
-no longer requires sample updates.</p></dd>
+<dt><code>geopm_endpoint_create</code>()</dt><dd><p>will create an endpoint object.  This object will hold the necessary state
+for interfacing with the shmem regions.  The endpoint is stored in
+<em>endpoint</em> and will be used with other functions in this interface.  This
+will return zero on success indicating that the <em>endpoint</em> struct can now be
+used.  It will return an error code of EEXIST if the shmem regions already
+exist. <em>endpoint</em> will also be NULL if an error occurs.</p></dd>
+<dt><code>geopm_endpoint_destroy</code>()</dt><dd><p>will release resources associated with <em>endpoint</em>.    This will return zero
+on success indicating that the shmem regions were removed.  Otherwise an
+error code is returned.  This function will not delete any shmem regions.</p></dd>
+<dt><code>geopm_endpoint_shmem_create</code>()</dt><dd><p>will create shmem regions for passing policies to the Agent, and reading
+samples from the Agent.  These regions will have a substring of the shmem
+key that matches <em>endpoint_name</em>.  These shmem regions are managed by the
+endpoint.  This will return zero on success indicating that the shmem
+regions were successfully created.  If the shmem key already exists, an
+error code of EEXIST is returned.</p></dd>
+<dt><code>geopm_endpoint_shmem_destroy</code>()</dt><dd><p>will release shmem regions containing the substring <em>endpoint_name</em>.  This
+will additionally send a signal to the agent that the manager is detaching
+and no longer requires sample updates.  This will return zero on success
+indicating that the shmem regions were removed.  Otherwise an error code is
+returned.</p></dd>
 <dt><code>geopm_endpoint_agent</code>()</dt><dd><p>checks to see if an agent specified by <em>agent_name</em> has attached to the
 <em>endpoint</em>.  The number of bytes reserved for <em>agent_name</em> is specified in
 <em>agent_name_max</em>.  Returns zero if the endpoint has an agent attached and
 the agent's name can be stored in the <em>agent_name</em> buffer.  Otherwise an
 error code is returned.  If no agent has attached, error code
-GEOPM_ERROR_NO_AGENT is returned.</p></dd>
+GEOPM_ERROR_NO_AGENT is returned.  If no shmem region has been attached to
+the endpoint an error code is returned.</p></dd>
 <dt><code>geopm_endpoint_num_node</code>()</dt><dd><p>provides the number of nodes contained within the <em>endpoint</em> in <em>num_node</em>.
 Returns zero on success, otherwise an error code is returned.</p></dd>
 <dt><code>geopm_endpoint_node_name</code>()</dt><dd><p>provides the hostname of the <em>endpoint</em> managed compute node in
@@ -167,25 +184,13 @@ to convert them to strings.</p>
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_sched.3.html">geopm_sched<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpy_launcher.1.html">geopmpy_launcher<span class="s">(1)</span></a></strong>
 <strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmbench.1.html">geopmbench<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong></p>
+<strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>

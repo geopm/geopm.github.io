@@ -62,6 +62,7 @@
     <a href="#INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</a>
     <a href="#INTERPRETING-THE-TRACE">INTERPRETING THE TRACE</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
+    <a href="#DEPRECATION-NOTICE-AND-BETA-INTERFACE-CHANGES">DEPRECATION NOTICE AND BETA INTERFACE CHANGES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -257,9 +258,9 @@ the environment variable (separated by a '-').</p></dd>
 <dt><code>GEOPM_TRACE_SIGNALS</code></dt><dd><p>Used to insert additional columns into the trace beyond the
 default columns and the columns added by the Agent.  The value
 must be formatted as a comma-separated list of valid signal names.
-All custom signals added to the trace will be sampled for the
-entire node.  For example, the following will add total DRAM
-energy and power as columns in the trace:</p>
+All custom signals added to the trace will be sampled and
+aggregated for the entire node.  For example, the following will
+add total DRAM energy and power as columns in the trace:</p>
 
 <p><code>GEOPM_TRACE_SIGNALS=ENERGY_DRAM,POWER_DRAM</code></p>
 
@@ -278,8 +279,10 @@ in the trace by default.</p>
                (0x2000000000000000).  Epoch boundaries are
                recorded as entry and exit to the epoch region
                (0x8000000000000000). <br />
-<code>REGION_PROGRESS</code> - reported progress through the current region. <br />
-<code>REGION_RUNTIME</code> - last recorded runtime for the current region. <br />
+<code>REGION_PROGRESS</code> - minimum per-rank reported progress through the
+                    current region. <br />
+<code>REGION_RUNTIME</code> - maximum per-rank last recorded runtime for the
+                   current region. <br />
 <code>ENERGY_PACKAGE</code> - total energy for all sockets on the node. <br />
 <code>POWER_PACKAGE</code> - total power for all sockets on the node. <br />
 <code>FREQUENCY</code> - average frequency of all cores. <br />
@@ -287,9 +290,9 @@ in the trace by default.</p>
 <code>POWER_DRAM</code> - total power for all DRAM on the node. <br />
 <code>POWER_PACKAGE_MIN</code> - minimum setting for package power. <br />
 <code>POWER_PACKAGE_MAX</code> - maximum setting for package power. <br />
-<code>CYCLES_THREAD</code> - clock cycles executed by cores since the
+<code>CYCLES_THREAD</code> - average clock cycles executed by cores since the
                   beginning of execution. <br />
-<code>CYCLES_REFERENCE</code> - clock reference cycles since the beginning of
+<code>CYCLES_REFERENCE</code> - average clock reference cycles since the beginning of
                      execution. <br /></p></dd>
 <dt><code>GEOPM_AGENT</code></dt><dd><p>Used to select the Agent to be used by all Kontrollers.  The Agent
 will take over the role previously held by Deciders in splitting
@@ -395,8 +398,7 @@ The communication plugin is not currently used, but in the future
 the the comm plugin will be used for all communication between
 Controllers running on different nodes.  The only installed
 communication plugin uses MPI and the description string is "MPIComm".
-The user may wish to implement other communication mechanisms, please
-refer to the GEOPM Plugin Developer's Guide for detailed information.</p></dd>
+The user may wish to implement other communication mechanisms.</p></dd>
 <dt><code>GEOPM_DISABLE_HYPERTHREADS</code></dt><dd><p>Used by job launch wrapper (geopmsrun or geopmaprun) to disable
 the usage of hyperthreads for pinning purposes.  The default behavior
 is to use hyperthreads for pinning.  This environment variable serves
@@ -406,6 +408,53 @@ option is specified then hyperthreads will be disabled.</p></dd>
 </dl>
 
 
+<h2 id="DEPRECATION-NOTICE-AND-BETA-INTERFACE-CHANGES">DEPRECATION NOTICE AND BETA INTERFACE CHANGES</h2>
+
+<p>As of the GEOPM version 0.5.0 beta release, a major refactor of the
+controller and plugin architecture is provided as an optional new code
+path.  The old code path is still available for users as long as the
+controller is run without the <code>GEOPM_AGENT</code> environment variable set.
+The new code path will be active if the user selects an agent by name
+with the <code>GEOPM_AGENT</code> environment variable when launching the
+controller.  The old code path is maintained in the current Controller
+object along with the the Decider / Platform / PlatformImp plugins.
+The new code path is maintained in a replacement for the Controller
+which has been temporarily named the Kontroller.  The Kontroller will
+be renamed the Controller after the version 0.5.0 release, and the old
+code path will no longer be available.</p>
+
+<p>The beta release enables a new set of plugin interfaces named the
+IOGroup, Agent, and Comm.  It is through the IOGroup, Agent and Comm
+plugins that the GEOPM runtime can be extended.  The Decider /
+Platform / PlatformImp plugin extensions are deprecated and will be
+removed after this release.  The IOGroup plugin enables a user to add
+new signal and control mechanisms for an Agent to read and write.  The
+Agent plugin enables a user to add new monitor and control algorithms
+to the GEOPM runtime.  MPI use by the GEOPM runtime which is not
+linked by application has been completely encapsulated in Comm object.
+A tutorial has been extended with two new directories: tutorial/agent
+and tutorial/iogroup.  The tutorial/iogroup directory documents how to
+write an IOGroup plugin.  The tutorial/agent directory documents how
+to write an Agent plugin.</p>
+
+<p>The primary motivations for these changes are increasing the
+flexibility of extensions to GEOPM and improving testablity.  One
+significant problem solved by the IOGroup/PlatformIO replacement of
+the Platform/PlatformImp design is the ability to support multiple
+plugins simultaneously for extending telemetry and control.  The Agent
+interface enables a much more fully featured modification of the
+control algorithm.  Additionally the Agent definition enables the
+GEOPM resource manager interface to provide Agent-specific
+requirements.  In related changes to the inter-node communication, the
+GEOPM runtime now supports arbitrary samples and policies to be
+communicated between agents across the network.</p>
+
+<p>For more information regarding these changes and their effects on
+command line executables see: <strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong>.</p>
+
+<p>For more information regarding these changes and their effects on C
+interfaces: <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong> and <strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong></p>
+
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
 <p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
@@ -413,20 +462,29 @@ option is specified then hyperthreads will be disabled.</p></dd>
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_sched.3.html">geopm_sched<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmbench.1.html">geopmbench<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmwrite.1.html">geopmwrite<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="http://linux.die.net/man/8/ld.so">ld.so<span class="s">(8)</span></a></strong></p>
 
 

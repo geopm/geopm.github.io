@@ -18,6 +18,8 @@ var searchData=
   ['policy_2ehpp',['Policy.hpp',['../_policy_8hpp.html',1,'']]],
   ['policyflags_2ecpp',['PolicyFlags.cpp',['../_policy_flags_8cpp.html',1,'']]],
   ['policyflags_2ehpp',['PolicyFlags.hpp',['../_policy_flags_8hpp.html',1,'']]],
+  ['powerbalanceragent_2ecpp',['PowerBalancerAgent.cpp',['../_power_balancer_agent_8cpp.html',1,'']]],
+  ['powerbalanceragent_2ehpp',['PowerBalancerAgent.hpp',['../_power_balancer_agent_8hpp.html',1,'']]],
   ['profile_2ecpp',['Profile.cpp',['../_profile_8cpp.html',1,'']]],
   ['profile_2ehpp',['Profile.hpp',['../_profile_8hpp.html',1,'']]],
   ['profileio_2ecpp',['ProfileIO.cpp',['../_profile_i_o_8cpp.html',1,'']]],

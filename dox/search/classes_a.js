@@ -10,6 +10,7 @@ var searchData=
   ['pluginfactory',['PluginFactory',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
   ['policy',['Policy',['../classgeopm_1_1_policy.html',1,'geopm']]],
   ['policyflags',['PolicyFlags',['../classgeopm_1_1_policy_flags.html',1,'geopm']]],
+  ['powerbalanceragent',['PowerBalancerAgent',['../classgeopm_1_1_power_balancer_agent.html',1,'geopm']]],
   ['profile',['Profile',['../classgeopm_1_1_profile.html',1,'geopm']]],
   ['profileio',['ProfileIO',['../classgeopm_1_1_profile_i_o.html',1,'geopm']]],
   ['profileiogroup',['ProfileIOGroup',['../classgeopm_1_1_profile_i_o_group.html',1,'geopm']]],
