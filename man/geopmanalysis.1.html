@@ -79,24 +79,28 @@
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>Used to run applications and analyze results for specific GEOPM use cases.
-An application must be launched at least once to generate report files. When using
-geopmanalysis to launch applications, it must be run within an allocation to
-ensure that all runs use the same set of nodes. Once all the required reports
-have been generated, the analysis can be rerun without needing an allocation
-using the <code>--skip-launch</code> option.</p>
+<p>Used to run applications and analyze results for specific GEOPM use
+cases.  An application must be launched at least once to generate
+report files. When using geopmanalysis to launch applications, it must
+be run within an allocation to ensure that all runs use the same set
+of nodes. Once all the required reports have been generated, the
+analysis can be rerun without needing an allocation using the
+<code>--skip-launch</code> option.</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
 <dt><code>-h</code>, <code>--help</code></dt><dd><p>Show help message and exit.</p></dd>
-<dt><code>-t</code>, <code>--analysis-type</code> <em>freq_sweep</em>|<em>balancer</em>|<em>offline</em>|<em>online</em>|<em>stream_mix</em></dt><dd><p>The type of analysis to perform. <em>balancer</em> analysis is not yet implemented.</p></dd>
-<dt><code>-n</code>, <code>--num-rank</code> <em>NUM_RANKS</em></dt><dd><p>Total number of application ranks to launch with. Because geopmanalysis
-uses the GEOPM launch method "process" there will be one extra rank launched
-per node in addition to the number of application ranks specified by this option.</p></dd>
-<dt><code>-N</code>, <code>--num-node</code> <em>NUM_NODES</em></dt><dd><p>Number of compute nodes to launch onto.  Note that this option is <code>not</code> propagated
-to the underlying launch application; for instance if ALPS is the application
-launch backend, this option does not specify the number of ranks per node.</p></dd>
+<dt><code>-t</code>, <code>--analysis-type</code> <em>freq_sweep</em>|<em>balancer</em>|<em>offline</em>|<em>online</em>|<em>stream_mix</em></dt><dd><p>The type of analysis to perform. <em>balancer</em> analysis is not yet
+implemented.</p></dd>
+<dt><code>-n</code>, <code>--num-rank</code> <em>NUM_RANKS</em></dt><dd><p>Total number of application ranks to launch with. Because
+geopmanalysis uses the GEOPM launch method "process" there will be
+one extra rank launched per node in addition to the number of
+application ranks specified by this option.</p></dd>
+<dt><code>-N</code>, <code>--num-node</code> <em>NUM_NODES</em></dt><dd><p>Number of compute nodes to launch onto.  Note that this option is
+<code>not</code> propagated to the underlying launch application; for instance
+if ALPS is the application launch backend, this option does not
+specify the number of ranks per node.</p></dd>
 <dt><code>-o</code>, <code>--output-dir</code> <em>OUTPUT_DIR</em></dt><dd><p>The output directory for reports, traces, and plots (default: '.').</p></dd>
 <dt><code>-p</code>, <code>--profile-prefix</code> <em>PREFIX</em></dt><dd><p>Prefix to prepend to profile name when launching. Depending on the
 type of analysis, several profiles will be generated. For example,
@@ -111,44 +115,53 @@ prefix.</p></dd>
 <dt><code>-v</code>, <code>--verbose</code></dt><dd><p>Print verbose debugging information.</p></dd>
 <dt><code>--geopm-ctl</code> <em>GEOPM_CTL</em></dt><dd><p>Launch type for the GEOPM controller.  Available GEOPM_CTL values:
 process, pthread, or application (default 'process').</p></dd>
-<dt><code>--iterations</code> <em>NUM_ITERATIONS</em></dt><dd><p>Number of iterations to perform for every type of analysis.  E.g. for the
-OfflineFrequencyAnalysis, <em>NUM_ITERATIONS</em> runs will be performed at every
-available frequency.  The data is averaged together prior to evaluating what
-the best per-region frequency is. (default: <em>1</em>)</p></dd>
-<dt><code>--enable-turbo</code></dt><dd><p>When calculating the best per region frequencies, this flag sipulates that frequencies
-in the turbo range should be considered.  By default, this flag is not set meaning
-frequencies in the turbo range are not considered.</p></dd>
+<dt><code>--iterations</code> <em>NUM_ITERATIONS</em></dt><dd><p>Number of iterations to perform for every type of analysis.
+E.g. for the OfflineFrequencyAnalysis, <em>NUM_ITERATIONS</em> runs will be
+performed at every available frequency.  The data is averaged
+together prior to evaluating what the best per-region frequency
+is. (default: <em>1</em>)</p></dd>
+<dt><code>--enable-turbo</code></dt><dd><p>When calculating the best per region frequencies, this flag
+stipulates that frequencies in the turbo range should be considered.
+By default, this flag is not set meaning frequencies in the turbo
+range are not considered.</p></dd>
 </dl>
 
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
-<p>  Once the geopmpy modules are installed, you can invoke this utility directly from
-  the command line.  You can either run the utility from inside a directory containing
-  data, or from a remote directory.  Some examples follow:</p>
+<p>  Once the geopmpy modules are installed, you can invoke this utility
+  directly from the command line.  You can either run the utility from
+  inside a directory containing data, or from a remote directory.
+  Some examples follow:</p>
 
-<p>  The <em>freq_sweep</em> analysis type runs the application once at each available frequency
-  on the platform. The reports generated from this analysis can be used for other types
-  of analysis. The output from the frequency sweep is a mapping of the best-fit frequency
-  for each region that saves energy while not letting the runtime increase more than 10%.</p>
+<p>  The <em>freq_sweep</em> analysis type runs the application once at each
+  available frequency on the platform. The reports generated from this
+  analysis can be used for other types of analysis. The output from
+  the frequency sweep is a mapping of the best-fit frequency for each
+  region that saves energy while not letting the runtime increase more
+  than 10%.</p>
 
 <pre><code>geopmanalysis -n1 -N1 -t freq_sweep -p myprof -o myprof -- ./build/bin/geopmbench config.json
 </code></pre>
 
-<p>  The <em>offline</em> analysis type runs a frequency sweep (if reports are not already present)
-  to determine the best-fit frequency for each region of the application. Then it runs the
-  application using the EfficientFreqDecider plugin, which uses this mapping to change the
-  frequency when entering each reagion. The <em>online</em> analysis type is similar except that
-  it determines the best-fit frequency through online training.</p>
+<p>  The <em>offline</em> analysis type runs a frequency sweep (if reports are
+  not already present) to determine the best-fit frequency for each
+  region of the application. Then it runs the application using the
+  EfficientFreqDecider plugin, which uses this mapping to change the
+  frequency when entering each region. The <em>online</em> analysis type is
+  similar except that it determines the best-fit frequency through
+  online training.</p>
 
 <pre><code>geopmanalysis -n1 -N1 -t offline -p myprof -o myprof -- ./build/bin/geopmbench config.json
 </code></pre>
 
-<p>  The <em>stream_mix</em> analysis type uses the geopmbench application and varies the ratio
-  between the runtimes of the stream and dgemm regions from around 20% stream to around 80%
-  stream. For each ratio, it launches a frequency sweep and the offline and online analysis
-  modes described above. The resulting analysis produces plots comparing the runtime and
-  energy savings of the different plugin modes at each stream mix ratio.</p>
+<p>  The <em>stream_mix</em> analysis type uses the geopmbench application and
+  varies the ratio between the runtimes of the stream and dgemm
+  regions from around 20% stream to around 80% stream. For each ratio,
+  it launches a frequency sweep and the offline and online analysis
+  modes described above. The resulting analysis produces plots
+  comparing the runtime and energy savings of the different plugin
+  modes at each stream mix ratio.</p>
 
 <pre><code>geopmanalysis -n1 -N1 -t stream_mix -p myprof -o myprof -- ./build/bin/geopmbench config.json
 </code></pre>
@@ -169,7 +182,7 @@ frequencies in the turbo range are not considered.</p></dd>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>May 2018</li>
+    <li class='tc'>July 2018</li>
     <li class='tr'>geopmanalysis(1)</li>
   </ol>
 

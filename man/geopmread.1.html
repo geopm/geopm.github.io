@@ -96,9 +96,10 @@ the type and number of hardware domains.  Details of the hardware
 domains can also be inferred from the output of <strong><a class="man-ref" href="http://linux.die.net/man/1/lscpu">lscpu<span class="s">(1)</span></a></strong>.</p>
 
 <p>When run without any arguments, the default behavior is to print a
-summary of available signals.  Some signals, namely the region-related
-signals, are only relevant when using GEOPM to run an application and
-will not yield useful values when sampled with <code>geopmread</code>.</p>
+summary of available signals.  Signal names ending in # represent the
+raw bits of MSRs without any interpretation and will be printed in
+hex.  This feature is mainly useful for debugging; for profiling, the
+signal aliases should be preferred.</p>
 
 <p>To read a specific signal, <code>geopmread</code> should be run with the three
 arguments.  SIGNAL_NAME is the name of the signal of interest.
@@ -127,9 +128,11 @@ contained in parents of its parent domain.</p>
 ++<code>board_accelerator</code> - domain for accelerators on the board</p>
 
 <p>The aggregation functions used for each signal are described in
-<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> under the description for <code>GEOPM_TRACE_SIGNALS</code>.  The same
-functions are used to aggregate signals in the trace into the board
-domain.</p>
+<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> under the description for <code>GEOPM_TRACE_SIGNALS</code>.  The
+same functions are used to aggregate signals in the trace into the
+board domain.  Note that not all signals have aggregation functions,
+and if a signal is not readable at board domain, it cannot be printed
+in the trace.</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
@@ -201,7 +204,7 @@ board_memory
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>May 2018</li>
+    <li class='tc'>July 2018</li>
     <li class='tr'>geopmread(1)</li>
   </ol>
 

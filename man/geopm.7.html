@@ -147,7 +147,9 @@ application including support for static control.</p>
 
 <p><strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong>: Agent for saving energy</p>
 
-<p><strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>: Agent optimizes performance under a power cap</p>
+<p><strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>: Agent that optimizes performance under a power cap</p>
+
+<p><strong><a class="man-ref" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor<span class="s">(7)</span></a></strong>: Agent that enforces a power cap</p>
 
 <h2 id="RUNTIME-CONTROL">RUNTIME CONTROL</h2>
 
@@ -183,7 +185,7 @@ option <code>--disable-pmpi</code>, but is enabled by default.  See
 <code>LD_DYNAMIC_WEAK</code> environment variable description below for the
 runtime requirements of the PMPI design.  When using the GEOPM PMPI
 interposition other profilers which use the same method will be in
-conflict.  The GEOPM runtime can create a application performance
+conflict.  The GEOPM runtime can create an application performance
 profile report and a trace of the application runtime.  As such, GEOPM
 serves the role of an application profiler in addition to management
 of power resources.  The report and trace generation are controlled by
@@ -193,17 +195,17 @@ description below.</p>
 <h2 id="INTEGRATION-WITH-OMPT">INTEGRATION WITH OMPT</h2>
 
 <p>When the OpenMP runtime compiled with GEOPM supports the OMPT
-interface, GEOPM will use the OMPT callbacks wrap OpenMP parallel
+interface, GEOPM will use the OMPT callbacks to wrap OpenMP parallel
 regions with calls to <code>geopm_prof_enter()</code> and <code>geopm_prof_exit()</code>.
-In this way any OpenMP parallel region not within another application
-defined region will be reported to the GEOPM runtime.  This will
-appear in the report as a region name beginning with "[OMPT]" and
-referencing the object file and function name containing the OpenMP
-parallel region e.g.</p>
+In this way, any OpenMP parallel region not within another
+application-defined region will be reported to the GEOPM runtime.
+This will appear in the report as a region name beginning with
+"[OMPT]" and referencing the object file and function name containing
+the OpenMP parallel region e.g.</p>
 
 <p><code>[OMPT]tutorial_6:geopm::StreamModelRegion::run()</code></p>
 
-<p>To expressly enable this feature pass the <code>--enable-ompt</code> configure
+<p>To expressly enable this feature, pass the <code>--enable-ompt</code> configure
 flag at GEOPM build time.  This will build and install the LLVM OpenMP
 runtime configured to support OMPT if the default OpenMP runtime does
 not support the OMPT callbacks.  Note that your compiler must be
@@ -232,17 +234,17 @@ application should be launched in parallel.</p>
 
 <p>There are legacy methods for launching the runtime programmatically.
 These are documented in <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>, but are deprecated as an
-application facing interface because their use within an application
+application-facing interface because their use within an application
 is incompatible with the GEOPM launcher script.</p>
 
 <h2 id="PLOTTING-REPORT-AND-TRACE-DATA">PLOTTING REPORT AND TRACE DATA</h2>
 
-<p>Please see the <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>
-man pages for information about the
-data analysis tools available for visualizing the data contained in
-the GEOPM report and trace files.  The report file is intended to be
-human readable, and the trace file format can be easily parsed by a
-wide variety of analysis applications.</p>
+<p>Please see the <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong> man pages
+for information about the data analysis tools available for
+visualizing the data contained in the GEOPM report and trace files.
+The report file is intended to be human readable, and the trace file
+format can be easily parsed by a wide variety of analysis
+applications.</p>
 
 <h2 id="INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</h2>
 
@@ -360,7 +362,8 @@ in the trace by default.</p>
 will take over the role previously held by Deciders in splitting
 policy information to be sent to controllers lower in the tree,
 and aggregating sampled data up the tree.  Available agents are:
-"monitor", "power_balancer", and "energy_efficient".</p></dd>
+"monitor", "power_balancer", "power_governor", and
+"energy_efficient".</p></dd>
 <dt><code>GEOPM_POLICY</code></dt><dd><p>Specifies a JSON file path containing the policy.  If the policy
 is provided through this file, it will only be read once and
 cannot be changed dynamically.  In this mode, samples will not be
@@ -436,6 +439,16 @@ attached and the local variable "cont" is set to a non-zero value.
 If set, but not to a numerical value then all ranks are trapped.
 The runtime will print a message explaining the hostname and
 process ID that the debugger should attach to.</p></dd>
+<dt><code>GEOPM_EXEC_WRAPPER</code></dt><dd><p>Configure string for GEOPM launcher to run arbitrary
+application to wrap target job execution.</p>
+
+<p><code>$ export GEOPM_EXEC_WRAPPER="numactl -m 1"</code></p>
+
+<p><code>$ export GEOPM_EXEC_WRAPPER="valgrind --tool=memcheck --vgdb=yes \
+                              --vgdb-error=0"</code></p>
+
+<p><code>$ export GEOPM_EXEC_WRAPPER="$PATH_TO_DDT_CLIENT_BIN --ddtsessionfile \
+                              $PATH_TO_DDT_CLIENT_SESSION_FILE"</code></p></dd>
 <dt><code>GEOPM_REGION_BARRIER</code></dt><dd><p>Enables a node local MPI_Barrier() at time of calling
 <code>geopm_region_enter</code>() or <code>geopm_region_exit</code>() for all
 application ranks that share a node.  Since the GEOPM controller
@@ -527,6 +540,7 @@ interfaces: <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c
 <strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong>,
@@ -552,7 +566,7 @@ interfaces: <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>May 2018</li>
+    <li class='tc'>July 2018</li>
     <li class='tr'>geopm(7)</li>
   </ol>
 

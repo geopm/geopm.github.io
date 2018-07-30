@@ -21,6 +21,8 @@ var searchData=
   ['iplatformtopology',['IPlatformTopology',['../classgeopm_1_1_i_platform_topology.html',1,'geopm']]],
   ['ipolicy',['IPolicy',['../classgeopm_1_1_i_policy.html',1,'geopm']]],
   ['ipolicyflags',['IPolicyFlags',['../classgeopm_1_1_i_policy_flags.html',1,'geopm']]],
+  ['ipowerbalancer',['IPowerBalancer',['../classgeopm_1_1_i_power_balancer.html',1,'geopm']]],
+  ['ipowergovernor',['IPowerGovernor',['../classgeopm_1_1_i_power_governor.html',1,'geopm']]],
   ['iprofile',['IProfile',['../classgeopm_1_1_i_profile.html',1,'geopm']]],
   ['iprofileioruntime',['IProfileIORuntime',['../classgeopm_1_1_i_profile_i_o_runtime.html',1,'geopm']]],
   ['iprofileiosample',['IProfileIOSample',['../classgeopm_1_1_i_profile_i_o_sample.html',1,'geopm']]],

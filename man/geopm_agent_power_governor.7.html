@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopm_agent_power_governor(7) - agent enforces a power cap</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#AGENT-BEHAVIOR-HIGHLIGHTS">AGENT BEHAVIOR HIGHLIGHTS</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopm_agent_power_governor(7)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopm_agent_power_governor(7)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopm_agent_power_governor</code> - <span class="man-whatis">agent enforces a power cap</span>
+</p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The PowerGovernorAgent is designed to enforce a per-compute-node power
+cap by varying the package power limit in response to the measured
+DRAM power.</p>
+
+<h2 id="AGENT-BEHAVIOR-HIGHLIGHTS">AGENT BEHAVIOR HIGHLIGHTS</h2>
+
+<dl>
+<dt><code>Agent Name</code></dt><dd><p>Set the <code>GEOPM_AGENT</code> environment variable to "power_governor" and
+the Kontroller instances will select the PowerGovernorAgent for
+its control handler.  See <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> for more information about
+environment variables.</p></dd>
+<dt><code>Ordered Policies Descending</code>:</dt><dd><p></p>
+
+<p><code>POWER</code>: Sets the average power cap per compute node in
+                 units of Watts.</p></dd>
+<dt><code>Ordered Samples Ascending</code>:</dt><dd><p></p>
+
+<p><code>POWER_MAXIMUM</code>: Maximum power excursion in Watts measured over the
+                 last epoch.  The maximum power excursion is
+                 determined by differencing energy values across the
+                 time window provided by the policy.</p>
+
+<p><code>IS_CONVERGED</code>: Will be 1.0 if the power policy has been
+                enforced and the power consumption by all nodes is
+                within the assigned limits, otherwise it will be
+                0.0.</p>
+
+<p><code>POWER_AVERAGE_ENFORCED</code>: Enforced power limit averaged over all compute nodes.
+                This value corresponds to the <code>POWER_AVERAGE</code> policy field and
+                is expected to match unless the policy is unachievable.</p></dd>
+<dt><code>Tracing Modifications</code>:</dt><dd><p></p>
+
+<p><code>power_package</code>: Instantaneous power measurement of all processor
+                 packages on each compute node averaged over all
+                 compute nodes allocated to the application.</p>
+
+<p><code>power_dram</code>: Instantaneous power measurement of all DRAM modules in
+              each compute node averaged over all compute nodes
+              allocated to the application.</p>
+
+<p><code>power_budget</code>: Power budget assigned to the compute node associated
+                with the trace file at time of sampling.</p></dd>
+<dt><code>Report Modifiers</code></dt><dd><p>N/A</p></dd>
+<dt><code>Control Loop Gate</code></dt><dd><p>The agent gates the Kontroller's control loop to a cadence of 5
+updates to the POWER_PACKAGE platform signal.  This agent propagates
+its ascending signals up the tree every 50 updates to the
+POWER_PACKAGE platform signal (i.e. 10 control cycles).  For
+example, on KNL this is around 5ms.</p></dd>
+</dl>
+
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Intel Corporation</li>
+    <li class='tc'>July 2018</li>
+    <li class='tr'>geopm_agent_power_governor(7)</li>
+  </ol>
+
+  </div>
+</body>
+</html>
