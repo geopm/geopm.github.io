@@ -134,11 +134,36 @@ unmodified.  The <em>region_name</em> is used to determine the output
 <em>region_id</em> and is also displayed in the profiling report to
 identify the region.  The <em>hint</em> is one of the values given by the
 geopm_region_hint_e enum defined in <em>geopm.h</em> which determines the
-initial control settings.  The following hints are supported:
-<code>GEOPM_REGION_HINT_UNKNOWN</code>, <code>GEOPM_REGION_HINT_COMPUTE</code>,
-<code>GEOPM_REGION_HINT_MEMORY</code>, <code>GEOPM_REGION_HINT_NETWORK</code>,
-<code>GEOPM_REGION_HINT_IO</code>, <code>GEOPM_REGION_HINT_SERIAL</code>,
-<code>GEOPM_REGION_HINT_PARALLEL</code>, <code>GEOPM_REGION_HINT_IGNORE</code>.</p></dd>
+initial control settings.  The following hints are supported:</p>
+
+<p><code>GEOPM_REGION_HINT_UNKNOWN</code>: <br />
+Default value, provides no hint to the runtime.</p>
+
+<p><code>GEOPM_REGION_HINT_COMPUTE</code>: <br />
+Compute limited region.</p>
+
+<p><code>GEOPM_REGION_HINT_MEMORY</code>: <br />
+Memory bandwidth bound region.</p>
+
+<p><code>GEOPM_REGION_HINT_NETWORK</code>: <br />
+Inter-node network dominated region, default for unnested MPI
+calls.</p>
+
+<p><code>GEOPM_REGION_HINT_IO</code>: <br />
+Disk input/output dominated region.</p>
+
+<p><code>GEOPM_REGION_HINT_SERIAL</code>: <br />
+Calculation that is not executed by a multi-threaded process (may
+be multi-process).</p>
+
+<p><code>GEOPM_REGION_HINT_PARALLEL</code>: <br />
+Calculation that is executed by a multi-threaded process in a
+hybrid thread/process paralellism (e.g. MPI + OpenMP).</p>
+
+<p><code>GEOPM_REGION_HINT_IGNORE</code>: <br />
+Do not include time spent in ignore regions when calculating epoch
+runtime, this should be applied to application start up, shutdown,
+or events that do not happen on every trip through the outer loop.</p></dd>
 <dt><code>geopm_prof_enter</code>()</dt><dd><p>is called by the compute application to mark the beginning of the
 profiled compute region associated with the <em>region_id</em>. If this
 call is made after entering a different region, but before exiting
@@ -160,9 +185,9 @@ iteration.  The divergence in the elapsed time between calls by
 different MPI ranks is interpreted as an imbalance to be corrected
 by the runtime.  This function may be called at different places
 in an application, but it should not be used to mark a loop that
-is nested inside of another loop which is also marked.  It is
-important to note that this call acts as a barrier between ranks
-running within the same compute node.</p></dd>
+is nested inside of another loop which is also marked.  All calls
+to <code>geopm_prof_epoch</code>() made inside of a user defined region with
+the <code>GEOPM_REGION_HINT_IGNORE</code> hint bit set will be ignored.</p></dd>
 <dt><code>geopm_tprof_init</code>()</dt><dd><p>resets the thread profile table which extends the functionality of
 the profiling interface to report progress within threaded
 regions.  This should be called by all threads to set up the
@@ -277,7 +302,7 @@ to convert them to strings.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>July 2018</li>
+    <li class='tc'>August 2018</li>
     <li class='tr'>geopm_prof_c(3)</li>
   </ol>
 

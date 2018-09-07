@@ -54,6 +54,7 @@ var searchData=
   ['_7eiprofiletable',['~IProfileTable',['../classgeopm_1_1_i_profile_table.html#a50f19f53630ccef1a01b46c793582bce',1,'geopm::IProfileTable']]],
   ['_7eiprofilethreadtable',['~IProfileThreadTable',['../classgeopm_1_1_i_profile_thread_table.html#a99784db6385f0959d9af130fbf3c20f9',1,'geopm::IProfileThreadTable']]],
   ['_7eiregion',['~IRegion',['../classgeopm_1_1_i_region.html#a81c835277f7aec1563eac21dcef0cb87',1,'geopm::IRegion']]],
+  ['_7eiregionaggregator',['~IRegionAggregator',['../classgeopm_1_1_i_region_aggregator.html#a27161fea6e2ca06558e759bb90211094',1,'geopm::IRegionAggregator']]],
   ['_7eireporter',['~IReporter',['../classgeopm_1_1_i_reporter.html#af5ed01310f47c133733801f8769dcc82',1,'geopm::IReporter']]],
   ['_7eiruntimeregulator',['~IRuntimeRegulator',['../classgeopm_1_1_i_runtime_regulator.html#ad260a7b03963c224da5431aebecd0e00',1,'geopm::IRuntimeRegulator']]],
   ['_7eisampleregulator',['~ISampleRegulator',['../classgeopm_1_1_i_sample_regulator.html#a3e2b33d50d761f0f4dcaaed44fd75992',1,'geopm::ISampleRegulator']]],

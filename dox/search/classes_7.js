@@ -31,6 +31,7 @@ var searchData=
   ['iprofiletable',['IProfileTable',['../classgeopm_1_1_i_profile_table.html',1,'geopm']]],
   ['iprofilethreadtable',['IProfileThreadTable',['../classgeopm_1_1_i_profile_thread_table.html',1,'geopm']]],
   ['iregion',['IRegion',['../classgeopm_1_1_i_region.html',1,'geopm']]],
+  ['iregionaggregator',['IRegionAggregator',['../classgeopm_1_1_i_region_aggregator.html',1,'geopm']]],
   ['ireporter',['IReporter',['../classgeopm_1_1_i_reporter.html',1,'geopm']]],
   ['iruntimeregulator',['IRuntimeRegulator',['../classgeopm_1_1_i_runtime_regulator.html',1,'geopm']]],
   ['isampleregulator',['ISampleRegulator',['../classgeopm_1_1_i_sample_regulator.html',1,'geopm']]],
