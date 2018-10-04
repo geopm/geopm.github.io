@@ -1,9 +1,26 @@
 var searchData=
 [
-  ['raplplatform',['RAPLPlatform',['../classgeopm_1_1_r_a_p_l_platform.html',1,'geopm']]],
-  ['region',['Region',['../classgeopm_1_1_region.html',1,'geopm']]],
-  ['regionaggregator',['RegionAggregator',['../classgeopm_1_1_region_aggregator.html',1,'geopm']]],
-  ['regionpolicy',['RegionPolicy',['../classgeopm_1_1_region_policy.html',1,'geopm']]],
-  ['reporter',['Reporter',['../classgeopm_1_1_reporter.html',1,'geopm']]],
-  ['runtimeregulator',['RuntimeRegulator',['../classgeopm_1_1_runtime_regulator.html',1,'geopm']]]
+  ['perregionderivativecombinedsignal',['PerRegionDerivativeCombinedSignal',['../classgeopm_1_1_per_region_derivative_combined_signal.html',1,'geopm']]],
+  ['platform',['Platform',['../classgeopm_1_1_platform.html',1,'geopm']]],
+  ['platformfactory',['PlatformFactory',['../classgeopm_1_1_platform_factory.html',1,'geopm']]],
+  ['platformimp',['PlatformImp',['../classgeopm_1_1_platform_imp.html',1,'geopm']]],
+  ['platformio',['PlatformIO',['../classgeopm_1_1_platform_i_o.html',1,'geopm']]],
+  ['platformtopo',['PlatformTopo',['../classgeopm_1_1_platform_topo.html',1,'geopm']]],
+  ['platformtopology',['PlatformTopology',['../classgeopm_1_1_platform_topology.html',1,'geopm']]],
+  ['pluginfactory',['PluginFactory',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
+  ['policy',['Policy',['../classgeopm_1_1_policy.html',1,'geopm']]],
+  ['policyflags',['PolicyFlags',['../classgeopm_1_1_policy_flags.html',1,'geopm']]],
+  ['powerbalancer',['PowerBalancer',['../classgeopm_1_1_power_balancer.html',1,'geopm']]],
+  ['powerbalanceragent',['PowerBalancerAgent',['../classgeopm_1_1_power_balancer_agent.html',1,'geopm']]],
+  ['powergovernor',['PowerGovernor',['../classgeopm_1_1_power_governor.html',1,'geopm']]],
+  ['powergovernoragent',['PowerGovernorAgent',['../classgeopm_1_1_power_governor_agent.html',1,'geopm']]],
+  ['profile',['Profile',['../classgeopm_1_1_profile.html',1,'geopm']]],
+  ['profileio',['ProfileIO',['../classgeopm_1_1_profile_i_o.html',1,'geopm']]],
+  ['profileiogroup',['ProfileIOGroup',['../classgeopm_1_1_profile_i_o_group.html',1,'geopm']]],
+  ['profileioruntime',['ProfileIORuntime',['../classgeopm_1_1_profile_i_o_runtime.html',1,'geopm']]],
+  ['profileiosample',['ProfileIOSample',['../classgeopm_1_1_profile_i_o_sample.html',1,'geopm']]],
+  ['profileranksampler',['ProfileRankSampler',['../classgeopm_1_1_profile_rank_sampler.html',1,'geopm']]],
+  ['profilesampler',['ProfileSampler',['../classgeopm_1_1_profile_sampler.html',1,'geopm']]],
+  ['profiletable',['ProfileTable',['../classgeopm_1_1_profile_table.html',1,'geopm']]],
+  ['profilethreadtable',['ProfileThreadTable',['../classgeopm_1_1_profile_thread_table.html',1,'geopm']]]
 ];

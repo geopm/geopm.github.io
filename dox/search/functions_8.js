@@ -70,6 +70,7 @@ var searchData=
   ['isamplescheduler',['ISampleScheduler',['../classgeopm_1_1_i_sample_scheduler.html#a7dba907ab6dd4d7da4076800665d9d8e',1,'geopm::ISampleScheduler']]],
   ['isharedmemory',['ISharedMemory',['../classgeopm_1_1_i_shared_memory.html#a7b792fe07adfc0efcd2807a4b9ca3256',1,'geopm::ISharedMemory::ISharedMemory()=default'],['../classgeopm_1_1_i_shared_memory.html#adc3e2b9f706b3062b68264c28e117030',1,'geopm::ISharedMemory::ISharedMemory(const ISharedMemory &amp;other)=default']]],
   ['isharedmemoryuser',['ISharedMemoryUser',['../classgeopm_1_1_i_shared_memory_user.html#a0d7130ae7d3df3260095de93b5f6f432',1,'geopm::ISharedMemoryUser::ISharedMemoryUser()=default'],['../classgeopm_1_1_i_shared_memory_user.html#a3d129fb649432b3a52d73471ddc5624e',1,'geopm::ISharedMemoryUser::ISharedMemoryUser(const ISharedMemoryUser &amp;other)=default']]],
+  ['istep',['IStep',['../classgeopm_1_1_power_balancer_agent_1_1_i_step.html#ab6684128c56bf094ab64d3729edd5869',1,'geopm::PowerBalancerAgent::IStep']]],
   ['itracer',['ITracer',['../classgeopm_1_1_i_tracer.html#ad8307842f550d305f2b1c91830d301db',1,'geopm::ITracer']]],
   ['itreecomm',['ITreeComm',['../classgeopm_1_1_i_tree_comm.html#a9105d8c0e9e17bca520c8987fa6e4290',1,'geopm::ITreeComm']]],
   ['itreecommlevel',['ITreeCommLevel',['../classgeopm_1_1_i_tree_comm_level.html#a3694a98c8c7969edc2f8b7ba2c78adad',1,'geopm::ITreeCommLevel']]],

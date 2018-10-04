@@ -56,7 +56,9 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
-    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#ANALYSIS-TYPES">ANALYSIS TYPES</a>
+    <a href="#COMMON-OPTIONS-FOR-ALL-ANALYSIS-TYPES">COMMON OPTIONS FOR ALL ANALYSIS TYPES</a>
+    <a href="#OPTIONS-FOR-FREQUENCY-SWEEP-BASED-ANALYSIS">OPTIONS FOR FREQUENCY SWEEP-BASED ANALYSIS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
@@ -75,7 +77,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>geopmanalysis</code> -t <em>ANALYSIS_TYPE</em> -n <em>NUM_RANK</em> -N <em>NUM_NODE</em> [<em>OPTIONS</em>] -- <em>EXEC</em> [<em>EXEC_ARGS</em>]</p>
+<p><code>geopmanalysis</code> <em>ANALYSIS_TYPE</em> [<em>OPTIONS</em>] -- <em>EXEC</em> [<em>EXEC_ARGS</em>]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -85,14 +87,42 @@ report files. When using geopmanalysis to launch applications, it must
 be run within an allocation to ensure that all runs use the same set
 of nodes. Once all the required reports have been generated, the
 analysis can be rerun without needing an allocation using the
-<code>--skip-launch</code> option.</p>
+<code>--skip-launch</code> option.  Using the <code>--output-dir</code> option to specify
+a unique directory for each analysis is highly recommended so that
+reports and traces from different experiments are not combined by
+mistake.</p>
 
-<h2 id="OPTIONS">OPTIONS</h2>
+<h2 id="ANALYSIS-TYPES">ANALYSIS TYPES</h2>
+
+<p>The available analysis types are:</p>
 
 <dl>
-<dt><code>-h</code>, <code>--help</code></dt><dd><p>Show help message and exit.</p></dd>
-<dt><code>-t</code>, <code>--analysis-type</code> <em>freq_sweep</em>|<em>balancer</em>|<em>offline</em>|<em>online</em>|<em>stream_mix</em></dt><dd><p>The type of analysis to perform. <em>balancer</em> analysis is not yet
-implemented.</p></dd>
+<dt><em>freq_sweep</em></dt><dd><p>Runs the application at each available frequency. Compared to the baseline
+frequency, finds the lowest frequency for each region at which the performance
+will not be degraded by more than a given margin.</p></dd>
+<dt class="flush"><em>offline</em></dt><dd><p>Compares the energy efficiency plugin in offline mode to the
+baseline at sticker frequency.</p></dd>
+<dt class="flush"><em>online</em></dt><dd><p>Compares the energy efficiency plugin in online mode to the
+baseline at sticker frequency.</p></dd>
+<dt><em>stream_mix</em></dt><dd><p>Runs a full frequency sweep, then offline and online modes of the
+energy efficieny plugin. The energy and runtime of the
+application best-fit, per-phase offline mode, and per-phase
+online mode are compared to the run a sticker frequency.</p></dd>
+</dl>
+
+
+<h2 id="COMMON-OPTIONS-FOR-ALL-ANALYSIS-TYPES">COMMON OPTIONS FOR ALL ANALYSIS TYPES</h2>
+
+<dl>
+<dt><code>-h</code>, <code>--help</code></dt><dd><p>Show help message and exit.  When used with an analysis type, it
+shows additional options for that analysis.</p></dd>
+<dt><code>-o</code>, <code>--output-dir</code> <em>OUTPUT_DIR</em></dt><dd><p>The output directory for reports, traces, and plots (default: '.').</p></dd>
+<dt><code>-p</code>, <code>--profile-prefix</code> <em>PREFIX</em></dt><dd><p>Prefix to prepend to profile name when launching. Depending on the
+type of analysis, several profiles will be generated. For example,
+the freq_sweep analysis appends the frequency for each run to this
+prefix.</p></dd>
+<dt><code>--summary</code></dt><dd><p>Print a summary of the data depending on the analysis type.</p></dd>
+<dt class="flush"><code>--plot</code></dt><dd><p>Generate plots of the data.</p></dd>
 <dt><code>-n</code>, <code>--num-rank</code> <em>NUM_RANKS</em></dt><dd><p>Total number of application ranks to launch with. Because
 geopmanalysis uses the GEOPM launch method "process" there will be
 one extra rank launched per node in addition to the number of
@@ -101,15 +131,6 @@ application ranks specified by this option.</p></dd>
 <code>not</code> propagated to the underlying launch application; for instance
 if ALPS is the application launch backend, this option does not
 specify the number of ranks per node.</p></dd>
-<dt><code>-o</code>, <code>--output-dir</code> <em>OUTPUT_DIR</em></dt><dd><p>The output directory for reports, traces, and plots (default: '.').</p></dd>
-<dt><code>-p</code>, <code>--profile-prefix</code> <em>PREFIX</em></dt><dd><p>Prefix to prepend to profile name when launching. Depending on the
-type of analysis, several profiles will be generated. For example,
-the freq_sweep analysis appends the frequency for each run to this
-prefix.</p></dd>
-<dt><code>-l</code>, <code>--level</code> 0|1|2</dt><dd><p>Controls the level of detail provided in the analysis. <br />
-  level 0: run application and generate reports and traces only <br />
-  level 1: print analysis of report and trace data (default) <br />
-  level 2: create plots from report and trace data</p></dd>
 <dt><code>-s</code>, <code>--skip-launch</code></dt><dd><p>Do not launch jobs, only analyze existing data.</p></dd>
 <dt><code>--version</code></dt><dd><p>Show the GEOPM version number and exit.</p></dd>
 <dt><code>-v</code>, <code>--verbose</code></dt><dd><p>Print verbose debugging information.</p></dd>
@@ -120,6 +141,16 @@ E.g. for the OfflineFrequencyAnalysis, <em>NUM_ITERATIONS</em> runs will be
 performed at every available frequency.  The data is averaged
 together prior to evaluating what the best per-region frequency
 is. (default: <em>1</em>)</p></dd>
+</dl>
+
+
+<h2 id="OPTIONS-FOR-FREQUENCY-SWEEP-BASED-ANALYSIS">OPTIONS FOR FREQUENCY SWEEP-BASED ANALYSIS</h2>
+
+<dl>
+<dt><code>--min-freq</code></dt><dd><p>The minimum frequency to use for the sweep and analysis.  If out of
+range, the minimum available frequency on the platform will be used.</p></dd>
+<dt><code>--max-freq</code></dt><dd><p>The maximum frequency to use for the sweep and analysis.  If out of
+range, the maximum available frequency on the platform will be used.</p></dd>
 <dt><code>--enable-turbo</code></dt><dd><p>When calculating the best per region frequencies, this flag
 stipulates that frequencies in the turbo range should be considered.
 By default, this flag is not set meaning frequencies in the turbo
@@ -135,24 +166,25 @@ range are not considered.</p></dd>
   Some examples follow:</p>
 
 <p>  The <em>freq_sweep</em> analysis type runs the application once at each
-  available frequency on the platform. The reports generated from this
+  available frequency on the platform. The summary generated from this
   analysis can be used for other types of analysis. The output from
   the frequency sweep is a mapping of the best-fit frequency for each
   region that saves energy while not letting the runtime increase more
-  than 10%.</p>
+  than 10%.  It can also generate plots of the runtime and energy of
+  each region at each frequency setting.</p>
 
-<pre><code>geopmanalysis -n1 -N1 -t freq_sweep -p myprof -o myprof -- ./build/bin/geopmbench config.json
+<pre><code>geopmanalysis freq_sweep -p myprof -o myprof -N1 -n1 --summary -- ./build/bin/geopmbench config.json
 </code></pre>
 
 <p>  The <em>offline</em> analysis type runs a frequency sweep (if reports are
   not already present) to determine the best-fit frequency for each
   region of the application. Then it runs the application using the
-  EfficientFreqDecider plugin, which uses this mapping to change the
+  EnergyEfficientAgent plugin, which uses this mapping to change the
   frequency when entering each region. The <em>online</em> analysis type is
   similar except that it determines the best-fit frequency through
   online training.</p>
 
-<pre><code>geopmanalysis -n1 -N1 -t offline -p myprof -o myprof -- ./build/bin/geopmbench config.json
+<pre><code>geopmanalysis offline -p myprof -o myprof -N1 -n1 -- ./build/bin/geopmbench config.json
 </code></pre>
 
 <p>  The <em>stream_mix</em> analysis type uses the geopmbench application and
@@ -163,7 +195,18 @@ range are not considered.</p></dd>
   comparing the runtime and energy savings of the different plugin
   modes at each stream mix ratio.</p>
 
-<pre><code>geopmanalysis -n1 -N1 -t stream_mix -p myprof -o myprof -- ./build/bin/geopmbench config.json
+<pre><code>geopmanalysis stream_mix -p myprof -o myprof --summary -N1 -n1 -- ./build/bin/geopmbench config.json
+</code></pre>
+
+<p>  If an analysis launch has been run once, the same data can be reused
+  using the --skip-launch options without supplying launch options
+  (number of nodes, application arguments, etc.).  This option can
+  also be used to analyze reports and traces generated through another
+  launch method, provided that the profile names and file names are
+  consistent with what the analysis expects.  For example, the
+  following command generates plots for the previous analysis:</p>
+
+<pre><code>geopmanalysis stream_mix -p myprof -o myprof --plot -s --min-freq 1.0e9 --max-freq 2.0e9
 </code></pre>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
@@ -182,7 +225,7 @@ range are not considered.</p></dd>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>August 2018</li>
+    <li class='tc'>October 2018</li>
     <li class='tr'>geopmanalysis(1)</li>
   </ol>
 

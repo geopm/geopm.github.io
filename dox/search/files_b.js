@@ -22,7 +22,6 @@ var searchData=
   ['powerbalancer_2ehpp',['PowerBalancer.hpp',['../_power_balancer_8hpp.html',1,'']]],
   ['powerbalanceragent_2ecpp',['PowerBalancerAgent.cpp',['../_power_balancer_agent_8cpp.html',1,'']]],
   ['powerbalanceragent_2ehpp',['PowerBalancerAgent.hpp',['../_power_balancer_agent_8hpp.html',1,'']]],
-  ['powerbalancerstep_2ehpp',['PowerBalancerStep.hpp',['../_power_balancer_step_8hpp.html',1,'']]],
   ['powergovernor_2ecpp',['PowerGovernor.cpp',['../_power_governor_8cpp.html',1,'']]],
   ['powergovernor_2ehpp',['PowerGovernor.hpp',['../_power_governor_8hpp.html',1,'']]],
   ['powergovernoragent_2ecpp',['PowerGovernorAgent.cpp',['../_power_governor_agent_8cpp.html',1,'']]],
