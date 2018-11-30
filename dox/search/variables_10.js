@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['units',['units',['../structgeopm_1_1_i_m_s_r_1_1m__encode__s.html#a0e938c38ed4f65db57fe61b7a6e1af4a',1,'geopm::IMSR::m_encode_s']]]
+  ['values',['values',['../structgeopm_1_1geopm__manager__shmem__header.html#a653aed715b6c7c789e7211763a5aa7d3',1,'geopm::geopm_manager_shmem_header::values()'],['../structgeopm_1_1geopm__manager__shmem__s.html#a9d33b5250f2f16006b9642d13ac571d8',1,'geopm::geopm_manager_shmem_s::values()']]]
 ];

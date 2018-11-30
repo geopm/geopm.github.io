@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['scalar',['scalar',['../structgeopm_1_1_i_m_s_r_1_1m__encode__s.html#aa7ed1e6ecd4d819479dc40be5d2c8561',1,'geopm::IMSR::m_encode_s']]],
-  ['signal',['signal',['../structgeopm__sample__message__s.html#ad074e2199f9b7f21000d2259cb036d9a',1,'geopm_sample_message_s::signal()'],['../structgeopm__msr__message__s.html#a11205037cb61f3c8ba6c38387fd35fdb',1,'geopm_msr_message_s::signal()'],['../structgeopm__telemetry__message__s.html#a08cc9723fd94778471826bfed910d0bb',1,'geopm_telemetry_message_s::signal()']]],
-  ['signal_5ftype',['signal_type',['../structgeopm__msr__message__s.html#a7a0a25484e03cf5f3a298462d4074859',1,'geopm_msr_message_s::signal_type()'],['../structgeopm_1_1geopm__signal__descriptor.html#ae4d83f05ef1efc3c1411884688b73137',1,'geopm::geopm_signal_descriptor::signal_type()']]]
+  ['t',['t',['../structgeopm__time__s.html#a69112ff3a601269da02aa4cd6bd38997',1,'geopm_time_s']]],
+  ['timestamp',['timestamp',['../structgeopm__prof__message__s.html#a15ba434e0bcb8e9fe5e9aa979569de73',1,'geopm_prof_message_s::timestamp()'],['../structgeopm_1_1_sample_regulator_1_1m__rank__sample__s.html#af2a048bf19024851b0f90a21e3c72074',1,'geopm::SampleRegulator::m_rank_sample_s::timestamp()']]],
+  ['total_5fruntime',['total_runtime',['../structgeopm_1_1_runtime_regulator_1_1m__log__s.html#a01c7225ce98dfb782a56a3c9af30736c',1,'geopm::RuntimeRegulator::m_log_s']]]
 ];

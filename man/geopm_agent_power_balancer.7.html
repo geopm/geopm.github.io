@@ -106,7 +106,7 @@ iterative application.</p>
 
 <dl>
 <dt><code>Agent Name</code></dt><dd><p>Set the <code>GEOPM_AGENT</code> environment variable to "power_balancer" and
-the Kontroller instances will select the PowerBalancerAgent for
+the Controller instances will select the PowerBalancerAgent for
 its control handler.  See <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> for more information about
 environment variables.</p></dd>
 <dt><code>Ordered Policies Descending</code>:</dt><dd><p></p>
@@ -115,14 +115,17 @@ environment variables.</p></dd>
              Watts.  The power cap applied to any one compute node
              may be higher or lower than this parameter, but the
              average power cap in aggregate across all compute nodes
-             controlled by the policy will be equal to this value.</p>
+             controlled by the policy will be equal to this value.
+             If NAN is passed for the power cap, the value will
+             default to the thermal design power (TDP).</p>
 
 <p><code>STEP_COUNT</code>: Used as an inter-agent message passed through the
               policy.  This parameter is not used if the <code>POWER_CAP</code>
               policy is non-zero.  When creating a static policy
               file or when setting a policy with the
               geopm_endpoint_agent_policy() API the <code>POWER_CAP</code>
-              should be non-zero, and this value can be set to zero.</p>
+              should be non-zero, and this value can be set to zero.
+              If set to NAN, it will default to 0.</p>
 
 <p><code>MAX_EPOCH_RUNTIME</code>: Used as an inter-agent message passed through
                      the policy.  This parameter is not used if the
@@ -130,7 +133,8 @@ environment variables.</p></dd>
                      a static policy file or when setting a policy
                      with the geopm_endpoint_agent_policy() API the
                      <code>POWER_CAP</code> should be non-zero, and this value
-                     can be set to zero.</p>
+                     can be set to zero.  If set to NAN, it will
+                     default to 0.</p>
 
 <p><code>POWER_SLACK</code>: Used as an inter-agent message passed through the
                policy.  This parameter is not used if the
@@ -138,7 +142,7 @@ environment variables.</p></dd>
                static policy file or when setting a policy with the
                geopm_endpoint_agent_policy() API the <code>POWER_CAP</code>
                should be non-zero, and this value can be set to
-               zero.</p></dd>
+               zero.  If set to NAN, it will default to 0.</p></dd>
 <dt><code>Ordered Samples Ascending</code>:</dt><dd><p></p>
 
 <p> <code>STEP_COUNT</code>: Number of iterations of optimization algorithm since
@@ -170,7 +174,7 @@ environment variables.</p></dd>
 <p><code>power_limit</code>: Power limit assigned to the compute node associated
                with the trace file at time of sampling.</p></dd>
 <dt><code>Report Modifiers</code></dt><dd><p>N/A</p></dd>
-<dt><code>Control Loop Gate</code></dt><dd><p>The agent gates the Kontroller's control loop to a cadence of 5
+<dt><code>Control Loop Gate</code></dt><dd><p>The agent gates the Controller's control loop to a cadence of 5
 milliseconds.</p></dd>
 </dl>
 
@@ -192,7 +196,7 @@ milliseconds.</p></dd>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>October 2018</li>
+    <li class='tc'>November 2018</li>
     <li class='tr'>geopm_agent_power_balancer(7)</li>
   </ol>
 

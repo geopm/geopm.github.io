@@ -1,14 +1,11 @@
 var searchData=
 [
-  ['raplplatform_2ecpp',['RAPLPlatform.cpp',['../_r_a_p_l_platform_8cpp.html',1,'']]],
-  ['raplplatform_2ehpp',['RAPLPlatform.hpp',['../_r_a_p_l_platform_8hpp.html',1,'']]],
-  ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
-  ['region_2ecpp',['Region.cpp',['../_region_8cpp.html',1,'']]],
-  ['region_2ehpp',['Region.hpp',['../_region_8hpp.html',1,'']]],
-  ['regionaggregator_2ecpp',['RegionAggregator.cpp',['../_region_aggregator_8cpp.html',1,'']]],
-  ['regionaggregator_2ehpp',['RegionAggregator.hpp',['../_region_aggregator_8hpp.html',1,'']]],
-  ['reporter_2ecpp',['Reporter.cpp',['../_reporter_8cpp.html',1,'']]],
-  ['reporter_2ehpp',['Reporter.hpp',['../_reporter_8hpp.html',1,'']]],
-  ['runtimeregulator_2ecpp',['RuntimeRegulator.cpp',['../_runtime_regulator_8cpp.html',1,'']]],
-  ['runtimeregulator_2ehpp',['RuntimeRegulator.hpp',['../_runtime_regulator_8hpp.html',1,'']]]
+  ['timeiogroup_2ecpp',['TimeIOGroup.cpp',['../_time_i_o_group_8cpp.html',1,'']]],
+  ['timeiogroup_2ehpp',['TimeIOGroup.hpp',['../_time_i_o_group_8hpp.html',1,'']]],
+  ['tracer_2ecpp',['Tracer.cpp',['../_tracer_8cpp.html',1,'']]],
+  ['tracer_2ehpp',['Tracer.hpp',['../_tracer_8hpp.html',1,'']]],
+  ['treecomm_2ecpp',['TreeComm.cpp',['../_tree_comm_8cpp.html',1,'']]],
+  ['treecomm_2ehpp',['TreeComm.hpp',['../_tree_comm_8hpp.html',1,'']]],
+  ['treecommlevel_2ecpp',['TreeCommLevel.cpp',['../_tree_comm_level_8cpp.html',1,'']]],
+  ['treecommlevel_2ehpp',['TreeCommLevel.hpp',['../_tree_comm_level_8hpp.html',1,'']]]
 ];

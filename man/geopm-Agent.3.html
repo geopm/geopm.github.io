@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopm::Agent(3) - geopm agent plugin interface</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#TERMS">TERMS</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
+    <a href="#ERRORS">ERRORS</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopm::Agent(3)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopm::Agent(3)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopm::Agent</code> - <span class="man-whatis">geopm agent plugin interface</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/Agent.hpp">&lt;geopm/Agent.hpp></a></strong></p>
+
+<p><code>Link with -lgeopm</code></p>
+
+<p><code>namespace geopm</code></p>
+
+<p><code>using std::vector, std::pair, std::string, std::map, std::function</code></p>
+
+<dl>
+<dt><code>Agent::Agent(</code></dt><dd><p> <code>void);</code></p></dd>
+<dt><code>virtual Agent::~Agent(</code></dt><dd><p> <code>void);</code></p></dd>
+<dt><code>virtual void Agent::init(</code></dt><dd><p><code>int</code> <em>level</em><code>,</code> <br />
+<code>const vector&lt;int> &amp;</code><em>fan_in</em><code>,</code> <br />
+<code>bool</code> <em>is_level_root</em><code>) = 0;</code></p></dd>
+<dt><code>virtual bool Agent::descend(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>in_policy</em><code>,</code> <br />
+<code>vector&lt;vector&lt;double>&gt;&amp;</code> <em>out_policy</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual bool Agent::ascend(</code></dt><dd><p><code>const vector&lt;vector&lt;double>&gt; &amp;</code><em>in_sample</em><code>,</code> <br />
+<code>vector&lt;double> &amp;</code><em>out_sample</em><code>) = 0;</code></p></dd>
+<dt><code>virtual bool Agent::adjust_platform(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>policy</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual bool Agent::sample_platform(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>sample</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void Agent::wait(</code></dt><dd><p> <code>void) = 0</code>;</p></dd>
+<dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_header(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_node(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual map&lt;uint64_t, vector&lt;pair&lt;string, string>&gt;&gt; Agent::report_region(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual vector&lt;string> Agent::trace_names(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual void Agent::trace_values(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>values</em><code>) = 0;</code></p></dd>
+<dt><code>static int Agent::num_policy(</code></dt><dd><p><code>const map&lt;string, string> &amp;</code><em>dictionary</em><code>);</code></p></dd>
+<dt><code>static int Agent::num_sample(</code></dt><dd><p><code>const map&lt;string, string> &amp;</code><em>dictionary</em><code>);</code></p></dd>
+<dt><code>static vector&lt;string> Agent::policy_names(</code></dt><dd><p><code>const map&lt;string, string> &amp;</code><em>dictionary</em><code>);</code></p></dd>
+<dt><code>static vector&lt;string> Agent::sample_names(</code></dt><dd><p><code>const map&lt;string, string> &amp;</code><em>dictionary</em><code>);</code></p></dd>
+<dt><code>static map&lt;string, string> Agent::make_dictionary(</code></dt><dd><p><code>const vector&lt;string> &amp;</code><em>policy_names</em><code>,</code> <br />
+<code>const vector&lt;string> &amp;</code><em>sample_names</em><code>);</code></p></dd>
+<dt><code>static void Agent::aggregate_sample(</code></dt><dd><p><code>const vector&lt;vector&lt;double>&gt; &amp;</code><em>in_sample</em><code>,</code> <br />
+<code>const vector&lt;function&lt;double(const vector&lt;double>&amp;)&gt;&gt; &amp;</code><em>agg_func</em><code>,</code> <br />
+<code>vector&lt;double> &amp;</code><em>out_sample</em><code>);</code></p></dd>
+<dt><code>PluginFactory&lt;Agent> &amp;agent_factory(</code></dt><dd><p><code>void);</code></p></dd>
+</dl>
+
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The <code>Agent</code> class is an abstract pure virtual class which defines the
+fundamental procedures executed by the GEOPM runtime.  By default the
+<code>geopm::MonitorAgent(3)</code> is used, but other agents can be selected
+with the <code>GEOPM_AGENT</code> environment variable or <code>--geopm-agent</code> command
+line option to the <code>geopm_launcher(1)</code>.  Exactly one agent type is used
+during each execution of the GEOPM runtime.</p>
+
+<p>Any C++ class that derives from the <code>Agent</code> class and is compiled
+into a shared object file can be loaded at application launch time
+through the GEOPM plugin interface.  This allows users and system
+administrators to extend the features and behavior of the monitor and
+control process that GEOPM executes without recompiling the GEOPM
+runtime.</p>
+
+<p>A single process (or application thread) on each compute node utilized
+by an application running with GEOPM creates a <code>Controller</code> object and
+each of these objects creates one or more <code>Agent</code> objects.  The
+<code>Agent</code> objects are related to each other through a balanced tree of
+bi-directional communication with "leaf" <code>Agent</code> objects defined to
+have no children and one parent and "tree" <code>Agent</code> objects defined to
+have many children and one parent.  The <code>Agent::init</code>() method is
+called by the <code>Controller</code> prior to all other <code>Agent</code> methods.  The
+parameters passed by the <code>Controller</code> in this call define the geometry
+of the <code>Agent</code> tree and where the particular <code>Agent</code> object falls in
+the tree.  See detailed description of <code>Agent::init</code>() below for more
+information about the tree structure.</p>
+
+<p>All Controllers create an <code>Agent</code> object to execute <em>level</em> 0, or
+"leaf" responsibilities.  The leaf responsibilities include monitoring
+signals and deriving samples to send to their parent <code>Agent</code>'s at
+<em>level</em> 1 in the tree.  Additionally a leaf <code>Agent</code> must interpret
+policies received from their parent agent at <em>level</em> 1 and set
+controls which reflect the policy.  Some of the <code>Controller</code> objects
+will create <code>Agent</code> objects to execute non-zero <em>level</em>, or "tree"
+responsibilities.  These non-zero <em>level</em> <code>Agent</code> objects are
+responsible for aggregating samples from child agents to send to
+parent agents and splitting policy values from parent agents to send
+to child agents.  Note that the <code>Agent</code> running at the root of the
+tree uses the same policy/sample interface to interact with the
+resource manager.  The resource manager implements the role of a
+parent <code>Agent</code> to the root <code>Agent</code> my making calls to the
+<a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a> interface.</p>
+
+<p>The <strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong> class provides a high level interface for
+signals and controls that can be used by many different <code>Agent</code> types.
+The <strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong> interface can be extended through the
+<strong><span class="man-ref">IOGroup<span class="s">(3)</span></span></strong> plugin interface so that the extensions can be made
+independently of the <code>Agents</code> that use them.  Without extension the
+<strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong> class provides a large number of built in signals
+and controls.  These signals and controls include a wide range of
+hardware metrics, hardware settings, and signals derived from
+application behavior.  Application behavior is tracked by GEOPM's
+integration with MPI and OpenMP and also by application use of the
+<strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong> mark-up interface.</p>
+
+<h2 id="TERMS">TERMS</h2>
+
+<p>Below are some definitions of terms that are used to describe
+different parts of the GEOPM runtime.  Understanding these terms will
+help to interpret the documentation about how to extend the GEOPM
+runtime.  These are arranged from from highest levels of abstraction
+down to the lowest levels of abstraction.</p>
+
+<dl>
+<dt><em>launcher</em></dt><dd><p>Wrapper of system application launch (e.g. srun or aprun) to start
+GEOPM runtime.</p></dd>
+<dt class="flush"><em>report</em></dt><dd><p>Text file containing summary of aggregated stats collected during
+application run.</p></dd>
+<dt class="flush"><em>trace</em></dt><dd><p>Time series of signals collected over application run in pipe
+separated ASCII table.</p></dd>
+<dt class="flush"><em>policy</em></dt><dd><p>Array of floating-point settings for Agent specific control
+parameters in SI units.</p></dd>
+<dt class="flush"><em>sample</em></dt><dd><p>Array of floating-point values providing Agent specific runtime
+data in SI units.</p></dd>
+<dt><em>endpoint</em></dt><dd><p>Interface between resource manager and GEOPM runtime.</p></dd>
+<dt class="flush"><em>profile</em></dt><dd><p>Interface for annotating compute application; provides PlatformIO
+region signals</p></dd>
+<dt><em>controller</em></dt><dd><p>Thread on each compute node loads plugins and runs GEOPM
+algorithm.</p></dd>
+<dt class="flush"><em>level</em></dt><dd><p>Attribute of an <code>Agent</code> describing the number of edges between it
+and the nearest leaf <code>Agent</code> in the communication Tree (leaf
+<code>Agents</code> are <em>level</em> zero).</p></dd>
+<dt class="flush"><em>signal</em></dt><dd><p>Named parameter in SI units that can be measured using PlatformIO.</p></dd>
+<dt class="flush"><em>control</em></dt><dd><p>Named parameter in SI units that can be set using PlatformIO.</p></dd>
+</dl>
+
+
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
+<dt class="flush"><code>init</code>()</dt><dd>The <code>init</code>() method is the first method that will be called and
+provides contextual information for the <code>Agent</code> about the
+communication tree geometry and where in the tree the <code>Agent</code>
+resides.  The communication tree that connects the <code>Agent</code> objects
+is a balanced tree.  The <em>level</em> is the minimum number of edges
+between <code>self</code> and any leaf <code>Agent</code>.  Only when <em>level</em> is zero
+will the <code>sample_platform</code>() an <code>adjust_platform</code>() methods be
+called.  If the <em>level</em> is zero then the <code>init</code>() method should
+push all signals and controls for <strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong>.  The <em>fan_in</em>
+is a vector indexed by <em>level</em> that describes the number of
+siblings that an <code>Agent</code> at <em>level</em> has which share a parent.  The
+figure below represents a tree with <em>fan_in</em> == {4,3,2} where each
+Agent is signified by a digit that is equal to the <em>level</em>.  Note
+that this example supports 24 compute nodes.  The <em>is_level_root</em>
+parameter is true for one child of each parent and only if this
+parameter is true will the controller call the <code>ascend</code>() or
+<code>descend</code>() methods of the object.</dd>
+</dl>
+
+
+<pre><code>                                    (3)
+                         ___________/ \___________
+                        /                         \
+                   __ (2)                         (2) __
+           _______/  /   \____               ____/   \  \_______
+          /         |         \             /         |         \
+        (1)        (1)        (1)         (1)        (1)        (1)
+       -- --      -- --      -- --       -- --      -- --      -- --
+      / | | \    / | | \    / | | \     / | | \    / | | \    / | | \
+    (0)(0|0)(0)(0)(0|0)(0)(0)(0|0)(0) (0)(0|0)(0)(0)(0|0)(0)(0)(0|0)(0)
+</code></pre>
+
+<dl>
+<dt><code>descend</code>()</dt><dd><p>Split policy for children at next level down the tree.  The
+<em>in_policy</em> is an input vector of policy values from the parent.
+The <em>out_policy</em> is an output vector of policies to be sent to
+each child.  Returns true if out_policy has been updated since
+last call.</p></dd>
+<dt><code>ascend</code>()</dt><dd><p>Aggregate samples from children for the next level up the tree.
+The <em>in_sample</em> input vector is a sample of vectors, one from each
+child.  The <em>out_sample</em> is an output vector of aggregated sample
+values to be sent up to the parent.  Returns true if out_sample
+has been updated since last call.</p></dd>
+<dt><code>adjust_platform</code>()</dt><dd><p>Adjust the platform settings based the policy from above.
+Settings for each control in the <em>policy</em>.  Returns true if
+platform was adjusted, false otherwise.</p></dd>
+<dt><code>sample_platform</code>()</dt><dd><p>Read signals from the platform and interpret/aggregate these
+signals to create a sample which can be sent up the tree.  The
+<em>sample</em> parameter is an output vector of agent specific sample
+values to be sent up the tree. Returns true if sample has been
+updated since last call.</p></dd>
+<dt class="flush"><code>wait</code>()</dt><dd><p>Called to wait for sample period to elapse. This controls the
+cadence of the Controller main loop.</p></dd>
+<dt><code>report_header</code>()</dt><dd><p>Custom fields that will be added to the report header when this
+agent is used.</p></dd>
+<dt><code>report_node</code>()</dt><dd><p>Custom fields for the node section of the report.</p></dd>
+<dt><code>report_region</code>()</dt><dd><p>Custom fields for each region in the report.</p></dd>
+<dt><code>trace_names</code>()</dt><dd><p>Column headers to be added to the trace.</p></dd>
+<dt><code>trace_values</code>()</dt><dd><p>Called to get latest values to be added to the trace.</p></dd>
+<dt><code>num_policy</code>()</dt><dd><p>Used to look up the number of values in the policy vector sent
+down the tree for a specific Agent. This should be called with the
+dictionary returned by
+<code>agent_factory</code>().<code>dictionary</code>(<em>agent_name</em>) for the Agent of
+interest.</p></dd>
+<dt><code>num_sample</code>()</dt><dd><p>Used to look up the number of values in the sample vector sent up
+the tree for a specific Agent. This should be called with the
+dictionary returned by
+<code>agent_factory</code>().<code>dictionary</code>(<em>agent_name</em>) for the Agent of
+interest.</p></dd>
+<dt><code>policy_names</code>()</dt><dd><p>Used to look up the names of values in the policy vector sent down
+the tree for a specific Agent. This should be called with the
+dictionary returned by
+<code>agent_factory</code>().<code>dictionary</code>(<em>agent_name</em>) for the Agent of
+interest.</p></dd>
+<dt><code>sample_names</code>()</dt><dd><p>Used to look up the names of values in the sample vector sent up
+the tree for a specific Agent. This should be called with the
+dictionary returned by
+<code>agent_factory</code>().<code>dictionary</code>(<em>agent_name</em>) for the Agent of
+interest.</p></dd>
+<dt><code>make_dictionary</code>()</dt><dd><p>Used to create a correctly-formatted dictionary for an Agent at
+the time the Agent is registered with the factory. Concrete Agent
+classes may provide policy_names() and sample_names() methods to
+provide the vectors to be passed to this method.</p></dd>
+<dt><code>aggregate_sample</code>()</dt><dd><p>Generically aggregate a vector of samples given a vector of
+aggregation functions. This helper method applies a different
+aggregation function to each sample element while aggregating
+across child samples. The <em>in_sample</em> parameter is an input vector
+over children of the sample vector received from each child.  The
+<em>agg_func</em> is an input vector over agent samples of the
+aggregation function that is applied.  The <em>out_sample</em> is an
+output sample vector resulting from the applying the aggregation
+across child samples.</p></dd>
+<dt><code>agent_factory</code>():</dt><dd><p></p></dd>
+</dl>
+
+
+<h2 id="ERRORS">ERRORS</h2>
+
+<p>All functions described on this man page throw <strong><span class="man-ref">geopm::Exception<span class="s">(3)</span></span></strong>
+on error.</p>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Intel Corporation</li>
+    <li class='tc'>November 2018</li>
+    <li class='tr'>geopm::Agent(3)</li>
+  </ol>
+
+  </div>
+</body>
+</html>
