@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fupdated',['is_updated',['../structgeopm_1_1geopm__manager__shmem__header.html#ae93da0f71948b2dd71511697b72218c9',1,'geopm::geopm_manager_shmem_header::is_updated()'],['../structgeopm_1_1geopm__manager__shmem__s.html#acd691cc6b6262177625349dc05f04d63',1,'geopm::geopm_manager_shmem_s::is_updated()']]]
+  ['scalar',['scalar',['../structgeopm_1_1_i_m_s_r_1_1m__encode__s.html#aa7ed1e6ecd4d819479dc40be5d2c8561',1,'geopm::IMSR::m_encode_s']]]
 ];

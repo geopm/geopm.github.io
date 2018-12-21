@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['measureruntimestep',['MeasureRuntimeStep',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#af5d1b927b12e8567d3a520909b1d5f75',1,'geopm::PowerBalancerAgent::TreeRole::MeasureRuntimeStep()'],['../classgeopm_1_1_power_balancer_agent_1_1_root_role.html#af5d1b927b12e8567d3a520909b1d5f75',1,'geopm::PowerBalancerAgent::RootRole::MeasureRuntimeStep()'],['../classgeopm_1_1_power_balancer_agent_1_1_leaf_role.html#af5d1b927b12e8567d3a520909b1d5f75',1,'geopm::PowerBalancerAgent::LeafRole::MeasureRuntimeStep()']]]
+  ['json',['Json',['../classjson11_1_1_json_value.html#a7dd8a79e9210a2a230d000eee63c6e8a',1,'json11::JsonValue']]],
+  ['jsondouble',['JsonDouble',['../classjson11_1_1_json_value.html#a0bdd38d55ffef87604233cb81a887f47',1,'json11::JsonValue']]],
+  ['jsonint',['JsonInt',['../classjson11_1_1_json_value.html#a4079b619596181593da9d6fde75ee2f3',1,'json11::JsonValue']]]
 ];

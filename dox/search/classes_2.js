@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['defaultprofile',['DefaultProfile',['../classgeopm_1_1_default_profile.html',1,'geopm']]],
-  ['derivativecombinedsignal',['DerivativeCombinedSignal',['../classgeopm_1_1_derivative_combined_signal.html',1,'geopm']]],
-  ['dgemmmodelregion',['DGEMMModelRegion',['../classgeopm_1_1_d_g_e_m_m_model_region.html',1,'geopm']]]
+  ['energyefficientagent',['EnergyEfficientAgent',['../classgeopm_1_1_energy_efficient_agent.html',1,'geopm']]],
+  ['energyefficientregion',['EnergyEfficientRegion',['../classgeopm_1_1_energy_efficient_region.html',1,'geopm']]],
+  ['exception',['Exception',['../classgeopm_1_1_exception.html',1,'geopm']]]
 ];

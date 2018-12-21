@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['u_5fshort',['u_short',['../geopm__plugin_8c.html#ab89b0350a4213b1dee3daebf4d196f7f',1,'geopm_plugin.c']]],
   ['units',['units',['../structgeopm_1_1_i_m_s_r_1_1m__encode__s.html#a0e938c38ed4f65db57fe61b7a6e1af4a',1,'geopm::IMSR::m_encode_s']]],
   ['unlink',['unlink',['../classgeopm_1_1_i_shared_memory_user.html#a10e84083b4521a9662e438df5d43d172',1,'geopm::ISharedMemoryUser::unlink()'],['../classgeopm_1_1_shared_memory_user.html#a9ef2c20458368a37788f026401cb56fc',1,'geopm::SharedMemoryUser::unlink()']]],
-  ['unlock',['unlock',['../classgeopm_1_1_comm_window.html#a34160ddf0095f39e7991bc761b5a68d4',1,'geopm::CommWindow']]],
-  ['update',['update',['../classgeopm_1_1_i_application_i_o.html#a2d73085849e2c5ea18170bea09f93a77',1,'geopm::IApplicationIO::update()'],['../classgeopm_1_1_application_i_o.html#ab2ac085cb20fb196258f532517b7489e',1,'geopm::ApplicationIO::update()'],['../classgeopm_1_1_i_profile_i_o_sample.html#a823b701a26ab6fc6391c725d65fb4d83',1,'geopm::IProfileIOSample::update()'],['../classgeopm_1_1_profile_i_o_sample.html#afd1ef691f676e33cebcd3f5abbf1d9d4',1,'geopm::ProfileIOSample::update()'],['../classgeopm_1_1_i_reporter.html#aa08a65fb6eef32d6decef3819dad7384',1,'geopm::IReporter::update()'],['../classgeopm_1_1_reporter.html#a38e5e55d9b2d8faa4e9d7435115e7a1d',1,'geopm::Reporter::update()'],['../classgeopm_1_1_i_tracer.html#a1c39bacf46654e61d660155631a62c62',1,'geopm::ITracer::update()'],['../classgeopm_1_1_tracer.html#a142214db18e73426383d1d87ceaa0b04',1,'geopm::Tracer::update()']]],
+  ['update',['update',['../classgeopm_1_1_i_profile_i_o_sample.html#a823b701a26ab6fc6391c725d65fb4d83',1,'geopm::IProfileIOSample::update()'],['../classgeopm_1_1_profile_i_o_sample.html#afd1ef691f676e33cebcd3f5abbf1d9d4',1,'geopm::ProfileIOSample::update()']]],
   ['update_5fentry',['update_entry',['../classgeopm_1_1_energy_efficient_region.html#a369a17ae15a97948a3da1538b1caa499',1,'geopm::EnergyEfficientRegion']]],
   ['update_5fexit',['update_exit',['../classgeopm_1_1_energy_efficient_region.html#a4d6bf743e5fd7a059679a1947cd2f8bf',1,'geopm::EnergyEfficientRegion']]],
   ['update_5ffreq_5frange',['update_freq_range',['../classgeopm_1_1_energy_efficient_region.html#af3c1d2288d5e8f882087be073da31931',1,'geopm::EnergyEfficientRegion']]],
