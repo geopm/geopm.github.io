@@ -1,0 +1,753 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - v0.6.0-142-gb6330da - src/PowerBalancerAgent.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - PowerBalancerAgent.cpp<span style="font-size: 80%;"> (source / <a href="PowerBalancerAgent.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">295</td>
+            <td class="headerCovTableEntry">315</td>
+            <td class="headerCovTableEntryHi">93.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-21</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">53</td>
+            <td class="headerCovTableEntry">54</td>
+            <td class="headerCovTableEntryHi">98.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &lt;cfloat&gt;</a>
+<span class="lineNum">      34 </span>            : #include &lt;cmath&gt;
+<span class="lineNum">      35 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      36 </span>            : #include &lt;iostream&gt;
+<a name="37"><span class="lineNum">      37 </span>            : </a>
+<span class="lineNum">      38 </span>            : #include &quot;PowerGovernor.hpp&quot;
+<span class="lineNum">      39 </span>            : #include &quot;PowerBalancerAgent.hpp&quot;
+<span class="lineNum">      40 </span>            : #include &quot;PowerBalancer.hpp&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;PlatformIO.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;CircularBuffer.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;Agg.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;Helper.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      48 </span>            : 
+<a name="49"><span class="lineNum">      49 </span>            : namespace geopm</a>
+<span class="lineNum">      50 </span>            : {
+<span class="lineNum">      51 </span><span class="lineCov">          3 :     PowerBalancerAgent::Role::Role()</span>
+<span class="lineNum">      52 </span>            :         : M_STEP_IMP({
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          6 :                 std::make_shared&lt;SendDownLimitStep&gt;(),</span></a>
+<span class="lineNum">      54 </span><span class="lineCov">          6 :                 std::make_shared&lt;MeasureRuntimeStep&gt;(),</span>
+<span class="lineNum">      55 </span><span class="lineCov">          6 :                 std::make_shared&lt;ReduceLimitStep&gt;()</span>
+<span class="lineNum">      56 </span>            :             })
+<a name="57"><span class="lineNum">      57 </span>            :         , m_policy(M_NUM_POLICY, NAN)</a>
+<span class="lineNum">      58 </span>            :         , m_step_count(-1)
+<span class="lineNum">      59 </span><span class="lineCov">         15 :         , m_is_step_complete(false)</span>
+<span class="lineNum">      60 </span>            :     {
+<a name="61"><span class="lineNum">      61 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">      62 </span><span class="lineCov">          3 :         if (M_STEP_IMP.size() != M_NUM_STEP) {</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): invalid M_STEP_IMP size&quot;,</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="65"><span class="lineNum">      65 </span>            :         }</a>
+<span class="lineNum">      66 </span>            : #endif
+<span class="lineNum">      67 </span><span class="lineCov">          3 :     }</span>
+<span class="lineNum">      68 </span>            : 
+<a name="69"><span class="lineNum">      69 </span>            :     PowerBalancerAgent::Role::~Role() = default;</a>
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span><span class="lineCov">          1 :     bool PowerBalancerAgent::Role::descend(const std::vector&lt;double&gt; &amp;in_policy,</span>
+<span class="lineNum">      72 </span>            :             std::vector&lt;std::vector&lt;double&gt; &gt;&amp;out_policy)
+<a name="73"><span class="lineNum">      73 </span>            :     {</a>
+<span class="lineNum">      74 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">      75 </span><span class="lineCov">          2 :         throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): was called on non-tree agent&quot;,</span>
+<span class="lineNum">      76 </span><span class="lineCov">          3 :                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="77"><span class="lineNum">      77 </span>            : #endif</a>
+<span class="lineNum">      78 </span>            :         return false;
+<a name="79"><span class="lineNum">      79 </span>            :     }</a>
+<span class="lineNum">      80 </span>            : 
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">          1 :     bool PowerBalancerAgent::Role::ascend(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span></a>
+<span class="lineNum">      82 </span>            :             std::vector&lt;double&gt; &amp;out_sample)
+<span class="lineNum">      83 </span>            :     {
+<span class="lineNum">      84 </span>            : #ifdef GEOPM_DEBUG
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">          2 :         throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): was called on non-tree agent&quot;,</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">          3 :                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">      87 </span>            : #endif
+<span class="lineNum">      88 </span>            :         return false;
+<a name="89"><span class="lineNum">      89 </span>            :     }</a>
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span><span class="lineCov">          2 :     bool PowerBalancerAgent::Role::adjust_platform(const std::vector&lt;double&gt; &amp;in_policy)</span>
+<span class="lineNum">      92 </span>            :     {
+<a name="93"><span class="lineNum">      93 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">      94 </span><span class="lineCov">          4 :         throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): was called on non-leaf agent&quot;,</span>
+<span class="lineNum">      95 </span><span class="lineCov">          6 :                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">      96 </span>            : #endif
+<a name="97"><span class="lineNum">      97 </span>            :         return false;</a>
+<a name="98"><span class="lineNum">      98 </span>            :     }</a>
+<span class="lineNum">      99 </span>            : 
+<span class="lineNum">     100 </span><span class="lineCov">          2 :     bool PowerBalancerAgent::Role::sample_platform(std::vector&lt;double&gt; &amp;out_sample)</span>
+<a name="101"><span class="lineNum">     101 </span>            :     {</a>
+<span class="lineNum">     102 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     103 </span><span class="lineCov">          4 :         throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): was called on non-leaf agent&quot;,</span>
+<span class="lineNum">     104 </span><span class="lineCov">          6 :                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="105"><span class="lineNum">     105 </span>            : #endif</a>
+<span class="lineNum">     106 </span>            :         return false;
+<a name="107"><span class="lineNum">     107 </span>            :     }</a>
+<span class="lineNum">     108 </span>            : 
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">          2 :     std::vector&lt;std::string&gt; PowerBalancerAgent::Role::trace_names(void) const</span></a>
+<span class="lineNum">     110 </span>            :     {
+<span class="lineNum">     111 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     112 </span><span class="lineCov">          4 :         throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): was called on non-leaf agent&quot;,</span>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          6 :                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     114 </span>            : #endif
+<span class="lineNum">     115 </span>            :         return {};
+<a name="116"><span class="lineNum">     116 </span>            :     }</a>
+<a name="117"><span class="lineNum">     117 </span>            : </a>
+<span class="lineNum">     118 </span><span class="lineCov">          2 :     void PowerBalancerAgent::Role::trace_values(std::vector&lt;double&gt; &amp;values)</span>
+<span class="lineNum">     119 </span>            :     {
+<span class="lineNum">     120 </span>            : #ifdef GEOPM_DEBUG
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">          4 :         throw Exception(&quot;PowerBalancerAgent::Role::&quot; + std::string(__func__) + &quot;(): was called on non-leaf agent&quot;,</span></a>
+<span class="lineNum">     122 </span><span class="lineCov">          6 :                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     123 </span>            : #endif
+<a name="124"><span class="lineNum">     124 </span>            :     }</a>
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span><span class="lineCov">         10 :     int PowerBalancerAgent::Role::step(size_t step_count) const</span>
+<span class="lineNum">     127 </span>            :     {
+<span class="lineNum">     128 </span><span class="lineCov">         10 :         return (step_count % M_NUM_STEP);</span>
+<a name="129"><span class="lineNum">     129 </span>            :     }</a>
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span><span class="lineCov">         10 :     int PowerBalancerAgent::Role::step(void) const</span>
+<span class="lineNum">     132 </span>            :     {
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         10 :         return step(m_step_count);</span></a>
+<a name="134"><span class="lineNum">     134 </span>            :     }</a>
+<span class="lineNum">     135 </span>            : 
+<span class="lineNum">     136 </span><span class="lineCov">         10 :     const PowerBalancerAgent::IStep&amp; PowerBalancerAgent::Role::step_imp()</span>
+<a name="137"><span class="lineNum">     137 </span>            :     {</a>
+<span class="lineNum">     138 </span><span class="lineCov">         10 :         return *M_STEP_IMP[step()];</span>
+<a name="139"><span class="lineNum">     139 </span>            :     }</a>
+<span class="lineNum">     140 </span>            : 
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">          1 :     PowerBalancerAgent::LeafRole::LeafRole(IPlatformIO &amp;platform_io, IPlatformTopo &amp;platform_topo,</span></a>
+<span class="lineNum">     142 </span>            :                                            std::unique_ptr&lt;IPowerGovernor&gt; power_governor, std::unique_ptr&lt;IPowerBalancer&gt; power_balancer)
+<span class="lineNum">     143 </span>            :         : Role()
+<span class="lineNum">     144 </span>            :         , m_platform_io(platform_io)
+<a name="145"><span class="lineNum">     145 </span>            :         , m_platform_topo(platform_topo)</a>
+<span class="lineNum">     146 </span><span class="lineCov">          2 :         , m_power_max(m_platform_topo.num_domain(IPlatformTopo::M_DOMAIN_PACKAGE) *</span>
+<span class="lineNum">     147 </span><span class="lineCov">          2 :                       m_platform_io.read_signal(&quot;POWER_PACKAGE_MAX&quot;, IPlatformTopo::M_DOMAIN_PACKAGE, 0))</span>
+<span class="lineNum">     148 </span>            :         , m_pio_idx(M_PLAT_NUM_SIGNAL)
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          1 :         , m_power_governor(std::move(power_governor))</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">          1 :         , m_power_balancer(std::move(power_balancer))</span>
+<span class="lineNum">     151 </span>            :         , m_last_epoch_count(0)
+<span class="lineNum">     152 </span>            :         , m_runtime(0.0)
+<a name="153"><span class="lineNum">     153 </span>            :         , m_actual_limit(NAN)</a>
+<span class="lineNum">     154 </span>            :         , m_power_slack(0.0)
+<span class="lineNum">     155 </span>            :         , m_power_headroom(0.0)
+<span class="lineNum">     156 </span>            :         , M_STABILITY_FACTOR(3.0)
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">          5 :         , m_is_out_of_bounds(false)</span></a>
+<span class="lineNum">     158 </span>            :     {
+<span class="lineNum">     159 </span><span class="lineCov">          1 :         if (nullptr == m_power_governor) {</span>
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :             m_power_governor = geopm::make_unique&lt;PowerGovernor&gt;(m_platform_io, m_platform_topo);</span>
+<a name="161"><span class="lineNum">     161 </span>            :         }</a>
+<span class="lineNum">     162 </span><span class="lineCov">          1 :         if (nullptr == m_power_balancer) {</span>
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :             m_power_balancer = geopm::make_unique&lt;PowerBalancer&gt;(M_STABILITY_FACTOR * m_power_governor-&gt;power_package_time_window());</span>
+<span class="lineNum">     164 </span>            :         }
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          1 :         init_platform_io();</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">          1 :         m_is_step_complete = true;</span>
+<span class="lineNum">     167 </span><span class="lineCov">          1 :     }</span>
+<span class="lineNum">     168 </span>            : 
+<a name="169"><span class="lineNum">     169 </span>            :     PowerBalancerAgent::LeafRole::~LeafRole() = default;</a>
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span><span class="lineCov">          1 :     void PowerBalancerAgent::LeafRole::init_platform_io(void)</span>
+<span class="lineNum">     172 </span>            :     {
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          1 :         m_power_governor-&gt;init_platform_io();</span></a>
+<span class="lineNum">     174 </span>            :         // Setup signals
+<span class="lineNum">     175 </span><span class="lineCov">          1 :         m_pio_idx[M_PLAT_SIGNAL_EPOCH_RUNTIME] = m_platform_io.push_signal(&quot;EPOCH_RUNTIME&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
+<span class="lineNum">     176 </span><span class="lineCov">          1 :         m_pio_idx[M_PLAT_SIGNAL_EPOCH_COUNT] = m_platform_io.push_signal(&quot;EPOCH_COUNT&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          1 :         m_pio_idx[M_PLAT_SIGNAL_EPOCH_RUNTIME_MPI] = m_platform_io.push_signal(&quot;EPOCH_RUNTIME_MPI&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span></a>
+<span class="lineNum">     178 </span><span class="lineCov">          1 :         m_pio_idx[M_PLAT_SIGNAL_EPOCH_RUNTIME_IGNORE] = m_platform_io.push_signal(&quot;EPOCH_RUNTIME_IGNORE&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     180 </span>            : 
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">          4 :     bool PowerBalancerAgent::LeafRole::adjust_platform(const std::vector&lt;double&gt; &amp;in_policy)</span></a>
+<span class="lineNum">     182 </span>            :     {
+<span class="lineNum">     183 </span><span class="lineCov">          4 :         m_policy = in_policy;</span>
+<span class="lineNum">     184 </span><span class="lineCov">          4 :         if (in_policy[M_POLICY_POWER_CAP] != 0.0) {</span>
+<a name="185"><span class="lineNum">     185 </span>            :             // New power cap from resource manager, reset</a>
+<span class="lineNum">     186 </span>            :             // algorithm.
+<span class="lineNum">     187 </span><span class="lineCov">          1 :             m_step_count = M_STEP_SEND_DOWN_LIMIT;</span>
+<span class="lineNum">     188 </span><span class="lineCov">          1 :             m_power_balancer-&gt;power_cap(in_policy[M_POLICY_POWER_CAP]);</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          1 :             if (in_policy[M_POLICY_POWER_CAP] &gt; m_power_max) {</span></a>
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :                 m_power_max = in_policy[M_POLICY_POWER_CAP];</span>
+<span class="lineNum">     191 </span>            :             }
+<span class="lineNum">     192 </span><span class="lineCov">          1 :             m_is_step_complete = true;</span>
+<a name="193"><span class="lineNum">     193 </span>            :         }</a>
+<span class="lineNum">     194 </span><span class="lineCov">          3 :         else if (in_policy[M_POLICY_STEP_COUNT] != m_step_count) {</span>
+<span class="lineNum">     195 </span>            :             // Advance a step
+<span class="lineNum">     196 </span><span class="lineCov">          3 :             ++m_step_count;</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">          3 :             m_is_step_complete = false;</span></a>
+<span class="lineNum">     198 </span><span class="lineCov">          3 :             if (m_step_count != in_policy[M_POLICY_STEP_COUNT]) {</span>
+<span class="lineNum">     199 </span>            :                 throw Exception(&quot;PowerBalancerAgent::adjust_platform(): The policy step is out of sync &quot;
+<span class="lineNum">     200 </span>            :                                 &quot;with the agent step or first policy received had a zero power cap.&quot;,
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     202 </span>            :             }
+<span class="lineNum">     203 </span><span class="lineCov">          3 :             step_imp().enter_step(*this, in_policy);</span>
+<span class="lineNum">     204 </span>            :         }
+<a name="205"><span class="lineNum">     205 </span>            : </a>
+<span class="lineNum">     206 </span><span class="lineCov">          4 :         bool result = false;</span>
+<span class="lineNum">     207 </span>            :         // Request the power limit from the balancer
+<span class="lineNum">     208 </span><span class="lineCov">          4 :         double request_limit = m_power_balancer-&gt;power_limit();</span>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          4 :         if (!std::isnan(request_limit) &amp;&amp; request_limit != 0.0) {</span></a>
+<span class="lineNum">     210 </span><span class="lineCov">          4 :             result = m_power_governor-&gt;adjust_platform(request_limit, m_actual_limit);</span>
+<span class="lineNum">     211 </span><span class="lineCov">          4 :             if (request_limit &lt; m_actual_limit) {</span>
+<span class="lineNum">     212 </span><span class="lineNoCov">          0 :                 m_is_out_of_bounds = true;</span>
+<a name="213"><span class="lineNum">     213 </span>            :             }</a>
+<span class="lineNum">     214 </span><span class="lineCov">          4 :             if (result) {</span>
+<span class="lineNum">     215 </span><span class="lineCov">          4 :                 m_power_balancer-&gt;power_limit_adjusted(m_actual_limit);</span>
+<span class="lineNum">     216 </span>            :             }
+<a name="217"><span class="lineNum">     217 </span>            :         }</a>
+<span class="lineNum">     218 </span><span class="lineCov">          4 :         return result;</span>
+<a name="219"><span class="lineNum">     219 </span>            :     }</a>
+<span class="lineNum">     220 </span>            : 
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          5 :     bool PowerBalancerAgent::LeafRole::sample_platform(std::vector&lt;double&gt; &amp;out_sample)</span></a>
+<span class="lineNum">     222 </span>            :     {
+<span class="lineNum">     223 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     224 </span><span class="lineCov">          5 :         if (out_sample.size() != M_NUM_SAMPLE) {</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">          2 :             throw Exception(&quot;PowerBalancerAgent::LeafRole::&quot; + std::string(__func__)  + &quot;(): out_sample vector not correctly sized.&quot;,</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">          3 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     227 </span>            :         }
+<span class="lineNum">     228 </span>            : #endif
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          4 :         step_imp().sample_platform(*this);</span></a>
+<span class="lineNum">     230 </span><span class="lineCov">          4 :         m_power_governor-&gt;sample_platform();</span>
+<span class="lineNum">     231 </span><span class="lineCov">          4 :         out_sample[M_SAMPLE_STEP_COUNT] = m_step_count;</span>
+<span class="lineNum">     232 </span><span class="lineCov">          4 :         out_sample[M_SAMPLE_MAX_EPOCH_RUNTIME] = m_runtime;</span>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          4 :         out_sample[M_SAMPLE_SUM_POWER_SLACK] = m_power_slack;</span></a>
+<span class="lineNum">     234 </span><span class="lineCov">          4 :         out_sample[M_SAMPLE_MIN_POWER_HEADROOM] = m_power_headroom;</span>
+<span class="lineNum">     235 </span><span class="lineCov">          4 :         return m_is_step_complete;</span>
+<a name="236"><span class="lineNum">     236 </span>            :     }</a>
+<a name="237"><span class="lineNum">     237 </span>            : </a>
+<span class="lineNum">     238 </span><span class="lineCov">          1 :     std::vector&lt;std::string&gt; PowerBalancerAgent::LeafRole::trace_names(void) const</span>
+<span class="lineNum">     239 </span>            :     {
+<span class="lineNum">     240 </span>            :         return {&quot;epoch_runtime&quot;,            // M_TRACE_SAMPLE_EPOCH_RUNTIME
+<a name="241"><span class="lineNum">     241 </span>            :                 &quot;power_limit&quot;,              // M_TRACE_SAMPLE_POWER_LIMIT</a>
+<span class="lineNum">     242 </span>            :                 &quot;policy_power_cap&quot;,         // M_TRACE_SAMPLE_POLICY_POWER_CAP
+<span class="lineNum">     243 </span>            :                 &quot;policy_step_count&quot;,        // M_TRACE_SAMPLE_POLICY_STEP_COUNT
+<span class="lineNum">     244 </span>            :                 &quot;policy_max_epoch_runtime&quot;, // M_TRACE_SAMPLE_POLICY_MAX_EPOCH_RUNTIME
+<a name="245"><span class="lineNum">     245 </span>            :                 &quot;policy_power_slack&quot;,       // M_TRACE_SAMPLE_POLICY_POWER_SLACK</a>
+<span class="lineNum">     246 </span>            :                 &quot;policy_power_limit&quot;        // M_TRACE_SAMPLE_POLICY_POWER_LIMIT
+<span class="lineNum">     247 </span><span class="lineCov">          1 :                };</span>
+<a name="248"><span class="lineNum">     248 </span>            :     }</a>
+<a name="249"><span class="lineNum">     249 </span>            : </a>
+<span class="lineNum">     250 </span><span class="lineCov">          2 :     void PowerBalancerAgent::LeafRole::trace_values(std::vector&lt;double&gt; &amp;values)</span>
+<span class="lineNum">     251 </span>            :     {
+<span class="lineNum">     252 </span>            : #ifdef GEOPM_DEBUG
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">          2 :         if (values.size() != M_TRACE_NUM_SAMPLE) { // Everything sampled from the platform, latest policy values, and actual power limit</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">          2 :             throw Exception(&quot;PowerBalancerAgent::LeafRole::&quot; + std::string(__func__) + &quot;(): values vector not correctly sized.&quot;,</span>
+<span class="lineNum">     255 </span><span class="lineCov">          3 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     256 </span>            :         }
+<a name="257"><span class="lineNum">     257 </span>            : #endif</a>
+<span class="lineNum">     258 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_EPOCH_RUNTIME] = m_power_balancer-&gt;runtime_sample();</span>
+<span class="lineNum">     259 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_POWER_LIMIT] = m_power_balancer-&gt;power_limit();</span>
+<span class="lineNum">     260 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_POLICY_POWER_CAP] = m_policy[M_POLICY_POWER_CAP];</span>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_POLICY_STEP_COUNT] = m_policy[M_POLICY_STEP_COUNT];</span></a>
+<span class="lineNum">     262 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_POLICY_MAX_EPOCH_RUNTIME] = m_policy[M_POLICY_MAX_EPOCH_RUNTIME];</span>
+<span class="lineNum">     263 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_POLICY_POWER_SLACK] = m_policy[M_POLICY_POWER_SLACK];</span>
+<span class="lineNum">     264 </span><span class="lineCov">          1 :         values[M_TRACE_SAMPLE_POLICY_POWER_LIMIT] = m_actual_limit;</span>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     266 </span>            : 
+<span class="lineNum">     267 </span><span class="lineCov">          2 :     PowerBalancerAgent::TreeRole::TreeRole(int level, const std::vector&lt;int&gt; &amp;fan_in)</span>
+<span class="lineNum">     268 </span>            :         : Role()
+<a name="269"><span class="lineNum">     269 </span>            :         , M_AGG_FUNC({</a>
+<span class="lineNum">     270 </span>            :               Agg::min, // M_SAMPLE_STEP_COUNT
+<span class="lineNum">     271 </span>            :               Agg::max, // M_SAMPLE_MAX_EPOCH_RUNTIME
+<span class="lineNum">     272 </span>            :               Agg::sum, // M_SAMPLE_SUM_POWER_SLACK
+<a name="273"><span class="lineNum">     273 </span>            :               Agg::min, // M_SAMPLE_MIN_POWER_HEADROOM</a>
+<span class="lineNum">     274 </span>            :           })
+<span class="lineNum">     275 </span><span class="lineCov">          2 :         , M_NUM_CHILDREN(fan_in[level - 1])</span>
+<span class="lineNum">     276 </span>            :     {
+<a name="277"><span class="lineNum">     277 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">     278 </span><span class="lineCov">          2 :         if (M_AGG_FUNC.size() != M_NUM_SAMPLE) {</span>
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerBalancerAgent::TreeRole::&quot; + std::string(__func__) + &quot;(): aggregation function vector is not the size of the policy vector&quot;,</span>
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="281"><span class="lineNum">     281 </span>            :         }</a>
+<span class="lineNum">     282 </span>            : #endif
+<span class="lineNum">     283 </span><span class="lineCov">          2 :         m_is_step_complete = true;</span>
+<span class="lineNum">     284 </span><span class="lineCov">          2 :     }</span>
+<a name="285"><span class="lineNum">     285 </span>            : </a>
+<a name="286"><span class="lineNum">     286 </span>            :     PowerBalancerAgent::TreeRole::~TreeRole() = default;</a>
+<span class="lineNum">     287 </span>            : 
+<span class="lineNum">     288 </span><span class="lineCov">          5 :     bool PowerBalancerAgent::TreeRole::descend(const std::vector&lt;double&gt; &amp;in_policy,</span>
+<a name="289"><span class="lineNum">     289 </span>            :                                                std::vector&lt;std::vector&lt;double&gt; &gt;&amp;out_policy)</a>
+<span class="lineNum">     290 </span>            :     {
+<span class="lineNum">     291 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     292 </span><span class="lineCov">          5 :         if (out_policy.size() != (size_t)M_NUM_CHILDREN) {</span>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">          2 :             throw Exception(&quot;PowerBalancerAgent::TreeRole::&quot; + std::string(__func__) + &quot;(): policy vectors are not correctly sized.&quot;,</span></a>
+<span class="lineNum">     294 </span><span class="lineCov">          3 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     295 </span>            :         }
+<span class="lineNum">     296 </span>            : #endif
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          4 :         bool result = false;</span></a>
+<span class="lineNum">     298 </span><span class="lineCov">          8 :         if (m_is_step_complete &amp;&amp;</span>
+<span class="lineNum">     299 </span><span class="lineCov">          4 :             in_policy[M_POLICY_STEP_COUNT] != m_step_count) {</span>
+<span class="lineNum">     300 </span><span class="lineCov">          4 :             if (in_policy[M_POLICY_STEP_COUNT] == M_STEP_SEND_DOWN_LIMIT) {</span>
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">          1 :                 m_step_count = M_STEP_SEND_DOWN_LIMIT;</span></a>
+<span class="lineNum">     302 </span>            :             }
+<span class="lineNum">     303 </span><span class="lineCov">          3 :             else if (in_policy[M_POLICY_STEP_COUNT] == m_step_count + 1) {</span>
+<span class="lineNum">     304 </span><span class="lineCov">          3 :                 ++m_step_count;</span>
+<a name="305"><span class="lineNum">     305 </span>            :             }</a>
+<span class="lineNum">     306 </span>            :             else {
+<span class="lineNum">     307 </span>            :                 throw Exception(&quot;PowerBalancerAgent::descend(): policy is out of sync with agent step.&quot;,
+<span class="lineNum">     308 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="309"><span class="lineNum">     309 </span>            :             }</a>
+<span class="lineNum">     310 </span><span class="lineCov">          4 :             m_is_step_complete = false;</span>
+<span class="lineNum">     311 </span>            :             // Copy the input policy directly into each child's
+<span class="lineNum">     312 </span>            :             // policy.
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">         12 :             for (auto &amp;po : out_policy) {</span></a>
+<span class="lineNum">     314 </span><span class="lineCov">          8 :                 po = in_policy;</span>
+<span class="lineNum">     315 </span>            :             }
+<span class="lineNum">     316 </span><span class="lineCov">          4 :             m_policy = in_policy;</span>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">          4 :             result = true;</span></a>
+<span class="lineNum">     318 </span>            :         }
+<span class="lineNum">     319 </span><span class="lineCov">          4 :         return result;</span>
+<a name="320"><span class="lineNum">     320 </span>            :     }</a>
+<a name="321"><span class="lineNum">     321 </span>            : </a>
+<span class="lineNum">     322 </span><span class="lineCov">         10 :     bool PowerBalancerAgent::TreeRole::ascend(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
+<span class="lineNum">     323 </span>            :             std::vector&lt;double&gt; &amp;out_sample)
+<span class="lineNum">     324 </span>            :     {
+<a name="325"><span class="lineNum">     325 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">     326 </span><span class="lineCov">         18 :         if (in_sample.size() != (size_t)M_NUM_CHILDREN ||</span>
+<span class="lineNum">     327 </span><span class="lineCov">          8 :             out_sample.size() != M_NUM_SAMPLE) {</span>
+<span class="lineNum">     328 </span><span class="lineCov">          8 :             throw Exception(&quot;PowerBalancerAgent::TreeRole::&quot; + std::string(__func__) + &quot;(): sample vectors not correctly sized.&quot;,</span>
+<a name="329"><span class="lineNum">     329 </span><span class="lineCov">         12 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     330 </span>            :         }
+<span class="lineNum">     331 </span>            : #endif
+<span class="lineNum">     332 </span><span class="lineCov">          6 :         bool result = false;</span>
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">          6 :         aggregate_sample(in_sample, M_AGG_FUNC, out_sample);</span></a>
+<span class="lineNum">     334 </span><span class="lineCov">          6 :         if (!m_is_step_complete &amp;&amp; out_sample[M_SAMPLE_STEP_COUNT] == m_step_count) {</span>
+<span class="lineNum">     335 </span>            :             // Method returns true if all children have completed the step
+<span class="lineNum">     336 </span>            :             // for the first time.
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">          6 :             result = true;</span></a>
+<span class="lineNum">     338 </span><span class="lineCov">          6 :             m_is_step_complete = true;</span>
+<span class="lineNum">     339 </span><span class="lineCov">          6 :             if (out_sample[M_SAMPLE_STEP_COUNT] != m_step_count) {</span>
+<span class="lineNum">     340 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;PowerBalancerAgent::TreeRole::&quot; + std::string(__func__) +</span>
+<a name="341"><span class="lineNum">     341 </span><span class="lineNoCov">          0 :                                 &quot;(): sample recieved has true for step complete field, &quot; +</span></a>
+<span class="lineNum">     342 </span>            :                                 &quot;but the step_count does not match the agent's current step_count.&quot;,
+<span class="lineNum">     343 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     344 </span>            :             }
+<a name="345"><span class="lineNum">     345 </span>            :         }</a>
+<span class="lineNum">     346 </span><span class="lineCov">          6 :         return result;</span>
+<a name="347"><span class="lineNum">     347 </span>            :     }</a>
+<span class="lineNum">     348 </span>            : 
+<a name="349"><span class="lineNum">     349 </span><span class="lineCov">          1 :     static int calc_num_node(const std::vector&lt;int&gt; &amp;fan_in)</span></a>
+<span class="lineNum">     350 </span>            :     {
+<span class="lineNum">     351 </span><span class="lineCov">          1 :         int num_node = 1;</span>
+<span class="lineNum">     352 </span><span class="lineCov">          3 :         for (auto fi : fan_in) {</span>
+<a name="353"><span class="lineNum">     353 </span><span class="lineCov">          2 :             num_node *= fi;</span></a>
+<span class="lineNum">     354 </span>            :         }
+<span class="lineNum">     355 </span><span class="lineCov">          1 :         return num_node;</span>
+<a name="356"><span class="lineNum">     356 </span>            :     }</a>
+<a name="357"><span class="lineNum">     357 </span>            : </a>
+<span class="lineNum">     358 </span><span class="lineCov">          1 :     PowerBalancerAgent::RootRole::RootRole(int level, const std::vector&lt;int&gt; &amp;fan_in,</span>
+<span class="lineNum">     359 </span>            :                                            double min_power, double max_power)
+<span class="lineNum">     360 </span>            :         : TreeRole(level, fan_in)
+<a name="361"><span class="lineNum">     361 </span><span class="lineCov">          1 :         , M_NUM_NODE(calc_num_node(fan_in))</span></a>
+<span class="lineNum">     362 </span>            :         , m_root_cap(NAN)
+<span class="lineNum">     363 </span>            :         , M_MIN_PKG_POWER_SETTING(min_power)
+<span class="lineNum">     364 </span><span class="lineCov">          2 :         , M_MAX_PKG_POWER_SETTING(max_power)</span>
+<a name="365"><span class="lineNum">     365 </span>            :     {</a>
+<span class="lineNum">     366 </span><span class="lineCov">          1 :         m_step_count = M_STEP_SEND_DOWN_LIMIT;</span>
+<span class="lineNum">     367 </span><span class="lineCov">          1 :         m_is_step_complete = false;</span>
+<span class="lineNum">     368 </span><span class="lineCov">          1 :     }</span>
+<a name="369"><span class="lineNum">     369 </span>            : </a>
+<a name="370"><span class="lineNum">     370 </span>            :     PowerBalancerAgent::RootRole::~RootRole() = default;</a>
+<span class="lineNum">     371 </span>            : 
+<span class="lineNum">     372 </span><span class="lineCov">          5 :     bool PowerBalancerAgent::RootRole::ascend(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
+<a name="373"><span class="lineNum">     373 </span>            :             std::vector&lt;double&gt; &amp;out_sample)</a>
+<span class="lineNum">     374 </span>            :     {
+<span class="lineNum">     375 </span><span class="lineCov">          5 :         bool result = TreeRole::ascend(in_sample, out_sample);</span>
+<span class="lineNum">     376 </span><span class="lineCov">          3 :         if (result) {</span>
+<a name="377"><span class="lineNum">     377 </span><span class="lineCov">          3 :             if (m_step_count != m_policy[M_POLICY_STEP_COUNT]) {</span></a>
+<span class="lineNum">     378 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;PowerBalancerAgent::RootRole::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     379 </span>            :                                 &quot;(): sample passed does not match current step_count.&quot;,
+<span class="lineNum">     380 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="381"><span class="lineNum">     381 </span>            :             }</a>
+<span class="lineNum">     382 </span><span class="lineCov">          3 :             step_imp().update_policy(*this, out_sample);</span>
+<span class="lineNum">     383 </span><span class="lineCov">          3 :             m_policy[M_POLICY_STEP_COUNT] = m_step_count + 1;</span>
+<span class="lineNum">     384 </span>            :         }
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">          3 :         return result;</span></a>
+<a name="386"><span class="lineNum">     386 </span>            :     }</a>
+<span class="lineNum">     387 </span>            : 
+<span class="lineNum">     388 </span><span class="lineCov">          5 :     bool PowerBalancerAgent::RootRole::descend(const std::vector&lt;double&gt; &amp;in_policy,</span>
+<a name="389"><span class="lineNum">     389 </span>            :             std::vector&lt;std::vector&lt;double&gt; &gt;&amp;out_policy)</a>
+<span class="lineNum">     390 </span>            :     {
+<span class="lineNum">     391 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     392 </span><span class="lineCov">          5 :         if (out_policy.size() != (size_t)M_NUM_CHILDREN) {</span>
+<a name="393"><span class="lineNum">     393 </span><span class="lineCov">          2 :             throw Exception(&quot;PowerBalancerAgent::TreeRole::&quot; + std::string(__func__) + &quot;(): policy vectors are not correctly sized.&quot;,</span></a>
+<span class="lineNum">     394 </span><span class="lineCov">          3 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     395 </span>            :         }
+<span class="lineNum">     396 </span>            : #endif
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">          4 :         bool result = false;</span></a>
+<span class="lineNum">     398 </span><span class="lineCov">          4 :         if (in_policy[M_POLICY_POWER_CAP] != m_root_cap) {</span>
+<span class="lineNum">     399 </span><span class="lineCov">          1 :             m_step_count = M_STEP_SEND_DOWN_LIMIT;</span>
+<span class="lineNum">     400 </span><span class="lineCov">          1 :             m_policy[M_POLICY_POWER_CAP] = in_policy[M_POLICY_POWER_CAP];</span>
+<a name="401"><span class="lineNum">     401 </span><span class="lineCov">          1 :             m_policy[M_POLICY_STEP_COUNT] = M_STEP_SEND_DOWN_LIMIT;</span></a>
+<span class="lineNum">     402 </span><span class="lineCov">          1 :             m_policy[M_POLICY_MAX_EPOCH_RUNTIME] = 0.0;</span>
+<span class="lineNum">     403 </span><span class="lineCov">          1 :             m_policy[M_POLICY_POWER_SLACK] = 0.0;</span>
+<span class="lineNum">     404 </span><span class="lineCov">          1 :             m_root_cap = in_policy[M_POLICY_POWER_CAP];</span>
+<a name="405"><span class="lineNum">     405 </span><span class="lineCov">          2 :             if (m_root_cap &gt; M_MAX_PKG_POWER_SETTING ||</span></a>
+<span class="lineNum">     406 </span><span class="lineCov">          1 :                 m_root_cap &lt; M_MIN_PKG_POWER_SETTING) {</span>
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;PowerBalancerAgent::descend(): invalid power budget: &quot; + std::to_string(m_root_cap),</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="409"><span class="lineNum">     409 </span>            :             }</a>
+<span class="lineNum">     410 </span><span class="lineCov">          1 :             result = true;</span>
+<span class="lineNum">     411 </span>            :         }
+<span class="lineNum">     412 </span><span class="lineCov">          3 :         else if (m_step_count + 1 == m_policy[M_POLICY_STEP_COUNT]) {</span>
+<a name="413"><span class="lineNum">     413 </span><span class="lineCov">          3 :             ++m_step_count;</span></a>
+<span class="lineNum">     414 </span><span class="lineCov">          3 :             m_is_step_complete = false;</span>
+<span class="lineNum">     415 </span><span class="lineCov">          3 :             result = true;</span>
+<span class="lineNum">     416 </span>            :         }
+<a name="417"><span class="lineNum">     417 </span><span class="lineNoCov">          0 :         else if (m_step_count != m_policy[M_POLICY_STEP_COUNT]) {</span></a>
+<span class="lineNum">     418 </span>            :             throw Exception(&quot;PowerBalancerAgent::descend(): updated policy is out of sync with current step&quot;,
+<span class="lineNum">     419 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     420 </span>            :         }
+<a name="421"><span class="lineNum">     421 </span><span class="lineCov">          4 :         if (result) {</span></a>
+<span class="lineNum">     422 </span><span class="lineCov">         12 :             for (auto &amp;po : out_policy) {</span>
+<span class="lineNum">     423 </span><span class="lineCov">          8 :                 po = m_policy;</span>
+<span class="lineNum">     424 </span>            :             }
+<a name="425"><span class="lineNum">     425 </span>            :         }</a>
+<span class="lineNum">     426 </span><span class="lineCov">          4 :         return result;</span>
+<a name="427"><span class="lineNum">     427 </span>            :     }</a>
+<span class="lineNum">     428 </span>            : 
+<a name="429"><span class="lineNum">     429 </span><span class="lineCov">          1 :     void PowerBalancerAgent::SendDownLimitStep::update_policy(PowerBalancerAgent::RootRole &amp;role, const std::vector&lt;double&gt; &amp;sample) const</span></a>
+<span class="lineNum">     430 </span>            :     {
+<span class="lineNum">     431 </span><span class="lineCov">          1 :         role.m_policy[PowerBalancerAgent::M_POLICY_POWER_CAP] = 0.0;</span>
+<a name="432"><span class="lineNum">     432 </span><span class="lineCov">          1 :     }</span></a>
+<a name="433"><span class="lineNum">     433 </span>            : </a>
+<span class="lineNum">     434 </span><span class="lineCov">          1 :     void PowerBalancerAgent::SendDownLimitStep::enter_step(PowerBalancerAgent::LeafRole &amp;role, const std::vector&lt;double&gt; &amp;in_policy) const</span>
+<span class="lineNum">     435 </span>            :     {
+<span class="lineNum">     436 </span><span class="lineCov">          1 :         role.m_power_balancer-&gt;power_cap(role.m_power_balancer-&gt;power_limit() + in_policy[PowerBalancerAgent::M_POLICY_POWER_SLACK]);</span>
+<a name="437"><span class="lineNum">     437 </span><span class="lineCov">          1 :         role.m_is_step_complete = true;</span></a>
+<a name="438"><span class="lineNum">     438 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     439 </span>            : 
+<span class="lineNum">     440 </span><span class="lineCov">          2 :     void PowerBalancerAgent::SendDownLimitStep::sample_platform(PowerBalancerAgent::LeafRole &amp;role) const</span>
+<a name="441"><span class="lineNum">     441 </span>            :     {</a>
+<a name="442"><span class="lineNum">     442 </span><span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     443 </span>            : 
+<span class="lineNum">     444 </span><span class="lineCov">          1 :     void PowerBalancerAgent::MeasureRuntimeStep::update_policy(PowerBalancerAgent::RootRole &amp;role, const std::vector&lt;double&gt; &amp;sample) const</span>
+<a name="445"><span class="lineNum">     445 </span>            :     {</a>
+<span class="lineNum">     446 </span><span class="lineCov">          1 :         role.m_policy[PowerBalancerAgent::M_POLICY_MAX_EPOCH_RUNTIME] = sample[PowerBalancerAgent::M_SAMPLE_MAX_EPOCH_RUNTIME];</span>
+<a name="447"><span class="lineNum">     447 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     448 </span>            : 
+<a name="449"><span class="lineNum">     449 </span><span class="lineCov">          1 :     void PowerBalancerAgent::MeasureRuntimeStep::enter_step(PowerBalancerAgent::LeafRole &amp;role, const std::vector&lt;double&gt; &amp;in_policy) const</span></a>
+<span class="lineNum">     450 </span>            :     {
+<a name="451"><span class="lineNum">     451 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     452 </span>            : 
+<a name="453"><span class="lineNum">     453 </span><span class="lineCov">          1 :     void PowerBalancerAgent::MeasureRuntimeStep::sample_platform(PowerBalancerAgent::LeafRole &amp;role) const</span></a>
+<span class="lineNum">     454 </span>            :     {
+<span class="lineNum">     455 </span><span class="lineCov">          1 :         int epoch_count = role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_COUNT]);</span>
+<span class="lineNum">     456 </span>            :         // If all of the ranks have observed a new epoch then update
+<a name="457"><span class="lineNum">     457 </span>            :         // the power_balancer.</a>
+<span class="lineNum">     458 </span><span class="lineCov">          2 :         if (epoch_count != role.m_last_epoch_count &amp;&amp;</span>
+<span class="lineNum">     459 </span><span class="lineCov">          1 :             !role.m_is_step_complete) {</span>
+<span class="lineNum">     460 </span>            : 
+<a name="461"><span class="lineNum">     461 </span>            :             /// We wish to measure runtime that is a function of node local optimizations only, and therefore uncorrelated between compute nodes.</a>
+<span class="lineNum">     462 </span><span class="lineCov">          2 :             double balanced_epoch_runtime = role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_RUNTIME]) -</span>
+<span class="lineNum">     463 </span><span class="lineCov">          1 :                                             role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_RUNTIME_MPI]) -</span>
+<span class="lineNum">     464 </span><span class="lineCov">          1 :                                             role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_RUNTIME_IGNORE]);</span>
+<a name="465"><span class="lineNum">     465 </span><span class="lineCov">          1 :             role.m_is_step_complete = role.m_power_balancer-&gt;is_runtime_stable(balanced_epoch_runtime);</span></a>
+<span class="lineNum">     466 </span><span class="lineCov">          1 :             role.m_power_balancer-&gt;calculate_runtime_sample();</span>
+<span class="lineNum">     467 </span><span class="lineCov">          1 :             role.m_runtime = role.m_power_balancer-&gt;runtime_sample();</span>
+<span class="lineNum">     468 </span><span class="lineCov">          1 :             role.m_last_epoch_count = epoch_count;</span>
+<a name="469"><span class="lineNum">     469 </span>            :         }</a>
+<a name="470"><span class="lineNum">     470 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     471 </span>            : 
+<span class="lineNum">     472 </span><span class="lineCov">          1 :     void PowerBalancerAgent::ReduceLimitStep::update_policy(PowerBalancerAgent::RootRole &amp;role, const std::vector&lt;double&gt; &amp;sample) const</span>
+<a name="473"><span class="lineNum">     473 </span>            :     {</a>
+<span class="lineNum">     474 </span><span class="lineCov">          1 :         double slack = sample[PowerBalancerAgent::M_SAMPLE_SUM_POWER_SLACK] / role.M_NUM_NODE;</span>
+<span class="lineNum">     475 </span><span class="lineCov">          1 :         double head = sample[PowerBalancerAgent::M_SAMPLE_MIN_POWER_HEADROOM];</span>
+<span class="lineNum">     476 </span><span class="lineCov">          1 :         role.m_policy[PowerBalancerAgent::M_POLICY_POWER_SLACK] = slack &lt; head ? slack : head;</span>
+<a name="477"><span class="lineNum">     477 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     478 </span>            : 
+<span class="lineNum">     479 </span><span class="lineCov">          1 :     void PowerBalancerAgent::ReduceLimitStep::enter_step(PowerBalancerAgent::LeafRole &amp;role, const std::vector&lt;double&gt; &amp;in_policy) const</span>
+<span class="lineNum">     480 </span>            :     {
+<a name="481"><span class="lineNum">     481 </span><span class="lineCov">          1 :         role.m_power_balancer-&gt;target_runtime(in_policy[PowerBalancerAgent::M_POLICY_MAX_EPOCH_RUNTIME]);</span></a>
+<a name="482"><span class="lineNum">     482 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     483 </span>            : 
+<span class="lineNum">     484 </span><span class="lineCov">          1 :     void PowerBalancerAgent::ReduceLimitStep::sample_platform(PowerBalancerAgent::LeafRole &amp;role) const</span>
+<a name="485"><span class="lineNum">     485 </span>            :     {</a>
+<span class="lineNum">     486 </span><span class="lineCov">          1 :         int epoch_count = role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_COUNT]);</span>
+<span class="lineNum">     487 </span>            :         // If all of the ranks have observed a new epoch then update
+<span class="lineNum">     488 </span>            :         // the power_balancer.
+<a name="489"><span class="lineNum">     489 </span><span class="lineCov">          2 :         if (epoch_count != role.m_last_epoch_count &amp;&amp;</span></a>
+<span class="lineNum">     490 </span><span class="lineCov">          1 :             !role.m_is_step_complete) {</span>
+<span class="lineNum">     491 </span>            : 
+<span class="lineNum">     492 </span>            :             /// We wish to measure runtime that is a function of node local optimizations only, and therefore uncorrelated between compute nodes.
+<a name="493"><span class="lineNum">     493 </span><span class="lineCov">          2 :             double balanced_epoch_runtime = role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_RUNTIME]) -</span></a>
+<span class="lineNum">     494 </span><span class="lineCov">          1 :                                             role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_RUNTIME_MPI]) -</span>
+<span class="lineNum">     495 </span><span class="lineCov">          1 :                                             role.m_platform_io.sample(role.m_pio_idx[PowerBalancerAgent::M_PLAT_SIGNAL_EPOCH_RUNTIME_IGNORE]);</span>
+<span class="lineNum">     496 </span><span class="lineCov">          1 :             role.m_power_balancer-&gt;calculate_runtime_sample();</span>
+<a name="497"><span class="lineNum">     497 </span><span class="lineCov">          2 :             role.m_is_step_complete = role.m_is_out_of_bounds ||</span></a>
+<span class="lineNum">     498 </span><span class="lineCov">          2 :                                       role.m_power_balancer-&gt;is_target_met(balanced_epoch_runtime);</span>
+<span class="lineNum">     499 </span><span class="lineCov">          1 :             role.m_power_slack = role.m_power_balancer-&gt;power_slack();</span>
+<span class="lineNum">     500 </span><span class="lineCov">          1 :             role.m_is_out_of_bounds = false;</span>
+<a name="501"><span class="lineNum">     501 </span><span class="lineCov">          1 :             role.m_power_headroom = role.m_power_max - role.m_power_balancer-&gt;power_limit();</span></a>
+<span class="lineNum">     502 </span><span class="lineCov">          1 :             role.m_last_epoch_count = epoch_count;</span>
+<span class="lineNum">     503 </span>            :         }
+<a name="504"><span class="lineNum">     504 </span><span class="lineCov">          1 :     }</span></a>
+<a name="505"><span class="lineNum">     505 </span>            : </a>
+<span class="lineNum">     506 </span><span class="lineCov">          1 :     PowerBalancerAgent::PowerBalancerAgent()</span>
+<span class="lineNum">     507 </span><span class="lineCov">          1 :         : PowerBalancerAgent(platform_io(), platform_topo(), nullptr, nullptr)</span>
+<span class="lineNum">     508 </span>            :     {
+<a name="509"><span class="lineNum">     509 </span>            : </a>
+<a name="510"><span class="lineNum">     510 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     511 </span>            : 
+<span class="lineNum">     512 </span><span class="lineCov">          5 :     PowerBalancerAgent::PowerBalancerAgent(IPlatformIO &amp;platform_io,</span>
+<a name="513"><span class="lineNum">     513 </span>            :                                            IPlatformTopo &amp;platform_topo,</a>
+<span class="lineNum">     514 </span>            :                                            std::unique_ptr&lt;IPowerGovernor&gt; power_governor,
+<span class="lineNum">     515 </span>            :                                            std::unique_ptr&lt;IPowerBalancer&gt; power_balancer)
+<span class="lineNum">     516 </span>            :         : m_platform_io(platform_io)
+<a name="517"><span class="lineNum">     517 </span>            :         , m_platform_topo(platform_topo)</a>
+<span class="lineNum">     518 </span>            :         , m_role(nullptr)
+<span class="lineNum">     519 </span><span class="lineCov">          5 :         , m_power_governor(std::move(power_governor))</span>
+<span class="lineNum">     520 </span><span class="lineCov">          5 :         , m_power_balancer(std::move(power_balancer))</span>
+<a name="521"><span class="lineNum">     521 </span>            :         , m_last_wait(GEOPM_TIME_REF)</a>
+<span class="lineNum">     522 </span>            :         , M_WAIT_SEC(0.005)
+<span class="lineNum">     523 </span><span class="lineCov">         15 :         , m_power_tdp(NAN)</span>
+<span class="lineNum">     524 </span>            :     {
+<a name="525"><span class="lineNum">     525 </span><span class="lineCov">          5 :         geopm_time(&amp;m_last_wait);</span></a>
+<span class="lineNum">     526 </span><span class="lineCov">          5 :     }</span>
+<span class="lineNum">     527 </span>            : 
+<a name="528"><span class="lineNum">     528 </span>            :     PowerBalancerAgent::~PowerBalancerAgent() = default;</a>
+<a name="529"><span class="lineNum">     529 </span>            : </a>
+<span class="lineNum">     530 </span><span class="lineCov">          4 :     void PowerBalancerAgent::init(int level, const std::vector&lt;int&gt; &amp;fan_in, bool is_root)</span>
+<span class="lineNum">     531 </span>            :     {
+<span class="lineNum">     532 </span><span class="lineCov">          4 :         if (fan_in.size() == (size_t) 0) {</span>
+<a name="533"><span class="lineNum">     533 </span><span class="lineCov">          2 :             throw Exception(&quot;PowerBalancerAgent::&quot; + std::string(__func__) +</span></a>
+<span class="lineNum">     534 </span>            :                             &quot;(): single node job detected, user power_governor.&quot;,
+<span class="lineNum">     535 </span><span class="lineCov">          3 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     536 </span>            :         }
+<a name="537"><span class="lineNum">     537 </span><span class="lineCov">          3 :         bool is_tree_root = (level == (int)fan_in.size());</span></a>
+<span class="lineNum">     538 </span><span class="lineCov">          3 :         if (is_tree_root) {</span>
+<span class="lineNum">     539 </span><span class="lineCov">          1 :             int num_pkg = m_platform_topo.num_domain(m_platform_io.control_domain_type(&quot;POWER_PACKAGE_LIMIT&quot;));</span>
+<span class="lineNum">     540 </span><span class="lineCov">          1 :             double min_power = num_pkg * m_platform_io.read_signal(&quot;POWER_PACKAGE_MIN&quot;, IPlatformTopo::M_DOMAIN_PACKAGE, 0);</span>
+<a name="541"><span class="lineNum">     541 </span><span class="lineCov">          1 :             double max_power = num_pkg * m_platform_io.read_signal(&quot;POWER_PACKAGE_MAX&quot;, IPlatformTopo::M_DOMAIN_PACKAGE, 0);</span></a>
+<span class="lineNum">     542 </span><span class="lineCov">          1 :             m_power_tdp = num_pkg * m_platform_io.read_signal(&quot;POWER_PACKAGE_TDP&quot;, IPlatformTopo::M_DOMAIN_PACKAGE, 0);</span>
+<span class="lineNum">     543 </span><span class="lineCov">          1 :             m_role = std::make_shared&lt;RootRole&gt;(level, fan_in, min_power, max_power);</span>
+<span class="lineNum">     544 </span>            :         }
+<a name="545"><span class="lineNum">     545 </span><span class="lineCov">          2 :         else if (level == 0) {</span></a>
+<span class="lineNum">     546 </span><span class="lineCov">          1 :             m_role = std::make_shared&lt;LeafRole&gt;(m_platform_io, m_platform_topo, std::move(m_power_governor), std::move(m_power_balancer));</span>
+<span class="lineNum">     547 </span>            :         }
+<span class="lineNum">     548 </span>            :         else {
+<a name="549"><span class="lineNum">     549 </span><span class="lineCov">          1 :             m_role = std::make_shared&lt;TreeRole&gt;(level, fan_in);</span></a>
+<span class="lineNum">     550 </span>            :         }
+<a name="551"><span class="lineNum">     551 </span><span class="lineCov">          3 :     }</span></a>
+<span class="lineNum">     552 </span>            : 
+<a name="553"><span class="lineNum">     553 </span><span class="lineCov">         13 :     bool PowerBalancerAgent::descend(const std::vector&lt;double&gt; &amp;in_policy, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;out_policy)</span></a>
+<span class="lineNum">     554 </span>            :     {
+<span class="lineNum">     555 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     556 </span><span class="lineCov">         13 :         if (in_policy.size() != M_NUM_POLICY) {</span>
+<a name="557"><span class="lineNum">     557 </span><span class="lineCov">          4 :             throw Exception(&quot;PowerBalancerAgent::&quot; + std::string(__func__) + &quot;(): policy vectors are not correctly sized.&quot;,</span></a>
+<span class="lineNum">     558 </span><span class="lineCov">          6 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     559 </span>            :         }
+<span class="lineNum">     560 </span>            : #endif
+<a name="561"><span class="lineNum">     561 </span><span class="lineCov">         22 :         auto policy = validate_policy(in_policy);</span></a>
+<span class="lineNum">     562 </span><span class="lineCov">         19 :         return m_role-&gt;descend(policy, out_policy);</span>
+<a name="563"><span class="lineNum">     563 </span>            :     }</a>
+<span class="lineNum">     564 </span>            : 
+<a name="565"><span class="lineNum">     565 </span><span class="lineCov">         11 :     bool PowerBalancerAgent::ascend(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample_in, std::vector&lt;double&gt; &amp;sample_out)</span></a>
+<span class="lineNum">     566 </span>            :     {
+<span class="lineNum">     567 </span><span class="lineCov">         11 :         return m_role-&gt;ascend(sample_in, sample_out);</span>
+<a name="568"><span class="lineNum">     568 </span>            :     }</a>
+<a name="569"><span class="lineNum">     569 </span>            : </a>
+<span class="lineNum">     570 </span><span class="lineCov">          7 :     bool PowerBalancerAgent::adjust_platform(const std::vector&lt;double&gt; &amp;in_policy)</span>
+<span class="lineNum">     571 </span>            :     {
+<span class="lineNum">     572 </span>            : #ifdef GEOPM_DEBUG
+<a name="573"><span class="lineNum">     573 </span><span class="lineCov">          7 :         if (in_policy.size() != M_NUM_POLICY) {</span></a>
+<span class="lineNum">     574 </span><span class="lineCov">          2 :             throw Exception(&quot;PowerBalancerAgent::&quot; + std::string(__func__) + &quot;(): policy vectors are not correctly sized.&quot;,</span>
+<span class="lineNum">     575 </span><span class="lineCov">          3 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     576 </span>            :         }
+<a name="577"><span class="lineNum">     577 </span>            : #endif</a>
+<span class="lineNum">     578 </span><span class="lineCov">         12 :         auto policy = validate_policy(in_policy);</span>
+<span class="lineNum">     579 </span><span class="lineCov">         10 :         return m_role-&gt;adjust_platform(policy);</span>
+<a name="580"><span class="lineNum">     580 </span>            :     }</a>
+<a name="581"><span class="lineNum">     581 </span>            : </a>
+<span class="lineNum">     582 </span><span class="lineCov">          7 :     bool PowerBalancerAgent::sample_platform(std::vector&lt;double&gt; &amp;out_sample)</span>
+<span class="lineNum">     583 </span>            :     {
+<span class="lineNum">     584 </span><span class="lineCov">          7 :         return m_role-&gt;sample_platform(out_sample);</span>
+<a name="585"><span class="lineNum">     585 </span>            :     }</a>
+<span class="lineNum">     586 </span>            : 
+<span class="lineNum">     587 </span><span class="lineCov">          1 :     void PowerBalancerAgent::wait(void)    {</span>
+<span class="lineNum">     588 </span><span class="lineCov">          1 :         while(geopm_time_since(&amp;m_last_wait) &lt; M_WAIT_SEC) {</span>
+<a name="589"><span class="lineNum">     589 </span>            : </a>
+<span class="lineNum">     590 </span>            :         }
+<span class="lineNum">     591 </span><span class="lineCov">          1 :         geopm_time(&amp;m_last_wait);</span>
+<a name="592"><span class="lineNum">     592 </span><span class="lineCov">          1 :     }</span></a>
+<a name="593"><span class="lineNum">     593 </span>            : </a>
+<span class="lineNum">     594 </span><span class="lineCov">          1 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; PowerBalancerAgent::report_header(void) const</span>
+<span class="lineNum">     595 </span>            :     {
+<span class="lineNum">     596 </span><span class="lineCov">          1 :         return {};</span>
+<a name="597"><span class="lineNum">     597 </span>            :     }</a>
+<span class="lineNum">     598 </span>            : 
+<span class="lineNum">     599 </span><span class="lineCov">          1 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; PowerBalancerAgent::report_node(void) const</span>
+<span class="lineNum">     600 </span>            :     {
+<a name="601"><span class="lineNum">     601 </span><span class="lineCov">          1 :         return {};</span></a>
+<a name="602"><span class="lineNum">     602 </span>            :     }</a>
+<span class="lineNum">     603 </span>            : 
+<span class="lineNum">     604 </span><span class="lineCov">          1 :     std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; PowerBalancerAgent::report_region(void) const</span>
+<a name="605"><span class="lineNum">     605 </span>            :     {</a>
+<span class="lineNum">     606 </span><span class="lineCov">          1 :         return {};</span>
+<a name="607"><span class="lineNum">     607 </span>            :     }</a>
+<span class="lineNum">     608 </span>            : 
+<a name="609"><span class="lineNum">     609 </span><span class="lineCov">          3 :     std::vector&lt;std::string&gt; PowerBalancerAgent::trace_names(void) const</span></a>
+<span class="lineNum">     610 </span>            :     {
+<span class="lineNum">     611 </span><span class="lineCov">          3 :         return m_role-&gt;trace_names();</span>
+<a name="612"><span class="lineNum">     612 </span>            :     }</a>
+<a name="613"><span class="lineNum">     613 </span>            : </a>
+<span class="lineNum">     614 </span><span class="lineCov">          4 :     void PowerBalancerAgent::trace_values(std::vector&lt;double&gt; &amp;values)</span>
+<span class="lineNum">     615 </span>            :     {
+<span class="lineNum">     616 </span><span class="lineCov">          4 :         m_role-&gt;trace_values(values);</span>
+<a name="617"><span class="lineNum">     617 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     618 </span>            : 
+<span class="lineNum">     619 </span><span class="lineCov">         15 :     std::string PowerBalancerAgent::plugin_name(void)</span>
+<span class="lineNum">     620 </span>            :     {
+<a name="621"><span class="lineNum">     621 </span><span class="lineCov">         15 :         return &quot;power_balancer&quot;;</span></a>
+<a name="622"><span class="lineNum">     622 </span>            :     }</a>
+<span class="lineNum">     623 </span>            : 
+<span class="lineNum">     624 </span><span class="lineCov">          1 :     std::unique_ptr&lt;Agent&gt; PowerBalancerAgent::make_plugin(void)</span>
+<a name="625"><span class="lineNum">     625 </span>            :     {</a>
+<span class="lineNum">     626 </span><span class="lineCov">          1 :         return geopm::make_unique&lt;PowerBalancerAgent&gt;();</span>
+<a name="627"><span class="lineNum">     627 </span>            :     }</a>
+<span class="lineNum">     628 </span>            : 
+<a name="629"><span class="lineNum">     629 </span><span class="lineCov">         15 :     std::vector&lt;std::string&gt; PowerBalancerAgent::policy_names(void)</span></a>
+<span class="lineNum">     630 </span>            :     {
+<span class="lineNum">     631 </span>            :         return {&quot;POWER_CAP&quot;,
+<span class="lineNum">     632 </span>            :                 &quot;STEP_COUNT&quot;,
+<a name="633"><span class="lineNum">     633 </span>            :                 &quot;MAX_EPOCH_RUNTIME&quot;,</a>
+<span class="lineNum">     634 </span><span class="lineCov">         15 :                 &quot;POWER_SLACK&quot;};</span>
+<a name="635"><span class="lineNum">     635 </span>            :     }</a>
+<span class="lineNum">     636 </span>            : 
+<a name="637"><span class="lineNum">     637 </span><span class="lineCov">         15 :     std::vector&lt;std::string&gt; PowerBalancerAgent::sample_names(void)</span></a>
+<span class="lineNum">     638 </span>            :     {
+<span class="lineNum">     639 </span>            :         return {&quot;STEP_COUNT&quot;,
+<span class="lineNum">     640 </span>            :                 &quot;MAX_EPOCH_RUNTIME&quot;,
+<a name="641"><span class="lineNum">     641 </span>            :                 &quot;SUM_POWER_SLACK&quot;,</a>
+<span class="lineNum">     642 </span><span class="lineCov">         15 :                 &quot;MIN_POWER_HEADROOM&quot;};</span>
+<a name="643"><span class="lineNum">     643 </span>            :     }</a>
+<span class="lineNum">     644 </span>            : 
+<a name="645"><span class="lineNum">     645 </span><span class="lineCov">         17 :     std::vector&lt;double&gt; PowerBalancerAgent::validate_policy(const std::vector&lt;double&gt; &amp;in_policy) const</span></a>
+<span class="lineNum">     646 </span>            :     {
+<span class="lineNum">     647 </span>            :         // If NAN, use default
+<span class="lineNum">     648 </span><span class="lineCov">         17 :         std::vector&lt;double&gt; updated_policy = in_policy;</span>
+<a name="649"><span class="lineNum">     649 </span><span class="lineCov">         17 :         if (std::isnan(in_policy[M_POLICY_POWER_CAP])) {</span></a>
+<span class="lineNum">     650 </span><span class="lineCov">          3 :             updated_policy[M_POLICY_POWER_CAP] = m_power_tdp;</span>
+<span class="lineNum">     651 </span>            :         }
+<span class="lineNum">     652 </span><span class="lineCov">         17 :         if (std::isnan(in_policy[M_POLICY_STEP_COUNT])) {</span>
+<a name="653"><span class="lineNum">     653 </span><span class="lineCov">          3 :             updated_policy[M_POLICY_STEP_COUNT] = 0.0;</span></a>
+<span class="lineNum">     654 </span>            :         }
+<span class="lineNum">     655 </span><span class="lineCov">         17 :         if (std::isnan(in_policy[M_POLICY_MAX_EPOCH_RUNTIME])) {</span>
+<span class="lineNum">     656 </span><span class="lineCov">          3 :             updated_policy[M_POLICY_MAX_EPOCH_RUNTIME] = 0.0;</span>
+<a name="657"><span class="lineNum">     657 </span>            :         }</a>
+<span class="lineNum">     658 </span><span class="lineCov">         17 :         if (std::isnan(in_policy[M_POLICY_POWER_SLACK])) {</span>
+<span class="lineNum">     659 </span><span class="lineCov">          3 :             updated_policy[M_POLICY_POWER_SLACK] = 0.0;</span>
+<span class="lineNum">     660 </span>            :         }
+<a name="661"><span class="lineNum">     661 </span>            :         // Policy of all zero is not valid</a>
+<span class="lineNum">     662 </span><span class="lineCov">         17 :         if (std::all_of(updated_policy.begin(), updated_policy.end(),</span>
+<span class="lineNum">     663 </span><span class="lineCov">         23 :                         [] (double x) { return x == 0.0; })) {</span>
+<span class="lineNum">     664 </span>            :             throw Exception(&quot;PowerBalancerAgent: invalid policy.&quot;,
+<a name="665"><span class="lineNum">     665 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     666 </span>            :         }
+<a name="667"><span class="lineNum">     667 </span><span class="lineCov">         17 :         return updated_policy;</span></a>
+<span class="lineNum">     668 </span>            :     }
+<a name="669"><span class="lineNum">     669 </span><span class="lineCov">        849 : }</span></a>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.4.0-1-g973044a - src/Tracer.hpp</title>
+  <title>LCOV - v0.6.0-142-gb6330da - src/Tracer.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.4.0-1-g973044a</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">2</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-01-25</td>
+            <td class="headerValue">2018-12-21</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -49,16 +49,8 @@
             <td class="headerValueLeg">            Lines:
             <span class="coverLegendCov">hit</span>
             <span class="coverLegendNoCov">not hit</span>
-            | Branches:
-            <span class="coverLegendCov">+</span> taken
-            <span class="coverLegendNoCov">-</span> not taken
-            <span class="coverLegendNoCov">#</span> not executed
 </td>
             <td></td>
-            <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">2</td>
-            <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntryLo">50.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -74,87 +66,141 @@
     </tr>
     <tr>
       <td>
-<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
-<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
-<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2016, Intel Corporation
-<span class="lineNum">       3 </span>                :            :  *
-<span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
-<a name="5"><span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions</a>
-<span class="lineNum">       6 </span>                :            :  * are met:
-<span class="lineNum">       7 </span>                :            :  *
-<span class="lineNum">       8 </span>                :            :  *     * Redistributions of source code must retain the above copyright
-<a name="9"><span class="lineNum">       9 </span>                :            :  *       notice, this list of conditions and the following disclaimer.</a>
-<span class="lineNum">      10 </span>                :            :  *
-<span class="lineNum">      11 </span>                :            :  *     * Redistributions in binary form must reproduce the above copyright
-<span class="lineNum">      12 </span>                :            :  *       notice, this list of conditions and the following disclaimer in
-<a name="13"><span class="lineNum">      13 </span>                :            :  *       the documentation and/or other materials provided with the</a>
-<span class="lineNum">      14 </span>                :            :  *       distribution.
-<span class="lineNum">      15 </span>                :            :  *
-<span class="lineNum">      16 </span>                :            :  *     * Neither the name of Intel Corporation nor the names of its
-<a name="17"><span class="lineNum">      17 </span>                :            :  *       contributors may be used to endorse or promote products derived</a>
-<span class="lineNum">      18 </span>                :            :  *       from this software without specific prior written permission.
-<span class="lineNum">      19 </span>                :            :  *
-<span class="lineNum">      20 </span>                :            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-<a name="21"><span class="lineNum">      21 </span>                :            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
-<span class="lineNum">      22 </span>                :            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-<span class="lineNum">      23 </span>                :            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-<span class="lineNum">      24 </span>                :            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-<a name="25"><span class="lineNum">      25 </span>                :            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
-<span class="lineNum">      26 </span>                :            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-<span class="lineNum">      27 </span>                :            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-<span class="lineNum">      28 </span>                :            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-<a name="29"><span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
-<span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-<span class="lineNum">      31 </span>                :            :  */
-<span class="lineNum">      32 </span>                :            : 
-<a name="33"><span class="lineNum">      33 </span>                :            : #ifndef TRACER_HPP_INCLUDE</a>
-<span class="lineNum">      34 </span>                :            : #define TRACER_HPP_INCLUDE
-<span class="lineNum">      35 </span>                :            : 
-<span class="lineNum">      36 </span>                :            : #include &lt;fstream&gt;
-<a name="37"><span class="lineNum">      37 </span>                :            : #include &lt;string&gt;</a>
-<span class="lineNum">      38 </span>                :            : #include &lt;vector&gt;
-<span class="lineNum">      39 </span>                :            : #include &lt;sstream&gt;
-<span class="lineNum">      40 </span>                :            : 
-<a name="41"><span class="lineNum">      41 </span>                :            : #include &lt;geopm_message.h&gt;</a>
-<span class="lineNum">      42 </span>                :            : #include &lt;GlobalPolicy.hpp&gt;
-<span class="lineNum">      43 </span>                :            : 
-<span class="lineNum">      44 </span>                :            : namespace geopm
-<a name="45"><span class="lineNum">      45 </span>                :            : {</a>
-<span class="lineNum">      46 </span>                :            :     /// @brief Abstract base class for the Tracer object defines the interface.
-<span class="lineNum">      47 </span>                :            :     class ITracer
-<a name="48"><span class="lineNum">      48 </span>                :            :     {</a>
-<a name="49"><span class="lineNum">      49 </span>                :            :         public:</a>
-<span class="lineNum">      50 </span>                :<span class="lineCov">         59 :             ITracer() {}</span>
-<span class="lineNum">      51 </span>[<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 26 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 19 times"> + </span>]:<span class="lineCov">         90 :             virtual ~ITracer() {}</span>
-<span class="lineNum">      52 </span>                :            :             virtual void update(const std::vector &lt;struct geopm_telemetry_message_s&gt; &amp;telemetry) = 0;
-<a name="53"><span class="lineNum">      53 </span>                :            :             virtual void update(const struct geopm_policy_message_s &amp;policy) = 0;</a>
-<span class="lineNum">      54 </span>                :            :     };
-<span class="lineNum">      55 </span>                :            : 
-<span class="lineNum">      56 </span>                :            :     /// @brief Class used to write a trace of the telemetry and policy.
-<a name="57"><span class="lineNum">      57 </span>                :            :     class Tracer : public ITracer</a>
-<span class="lineNum">      58 </span>                :            :     {
-<span class="lineNum">      59 </span>                :            :         public:
-<span class="lineNum">      60 </span>                :            :             /// @brief Tracer constructor.
-<a name="61"><span class="lineNum">      61 </span>                :            :             Tracer(std::string header);</a>
-<span class="lineNum">      62 </span>                :            :             /// @brief Tracer destructor, virtual.
-<span class="lineNum">      63 </span>                :            :             virtual ~Tracer();
-<span class="lineNum">      64 </span>                :            :             void update(const std::vector &lt;struct geopm_telemetry_message_s&gt; &amp;telemetry);
-<a name="65"><span class="lineNum">      65 </span>                :            :             void update(const struct geopm_policy_message_s &amp;policy);</a>
-<span class="lineNum">      66 </span>                :            :         protected:
-<span class="lineNum">      67 </span>                :            :             std::string m_header;
-<span class="lineNum">      68 </span>                :            :             std::string m_hostname;
-<a name="69"><span class="lineNum">      69 </span>                :            :             bool m_is_trace_enabled;</a>
-<span class="lineNum">      70 </span>                :            :             bool m_do_header;
-<span class="lineNum">      71 </span>                :            :             std::ofstream m_stream;
-<span class="lineNum">      72 </span>                :            :             std::ostringstream m_buffer;
-<a name="73"><span class="lineNum">      73 </span>                :            :             off_t m_buffer_limit;</a>
-<span class="lineNum">      74 </span>                :            :             struct geopm_time_s m_time_zero;
-<span class="lineNum">      75 </span>                :            :             struct geopm_policy_message_s m_policy;
-<span class="lineNum">      76 </span>                :            :     };
-<a name="77"><span class="lineNum">      77 </span>                :            : }</a>
-<span class="lineNum">      78 </span>                :            : 
-<span class="lineNum">      79 </span>                :            : #endif
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2016, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #ifndef TRACER_HPP_INCLUDE</a>
+<span class="lineNum">      34 </span>            : #define TRACER_HPP_INCLUDE
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : #include &lt;fstream&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;string&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      39 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">      40 </span>            : #include &lt;set&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;list&gt;</a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : #include &quot;PlatformIO.hpp&quot;
+<span class="lineNum">      44 </span>            : 
+<a name="45"><span class="lineNum">      45 </span>            : struct geopm_region_info_s;</a>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            : namespace geopm
+<span class="lineNum">      48 </span>            : {
+<a name="49"><span class="lineNum">      49 </span>            :     /// @brief Abstract base class for the Tracer object defines the interface.</a>
+<span class="lineNum">      50 </span>            :     class ITracer
+<a name="51"><span class="lineNum">      51 </span>            :     {</a>
+<a name="52"><span class="lineNum">      52 </span>            :         public:</a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         20 :             ITracer() = default;</span></a>
+<span class="lineNum">      54 </span><span class="lineCov">         20 :             virtual ~ITracer() = default;</span>
+<span class="lineNum">      55 </span>            :             /// @brief Set up default columns and add columns to be
+<span class="lineNum">      56 </span>            :             //         provided by the Agent.
+<a name="57"><span class="lineNum">      57 </span>            :             virtual void columns(const std::vector&lt;std::string&gt; &amp;agent_cols) = 0;</a>
+<span class="lineNum">      58 </span>            :             /// @brief Update the trace with telemetry samples and
+<span class="lineNum">      59 </span>            :             ///        region info.  The Tracer samples values for
+<span class="lineNum">      60 </span>            :             ///        default and environment columns and the
+<a name="61"><span class="lineNum">      61 </span>            :             ///        remaining signal values are provided by the</a>
+<span class="lineNum">      62 </span>            :             ///        Agent.
+<span class="lineNum">      63 </span>            :             /// @param [in] agent_signals Values for signals provided
+<span class="lineNum">      64 </span>            :             ///        by the agent.
+<a name="65"><span class="lineNum">      65 </span>            :             /// @param [in] region_entry_exit Entries and exits to</a>
+<span class="lineNum">      66 </span>            :             ///        regions recorded by the application.  There may
+<span class="lineNum">      67 </span>            :             ///        be multiple entires and exits for each
+<span class="lineNum">      68 </span>            :             ///        telemetry sample.
+<a name="69"><span class="lineNum">      69 </span>            :             virtual void update(const std::vector&lt;double&gt; &amp;agent_signals,</a>
+<span class="lineNum">      70 </span>            :                                 std::list&lt;geopm_region_info_s&gt; region_entry_exit) = 0;
+<span class="lineNum">      71 </span>            :             /// @brief Write the remaining trace data to the file and
+<span class="lineNum">      72 </span>            :             ///        stop tracing.
+<a name="73"><span class="lineNum">      73 </span>            :             virtual void flush(void) = 0;</a>
+<span class="lineNum">      74 </span>            :             /// @brief Returns the column header to be displayed in
+<span class="lineNum">      75 </span>            :             ///        the trace.  The string is based on the signal
+<span class="lineNum">      76 </span>            :             ///        name.  If the domain type is board, the name
+<a name="77"><span class="lineNum">      77 </span>            :             ///        only will be used.  Otherwise, the column</a>
+<span class="lineNum">      78 </span>            :             ///        header includes the name, domain type, and
+<span class="lineNum">      79 </span>            :             ///        domain index.
+<span class="lineNum">      80 </span>            :             /// @param [in] col The request structure containing the
+<a name="81"><span class="lineNum">      81 </span>            :             ///        signal name, domain type, and domain index.</a>
+<span class="lineNum">      82 </span>            :             static std::string pretty_name(const IPlatformIO::m_request_s &amp;col);
+<span class="lineNum">      83 </span>            :     };
+<span class="lineNum">      84 </span>            : 
+<a name="85"><span class="lineNum">      85 </span>            :     class IPlatformIO;</a>
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span>            :     /// @brief Class used to write a trace of the telemetry and policy.
+<span class="lineNum">      88 </span>            :     class Tracer : public ITracer
+<a name="89"><span class="lineNum">      89 </span>            :     {</a>
+<span class="lineNum">      90 </span>            :         public:
+<span class="lineNum">      91 </span>            :             /// @brief Tracer constructor.
+<span class="lineNum">      92 </span>            :             Tracer(const std::string &amp;start_time);
+<a name="93"><span class="lineNum">      93 </span>            :             Tracer(const std::string &amp;start_time,</a>
+<span class="lineNum">      94 </span>            :                    const std::string &amp;file_path,
+<span class="lineNum">      95 </span>            :                    const std::string &amp;hostname,
+<span class="lineNum">      96 </span>            :                    const std::string &amp;agent,
+<a name="97"><span class="lineNum">      97 </span>            :                    const std::string &amp;profile_name,</a>
+<span class="lineNum">      98 </span>            :                    bool do_trace,
+<span class="lineNum">      99 </span>            :                    IPlatformIO &amp;platform_io,
+<span class="lineNum">     100 </span>            :                    const std::vector&lt;std::string&gt; &amp;env_column,
+<a name="101"><span class="lineNum">     101 </span>            :                    int precision);</a>
+<span class="lineNum">     102 </span>            :             /// @brief Tracer destructor, virtual.
+<span class="lineNum">     103 </span>            :             virtual ~Tracer();
+<span class="lineNum">     104 </span>            :             void columns(const std::vector&lt;std::string&gt; &amp;agent_cols) override;
+<a name="105"><span class="lineNum">     105 </span>            :             void update(const std::vector&lt;double&gt; &amp;agent_signals,</a>
+<span class="lineNum">     106 </span>            :                         std::list&lt;geopm_region_info_s&gt; region_entry_exit) override;
+<span class="lineNum">     107 </span>            :             void flush(void) override;
+<span class="lineNum">     108 </span>            :         private:
+<a name="109"><span class="lineNum">     109 </span>            :             static std::string hostname(void);</a>
+<span class="lineNum">     110 </span>            :             /// @brief Format and write the values in m_last_telemetry to the trace.
+<span class="lineNum">     111 </span>            :             void write_line(void);
+<span class="lineNum">     112 </span>            :             std::string m_file_path;
+<a name="113"><span class="lineNum">     113 </span>            :             std::string m_header;</a>
+<span class="lineNum">     114 </span>            :             std::string m_hostname;
+<span class="lineNum">     115 </span>            :             bool m_is_trace_enabled;
+<span class="lineNum">     116 </span>            :             bool m_do_header;
+<a name="117"><span class="lineNum">     117 </span>            :             std::ofstream m_stream;</a>
+<span class="lineNum">     118 </span>            :             std::ostringstream m_buffer;
+<span class="lineNum">     119 </span>            :             off_t m_buffer_limit;
+<span class="lineNum">     120 </span>            : 
+<a name="121"><span class="lineNum">     121 </span>            :             IPlatformIO &amp;m_platform_io;</a>
+<span class="lineNum">     122 </span>            :             std::vector&lt;std::string&gt; m_env_column; // extra columns from environment
+<span class="lineNum">     123 </span>            :             int m_precision;
+<span class="lineNum">     124 </span>            :             std::vector&lt;int&gt; m_column_idx; // columns sampled by Tracer
+<a name="125"><span class="lineNum">     125 </span>            :             std::set&lt;int&gt; m_hex_column;</a>
+<span class="lineNum">     126 </span>            :             std::vector&lt;double&gt; m_last_telemetry;
+<span class="lineNum">     127 </span>            :             int m_region_id_idx = -1;
+<span class="lineNum">     128 </span>            :             int m_region_progress_idx = -1;
+<a name="129"><span class="lineNum">     129 </span>            :             int m_region_runtime_idx = -1;</a>
+<span class="lineNum">     130 </span>            :     };
+<span class="lineNum">     131 </span>            : }
+<span class="lineNum">     132 </span>            : 
+<a name="133"><span class="lineNum">     133 </span>            : #endif</a>
 </pre>
       </td>
     </tr>

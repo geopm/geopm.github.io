@@ -1,0 +1,981 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - v0.6.0-142-gb6330da - src/msr_snb.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - msr_snb.cpp<span style="font-size: 80%;"> (source / <a href="msr_snb.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-21</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;MSR.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<span class="lineNum">      35 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      36 </span>            : 
+<a name="37"><span class="lineNum">      37 </span>            : namespace geopm</a>
+<span class="lineNum">      38 </span>            : {
+<span class="lineNum">      39 </span><span class="lineCov">          2 :     const MSR *msr_snb(size_t &amp;num_msr)</span>
+<span class="lineNum">      40 </span>            :     {
+<a name="41"><span class="lineNum">      41 </span>            :         static const MSR instance[] = {</a>
+<span class="lineNum">      42 </span>            :             MSR(&quot;TIME_STAMP_COUNTER&quot;, 0x10,
+<span class="lineNum">      43 </span>            :                 {{&quot;TIMESTAMP_COUNT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">      44 </span>            :                       .begin_bit = 0,
+<a name="45"><span class="lineNum">      45 </span>            :                       .end_bit   = 48,</a>
+<span class="lineNum">      46 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">      47 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<span class="lineNum">      48 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="49"><span class="lineNum">      49 </span>            :                       .scalar    = 1.0}}},</a>
+<span class="lineNum">      50 </span><span class="lineCov">          1 :                 {}),</span>
+<span class="lineNum">      51 </span>            :             MSR(&quot;PERF_STATUS&quot;, 0x198,
+<span class="lineNum">      52 </span>            :                 {{&quot;FREQ&quot;, (struct IMSR::m_encode_s) {
+<a name="53"><span class="lineNum">      53 </span>            :                       .begin_bit = 8,</a>
+<span class="lineNum">      54 </span>            :                       .end_bit   = 16,
+<span class="lineNum">      55 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">      56 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="57"><span class="lineNum">      57 </span>            :                       .units     = IMSR::M_UNITS_HZ,</a>
+<span class="lineNum">      58 </span>            :                       .scalar    = 1e8}}},
+<span class="lineNum">      59 </span><span class="lineCov">          1 :                 {}),</span>
+<span class="lineNum">      60 </span>            :             MSR(&quot;PERF_CTL&quot;, 0x199,
+<a name="61"><span class="lineNum">      61 </span>            :                 {{&quot;FREQ&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">      62 </span>            :                       .begin_bit = 8,
+<span class="lineNum">      63 </span>            :                       .end_bit   = 16,
+<span class="lineNum">      64 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="65"><span class="lineNum">      65 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">      66 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<span class="lineNum">      67 </span>            :                       .scalar    = 1e8}},
+<span class="lineNum">      68 </span>            :                  {&quot;TURBO_DISENGAGE&quot;, (struct IMSR::m_encode_s) {
+<a name="69"><span class="lineNum">      69 </span>            :                       .begin_bit = 32,</a>
+<span class="lineNum">      70 </span>            :                       .end_bit   = 33,
+<span class="lineNum">      71 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">      72 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="73"><span class="lineNum">      73 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">      74 </span>            :                       .scalar    = 1.0}}},
+<span class="lineNum">      75 </span>            :                 {{&quot;FREQ&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">      76 </span>            :                       .begin_bit = 8,
+<a name="77"><span class="lineNum">      77 </span>            :                       .end_bit   = 16,</a>
+<span class="lineNum">      78 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">      79 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">      80 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<a name="81"><span class="lineNum">      81 </span>            :                       .scalar    = 1e8}},</a>
+<span class="lineNum">      82 </span>            :                  {&quot;TURBO_DISENGAGE&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">      83 </span>            :                       .begin_bit = 32,
+<span class="lineNum">      84 </span>            :                       .end_bit   = 33,
+<a name="85"><span class="lineNum">      85 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">      86 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">      87 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">      88 </span><span class="lineCov">          4 :                       .scalar    = 1.0}}}),</span>
+<a name="89"><span class="lineNum">      89 </span>            :             MSR(&quot;IA32_THERM_STATUS&quot;, 0x19C,</a>
+<span class="lineNum">      90 </span>            :                 {{&quot;THERMAL_STATUS_FLAG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">      91 </span>            :                       .begin_bit = 0,
+<span class="lineNum">      92 </span>            :                       .end_bit   = 1,
+<a name="93"><span class="lineNum">      93 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,</a>
+<span class="lineNum">      94 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">      95 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">      96 </span>            :                       .scalar    = 1.0}},
+<a name="97"><span class="lineNum">      97 </span>            :                  {&quot;THERMAL_STATUS_LOG_FLAG&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">      98 </span>            :                       .begin_bit = 1,
+<span class="lineNum">      99 </span>            :                       .end_bit   = 2,
+<span class="lineNum">     100 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="101"><span class="lineNum">     101 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     102 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     103 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     104 </span>            :                  {&quot;PROCHOT_EVENT&quot;, (struct IMSR::m_encode_s) {
+<a name="105"><span class="lineNum">     105 </span>            :                       .begin_bit = 2,</a>
+<span class="lineNum">     106 </span>            :                       .end_bit   = 3,
+<span class="lineNum">     107 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     108 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="109"><span class="lineNum">     109 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     110 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     111 </span>            :                  {&quot;PROCHOT_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     112 </span>            :                       .begin_bit = 3,
+<a name="113"><span class="lineNum">     113 </span>            :                       .end_bit   = 4,</a>
+<span class="lineNum">     114 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     115 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     116 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="117"><span class="lineNum">     117 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     118 </span>            :                  {&quot;CRITICAL_TEMP_STATUS&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     119 </span>            :                       .begin_bit = 4,
+<span class="lineNum">     120 </span>            :                       .end_bit   = 5,
+<a name="121"><span class="lineNum">     121 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,</a>
+<span class="lineNum">     122 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     123 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     124 </span>            :                       .scalar    = 1.0}},
+<a name="125"><span class="lineNum">     125 </span>            :                  {&quot;CRITICAL_TEMP_LOG&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     126 </span>            :                       .begin_bit = 5,
+<span class="lineNum">     127 </span>            :                       .end_bit   = 6,
+<span class="lineNum">     128 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="129"><span class="lineNum">     129 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     130 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     131 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     132 </span>            :                  {&quot;THERMAL_THRESH_1_STATUS&quot;, (struct IMSR::m_encode_s) {
+<a name="133"><span class="lineNum">     133 </span>            :                       .begin_bit = 6,</a>
+<span class="lineNum">     134 </span>            :                       .end_bit   = 7,
+<span class="lineNum">     135 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     136 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="137"><span class="lineNum">     137 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     138 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     139 </span>            :                  {&quot;THERMAL_THRESH_1_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     140 </span>            :                       .begin_bit = 7,
+<a name="141"><span class="lineNum">     141 </span>            :                       .end_bit   = 8,</a>
+<span class="lineNum">     142 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     143 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     144 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="145"><span class="lineNum">     145 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     146 </span>            :                  {&quot;THERMAL_THRESH_2_STATUS&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     147 </span>            :                       .begin_bit = 8,
+<span class="lineNum">     148 </span>            :                       .end_bit   = 9,
+<a name="149"><span class="lineNum">     149 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,</a>
+<span class="lineNum">     150 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     151 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     152 </span>            :                       .scalar    = 1.0}},
+<a name="153"><span class="lineNum">     153 </span>            :                  {&quot;THERMAL_THRESH_2_LOG&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     154 </span>            :                       .begin_bit = 9,
+<span class="lineNum">     155 </span>            :                       .end_bit   = 10,
+<span class="lineNum">     156 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="157"><span class="lineNum">     157 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     158 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     159 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     160 </span>            :                  {&quot;POWER_LIMIT_STATUS&quot;, (struct IMSR::m_encode_s) {
+<a name="161"><span class="lineNum">     161 </span>            :                       .begin_bit = 10,</a>
+<span class="lineNum">     162 </span>            :                       .end_bit   = 11,
+<span class="lineNum">     163 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     164 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="165"><span class="lineNum">     165 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     166 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     167 </span>            :                  {&quot;POWER_NOTIFICATION_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     168 </span>            :                       .begin_bit = 11,
+<a name="169"><span class="lineNum">     169 </span>            :                       .end_bit   = 12,</a>
+<span class="lineNum">     170 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     171 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     172 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="173"><span class="lineNum">     173 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     174 </span>            :                  {&quot;DIGITAL_READOUT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     175 </span>            :                       .begin_bit = 16,
+<span class="lineNum">     176 </span>            :                       .end_bit   = 23,
+<a name="177"><span class="lineNum">     177 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,</a>
+<span class="lineNum">     178 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     179 </span>            :                       .units     = IMSR::M_UNITS_CELSIUS,
+<span class="lineNum">     180 </span>            :                       .scalar    = 1.0}},
+<a name="181"><span class="lineNum">     181 </span>            :                  {&quot;RESOLUTION&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     182 </span>            :                       .begin_bit = 27,
+<span class="lineNum">     183 </span>            :                       .end_bit   = 31,
+<span class="lineNum">     184 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="185"><span class="lineNum">     185 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     186 </span>            :                       .units     = IMSR::M_UNITS_CELSIUS,
+<span class="lineNum">     187 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     188 </span>            :                  {&quot;READING_VALID&quot;, (struct IMSR::m_encode_s) {
+<a name="189"><span class="lineNum">     189 </span>            :                       .begin_bit = 31,</a>
+<span class="lineNum">     190 </span>            :                       .end_bit   = 32,
+<span class="lineNum">     191 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     192 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="193"><span class="lineNum">     193 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     194 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     195 </span>            :                 },
+<span class="lineNum">     196 </span>            :                 // Log bits are sticky; can be reset by software
+<a name="197"><span class="lineNum">     197 </span>            :                 {{&quot;THERMAL_STATUS_LOG&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     198 </span>            :                       .begin_bit = 1,
+<span class="lineNum">     199 </span>            :                       .end_bit   = 2,
+<span class="lineNum">     200 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="201"><span class="lineNum">     201 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     202 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     203 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     204 </span>            :                  {&quot;PROCHOT_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="205"><span class="lineNum">     205 </span>            :                       .begin_bit = 3,</a>
+<span class="lineNum">     206 </span>            :                       .end_bit   = 4,
+<span class="lineNum">     207 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     208 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="209"><span class="lineNum">     209 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     210 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     211 </span>            :                  {&quot;CRITICAL_TEMP_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     212 </span>            :                       .begin_bit = 5,
+<a name="213"><span class="lineNum">     213 </span>            :                       .end_bit   = 6,</a>
+<span class="lineNum">     214 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     215 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     216 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="217"><span class="lineNum">     217 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     218 </span>            :                  {&quot;THERMAL_THRESH_1_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     219 </span>            :                       .begin_bit = 7,
+<span class="lineNum">     220 </span>            :                       .end_bit   = 8,
+<a name="221"><span class="lineNum">     221 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,</a>
+<span class="lineNum">     222 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     223 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     224 </span>            :                       .scalar    = 1.0}},
+<a name="225"><span class="lineNum">     225 </span>            :                  {&quot;THERMAL_THRESH_2_LOG&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     226 </span>            :                       .begin_bit = 9,
+<span class="lineNum">     227 </span>            :                       .end_bit   = 10,
+<span class="lineNum">     228 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="229"><span class="lineNum">     229 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     230 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     231 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     232 </span>            :                  {&quot;POWER_NOTIFICATION_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="233"><span class="lineNum">     233 </span>            :                       .begin_bit = 11,</a>
+<span class="lineNum">     234 </span>            :                       .end_bit   = 12,
+<span class="lineNum">     235 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<span class="lineNum">     236 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="237"><span class="lineNum">     237 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     238 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     239 </span><span class="lineCov">         21 :                 }),</span>
+<span class="lineNum">     240 </span>            :             MSR(&quot;TEMPERATURE_TARGET&quot;, 0x1A2,
+<a name="241"><span class="lineNum">     241 </span>            :                 {{&quot;PROCHOT_MIN&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     242 </span>            :                       .begin_bit = 16,
+<span class="lineNum">     243 </span>            :                       .end_bit   = 24,
+<span class="lineNum">     244 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CORE,
+<a name="245"><span class="lineNum">     245 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     246 </span>            :                       .units     = IMSR::M_UNITS_CELSIUS,
+<span class="lineNum">     247 </span>            :                       .scalar    = 1.0}}
+<span class="lineNum">     248 </span>            :                 },
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">          1 :                 {}),</span></a>
+<span class="lineNum">     250 </span>            :             MSR(&quot;IA32_PACKAGE_THERM_STATUS&quot;, 0x1B1,
+<span class="lineNum">     251 </span>            :                 {{&quot;THERMAL_STATUS_FLAG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     252 </span>            :                       .begin_bit = 0,
+<a name="253"><span class="lineNum">     253 </span>            :                       .end_bit   = 1,</a>
+<span class="lineNum">     254 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     255 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     256 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="257"><span class="lineNum">     257 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     258 </span>            :                  {&quot;THERMAL_STATUS_LOG_FLAG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     259 </span>            :                       .begin_bit = 1,
+<span class="lineNum">     260 </span>            :                       .end_bit   = 2,
+<a name="261"><span class="lineNum">     261 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     262 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     263 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     264 </span>            :                       .scalar    = 1.0}},
+<a name="265"><span class="lineNum">     265 </span>            :                  {&quot;PROCHOT_EVENT&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     266 </span>            :                       .begin_bit = 2,
+<span class="lineNum">     267 </span>            :                       .end_bit   = 3,
+<span class="lineNum">     268 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="269"><span class="lineNum">     269 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     270 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     271 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     272 </span>            :                  {&quot;PROCHOT_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="273"><span class="lineNum">     273 </span>            :                       .begin_bit = 3,</a>
+<span class="lineNum">     274 </span>            :                       .end_bit   = 4,
+<span class="lineNum">     275 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     276 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="277"><span class="lineNum">     277 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     278 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     279 </span>            :                  {&quot;CRITICAL_TEMP_STATUS&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     280 </span>            :                       .begin_bit = 4,
+<a name="281"><span class="lineNum">     281 </span>            :                       .end_bit   = 5,</a>
+<span class="lineNum">     282 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     283 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     284 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="285"><span class="lineNum">     285 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     286 </span>            :                  {&quot;CRITICAL_TEMP_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     287 </span>            :                       .begin_bit = 5,
+<span class="lineNum">     288 </span>            :                       .end_bit   = 6,
+<a name="289"><span class="lineNum">     289 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     290 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     291 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     292 </span>            :                       .scalar    = 1.0}},
+<a name="293"><span class="lineNum">     293 </span>            :                  {&quot;THERMAL_THRESH_1_STATUS&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     294 </span>            :                       .begin_bit = 6,
+<span class="lineNum">     295 </span>            :                       .end_bit   = 7,
+<span class="lineNum">     296 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="297"><span class="lineNum">     297 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     298 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     299 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     300 </span>            :                  {&quot;THERMAL_THRESH_1_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="301"><span class="lineNum">     301 </span>            :                       .begin_bit = 7,</a>
+<span class="lineNum">     302 </span>            :                       .end_bit   = 8,
+<span class="lineNum">     303 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     304 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="305"><span class="lineNum">     305 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     306 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     307 </span>            :                  {&quot;THERMAL_THRESH_2_STATUS&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     308 </span>            :                       .begin_bit = 8,
+<a name="309"><span class="lineNum">     309 </span>            :                       .end_bit   = 9,</a>
+<span class="lineNum">     310 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     311 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     312 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="313"><span class="lineNum">     313 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     314 </span>            :                  {&quot;THERMAL_THRESH_2_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     315 </span>            :                       .begin_bit = 9,
+<span class="lineNum">     316 </span>            :                       .end_bit   = 10,
+<a name="317"><span class="lineNum">     317 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     318 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     319 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     320 </span>            :                       .scalar    = 1.0}},
+<a name="321"><span class="lineNum">     321 </span>            :                  {&quot;POWER_LIMIT_STATUS&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     322 </span>            :                       .begin_bit = 10,
+<span class="lineNum">     323 </span>            :                       .end_bit   = 11,
+<span class="lineNum">     324 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="325"><span class="lineNum">     325 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     326 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     327 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     328 </span>            :                  {&quot;POWER_NOTIFICATION_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="329"><span class="lineNum">     329 </span>            :                       .begin_bit = 11,</a>
+<span class="lineNum">     330 </span>            :                       .end_bit   = 12,
+<span class="lineNum">     331 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     332 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="333"><span class="lineNum">     333 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     334 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     335 </span>            :                  {&quot;DIGITAL_READOUT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     336 </span>            :                       .begin_bit = 16,
+<a name="337"><span class="lineNum">     337 </span>            :                       .end_bit   = 23,</a>
+<span class="lineNum">     338 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     339 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     340 </span>            :                       .units     = IMSR::M_UNITS_CELSIUS,
+<a name="341"><span class="lineNum">     341 </span>            :                       .scalar    = 1.0}}</a>
+<span class="lineNum">     342 </span>            :                 },
+<span class="lineNum">     343 </span>            :                 // Log bits are sticky; can be reset by software
+<span class="lineNum">     344 </span>            :                 {{&quot;THERMAL_STATUS_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="345"><span class="lineNum">     345 </span>            :                       .begin_bit = 1,</a>
+<span class="lineNum">     346 </span>            :                       .end_bit   = 2,
+<span class="lineNum">     347 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     348 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="349"><span class="lineNum">     349 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     350 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     351 </span>            :                  {&quot;PROCHOT_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     352 </span>            :                       .begin_bit = 3,
+<a name="353"><span class="lineNum">     353 </span>            :                       .end_bit   = 4,</a>
+<span class="lineNum">     354 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     355 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     356 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="357"><span class="lineNum">     357 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     358 </span>            :                  {&quot;CRITICAL_TEMP_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     359 </span>            :                       .begin_bit = 5,
+<span class="lineNum">     360 </span>            :                       .end_bit   = 6,
+<a name="361"><span class="lineNum">     361 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     362 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     363 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     364 </span>            :                       .scalar    = 1.0}},
+<a name="365"><span class="lineNum">     365 </span>            :                  {&quot;THERMAL_THRESH_1_LOG&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     366 </span>            :                       .begin_bit = 7,
+<span class="lineNum">     367 </span>            :                       .end_bit   = 8,
+<span class="lineNum">     368 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="369"><span class="lineNum">     369 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     370 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     371 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     372 </span>            :                  {&quot;THERMAL_THRESH_2_LOG&quot;, (struct IMSR::m_encode_s) {
+<a name="373"><span class="lineNum">     373 </span>            :                       .begin_bit = 9,</a>
+<span class="lineNum">     374 </span>            :                       .end_bit   = 10,
+<span class="lineNum">     375 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     376 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="377"><span class="lineNum">     377 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     378 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     379 </span>            :                  {&quot;POWER_NOTIFICATION_LOG&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     380 </span>            :                       .begin_bit = 11,
+<a name="381"><span class="lineNum">     381 </span>            :                       .end_bit   = 12,</a>
+<span class="lineNum">     382 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     383 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     384 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="385"><span class="lineNum">     385 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     386 </span><span class="lineCov">         19 :                 }),</span>
+<span class="lineNum">     387 </span>            :             MSR(&quot;PKG_RAPL_UNIT&quot;, 0x606,
+<span class="lineNum">     388 </span>            :                 {{&quot;POWER&quot;, (struct IMSR::m_encode_s) {
+<a name="389"><span class="lineNum">     389 </span>            :                       .begin_bit = 0,</a>
+<span class="lineNum">     390 </span>            :                       .end_bit   = 4,
+<span class="lineNum">     391 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     392 </span>            :                       .function  = IMSR::M_FUNCTION_LOG_HALF,
+<a name="393"><span class="lineNum">     393 </span>            :                       .units     = IMSR::M_UNITS_WATTS,</a>
+<span class="lineNum">     394 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     395 </span>            :                  {&quot;ENERGY&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     396 </span>            :                       .begin_bit = 8,
+<a name="397"><span class="lineNum">     397 </span>            :                       .end_bit   = 13,</a>
+<span class="lineNum">     398 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     399 </span>            :                       .function  = IMSR::M_FUNCTION_LOG_HALF,
+<span class="lineNum">     400 </span>            :                       .units     = IMSR::M_UNITS_JOULES,
+<a name="401"><span class="lineNum">     401 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     402 </span>            :                  {&quot;TIME&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     403 </span>            :                       .begin_bit = 16,
+<span class="lineNum">     404 </span>            :                       .end_bit   = 20,
+<a name="405"><span class="lineNum">     405 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     406 </span>            :                       .function  = IMSR::M_FUNCTION_LOG_HALF,
+<span class="lineNum">     407 </span>            :                       .units     = IMSR::M_UNITS_SECONDS,
+<span class="lineNum">     408 </span>            :                       .scalar    = 1.0}}},
+<a name="409"><span class="lineNum">     409 </span><span class="lineCov">          3 :                 {}),</span></a>
+<span class="lineNum">     410 </span>            :             MSR(&quot;PKG_POWER_LIMIT&quot;, 0x610,
+<span class="lineNum">     411 </span>            :                 {{&quot;PL1_POWER_LIMIT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     412 </span>            :                       .begin_bit = 0,
+<a name="413"><span class="lineNum">     413 </span>            :                       .end_bit   = 15,</a>
+<span class="lineNum">     414 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     415 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     416 </span>            :                       .units     = IMSR::M_UNITS_WATTS,
+<a name="417"><span class="lineNum">     417 </span>            :                       .scalar    = 1.25e-1}},</a>
+<span class="lineNum">     418 </span>            :                  {&quot;PL1_LIMIT_ENABLE&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     419 </span>            :                       .begin_bit = 15,
+<span class="lineNum">     420 </span>            :                       .end_bit   = 16,
+<a name="421"><span class="lineNum">     421 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     422 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     423 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     424 </span>            :                       .scalar    = 1.0}},
+<a name="425"><span class="lineNum">     425 </span>            :                  {&quot;PL1_CLAMP_ENABLE&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     426 </span>            :                       .begin_bit = 16,
+<span class="lineNum">     427 </span>            :                       .end_bit   = 17,
+<span class="lineNum">     428 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="429"><span class="lineNum">     429 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     430 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     431 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     432 </span>            :                  {&quot;PL1_TIME_WINDOW&quot;, (struct IMSR::m_encode_s) {
+<a name="433"><span class="lineNum">     433 </span>            :                       .begin_bit = 17,</a>
+<span class="lineNum">     434 </span>            :                       .end_bit   = 24,
+<span class="lineNum">     435 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     436 </span>            :                       .function  = IMSR::M_FUNCTION_7_BIT_FLOAT,
+<a name="437"><span class="lineNum">     437 </span>            :                       .units     = IMSR::M_UNITS_SECONDS,</a>
+<span class="lineNum">     438 </span>            :                       .scalar    = 9.765625e-04}},
+<span class="lineNum">     439 </span>            :                  {&quot;PL2_POWER_LIMIT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     440 </span>            :                       .begin_bit = 32,
+<a name="441"><span class="lineNum">     441 </span>            :                       .end_bit   = 47,</a>
+<span class="lineNum">     442 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     443 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     444 </span>            :                       .units     = IMSR::M_UNITS_WATTS,
+<a name="445"><span class="lineNum">     445 </span>            :                       .scalar    = 1.25e-1}},</a>
+<span class="lineNum">     446 </span>            :                  {&quot;PL2_LIMIT_ENABLE&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     447 </span>            :                       .begin_bit = 47,
+<span class="lineNum">     448 </span>            :                       .end_bit   = 48,
+<a name="449"><span class="lineNum">     449 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     450 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     451 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     452 </span>            :                       .scalar    = 1.0}},
+<a name="453"><span class="lineNum">     453 </span>            :                  {&quot;PL2_CLAMP_ENABLE&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     454 </span>            :                       .begin_bit = 48,
+<span class="lineNum">     455 </span>            :                       .end_bit   = 49,
+<span class="lineNum">     456 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="457"><span class="lineNum">     457 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     458 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     459 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     460 </span>            :                  {&quot;PL2_TIME_WINDOW&quot;, (struct IMSR::m_encode_s) {
+<a name="461"><span class="lineNum">     461 </span>            :                       .begin_bit = 49,</a>
+<span class="lineNum">     462 </span>            :                       .end_bit   = 56,
+<span class="lineNum">     463 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     464 </span>            :                       .function  = IMSR::M_FUNCTION_7_BIT_FLOAT,
+<a name="465"><span class="lineNum">     465 </span>            :                       .units     = IMSR::M_UNITS_SECONDS,</a>
+<span class="lineNum">     466 </span>            :                       .scalar    = 9.765625e-04}},
+<span class="lineNum">     467 </span>            :                  {&quot;LOCK&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     468 </span>            :                       .begin_bit = 63,
+<a name="469"><span class="lineNum">     469 </span>            :                       .end_bit   = 64,</a>
+<span class="lineNum">     470 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     471 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     472 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="473"><span class="lineNum">     473 </span>            :                       .scalar    = 1.0}}},</a>
+<span class="lineNum">     474 </span>            :                 {{&quot;PL1_POWER_LIMIT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     475 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     476 </span>            :                       .end_bit   = 15,
+<a name="477"><span class="lineNum">     477 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     478 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     479 </span>            :                       .units     = IMSR::M_UNITS_WATTS,
+<span class="lineNum">     480 </span>            :                       .scalar    = 1.25e-1}},
+<a name="481"><span class="lineNum">     481 </span>            :                  {&quot;PL1_LIMIT_ENABLE&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     482 </span>            :                       .begin_bit = 15,
+<span class="lineNum">     483 </span>            :                       .end_bit   = 16,
+<span class="lineNum">     484 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="485"><span class="lineNum">     485 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     486 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     487 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     488 </span>            :                  {&quot;PL1_CLAMP_ENABLE&quot;, (struct IMSR::m_encode_s) {
+<a name="489"><span class="lineNum">     489 </span>            :                       .begin_bit = 16,</a>
+<span class="lineNum">     490 </span>            :                       .end_bit   = 17,
+<span class="lineNum">     491 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     492 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="493"><span class="lineNum">     493 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     494 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     495 </span>            :                  {&quot;PL1_TIME_WINDOW&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     496 </span>            :                       .begin_bit = 17,
+<a name="497"><span class="lineNum">     497 </span>            :                       .end_bit   = 24,</a>
+<span class="lineNum">     498 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     499 </span>            :                       .function  = IMSR::M_FUNCTION_7_BIT_FLOAT,
+<span class="lineNum">     500 </span>            :                       .units     = IMSR::M_UNITS_SECONDS,
+<a name="501"><span class="lineNum">     501 </span>            :                       .scalar    = 9.765625e-04}},</a>
+<span class="lineNum">     502 </span>            :                  {&quot;PL2_POWER_LIMIT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     503 </span>            :                       .begin_bit = 32,
+<span class="lineNum">     504 </span>            :                       .end_bit   = 47,
+<a name="505"><span class="lineNum">     505 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     506 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     507 </span>            :                       .units     = IMSR::M_UNITS_WATTS,
+<span class="lineNum">     508 </span>            :                       .scalar    = 1.25e-1}},
+<a name="509"><span class="lineNum">     509 </span>            :                  {&quot;PL2_LIMIT_ENABLE&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     510 </span>            :                       .begin_bit = 47,
+<span class="lineNum">     511 </span>            :                       .end_bit   = 48,
+<span class="lineNum">     512 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="513"><span class="lineNum">     513 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     514 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     515 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     516 </span>            :                  {&quot;PL2_CLAMP_ENABLE&quot;, (struct IMSR::m_encode_s) {
+<a name="517"><span class="lineNum">     517 </span>            :                       .begin_bit = 48,</a>
+<span class="lineNum">     518 </span>            :                       .end_bit   = 49,
+<span class="lineNum">     519 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     520 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="521"><span class="lineNum">     521 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     522 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     523 </span>            :                  {&quot;PL2_TIME_WINDOW&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     524 </span>            :                       .begin_bit = 49,
+<a name="525"><span class="lineNum">     525 </span>            :                       .end_bit   = 56,</a>
+<span class="lineNum">     526 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     527 </span>            :                       .function  = IMSR::M_FUNCTION_7_BIT_FLOAT,
+<span class="lineNum">     528 </span>            :                       .units     = IMSR::M_UNITS_SECONDS,
+<a name="529"><span class="lineNum">     529 </span><span class="lineCov">         17 :                       .scalar    = 9.765625e-04}}}),</span></a>
+<span class="lineNum">     530 </span>            :             MSR(&quot;PKG_ENERGY_STATUS&quot;, 0x611,
+<span class="lineNum">     531 </span>            :                 {{&quot;ENERGY&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     532 </span>            :                       .begin_bit = 0,
+<a name="533"><span class="lineNum">     533 </span>            :                       .end_bit   = 32,</a>
+<span class="lineNum">     534 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     535 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<span class="lineNum">     536 </span>            :                       .units     = IMSR::M_UNITS_JOULES,
+<a name="537"><span class="lineNum">     537 </span>            :                       .scalar    = 1.5258789063e-5}}},</a>
+<span class="lineNum">     538 </span><span class="lineCov">          1 :                 {}),</span>
+<span class="lineNum">     539 </span>            :             MSR(&quot;PKG_POWER_INFO&quot;, 0x614,
+<span class="lineNum">     540 </span>            :                 {{&quot;THERMAL_SPEC_POWER&quot;, (struct IMSR::m_encode_s) {
+<a name="541"><span class="lineNum">     541 </span>            :                       .begin_bit = 0,</a>
+<span class="lineNum">     542 </span>            :                       .end_bit   = 15,
+<span class="lineNum">     543 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     544 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="545"><span class="lineNum">     545 </span>            :                       .units     = IMSR::M_UNITS_WATTS,</a>
+<span class="lineNum">     546 </span>            :                       .scalar    = 1.25e-1}},
+<span class="lineNum">     547 </span>            :                  {&quot;MIN_POWER&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     548 </span>            :                       .begin_bit = 16,
+<a name="549"><span class="lineNum">     549 </span>            :                       .end_bit   = 31,</a>
+<span class="lineNum">     550 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     551 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     552 </span>            :                       .units     = IMSR::M_UNITS_WATTS,
+<a name="553"><span class="lineNum">     553 </span>            :                       .scalar    = 1.25e-1}},</a>
+<span class="lineNum">     554 </span>            :                  {&quot;MAX_POWER&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     555 </span>            :                       .begin_bit = 32,
+<span class="lineNum">     556 </span>            :                       .end_bit   = 47,
+<a name="557"><span class="lineNum">     557 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     558 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     559 </span>            :                       .units     = IMSR::M_UNITS_WATTS,
+<span class="lineNum">     560 </span>            :                       .scalar    = 1.25e-1}},
+<a name="561"><span class="lineNum">     561 </span>            :                  {&quot;MAX_TIME_WINDOW&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     562 </span>            :                       .begin_bit = 48,
+<span class="lineNum">     563 </span>            :                       .end_bit   = 55,
+<span class="lineNum">     564 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="565"><span class="lineNum">     565 </span>            :                       .function  = IMSR::M_FUNCTION_7_BIT_FLOAT,</a>
+<span class="lineNum">     566 </span>            :                       .units     = IMSR::M_UNITS_SECONDS,
+<span class="lineNum">     567 </span>            :                       .scalar    = 9.765625e-04}}},
+<span class="lineNum">     568 </span><span class="lineCov">          4 :                 {}),</span>
+<a name="569"><span class="lineNum">     569 </span>            :             MSR(&quot;DRAM_ENERGY_STATUS&quot;, 0x619,</a>
+<span class="lineNum">     570 </span>            :                 {{&quot;ENERGY&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     571 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     572 </span>            :                       .end_bit   = 32,
+<a name="573"><span class="lineNum">     573 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_BOARD_MEMORY,</a>
+<span class="lineNum">     574 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<span class="lineNum">     575 </span>            :                       .units     = IMSR::M_UNITS_JOULES,
+<span class="lineNum">     576 </span>            :                       .scalar    = 1.5258789063e-5}}},
+<a name="577"><span class="lineNum">     577 </span><span class="lineCov">          1 :                 {}),</span></a>
+<span class="lineNum">     578 </span>            :             MSR(&quot;PLATFORM_INFO&quot;, 0xCE,
+<span class="lineNum">     579 </span>            :                 {{&quot;MAX_NON_TURBO_RATIO&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     580 </span>            :                       .begin_bit = 8,
+<a name="581"><span class="lineNum">     581 </span>            :                       .end_bit   = 16,</a>
+<span class="lineNum">     582 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     583 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     584 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<a name="585"><span class="lineNum">     585 </span>            :                       .scalar    = 1e8}},</a>
+<span class="lineNum">     586 </span>            :                  {&quot;PROGRAMMABLE_RATIO_LIMITS_TURBO_MODE&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     587 </span>            :                       .begin_bit = 28,
+<span class="lineNum">     588 </span>            :                       .end_bit   = 29,
+<a name="589"><span class="lineNum">     589 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     590 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     591 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     592 </span>            :                       .scalar    = 1}},
+<a name="593"><span class="lineNum">     593 </span>            :                  {&quot;PROGRAMMABLE_TDP_LIMITS_TURBO_MODE&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     594 </span>            :                       .begin_bit = 29,
+<span class="lineNum">     595 </span>            :                       .end_bit   = 30,
+<span class="lineNum">     596 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="597"><span class="lineNum">     597 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     598 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     599 </span>            :                       .scalar    = 1}},
+<span class="lineNum">     600 </span>            :                  {&quot;PROGRAMMABLE_TCC_ACTIVATION_OFFSET&quot;, (struct IMSR::m_encode_s) {
+<a name="601"><span class="lineNum">     601 </span>            :                       .begin_bit = 30,</a>
+<span class="lineNum">     602 </span>            :                       .end_bit   = 31,
+<span class="lineNum">     603 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     604 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="605"><span class="lineNum">     605 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     606 </span>            :                       .scalar    = 1}},
+<span class="lineNum">     607 </span>            :                  {&quot;MAX_EFFICIENCY_RATIO&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     608 </span>            :                       .begin_bit = 40,
+<a name="609"><span class="lineNum">     609 </span>            :                       .end_bit   = 48,</a>
+<span class="lineNum">     610 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     611 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     612 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<a name="613"><span class="lineNum">     613 </span>            :                       .scalar    = 1e8}}},</a>
+<span class="lineNum">     614 </span><span class="lineCov">          5 :                 {}),</span>
+<span class="lineNum">     615 </span>            :             MSR(&quot;MISC_ENABLE&quot;, 0x1A0,
+<span class="lineNum">     616 </span>            :                 {{&quot;ENHANCED_SPEEDSTEP_TECH_ENABLE&quot;, (struct IMSR::m_encode_s) {
+<a name="617"><span class="lineNum">     617 </span>            :                       .begin_bit = 16,</a>
+<span class="lineNum">     618 </span>            :                       .end_bit   = 17,
+<span class="lineNum">     619 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     620 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="621"><span class="lineNum">     621 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     622 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     623 </span>            :                 {&quot;TURBO_MODE_DISABLE&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     624 </span>            :                       .begin_bit = 38,
+<a name="625"><span class="lineNum">     625 </span>            :                       .end_bit   = 39,</a>
+<span class="lineNum">     626 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     627 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     628 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="629"><span class="lineNum">     629 </span>            :                       .scalar    = 1.0}}},</a>
+<span class="lineNum">     630 </span><span class="lineCov">          2 :                 {}),</span>
+<span class="lineNum">     631 </span>            :             // The number of TURBO_RATIO_LIMIT registers will depend on the
+<span class="lineNum">     632 </span>            :             // number of physical cores on the platform. Will need to check the
+<a name="633"><span class="lineNum">     633 </span>            :             // family and model, not just the microarchitecture.</a>
+<span class="lineNum">     634 </span>            :             MSR(&quot;TURBO_RATIO_LIMIT&quot;, 0x1AD,
+<span class="lineNum">     635 </span>            :                 {},
+<span class="lineNum">     636 </span>            :                 {{&quot;MAX_RATIO_LIMIT_1CORE&quot;, (struct IMSR::m_encode_s) {
+<a name="637"><span class="lineNum">     637 </span>            :                       .begin_bit = 0,</a>
+<span class="lineNum">     638 </span>            :                       .end_bit   = 8,
+<span class="lineNum">     639 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     640 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="641"><span class="lineNum">     641 </span>            :                       .units     = IMSR::M_UNITS_HZ,</a>
+<span class="lineNum">     642 </span>            :                       .scalar    = 1e8}},
+<span class="lineNum">     643 </span>            :                 {&quot;MAX_RATIO_LIMIT_2CORES&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     644 </span>            :                       .begin_bit = 8,
+<a name="645"><span class="lineNum">     645 </span>            :                       .end_bit   = 16,</a>
+<span class="lineNum">     646 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     647 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     648 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<a name="649"><span class="lineNum">     649 </span>            :                       .scalar    = 1e8}},</a>
+<span class="lineNum">     650 </span>            :                 {&quot;MAX_RATIO_LIMIT_3CORES&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     651 </span>            :                       .begin_bit = 16,
+<span class="lineNum">     652 </span>            :                       .end_bit   = 24,
+<a name="653"><span class="lineNum">     653 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     654 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     655 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<span class="lineNum">     656 </span>            :                       .scalar    = 1e8}},
+<a name="657"><span class="lineNum">     657 </span>            :                 {&quot;MAX_RATIO_LIMIT_4CORES&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     658 </span>            :                       .begin_bit = 24,
+<span class="lineNum">     659 </span>            :                       .end_bit   = 32,
+<span class="lineNum">     660 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="661"><span class="lineNum">     661 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     662 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<span class="lineNum">     663 </span>            :                       .scalar    = 1e8}},
+<span class="lineNum">     664 </span>            :                 {&quot;MAX_RATIO_LIMIT_5CORES&quot;, (struct IMSR::m_encode_s) {
+<a name="665"><span class="lineNum">     665 </span>            :                       .begin_bit = 32,</a>
+<span class="lineNum">     666 </span>            :                       .end_bit   = 40,
+<span class="lineNum">     667 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     668 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="669"><span class="lineNum">     669 </span>            :                       .units     = IMSR::M_UNITS_HZ,</a>
+<span class="lineNum">     670 </span>            :                       .scalar    = 1e8}},
+<span class="lineNum">     671 </span>            :                 {&quot;MAX_RATIO_LIMIT_6CORES&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     672 </span>            :                       .begin_bit = 40,
+<a name="673"><span class="lineNum">     673 </span>            :                       .end_bit   = 48,</a>
+<span class="lineNum">     674 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     675 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     676 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<a name="677"><span class="lineNum">     677 </span>            :                       .scalar    = 1e8}},</a>
+<span class="lineNum">     678 </span>            :                 {&quot;MAX_RATIO_LIMIT_7CORES&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     679 </span>            :                       .begin_bit = 48,
+<span class="lineNum">     680 </span>            :                       .end_bit   = 56,
+<a name="681"><span class="lineNum">     681 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,</a>
+<span class="lineNum">     682 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     683 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<span class="lineNum">     684 </span>            :                       .scalar    = 1e8}},
+<a name="685"><span class="lineNum">     685 </span>            :                 {&quot;MAX_RATIO_LIMIT_8CORES&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     686 </span>            :                       .begin_bit = 56,
+<span class="lineNum">     687 </span>            :                       .end_bit   = 64,
+<span class="lineNum">     688 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="689"><span class="lineNum">     689 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     690 </span>            :                       .units     = IMSR::M_UNITS_HZ,
+<span class="lineNum">     691 </span><span class="lineCov">          8 :                       .scalar    = 1e8}}}),</span>
+<span class="lineNum">     692 </span>            :             MSR(&quot;PACKAGE_THERM_STATUS&quot;, 0x1B1,
+<a name="693"><span class="lineNum">     693 </span>            :                 {{&quot;DIGITAL_READOUT&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     694 </span>            :                       .begin_bit = 16,
+<span class="lineNum">     695 </span>            :                       .end_bit   = 23,
+<span class="lineNum">     696 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<a name="697"><span class="lineNum">     697 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     698 </span>            :                       .units     = IMSR::M_UNITS_CELSIUS,
+<span class="lineNum">     699 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     700 </span>            :                 {&quot;VALID&quot;, (struct IMSR::m_encode_s) {
+<a name="701"><span class="lineNum">     701 </span>            :                       .begin_bit = 31,</a>
+<span class="lineNum">     702 </span>            :                       .end_bit   = 32,
+<span class="lineNum">     703 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+<span class="lineNum">     704 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="705"><span class="lineNum">     705 </span>            :                       .units     = IMSR::M_UNITS_CELSIUS,</a>
+<span class="lineNum">     706 </span>            :                       .scalar    = 1.0}}},
+<span class="lineNum">     707 </span><span class="lineCov">          2 :                 {}),</span>
+<span class="lineNum">     708 </span>            :             MSR(&quot;MPERF&quot;, 0xE7,
+<a name="709"><span class="lineNum">     709 </span>            :                 {{&quot;MCNT&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     710 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     711 </span>            :                       .end_bit   = 48,
+<span class="lineNum">     712 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<a name="713"><span class="lineNum">     713 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,</a>
+<span class="lineNum">     714 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     715 </span>            :                       .scalar    = 1.0}}},
+<span class="lineNum">     716 </span><span class="lineCov">          1 :                 {}),</span>
+<a name="717"><span class="lineNum">     717 </span>            :             MSR(&quot;APERF&quot;, 0xE8,</a>
+<span class="lineNum">     718 </span>            :                 {{&quot;ACNT&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     719 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     720 </span>            :                       .end_bit   = 48,
+<a name="721"><span class="lineNum">     721 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     722 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<span class="lineNum">     723 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     724 </span>            :                       .scalar    = 1.0}}},
+<a name="725"><span class="lineNum">     725 </span><span class="lineCov">          1 :                 {}),</span></a>
+<span class="lineNum">     726 </span>            :             MSR(&quot;PERF_FIXED_CTR_CTRL&quot;, 0x38D,
+<span class="lineNum">     727 </span>            :                 {},
+<span class="lineNum">     728 </span>            :                 {{&quot;EN0_OS&quot;, (struct IMSR::m_encode_s) {
+<a name="729"><span class="lineNum">     729 </span>            :                       .begin_bit = 0,</a>
+<span class="lineNum">     730 </span>            :                       .end_bit   = 1,
+<span class="lineNum">     731 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     732 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="733"><span class="lineNum">     733 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     734 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     735 </span>            :                  {&quot;EN0_USR&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     736 </span>            :                       .begin_bit = 1,
+<a name="737"><span class="lineNum">     737 </span>            :                       .end_bit   = 2,</a>
+<span class="lineNum">     738 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     739 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     740 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="741"><span class="lineNum">     741 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     742 </span>            :                  {&quot;EN0_PMI&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     743 </span>            :                       .begin_bit = 3,
+<span class="lineNum">     744 </span>            :                       .end_bit   = 4,
+<a name="745"><span class="lineNum">     745 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     746 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     747 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     748 </span>            :                       .scalar    = 1.0}},
+<a name="749"><span class="lineNum">     749 </span>            :                  {&quot;EN1_OS&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     750 </span>            :                       .begin_bit = 4,
+<span class="lineNum">     751 </span>            :                       .end_bit   = 5,
+<span class="lineNum">     752 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<a name="753"><span class="lineNum">     753 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     754 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     755 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     756 </span>            :                  {&quot;EN1_USR&quot;, (struct IMSR::m_encode_s) {
+<a name="757"><span class="lineNum">     757 </span>            :                       .begin_bit = 5,</a>
+<span class="lineNum">     758 </span>            :                       .end_bit   = 6,
+<span class="lineNum">     759 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     760 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="761"><span class="lineNum">     761 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     762 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     763 </span>            :                  {&quot;EN1_PMI&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     764 </span>            :                       .begin_bit = 7,
+<a name="765"><span class="lineNum">     765 </span>            :                       .end_bit   = 8,</a>
+<span class="lineNum">     766 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     767 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     768 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="769"><span class="lineNum">     769 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     770 </span>            :                  {&quot;EN2_OS&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     771 </span>            :                       .begin_bit = 8,
+<span class="lineNum">     772 </span>            :                       .end_bit   = 9,
+<a name="773"><span class="lineNum">     773 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     774 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     775 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     776 </span>            :                       .scalar    = 1.0}},
+<a name="777"><span class="lineNum">     777 </span>            :                  {&quot;EN2_USR&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     778 </span>            :                       .begin_bit = 9,
+<span class="lineNum">     779 </span>            :                       .end_bit   = 10,
+<span class="lineNum">     780 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<a name="781"><span class="lineNum">     781 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     782 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     783 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     784 </span>            :                  {&quot;EN2_PMI&quot;, (struct IMSR::m_encode_s) {
+<a name="785"><span class="lineNum">     785 </span>            :                       .begin_bit = 11,</a>
+<span class="lineNum">     786 </span>            :                       .end_bit   = 12,
+<span class="lineNum">     787 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     788 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="789"><span class="lineNum">     789 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     790 </span><span class="lineCov">          9 :                       .scalar    = 1.0}}}),</span>
+<span class="lineNum">     791 </span>            :             MSR(&quot;PERF_GLOBAL_CTRL&quot;, 0x38F,
+<span class="lineNum">     792 </span>            :                 {},
+<a name="793"><span class="lineNum">     793 </span>            :                 {{&quot;EN_PMC0&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     794 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     795 </span>            :                       .end_bit   = 1,
+<span class="lineNum">     796 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<a name="797"><span class="lineNum">     797 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     798 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     799 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     800 </span>            :                  {&quot;EN_PMC1&quot;, (struct IMSR::m_encode_s) {
+<a name="801"><span class="lineNum">     801 </span>            :                       .begin_bit = 1,</a>
+<span class="lineNum">     802 </span>            :                       .end_bit   = 2,
+<span class="lineNum">     803 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     804 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="805"><span class="lineNum">     805 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     806 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     807 </span>            :                  {&quot;EN_FIXED_CTR0&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     808 </span>            :                       .begin_bit = 32,
+<a name="809"><span class="lineNum">     809 </span>            :                       .end_bit   = 33,</a>
+<span class="lineNum">     810 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     811 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     812 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="813"><span class="lineNum">     813 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     814 </span>            :                  {&quot;EN_FIXED_CTR1&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     815 </span>            :                       .begin_bit = 33,
+<span class="lineNum">     816 </span>            :                       .end_bit   = 34,
+<a name="817"><span class="lineNum">     817 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     818 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     819 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     820 </span>            :                       .scalar    = 1.0}},
+<a name="821"><span class="lineNum">     821 </span>            :                  {&quot;EN_FIXED_CTR2&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     822 </span>            :                       .begin_bit = 34,
+<span class="lineNum">     823 </span>            :                       .end_bit   = 35,
+<span class="lineNum">     824 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<a name="825"><span class="lineNum">     825 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     826 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     827 </span><span class="lineCov">          5 :                       .scalar    = 1.0}}}),</span>
+<span class="lineNum">     828 </span>            :             MSR(&quot;PERF_GLOBAL_OVF_CTRL&quot;, 0x390,
+<a name="829"><span class="lineNum">     829 </span>            :                 {},</a>
+<span class="lineNum">     830 </span>            :                 {{&quot;CLEAR_OVF_PMC0&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     831 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     832 </span>            :                       .end_bit   = 1,
+<a name="833"><span class="lineNum">     833 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     834 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     835 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     836 </span>            :                       .scalar    = 1.0}},
+<a name="837"><span class="lineNum">     837 </span>            :                  {&quot;CLEAR_OVF_PMC1&quot;, (struct IMSR::m_encode_s) {</a>
+<span class="lineNum">     838 </span>            :                       .begin_bit = 1,
+<span class="lineNum">     839 </span>            :                       .end_bit   = 2,
+<span class="lineNum">     840 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<a name="841"><span class="lineNum">     841 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,</a>
+<span class="lineNum">     842 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     843 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     844 </span>            :                  {&quot;CLEAR_OVF_FIXED_CTR0&quot;, (struct IMSR::m_encode_s) {
+<a name="845"><span class="lineNum">     845 </span>            :                       .begin_bit = 32,</a>
+<span class="lineNum">     846 </span>            :                       .end_bit   = 33,
+<span class="lineNum">     847 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     848 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<a name="849"><span class="lineNum">     849 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     850 </span>            :                       .scalar    = 1.0}},
+<span class="lineNum">     851 </span>            :                  {&quot;CLEAR_OVF_FIXED_CTR1&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     852 </span>            :                       .begin_bit = 33,
+<a name="853"><span class="lineNum">     853 </span>            :                       .end_bit   = 34,</a>
+<span class="lineNum">     854 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     855 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     856 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="857"><span class="lineNum">     857 </span>            :                       .scalar    = 1.0}},</a>
+<span class="lineNum">     858 </span>            :                  {&quot;CLEAR_OVF_FIXED_CTR2&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     859 </span>            :                       .begin_bit = 34,
+<span class="lineNum">     860 </span>            :                       .end_bit   = 35,
+<a name="861"><span class="lineNum">     861 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     862 </span>            :                       .function  = IMSR::M_FUNCTION_SCALE,
+<span class="lineNum">     863 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     864 </span><span class="lineCov">          5 :                       .scalar    = 1.0}}}),</span>
+<a name="865"><span class="lineNum">     865 </span>            :             MSR(&quot;PERF_FIXED_CTR0&quot;, 0x309,</a>
+<span class="lineNum">     866 </span>            :                 {{&quot;INST_RETIRED_ANY&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     867 </span>            :                       .begin_bit = 0,
+<span class="lineNum">     868 </span>            :                       .end_bit   = 48,
+<a name="869"><span class="lineNum">     869 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,</a>
+<span class="lineNum">     870 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<span class="lineNum">     871 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<span class="lineNum">     872 </span>            :                       .scalar    = 1.0}}},
+<a name="873"><span class="lineNum">     873 </span><span class="lineCov">          1 :                 {}),</span></a>
+<span class="lineNum">     874 </span>            :             MSR(&quot;PERF_FIXED_CTR1&quot;, 0x30A,
+<span class="lineNum">     875 </span>            :                 {{&quot;CPU_CLK_UNHALTED_THREAD&quot;, (struct IMSR::m_encode_s) {
+<span class="lineNum">     876 </span>            :                       .begin_bit = 0,
+<a name="877"><span class="lineNum">     877 </span>            :                       .end_bit   = 48,</a>
+<span class="lineNum">     878 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     879 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<span class="lineNum">     880 </span>            :                       .units     = IMSR::M_UNITS_NONE,
+<a name="881"><span class="lineNum">     881 </span>            :                       .scalar    = 1.0}}},</a>
+<span class="lineNum">     882 </span><span class="lineCov">          1 :                 {}),</span>
+<span class="lineNum">     883 </span>            :             MSR(&quot;PERF_FIXED_CTR2&quot;, 0x30B,
+<span class="lineNum">     884 </span>            :                 {{&quot;CPU_CLK_UNHALTED_REF_TSC&quot;, (struct IMSR::m_encode_s) {
+<a name="885"><span class="lineNum">     885 </span>            :                       .begin_bit = 0,</a>
+<span class="lineNum">     886 </span>            :                       .end_bit   = 48,
+<span class="lineNum">     887 </span>            :                       .domain    = IPlatformTopo::M_DOMAIN_CPU,
+<span class="lineNum">     888 </span>            :                       .function  = IMSR::M_FUNCTION_OVERFLOW,
+<a name="889"><span class="lineNum">     889 </span>            :                       .units     = IMSR::M_UNITS_NONE,</a>
+<span class="lineNum">     890 </span>            :                       .scalar    = 1.0}}},
+<a name="891"><span class="lineNum">     891 </span><span class="lineCov">          1 :                 {}),</span></a>
+<span class="lineNum">     892 </span>            :                 /// @todo Define all the other MSRs.
+<a name="893"><span class="lineNum">     893 </span><span class="lineCov">        117 :         };</span></a>
+<span class="lineNum">     894 </span><span class="lineCov">          2 :         num_msr = sizeof(instance) / sizeof(MSR);</span>
+<span class="lineNum">     895 </span><span class="lineCov">          2 :         return instance;</span>
+<span class="lineNum">     896 </span>            :     }
+<a name="897"><span class="lineNum">     897 </span>            : }</a>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,858 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - v0.6.0-142-gb6330da - src/ModelRegion.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - ModelRegion.cpp<span style="font-size: 80%;"> (source / <a href="ModelRegion.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">280</td>
+            <td class="headerCovTableEntry">435</td>
+            <td class="headerCovTableEntryLo">64.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-21</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">41</td>
+            <td class="headerCovTableEntry">56</td>
+            <td class="headerCovTableEntryLo">73.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &lt;stdlib.h&gt;</a>
+<span class="lineNum">      34 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      35 </span>            : #include &lt;time.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cmath&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;string&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;mpi.h&gt;
+<span class="lineNum">      40 </span>            : #ifdef _OPENMP
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;omp.h&gt;</a>
+<span class="lineNum">      42 </span>            : #endif
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            : #include &quot;geopm.h&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;geopm_time.h&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;ModelRegion.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;geopm_imbalancer.h&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            : #ifdef GEOPM_ENABLE_MKL
+<span class="lineNum">      52 </span>            : #include &lt;mkl.h&gt;
+<a name="53"><span class="lineNum">      53 </span>            : #else</a>
+<span class="lineNum">      54 </span>            : // Terrible DGEMM implementation should only be used if there is no
+<span class="lineNum">      55 </span>            : // BLAS support.  Build assumes that the Intel(R) Math Kernel Library
+<a name="56"><span class="lineNum">      56 </span>            : // is the only provider of BLAS.</a>
+<a name="57"><span class="lineNum">      57 </span>            : static inline</a>
+<span class="lineNum">      58 </span><span class="lineCov">         32 : void dgemm(const char *transa, const char *transb, const int *M,</span>
+<span class="lineNum">      59 </span>            :            const int *N, const int *K, const double *alpha,
+<span class="lineNum">      60 </span>            :            const double *A, const int *LDA, const double *B,
+<a name="61"><span class="lineNum">      61 </span>            :            const int *LDB, const double *beta, double *C, const int *LDC)</a>
+<span class="lineNum">      62 </span>            : {
+<span class="lineNum">      63 </span><span class="lineCov">        271 : #pragma omp parallel for</span>
+<span class="lineNum">      64 </span><span class="lineCov">        239 :     for (int i = 0; i &lt; *M; ++i) {</span>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">   80335599 :         for (int j = 0; j &lt; *N; ++j) {</span></a>
+<span class="lineNum">      66 </span><span class="lineCov">   80284822 :             C[i * *LDC + j] = 0;</span>
+<span class="lineNum">      67 </span><span class="lineCov">14807054137 :             for (int k = 0; k &lt; *K; ++k) {</span>
+<span class="lineNum">      68 </span><span class="lineCov">14726769315 :                 C[i * *LDC + j] += A[i * *LDA + j] * B[j * *LDB + k];</span>
+<a name="69"><span class="lineNum">      69 </span>            :             }</a>
+<span class="lineNum">      70 </span>            :         }
+<span class="lineNum">      71 </span>            :     }
+<span class="lineNum">      72 </span><span class="lineCov">         32 : }</span>
+<a name="73"><span class="lineNum">      73 </span>            : #endif</a>
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            : 
+<a name="76"><span class="lineNum">      76 </span>            : namespace geopm</a>
+<a name="77"><span class="lineNum">      77 </span>            : {</a>
+<span class="lineNum">      78 </span><span class="lineCov">        116 :     ModelRegionBase *model_region_factory(std::string name, double big_o, int verbosity)</span>
+<span class="lineNum">      79 </span>            :     {
+<span class="lineNum">      80 </span><span class="lineCov">        116 :         bool do_imbalance = (name.find(&quot;-imbalance&quot;) != std::string::npos);</span>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">        116 :         bool do_progress = (name.find(&quot;-progress&quot;) != std::string::npos);</span></a>
+<span class="lineNum">      82 </span><span class="lineCov">        116 :         bool do_unmarked = (name.find(&quot;-unmarked&quot;) != std::string::npos);</span>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineCov">        116 :         if (do_unmarked) {</span>
+<a name="85"><span class="lineNum">      85 </span><span class="lineNoCov">          0 :             do_progress = false;</span></a>
+<span class="lineNum">      86 </span>            :         }
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineCov">        116 :         ModelRegionBase *result = NULL;</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">        180 :         if (name.find(&quot;sleep&quot;) == 0 &amp;&amp;</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">         32 :             (name[strlen(&quot;sleep&quot;)] == '\0' ||</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :              name[strlen(&quot;sleep&quot;)] == '-')) {</span>
+<span class="lineNum">      92 </span><span class="lineCov">         32 :             result = new SleepModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span>
+<a name="93"><span class="lineNum">      93 </span>            :         }</a>
+<span class="lineNum">      94 </span><span class="lineCov">         92 :         else if (name.find(&quot;spin&quot;) == 0 &amp;&amp;</span>
+<span class="lineNum">      95 </span><span class="lineCov">          4 :                  (name[strlen(&quot;spin&quot;)] == '\0' ||</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :                   name[strlen(&quot;spin&quot;)] == '-'))  {</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">          4 :             result = new SpinModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span></a>
+<span class="lineNum">      98 </span>            :         }
+<span class="lineNum">      99 </span><span class="lineCov">        144 :         else if (name.find(&quot;dgemm&quot;) == 0 &amp;&amp;</span>
+<span class="lineNum">     100 </span><span class="lineCov">         32 :                  (name[strlen(&quot;dgemm&quot;)] == '\0' ||</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineNoCov">          0 :                   name[strlen(&quot;dgemm&quot;)] == '-'))  {</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">         32 :             result = new DGEMMModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span>
+<span class="lineNum">     103 </span>            :         }
+<span class="lineNum">     104 </span><span class="lineCov">         48 :         else if (name.find(&quot;stream&quot;) == 0 &amp;&amp;</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineNoCov">          0 :                  (name[strlen(&quot;stream&quot;)] == '\0' ||</span></a>
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :                   name[strlen(&quot;stream&quot;)] == '-')) {</span>
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :             result = new StreamModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span>
+<span class="lineNum">     108 </span>            :         }
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        112 :         else if (name.find(&quot;all2all&quot;) == 0 &amp;&amp;</span></a>
+<span class="lineNum">     110 </span><span class="lineCov">         32 :                  (name[strlen(&quot;all2all&quot;)] == '\0' ||</span>
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :                   name[strlen(&quot;all2all&quot;)] == '-')) {</span>
+<span class="lineNum">     112 </span><span class="lineCov">         32 :             result = new All2allModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span>
+<a name="113"><span class="lineNum">     113 </span>            :         }</a>
+<span class="lineNum">     114 </span><span class="lineCov">         16 :         else if (name.find(&quot;nested&quot;) == 0 &amp;&amp;</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :                  (name[strlen(&quot;nested&quot;)] == '\0' ||</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :                   name[strlen(&quot;nested&quot;)] == '-')) {</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineNoCov">          0 :             result = new NestedModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span></a>
+<span class="lineNum">     118 </span>            :         }
+<span class="lineNum">     119 </span><span class="lineCov">         48 :         else if (name.find(&quot;ignore&quot;) == 0 &amp;&amp;</span>
+<span class="lineNum">     120 </span><span class="lineCov">         16 :             (name[strlen(&quot;ignore&quot;)] == '\0' ||</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineNoCov">          0 :              name[strlen(&quot;ignore&quot;)] == '-')) {</span></a>
+<span class="lineNum">     122 </span><span class="lineCov">         16 :             result = new IgnoreModelRegion(big_o, verbosity, do_imbalance, do_progress, do_unmarked);</span>
+<span class="lineNum">     123 </span>            :         }
+<span class="lineNum">     124 </span>            :         else {
+<a name="125"><span class="lineNum">     125 </span><span class="lineNoCov">          0 :             throw Exception(&quot;model_region_factory: unknown name: &quot; + name,</span></a>
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     127 </span>            :         }
+<span class="lineNum">     128 </span><span class="lineCov">        116 :         return result;</span>
+<a name="129"><span class="lineNum">     129 </span>            :     }</a>
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span><span class="lineCov">        116 :     ModelRegionBase::ModelRegionBase(int verbosity)</span>
+<span class="lineNum">     132 </span>            :         : m_big_o(0.0)
+<a name="133"><span class="lineNum">     133 </span>            :         , m_verbosity(verbosity)</a>
+<span class="lineNum">     134 </span>            :         , m_do_imbalance(false)
+<span class="lineNum">     135 </span>            :         , m_do_progress(false)
+<span class="lineNum">     136 </span>            :         , m_do_unmarked(false)
+<a name="137"><span class="lineNum">     137 </span>            :         , m_num_progress_updates(1)</a>
+<span class="lineNum">     138 </span><span class="lineCov">        116 :         , m_norm(1.0)</span>
+<span class="lineNum">     139 </span>            :     {
+<span class="lineNum">     140 </span>            : 
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        116 :     }</span></a>
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span><span class="lineCov">        116 :     ModelRegionBase::~ModelRegionBase()</span>
+<span class="lineNum">     144 </span>            :     {
+<a name="145"><span class="lineNum">     145 </span>            : </a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">        116 :     }</span></a>
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :     std::string ModelRegionBase::name(void)</span>
+<a name="149"><span class="lineNum">     149 </span>            :     {</a>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :         return m_name;</span>
+<a name="151"><span class="lineNum">     151 </span>            :     }</a>
+<span class="lineNum">     152 </span>            : 
+<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :     double ModelRegionBase::big_o(void)</span></a>
+<span class="lineNum">     154 </span>            :     {
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :         return m_big_o;</span>
+<a name="156"><span class="lineNum">     156 </span>            :     }</a>
+<a name="157"><span class="lineNum">     157 </span>            : </a>
+<span class="lineNum">     158 </span><span class="lineCov">        180 :     void ModelRegionBase::num_progress_updates(double big_o_in)</span>
+<span class="lineNum">     159 </span>            :     {
+<span class="lineNum">     160 </span><span class="lineCov">        180 :         if (!m_do_progress) {</span>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        180 :             m_num_progress_updates = 1;</span></a>
+<span class="lineNum">     162 </span>            :         }
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :         else if (big_o_in &gt; 1.0) {</span>
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :             m_num_progress_updates = (uint64_t)(100.0 * big_o_in);</span>
+<a name="165"><span class="lineNum">     165 </span>            :         }</a>
+<span class="lineNum">     166 </span>            :         else {
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :             m_num_progress_updates = 100;</span>
+<span class="lineNum">     168 </span>            :         }
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        180 :         m_norm = 1.0 / m_num_progress_updates;</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">        180 :     }</span></a>
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span><span class="lineCov">        116 :     int ModelRegionBase::region(uint64_t hint)</span>
+<a name="173"><span class="lineNum">     173 </span>            :     {</a>
+<span class="lineNum">     174 </span><span class="lineCov">        116 :         int err = 0;</span>
+<span class="lineNum">     175 </span><span class="lineCov">        116 :         if (!m_do_unmarked) {</span>
+<span class="lineNum">     176 </span><span class="lineCov">        116 :             err = geopm_prof_region(m_name.c_str(), hint, &amp;m_region_id);</span>
+<a name="177"><span class="lineNum">     177 </span>            :         }</a>
+<span class="lineNum">     178 </span><span class="lineCov">        116 :         return err;</span>
+<a name="179"><span class="lineNum">     179 </span>            :     }</a>
+<span class="lineNum">     180 </span>            : 
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">         36 :     int ModelRegionBase::region(void)</span></a>
+<span class="lineNum">     182 </span>            :     {
+<span class="lineNum">     183 </span><span class="lineCov">         36 :         return region(GEOPM_REGION_HINT_UNKNOWN);</span>
+<a name="184"><span class="lineNum">     184 </span>            :     }</a>
+<a name="185"><span class="lineNum">     185 </span>            : </a>
+<span class="lineNum">     186 </span><span class="lineCov">        512 :     void ModelRegionBase::region_enter(void)</span>
+<span class="lineNum">     187 </span>            :     {
+<span class="lineNum">     188 </span><span class="lineCov">        512 :         if (!m_do_unmarked) {</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">        512 :             (void)geopm_prof_enter(m_region_id);</span></a>
+<span class="lineNum">     190 </span>            :         }
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">        512 :     }</span></a>
+<span class="lineNum">     192 </span>            : 
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">        512 :     void ModelRegionBase::region_exit(void)</span></a>
+<span class="lineNum">     194 </span>            :     {
+<span class="lineNum">     195 </span><span class="lineCov">        512 :         if (!m_do_unmarked) {</span>
+<span class="lineNum">     196 </span><span class="lineCov">        512 :             (void)geopm_prof_exit(m_region_id);</span>
+<a name="197"><span class="lineNum">     197 </span>            :         }</a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineCov">        512 :     }</span></a>
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span><span class="lineCov">        512 :     void ModelRegionBase::loop_enter(uint64_t iteration)</span>
+<a name="201"><span class="lineNum">     201 </span>            :     {</a>
+<span class="lineNum">     202 </span><span class="lineCov">        512 :         if (m_do_progress) {</span>
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 :             (void)geopm_prof_progress(m_region_id, iteration * m_norm);</span>
+<span class="lineNum">     204 </span>            :         }
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">        512 :         if (m_do_imbalance) {</span></a>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :             (void)geopm_imbalancer_enter();</span>
+<span class="lineNum">     207 </span>            :         }
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">        512 :     }</span></a>
+<a name="209"><span class="lineNum">     209 </span>            : </a>
+<span class="lineNum">     210 </span><span class="lineCov">        512 :     void ModelRegionBase::loop_exit(void)</span>
+<span class="lineNum">     211 </span>            :     {
+<span class="lineNum">     212 </span><span class="lineCov">        512 :         if (m_do_imbalance) {</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineNoCov">          0 :             (void)geopm_imbalancer_exit();</span></a>
+<span class="lineNum">     214 </span>            :         }
+<a name="215"><span class="lineNum">     215 </span><span class="lineCov">        512 :     }</span></a>
+<span class="lineNum">     216 </span>            : 
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         32 :     SleepModelRegion::SleepModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">         32 :         : ModelRegionBase(verbosity)</span>
+<span class="lineNum">     219 </span>            :     {
+<span class="lineNum">     220 </span><span class="lineCov">         32 :         m_name = &quot;sleep&quot;;</span>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         32 :         m_do_imbalance = do_imbalance;</span></a>
+<span class="lineNum">     222 </span><span class="lineCov">         32 :         m_do_progress = do_progress;</span>
+<span class="lineNum">     223 </span><span class="lineCov">         32 :         m_do_unmarked = do_unmarked;</span>
+<span class="lineNum">     224 </span><span class="lineCov">         32 :         big_o(big_o_in);</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         32 :         int err = ModelRegionBase::region();</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">         32 :         if (err) {</span>
+<span class="lineNum">     227 </span>            :             throw Exception(&quot;SleepModelRegion::SleepModelRegion()&quot;,
+<span class="lineNum">     228 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
+<a name="229"><span class="lineNum">     229 </span>            :         }</a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">     231 </span>            : 
+<span class="lineNum">     232 </span><span class="lineCov">         64 :     SleepModelRegion::~SleepModelRegion()</span>
+<a name="233"><span class="lineNum">     233 </span>            :     {</a>
+<span class="lineNum">     234 </span>            : 
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">         64 :     }</span></a>
+<span class="lineNum">     236 </span>            : 
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         32 :     void SleepModelRegion::big_o(double big_o_in)</span></a>
+<span class="lineNum">     238 </span>            :     {
+<span class="lineNum">     239 </span><span class="lineCov">         32 :         num_progress_updates(big_o_in);</span>
+<span class="lineNum">     240 </span><span class="lineCov">         32 :         double seconds = big_o_in / m_num_progress_updates;</span>
+<a name="241"><span class="lineNum">     241 </span>            :         m_delay = {(time_t)(seconds),</a>
+<span class="lineNum">     242 </span><span class="lineCov">         32 :                    (long)((seconds - (time_t)(seconds)) * 1E9)};</span>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span><span class="lineCov">         32 :         m_big_o = big_o_in;</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span><span class="lineCov">         32 :     void SleepModelRegion::run(void)</span>
+<span class="lineNum">     248 </span>            :     {
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         32 :         if (m_big_o != 0.0) {</span></a>
+<span class="lineNum">     250 </span><span class="lineCov">         32 :             if (m_verbosity) {</span>
+<span class="lineNum">     251 </span><span class="lineCov">          2 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_big_o &lt;&lt; &quot; second sleep.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<span class="lineNum">     252 </span>            :             }
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         32 :             ModelRegionBase::region_enter();</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">         64 :             for (uint64_t i = 0 ; i &lt; m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     255 </span><span class="lineCov">         32 :                 ModelRegionBase::loop_enter(i);</span>
+<span class="lineNum">     256 </span>            :                 int err;
+<a name="257"><span class="lineNum">     257 </span>            : #ifdef __APPLE__</a>
+<span class="lineNum">     258 </span>            :                 err = nanosleep(&amp;m_delay, NULL);
+<span class="lineNum">     259 </span>            : #else
+<span class="lineNum">     260 </span><span class="lineCov">         32 :                 err = clock_nanosleep(CLOCK_REALTIME, 0, &amp;m_delay, NULL);</span>
+<a name="261"><span class="lineNum">     261 </span>            : #endif</a>
+<span class="lineNum">     262 </span>            : 
+<span class="lineNum">     263 </span><span class="lineCov">         32 :                 if (err) {</span>
+<span class="lineNum">     264 </span>            :                     throw Exception(&quot;SleepModelRegion::run()&quot;,
+<a name="265"><span class="lineNum">     265 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     266 </span>            :                 }
+<span class="lineNum">     267 </span><span class="lineCov">         32 :                 ModelRegionBase::loop_exit();</span>
+<span class="lineNum">     268 </span>            :             }
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         32 :             ModelRegionBase::region_exit();</span></a>
+<span class="lineNum">     270 </span>            :         }
+<a name="271"><span class="lineNum">     271 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">     272 </span>            : 
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">          4 :     SpinModelRegion::SpinModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span></a>
+<span class="lineNum">     274 </span><span class="lineCov">          4 :         : ModelRegionBase(verbosity)</span>
+<span class="lineNum">     275 </span>            :     {
+<span class="lineNum">     276 </span><span class="lineCov">          4 :         m_name = &quot;spin&quot;;</span>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">          4 :         m_do_imbalance = do_imbalance;</span></a>
+<span class="lineNum">     278 </span><span class="lineCov">          4 :         m_do_progress = do_progress;</span>
+<span class="lineNum">     279 </span><span class="lineCov">          4 :         m_do_unmarked = do_unmarked;</span>
+<span class="lineNum">     280 </span><span class="lineCov">          4 :         big_o(big_o_in);</span>
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">          4 :         int err = ModelRegionBase::region();</span></a>
+<span class="lineNum">     282 </span><span class="lineCov">          4 :         if (err) {</span>
+<span class="lineNum">     283 </span>            :             throw Exception(&quot;SpinModelRegion::SpinModelRegion()&quot;,
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
+<a name="285"><span class="lineNum">     285 </span>            :         }</a>
+<a name="286"><span class="lineNum">     286 </span><span class="lineCov">          4 :     }</span></a>
+<span class="lineNum">     287 </span>            : 
+<span class="lineNum">     288 </span><span class="lineCov">          8 :     SpinModelRegion::~SpinModelRegion()</span>
+<a name="289"><span class="lineNum">     289 </span>            :     {</a>
+<span class="lineNum">     290 </span>            : 
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">          8 :     }</span></a>
+<span class="lineNum">     292 </span>            : 
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">          4 :     void SpinModelRegion::big_o(double big_o_in)</span></a>
+<span class="lineNum">     294 </span>            :     {
+<span class="lineNum">     295 </span><span class="lineCov">          4 :         num_progress_updates(big_o_in);</span>
+<span class="lineNum">     296 </span><span class="lineCov">          4 :         m_delay = big_o_in / m_num_progress_updates;</span>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          4 :         m_big_o = big_o_in;</span></a>
+<a name="298"><span class="lineNum">     298 </span><span class="lineCov">          4 :     }</span></a>
+<span class="lineNum">     299 </span>            : 
+<span class="lineNum">     300 </span><span class="lineCov">        400 :     void SpinModelRegion::run(void)</span>
+<a name="301"><span class="lineNum">     301 </span>            :     {</a>
+<span class="lineNum">     302 </span><span class="lineCov">        400 :         if (m_big_o != 0.0) {</span>
+<span class="lineNum">     303 </span><span class="lineCov">        400 :             if (m_verbosity) {</span>
+<span class="lineNum">     304 </span><span class="lineCov">        100 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_big_o &lt;&lt; &quot; second spin.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<a name="305"><span class="lineNum">     305 </span>            :             }</a>
+<span class="lineNum">     306 </span><span class="lineCov">        400 :             ModelRegionBase::region_enter();</span>
+<span class="lineNum">     307 </span><span class="lineCov">        800 :             for (uint64_t i = 0 ; i &lt; m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     308 </span><span class="lineCov">        400 :                 ModelRegionBase::loop_enter(i);</span>
+<a name="309"><span class="lineNum">     309 </span>            : </a>
+<span class="lineNum">     310 </span><span class="lineCov">        400 :                 double timeout = 0.0;</span>
+<span class="lineNum">     311 </span><span class="lineCov">        400 :                 struct geopm_time_s start = {{0,0}};</span>
+<span class="lineNum">     312 </span><span class="lineCov">        400 :                 struct geopm_time_s curr = {{0,0}};</span>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">        400 :                 (void)geopm_time(&amp;start);</span></a>
+<span class="lineNum">     314 </span><span class="lineCov">   18238744 :                 while (timeout &lt; m_delay) {</span>
+<span class="lineNum">     315 </span><span class="lineCov">    9119172 :                     (void)geopm_time(&amp;curr);</span>
+<span class="lineNum">     316 </span><span class="lineCov">    9119172 :                     timeout = geopm_time_diff(&amp;start, &amp;curr);</span>
+<a name="317"><span class="lineNum">     317 </span>            :                 }</a>
+<span class="lineNum">     318 </span>            : 
+<span class="lineNum">     319 </span><span class="lineCov">        400 :                 ModelRegionBase::loop_exit();</span>
+<span class="lineNum">     320 </span>            :             }
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">        400 :             ModelRegionBase::region_exit();</span></a>
+<span class="lineNum">     322 </span>            :         }
+<a name="323"><span class="lineNum">     323 </span><span class="lineCov">        400 :     }</span></a>
+<span class="lineNum">     324 </span>            : 
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">         32 :     DGEMMModelRegion::DGEMMModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span></a>
+<span class="lineNum">     326 </span>            :         : ModelRegionBase(verbosity)
+<span class="lineNum">     327 </span>            :         , m_matrix_a(NULL)
+<span class="lineNum">     328 </span>            :         , m_matrix_b(NULL)
+<a name="329"><span class="lineNum">     329 </span>            :         , m_matrix_c(NULL)</a>
+<span class="lineNum">     330 </span>            :         , m_matrix_size(0)
+<span class="lineNum">     331 </span><span class="lineCov">         32 :         , m_pad_size(64)</span>
+<span class="lineNum">     332 </span>            :     {
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">         32 :         m_name = &quot;dgemm&quot;;</span></a>
+<span class="lineNum">     334 </span><span class="lineCov">         32 :         m_do_imbalance = do_imbalance;</span>
+<span class="lineNum">     335 </span><span class="lineCov">         32 :         m_do_progress = do_progress;</span>
+<span class="lineNum">     336 </span><span class="lineCov">         32 :         m_do_unmarked = do_unmarked;</span>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         32 :         big_o(big_o_in);</span></a>
+<span class="lineNum">     338 </span><span class="lineCov">         32 :         int err = ModelRegionBase::region(GEOPM_REGION_HINT_COMPUTE);</span>
+<span class="lineNum">     339 </span><span class="lineCov">         32 :         if (err) {</span>
+<span class="lineNum">     340 </span>            :             throw Exception(&quot;DGEMMModelRegion::DGEMMModelRegion()&quot;,
+<a name="341"><span class="lineNum">     341 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     342 </span>            :         }
+<a name="343"><span class="lineNum">     343 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">     344 </span>            : 
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">         96 :     DGEMMModelRegion::~DGEMMModelRegion()</span></a>
+<span class="lineNum">     346 </span>            :     {
+<span class="lineNum">     347 </span><span class="lineCov">         32 :         big_o(0);</span>
+<a name="348"><span class="lineNum">     348 </span><span class="lineCov">         64 :     }</span></a>
+<a name="349"><span class="lineNum">     349 </span>            : </a>
+<span class="lineNum">     350 </span><span class="lineCov">         64 :     void DGEMMModelRegion::big_o(double big_o_in)</span>
+<span class="lineNum">     351 </span>            :     {
+<span class="lineNum">     352 </span><span class="lineCov">         64 :         if (m_big_o &amp;&amp; m_big_o != big_o_in) {</span>
+<a name="353"><span class="lineNum">     353 </span><span class="lineCov">         32 :             free(m_matrix_c);</span></a>
+<span class="lineNum">     354 </span><span class="lineCov">         32 :             free(m_matrix_b);</span>
+<span class="lineNum">     355 </span><span class="lineCov">         32 :             free(m_matrix_a);</span>
+<span class="lineNum">     356 </span>            :         }
+<a name="357"><span class="lineNum">     357 </span>            : </a>
+<span class="lineNum">     358 </span><span class="lineCov">         64 :         num_progress_updates(big_o_in);</span>
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span><span class="lineCov">         64 :         m_matrix_size = (int)pow(4e9 * big_o_in / m_num_progress_updates, 1.0/3.0);</span>
+<a name="361"><span class="lineNum">     361 </span><span class="lineCov">         64 :         if (big_o_in &amp;&amp; m_big_o != big_o_in) {</span></a>
+<span class="lineNum">     362 </span><span class="lineCov">         32 :             size_t mem_size = sizeof(double) * (m_matrix_size * (m_matrix_size + m_pad_size));</span>
+<span class="lineNum">     363 </span><span class="lineCov">         32 :             int err = posix_memalign((void **)&amp;m_matrix_a, m_pad_size, mem_size);</span>
+<span class="lineNum">     364 </span><span class="lineCov">         32 :             if (!err) {</span>
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">         32 :                 err = posix_memalign((void **)&amp;m_matrix_b, m_pad_size, mem_size);</span></a>
+<span class="lineNum">     366 </span>            :             }
+<span class="lineNum">     367 </span><span class="lineCov">         32 :             if (!err) {</span>
+<span class="lineNum">     368 </span><span class="lineCov">         32 :                 err = posix_memalign((void **)&amp;m_matrix_c, m_pad_size, mem_size);</span>
+<a name="369"><span class="lineNum">     369 </span>            :             }</a>
+<span class="lineNum">     370 </span><span class="lineCov">         32 :             if (err) {</span>
+<span class="lineNum">     371 </span>            :                 throw Exception(&quot;DGEMMModelRegion::big_o(): posix_memalign() failed&quot;,
+<a name="372"><span class="lineNum">     372 </span><span class="lineNoCov">          0 :                                 err, __FILE__, __LINE__);</span></a>
+<a name="373"><span class="lineNum">     373 </span>            :             }</a>
+<span class="lineNum">     374 </span><span class="lineCov">        228 : #pragma omp parallel for</span>
+<span class="lineNum">     375 </span><span class="lineCov">        196 :             for (size_t i = 0; i &lt; mem_size / sizeof(double); ++i) {</span>
+<span class="lineNum">     376 </span><span class="lineCov">   12462622 :                 m_matrix_a[i] = 2.0 * i;</span>
+<a name="377"><span class="lineNum">     377 </span><span class="lineCov">   12462622 :                 m_matrix_b[i] = 3.0 * i;</span></a>
+<span class="lineNum">     378 </span>            :             }
+<span class="lineNum">     379 </span>            :         }
+<span class="lineNum">     380 </span><span class="lineCov">         64 :         m_big_o = big_o_in;</span>
+<a name="381"><span class="lineNum">     381 </span><span class="lineCov">         64 :     }</span></a>
+<span class="lineNum">     382 </span>            : 
+<span class="lineNum">     383 </span><span class="lineCov">         32 :     void DGEMMModelRegion::run(void)</span>
+<span class="lineNum">     384 </span>            :     {
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">         32 :         if (m_big_o != 0.0) {</span></a>
+<span class="lineNum">     386 </span><span class="lineCov">         32 :             if (m_verbosity) {</span>
+<span class="lineNum">     387 </span><span class="lineCov">          2 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_matrix_size &lt;&lt; &quot; x &quot; &lt;&lt; m_matrix_size &lt;&lt; &quot; DGEMM &quot;</span>
+<span class="lineNum">     388 </span><span class="lineCov">          4 :                           &lt;&lt; m_num_progress_updates &lt;&lt; &quot; times.&quot; &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<a name="389"><span class="lineNum">     389 </span>            :             }</a>
+<span class="lineNum">     390 </span><span class="lineCov">         32 :             ModelRegionBase::region_enter();</span>
+<span class="lineNum">     391 </span><span class="lineCov">         64 :             for (uint64_t i = 0; i &lt; m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     392 </span><span class="lineCov">         32 :                 ModelRegionBase::loop_enter(i);</span>
+<a name="393"><span class="lineNum">     393 </span>            : </a>
+<span class="lineNum">     394 </span><span class="lineCov">         32 :                 int M = m_matrix_size;</span>
+<span class="lineNum">     395 </span><span class="lineCov">         32 :                 int N = m_matrix_size;</span>
+<span class="lineNum">     396 </span><span class="lineCov">         32 :                 int K = m_matrix_size;</span>
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">         32 :                 int LDA = m_matrix_size + m_pad_size / sizeof(double);</span></a>
+<span class="lineNum">     398 </span><span class="lineCov">         32 :                 int LDB = m_matrix_size + m_pad_size / sizeof(double);</span>
+<span class="lineNum">     399 </span><span class="lineCov">         32 :                 int LDC = m_matrix_size + m_pad_size / sizeof(double);</span>
+<span class="lineNum">     400 </span><span class="lineCov">         32 :                 double alpha = 2.0;</span>
+<a name="401"><span class="lineNum">     401 </span><span class="lineCov">         32 :                 double beta = 3.0;</span></a>
+<span class="lineNum">     402 </span><span class="lineCov">         32 :                 char transa = 'n';</span>
+<span class="lineNum">     403 </span><span class="lineCov">         32 :                 char transb = 'n';</span>
+<span class="lineNum">     404 </span>            : 
+<a name="405"><span class="lineNum">     405 </span><span class="lineCov">         32 :                 dgemm(&amp;transa, &amp;transb, &amp;M, &amp;N, &amp;K, &amp;alpha,</span></a>
+<span class="lineNum">     406 </span><span class="lineCov">         32 :                       m_matrix_a, &amp;LDA, m_matrix_b, &amp;LDB, &amp;beta, m_matrix_c, &amp;LDC);</span>
+<span class="lineNum">     407 </span>            : 
+<span class="lineNum">     408 </span><span class="lineCov">         32 :                 ModelRegionBase::loop_exit();</span>
+<a name="409"><span class="lineNum">     409 </span>            :             }</a>
+<span class="lineNum">     410 </span><span class="lineCov">         32 :             ModelRegionBase::region_exit();</span>
+<span class="lineNum">     411 </span>            :         }
+<a name="412"><span class="lineNum">     412 </span><span class="lineCov">         32 :     }</span></a>
+<a name="413"><span class="lineNum">     413 </span>            : </a>
+<span class="lineNum">     414 </span><span class="lineNoCov">          0 :     StreamModelRegion::StreamModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span>
+<span class="lineNum">     415 </span>            :         : ModelRegionBase(verbosity)
+<span class="lineNum">     416 </span>            :         , m_array_a(NULL)
+<a name="417"><span class="lineNum">     417 </span>            :         , m_array_b(NULL)</a>
+<span class="lineNum">     418 </span>            :         , m_array_c(NULL)
+<span class="lineNum">     419 </span>            :         , m_array_len(0)
+<span class="lineNum">     420 </span><span class="lineNoCov">          0 :         , m_align(64)</span>
+<a name="421"><span class="lineNum">     421 </span>            :     {</a>
+<span class="lineNum">     422 </span><span class="lineNoCov">          0 :         m_name = &quot;stream&quot;;</span>
+<span class="lineNum">     423 </span><span class="lineNoCov">          0 :         m_do_imbalance = do_imbalance;</span>
+<span class="lineNum">     424 </span><span class="lineNoCov">          0 :         m_do_progress = do_progress;</span>
+<a name="425"><span class="lineNum">     425 </span><span class="lineNoCov">          0 :         m_do_unmarked = do_unmarked;</span></a>
+<span class="lineNum">     426 </span><span class="lineNoCov">          0 :         big_o(big_o_in);</span>
+<span class="lineNum">     427 </span><span class="lineNoCov">          0 :         int err = ModelRegionBase::region(GEOPM_REGION_HINT_MEMORY);</span>
+<span class="lineNum">     428 </span><span class="lineNoCov">          0 :         if (err) {</span>
+<a name="429"><span class="lineNum">     429 </span>            :             throw Exception(&quot;StreamModelRegion::StreamModelRegion()&quot;,</a>
+<span class="lineNum">     430 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
+<span class="lineNum">     431 </span>            :         }
+<a name="432"><span class="lineNum">     432 </span><span class="lineNoCov">          0 :     }</span></a>
+<a name="433"><span class="lineNum">     433 </span>            : </a>
+<span class="lineNum">     434 </span><span class="lineNoCov">          0 :     StreamModelRegion::~StreamModelRegion()</span>
+<span class="lineNum">     435 </span>            :     {
+<span class="lineNum">     436 </span><span class="lineNoCov">          0 :         big_o(0);</span>
+<a name="437"><span class="lineNum">     437 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     438 </span>            : 
+<span class="lineNum">     439 </span><span class="lineNoCov">          0 :     void StreamModelRegion::big_o(double big_o_in)</span>
+<span class="lineNum">     440 </span>            :     {
+<a name="441"><span class="lineNum">     441 </span><span class="lineNoCov">          0 :         if (m_big_o &amp;&amp; m_big_o != big_o_in) {</span></a>
+<span class="lineNum">     442 </span><span class="lineNoCov">          0 :             free(m_array_c);</span>
+<span class="lineNum">     443 </span><span class="lineNoCov">          0 :             free(m_array_b);</span>
+<span class="lineNum">     444 </span><span class="lineNoCov">          0 :             free(m_array_a);</span>
+<a name="445"><span class="lineNum">     445 </span>            :         }</a>
+<span class="lineNum">     446 </span>            : 
+<span class="lineNum">     447 </span><span class="lineNoCov">          0 :         num_progress_updates(big_o_in);</span>
+<span class="lineNum">     448 </span>            : 
+<a name="449"><span class="lineNum">     449 </span><span class="lineNoCov">          0 :         m_array_len = (size_t)(5e8 * big_o_in);</span></a>
+<span class="lineNum">     450 </span><span class="lineNoCov">          0 :         if (big_o_in &amp;&amp; m_big_o != big_o_in) {</span>
+<span class="lineNum">     451 </span><span class="lineNoCov">          0 :             int err = posix_memalign((void **)&amp;m_array_a, m_align, m_array_len * sizeof(double));</span>
+<span class="lineNum">     452 </span><span class="lineNoCov">          0 :             if (!err) {</span>
+<a name="453"><span class="lineNum">     453 </span><span class="lineNoCov">          0 :                 err = posix_memalign((void **)&amp;m_array_b, m_align, m_array_len * sizeof(double));</span></a>
+<span class="lineNum">     454 </span>            :             }
+<span class="lineNum">     455 </span><span class="lineNoCov">          0 :             if (!err) {</span>
+<span class="lineNum">     456 </span><span class="lineNoCov">          0 :                 err = posix_memalign((void **)&amp;m_array_c, m_align, m_array_len * sizeof(double));</span>
+<a name="457"><span class="lineNum">     457 </span>            :             }</a>
+<span class="lineNum">     458 </span><span class="lineNoCov">          0 :             if (err) {</span>
+<span class="lineNum">     459 </span>            :                 throw Exception(&quot;StreamModelRegion::big_o(): posix_memalign() failed&quot;,
+<a name="460"><span class="lineNum">     460 </span><span class="lineNoCov">          0 :                                 err, __FILE__, __LINE__);</span></a>
+<a name="461"><span class="lineNum">     461 </span>            :             }</a>
+<span class="lineNum">     462 </span><span class="lineNoCov">          0 : #pragma omp parallel for</span>
+<span class="lineNum">     463 </span><span class="lineNoCov">          0 :             for (size_t i = 0; i &lt; m_array_len; i++) {</span>
+<span class="lineNum">     464 </span><span class="lineNoCov">          0 :                 m_array_a[i] = 0.0;</span>
+<a name="465"><span class="lineNum">     465 </span><span class="lineNoCov">          0 :                 m_array_b[i] = 1.0;</span></a>
+<span class="lineNum">     466 </span><span class="lineNoCov">          0 :                 m_array_c[i] = 2.0;</span>
+<span class="lineNum">     467 </span>            :             }
+<span class="lineNum">     468 </span>            :         }
+<a name="469"><span class="lineNum">     469 </span><span class="lineNoCov">          0 :         m_big_o = big_o_in;</span></a>
+<a name="470"><span class="lineNum">     470 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     471 </span>            : 
+<span class="lineNum">     472 </span><span class="lineNoCov">          0 :     void StreamModelRegion::run(void)</span>
+<a name="473"><span class="lineNum">     473 </span>            :     {</a>
+<span class="lineNum">     474 </span><span class="lineNoCov">          0 :         if (m_big_o != 0.0) {</span>
+<span class="lineNum">     475 </span><span class="lineNoCov">          0 :             if (m_verbosity) {</span>
+<span class="lineNum">     476 </span><span class="lineNoCov">          0 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_array_len * m_num_progress_updates &lt;&lt; &quot; array length stream triadd.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<a name="477"><span class="lineNum">     477 </span>            :             }</a>
+<span class="lineNum">     478 </span><span class="lineNoCov">          0 :             ModelRegionBase::region_enter();</span>
+<span class="lineNum">     479 </span><span class="lineNoCov">          0 :             size_t block_size = m_array_len / m_num_progress_updates;</span>
+<span class="lineNum">     480 </span><span class="lineNoCov">          0 :             double scalar = 3.0;</span>
+<a name="481"><span class="lineNum">     481 </span><span class="lineNoCov">          0 :             for (uint64_t i = 0; i &lt; m_num_progress_updates; ++i) {</span></a>
+<span class="lineNum">     482 </span><span class="lineNoCov">          0 :                 ModelRegionBase::loop_enter(i);</span>
+<span class="lineNum">     483 </span><span class="lineNoCov">          0 : #pragma omp parallel for</span>
+<span class="lineNum">     484 </span><span class="lineNoCov">          0 :                 for (size_t j = 0; j &lt; block_size; ++j) {</span>
+<a name="485"><span class="lineNum">     485 </span><span class="lineNoCov">          0 :                     m_array_a[i * block_size + j] = m_array_b[i * block_size + j] + scalar * m_array_c[i * block_size + j];</span></a>
+<span class="lineNum">     486 </span>            :                 }
+<span class="lineNum">     487 </span>            : 
+<span class="lineNum">     488 </span><span class="lineNoCov">          0 :                 ModelRegionBase::loop_exit();</span>
+<a name="489"><span class="lineNum">     489 </span>            :             }</a>
+<span class="lineNum">     490 </span><span class="lineNoCov">          0 :             size_t remainder = m_array_len;</span>
+<span class="lineNum">     491 </span><span class="lineNoCov">          0 :             if (block_size != 0) {</span>
+<span class="lineNum">     492 </span><span class="lineNoCov">          0 :                 remainder = m_array_len % block_size;</span>
+<a name="493"><span class="lineNum">     493 </span>            :             }</a>
+<span class="lineNum">     494 </span><span class="lineNoCov">          0 :             for (uint64_t j = 0; j &lt; remainder; ++j) {</span>
+<span class="lineNum">     495 </span><span class="lineNoCov">          0 :                 m_array_a[m_num_progress_updates * block_size + j] = m_array_b[m_num_progress_updates * block_size + j] + scalar * m_array_c[m_num_progress_updates * block_size + j];</span>
+<span class="lineNum">     496 </span>            :             }
+<a name="497"><span class="lineNum">     497 </span><span class="lineNoCov">          0 :             ModelRegionBase::region_exit();</span></a>
+<span class="lineNum">     498 </span>            :         }
+<a name="499"><span class="lineNum">     499 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     500 </span>            : 
+<a name="501"><span class="lineNum">     501 </span><span class="lineCov">         32 :     All2allModelRegion::All2allModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span></a>
+<span class="lineNum">     502 </span>            :         : ModelRegionBase(verbosity)
+<span class="lineNum">     503 </span>            :         , m_send_buffer(NULL)
+<span class="lineNum">     504 </span>            :         , m_recv_buffer(NULL)
+<a name="505"><span class="lineNum">     505 </span>            :         , m_num_send(0)</a>
+<span class="lineNum">     506 </span>            :         , m_num_rank(0)
+<span class="lineNum">     507 </span>            :         , m_align(64)
+<span class="lineNum">     508 </span><span class="lineCov">         32 :         , m_rank(-1)</span>
+<a name="509"><span class="lineNum">     509 </span>            :     {</a>
+<span class="lineNum">     510 </span><span class="lineCov">         32 :         m_name = &quot;all2all&quot;;</span>
+<span class="lineNum">     511 </span><span class="lineCov">         32 :         m_do_imbalance = do_imbalance;</span>
+<span class="lineNum">     512 </span><span class="lineCov">         32 :         m_do_progress = do_progress;</span>
+<a name="513"><span class="lineNum">     513 </span><span class="lineCov">         32 :         m_do_unmarked = do_unmarked;</span></a>
+<span class="lineNum">     514 </span><span class="lineCov">         32 :         big_o(big_o_in);</span>
+<span class="lineNum">     515 </span><span class="lineCov">         32 :         int err = ModelRegionBase::region(GEOPM_REGION_HINT_NETWORK);</span>
+<span class="lineNum">     516 </span><span class="lineCov">         32 :         if (!err) {</span>
+<a name="517"><span class="lineNum">     517 </span><span class="lineCov">         32 :             err = MPI_Comm_rank(MPI_COMM_WORLD, &amp;m_rank);</span></a>
+<span class="lineNum">     518 </span>            :         }
+<span class="lineNum">     519 </span><span class="lineCov">         32 :         if (err) {</span>
+<span class="lineNum">     520 </span>            :             throw Exception(&quot;All2allModelRegion::All2allModelRegion()&quot;,
+<a name="521"><span class="lineNum">     521 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     522 </span>            :         }
+<a name="523"><span class="lineNum">     523 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">     524 </span>            : 
+<a name="525"><span class="lineNum">     525 </span><span class="lineCov">         96 :     All2allModelRegion::~All2allModelRegion()</span></a>
+<span class="lineNum">     526 </span>            :     {
+<span class="lineNum">     527 </span><span class="lineCov">         32 :         big_o(0);</span>
+<a name="528"><span class="lineNum">     528 </span><span class="lineCov">         64 :     }</span></a>
+<a name="529"><span class="lineNum">     529 </span>            : </a>
+<span class="lineNum">     530 </span><span class="lineCov">         64 :     void All2allModelRegion::big_o(double big_o_in)</span>
+<span class="lineNum">     531 </span>            :     {
+<span class="lineNum">     532 </span><span class="lineCov">         64 :         if (m_big_o &amp;&amp; m_big_o != big_o_in) {</span>
+<a name="533"><span class="lineNum">     533 </span><span class="lineCov">         32 :             free(m_recv_buffer);</span></a>
+<span class="lineNum">     534 </span><span class="lineCov">         32 :             free(m_send_buffer);</span>
+<span class="lineNum">     535 </span>            :         }
+<span class="lineNum">     536 </span>            : 
+<a name="537"><span class="lineNum">     537 </span><span class="lineCov">         64 :         num_progress_updates(big_o_in);</span></a>
+<span class="lineNum">     538 </span>            : 
+<span class="lineNum">     539 </span><span class="lineCov">         64 :         int err = MPI_Comm_size(MPI_COMM_WORLD, &amp;m_num_rank);</span>
+<span class="lineNum">     540 </span><span class="lineCov">         64 :         if (err) {</span>
+<a name="541"><span class="lineNum">     541 </span>            :             throw Exception(&quot;MPI_Comm_size()&quot;,</a>
+<span class="lineNum">     542 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
+<span class="lineNum">     543 </span>            :         }
+<span class="lineNum">     544 </span>            : 
+<a name="545"><span class="lineNum">     545 </span><span class="lineCov">         64 :         if (m_num_progress_updates &gt; 1) {</span></a>
+<span class="lineNum">     546 </span><span class="lineNoCov">          0 :             m_num_send = 1048576; //1MB</span>
+<span class="lineNum">     547 </span>            :         }
+<span class="lineNum">     548 </span>            :         else {
+<a name="549"><span class="lineNum">     549 </span><span class="lineCov">         64 :             m_num_send = 10485760; //10MB</span></a>
+<span class="lineNum">     550 </span>            :         }
+<span class="lineNum">     551 </span>            : 
+<span class="lineNum">     552 </span><span class="lineCov">         64 :         if (big_o_in &amp;&amp; m_big_o != big_o_in) {</span>
+<a name="553"><span class="lineNum">     553 </span><span class="lineCov">         32 :             err = posix_memalign((void **)&amp;m_send_buffer, m_align,</span></a>
+<span class="lineNum">     554 </span><span class="lineCov">         64 :                                  m_num_rank * m_num_send * sizeof(char));</span>
+<span class="lineNum">     555 </span><span class="lineCov">         32 :             if (!err) {</span>
+<span class="lineNum">     556 </span><span class="lineCov">         32 :                 err = posix_memalign((void **)&amp;m_recv_buffer, m_align,</span>
+<a name="557"><span class="lineNum">     557 </span><span class="lineCov">         64 :                                      m_num_rank * m_num_send * sizeof(char));</span></a>
+<span class="lineNum">     558 </span>            :             }
+<span class="lineNum">     559 </span><span class="lineCov">         32 :             if (err) {</span>
+<span class="lineNum">     560 </span>            :                 throw Exception(&quot;All2allModelRegion::big_o(): posix_memalign() failed&quot;,
+<a name="561"><span class="lineNum">     561 </span><span class="lineNoCov">          0 :                                 err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     562 </span>            :             }
+<span class="lineNum">     563 </span><span class="lineCov">        168 : #pragma omp parallel for</span>
+<span class="lineNum">     564 </span><span class="lineCov">        136 :             for (size_t i = 0; i &lt; m_num_rank * m_num_send; i++) {</span>
+<a name="565"><span class="lineNum">     565 </span><span class="lineCov">  598337914 :                 m_send_buffer[i] = (char)(i);</span></a>
+<span class="lineNum">     566 </span>            :             }
+<span class="lineNum">     567 </span>            :         }
+<span class="lineNum">     568 </span><span class="lineCov">         64 :         m_big_o = big_o_in;</span>
+<a name="569"><span class="lineNum">     569 </span><span class="lineCov">         64 :     }</span></a>
+<span class="lineNum">     570 </span>            : 
+<span class="lineNum">     571 </span><span class="lineCov">         32 :     void All2allModelRegion::run(void)</span>
+<span class="lineNum">     572 </span>            :     {
+<a name="573"><span class="lineNum">     573 </span><span class="lineCov">         32 :         if (m_big_o != 0) {</span></a>
+<span class="lineNum">     574 </span><span class="lineCov">         32 :             if (m_verbosity) {</span>
+<span class="lineNum">     575 </span><span class="lineCov">          2 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_num_send &lt;&lt; &quot; byte buffer all2all &quot;</span>
+<span class="lineNum">     576 </span><span class="lineCov">          4 :                           &lt;&lt; m_num_progress_updates &lt;&lt; &quot; times.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<a name="577"><span class="lineNum">     577 </span>            :             }</a>
+<span class="lineNum">     578 </span><span class="lineCov">         32 :             ModelRegionBase::region_enter();</span>
+<span class="lineNum">     579 </span><span class="lineCov">         64 :             for (uint64_t i = 0; i &lt; m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     580 </span><span class="lineCov">         32 :                 ModelRegionBase::loop_enter(i);</span>
+<a name="581"><span class="lineNum">     581 </span>            : </a>
+<span class="lineNum">     582 </span><span class="lineCov">         32 :                 double timeout = 0.0;</span>
+<span class="lineNum">     583 </span><span class="lineCov">         32 :                 struct geopm_time_s start = {{0,0}};</span>
+<span class="lineNum">     584 </span><span class="lineCov">         32 :                 struct geopm_time_s curr = {{0,0}};</span>
+<a name="585"><span class="lineNum">     585 </span><span class="lineCov">         32 :                 int loop_done = 0;</span></a>
+<span class="lineNum">     586 </span><span class="lineCov">         32 :                 if (!m_rank) {</span>
+<span class="lineNum">     587 </span><span class="lineCov">          2 :                     (void)geopm_time(&amp;start);</span>
+<span class="lineNum">     588 </span>            :                 }
+<a name="589"><span class="lineNum">     589 </span><span class="lineCov">        480 :                 while (!loop_done) {</span></a>
+<span class="lineNum">     590 </span><span class="lineCov">        224 :                     int err = MPI_Alltoall(m_send_buffer, m_num_send, MPI_CHAR, m_recv_buffer,</span>
+<span class="lineNum">     591 </span><span class="lineCov">        448 :                                            m_num_send, MPI_CHAR, MPI_COMM_WORLD);</span>
+<span class="lineNum">     592 </span><span class="lineCov">        224 :                     if (err) {</span>
+<a name="593"><span class="lineNum">     593 </span><span class="lineNoCov">          0 :                         throw Exception(&quot;MPI_Alltoall()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     594 </span>            :                     }
+<span class="lineNum">     595 </span><span class="lineCov">        224 :                     if (!m_rank) {</span>
+<span class="lineNum">     596 </span><span class="lineCov">         14 :                         (void)geopm_time(&amp;curr);</span>
+<a name="597"><span class="lineNum">     597 </span><span class="lineCov">         14 :                         timeout = geopm_time_diff(&amp;start, &amp;curr);</span></a>
+<span class="lineNum">     598 </span><span class="lineCov">         14 :                         if (timeout &gt; (m_big_o / m_num_progress_updates)) {</span>
+<span class="lineNum">     599 </span><span class="lineCov">          2 :                             loop_done = 1;</span>
+<span class="lineNum">     600 </span>            :                         }
+<a name="601"><span class="lineNum">     601 </span>            :                     }</a>
+<span class="lineNum">     602 </span><span class="lineCov">        224 :                     err = MPI_Bcast((void*)&amp;loop_done, 1, MPI_INT, 0, MPI_COMM_WORLD);</span>
+<span class="lineNum">     603 </span><span class="lineCov">        224 :                     if (err) {</span>
+<span class="lineNum">     604 </span><span class="lineNoCov">          0 :                         throw Exception(&quot;MPI_Bcast()&quot;, err, __FILE__, __LINE__);</span>
+<a name="605"><span class="lineNum">     605 </span>            :                     }</a>
+<span class="lineNum">     606 </span>            :                 }
+<span class="lineNum">     607 </span>            : 
+<span class="lineNum">     608 </span><span class="lineCov">         32 :                 ModelRegionBase::loop_exit();</span>
+<a name="609"><span class="lineNum">     609 </span>            :             }</a>
+<span class="lineNum">     610 </span><span class="lineCov">         32 :             ModelRegionBase::region_exit();</span>
+<span class="lineNum">     611 </span>            :         }
+<a name="612"><span class="lineNum">     612 </span><span class="lineCov">         32 :     }</span></a>
+<a name="613"><span class="lineNum">     613 </span>            : </a>
+<span class="lineNum">     614 </span><span class="lineNoCov">          0 :     NestedModelRegion::NestedModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span>
+<span class="lineNum">     615 </span>            :         : ModelRegionBase(verbosity)
+<span class="lineNum">     616 </span>            :         , m_spin_region(big_o_in, verbosity, do_imbalance, do_progress, do_unmarked)
+<a name="617"><span class="lineNum">     617 </span><span class="lineNoCov">          0 :         , m_all2all_region(big_o_in, verbosity, do_imbalance, do_progress, do_unmarked)</span></a>
+<span class="lineNum">     618 </span>            :     {
+<a name="619"><span class="lineNum">     619 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     620 </span>            : 
+<a name="621"><span class="lineNum">     621 </span><span class="lineNoCov">          0 :     NestedModelRegion::~NestedModelRegion()</span></a>
+<span class="lineNum">     622 </span>            :     {
+<a name="623"><span class="lineNum">     623 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     624 </span>            : 
+<a name="625"><span class="lineNum">     625 </span><span class="lineNoCov">          0 :     void NestedModelRegion::big_o(double big_o_in)</span></a>
+<span class="lineNum">     626 </span>            :     {
+<span class="lineNum">     627 </span><span class="lineNoCov">          0 :         m_spin_region.big_o(big_o_in);</span>
+<span class="lineNum">     628 </span><span class="lineNoCov">          0 :         m_all2all_region.big_o(big_o_in);</span>
+<a name="629"><span class="lineNum">     629 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     630 </span>            : 
+<span class="lineNum">     631 </span><span class="lineNoCov">          0 :     void NestedModelRegion::run(void)</span>
+<span class="lineNum">     632 </span>            :     {
+<a name="633"><span class="lineNum">     633 </span><span class="lineNoCov">          0 :         if (m_spin_region.m_big_o != 0.0 &amp;&amp; m_all2all_region.m_big_o != 0.0) {</span></a>
+<span class="lineNum">     634 </span><span class="lineNoCov">          0 :             (void)geopm_prof_epoch();</span>
+<span class="lineNum">     635 </span>            :         }
+<span class="lineNum">     636 </span>            :         // Do spin
+<a name="637"><span class="lineNum">     637 </span><span class="lineNoCov">          0 :         if (m_spin_region.m_big_o != 0.0) {</span></a>
+<span class="lineNum">     638 </span><span class="lineNoCov">          0 :             if (m_spin_region.m_verbosity) {</span>
+<span class="lineNum">     639 </span><span class="lineNoCov">          0 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_spin_region.m_big_o &lt;&lt; &quot; second spin.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<span class="lineNum">     640 </span>            :             }
+<a name="641"><span class="lineNum">     641 </span><span class="lineNoCov">          0 :             (void)geopm_prof_enter(m_spin_region.m_region_id);</span></a>
+<span class="lineNum">     642 </span><span class="lineNoCov">          0 :             for (uint64_t i = 0 ; i &lt; m_spin_region.m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     643 </span><span class="lineNoCov">          0 :                 if (m_spin_region.m_do_imbalance) {</span>
+<span class="lineNum">     644 </span><span class="lineNoCov">          0 :                     (void)geopm_imbalancer_enter();</span>
+<a name="645"><span class="lineNum">     645 </span>            :                 }</a>
+<span class="lineNum">     646 </span>            : 
+<span class="lineNum">     647 </span><span class="lineNoCov">          0 :                 double timeout = 0.0;</span>
+<span class="lineNum">     648 </span><span class="lineNoCov">          0 :                 struct geopm_time_s start = {{0,0}};</span>
+<a name="649"><span class="lineNum">     649 </span><span class="lineNoCov">          0 :                 struct geopm_time_s curr = {{0,0}};</span></a>
+<span class="lineNum">     650 </span><span class="lineNoCov">          0 :                 (void)geopm_time(&amp;start);</span>
+<span class="lineNum">     651 </span><span class="lineNoCov">          0 :                 while (timeout &lt; m_spin_region.m_delay) {</span>
+<span class="lineNum">     652 </span><span class="lineNoCov">          0 :                     (void)geopm_time(&amp;curr);</span>
+<a name="653"><span class="lineNum">     653 </span><span class="lineNoCov">          0 :                     timeout = geopm_time_diff(&amp;start, &amp;curr);</span></a>
+<span class="lineNum">     654 </span>            :                 }
+<span class="lineNum">     655 </span>            : 
+<span class="lineNum">     656 </span><span class="lineNoCov">          0 :                 if (m_spin_region.m_do_imbalance) {</span>
+<a name="657"><span class="lineNum">     657 </span><span class="lineNoCov">          0 :                     (void)geopm_imbalancer_exit();</span></a>
+<span class="lineNum">     658 </span>            :                 }
+<span class="lineNum">     659 </span>            :             }
+<span class="lineNum">     660 </span>            :         }
+<a name="661"><span class="lineNum">     661 </span>            : </a>
+<span class="lineNum">     662 </span>            :         // Do all2all before spin region exit
+<span class="lineNum">     663 </span><span class="lineNoCov">          0 :         if (m_all2all_region.m_big_o != 0) {</span>
+<span class="lineNum">     664 </span><span class="lineNoCov">          0 :             if (m_all2all_region.m_verbosity) {</span>
+<a name="665"><span class="lineNum">     665 </span><span class="lineNoCov">          0 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_all2all_region.m_num_send &lt;&lt; &quot; byte buffer all2all &quot;</span></a>
+<span class="lineNum">     666 </span><span class="lineNoCov">          0 :                           &lt;&lt; m_all2all_region.m_num_progress_updates &lt;&lt; &quot; times.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<span class="lineNum">     667 </span>            :             }
+<span class="lineNum">     668 </span><span class="lineNoCov">          0 :             for (uint64_t i = 0; i &lt; m_all2all_region.m_num_progress_updates; ++i) {</span>
+<a name="669"><span class="lineNum">     669 </span><span class="lineNoCov">          0 :                 if (m_all2all_region.m_do_imbalance) {</span></a>
+<span class="lineNum">     670 </span><span class="lineNoCov">          0 :                     (void)geopm_imbalancer_enter();</span>
+<span class="lineNum">     671 </span>            :                 }
+<span class="lineNum">     672 </span>            : 
+<a name="673"><span class="lineNum">     673 </span><span class="lineNoCov">          0 :                 int err = MPI_Alltoall(m_all2all_region.m_send_buffer, m_all2all_region.m_num_send,</span></a>
+<span class="lineNum">     674 </span><span class="lineNoCov">          0 :                                        MPI_CHAR, m_all2all_region.m_recv_buffer,</span>
+<span class="lineNum">     675 </span><span class="lineNoCov">          0 :                                        m_all2all_region.m_num_send, MPI_CHAR, MPI_COMM_WORLD);</span>
+<span class="lineNum">     676 </span><span class="lineNoCov">          0 :                 if (err) {</span>
+<a name="677"><span class="lineNum">     677 </span><span class="lineNoCov">          0 :                     throw Exception(&quot;MPI_Alltoall()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     678 </span>            :                 }
+<span class="lineNum">     679 </span><span class="lineNoCov">          0 :                 err = MPI_Barrier(MPI_COMM_WORLD);</span>
+<span class="lineNum">     680 </span><span class="lineNoCov">          0 :                 if (err) {</span>
+<a name="681"><span class="lineNum">     681 </span><span class="lineNoCov">          0 :                     throw Exception(&quot;MPI_Barrier()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     682 </span>            :                 }
+<span class="lineNum">     683 </span>            :             }
+<span class="lineNum">     684 </span>            : 
+<a name="685"><span class="lineNum">     685 </span><span class="lineNoCov">          0 :             if (m_all2all_region.m_do_imbalance) {</span></a>
+<span class="lineNum">     686 </span><span class="lineNoCov">          0 :                 (void)geopm_imbalancer_exit();</span>
+<span class="lineNum">     687 </span>            :             }
+<span class="lineNum">     688 </span>            :         }
+<a name="689"><span class="lineNum">     689 </span>            : </a>
+<span class="lineNum">     690 </span>            :         // Do spin part deux.
+<span class="lineNum">     691 </span><span class="lineNoCov">          0 :         if (m_spin_region.m_big_o != 0.0) {</span>
+<span class="lineNum">     692 </span><span class="lineNoCov">          0 :             if (m_spin_region.m_verbosity) {</span>
+<a name="693"><span class="lineNum">     693 </span><span class="lineNoCov">          0 :                 std::cout &lt;&lt; &quot;Executing &quot; &lt;&lt; m_spin_region.m_big_o &lt;&lt; &quot; second spin #2.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span></a>
+<span class="lineNum">     694 </span>            :             }
+<span class="lineNum">     695 </span><span class="lineNoCov">          0 :             for (uint64_t i = 0 ; i &lt; m_spin_region.m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     696 </span><span class="lineNoCov">          0 :                 if (m_spin_region.m_do_imbalance) {</span>
+<a name="697"><span class="lineNum">     697 </span><span class="lineNoCov">          0 :                     (void)geopm_imbalancer_enter();</span></a>
+<span class="lineNum">     698 </span>            :                 }
+<span class="lineNum">     699 </span>            : 
+<span class="lineNum">     700 </span><span class="lineNoCov">          0 :                 double timeout = 0.0;</span>
+<a name="701"><span class="lineNum">     701 </span><span class="lineNoCov">          0 :                 struct geopm_time_s start = {{0,0}};</span></a>
+<span class="lineNum">     702 </span><span class="lineNoCov">          0 :                 struct geopm_time_s curr = {{0,0}};</span>
+<span class="lineNum">     703 </span><span class="lineNoCov">          0 :                 (void)geopm_time(&amp;start);</span>
+<span class="lineNum">     704 </span><span class="lineNoCov">          0 :                 while (timeout &lt; m_spin_region.m_delay) {</span>
+<a name="705"><span class="lineNum">     705 </span><span class="lineNoCov">          0 :                     (void)geopm_time(&amp;curr);</span></a>
+<span class="lineNum">     706 </span><span class="lineNoCov">          0 :                     timeout = geopm_time_diff(&amp;start, &amp;curr);</span>
+<span class="lineNum">     707 </span>            :                 }
+<span class="lineNum">     708 </span>            : 
+<a name="709"><span class="lineNum">     709 </span><span class="lineNoCov">          0 :                 if (m_spin_region.m_do_imbalance) {</span></a>
+<span class="lineNum">     710 </span><span class="lineNoCov">          0 :                     (void)geopm_imbalancer_exit();</span>
+<span class="lineNum">     711 </span>            :                 }
+<span class="lineNum">     712 </span>            :             }
+<a name="713"><span class="lineNum">     713 </span><span class="lineNoCov">          0 :             (void)geopm_prof_exit(m_spin_region.m_region_id);</span></a>
+<span class="lineNum">     714 </span>            :         }
+<a name="715"><span class="lineNum">     715 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     716 </span>            : 
+<a name="717"><span class="lineNum">     717 </span><span class="lineCov">         16 :     IgnoreModelRegion::IgnoreModelRegion(double big_o_in, int verbosity, bool do_imbalance, bool do_progress, bool do_unmarked)</span></a>
+<span class="lineNum">     718 </span><span class="lineCov">         16 :         : ModelRegionBase(verbosity)</span>
+<span class="lineNum">     719 </span>            :     {
+<span class="lineNum">     720 </span><span class="lineCov">         16 :         m_name = &quot;ignore&quot;;</span>
+<a name="721"><span class="lineNum">     721 </span><span class="lineCov">         16 :         m_do_imbalance = do_imbalance;</span></a>
+<span class="lineNum">     722 </span><span class="lineCov">         16 :         m_do_progress = do_progress;</span>
+<span class="lineNum">     723 </span><span class="lineCov">         16 :         m_do_unmarked = do_unmarked;</span>
+<span class="lineNum">     724 </span><span class="lineCov">         16 :         big_o(big_o_in);</span>
+<a name="725"><span class="lineNum">     725 </span><span class="lineCov">         16 :         int err = ModelRegionBase::region(GEOPM_REGION_HINT_IGNORE);</span></a>
+<span class="lineNum">     726 </span><span class="lineCov">         16 :         if (err) {</span>
+<span class="lineNum">     727 </span>            :             throw Exception(&quot;IgnoreModelRegion::IgnoreModelRegion()&quot;,
+<span class="lineNum">     728 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
+<a name="729"><span class="lineNum">     729 </span>            :         }</a>
+<a name="730"><span class="lineNum">     730 </span><span class="lineCov">         16 :     }</span></a>
+<span class="lineNum">     731 </span>            : 
+<span class="lineNum">     732 </span><span class="lineCov">         32 :     IgnoreModelRegion::~IgnoreModelRegion()</span>
+<a name="733"><span class="lineNum">     733 </span>            :     {</a>
+<span class="lineNum">     734 </span>            : 
+<a name="735"><span class="lineNum">     735 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">     736 </span>            : 
+<a name="737"><span class="lineNum">     737 </span><span class="lineCov">         16 :     void IgnoreModelRegion::big_o(double big_o_in)</span></a>
+<span class="lineNum">     738 </span>            :     {
+<span class="lineNum">     739 </span><span class="lineCov">         16 :         num_progress_updates(big_o_in);</span>
+<span class="lineNum">     740 </span><span class="lineCov">         16 :         double seconds = big_o_in / m_num_progress_updates;</span>
+<a name="741"><span class="lineNum">     741 </span>            :         m_delay = {(time_t)(seconds),</a>
+<span class="lineNum">     742 </span><span class="lineCov">         16 :                    (long)((seconds - (time_t)(seconds)) * 1E9)};</span>
+<span class="lineNum">     743 </span>            : 
+<span class="lineNum">     744 </span><span class="lineCov">         16 :         m_big_o = big_o_in;</span>
+<a name="745"><span class="lineNum">     745 </span><span class="lineCov">         16 :     }</span></a>
+<span class="lineNum">     746 </span>            : 
+<span class="lineNum">     747 </span><span class="lineCov">         16 :     void IgnoreModelRegion::run(void)</span>
+<span class="lineNum">     748 </span>            :     {
+<a name="749"><span class="lineNum">     749 </span><span class="lineCov">         16 :         if (m_big_o != 0.0) {</span></a>
+<span class="lineNum">     750 </span><span class="lineCov">         16 :             if (m_verbosity) {</span>
+<span class="lineNum">     751 </span><span class="lineCov">          1 :                 std::cout &lt;&lt; &quot;Executing ignored &quot; &lt;&lt; m_big_o &lt;&lt; &quot; second sleep.&quot;  &lt;&lt; std::endl &lt;&lt; std::flush;</span>
+<span class="lineNum">     752 </span>            :             }
+<a name="753"><span class="lineNum">     753 </span><span class="lineCov">         16 :             ModelRegionBase::region_enter();</span></a>
+<span class="lineNum">     754 </span><span class="lineCov">         32 :             for (uint64_t i = 0 ; i &lt; m_num_progress_updates; ++i) {</span>
+<span class="lineNum">     755 </span><span class="lineCov">         16 :                 ModelRegionBase::loop_enter(i);</span>
+<span class="lineNum">     756 </span>            : 
+<a name="757"><span class="lineNum">     757 </span>            :                 int err;</a>
+<span class="lineNum">     758 </span>            : #ifdef __APPLE__
+<span class="lineNum">     759 </span>            :                 err = nanosleep(&amp;m_delay, NULL);
+<span class="lineNum">     760 </span>            : #else
+<a name="761"><span class="lineNum">     761 </span><span class="lineCov">         16 :                 err = clock_nanosleep(CLOCK_REALTIME, 0, &amp;m_delay, NULL);</span></a>
+<span class="lineNum">     762 </span>            : #endif
+<span class="lineNum">     763 </span>            : 
+<span class="lineNum">     764 </span><span class="lineCov">         16 :                 if (err) {</span>
+<a name="765"><span class="lineNum">     765 </span>            :                     throw Exception(&quot;IgnoreModelRegion::run()&quot;,</a>
+<span class="lineNum">     766 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     767 </span>            :                 }
+<span class="lineNum">     768 </span>            : 
+<a name="769"><span class="lineNum">     769 </span><span class="lineCov">         16 :                 ModelRegionBase::loop_exit();</span></a>
+<span class="lineNum">     770 </span>            :             }
+<span class="lineNum">     771 </span><span class="lineCov">         16 :             ModelRegionBase::region_exit();</span>
+<a name="772"><span class="lineNum">     772 </span>            :         }</a>
+<a name="773"><span class="lineNum">     773 </span><span class="lineCov">         16 :     }</span></a>
+<span class="lineNum">     774 </span><span class="lineCov">        195 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

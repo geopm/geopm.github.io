@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.4.0-1-g973044a - src/Tracer.cpp</title>
+  <title>LCOV - v0.6.0-142-gb6330da - src/Tracer.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,37 +28,29 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.4.0-1-g973044a</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">55</td>
-            <td class="headerCovTableEntry">58</td>
-            <td class="headerCovTableEntryHi">94.8 %</td>
+            <td class="headerCovTableEntry">117</td>
+            <td class="headerCovTableEntry">130</td>
+            <td class="headerCovTableEntryHi">90.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-01-25</td>
+            <td class="headerValue">2018-12-21</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">8</td>
-            <td class="headerCovTableEntry">10</td>
-            <td class="headerCovTableEntryMed">80.0 %</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntryHi">92.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
             <td class="headerValueLeg">            Lines:
             <span class="coverLegendCov">hit</span>
             <span class="coverLegendNoCov">not hit</span>
-            | Branches:
-            <span class="coverLegendCov">+</span> taken
-            <span class="coverLegendNoCov">-</span> not taken
-            <span class="coverLegendNoCov">#</span> not executed
 </td>
             <td></td>
-            <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntry">69</td>
-            <td class="headerCovTableEntry">122</td>
-            <td class="headerCovTableEntryLo">56.6 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -74,156 +66,304 @@
     </tr>
     <tr>
       <td>
-<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
-<a name="1"><span class="lineNum">       1 </span>                :            : /*</a>
-<span class="lineNum">       2 </span>                :            :  * Copyright (c) 2016, Intel Corporation
-<span class="lineNum">       3 </span>                :            :  *
-<span class="lineNum">       4 </span>                :            :  * Redistribution and use in source and binary forms, with or without
-<a name="5"><span class="lineNum">       5 </span>                :            :  * modification, are permitted provided that the following conditions</a>
-<span class="lineNum">       6 </span>                :            :  * are met:
-<span class="lineNum">       7 </span>                :            :  *
-<span class="lineNum">       8 </span>                :            :  *     * Redistributions of source code must retain the above copyright
-<a name="9"><span class="lineNum">       9 </span>                :            :  *       notice, this list of conditions and the following disclaimer.</a>
-<span class="lineNum">      10 </span>                :            :  *
-<span class="lineNum">      11 </span>                :            :  *     * Redistributions in binary form must reproduce the above copyright
-<span class="lineNum">      12 </span>                :            :  *       notice, this list of conditions and the following disclaimer in
-<a name="13"><span class="lineNum">      13 </span>                :            :  *       the documentation and/or other materials provided with the</a>
-<span class="lineNum">      14 </span>                :            :  *       distribution.
-<span class="lineNum">      15 </span>                :            :  *
-<span class="lineNum">      16 </span>                :            :  *     * Neither the name of Intel Corporation nor the names of its
-<a name="17"><span class="lineNum">      17 </span>                :            :  *       contributors may be used to endorse or promote products derived</a>
-<span class="lineNum">      18 </span>                :            :  *       from this software without specific prior written permission.
-<span class="lineNum">      19 </span>                :            :  *
-<span class="lineNum">      20 </span>                :            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-<a name="21"><span class="lineNum">      21 </span>                :            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
-<span class="lineNum">      22 </span>                :            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-<span class="lineNum">      23 </span>                :            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-<span class="lineNum">      24 </span>                :            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-<a name="25"><span class="lineNum">      25 </span>                :            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
-<span class="lineNum">      26 </span>                :            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-<span class="lineNum">      27 </span>                :            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-<span class="lineNum">      28 </span>                :            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-<a name="29"><span class="lineNum">      29 </span>                :            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
-<span class="lineNum">      30 </span>                :            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-<span class="lineNum">      31 </span>                :            :  */
-<span class="lineNum">      32 </span>                :            : 
-<a name="33"><span class="lineNum">      33 </span>                :            : #include &lt;unistd.h&gt;</a>
-<span class="lineNum">      34 </span>                :            : #include &lt;iomanip&gt;
-<span class="lineNum">      35 </span>                :            : #include &lt;sstream&gt;
-<span class="lineNum">      36 </span>                :            : #include &lt;iostream&gt;
-<a name="37"><span class="lineNum">      37 </span>                :            : </a>
-<span class="lineNum">      38 </span>                :            : #include &quot;Tracer.hpp&quot;
-<span class="lineNum">      39 </span>                :            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      40 </span>                :            : #include &quot;geopm_env.h&quot;
-<a name="41"><span class="lineNum">      41 </span>                :            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      42 </span>                :            : 
-<span class="lineNum">      43 </span>                :            : #ifndef NAME_MAX
-<span class="lineNum">      44 </span>                :            : #define NAME_MAX 1024
-<a name="45"><span class="lineNum">      45 </span>                :            : #endif</a>
-<span class="lineNum">      46 </span>                :            : 
-<a name="47"><span class="lineNum">      47 </span>                :            : namespace geopm</a>
-<span class="lineNum">      48 </span>                :            : {
-<a name="49"><span class="lineNum">      49 </span>                :<span class="lineCov">         59 :     Tracer::Tracer(std::string header)</span></a>
-<span class="lineNum">      50 </span>                :            :         : m_header(header)
-<span class="lineNum">      51 </span>                :            :         , m_is_trace_enabled(false)
-<span class="lineNum">      52 </span>                :            :         , m_do_header(true)
-<a name="53"><span class="lineNum">      53 </span>                :            :         , m_buffer_limit(134217728) // 128 MiB</a>
-<span class="lineNum">      54 </span>                :            :         , m_time_zero({{0, 0}})
-<span class="lineNum">      55 </span>        [<span class="branchCov" title="Branch 2 was taken 59 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         59 :         , m_policy({0, 0, 0, 0.0})</span>
-<span class="lineNum">         </span>     [<span class="branchCov" title="Branch 5 was taken 33 times"> + </span><span class="branchCov" title="Branch 6 was taken 26 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
-<span class="lineNum">         </span>     [<span class="branchCov" title="Branch 8 was taken 33 times"> + </span><span class="branchCov" title="Branch 9 was taken 26 times"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 11 was taken 33 times"> + </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span>]
-<span class="lineNum">      56 </span>                :            :     {
-<a name="57"><span class="lineNum">      57 </span>                :<span class="lineCov">         59 :         geopm_time(&amp;m_time_zero);</span></a>
-<span class="lineNum">      58 </span>[<span class="branchCov" title="Branch 3 was taken 49 times"> + </span><span class="branchCov" title="Branch 4 was taken 10 times"> + </span>][<span class="branchCov" title="Branch 1 was taken 26 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         59 :         if (geopm_env_do_trace()) {</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 1 was taken 33 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]
-<span class="lineNum">      59 </span>                :            :             char hostname[NAME_MAX];
-<span class="lineNum">      60 </span>                :<span class="lineCov">         49 :             int err = gethostname(hostname, NAME_MAX);</span>
-<a name="61"><span class="lineNum">      61 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 22 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 27 times"> + </span>]:<span class="lineCov">         49 :             if (err) {</span></a>
-<span class="lineNum">      62 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 throw Exception(&quot;Tracer::Tracer() gethostname() failed&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">      63 </span>                :            :             }
-<span class="lineNum">      64 </span>        [<span class="branchCov" title="Branch 1 was taken 49 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         49 :             m_hostname = hostname;</span>
-<a name="65"><span class="lineNum">      65 </span>        [<span class="branchCov" title="Branch 1 was taken 49 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         71 :             std::ostringstream output_path;</span></a>
-<span class="lineNum">      66 </span>[<span class="branchCov" title="Branch 1 was taken 49 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 49 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">         49 :             output_path &lt;&lt; geopm_env_trace() &lt;&lt; &quot;-&quot; &lt;&lt; m_hostname;</span>
-<span class="lineNum">         </span>[<span class="branchCov" title="Branch 7 was taken 49 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>][<span class="branchCov" title="Branch 10 was taken 49 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
-<span class="lineNum">      67 </span>     [<span class="branchCov" title="Branch 1 was taken 27 times"> + </span><span class="branchCov" title="Branch 2 was taken 22 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         49 :             m_stream.open(output_path.str());</span>
-<span class="lineNum">         </span>     [<span class="branchCov" title="Branch 4 was taken 27 times"> + </span><span class="branchCov" title="Branch 5 was taken 22 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 27 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]
-<span class="lineNum">      68 </span>[<span class="branchNoCov" title="Branch 3 was not taken"> - </span><span class="branchCov" title="Branch 4 was taken 49 times"> + </span>][<span class="branchCov" title="Branch 1 was taken 22 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">         49 :             if (!m_stream.good()) {</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 1 was taken 27 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]
-<a name="69"><span class="lineNum">      69 </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 std::cerr &lt;&lt; &quot;Warning: unable to open trace file '&quot; &lt;&lt; output_path.str()</span></a>
-<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]
-<span class="lineNum">      70 </span>[<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]:<span class="lineNoCov">          0 :                           &lt;&lt; &quot;': &quot; &lt;&lt; strerror(errno) &lt;&lt; std::endl;</span>
-<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
-<span class="lineNum">      71 </span>                :            :             }
-<span class="lineNum">      72 </span>     [<span class="branchCov" title="Branch 1 was taken 27 times"> + </span><span class="branchCov" title="Branch 2 was taken 22 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         49 :             m_buffer &lt;&lt; std::setprecision(16);</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 27 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
-<a name="73"><span class="lineNum">      73 </span>                :<span class="lineCov">         49 :             m_is_trace_enabled = true;</span></a>
-<span class="lineNum">      74 </span>                :            :         }
-<a name="75"><span class="lineNum">      75 </span>                :<span class="lineCov">         59 :     }</span></a>
-<span class="lineNum">      76 </span>                :            : 
-<a name="77"><span class="lineNum">      77 </span>                :<span class="lineCov">        135 :     Tracer::~Tracer()</span></a>
-<span class="lineNum">      78 </span>                :            :     {
-<span class="lineNum">      79 </span>                :<span class="lineCov">         45 :         m_stream &lt;&lt; m_buffer.str();</span>
-<span class="lineNum">      80 </span>[<span class="branchCov" title="Branch 0 was taken 22 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 15 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">         45 :         if (m_is_trace_enabled) {</span>
-<a name="81"><span class="lineNum">      81 </span>                :<span class="lineCov">         37 :             m_stream.close();</span></a>
-<span class="lineNum">      82 </span>                :            :         }
-<a name="83"><span class="lineNum">      83 </span>        [<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 45 times"> + </span>]:<span class="lineCov">         90 :     }</span></a>
-<span class="lineNum">      84 </span>                :            : 
-<a name="85"><span class="lineNum">      85 </span>                :<span class="lineCov">    4679850 :     void Tracer::update(const std::vector &lt;struct geopm_telemetry_message_s&gt; &amp;telemetry)</span></a>
-<span class="lineNum">      86 </span>                :            :     {
-<span class="lineNum">      87 </span>[<span class="branchCov" title="Branch 0 was taken 4665683 times"> + </span><span class="branchCov" title="Branch 1 was taken 14167 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 4665683 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">    4679850 :         if (m_is_trace_enabled &amp;&amp; telemetry.size()) {</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 4665683 times"> + </span><span class="branchCov" title="Branch 6 was taken 14167 times"> + </span>]
-<span class="lineNum">      88 </span>        [<span class="branchCov" title="Branch 0 was taken 49 times"> + </span><span class="branchCov" title="Branch 1 was taken 4665634 times"> + </span>]:<span class="lineCov">    4665683 :             if (m_do_header) {</span>
-<a name="89"><span class="lineNum">      89 </span>                :            :                 // Write the GlobalPolicy information first</a>
-<span class="lineNum">      90 </span>                :<span class="lineCov">         49 :                 m_buffer &lt;&lt; m_header;</span>
-<span class="lineNum">      91 </span>                :<span class="lineCov">         49 :                 m_buffer &lt;&lt; &quot;# \&quot;node_name\&quot; : \&quot;&quot; &lt;&lt; m_hostname &lt;&lt; &quot;\&quot;&quot; &lt;&lt; std::endl;</span>
-<span class="lineNum">      92 </span>                :<span class="lineCov">         49 :                 m_buffer &lt;&lt; &quot;region_id | seconds | &quot;;</span>
-<a name="93"><span class="lineNum">      93 </span>        [<span class="branchCov" title="Branch 1 was taken 76 times"> + </span><span class="branchCov" title="Branch 2 was taken 49 times"> + </span>]:<span class="lineCov">        125 :                 for (size_t i = 0; i &lt; telemetry.size(); ++i) {</span></a>
-<span class="lineNum">      94 </span>                :<span class="lineCov">         76 :                     m_buffer &lt;&lt; &quot;pkg_energy-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">      95 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;dram_energy-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">      96 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;frequency-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span>
-<a name="97"><span class="lineNum">      97 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;inst_retired-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span></a>
-<span class="lineNum">      98 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;clk_unhalted_core-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">      99 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;clk_unhalted_ref-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">     100 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;read_bandwidth-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span>
-<a name="101"><span class="lineNum">     101 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;progress-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;</span></a>
-<span class="lineNum">     102 </span>                :<span class="lineCov">         76 :                              &lt;&lt; &quot;runtime-&quot; &lt;&lt; i &lt;&lt; &quot; | &quot;;</span>
-<span class="lineNum">     103 </span>                :            :                 }
-<span class="lineNum">     104 </span>                :<span class="lineCov">         49 :                 m_buffer &lt;&lt; &quot;policy_mode | policy_flags | policy_num_sample | policy_power_budget&quot; &lt;&lt; std::endl;</span>
-<a name="105"><span class="lineNum">     105 </span>                :<span class="lineCov">         49 :                 m_do_header = false;</span></a>
-<span class="lineNum">     106 </span>                :            :             }
-<span class="lineNum">     107 </span>                :<span class="lineCov">    4665683 :             m_buffer &lt;&lt; telemetry[0].region_id &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">     108 </span>                :<span class="lineCov">    9331366 :                      &lt;&lt; geopm_time_diff(&amp;m_time_zero, &amp;(telemetry[0].timestamp)) &lt;&lt; &quot; | &quot;;</span>
-<a name="109"><span class="lineNum">     109 </span>     [<span class="branchCov" title="Branch 2 was taken 8679780 times"> + </span><span class="branchCov" title="Branch 3 was taken 325793 times"> + </span><span class="branchCov" title="Branch 4 was taken 325793 times"> + </span>]:<span class="lineCov">   13671256 :             for (auto it = telemetry.begin(); it != telemetry.end(); ++it) {</span></a>
-<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 13019670 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 8 was taken 8679780 times"> + </span><span class="branchCov" title="Branch 9 was taken 4339890 times"> + </span>]
-<span class="lineNum">     110 </span>[<span class="branchCov" title="Branch 0 was taken 2932137 times"> + </span><span class="branchCov" title="Branch 1 was taken 325793 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 78118020 times"> + </span><span class="branchCov" title="Branch 1 was taken 8679780 times"> + </span>]:<span class="lineCov">   90055730 :                 for (int i = 0; i != GEOPM_NUM_TELEMETRY_TYPE; ++i) {</span>
-<span class="lineNum">     111 </span>     [<span class="branchCov" title="Branch 1 was taken 78118020 times"> + </span><span class="branchCov" title="Branch 2 was taken 2932137 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">   81050157 :                     m_buffer &lt;&lt; it-&gt;signal[i] &lt;&lt; &quot; | &quot;;</span>
-<span class="lineNum">         </span>     [<span class="branchCov" title="Branch 4 was taken 78118020 times"> + </span><span class="branchCov" title="Branch 5 was taken 2932137 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 7 was taken 78118020 times"> + </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span>]
-<span class="lineNum">     112 </span>                :            :                 }
-<a name="113"><span class="lineNum">     113 </span>                :            :             }</a>
-<span class="lineNum">     114 </span>                :<span class="lineCov">    4665683 :             m_buffer &lt;&lt; m_policy.mode &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">     115 </span>                :<span class="lineCov">    4665683 :                      &lt;&lt; m_policy.flags &lt;&lt; &quot; | &quot;</span>
-<span class="lineNum">     116 </span>                :<span class="lineCov">    4665683 :                      &lt;&lt; m_policy.num_sample &lt;&lt; &quot; | &quot;</span>
-<a name="117"><span class="lineNum">     117 </span>                :<span class="lineCov">    4665683 :                      &lt;&lt; m_policy.power_budget &lt;&lt; std::endl;</span></a>
-<span class="lineNum">     118 </span>                :            : 
-<span class="lineNum">     119 </span>                :            :         }
-<span class="lineNum">     120 </span>[<span class="branchCov" title="Branch 2 was taken 4350809 times"> + </span><span class="branchCov" title="Branch 3 was taken 329041 times"> + </span>][<span class="branchCov" title="Branch 4 was taken 8 times"> + </span><span class="branchCov" title="Branch 5 was taken 4350801 times"> + </span>]:<span class="lineCov">    4679850 :         if (m_buffer.tellp() &gt; m_buffer_limit) {</span>
-<a name="121"><span class="lineNum">     121 </span>        [<span class="branchCov" title="Branch 2 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          8 :             m_stream &lt;&lt; m_buffer.str();</span></a>
-<span class="lineNum">     122 </span>[<span class="branchCov" title="Branch 5 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">          8 :             m_buffer.str(&quot;&quot;);</span>
-<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 2 was taken 8 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]
-<span class="lineNum">     123 </span>                :            :         }
-<a name="124"><span class="lineNum">     124 </span>                :<span class="lineCov">    4679850 :     }</span></a>
-<a name="125"><span class="lineNum">     125 </span>                :            : </a>
-<span class="lineNum">     126 </span>                :<span class="lineCov">         59 :     void Tracer::update(const struct geopm_policy_message_s &amp;policy)</span>
-<span class="lineNum">     127 </span>                :            :     {
-<span class="lineNum">     128 </span>        [<span class="branchCov" title="Branch 0 was taken 49 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">         59 :         if (m_is_trace_enabled) {</span>
-<a name="129"><span class="lineNum">     129 </span>                :<span class="lineCov">         49 :             m_policy = policy;</span></a>
-<a name="130"><span class="lineNum">     130 </span>                :            :         }</a>
-<span class="lineNum">     131 </span>                :<span class="lineCov">         59 :     }</span>
-<span class="lineNum">     132 </span>[<span class="branchCov" title="Branch 1 was taken 939 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 939 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">       3756 : }</span>
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2016, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &lt;unistd.h&gt;</a>
+<span class="lineNum">      34 </span>            : #include &lt;limits.h&gt;
+<span class="lineNum">      35 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cctype&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;iomanip&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">      39 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      40 </span>            : #include &lt;algorithm&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;time.h&gt;</a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : #include &quot;Tracer.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;PlatformIO.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;PlatformTopo.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;geopm_env.h&quot;
+<span class="lineNum">      48 </span>            : #include &quot;geopm_hash.h&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;geopm_version.h&quot;</a>
+<span class="lineNum">      50 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      51 </span>            : #include &quot;geopm_internal.h&quot;
+<span class="lineNum">      52 </span>            : #include &quot;geopm_region_id.h&quot;
+<a name="53"><span class="lineNum">      53 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            : using geopm::IPlatformTopo;
+<span class="lineNum">      56 </span>            : 
+<a name="57"><span class="lineNum">      57 </span>            : namespace geopm</a>
+<span class="lineNum">      58 </span>            : {
+<span class="lineNum">      59 </span><span class="lineCov">         13 :     Tracer::Tracer(const std::string &amp;start_time)</span>
+<span class="lineNum">      60 </span><span class="lineCov">         26 :         : Tracer(start_time, geopm_env_trace(), hostname(), geopm_env_agent(),</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">         13 :                  geopm_env_profile(), geopm_env_do_trace(), platform_io(),</span></a>
+<span class="lineNum">      62 </span><span class="lineCov">         52 :                  {}, 16)</span>
+<span class="lineNum">      63 </span>            :     {
+<span class="lineNum">      64 </span>            : 
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         13 :     }</span></a>
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span><span class="lineCov">         16 :     Tracer::Tracer(const std::string &amp;start_time,</span>
+<span class="lineNum">      68 </span>            :                    const std::string &amp;file_path,
+<a name="69"><span class="lineNum">      69 </span>            :                    const std::string &amp;hostname,</a>
+<span class="lineNum">      70 </span>            :                    const std::string &amp;agent,
+<span class="lineNum">      71 </span>            :                    const std::string &amp;profile_name,
+<span class="lineNum">      72 </span>            :                    bool do_trace,
+<a name="73"><span class="lineNum">      73 </span>            :                    IPlatformIO &amp;platform_io,</a>
+<span class="lineNum">      74 </span>            :                    const std::vector&lt;std::string&gt; &amp;env_column,
+<span class="lineNum">      75 </span>            :                    int precision)
+<span class="lineNum">      76 </span>            :         : m_file_path(file_path)
+<a name="77"><span class="lineNum">      77 </span>            :         , m_hostname(hostname)</a>
+<span class="lineNum">      78 </span>            :         , m_is_trace_enabled(do_trace)
+<span class="lineNum">      79 </span>            :         , m_do_header(true)
+<span class="lineNum">      80 </span>            :         , m_buffer_limit(134217728) // 128 MiB
+<a name="81"><span class="lineNum">      81 </span>            :         , m_platform_io(platform_io)</a>
+<span class="lineNum">      82 </span>            :         , m_env_column(env_column)
+<span class="lineNum">      83 </span><span class="lineCov">         16 :         , m_precision(precision)</span>
+<span class="lineNum">      84 </span>            :     {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         16 :         if (m_env_column.empty()) {</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">         13 :             auto num_extra_cols = geopm_env_num_trace_signal();</span>
+<span class="lineNum">      87 </span><span class="lineCov">         13 :             for (int i = 0; i &lt; num_extra_cols; ++i) {</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :                 m_env_column.push_back(geopm_env_trace_signal(i));</span>
+<a name="89"><span class="lineNum">      89 </span>            :             }</a>
+<span class="lineNum">      90 </span>            :         }
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span><span class="lineCov">         16 :         if (m_is_trace_enabled) {</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         24 :             std::ostringstream output_path;</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">         12 :             output_path &lt;&lt; m_file_path &lt;&lt; &quot;-&quot; &lt;&lt; m_hostname;</span>
+<span class="lineNum">      95 </span><span class="lineCov">         12 :             m_stream.open(output_path.str());</span>
+<span class="lineNum">      96 </span><span class="lineCov">         12 :             if (!m_stream.good()) {</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineNoCov">          0 :                 std::cerr &lt;&lt; &quot;Warning: unable to open trace file '&quot; &lt;&lt; output_path.str()</span></a>
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :                           &lt;&lt; &quot;': &quot; &lt;&lt; strerror(errno) &lt;&lt; std::endl;</span>
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :                 m_is_trace_enabled = false;</span>
+<span class="lineNum">     100 </span>            :             }
+<a name="101"><span class="lineNum">     101 </span>            : </a>
+<span class="lineNum">     102 </span>            :             // Header
+<span class="lineNum">     103 </span><span class="lineCov">         12 :             m_buffer &lt;&lt; &quot;# \&quot;geopm_version\&quot; : \&quot;&quot; &lt;&lt; geopm_version() &lt;&lt; &quot;\&quot;,\n&quot;</span>
+<span class="lineNum">     104 </span><span class="lineCov">         12 :                      &lt;&lt; &quot;# \&quot;start_time\&quot; : \&quot;&quot; &lt;&lt; start_time &lt;&lt; &quot;\&quot;,\n&quot;</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         12 :                      &lt;&lt; &quot;# \&quot;profile_name\&quot; : \&quot;&quot; &lt;&lt; profile_name &lt;&lt; &quot;\&quot;,\n&quot;</span></a>
+<span class="lineNum">     106 </span><span class="lineCov">         24 :                      &lt;&lt; &quot;# \&quot;node_name\&quot; : \&quot;&quot; &lt;&lt; m_hostname &lt;&lt; &quot;\&quot;,\n&quot;</span>
+<span class="lineNum">     107 </span><span class="lineCov">         12 :                      &lt;&lt; &quot;# \&quot;agent\&quot; : \&quot;&quot; &lt;&lt; agent &lt;&lt; &quot;\&quot;\n&quot;;</span>
+<span class="lineNum">     108 </span>            :         }
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         16 :     }</span></a>
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span><span class="lineCov">         45 :     Tracer::~Tracer()</span>
+<span class="lineNum">     112 </span>            :     {
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         16 :         if (m_stream.good() &amp;&amp; m_is_trace_enabled) {</span></a>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :             m_stream &lt;&lt; m_buffer.str();</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :             m_stream.close();</span>
+<span class="lineNum">     116 </span>            :         }
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         29 :     }</span></a>
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span><span class="lineCov">         13 :     std::string Tracer::hostname(void)</span>
+<span class="lineNum">     120 </span>            :     {
+<a name="121"><span class="lineNum">     121 </span>            :         char hostname[NAME_MAX];</a>
+<span class="lineNum">     122 </span><span class="lineCov">         13 :         int err = gethostname(hostname, NAME_MAX);</span>
+<span class="lineNum">     123 </span><span class="lineCov">         13 :         if (err) {</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :             throw Exception(&quot;Tracer::hostname() gethostname() failed&quot;, err, __FILE__, __LINE__);</span>
+<a name="125"><span class="lineNum">     125 </span>            :         }</a>
+<span class="lineNum">     126 </span><span class="lineCov">         13 :         return hostname;</span>
+<a name="127"><span class="lineNum">     127 </span>            :     }</a>
+<span class="lineNum">     128 </span>            : 
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         16 :     void Tracer::columns(const std::vector&lt;std::string&gt; &amp;agent_cols)</span></a>
+<span class="lineNum">     130 </span>            :     {
+<span class="lineNum">     131 </span><span class="lineCov">         16 :         if (m_is_trace_enabled) {</span>
+<span class="lineNum">     132 </span><span class="lineCov">         12 :             bool first = true;</span>
+<a name="133"><span class="lineNum">     133 </span>            : </a>
+<span class="lineNum">     134 </span>            :             // default columns
+<span class="lineNum">     135 </span>            :             std::vector&lt;IPlatformIO::m_request_s&gt; base_columns({
+<span class="lineNum">     136 </span>            :                     {&quot;TIME&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<a name="137"><span class="lineNum">     137 </span>            :                     {&quot;REGION_ID#&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},</a>
+<span class="lineNum">     138 </span>            :                     {&quot;REGION_PROGRESS&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<span class="lineNum">     139 </span>            :                     {&quot;REGION_RUNTIME&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<span class="lineNum">     140 </span>            :                     {&quot;ENERGY_PACKAGE&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<a name="141"><span class="lineNum">     141 </span>            :                     {&quot;ENERGY_DRAM&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},</a>
+<span class="lineNum">     142 </span>            :                     {&quot;POWER_PACKAGE&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<span class="lineNum">     143 </span>            :                     {&quot;POWER_DRAM&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<span class="lineNum">     144 </span>            :                     {&quot;FREQUENCY&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},
+<a name="145"><span class="lineNum">     145 </span>            :                     {&quot;CYCLES_THREAD&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0},</a>
+<span class="lineNum">     146 </span><span class="lineCov">         24 :                     {&quot;CYCLES_REFERENCE&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0}});</span>
+<span class="lineNum">     147 </span>            :             // for region entry/exit, make sure region index is known
+<span class="lineNum">     148 </span><span class="lineCov">         12 :             m_region_id_idx = 1;</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         12 :             m_region_progress_idx = 2;</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">         12 :             m_region_runtime_idx = 3;</span>
+<span class="lineNum">     151 </span>            : 
+<span class="lineNum">     152 </span>            :             // extra columns from environment
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         15 :             for (const auto &amp;extra : m_env_column) {</span></a>
+<span class="lineNum">     154 </span><span class="lineCov">          3 :                 base_columns.push_back({extra, IPlatformTopo::M_DOMAIN_BOARD, 0});</span>
+<span class="lineNum">     155 </span>            :             }
+<span class="lineNum">     156 </span>            : 
+<a name="157"><span class="lineNum">     157 </span>            :             // set up columns to be sampled by Tracer</a>
+<span class="lineNum">     158 </span><span class="lineCov">        147 :             for (const auto &amp;col : base_columns) {</span>
+<span class="lineNum">     159 </span><span class="lineCov">        405 :                 m_column_idx.push_back(m_platform_io.push_signal(col.name,</span>
+<span class="lineNum">     160 </span><span class="lineCov">        135 :                                                                  col.domain_type,</span>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        270 :                                                                  col.domain_idx));</span></a>
+<span class="lineNum">     162 </span><span class="lineCov">        135 :                 if (col.name.find(&quot;#&quot;) != std::string::npos) {</span>
+<span class="lineNum">     163 </span><span class="lineCov">         12 :                     m_hex_column.insert(m_column_idx.back());</span>
+<span class="lineNum">     164 </span>            :                 }
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        135 :                 if (first) {</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">         12 :                     m_buffer &lt;&lt; pretty_name(col);</span>
+<span class="lineNum">     167 </span><span class="lineCov">         12 :                     first = false;</span>
+<span class="lineNum">     168 </span>            :                 }
+<a name="169"><span class="lineNum">     169 </span>            :                 else {</a>
+<span class="lineNum">     170 </span><span class="lineCov">        123 :                     m_buffer &lt;&lt; &quot;|&quot; &lt;&lt; pretty_name(col);</span>
+<span class="lineNum">     171 </span>            :                 }
+<span class="lineNum">     172 </span>            :             }
+<a name="173"><span class="lineNum">     173 </span>            : </a>
+<span class="lineNum">     174 </span>            :             // columns from agent; will be sampled by agent
+<span class="lineNum">     175 </span><span class="lineCov">         27 :             for (const auto &amp;name : agent_cols) {</span>
+<span class="lineNum">     176 </span><span class="lineCov">         15 :                 m_buffer &lt;&lt; &quot;|&quot; &lt;&lt; name;</span>
+<a name="177"><span class="lineNum">     177 </span>            :             }</a>
+<span class="lineNum">     178 </span><span class="lineCov">         12 :             m_buffer &lt;&lt; &quot;\n&quot;;</span>
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span><span class="lineCov">         12 :             m_last_telemetry.resize(base_columns.size() + agent_cols.size());</span>
+<a name="181"><span class="lineNum">     181 </span>            :         }</a>
+<a name="182"><span class="lineNum">     182 </span><span class="lineCov">         16 :     }</span></a>
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span><span class="lineCov">     140271 :     void Tracer::write_line(void)</span>
+<a name="185"><span class="lineNum">     185 </span>            :     {</a>
+<span class="lineNum">     186 </span><span class="lineCov">     140271 :         m_buffer &lt;&lt; std::setprecision(m_precision) &lt;&lt; std::scientific;</span>
+<span class="lineNum">     187 </span><span class="lineCov">    1823537 :         for (size_t idx = 0; idx &lt; m_last_telemetry.size(); ++idx) {</span>
+<span class="lineNum">     188 </span><span class="lineCov">    1683266 :             if (idx != 0) {</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">    1542995 :                 m_buffer &lt;&lt; &quot;|&quot;;</span></a>
+<span class="lineNum">     190 </span>            :             }
+<span class="lineNum">     191 </span><span class="lineCov">    1683266 :             if (m_hex_column.find(m_column_idx[idx]) != m_hex_column.end()) {</span>
+<span class="lineNum">     192 </span><span class="lineCov">     140271 :                 m_buffer &lt;&lt; &quot;0x&quot; &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(16);</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">     140271 :                 uint64_t value = geopm_signal_to_field(m_last_telemetry[idx]);</span></a>
+<span class="lineNum">     194 </span><span class="lineCov">     140271 :                 if ((int)idx == m_region_id_idx) {</span>
+<span class="lineNum">     195 </span>            :                     // Remove hints from trace
+<span class="lineNum">     196 </span><span class="lineCov">     140271 :                     value = geopm_region_id_unset_hint(GEOPM_MASK_REGION_HINT, value);</span>
+<a name="197"><span class="lineNum">     197 </span>            :                     // Remove MPI bit in trace</a>
+<span class="lineNum">     198 </span><span class="lineCov">     140271 :                     value = geopm_region_id_unset_mpi(value);</span>
+<span class="lineNum">     199 </span>            :                 }
+<span class="lineNum">     200 </span><span class="lineCov">     140271 :                 m_buffer &lt;&lt; value;</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">     140271 :                 m_buffer &lt;&lt; std::setfill('\0') &lt;&lt; std::setw(0);</span></a>
+<span class="lineNum">     202 </span>            :             }
+<span class="lineNum">     203 </span><span class="lineCov">    1542995 :             else if ((int)idx == m_region_progress_idx) {</span>
+<span class="lineNum">     204 </span><span class="lineCov">     140271 :                 m_buffer &lt;&lt; std::setprecision(1) &lt;&lt; std::fixed</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">     280542 :                          &lt;&lt; m_last_telemetry[idx]</span></a>
+<span class="lineNum">     206 </span><span class="lineCov">     280542 :                          &lt;&lt; std::setprecision(m_precision) &lt;&lt; std::scientific;</span>
+<span class="lineNum">     207 </span>            :             }
+<span class="lineNum">     208 </span>            :             else {
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">    1402724 :                 m_buffer &lt;&lt; m_last_telemetry[idx];</span></a>
+<span class="lineNum">     210 </span>            :             }
+<span class="lineNum">     211 </span>            :         }
+<span class="lineNum">     212 </span><span class="lineCov">     140271 :         m_buffer &lt;&lt; &quot;\n&quot;;</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">     140271 :     }</span></a>
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span><span class="lineCov">     139092 :     void Tracer::update(const std::vector&lt;double&gt; &amp;agent_values,</span>
+<span class="lineNum">     216 </span>            :                         std::list&lt;geopm_region_info_s&gt; region_entry_exit)
+<a name="217"><span class="lineNum">     217 </span>            :     {</a>
+<span class="lineNum">     218 </span><span class="lineCov">     139092 :         if (m_is_trace_enabled) {</span>
+<span class="lineNum">     219 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     220 </span><span class="lineCov">     138547 :             if (m_column_idx.size() == 0) {</span>
+<a name="221"><span class="lineNum">     221 </span>            :                 throw Exception(&quot;Tracer::update(): No columns added to trace.&quot;,</a>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     223 </span>            :             }
+<span class="lineNum">     224 </span><span class="lineCov">     138547 :             if (m_column_idx.size() + agent_values.size() != m_last_telemetry.size()) {</span>
+<a name="225"><span class="lineNum">     225 </span>            :                 throw Exception(&quot;Tracer::update(): Last telemetry buffer not sized correctly.&quot;,</a>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     227 </span>            :             }
+<span class="lineNum">     228 </span>            : #endif
+<a name="229"><span class="lineNum">     229 </span>            :             // save values to be reused for region entry/exit</a>
+<span class="lineNum">     230 </span><span class="lineCov">     138547 :             size_t col_idx = 0;</span>
+<span class="lineNum">     231 </span><span class="lineCov">    3186585 :             for (; col_idx &lt; m_column_idx.size(); ++col_idx) {</span>
+<span class="lineNum">     232 </span><span class="lineCov">    1524019 :                 m_last_telemetry[col_idx] = m_platform_io.sample(m_column_idx[col_idx]);</span>
+<a name="233"><span class="lineNum">     233 </span>            :             }</a>
+<span class="lineNum">     234 </span><span class="lineCov">     277096 :             for (const auto &amp;val : agent_values) {</span>
+<span class="lineNum">     235 </span><span class="lineCov">     138549 :                 m_last_telemetry[col_idx] = val;</span>
+<span class="lineNum">     236 </span><span class="lineCov">     138549 :                 ++col_idx;</span>
+<a name="237"><span class="lineNum">     237 </span>            :             }</a>
+<span class="lineNum">     238 </span>            :             // save region id and progress, which will get written over by entry/exit
+<span class="lineNum">     239 </span><span class="lineCov">     138547 :             double region_id = m_last_telemetry[m_region_id_idx];</span>
+<span class="lineNum">     240 </span><span class="lineCov">     138547 :             double region_progress = m_last_telemetry[m_region_progress_idx];</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">     138547 :             double region_runtime = m_last_telemetry[m_region_runtime_idx];</span></a>
+<span class="lineNum">     242 </span>            : 
+<span class="lineNum">     243 </span>            :             // insert samples for region entry/exit
+<span class="lineNum">     244 </span><span class="lineCov">     138547 :             size_t idx = 0;</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">     140272 :             for (const auto &amp;reg : region_entry_exit) {</span></a>
+<span class="lineNum">     246 </span>            :                 // skip the last region entry if it matches the
+<span class="lineNum">     247 </span>            :                 // sampled telemetry region id and progress
+<span class="lineNum">     248 </span><span class="lineCov">       3584 :                 if (!((idx == region_entry_exit.size() - 1) &amp;&amp;</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">        233 :                       region_progress == reg.progress &amp;&amp;</span></a>
+<span class="lineNum">     250 </span>            :                       region_progress == 0.0 &amp;&amp;
+<span class="lineNum">     251 </span><span class="lineCov">       1817 :                       region_id == geopm_field_to_signal(reg.region_id) )) {</span>
+<span class="lineNum">     252 </span><span class="lineCov">       1724 :                     m_last_telemetry[m_region_id_idx] = geopm_field_to_signal(reg.region_id);</span>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">       1724 :                     m_last_telemetry[m_region_progress_idx] = reg.progress;</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">       1724 :                     m_last_telemetry[m_region_runtime_idx] = reg.runtime;</span>
+<span class="lineNum">     255 </span><span class="lineCov">       1724 :                     write_line();</span>
+<span class="lineNum">     256 </span>            :                 }
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">       1725 :                 ++idx;</span></a>
+<span class="lineNum">     258 </span>            :             }
+<span class="lineNum">     259 </span>            :             // print sampled data last
+<span class="lineNum">     260 </span><span class="lineCov">     138547 :             m_last_telemetry[m_region_id_idx] = region_id;</span>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">     138547 :             m_last_telemetry[m_region_progress_idx] = region_progress;</span></a>
+<span class="lineNum">     262 </span><span class="lineCov">     138547 :             m_last_telemetry[m_region_runtime_idx] = region_runtime;</span>
+<span class="lineNum">     263 </span><span class="lineCov">     138547 :             write_line();</span>
+<span class="lineNum">     264 </span>            :         }
+<a name="265"><span class="lineNum">     265 </span>            : </a>
+<span class="lineNum">     266 </span>            :         // if buffer is full, flush to file
+<span class="lineNum">     267 </span><span class="lineCov">     139092 :         if (m_buffer.tellp() &gt; m_buffer_limit) {</span>
+<span class="lineNum">     268 </span><span class="lineNoCov">          0 :             m_stream &lt;&lt; m_buffer.str();</span>
+<a name="269"><span class="lineNum">     269 </span><span class="lineNoCov">          0 :             m_buffer.str(&quot;&quot;);</span></a>
+<span class="lineNum">     270 </span>            :         }
+<a name="271"><span class="lineNum">     271 </span><span class="lineCov">     139092 :     }</span></a>
+<span class="lineNum">     272 </span>            : 
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         16 :     void Tracer::flush(void)</span></a>
+<span class="lineNum">     274 </span>            :     {
+<span class="lineNum">     275 </span><span class="lineCov">         16 :         m_stream &lt;&lt; m_buffer.str();</span>
+<span class="lineNum">     276 </span><span class="lineCov">         16 :         m_buffer.str(&quot;&quot;);</span>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         16 :         m_stream.close();</span></a>
+<span class="lineNum">     278 </span><span class="lineCov">         16 :         m_is_trace_enabled = false;</span>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">         16 :     }</span></a>
+<span class="lineNum">     280 </span>            : 
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">        135 :     std::string ITracer::pretty_name(const IPlatformIO::m_request_s &amp;col) {</span></a>
+<span class="lineNum">     282 </span><span class="lineCov">        270 :         std::ostringstream result;</span>
+<span class="lineNum">     283 </span><span class="lineCov">        270 :         std::string name = col.name;</span>
+<span class="lineNum">     284 </span><span class="lineCov">        135 :         if (name.find(&quot;#&quot;) == name.length() - 1) {</span>
+<a name="285"><span class="lineNum">     285 </span><span class="lineCov">         12 :             name = name.substr(0, name.length() - 1);</span></a>
+<a name="286"><span class="lineNum">     286 </span>            :         }</a>
+<span class="lineNum">     287 </span>            :         std::transform(name.begin(), name.end(), name.begin(),
+<span class="lineNum">     288 </span><span class="lineCov">       1686 :                        [](unsigned char c){ return std::tolower(c); });</span>
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">        135 :         result &lt;&lt; name;</span></a>
+<span class="lineNum">     290 </span><span class="lineCov">        135 :         if (col.domain_type != IPlatformTopo::M_DOMAIN_BOARD) {</span>
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :             result &lt;&lt; &quot;-&quot; &lt;&lt; IPlatformTopo::domain_type_to_name(col.domain_type)</span>
+<span class="lineNum">     292 </span><span class="lineNoCov">          0 :                    &lt;&lt; &quot;-&quot; &lt;&lt; col.domain_idx;</span>
+<a name="293"><span class="lineNum">     293 </span>            :         }</a>
+<a name="294"><span class="lineNum">     294 </span><span class="lineCov">        270 :         return result.str();</span></a>
+<span class="lineNum">     295 </span>            :     }
+<span class="lineNum">     296 </span><span class="lineCov">        849 : }</span>
 </pre>
       </td>
     </tr>

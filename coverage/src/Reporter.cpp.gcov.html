@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - v0.6.0-142-gb6330da - src/Reporter.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - Reporter.cpp<span style="font-size: 80%;"> (source / <a href="Reporter.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">158</td>
+            <td class="headerCovTableEntry">169</td>
+            <td class="headerCovTableEntryHi">93.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-21</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntryHi">92.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &lt;unistd.h&gt;</a>
+<span class="lineNum">      34 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      35 </span>            : #include &lt;fcntl.h&gt;
+<span class="lineNum">      36 </span>            : 
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;sstream&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;fstream&gt;
+<span class="lineNum">      39 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      40 </span>            : #include &lt;numeric&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;iostream&gt;</a>
+<span class="lineNum">      42 </span>            : #include &lt;iomanip&gt;
+<span class="lineNum">      43 </span>            : #include &lt;limits.h&gt;
+<span class="lineNum">      44 </span>            : 
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;Reporter.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;PlatformIO.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;RegionAggregator.hpp&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;ApplicationIO.hpp&quot;</a>
+<span class="lineNum">      50 </span>            : #include &quot;Comm.hpp&quot;
+<span class="lineNum">      51 </span>            : #include &quot;TreeComm.hpp&quot;
+<span class="lineNum">      52 </span>            : #include &quot;Exception.hpp&quot;
+<a name="53"><span class="lineNum">      53 </span>            : #include &quot;OMPT.hpp&quot;</a>
+<span class="lineNum">      54 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      55 </span>            : #include &quot;geopm_hash.h&quot;
+<span class="lineNum">      56 </span>            : #include &quot;geopm_version.h&quot;
+<a name="57"><span class="lineNum">      57 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            : #ifdef GEOPM_HAS_XMMINTRIN
+<span class="lineNum">      60 </span>            : #include &lt;xmmintrin.h&gt;
+<a name="61"><span class="lineNum">      61 </span>            : #endif</a>
+<span class="lineNum">      62 </span>            : 
+<a name="63"><span class="lineNum">      63 </span>            : namespace geopm</a>
+<span class="lineNum">      64 </span>            : {
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         13 :     Reporter::Reporter(const std::string &amp;start_time, const std::string &amp;report_name, IPlatformIO &amp;platform_io, int rank)</span></a>
+<span class="lineNum">      66 </span>            :         : Reporter(start_time, report_name, platform_io, rank,
+<span class="lineNum">      67 </span><span class="lineCov">         13 :                    std::unique_ptr&lt;IRegionAggregator&gt;(new RegionAggregator))</span>
+<span class="lineNum">      68 </span>            :     {
+<a name="69"><span class="lineNum">      69 </span>            : </a>
+<a name="70"><span class="lineNum">      70 </span><span class="lineCov">         13 :     }</span></a>
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span><span class="lineCov">         14 :     Reporter::Reporter(const std::string &amp;start_time, const std::string &amp;report_name, IPlatformIO &amp;platform_io, int rank,</span>
+<a name="73"><span class="lineNum">      73 </span>            :                        std::unique_ptr&lt;IRegionAggregator&gt; agg)</a>
+<span class="lineNum">      74 </span>            :         : m_start_time(start_time)
+<span class="lineNum">      75 </span>            :         , m_report_name(report_name)
+<span class="lineNum">      76 </span>            :         , m_platform_io(platform_io)
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         14 :         , m_region_agg(std::move(agg))</span></a>
+<span class="lineNum">      78 </span><span class="lineCov">         28 :         , m_rank(rank)</span>
+<span class="lineNum">      79 </span>            :     {
+<span class="lineNum">      80 </span>            : 
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         14 :     }</span></a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineCov">         14 :     void Reporter::init(void)</span>
+<span class="lineNum">      84 </span>            :     {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         14 :         m_region_bulk_runtime_idx = m_region_agg-&gt;push_signal_total(&quot;TIME&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">         14 :         m_energy_pkg_idx = m_region_agg-&gt;push_signal_total(&quot;ENERGY_PACKAGE&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
+<span class="lineNum">      87 </span><span class="lineCov">         14 :         m_energy_dram_idx = m_region_agg-&gt;push_signal_total(&quot;ENERGY_DRAM&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
+<span class="lineNum">      88 </span><span class="lineCov">         14 :         m_clk_core_idx = m_region_agg-&gt;push_signal_total(&quot;CYCLES_THREAD&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         14 :         m_clk_ref_idx = m_region_agg-&gt;push_signal_total(&quot;CYCLES_REFERENCE&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span></a>
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span><span class="lineCov">         14 :         if (!m_rank) {</span>
+<span class="lineNum">      92 </span>            :             // check if report file can be created
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">          5 :             if (!m_report_name.empty()) {</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">          8 :                 std::ofstream test_open(m_report_name);</span>
+<span class="lineNum">      95 </span><span class="lineCov">          4 :                 if (!test_open.good()) {</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;Warning: unable to open report file '&quot; &lt;&lt; m_report_name</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineNoCov">          0 :                               &lt;&lt; &quot;' for writing: &quot; &lt;&lt; strerror(errno) &lt;&lt; std::endl;</span></a>
+<span class="lineNum">      98 </span>            :                 }
+<span class="lineNum">      99 </span><span class="lineCov">          4 :                 std::remove(m_report_name.c_str());</span>
+<span class="lineNum">     100 </span>            :             }
+<a name="101"><span class="lineNum">     101 </span>            :         }</a>
+<span class="lineNum">     102 </span><span class="lineCov">         14 :         m_region_agg-&gt;init();</span>
+<a name="103"><span class="lineNum">     103 </span><span class="lineCov">         14 :     }</span></a>
+<span class="lineNum">     104 </span>            : 
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">     139062 :     void Reporter::update()</span></a>
+<span class="lineNum">     106 </span>            :     {
+<span class="lineNum">     107 </span><span class="lineCov">     139062 :         m_region_agg-&gt;read_batch();</span>
+<a name="108"><span class="lineNum">     108 </span><span class="lineCov">     139062 :     }</span></a>
+<a name="109"><span class="lineNum">     109 </span>            : </a>
+<span class="lineNum">     110 </span><span class="lineCov">         14 :     void Reporter::generate(const std::string &amp;agent_name,</span>
+<span class="lineNum">     111 </span>            :                             const std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &amp;agent_report_header,
+<span class="lineNum">     112 </span>            :                             const std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &amp;agent_node_report,
+<a name="113"><span class="lineNum">     113 </span>            :                             const std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; &amp;agent_region_report,</a>
+<span class="lineNum">     114 </span>            :                             const IApplicationIO &amp;application_io,
+<span class="lineNum">     115 </span>            :                             std::shared_ptr&lt;Comm&gt; comm,
+<span class="lineNum">     116 </span>            :                             const ITreeComm &amp;tree_comm)
+<a name="117"><span class="lineNum">     117 </span>            :     {</a>
+<span class="lineNum">     118 </span><span class="lineCov">         24 :         std::string report_name(application_io.report_name());</span>
+<span class="lineNum">     119 </span><span class="lineCov">         14 :         if (report_name.size() == 0) {</span>
+<span class="lineNum">     120 </span><span class="lineCov">          4 :             return;</span>
+<a name="121"><span class="lineNum">     121 </span>            :         }</a>
+<span class="lineNum">     122 </span>            : 
+<span class="lineNum">     123 </span><span class="lineCov">         10 :         int rank = comm-&gt;rank();</span>
+<span class="lineNum">     124 </span><span class="lineCov">         20 :         std::ofstream master_report;</span>
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">         10 :         if (!rank) {</span></a>
+<span class="lineNum">     126 </span><span class="lineCov">          4 :             master_report.open(report_name);</span>
+<span class="lineNum">     127 </span><span class="lineCov">          4 :             if (!master_report.good()) {</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Failed to open report file&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="129"><span class="lineNum">     129 </span>            :             }</a>
+<span class="lineNum">     130 </span>            :             // make header
+<span class="lineNum">     131 </span><span class="lineCov">          4 :             master_report &lt;&lt; &quot;##### geopm &quot; &lt;&lt; geopm_version() &lt;&lt; &quot; #####&quot; &lt;&lt; std::endl;</span>
+<span class="lineNum">     132 </span><span class="lineCov">          4 :             master_report &lt;&lt; &quot;Start Time: &quot; &lt;&lt; m_start_time &lt;&lt; std::endl;</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">          4 :             master_report &lt;&lt; &quot;Profile: &quot; &lt;&lt; application_io.profile_name() &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">          4 :             master_report &lt;&lt; &quot;Agent: &quot; &lt;&lt; agent_name &lt;&lt; std::endl;</span>
+<span class="lineNum">     135 </span><span class="lineCov">          6 :             for (const auto &amp;kv : agent_report_header) {</span>
+<span class="lineNum">     136 </span><span class="lineCov">          2 :                 master_report &lt;&lt; kv.first &lt;&lt; &quot;: &quot; &lt;&lt; kv.second &lt;&lt; std::endl;</span>
+<a name="137"><span class="lineNum">     137 </span>            :             }</a>
+<span class="lineNum">     138 </span>            :         }
+<span class="lineNum">     139 </span>            :         // per-node report
+<span class="lineNum">     140 </span><span class="lineCov">         20 :         std::ostringstream report;</span>
+<a name="141"><span class="lineNum">     141 </span>            :         char hostname[NAME_MAX];</a>
+<span class="lineNum">     142 </span><span class="lineCov">         10 :         gethostname(hostname, NAME_MAX);</span>
+<span class="lineNum">     143 </span><span class="lineCov">         10 :         report &lt;&lt; &quot;\nHost: &quot; &lt;&lt; hostname &lt;&lt; std::endl;</span>
+<span class="lineNum">     144 </span><span class="lineCov">         12 :         for (const auto &amp;kv : agent_node_report) {</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">          2 :             report &lt;&lt; kv.first &lt;&lt; &quot;: &quot; &lt;&lt; kv.second &lt;&lt; std::endl;</span></a>
+<a name="146"><span class="lineNum">     146 </span>            :         }</a>
+<span class="lineNum">     147 </span>            :         // vector of region data, in descending order by runtime
+<span class="lineNum">     148 </span><span class="lineCov">        390 :         struct region_info {</span>
+<a name="149"><span class="lineNum">     149 </span>            :                 std::string name;</a>
+<span class="lineNum">     150 </span>            :                 uint64_t id;
+<span class="lineNum">     151 </span>            :                 double per_rank_avg_runtime;
+<span class="lineNum">     152 </span>            :                 int count;
+<a name="153"><span class="lineNum">     153 </span>            :         };</a>
+<span class="lineNum">     154 </span><span class="lineCov">         20 :         std::vector&lt;region_info&gt; region_ordered;</span>
+<span class="lineNum">     155 </span><span class="lineCov">         20 :         auto region_name_set = application_io.region_name_set();</span>
+<span class="lineNum">     156 </span><span class="lineCov">         62 :         for (const auto &amp;region : region_name_set) {</span>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">         52 :             uint64_t region_id = geopm_crc32_str(0, region.c_str());</span></a>
+<span class="lineNum">     158 </span><span class="lineCov">        104 :             std::string region_name = region;</span>
+<span class="lineNum">     159 </span><span class="lineCov">         52 :             ompt_pretty_name(region_name);</span>
+<span class="lineNum">     160 </span>            : 
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">         52 :             int count = application_io.total_count(region_id);</span></a>
+<span class="lineNum">     162 </span><span class="lineCov">         52 :             if (count &gt; 0) {</span>
+<span class="lineNum">     163 </span><span class="lineCov">        108 :                 region_ordered.push_back({region_name,</span>
+<span class="lineNum">     164 </span>            :                                           region_id,
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">         36 :                                           application_io.total_region_runtime(region_id),</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">         36 :                                           count});</span>
+<span class="lineNum">     167 </span>            :             }
+<span class="lineNum">     168 </span>            :         }
+<a name="169"><span class="lineNum">     169 </span>            :         // sort based on averge runtime, descending</a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         20 :         std::sort(region_ordered.begin(), region_ordered.end(),</span></a>
+<span class="lineNum">     171 </span>            :                   [] (const region_info &amp;a,
+<span class="lineNum">     172 </span><span class="lineCov">         54 :                       const region_info &amp;b) -&gt; bool {</span>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">         54 :                       return a.per_rank_avg_runtime &gt;= b.per_rank_avg_runtime;</span></a>
+<span class="lineNum">     174 </span><span class="lineCov">         10 :                   });</span>
+<span class="lineNum">     175 </span>            :         // add unmarked and epoch at the end
+<span class="lineNum">     176 </span><span class="lineCov">         30 :         region_ordered.push_back({&quot;unmarked-region&quot;,</span>
+<a name="177"><span class="lineNum">     177 </span>            :                                   GEOPM_REGION_ID_UNMARKED,</a>
+<span class="lineNum">     178 </span><span class="lineCov">         10 :                                   application_io.total_region_runtime(GEOPM_REGION_ID_UNMARKED),</span>
+<span class="lineNum">     179 </span><span class="lineCov">         10 :                                   0});</span>
+<span class="lineNum">     180 </span>            :         /// Total epoch runtime for report includes MPI time and
+<a name="181"><span class="lineNum">     181 </span>            :         /// ignore time, but they are removed from the runtime returned</a>
+<span class="lineNum">     182 </span>            :         /// by the API.  This behavior is to support the EPOCH_RUNTIME
+<span class="lineNum">     183 </span>            :         /// signal used by the balancer, but will be changed in the future.
+<span class="lineNum">     184 </span><span class="lineCov">         40 :         region_ordered.push_back({&quot;epoch&quot;,</span>
+<a name="185"><span class="lineNum">     185 </span>            :                                   GEOPM_REGION_ID_EPOCH,</a>
+<span class="lineNum">     186 </span><span class="lineCov">         10 :                                   application_io.total_epoch_runtime(),</span>
+<span class="lineNum">     187 </span><span class="lineCov">         20 :                                   application_io.total_count(GEOPM_REGION_ID_EPOCH)});</span>
+<span class="lineNum">     188 </span>            : 
+<a name="189"><span class="lineNum">     189 </span>            :         // If any region data from Agent still has hints, remove them</a>
+<span class="lineNum">     190 </span><span class="lineCov">         20 :         std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; region_report;</span>
+<span class="lineNum">     191 </span><span class="lineCov">         16 :         for (const auto &amp;region_data : agent_region_report) {</span>
+<span class="lineNum">     192 </span><span class="lineCov">          6 :             uint64_t region_id = geopm_region_id_hash(region_data.first);</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          6 :             auto it = region_report.find(region_id);</span></a>
+<span class="lineNum">     194 </span><span class="lineCov">          6 :             if (it == region_report.end()) {</span>
+<span class="lineNum">     195 </span><span class="lineCov">          4 :                 region_report[region_id] = region_data.second;</span>
+<span class="lineNum">     196 </span>            :             }
+<a name="197"><span class="lineNum">     197 </span>            :             else {</a>
+<span class="lineNum">     198 </span><span class="lineCov">          2 :                 it-&gt;second.insert(it-&gt;second.end(), region_data.second.begin(), region_data.second.end());</span>
+<span class="lineNum">     199 </span>            :             }
+<span class="lineNum">     200 </span>            :         }
+<a name="201"><span class="lineNum">     201 </span>            : </a>
+<span class="lineNum">     202 </span><span class="lineCov">         66 :         for (const auto &amp;region : region_ordered) {</span>
+<span class="lineNum">     203 </span><span class="lineCov">         56 :             uint64_t mpi_region_id = geopm_region_id_set_mpi(region.id);</span>
+<span class="lineNum">     204 </span><span class="lineCov">         56 :             uint64_t printed_id = region.id;</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         56 :             report &lt;&lt; &quot;Region &quot; &lt;&lt; region.name &lt;&lt; &quot; (0x&quot; &lt;&lt; std::hex</span></a>
+<span class="lineNum">     206 </span><span class="lineCov">        112 :                    &lt;&lt; std::setfill('0') &lt;&lt; std::setw(16)</span>
+<span class="lineNum">     207 </span><span class="lineCov">         56 :                    &lt;&lt; printed_id &lt;&lt; std::dec &lt;&lt; &quot;):&quot;</span>
+<span class="lineNum">     208 </span><span class="lineCov">        112 :                    &lt;&lt; std::setfill('\0') &lt;&lt; std::setw(0)</span>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         56 :                    &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     210 </span><span class="lineCov">         56 :             report &lt;&lt; &quot;    runtime (sec): &quot; &lt;&lt; region.per_rank_avg_runtime &lt;&lt; std::endl;</span>
+<span class="lineNum">     211 </span><span class="lineCov">        112 :             report &lt;&lt; &quot;    sync-runtime (sec): &quot; &lt;&lt; m_region_agg-&gt;sample_total(m_region_bulk_runtime_idx, region.id) +</span>
+<span class="lineNum">     212 </span><span class="lineCov">        112 :                                                     m_region_agg-&gt;sample_total(m_region_bulk_runtime_idx, mpi_region_id) &lt;&lt; std::endl;</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">        112 :             report &lt;&lt; &quot;    package-energy (joules): &quot; &lt;&lt; m_region_agg-&gt;sample_total(m_energy_pkg_idx, region.id) +</span></a>
+<span class="lineNum">     214 </span><span class="lineCov">        112 :                                                          m_region_agg-&gt;sample_total(m_energy_pkg_idx, mpi_region_id) &lt;&lt; std::endl;</span>
+<span class="lineNum">     215 </span><span class="lineCov">        112 :             report &lt;&lt; &quot;    dram-energy (joules): &quot; &lt;&lt; m_region_agg-&gt;sample_total(m_energy_dram_idx, region.id) +</span>
+<span class="lineNum">     216 </span><span class="lineCov">        112 :                                                       m_region_agg-&gt;sample_total(m_energy_dram_idx, mpi_region_id) &lt;&lt; std::endl;</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         56 :             double numer = m_region_agg-&gt;sample_total(m_clk_core_idx, region.id) +</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">         56 :                            m_region_agg-&gt;sample_total(m_clk_core_idx, mpi_region_id);</span>
+<span class="lineNum">     219 </span><span class="lineCov">         56 :             double denom = m_region_agg-&gt;sample_total(m_clk_ref_idx, region.id) +</span>
+<span class="lineNum">     220 </span><span class="lineCov">         56 :                            m_region_agg-&gt;sample_total(m_clk_ref_idx, mpi_region_id);</span>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         56 :             double freq = denom != 0 ? 100.0 * numer / denom : 0.0;</span></a>
+<span class="lineNum">     222 </span><span class="lineCov">         56 :             report &lt;&lt; &quot;    frequency (%): &quot; &lt;&lt; freq &lt;&lt; std::endl;</span>
+<span class="lineNum">     223 </span><span class="lineCov">         56 :             report &lt;&lt; &quot;    frequency (Hz): &quot; &lt;&lt; freq / 100.0 * m_platform_io.read_signal(&quot;CPUINFO::FREQ_STICKER&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0) &lt;&lt; std::endl;</span>
+<span class="lineNum">     224 </span><span class="lineCov">         56 :             report &lt;&lt; &quot;    mpi-runtime (sec): &quot; &lt;&lt; application_io.total_region_runtime_mpi(region.id) &lt;&lt; std::endl;</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         56 :             report &lt;&lt; &quot;    count: &quot; &lt;&lt; region.count &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">         56 :             if (region_report.find(region.id) != region_report.end()) {</span>
+<span class="lineNum">     227 </span><span class="lineCov">         11 :                 for (const auto &amp;kv : region_report.at(region.id)) {</span>
+<span class="lineNum">     228 </span><span class="lineCov">          7 :                     report &lt;&lt; &quot;    &quot; &lt;&lt; kv.first &lt;&lt; &quot;: &quot; &lt;&lt; kv.second &lt;&lt; std::endl;</span>
+<a name="229"><span class="lineNum">     229 </span>            :                 }</a>
+<span class="lineNum">     230 </span>            :             }
+<span class="lineNum">     231 </span>            :         }
+<span class="lineNum">     232 </span>            :         // extra runtimes for epoch region
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">         10 :         report &lt;&lt; &quot;    epoch-runtime-ignore (sec): &quot; &lt;&lt; application_io.total_epoch_runtime_ignore() &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineCov">         10 :         double total_runtime = application_io.total_app_runtime();</span>
+<span class="lineNum">     236 </span><span class="lineCov">         10 :         report &lt;&lt; &quot;Application Totals:&quot; &lt;&lt; std::endl</span>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         10 :                &lt;&lt; &quot;    runtime (sec): &quot; &lt;&lt; total_runtime &lt;&lt; std::endl</span></a>
+<span class="lineNum">     238 </span><span class="lineCov">         20 :                &lt;&lt; &quot;    package-energy (joules): &quot; &lt;&lt; application_io.total_app_energy_pkg() &lt;&lt; std::endl</span>
+<span class="lineNum">     239 </span><span class="lineCov">         20 :                &lt;&lt; &quot;    dram-energy (joules): &quot; &lt;&lt; application_io.total_app_energy_dram() &lt;&lt; std::endl</span>
+<span class="lineNum">     240 </span><span class="lineCov">         20 :                &lt;&lt; &quot;    mpi-runtime (sec): &quot; &lt;&lt; application_io.total_app_runtime_mpi() &lt;&lt; std::endl</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         20 :                &lt;&lt; &quot;    ignore-time (sec): &quot; &lt;&lt; application_io.total_app_runtime_ignore() &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     242 </span>            : 
+<span class="lineNum">     243 </span><span class="lineCov">         20 :         std::string max_memory = get_max_memory();</span>
+<span class="lineNum">     244 </span><span class="lineCov">         10 :         report &lt;&lt; &quot;    geopmctl memory HWM: &quot; &lt;&lt; max_memory &lt;&lt; std::endl;</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         10 :         report &lt;&lt; &quot;    geopmctl network BW (B/sec): &quot; &lt;&lt; tree_comm.overhead_send() / total_runtime &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span>            :         // aggregate reports from every node
+<span class="lineNum">     248 </span><span class="lineCov">         10 :         report.seekp(0, std::ios::end);</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         10 :         size_t buffer_size = (size_t) report.tellp();</span></a>
+<span class="lineNum">     250 </span><span class="lineCov">         10 :         report.seekp(0, std::ios::beg);</span>
+<span class="lineNum">     251 </span><span class="lineCov">         20 :         std::vector&lt;char&gt; report_buffer;</span>
+<span class="lineNum">     252 </span><span class="lineCov">         20 :         std::vector&lt;size_t&gt; buffer_size_array;</span>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         20 :         std::vector&lt;off_t&gt; buffer_displacement;</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">         10 :         int num_ranks = comm-&gt;num_rank();</span>
+<span class="lineNum">     255 </span><span class="lineCov">         10 :         buffer_size_array.resize(num_ranks);</span>
+<span class="lineNum">     256 </span><span class="lineCov">         10 :         buffer_displacement.resize(num_ranks);</span>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">         20 :         comm-&gt;gather(&amp;buffer_size, sizeof(size_t), buffer_size_array.data(),</span></a>
+<span class="lineNum">     258 </span><span class="lineCov">         20 :                      sizeof(size_t), 0);</span>
+<span class="lineNum">     259 </span>            : 
+<span class="lineNum">     260 </span><span class="lineCov">         10 :         if (!rank) {</span>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          4 :             int full_report_size = std::accumulate(buffer_size_array.begin(), buffer_size_array.end(), 0) + 1;</span></a>
+<span class="lineNum">     262 </span><span class="lineCov">          4 :             report_buffer.resize(full_report_size);</span>
+<span class="lineNum">     263 </span><span class="lineCov">          4 :             buffer_displacement[0] = 0;</span>
+<span class="lineNum">     264 </span><span class="lineCov">         10 :             for (int i = 1; i &lt; num_ranks; ++i) {</span>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          6 :                 buffer_displacement[i] = buffer_displacement[i-1] + buffer_size_array[i-1];</span></a>
+<span class="lineNum">     266 </span>            :             }
+<span class="lineNum">     267 </span>            :         }
+<span class="lineNum">     268 </span>            : 
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         30 :         comm-&gt;gatherv((void *) (report.str().data()), sizeof(char) * buffer_size,</span></a>
+<span class="lineNum">     270 </span><span class="lineCov">         20 :                       (void *) report_buffer.data(), buffer_size_array, buffer_displacement, 0);</span>
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span><span class="lineCov">         10 :         if (!rank) {</span>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">          4 :             report_buffer.back() = '\0';</span></a>
+<span class="lineNum">     274 </span><span class="lineCov">          4 :             master_report &lt;&lt; report_buffer.data();</span>
+<span class="lineNum">     275 </span><span class="lineCov">          4 :             master_report &lt;&lt; std::endl;</span>
+<span class="lineNum">     276 </span><span class="lineCov">          4 :             master_report.close();</span>
+<a name="277"><span class="lineNum">     277 </span>            :         }</a>
+<a name="278"><span class="lineNum">     278 </span>            :     }</a>
+<span class="lineNum">     279 </span>            : 
+<span class="lineNum">     280 </span><span class="lineCov">         10 :     std::string Reporter::get_max_memory()</span>
+<a name="281"><span class="lineNum">     281 </span>            :     {</a>
+<span class="lineNum">     282 </span>            :         char status_buffer[8192];
+<span class="lineNum">     283 </span><span class="lineCov">         10 :         status_buffer[8191] = '\0';</span>
+<span class="lineNum">     284 </span><span class="lineCov">         10 :         const char *proc_path = &quot;/proc/self/status&quot;;</span>
+<a name="285"><span class="lineNum">     285 </span>            : </a>
+<span class="lineNum">     286 </span><span class="lineCov">         10 :         int fd = open(proc_path, O_RDONLY);</span>
+<span class="lineNum">     287 </span><span class="lineCov">         10 :         if (fd == -1) {</span>
+<span class="lineNum">     288 </span><span class="lineNoCov">          0 :             throw Exception(&quot;Reporter::generate(): Unable to open &quot; + std::string(proc_path),</span>
+<a name="289"><span class="lineNum">     289 </span><span class="lineNoCov">          0 :                             errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     290 </span>            :         }
+<span class="lineNum">     291 </span>            : 
+<span class="lineNum">     292 </span><span class="lineCov">         10 :         ssize_t num_read = read(fd, status_buffer, 8191);</span>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         10 :         if (num_read == -1) {</span></a>
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :             (void)close(fd);</span>
+<span class="lineNum">     295 </span><span class="lineNoCov">          0 :             throw Exception(&quot;Reporter::generate(): Unable to read &quot; + std::string(proc_path),</span>
+<span class="lineNum">     296 </span><span class="lineNoCov">          0 :                             errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<a name="297"><span class="lineNum">     297 </span>            :         }</a>
+<span class="lineNum">     298 </span><span class="lineCov">         10 :         status_buffer[num_read] = '\0';</span>
+<span class="lineNum">     299 </span>            : 
+<span class="lineNum">     300 </span><span class="lineCov">         10 :         int err = close(fd);</span>
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">         10 :         if (err) {</span></a>
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 :             throw Exception(&quot;Reporter::generate(): Unable to close &quot; + std::string(proc_path),</span>
+<span class="lineNum">     303 </span><span class="lineNoCov">          0 :                             errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     304 </span>            :         }
+<a name="305"><span class="lineNum">     305 </span>            : </a>
+<span class="lineNum">     306 </span>            : 
+<span class="lineNum">     307 </span><span class="lineCov">         20 :         std::istringstream proc_stream(status_buffer);</span>
+<span class="lineNum">     308 </span><span class="lineCov">         20 :         std::string line;</span>
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">         10 :         std::string max_memory;</span></a>
+<span class="lineNum">     310 </span><span class="lineCov">         20 :         const std::string key(&quot;VmHWM:&quot;);</span>
+<span class="lineNum">     311 </span><span class="lineCov">        850 :         while (proc_stream.good()) {</span>
+<span class="lineNum">     312 </span><span class="lineCov">        420 :             getline(proc_stream, line);</span>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">        420 :             if (line.find(key) == 0) {</span></a>
+<span class="lineNum">     314 </span><span class="lineCov">         10 :                 max_memory = line.substr(key.length());</span>
+<span class="lineNum">     315 </span><span class="lineCov">         10 :                 size_t off = max_memory.find_first_not_of(&quot; \t&quot;);</span>
+<span class="lineNum">     316 </span><span class="lineCov">         10 :                 if (off != std::string::npos) {</span>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">         10 :                     max_memory = max_memory.substr(off);</span></a>
+<span class="lineNum">     318 </span>            :                 }
+<span class="lineNum">     319 </span>            :             }
+<span class="lineNum">     320 </span>            :         }
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">         10 :         if (!max_memory.size()) {</span></a>
+<span class="lineNum">     322 </span>            :             throw Exception(&quot;Controller::generate_report(): Unable to get memory overhead from /proc&quot;,
+<span class="lineNum">     323 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     324 </span>            :         }
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">         20 :         return max_memory;</span></a>
+<span class="lineNum">     326 </span>            :     }
+<span class="lineNum">     327 </span><span class="lineCov">        849 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

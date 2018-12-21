@@ -1,0 +1,548 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - v0.6.0-142-gb6330da - src/EnergyEfficientAgent.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - EnergyEfficientAgent.cpp<span style="font-size: 80%;"> (source / <a href="EnergyEfficientAgent.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">116</td>
+            <td class="headerCovTableEntry">221</td>
+            <td class="headerCovTableEntryLo">52.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-21</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntryLo">45.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &lt;sstream&gt;</a>
+<span class="lineNum">      34 </span>            : #include &lt;cmath&gt;
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : #include &quot;contrib/json11/json11.hpp&quot;
+<a name="37"><span class="lineNum">      37 </span>            : </a>
+<span class="lineNum">      38 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      39 </span>            : #include &quot;geopm_region_id.h&quot;
+<span class="lineNum">      40 </span>            : #include &quot;geopm_hash.h&quot;
+<a name="41"><span class="lineNum">      41 </span>            : </a>
+<span class="lineNum">      42 </span>            : #include &quot;EnergyEfficientRegion.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;EnergyEfficientAgent.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;PlatformIO.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;PlatformTopo.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;Helper.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;config.h&quot;
+<a name="49"><span class="lineNum">      49 </span>            : </a>
+<span class="lineNum">      50 </span>            : using json11::Json;
+<span class="lineNum">      51 </span>            : 
+<a name="52"><span class="lineNum">      52 </span>            : namespace geopm</a>
+<a name="53"><span class="lineNum">      53 </span>            : {</a>
+<span class="lineNum">      54 </span><span class="lineNoCov">          0 :     EnergyEfficientAgent::EnergyEfficientAgent()</span>
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :         : EnergyEfficientAgent(platform_io(), platform_topo())</span>
+<span class="lineNum">      56 </span>            :     {
+<a name="57"><span class="lineNum">      57 </span>            : </a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span><span class="lineCov">          8 :     EnergyEfficientAgent::EnergyEfficientAgent(IPlatformIO &amp;plat_io, IPlatformTopo &amp;topo)</span>
+<a name="61"><span class="lineNum">      61 </span>            :         : m_platform_io(plat_io)</a>
+<span class="lineNum">      62 </span>            :         , m_platform_topo(topo)
+<span class="lineNum">      63 </span>            :         , m_freq_min(NAN)
+<span class="lineNum">      64 </span>            :         , m_freq_max(NAN)
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         16 :         , M_FREQ_STEP(get_limit(&quot;CPUINFO::FREQ_STEP&quot;))</span></a>
+<span class="lineNum">      66 </span>            :         , M_SEND_PERIOD(10)
+<span class="lineNum">      67 </span>            :         , m_last_freq(NAN)
+<span class="lineNum">      68 </span>            :         , m_curr_adapt_freq(NAN)
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         24 :         , m_last_wait(GEOPM_TIME_REF)</span></a>
+<span class="lineNum">      70 </span>            :     {
+<span class="lineNum">      71 </span><span class="lineCov">          8 :         parse_env_map();</span>
+<span class="lineNum">      72 </span><span class="lineCov">          8 :         const char* env_freq_online_str = getenv(&quot;GEOPM_EFFICIENT_FREQ_ONLINE&quot;);</span>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">          8 :         if (env_freq_online_str) {</span></a>
+<span class="lineNum">      74 </span><span class="lineCov">          4 :             m_is_online = true;</span>
+<span class="lineNum">      75 </span>            :         }
+<span class="lineNum">      76 </span><span class="lineCov">          8 :         init_platform_io();</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">          8 :     }</span></a>
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span><span class="lineCov">         16 :     std::string EnergyEfficientAgent::plugin_name(void)</span>
+<span class="lineNum">      80 </span>            :     {
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         16 :         return &quot;energy_efficient&quot;;</span></a>
+<a name="82"><span class="lineNum">      82 </span>            :     }</a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineNoCov">          0 :     std::unique_ptr&lt;Agent&gt; EnergyEfficientAgent::make_plugin(void)</span>
+<a name="85"><span class="lineNum">      85 </span>            :     {</a>
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 :         return geopm::make_unique&lt;EnergyEfficientAgent&gt;();</span>
+<a name="87"><span class="lineNum">      87 </span>            :     }</a>
+<span class="lineNum">      88 </span>            : 
+<a name="89"><span class="lineNum">      89 </span><span class="lineNoCov">          0 :     void EnergyEfficientAgent::init(int level, const std::vector&lt;int&gt; &amp;fan_in, bool is_level_root)</span></a>
+<span class="lineNum">      90 </span>            :     {
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :         m_level = level;</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :         if (level == 0) {</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineNoCov">          0 :             m_num_children = 0;</span></a>
+<span class="lineNum">      94 </span>            :         }
+<span class="lineNum">      95 </span>            :         else {
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :             m_num_children = fan_in[level - 1];</span>
+<a name="97"><span class="lineNum">      97 </span>            :         }</a>
+<a name="98"><span class="lineNum">      98 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">      99 </span>            : 
+<span class="lineNum">     100 </span><span class="lineCov">         18 :     bool EnergyEfficientAgent::update_freq_range(const std::vector&lt;double&gt; &amp;in_policy)</span>
+<a name="101"><span class="lineNum">     101 </span>            :     {</a>
+<span class="lineNum">     102 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     103 </span><span class="lineCov">         18 :         if (in_policy.size() != M_NUM_POLICY) {</span>
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :             throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): in_policy vector not correctly sized.&quot;,</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     106 </span>            :         }
+<span class="lineNum">     107 </span>            : #endif
+<span class="lineNum">     108 </span><span class="lineCov">         18 :         bool result = false;</span>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         18 :         double target_freq_min = std::isnan(in_policy[M_POLICY_FREQ_MIN]) ? get_limit(&quot;CPUINFO::FREQ_MIN&quot;) : in_policy[M_POLICY_FREQ_MIN];</span></a>
+<span class="lineNum">     110 </span><span class="lineCov">         18 :         double target_freq_max = std::isnan(in_policy[M_POLICY_FREQ_MAX]) ? get_limit(&quot;CPUINFO::FREQ_MAX&quot;) : in_policy[M_POLICY_FREQ_MAX];</span>
+<span class="lineNum">     111 </span><span class="lineCov">         18 :         if (std::isnan(target_freq_min) || std::isnan(target_freq_max) ||</span>
+<span class="lineNum">     112 </span>            :             target_freq_min &gt; target_freq_max) {
+<a name="113"><span class="lineNum">     113 </span><span class="lineNoCov">          0 :             throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): invalid frequency bounds.&quot;,</span></a>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     115 </span>            :         }
+<span class="lineNum">     116 </span><span class="lineCov">         30 :         if (m_freq_min != target_freq_min ||</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         12 :             m_freq_max != target_freq_max) {</span></a>
+<span class="lineNum">     118 </span><span class="lineCov">          6 :             m_freq_min = target_freq_min;</span>
+<span class="lineNum">     119 </span><span class="lineCov">          6 :             m_freq_max = target_freq_max;</span>
+<span class="lineNum">     120 </span><span class="lineCov">         10 :             for (auto &amp;eer : m_region_map) {</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">          4 :                 eer.second-&gt;update_freq_range(m_freq_min, m_freq_max, M_FREQ_STEP);</span></a>
+<span class="lineNum">     122 </span>            :             }
+<span class="lineNum">     123 </span><span class="lineCov">          6 :             result = true;</span>
+<span class="lineNum">     124 </span>            :         }
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">         18 :         return result;</span></a>
+<a name="126"><span class="lineNum">     126 </span>            :     }</a>
+<span class="lineNum">     127 </span>            : 
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :     std::vector&lt;double&gt; EnergyEfficientAgent::validate_policy(const std::vector&lt;double&gt; &amp;in_policy) const</span>
+<a name="129"><span class="lineNum">     129 </span>            :     {</a>
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :         return in_policy;</span>
+<a name="131"><span class="lineNum">     131 </span>            :     }</a>
+<span class="lineNum">     132 </span>            : 
+<a name="133"><span class="lineNum">     133 </span><span class="lineNoCov">          0 :     bool EnergyEfficientAgent::descend(const std::vector&lt;double&gt; &amp;in_policy,</span></a>
+<span class="lineNum">     134 </span>            :                                        std::vector&lt;std::vector&lt;double&gt; &gt;&amp;out_policy)
+<span class="lineNum">     135 </span>            :     {
+<span class="lineNum">     136 </span>            : #ifdef GEOPM_DEBUG
+<a name="137"><span class="lineNum">     137 </span><span class="lineNoCov">          0 :         if (out_policy.size() != (size_t) m_num_children) {</span></a>
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :             throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): out_policy vector not correctly sized.&quot;,</span>
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     140 </span>            :         }
+<a name="141"><span class="lineNum">     141 </span>            : #endif</a>
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :         bool result = update_freq_range(in_policy);</span>
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 :         if (result) {</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineNoCov">          0 :             for (auto &amp;child_policy : out_policy) {</span></a>
+<span class="lineNum">     146 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :                 if (child_policy.size() != M_NUM_POLICY) {</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :                     throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): child_policy vector not correctly sized.&quot;,</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     150 </span>            :                 }
+<span class="lineNum">     151 </span>            : #endif
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                 child_policy[M_POLICY_FREQ_MIN] = m_freq_min;</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :                 child_policy[M_POLICY_FREQ_MAX] = m_freq_max;</span></a>
+<span class="lineNum">     154 </span>            :             }
+<span class="lineNum">     155 </span>            :         }
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :         return result;</span>
+<a name="157"><span class="lineNum">     157 </span>            :     }</a>
+<span class="lineNum">     158 </span>            : 
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :     bool EnergyEfficientAgent::ascend(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
+<span class="lineNum">     160 </span>            :                                       std::vector&lt;double&gt; &amp;out_sample)
+<a name="161"><span class="lineNum">     161 </span>            :     {</a>
+<span class="lineNum">     162 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :         if (out_sample.size() != m_num_sample) {</span>
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :             throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): out_sample vector not correctly sized.&quot;,</span>
+<a name="165"><span class="lineNum">     165 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     166 </span>            :         }
+<span class="lineNum">     167 </span>            : #endif
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :         bool result = false;</span>
+<a name="169"><span class="lineNum">     169 </span><span class="lineNoCov">          0 :         if (m_num_ascend == 0) {</span></a>
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :             aggregate_sample(in_sample, m_agg_func, out_sample);</span>
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :             result = true;</span>
+<span class="lineNum">     172 </span>            :         }
+<a name="173"><span class="lineNum">     173 </span><span class="lineNoCov">          0 :         ++m_num_ascend;</span></a>
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 :         if (m_num_ascend == M_SEND_PERIOD) {</span>
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :            m_num_ascend = 0;</span>
+<span class="lineNum">     176 </span>            :         }
+<a name="177"><span class="lineNum">     177 </span><span class="lineNoCov">          0 :         return result;</span></a>
+<a name="178"><span class="lineNum">     178 </span>            :     }</a>
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span><span class="lineCov">         18 :     bool EnergyEfficientAgent::adjust_platform(const std::vector&lt;double&gt; &amp;in_policy)</span>
+<a name="181"><span class="lineNum">     181 </span>            :     {</a>
+<span class="lineNum">     182 </span><span class="lineCov">         18 :         update_freq_range(in_policy);</span>
+<span class="lineNum">     183 </span><span class="lineCov">         18 :         bool result = false;</span>
+<span class="lineNum">     184 </span><span class="lineCov">         18 :         double freq = m_last_freq;</span>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">         18 :         auto it = m_rid_freq_map.find(m_last_region_id);</span></a>
+<span class="lineNum">     186 </span><span class="lineCov">         18 :         if (it != m_rid_freq_map.end()) {</span>
+<span class="lineNum">     187 </span><span class="lineCov">          5 :             freq = it-&gt;second;</span>
+<span class="lineNum">     188 </span>            :         }
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">         13 :         else if (m_is_online) {</span></a>
+<span class="lineNum">     190 </span><span class="lineCov">          4 :             if (!std::isnan(m_curr_adapt_freq)) {</span>
+<span class="lineNum">     191 </span><span class="lineNoCov">          0 :                 freq = m_curr_adapt_freq;</span>
+<span class="lineNum">     192 </span>            :             }
+<a name="193"><span class="lineNum">     193 </span>            :             else {</a>
+<span class="lineNum">     194 </span><span class="lineCov">          4 :                 freq = m_freq_max - M_FREQ_STEP;</span>
+<span class="lineNum">     195 </span>            :             }
+<span class="lineNum">     196 </span>            :         }
+<a name="197"><span class="lineNum">     197 </span>            :         else {</a>
+<span class="lineNum">     198 </span><span class="lineCov">          9 :             switch(geopm_region_id_hint(m_last_region_id)) {</span>
+<span class="lineNum">     199 </span>            :                 // Hints for low CPU frequency
+<span class="lineNum">     200 </span>            :                 case GEOPM_REGION_HINT_MEMORY:
+<a name="201"><span class="lineNum">     201 </span>            :                 case GEOPM_REGION_HINT_NETWORK:</a>
+<span class="lineNum">     202 </span>            :                 case GEOPM_REGION_HINT_IO:
+<span class="lineNum">     203 </span><span class="lineCov">          4 :                     freq = m_freq_min;</span>
+<span class="lineNum">     204 </span><span class="lineCov">          4 :                     break;</span>
+<a name="205"><span class="lineNum">     205 </span>            : </a>
+<span class="lineNum">     206 </span>            :                 // Hints for maximum CPU frequency
+<span class="lineNum">     207 </span>            :                 case GEOPM_REGION_HINT_COMPUTE:
+<span class="lineNum">     208 </span>            :                 case GEOPM_REGION_HINT_SERIAL:
+<a name="209"><span class="lineNum">     209 </span>            :                 case GEOPM_REGION_HINT_PARALLEL:</a>
+<span class="lineNum">     210 </span><span class="lineCov">          3 :                     freq = m_freq_max;</span>
+<span class="lineNum">     211 </span><span class="lineCov">          3 :                     break;</span>
+<span class="lineNum">     212 </span>            :                 // Hint Inconclusive
+<a name="213"><span class="lineNum">     213 </span>            :                 //case GEOPM_REGION_HINT_UNKNOWN:</a>
+<span class="lineNum">     214 </span>            :                 //case GEOPM_REGION_HINT_IGNORE:
+<span class="lineNum">     215 </span>            :                 default:
+<span class="lineNum">     216 </span><span class="lineCov">          2 :                     freq = m_freq_max;</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">          2 :                     break;</span></a>
+<span class="lineNum">     218 </span>            :             }
+<span class="lineNum">     219 </span><span class="lineCov">          9 :             m_rid_freq_map[m_last_region_id] = freq;</span>
+<span class="lineNum">     220 </span>            :         }
+<a name="221"><span class="lineNum">     221 </span>            : </a>
+<span class="lineNum">     222 </span><span class="lineCov">         18 :         if (freq != m_last_freq) {</span>
+<span class="lineNum">     223 </span>            :             /// freq initialized to m_last_freq but frequency bounds may have changed since
+<span class="lineNum">     224 </span>            :             /// the time of the caching.  Need to make sure when we're within our bounds
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         18 :             if (m_freq_min &gt; freq) {</span></a>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :                 freq = m_freq_min;</span>
+<span class="lineNum">     227 </span>            :             }
+<span class="lineNum">     228 </span><span class="lineCov">         18 :             else if (m_freq_max &lt; freq) {</span>
+<a name="229"><span class="lineNum">     229 </span><span class="lineNoCov">          0 :                 freq = m_freq_max;</span></a>
+<span class="lineNum">     230 </span>            :             }
+<span class="lineNum">     231 </span><span class="lineCov">         90 :             for (auto ctl_idx : m_control_idx) {</span>
+<span class="lineNum">     232 </span><span class="lineCov">         72 :                 m_platform_io.adjust(ctl_idx, freq);</span>
+<a name="233"><span class="lineNum">     233 </span>            :             }</a>
+<span class="lineNum">     234 </span><span class="lineCov">         18 :             m_last_freq = freq;</span>
+<span class="lineNum">     235 </span><span class="lineCov">         18 :             result = true;</span>
+<span class="lineNum">     236 </span>            :         }
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         18 :         return result;</span></a>
+<a name="238"><span class="lineNum">     238 </span>            :     }</a>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">         18 :     bool EnergyEfficientAgent::sample_platform(std::vector&lt;double&gt; &amp;out_sample)</span>
+<a name="241"><span class="lineNum">     241 </span>            :     {</a>
+<span class="lineNum">     242 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     243 </span><span class="lineCov">         18 :         if (out_sample.size() != m_num_sample) {</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :             throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): out_sample vector not correctly sized.&quot;,</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     246 </span>            :         }
+<span class="lineNum">     247 </span>            : #endif
+<span class="lineNum">     248 </span><span class="lineCov">         54 :         for (size_t sample_idx = 0; sample_idx &lt; m_num_sample; ++sample_idx) {</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         36 :             out_sample[sample_idx] = m_platform_io.sample(m_sample_idx[sample_idx]);</span></a>
+<span class="lineNum">     250 </span>            :         }
+<span class="lineNum">     251 </span><span class="lineCov">         18 :         const uint64_t current_region_id = geopm_signal_to_field(m_platform_io.sample(m_signal_idx[M_SIGNAL_REGION_ID]));</span>
+<span class="lineNum">     252 </span><span class="lineCov">         18 :         if (m_is_online) {</span>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">          4 :             if (!geopm_region_id_is_unmarked(current_region_id)) {</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">          4 :                 bool is_region_boundary = m_last_region_id != current_region_id;</span>
+<span class="lineNum">     255 </span><span class="lineCov">          4 :                 if (is_region_boundary) {</span>
+<span class="lineNum">     256 </span>            :                     // set the freq for the current region (entry)
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">          4 :                     auto region_it = m_region_map.find(current_region_id);</span></a>
+<span class="lineNum">     258 </span><span class="lineCov">          4 :                     if (region_it == m_region_map.end()) {</span>
+<span class="lineNum">     259 </span>            :                         auto tmp = m_region_map.emplace(
+<span class="lineNum">     260 </span>            :                             current_region_id,
+<a name="261"><span class="lineNum">     261 </span>            :                             std::unique_ptr&lt;EnergyEfficientRegion&gt;(</a>
+<span class="lineNum">     262 </span><span class="lineCov">          4 :                                 new EnergyEfficientRegion(m_platform_io,</span>
+<span class="lineNum">     263 </span><span class="lineCov">          4 :                                     m_signal_idx[M_SIGNAL_RUNTIME],</span>
+<span class="lineNum">     264 </span><span class="lineCov">          8 :                                     m_signal_idx[M_SIGNAL_PKG_ENERGY])));</span>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          4 :                         region_it = tmp.first;</span></a>
+<span class="lineNum">     266 </span>            :                     }
+<span class="lineNum">     267 </span><span class="lineCov">          4 :                     region_it-&gt;second-&gt;update_entry();</span>
+<span class="lineNum">     268 </span>            : 
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          4 :                     m_curr_adapt_freq = region_it-&gt;second-&gt;freq();</span></a>
+<span class="lineNum">     270 </span>            :                 }
+<span class="lineNum">     271 </span><span class="lineCov">          4 :                 if (m_last_region_id != 0 &amp;&amp; is_region_boundary) {</span>
+<span class="lineNum">     272 </span>            :                     // update previous region (exit)
+<a name="273"><span class="lineNum">     273 </span><span class="lineNoCov">          0 :                     auto region_it = m_region_map.find(m_last_region_id);</span></a>
+<span class="lineNum">     274 </span><span class="lineNoCov">          0 :                     if (region_it == m_region_map.end()) {</span>
+<span class="lineNum">     275 </span>            :                         auto tmp = m_region_map.emplace(
+<span class="lineNum">     276 </span>            :                             m_last_region_id,
+<a name="277"><span class="lineNum">     277 </span>            :                             std::unique_ptr&lt;EnergyEfficientRegion&gt;(</a>
+<span class="lineNum">     278 </span><span class="lineNoCov">          0 :                                 new EnergyEfficientRegion(m_platform_io,</span>
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :                                     m_signal_idx[M_SIGNAL_RUNTIME],</span>
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :                                     m_signal_idx[M_SIGNAL_PKG_ENERGY])));</span>
+<a name="281"><span class="lineNum">     281 </span><span class="lineNoCov">          0 :                         region_it = tmp.first;</span></a>
+<span class="lineNum">     282 </span>            :                     }
+<span class="lineNum">     283 </span><span class="lineNoCov">          0 :                     region_it-&gt;second-&gt;update_exit();</span>
+<span class="lineNum">     284 </span>            :                 }
+<a name="285"><span class="lineNum">     285 </span>            :             }</a>
+<span class="lineNum">     286 </span>            :         }
+<span class="lineNum">     287 </span><span class="lineCov">         18 :         m_last_region_id = current_region_id;</span>
+<span class="lineNum">     288 </span><span class="lineCov">         18 :         return true;</span>
+<a name="289"><span class="lineNum">     289 </span>            :     }</a>
+<span class="lineNum">     290 </span>            : 
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :     void EnergyEfficientAgent::wait(void)</span>
+<span class="lineNum">     292 </span>            :     {
+<a name="293"><span class="lineNum">     293 </span>            :         static double M_WAIT_SEC = 0.005;</a>
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :         while(geopm_time_since(&amp;m_last_wait) &lt; M_WAIT_SEC) {</span>
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span>            :         }
+<a name="297"><span class="lineNum">     297 </span><span class="lineNoCov">          0 :         geopm_time(&amp;m_last_wait);</span></a>
+<a name="298"><span class="lineNum">     298 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     299 </span>            : 
+<span class="lineNum">     300 </span><span class="lineCov">         14 :     std::vector&lt;std::string&gt; EnergyEfficientAgent::policy_names(void)</span>
+<a name="301"><span class="lineNum">     301 </span>            :     {</a>
+<span class="lineNum">     302 </span><span class="lineCov">         14 :         return {&quot;FREQ_MIN&quot;, &quot;FREQ_MAX&quot;};</span>
+<a name="303"><span class="lineNum">     303 </span>            :     }</a>
+<span class="lineNum">     304 </span>            : 
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         22 :     std::vector&lt;std::string&gt; EnergyEfficientAgent::sample_names(void)</span></a>
+<span class="lineNum">     306 </span>            :     {
+<span class="lineNum">     307 </span><span class="lineCov">         22 :         return {&quot;ENERGY_PACKAGE&quot;, &quot;FREQUENCY&quot;};</span>
+<a name="308"><span class="lineNum">     308 </span>            :     }</a>
+<a name="309"><span class="lineNum">     309 </span>            : </a>
+<span class="lineNum">     310 </span><span class="lineNoCov">          0 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; EnergyEfficientAgent::report_header(void) const</span>
+<span class="lineNum">     311 </span>            :     {
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :         return {};</span>
+<a name="313"><span class="lineNum">     313 </span>            :     }</a>
+<span class="lineNum">     314 </span>            : 
+<span class="lineNum">     315 </span><span class="lineNoCov">          0 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; EnergyEfficientAgent::report_node(void) const</span>
+<span class="lineNum">     316 </span>            :     {
+<a name="317"><span class="lineNum">     317 </span><span class="lineNoCov">          0 :         std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; result;</span></a>
+<span class="lineNum">     318 </span><span class="lineNoCov">          0 :         std::ostringstream oss;</span>
+<span class="lineNum">     319 </span><span class="lineNoCov">          0 :         for (const auto &amp;region : m_region_map) {</span>
+<span class="lineNum">     320 </span><span class="lineNoCov">          0 :             oss &lt;&lt; std::hex &lt;&lt; region.first &lt;&lt; &quot;:&quot; &lt;&lt; std::dec &lt;&lt; region.second-&gt;freq() &lt;&lt; &quot; &quot;;</span>
+<a name="321"><span class="lineNum">     321 </span>            :         }</a>
+<span class="lineNum">     322 </span><span class="lineNoCov">          0 :         if (m_region_map.size()) {</span>
+<span class="lineNum">     323 </span><span class="lineNoCov">          0 :             result.push_back({&quot;Final online freq map&quot;, oss.str()});</span>
+<span class="lineNum">     324 </span>            :         }
+<a name="325"><span class="lineNum">     325 </span><span class="lineNoCov">          0 :         oss.str(&quot;&quot;);</span></a>
+<span class="lineNum">     326 </span><span class="lineNoCov">          0 :         for (const auto &amp;region : m_rid_freq_map) {</span>
+<span class="lineNum">     327 </span><span class="lineNoCov">          0 :             oss &lt;&lt; std::hex &lt;&lt; region.first &lt;&lt; &quot;:&quot; &lt;&lt; std::dec &lt;&lt; region.second &lt;&lt; &quot; &quot;;</span>
+<span class="lineNum">     328 </span>            :         }
+<a name="329"><span class="lineNum">     329 </span><span class="lineNoCov">          0 :         if (m_rid_freq_map.size()) {</span></a>
+<span class="lineNum">     330 </span><span class="lineNoCov">          0 :             result.push_back({&quot;Final offline/hint freq map&quot;, oss.str()});</span>
+<span class="lineNum">     331 </span>            :         }
+<span class="lineNum">     332 </span>            : 
+<a name="333"><span class="lineNum">     333 </span><span class="lineNoCov">          0 :         return result;</span></a>
+<a name="334"><span class="lineNum">     334 </span>            :     }</a>
+<span class="lineNum">     335 </span>            : 
+<span class="lineNum">     336 </span><span class="lineNoCov">          0 :     std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; EnergyEfficientAgent::report_region(void) const</span>
+<a name="337"><span class="lineNum">     337 </span>            :     {</a>
+<span class="lineNum">     338 </span><span class="lineNoCov">          0 :         std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; result;</span>
+<span class="lineNum">     339 </span>            :         // If region is in this map, online learning was used to set frequency
+<span class="lineNum">     340 </span><span class="lineNoCov">          0 :         for (const auto &amp;region : m_region_map) {</span>
+<a name="341"><span class="lineNum">     341 </span><span class="lineNoCov">          0 :             if (geopm_region_id_is_mpi(region.first)) {</span></a>
+<span class="lineNum">     342 </span><span class="lineNoCov">          0 :                 result[region.first].push_back(std::make_pair(&quot;REQUESTED_ONLINE_MPI_FREQUENCY&quot;, std::to_string(region.second-&gt;freq())));</span>
+<span class="lineNum">     343 </span>            :             }
+<span class="lineNum">     344 </span>            :             else {
+<a name="345"><span class="lineNum">     345 </span><span class="lineNoCov">          0 :                 result[region.first].push_back(std::make_pair(&quot;REQUESTED_ONLINE_FREQUENCY&quot;, std::to_string(region.second-&gt;freq())));</span></a>
+<span class="lineNum">     346 </span>            :             }
+<span class="lineNum">     347 </span>            :         }
+<span class="lineNum">     348 </span>            :         // If region is in this map, offline static frequency or hint was used
+<a name="349"><span class="lineNum">     349 </span><span class="lineNoCov">          0 :         for (const auto &amp;region : m_rid_freq_map) {</span></a>
+<span class="lineNum">     350 </span><span class="lineNoCov">          0 :             if (geopm_region_id_is_mpi(region.first)) {</span>
+<span class="lineNum">     351 </span><span class="lineNoCov">          0 :                 result[region.first].push_back(std::make_pair(&quot;REQUESTED_OFFLINE_MPI_FREQUENCY&quot;, std::to_string(region.second)));</span>
+<span class="lineNum">     352 </span>            :             }
+<a name="353"><span class="lineNum">     353 </span>            :             else {</a>
+<span class="lineNum">     354 </span><span class="lineNoCov">          0 :                 result[region.first].push_back(std::make_pair(&quot;REQUESTED_OFFLINE_FREQUENCY&quot;, std::to_string(region.second)));</span>
+<span class="lineNum">     355 </span>            :             }
+<span class="lineNum">     356 </span>            :         }
+<a name="357"><span class="lineNum">     357 </span><span class="lineNoCov">          0 :         return result;</span></a>
+<a name="358"><span class="lineNum">     358 </span>            :     }</a>
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span><span class="lineNoCov">          0 :     std::vector&lt;std::string&gt; EnergyEfficientAgent::trace_names(void) const</span>
+<a name="361"><span class="lineNum">     361 </span>            :     {</a>
+<span class="lineNum">     362 </span><span class="lineNoCov">          0 :         return {};</span>
+<a name="363"><span class="lineNum">     363 </span>            :     }</a>
+<span class="lineNum">     364 </span>            : 
+<a name="365"><span class="lineNum">     365 </span><span class="lineNoCov">          0 :     void EnergyEfficientAgent::trace_values(std::vector&lt;double&gt; &amp;values)</span></a>
+<span class="lineNum">     366 </span>            :     {
+<a name="367"><span class="lineNum">     367 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">     368 </span>            : 
+<a name="369"><span class="lineNum">     369 </span><span class="lineCov">          8 :     double EnergyEfficientAgent::get_limit(const std::string &amp;sig_name) const</span></a>
+<span class="lineNum">     370 </span>            :     {
+<span class="lineNum">     371 </span><span class="lineCov">          8 :         const int domain_type = m_platform_io.signal_domain_type(sig_name);</span>
+<span class="lineNum">     372 </span><span class="lineCov">          8 :         double result = NAN;</span>
+<a name="373"><span class="lineNum">     373 </span><span class="lineCov">          8 :         const double sticker_freq = m_platform_io.read_signal(&quot;CPUINFO::FREQ_STICKER&quot;, domain_type, 0);</span></a>
+<span class="lineNum">     374 </span><span class="lineCov">          8 :         if (sig_name == &quot;CPUINFO::FREQ_MIN&quot;) {</span>
+<span class="lineNum">     375 </span><span class="lineNoCov">          0 :             if (domain_type == IPlatformTopo::M_DOMAIN_INVALID) {</span>
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :                 if (m_platform_io.signal_domain_type(&quot;CPUINFO::FREQ_STICKER&quot;) == IPlatformTopo::M_DOMAIN_INVALID) {</span>
+<a name="377"><span class="lineNum">     377 </span><span class="lineNoCov">          0 :                     throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): unable to parse min and sticker frequencies.&quot;,</span></a>
+<span class="lineNum">     378 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_AGENT_UNSUPPORTED, __FILE__, __LINE__);</span>
+<span class="lineNum">     379 </span>            :                 }
+<span class="lineNum">     380 </span>            :             }
+<a name="381"><span class="lineNum">     381 </span>            :             else {</a>
+<span class="lineNum">     382 </span><span class="lineNoCov">          0 :                 result = m_platform_io.read_signal(sig_name, domain_type, 0);</span>
+<span class="lineNum">     383 </span>            :             }
+<span class="lineNum">     384 </span>            :         }
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">          8 :         else if (sig_name == &quot;CPUINFO::FREQ_MAX&quot;) {</span></a>
+<span class="lineNum">     386 </span><span class="lineNoCov">          0 :             if (domain_type == IPlatformTopo::M_DOMAIN_INVALID) {</span>
+<span class="lineNum">     387 </span><span class="lineNoCov">          0 :                 if (m_platform_io.signal_domain_type(&quot;CPUINFO::FREQ_STICKER&quot;) == IPlatformTopo::M_DOMAIN_INVALID) {</span>
+<span class="lineNum">     388 </span><span class="lineNoCov">          0 :                     throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): unable to parse max and sticker frequencies.&quot;,</span>
+<a name="389"><span class="lineNum">     389 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_AGENT_UNSUPPORTED, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     390 </span>            :                 }
+<span class="lineNum">     391 </span><span class="lineNoCov">          0 :                 result = sticker_freq + M_FREQ_STEP;</span>
+<span class="lineNum">     392 </span>            :             }
+<a name="393"><span class="lineNum">     393 </span>            :             else {</a>
+<span class="lineNum">     394 </span><span class="lineNoCov">          0 :                 result = m_platform_io.read_signal(sig_name, domain_type, 0);</span>
+<span class="lineNum">     395 </span>            :             }
+<span class="lineNum">     396 </span>            :         }
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">          8 :         else if (sig_name == &quot;CPUINFO::FREQ_STEP&quot;) {</span></a>
+<span class="lineNum">     398 </span><span class="lineCov">          8 :             result = m_platform_io.read_signal(sig_name, domain_type, 0);</span>
+<span class="lineNum">     399 </span>            :         }
+<span class="lineNum">     400 </span>            : #ifdef GEOPM_DEBUG
+<a name="401"><span class="lineNum">     401 </span>            :         else {</a>
+<span class="lineNum">     402 </span><span class="lineNoCov">          0 :             throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): requested invalid signal name.&quot;,</span>
+<span class="lineNum">     403 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     404 </span>            :         }
+<a name="405"><span class="lineNum">     405 </span>            : #endif</a>
+<span class="lineNum">     406 </span><span class="lineCov">          8 :         return result;</span>
+<a name="407"><span class="lineNum">     407 </span>            :     }</a>
+<span class="lineNum">     408 </span>            : 
+<a name="409"><span class="lineNum">     409 </span><span class="lineCov">          8 :     void EnergyEfficientAgent::init_platform_io(void)</span></a>
+<span class="lineNum">     410 </span>            :     {
+<span class="lineNum">     411 </span>            :         // All columns sampled will be in the trace
+<span class="lineNum">     412 </span><span class="lineCov">         24 :         for (auto sample : sample_names()) {</span>
+<a name="413"><span class="lineNum">     413 </span><span class="lineCov">         48 :             m_sample_idx.push_back(m_platform_io.push_signal(sample,</span></a>
+<span class="lineNum">     414 </span>            :                                                              IPlatformTopo::M_DOMAIN_BOARD,
+<span class="lineNum">     415 </span><span class="lineCov">         32 :                                                              0));</span>
+<span class="lineNum">     416 </span><span class="lineCov">         16 :             m_agg_func.push_back(m_platform_io.agg_function(sample));</span>
+<a name="417"><span class="lineNum">     417 </span>            :         }</a>
+<span class="lineNum">     418 </span><span class="lineCov">          8 :         m_num_sample = m_sample_idx.size();</span>
+<span class="lineNum">     419 </span>            : 
+<span class="lineNum">     420 </span><span class="lineCov">          8 :         const int freq_ctl_domain_type = m_platform_io.control_domain_type(&quot;FREQUENCY&quot;);</span>
+<a name="421"><span class="lineNum">     421 </span><span class="lineCov">          8 :         const int num_freq_ctl_domain = m_platform_topo.num_domain(freq_ctl_domain_type);</span></a>
+<span class="lineNum">     422 </span><span class="lineCov">         40 :         for (int ctl_dom_idx = 0; ctl_dom_idx != num_freq_ctl_domain; ++ctl_dom_idx) {</span>
+<span class="lineNum">     423 </span><span class="lineCov">         96 :             m_control_idx.push_back(m_platform_io.push_control(&quot;FREQUENCY&quot;,</span>
+<span class="lineNum">     424 </span><span class="lineCov">         64 :                                                                freq_ctl_domain_type, ctl_dom_idx));</span>
+<a name="425"><span class="lineNum">     425 </span>            :         }</a>
+<span class="lineNum">     426 </span>            :         std::vector&lt;std::string&gt; signal_names = {&quot;REGION_ID#&quot;, &quot;REGION_RUNTIME&quot;,
+<span class="lineNum">     427 </span><span class="lineCov">         16 :                                                  &quot;ENERGY_PACKAGE&quot;,};</span>
+<span class="lineNum">     428 </span><span class="lineCov">          8 :         size_t signal = 0;</span>
+<a name="429"><span class="lineNum">     429 </span><span class="lineCov">         24 :         m_signal_idx.push_back(m_platform_io.push_signal(signal_names[signal],</span></a>
+<span class="lineNum">     430 </span>            :                                                          IPlatformTopo::M_DOMAIN_BOARD,
+<span class="lineNum">     431 </span><span class="lineCov">         16 :                                                          0));</span>
+<span class="lineNum">     432 </span><span class="lineCov">          8 :         if (m_is_online) {</span>
+<a name="433"><span class="lineNum">     433 </span>            :             // All signals needed for adaptive mode</a>
+<span class="lineNum">     434 </span><span class="lineCov">         12 :             for (signal = 1; signal &lt; signal_names.size(); ++signal) {</span>
+<span class="lineNum">     435 </span><span class="lineCov">         24 :                 m_signal_idx.push_back(m_platform_io.push_signal(signal_names[signal],</span>
+<span class="lineNum">     436 </span>            :                                                                  IPlatformTopo::M_DOMAIN_BOARD,
+<a name="437"><span class="lineNum">     437 </span><span class="lineCov">         16 :                                                                  0));</span></a>
+<span class="lineNum">     438 </span>            :             }
+<span class="lineNum">     439 </span>            :         }
+<a name="440"><span class="lineNum">     440 </span><span class="lineCov">          8 :     }</span></a>
+<a name="441"><span class="lineNum">     441 </span>            : </a>
+<span class="lineNum">     442 </span><span class="lineCov">          8 :     void EnergyEfficientAgent::parse_env_map(void)</span>
+<span class="lineNum">     443 </span>            :     {
+<span class="lineNum">     444 </span><span class="lineCov">          8 :         const char* env_freq_rid_map_str = getenv(&quot;GEOPM_EFFICIENT_FREQ_RID_MAP&quot;);</span>
+<a name="445"><span class="lineNum">     445 </span><span class="lineCov">          8 :         if (env_freq_rid_map_str) {</span></a>
+<span class="lineNum">     446 </span><span class="lineCov">          8 :             std::string full_str(env_freq_rid_map_str);</span>
+<span class="lineNum">     447 </span><span class="lineCov">          8 :             std::string err;</span>
+<span class="lineNum">     448 </span><span class="lineCov">          8 :             Json root = Json::parse(full_str, err);</span>
+<a name="449"><span class="lineNum">     449 </span><span class="lineCov">          4 :             if (!err.empty() || !root.is_object()) {</span></a>
+<span class="lineNum">     450 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) + &quot;(): detected a malformed json config file: &quot; + err,</span>
+<span class="lineNum">     451 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span>
+<span class="lineNum">     452 </span>            :             }
+<a name="453"><span class="lineNum">     453 </span><span class="lineCov">         24 :             for (const auto &amp;obj : root.object_items()) {</span></a>
+<span class="lineNum">     454 </span><span class="lineCov">         20 :                 if (obj.second.type() != Json::NUMBER) {</span>
+<span class="lineNum">     455 </span><span class="lineNoCov">          0 :                     throw Exception(&quot;EnergyEfficientAgent::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     456 </span>            :                                     &quot;: Region best-fit frequency must be a number&quot;,
+<a name="457"><span class="lineNum">     457 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     458 </span>            :                 }
+<span class="lineNum">     459 </span><span class="lineCov">         20 :                 uint64_t rid = geopm_crc32_str(0, obj.first.c_str());</span>
+<span class="lineNum">     460 </span><span class="lineCov">         20 :                 m_rid_freq_map[rid] = obj.second.number_value();</span>
+<a name="461"><span class="lineNum">     461 </span>            :             }</a>
+<span class="lineNum">     462 </span>            :         }
+<span class="lineNum">     463 </span><span class="lineCov">          8 :     }</span>
+<span class="lineNum">     464 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
