@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>geopmctl(1) - geopm runtime control application</title>
+  <title>geopm_time.h(3) - helper methods for time</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -56,41 +56,57 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
-    <a href="#OPTIONS">OPTIONS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
 
   <ol class='man-decor man-head man head'>
-    <li class='tl'>geopmctl(1)</li>
+    <li class='tl'>geopm_time.h(3)</li>
     <li class='tc'></li>
-    <li class='tr'>geopmctl(1)</li>
+    <li class='tr'>geopm_time.h(3)</li>
   </ol>
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>geopmctl</code> - <span class="man-whatis">geopm runtime control application</span>
+  <code>geopm_time.h</code> - <span class="man-whatis">helper methods for time</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm_time.h">&lt;geopm_time.h></a></strong></p>
+
+<p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
+
 <dl>
-<dt><code>geopmctl</code> [<code>--help</code>] [<code>--version</code>]:</dt><dd></dd>
+<dt><code>int geopm_time_string(</code></dt><dd><p><code>int</code> <em>buf_size</em>, <br />
+<code>char *</code><em>buf</em><code>);</code></p></dd>
+<dt><code>int geopm_time(</code></dt><dd><p><code>struct geopm_time_s *</code><em>time</em><code>);</code></p></dd>
+<dt><code>double geopm_time_diff(</code></dt><dd><p><code>const struct geopm_time_s *</code><em>begin</em>, <br />
+<code>const struct geopm_time_s *</code><em>end</em><code>);</code></p></dd>
+<dt><code>bool geopm_time_comp(</code></dt><dd><p><code>const struct geopm_time_s *</code><em>aa</em>, <br />
+<code>const struct geopm_time_s *</code><em>bb</em><code>);</code></p></dd>
+<dt><code>void geopm_time_add(</code></dt><dd><p><code>const struct geopm_time_s *</code><em>begin</em>, <br />
+<code>double</code> <em>elapsed</em>, <br />
+<code>struct geopm_time_s *</code><em>end</em><code>);</code></p></dd>
+<dt><code>double geopm_time_since(</code></dt><dd><p><code>const struct geopm_time_s *</code><em>begin</em><code>);</code></p></dd>
 </dl>
 
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<pre><code>The geopmctl application runs concurrently with a computational MPI
-application to manage power settings on compute nodes allocated to the
-computation MPI application.
-</code></pre>
-
-<h2 id="OPTIONS">OPTIONS</h2>
+<p>The <em>geopm_time.h</em> header defines GEOPM interfaces for measuring time
+in seconds relative to a fixed arbitrary reference point. The geopm_time_s
+structure is used to hold time values.</p>
 
 <dl>
-<dt class="flush"><code>--help</code></dt><dd><p><br />Print brief summary of the command line usage information, then exit.</p></dd>
-<dt><code>--version</code></dt><dd><p>Print version of GEOPM to standard output, then exit.</p></dd>
+<dt><code>geopm_time_string</code>()</dt><dd><p>Fills <em>buf</em> with the current date and time as a string.  The
+string will be null-terminated and truncated to <em>buf_size</em>, which
+must be at least 26 characters as required by <strong><a class="man-ref" href="https://linux.die.net/man/3/asctime_r">asctime_r<span class="s">(3)</span></a></strong>.</p></dd>
+<dt><code>geopm_time</code>()</dt><dd><p>Sets <em>time</em> to the current time.</p></dd>
+<dt><code>geopm_time_diff</code>()</dt><dd><p>Returns the difference in seconds between <em>begin</em> and <em>end</em>.</p></dd>
+<dt><code>geopm_time_comp</code>()</dt><dd><p>Return true if <em>aa</em> is less than <em>bb</em>.</p></dd>
+<dt><code>geopm_time_add</code>()</dt><dd><p>Sets <em>end</em> to <em>elapsed</em> seconds after <em>begin</em>.</p></dd>
+<dt><code>geopm_time_since</code>()</dt><dd><p>Returns the number of seconds elapsed between the current time and <em>begin</em>.</p></dd>
 </dl>
 
 
@@ -101,16 +117,13 @@ computation MPI application.
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong></p>
+<strong><a class="man-ref" href="https://linux.die.net/man/3/asctime_r">asctime_r<span class="s">(3)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
     <li class='tc'>December 2018</li>
-    <li class='tr'>geopmctl(1)</li>
+    <li class='tr'>geopm_time.h(3)</li>
   </ol>
 
   </div>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopm::PluginFactory(3) - abstract factory for plugins</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#NAMESPACES">NAMESPACES</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#TERMS">TERMS</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
+    <a href="#BUILDING-A-PLUGIN-SHARED-OBJECT">BUILDING A PLUGIN SHARED OBJECT</a>
+    <a href="#PLUGIN-SEARCH-PATH-AND-LOAD-ORDER">PLUGIN SEARCH PATH AND LOAD ORDER</a>
+    <a href="#PLUGIN-LOAD-CONSTRUCTOR-FUNCTION">PLUGIN LOAD CONSTRUCTOR FUNCTION</a>
+    <a href="#EXAMPLE-REGISTER-IOGROUP-PLUGIN">EXAMPLE: REGISTER IOGROUP PLUGIN</a>
+    <a href="#EXAMPLE-REGISTER-AGENT-PLUGIN">EXAMPLE: REGISTER AGENT PLUGIN</a>
+    <a href="#EXAMPLE-REGISTER-COMM-PLUGIN">EXAMPLE: REGISTER COMM PLUGIN</a>
+    <a href="#EXAMPLE-AGENT">EXAMPLE AGENT</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopm::PluginFactory(3)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopm::PluginFactory(3)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopm::PluginFactory</code> - <span class="man-whatis">abstract factory for plugins</span>
+</p>
+
+<h2 id="NAMESPACES">NAMESPACES</h2>
+
+<p>The <code>PluginFactory</code> template class is a  member of the <code>namespace geopm</code>, but
+the full names, <code>geopm::PluginFactory&lt;class T></code>, has been abbreviated in this
+manual.  Similarly, the <code>std::</code> namespace specifier has been omitted from the
+interface definitions for the following standard types: <code>std::vector</code>,
+<code>std::string</code>, <code>std::set</code>, and <code>std::function</code>, to enable better rendering of
+this manual.</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/PluginFactory.hpp">&lt;geopm/PluginFactory.hpp></a></strong></p>
+
+<dl>
+<dt><code>void PluginFactory&lt;T>::register_plugin(</code></dt><dd><p><code>const string &amp;</code><em>plugin_name</em><code>,</code> <br />
+<code>function&lt;unique_ptr&lt;T>()&gt;</code> <em>make_plugin</em><code>,</code> <br />
+<code>const map&lt;string, string> &amp;</code><em>dictionary</em><code>);</code></p></dd>
+<dt><code>unique_ptr&lt;T> PluginFactory&lt;T>make_plugin(</code></dt><dd><p><code>const std::string &amp;</code><em>plugin_name</em><code>) const;</code></p></dd>
+<dt><code>vector&lt;string> PluginFactory&lt;T>plugin_names(</code></dt><dd><p><code>void) const</code>;</p></dd>
+<dt><code>const map&lt;string, string> PluginFactory&lt;T>&amp;dictionary(</code></dt><dd><p><code>const std::string &amp;</code><em>plugin_name</em><code>) const;</code></p></dd>
+</dl>
+
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>GEOPM can be extended though <code>Agent</code>, <code>IOGroup</code>, and <code>Comm</code> plugins.
+This man page describes the steps for adding a plugin.  Refer to
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong>, <strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong>, and <strong><a class="man-ref" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm<span class="s">(3)</span></a></strong> for
+more details about these interfaces.  Any C++ class that derives from
+one of these plugin base classes and is compiled into a shared object
+file can be loaded at application launch time through the GEOPM plugin
+interface.  This allows users and system administrators to extend the
+features and behavior of the monitor and control process that GEOPM
+executes without recompiling the GEOPM runtime.</p>
+
+<h2 id="TERMS">TERMS</h2>
+
+<p>Below are some definitions of terms that are used to describe
+different parts of the GEOPM runtime.  Understanding these terms will
+help to interpret the documentation about how to extend the GEOPM
+runtime.  These are arranged from from highest levels of abstraction
+down to the lowest levels of abstraction.</p>
+
+<dl>
+<dt><em>launcher</em></dt><dd><p>Wrapper of system application launch (e.g. srun or aprun) that
+executes the GEOPM runtime with the application.</p></dd>
+<dt class="flush"><em>report</em></dt><dd><p>Text file containing summary of aggregated stats collected during
+application run.</p></dd>
+<dt class="flush"><em>trace</em></dt><dd><p>Time series of signals collected over application run in a pipe
+separated ASCII table.</p></dd>
+<dt class="flush"><em>policy</em></dt><dd><p>Array of floating-point settings for <code>Agent</code>-specific control
+parameters in SI units.</p></dd>
+<dt class="flush"><em>sample</em></dt><dd><p>Array of floating-point values providing <code>Agent</code>-specific runtime
+statistics in SI units.</p></dd>
+<dt><em>endpoint</em></dt><dd><p>Interface between resource manager and GEOPM runtime.</p></dd>
+<dt><em>profile</em> </dt><dd><p>Interface for annotating compute application; provides PlatformIO
+region signals.</p></dd>
+<dt><em>controller</em></dt><dd><p>Thread on each compute node that loads plugins and runs GEOPM
+algorithm.</p></dd>
+<dt class="flush"><em>level</em></dt><dd><p>Attribute of an <code>Agent</code> describing the number of edges between it
+and the nearest leaf <code>Agent</code> in the communication Tree (a leaf
+<code>Agent</code> is <em>level</em> zero).</p></dd>
+<dt class="flush"><em>signal</em></dt><dd><p>Named parameter in SI units that can be measured using PlatformIO.</p></dd>
+<dt><em>control</em> </dt><dd><p>Named parameter in SI units that can be set using PlatformIO.</p></dd>
+</dl>
+
+
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<ul>
+<li><p><code>register_plugin</code>(): Add a plugin to this factory.  The <em>plugin_name</em>
+parameter will be used to request plugins of the registered type.  The
+<em>make_plugin</em> parameter will return a new objects of the registered type.
+The <em>dictionary</em> is an optional string, string dictionary containing static
+information about the registered type.</p></li>
+<li><p><code>make_plugin</code>(): Creates a object of the registered type.  If the type
+was not previously registered, an exception will be thrown.  The
+<em>plugin_name</em> parameter will be used to look up the constructor function
+used to create the object.</p></li>
+<li><p><code>plugin_names</code>(): Returns a list of all valid plugin names that have been
+registered with this factory.</p></li>
+<li><p><code>dictionary</code>(): Returns an optional dictionary of static metadata about
+a registered type.  If the type was not registered, an exception is thrown.
+The <em>plugin_name</em> parameter is used to look up the desired dictionary.</p></li>
+</ul>
+
+
+<h2 id="BUILDING-A-PLUGIN-SHARED-OBJECT">BUILDING A PLUGIN SHARED OBJECT</h2>
+
+<p>A GEOPM plugin is a shared object file that is loaded at runtime by
+the <em>controller</em> through the <strong><a class="man-ref" href="https://linux.die.net/man/3/dlopen">dlopen<span class="s">(3)</span></a></strong> interface.  Each file
+provides exactly one new implementation for one of the three
+extensible classes: <code>IOGroup</code>, <code>Agent</code>, and <code>Comm</code>.  Each
+implementation is identified by a unique name string referred to as
+the <em>plugin_name</em>.  An exception will be thrown if more than one
+plugin of the same name and same type are loaded.  The <em>plugin_name</em>
+is standardized to be all lower case letters.  The shared object file
+names must conform to the pattern:</p>
+
+<pre><code>libgeopm&lt;CLASS>_&lt;NAME>.so.1.0.0
+</code></pre>
+
+<p>Here <var>NAME</var> is the <em>plugin_name</em> and <var>CLASS</var> is one of the three
+strings identifying the plugin type: "iogroup", "agent", or "comm".
+The current GEOPM ABI version is 1.0.0, and the file name must end
+with this string.  Plugins must be marked to have exactly the same ABI
+version as the GEOPM library they are intended to be loaded by.  Do
+not link the plugin shared object against any of the GEOPM libraries;
+this will cause a circular link dependency.  Compile the shared object
+with flags appropriate for a dynamically loaded library, e.g. for
+<code>g++</code> and <code>icpc</code> you must provide the <code>-fPIC</code> and <code>-shared</code> options.</p>
+
+<h2 id="PLUGIN-SEARCH-PATH-AND-LOAD-ORDER">PLUGIN SEARCH PATH AND LOAD ORDER</h2>
+
+<p>The <code>GEOPM_PLUGIN_PATH</code> is a colon separated list of directories
+that contain plugin shared object files to be loaded by the GEOPM
+runtime.  See <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> for details about <code>GEOPM_PLUGIN_PATH</code>.
+Note that an Exception will be thrown by the register_plugin
+method if an attempt is made to register a plugin with the same name
+as a previously registered plugin.</p>
+
+<p>In the case of IOGroup plugins, the first path (from left to right in
+the colon separated list) containing a plugin that supports a signal
+name or control name will provide the implementation supporting the
+signal or control at runtime, and the default search path
+(<code>&lt;PREFIX>/lib/geopm</code>) will have the lowest priority.  The last plugin
+to register a signal or control provides the implementation.
+Therefore, the plugins in the default path are loaded first, and the
+directories in the <code>GEOPM_PLUGIN_PATH</code> are loaded in reverse (from
+right to left).</p>
+
+<h2 id="PLUGIN-LOAD-CONSTRUCTOR-FUNCTION">PLUGIN LOAD CONSTRUCTOR FUNCTION</h2>
+
+<p>The shared object file must provide a function that is decorated with
+the <code>constructor</code> compiler directive.  The <code>constructor</code> attribute
+enables the registration of plugins when the shared object is loaded
+by a call to <strong><a class="man-ref" href="https://linux.die.net/man/3/dlopen">dlopen<span class="s">(3)</span></a></strong>.  See the following link for the <code>gcc</code>
+documentation for the
+<a href="https://gcc.gnu.org/onlinedocs/gcc-4.3.0/gcc/Function-Attributes.html">constructor attribute</a>.</p>
+
+<p>It is recommended that each class deriving from one of the GEOPM
+plugin classes implement two static helper methods called
+<code>plugin_name()</code> and <code>make_plugin()</code>.  These functions can be called
+to provide the inputs to <code>PluginFactory::register_plugin()</code>.</p>
+
+<h2 id="EXAMPLE-REGISTER-IOGROUP-PLUGIN">EXAMPLE: REGISTER IOGROUP PLUGIN</h2>
+
+<pre><code>    // This example shows how to register an IOGroup plugin
+    #include &lt;geopm/IOGroup.hpp&gt; // geopm::IOGroup,
+                                 // geopm::iogroup_factory
+    #include &lt;geopm/Helper.hpp&gt;  // geopm::make_unique
+
+    // Header providing class ExampleIOGroup interface
+    #include "ExampleIOGroup.hpp"
+
+    // Called during dlopen() to register plugin
+    static void __attribute__((constructor))
+    register_plugin_example_iogroup(void)
+    {
+        geopm::PluginFactory&lt;geopm::IOGroup&gt; &amp;iof =
+            geopm::iogroup_factory();
+        iof.register_plugin(ExampleIOGroup::plugin_name(),
+                            ExampleIOGroup::make_plugin);
+    }
+
+    // Static method used by the factory to create objects
+    std::unique_ptr&lt;IOGroup> ExampleIOGroup::make_plugin(void)
+    {
+        return geopm::make_unique&lt;ExampleIOGroup>();
+    }
+
+    // Static method providing unique plugin name
+    std::string ExampleIOGroup::plugin_name(void)
+    {
+        return "example";
+    }
+</code></pre>
+
+<h2 id="EXAMPLE-REGISTER-AGENT-PLUGIN">EXAMPLE: REGISTER AGENT PLUGIN</h2>
+
+<pre><code>    // This example shows how to register an Agent plugin
+    #include &lt;geopm/Agent.hpp&gt;  // geopm::Agent,
+                                // geopm::agent_factory
+    #include &lt;geopm/Helper.hpp&gt; // geopm::make_unique
+
+    // Header providing class ExampleAgent interface
+    #include "ExampleAgent.hpp"
+
+    // Called during dlopen() to register plugin
+    static void __attribute__((constructor))
+    register_plugin_example_agent(void)
+    {
+        geopm::PluginFactory&lt;geopm::Agent&gt; &amp;af =
+            geopm::agent_factory();
+        af.register_plugin(ExampleAgent::plugin_name(),
+                           ExampleAgent::make_plugin,
+                           geopm::Agent::make_dictionary(
+                               ExampleAgent::policy_names(),
+                               ExampleAgent::sample_names()));
+    }
+
+    // Static method used by the factory to create objects
+    std::unique_ptr&lt;geopm::Agent&gt; ExampleAgent::make_plugin(void)
+    {
+        return geopm::make_unique&lt;ExampleAgent>();
+    }
+
+    // Static method providing unique plugin name
+    std::string ExampleAgent::plugin_name(void)
+    {
+        return "example";
+    }
+</code></pre>
+
+<h2 id="EXAMPLE-REGISTER-COMM-PLUGIN">EXAMPLE: REGISTER COMM PLUGIN</h2>
+
+<pre><code>    // This example shows how to register an Comm plugin
+    #include &lt;geopm/Comm.hpp&gt;   // geopm::Comm,
+                                // geopm::comm_factory
+    #include &lt;geopm/Helper.hpp&gt; // geopm::make_unique
+
+    // Header providing class ExampleComm interface
+    #include "ExampleComm.hpp"
+
+    // Called during dlopen() to register plugin
+    static void __attribute__((constructor))
+    register_plugin_example_comm(void)
+    {
+        geopm::PluginFactory&lt;geopm::Comm&gt; &amp;cf = geopm::comm_factory();
+        cf.register_plugin(ExampleComm::plugin_name(),
+                           ExampleComm::make_plugin);
+    }
+
+    // Static method used by the factory to create objects
+    std::unique_ptr&lt;geopm::Comm&gt; ExampleComm::make_plugin(void)
+    {
+        return geopm::make_unique&lt;ExampleComm>();
+    }
+
+    // Static method providing unique plugin name
+    std::string ExampleComm::plugin_name(void)
+    {
+        return "example";
+    }
+</code></pre>
+
+<h2 id="EXAMPLE-AGENT">EXAMPLE AGENT</h2>
+
+<p>Please see the (Agent
+tutorial)[https://github.com/geopm/geopm/tree/dev/tutorial/agent] for more
+information.  This code is located in the GEOPM source under tutorial/agent.</p>
+
+<p>For more details, see the doxygen
+page at <a href="https://geopm.github.io/dox/classgeopm_1_1_plugin_factory.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_plugin_factory.html</a>.</p>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong>
+<strong><a class="man-ref" href="https://linux.die.net/man/3/dlopen">dlopen<span class="s">(3)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Intel Corporation</li>
+    <li class='tc'>December 2018</li>
+    <li class='tr'>geopm::PluginFactory(3)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

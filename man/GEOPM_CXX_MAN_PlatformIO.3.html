@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopm::PlatformIO(3) - geopm platform interface</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#NAMESPACES">NAMESPACES</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#ALIASING-SIGNALS-AND-CONTROLS">ALIASING SIGNALS AND CONTROLS</a>
+    <a href="#SINGLETON-ACCESSOR">SINGLETON ACCESSOR</a>
+    <a href="#INSPECTION-CLASS-METHODS">INSPECTION CLASS METHODS</a>
+    <a href="#SERIAL-CLASS-METHODS">SERIAL CLASS METHODS</a>
+    <a href="#BATCH-CLASS-METHODS">BATCH CLASS METHODS</a>
+    <a href="#PLUGIN-CLASS-METHODS">PLUGIN CLASS METHODS</a>
+    <a href="#TYPES">TYPES</a>
+    <a href="#EXAMPLE">EXAMPLE</a>
+    <a href="#ERRORS">ERRORS</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopm::PlatformIO(3)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopm::PlatformIO(3)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopm::PlatformIO</code> - <span class="man-whatis">geopm platform interface</span>
+</p>
+
+<h2 id="NAMESPACES">NAMESPACES</h2>
+
+<p>The <code>IPlatformIO</code> class, the <code>IOGroup</code> class, and the <code>platform_io()</code>
+singleton accessor function are members of the <code>namespace geopm</code>, but
+the full names, <code>geopm::IPlatformIO</code>, <code>geopm::IOGroup</code> and
+<code>geopm::platform_io()</code>, have been abbreviated in this manual.
+Similarly, the <code>std::</code> namespace specifier has been omitted from the
+interface definitions for the following standard types:
+<code>std::shared_ptr</code>, <code>std::set</code>, <code>std::string</code>, <code>std::function</code>,
+<code>std::vector</code>, to enable better rendering of this manual.</p>
+
+<p>Note that the <code>IPlatformIO</code> class is an abstract base class that the
+user interacts with.  The concrete implementation, <code>PlatformIO</code>, is
+hidden by the singleton accessor.</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/PlatformIO.hpp">&lt;geopm/PlatformIO.hpp></a></strong></p>
+
+<p><code>Link with -lgeopm</code></p>
+
+<dl>
+<dt><code>IPlatformIO &amp;platform_io(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>virtual set&lt;string> IPlatformIO::signal_names(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual set&lt;string> IPlatformIO::control_names(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual string IPlatformIO::signal_description(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual string IPlatformIO::control_description(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int IPlatformIO::signal_domain_type(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int IPlatformIO::control_domain_type(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual double IPlatformIO::read_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::write_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>,</code> <br />
+<code>double</code> <em>setting</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::save_control(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::restore_control(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual int IPlatformIO::push_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code>
+<code>int</code> <em>domain_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual int IPlatformIO::push_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual int IPlatformIO::num_signal(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual int IPlatformIO::num_control(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual double IPlatformIO::sample(</code></dt><dd><p><code>int</code> <em>signal_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::adjust(</code></dt><dd><p><code>int</code> <em>control_idx</em><code>,</code>
+<code>double</code> <em>setting</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::read_batch(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::write_batch(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual function&lt;double(const vector&lt;double> &amp;)&gt; IPlatformIO::agg_function(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual void IPlatformIO::register_iogroup(</code></dt><dd><p><code>shared_ptr&lt;IOGroup></code> <em>iogroup</em><code>) = 0;</code></p></dd>
+<dt><code>struct IPlatformIO::m_request_s {</code></dt><dd><p><code>string</code> <em>name</em><code>;</code> <br />
+<code>int</code> <em>domain_type</em><code>;</code> <br />
+<code>int</code> <em>domain_idx</em><code>;</code> <br />
+<code>};</code></p></dd>
+</dl>
+
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The <code>PlatformIO</code> class provides a high-level interface for signals and
+controls.  There are a large number of built-in signals and controls.
+Theses built-in signals and controls include a wide range of hardware
+metrics, hardware settings, and signals derived from application
+behavior.  Application behavior is tracked by GEOPM's integration with
+MPI and OpenMP and also by application use of the <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>
+mark-up interface. In addition to the built-in features, <code>PlatformIO</code>
+can be extended through the <strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong> plugin interface to
+provide arbitrary signals and controls.</p>
+
+<p>A domain is a discrete component within a compute node where a signal
+or control is applicable.  For more information see
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo<span class="s">(3)</span></a></strong>.  A signal represents any measurement in SI
+units that can be sampled or any unit-free integer that can be read.
+A control represents a request for a hardware domain to operate such
+that a related signal measured from the hardware domain will track the
+request.  For example, the user can set a <code>POWER_PACKAGE_LIMIT</code> in
+units of watts and the related signal, <code>POWER_PACKAGE</code>, will remain
+below the limit.  Similarly the user can set a CPU <code>FREQUENCY</code> in
+hertz and the related signal, <code>FREQUENCY</code> will show the CPU operating
+at the value set.</p>
+
+<h2 id="ALIASING-SIGNALS-AND-CONTROLS">ALIASING SIGNALS AND CONTROLS</h2>
+
+<p>There are two classes of signals and control names: "low level" and
+"high level".  All <code>IOGroup</code>'s are expected to provide low level
+signals and controls with names that are prefixed with the IOGroup
+name and two colons, e.g. the <code>MSRIOGroup</code> provides the
+<code>MSR::PKG_ENERGY_STATUS:ENERGY</code> signal.  If the signal or control may
+be supported on more than one platform, the implementation should be
+aliased to a high level name.  This high level name enables the signal
+or control to be supported by more than one <code>IOGroup</code>, and different
+platforms will support the loading different sets of <code>IOGroups</code>.  The
+<code>MSRIOGroup</code> aliases the above signal to the high level
+<code>PACKAGE_ENERGY</code> signal which can be used on any platform to measure
+the current package energy value.  Agents are encouraged to request
+high level signals and controls to make the implementation more
+portable.  The high level signals and controls supported by built-in
+<code>IOGroup</code> classes are listed below.  See <strong><span class="man-ref">geopm::PluginFactory<span class="s">(7)</span></span></strong>
+secton on <code>SEARCH AND LOAD ORDER</code> for information about how the
+<code>GEOPM_PLUGIN_PATH</code> environment variable is used to select which
+<code>IOGroup</code> implementation is used in the case where more than one
+provides the same high level signal or control.</p>
+
+<dl>
+<dt class="flush"><code>TIME</code></dt><dd><p>Time elapsed since the beginning of execution.</p></dd>
+<dt><code>EPOCH_COUNT</code></dt><dd><p>Number of completed executions of an epoch.  Prior to the first call
+by the applicaiton to <code>geopm_prof_epoch()</code> the signal returns as -1.
+With each call to <code>geopm_prof_epoch()</code> the count increases by one.</p></dd>
+<dt><code>REGION_ID#</code></dt><dd><p>64-bit integer region ID that all ranks are running, including MPI
+flag (bit 62) if applicable.  A nested MPI region for the region
+ID 0x0000000012345678 will appear as 0x4000000012345678.  If all
+ranks are not in the same region, it will be recorded as unmarked
+(0x2000000000000000).  Epoch boundaries are recorded as entry and
+exit to the epoch region (0x8000000000000000).</p></dd>
+<dt><code>REGION_ID</code></dt><dd><p>NOT YET SUPPORTED.  The lower 32 bit hash of the region id name
+without hint or hidden bit set.</p></dd>
+<dt><code>REGION_HINT</code></dt><dd><p>NOT YET SUPPORTED.  The region hint (see <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>)
+associated with the currently running region.  For any interval
+when all ranks are within an MPI function inside of a user defined
+region, the hint will change from the hint associated with the
+user defined region to GEOPM_REGION_HINT_NETWORK.</p></dd>
+<dt><code>REGION_PROGRESS</code></dt><dd><p>Minimum per-rank reported progress through the current region.</p></dd>
+<dt><code>REGION_RUNTIME</code></dt><dd><p>Maximum per-rank of the last recorded runtime for the current
+region.</p></dd>
+<dt><code>ENERGY_PACKAGE</code></dt><dd><p>Total energy aggregated over the processor package.</p></dd>
+<dt><code>POWER_PACKAGE</code></dt><dd><p>Total power aggregated over the processor package.</p></dd>
+<dt><code>FREQUENCY</code></dt><dd><p>Average CPU frequency over the specified domain.</p></dd>
+<dt><code>ENERGY_DRAM</code></dt><dd><p>Total energy aggregated over the DRAM DIMMs associated with a NUMA
+node.</p></dd>
+<dt><code>POWER_DRAM</code></dt><dd><p>Total power aggregated over the DRAM DIMMs associated with a NUMA
+node.</p></dd>
+<dt><code>POWER_PACKAGE_MIN</code></dt><dd><p>Minimum setting for package power.</p></dd>
+<dt><code>POWER_PACKAGE_MAX</code></dt><dd><p>Maximum setting for package power.</p></dd>
+<dt><code>CYCLES_THREAD</code></dt><dd><p>Average over the domain of clock cycles executed by cores since
+the beginning of execution.</p></dd>
+<dt><code>CYCLES_REFERENCE</code></dt><dd><p>Average over the domain of clock reference cycles since the
+beginning of execution.</p></dd>
+</dl>
+
+
+<h2 id="SINGLETON-ACCESSOR">SINGLETON ACCESSOR</h2>
+
+<dl>
+<dt><code>platform_io</code>()</dt><dd>There is only one <code>PlatformIO</code> object, and the only way to access
+this object is through this function.  The function returns a
+reference to the single <code>PlatformIO</code> object that gives access to
+all of the CLASS METHODS described below.  See <code>EXAMPLE</code> section
+below.</dd>
+</dl>
+
+
+<h2 id="INSPECTION-CLASS-METHODS">INSPECTION CLASS METHODS</h2>
+
+<dl>
+<dt><code>signal_names()</code></dt><dd><p>Returns the names of all available signals that can be requested.
+This includes all signals and aliases provided through <code>IOGroup</code>
+extensions as well as signals provided by PlatformIO itself.  The
+set of strings that are returned can be passed as a <em>signal_name</em>
+to all <code>PlatformIO</code> methods that accept a signal name input
+parameter.</p></dd>
+<dt><code>control_names()</code></dt><dd><p>Returns the names of all available controls.  This includes all
+controls and aliases provided by IOGroups as well as controls
+provided by PlatformIO itself.  The set of strings that are returned
+can be passed as a <em>control_name</em> to all <code>PlatformIO</code> methods that
+accept a control name input parameter.</p></dd>
+<dt><code>signal_description()</code></dt><dd><p>Returns the description of the signal as defined by the IOGroup that
+provides this signal.</p></dd>
+<dt><code>control_description()</code></dt><dd><p>Returns the description of the control as defined by the IOGroup that
+provides this control.</p></dd>
+<dt><code>signal_domain_type()</code></dt><dd><p>Query the domain for the signal with name <em>signal_name</em>.  Returns
+one of the <code>geopm::PlatformTopo::m_domain_e</code> values signifying the
+granularity at which the signal is measured.  Will return
+<code>geopm::PlatformTopo::M_DOMAIN_INVALID</code> if the signal name is not
+supported.</p></dd>
+<dt><code>control_domain_type()</code></dt><dd><p>Query the domain for the control with the name <em>control_name</em>.
+Returns one of the <code>geopm::PlatformTopo::m_domain_e</code> values
+signifying the granularity at which the control can be adjusted.
+Will return <code>geopm::PlatformTopo::M_DOMAIN_INVALID</code> if the control
+name is not supported.</p></dd>
+<dt><code>agg_function()</code>:</dt><dd><p></p></dd>
+</dl>
+
+
+<h2 id="SERIAL-CLASS-METHODS">SERIAL CLASS METHODS</h2>
+
+<dl>
+<dt><code>read_signal()</code></dt><dd><p>Read from the platform and interpret into SI units a signal
+given its name and domain.  Does not modify values stored by
+calling <code>read_batch()</code>.</p></dd>
+<dt><code>write_control()</code></dt><dd><p>Interpret the setting and write it to the platform.  Does not
+modify the values stored by calling <code>adjust()</code>.</p></dd>
+<dt><code>save_control()</code></dt><dd><p>Save the state of all controls so that any subsequent changes
+made through PlatformIO may be reverted with a call to
+<code>restore_control()</code>.</p></dd>
+<dt><code>restore_control()</code></dt><dd><p>Restore all controls to values recorded in previous call to
+<code>save_control()</code>.</p></dd>
+</dl>
+
+
+<h2 id="BATCH-CLASS-METHODS">BATCH CLASS METHODS</h2>
+
+<dl>
+<dt><code>push_signal()</code></dt><dd><p>Push a signal onto the stack of batch access signals.  The signal
+is defined by selecting a <em>signal_name</em> from the set returned by
+the <code>signal_names()</code> method, the <em>domain_type</em> from one of the
+<code>PlatformTopo::m_domain_e</code> values, and the <em>domain_idx</em> between
+zero to the value returned by
+<code>PlatformTopo::num_domain(_domain_type_)</code>.  Subsequent calls to
+the <code>read_batch()</code> method will read the signal and update the
+internal state used to store batch signals.  The return value of
+the method can be passed to the <code>sample_signal()</code> method to access
+the signal stored in the internal state from the last update.  The
+returned signal index will be repeated for each unique tuple of
+push_signal input parameters.  All signals must be pushed onto the
+stack prior to the first call to <code>adjust()</code> or <code>read_batch()</code>.  Attempts to push
+a signal onto the stack after the first call to <code>adjust()</code> or <code>read_batch()</code> or
+attempts to push a <em>signal_name</em> that is not from the set
+returned by <code>signal_names()</code> will result in a thrown
+<code>geopm::Exception</code> with error number <code>GEOPM_ERROR_INVALID</code>.</p></dd>
+<dt><code>push_control()</code></dt><dd><p>Push a control onto the stack of batch access controls.  The control
+is defined by selecting a <em>control_name</em> from the set returned by
+the <code>control_names()</code> method, the <em>domain_type</em> from one of the
+<code>PlatformTopo::m_domain_e</code> values, and the <em>domain_idx</em> between
+zero to the value returned by
+<code>PlatformTopo::num_domain(_domain_type_)</code>.  The return value of
+the method can be passed to the <code>adjust()</code> method which will update the
+internal state used to store batch controls.  Subsequent calls to
+the <code>write_batch()</code> method access the control values in the internal
+state and write the values to the hardware.  The
+returned control index will be repeated for each unique tuple of
+push_control input parameters.  All controls must be pushed onto the
+stack prior to the first call to <code>adjust()</code> or <code>read_batch()</code>.  Attempts to push
+a controls onto the stack after the first call to <code>adjust()</code> or <code>read_batch()</code> or
+attempts to push a <em>control_name</em> that is not from the set
+returned by <code>control_names()</code> will result in a thrown
+<code>geopm::Exception</code> with error number <code>GEOPM_ERROR_INVALID</code>.</p></dd>
+<dt><code>num_signal()</code></dt><dd><p>Returns the number of <code>push_signal()</code> with unique tuple of input.</p></dd>
+<dt><code>num_control()</code></dt><dd><p>Returns the number of <code>push_control()</code> with unique tuple of input.</p></dd>
+<dt><code>sample()</code></dt><dd><p>Samples cached value of a single signal that has been pushed via
+<code>push_signal()</code> cached value is upated at the time of call to
+<code>read_batch()</code>.</p></dd>
+<dt><code>adjust()</code></dt><dd><p>Updates cached value for single control that has been pushed via
+<code>push_control()</code> cached value will be written to the platform at time of
+call to <code>write_batch()</code>.</p></dd>
+<dt><code>read_batch()</code></dt><dd><p>Read all push signals from the platform so that the next call to <code>sample()</code>
+will reflect the updated data.</p></dd>
+<dt><code>write_batch()</code></dt><dd><p>Write all pushed controls so that values provided to <code>adjust()</code>
+are written to the platform.</p></dd>
+</dl>
+
+
+<h2 id="PLUGIN-CLASS-METHODS">PLUGIN CLASS METHODS</h2>
+
+<dl>
+<dt><code>register_iogroup()</code></dt><dd>Registers an <code>IOGroup</code> with the <code>PlatformIO</code> so that the signals
+and controls provided by the object are available through the
+<code>PlatformIO</code> interface.  The <em>iogroup</em> is a shared pointer to a
+class derived from the <strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong>.  This method
+provides the mechanism for extending the <code>PlatformIO</code> interface at
+runtime.</dd>
+</dl>
+
+
+<h2 id="TYPES">TYPES</h2>
+
+<dl>
+<dt><code>m_request_s</code>:</dt><dd></dd>
+</dl>
+
+
+<h2 id="EXAMPLE">EXAMPLE</h2>
+
+<pre><code>/* Print a signal for all CPUs on the system. */
+
+#include &lt;iostream>
+#include &lt;string>
+#include &lt;geopm/PlatformIO.hpp&gt;
+#include &lt;geopm/PlatformTopo.hpp&gt;
+
+int main(int argc, char **argv)
+{
+    if (argc != 2) {
+        std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " SIGNAL_NAME" &lt;&lt; std::endl;
+        return -1;
+    }
+    std::string signal_name = argv[1];
+    geopm::IPlatformIO &amp;pio = geopm::platform_io();
+    geopm::IPlatformTopo &amp;topo = geopm::platform_topo();
+    const int DOMAIN = pio.signal_domain_type(signal_name);
+    const int NUM_DOMAIN = topo.num_domain(DOMAIN);
+    std::cout &lt;&lt; "cpu_idx    " &lt;&lt; signal_name &lt;&lt; std::endl;
+    for (int domain_idx = 0; domain_idx != NUM_DOMAIN; ++domain_idx) {
+        double signal = pio.read_signal(signal_name, DOMAIN, domain_idx);
+        for (const auto &amp;cpu_idx : topo.domain_cpus(DOMAIN, domain_idx)) {
+            std::cout &lt;&lt; cpu_idx &lt;&lt; "    " &lt;&lt; signal &lt;&lt; std::endl;
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+<h2 id="ERRORS">ERRORS</h2>
+
+<p>All functions described on this man page throw <strong><a class="man-ref" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception<span class="s">(3)</span></a></strong>
+on error.</p>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Intel Corporation</li>
+    <li class='tc'>December 2018</li>
+    <li class='tr'>geopm::PlatformIO(3)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

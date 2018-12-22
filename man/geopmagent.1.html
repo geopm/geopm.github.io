@@ -126,14 +126,30 @@ Policy: POWER
 Sample: POWER,IS_CONVERGED,EPOCH_RUNTIME
 </code></pre>
 
-<p>Create policy for power_balancer agent with 250 Watts per node power
+<p>Create policy for power_governor agent with 250 Watts per node power
 budget:</p>
 
-<pre><code>$ geopmagent -a power_balancer -p 250
+<pre><code>$ geopmagent -a power_governor -p 250
 {"POWER" : 250}
 </code></pre>
 
-<p>Create policy for monitor agent which does not require any policies.</p>
+<p>Create policy for power_balancer agent with 250 Watts per node power
+budget:</p>
+
+<pre><code>$ geopmagent -a power_balancer -p 250,0,0,0
+{"POWER_CAP" : 250, "STEP_COUNT" : 0, "MAX_EPOCH_RUNTIME" : 0, "POWER_SLACK" : 0}
+</code></pre>
+
+<p>Create policy for energy_efficient agent with minimum frequency of 1.2
+GHz and maximum frequency of 2.4 GHz:</p>
+
+<pre><code>$ geopmagent -a energy_efficient -p 1.2e9,2.4e9
+{"FREQ_MIN" : 1.2e+09, "FREQ_MAX" : 2.4e+09}
+</code></pre>
+
+<p>Create policy for monitor agent which does not require any policies.
+Note that GEOPM uses the monitor agent by default, in which case
+specifying <code>--geopm-agent</code> and <code>--geopm-policy</code> are optional.</p>
 
 <pre><code>$ geopmagent -a monitor -p None
 {}
@@ -157,7 +173,7 @@ budget:</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>November 2018</li>
+    <li class='tc'>December 2018</li>
     <li class='tr'>geopmagent(1)</li>
   </ol>
 

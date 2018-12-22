@@ -91,39 +91,27 @@
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>The geopm_ctl_c structure is used to launch or step the global
-extensible open power manager algorithm.  There are several ways to
-enable control: explicit stepping of the control algorithm by the
-application under control, running the control algorithm as a distinct
-processes from the application under control, or running the control
-algorithm as a separate pthread owned by the application process under
-control.  Each of these methods has different requirements and trade
-offs.</p>
+<p>The geopm_ctl_c structure is used to launch the global extensible open
+power manager algorithm.  There are several ways to enable control:
+running the control algorithm as a distinct processes from the
+application under control, or running the control algorithm as a
+separate pthread owned by the application process under control.  Each
+of these methods has different requirements and trade offs.</p>
 
 <dl>
 <dt><code>geopm_ctl_create</code>()</dt><dd><p>creates a geopm_ctl_c object, <em>ctl</em> which is an opaque structure
 that holds the state used to execute the control algorithm with
-one of the other functions described in this man page.  The user
-must provide a geopm_policy_c pointer, see <strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>
-man page for details.  The control algorithm relies on feedback
-about the application profile.  The user provides an MPI
-communicator, <em>comm</em> which must have at least one process running
-on every compute node under control.</p></dd>
+one of the other functions described in this man page.  The
+control algorithm relies on feedback about the application
+profile.  The user provides an MPI communicator, <em>comm</em> which must
+have at least one process running on every compute node under
+control.</p></dd>
 <dt><code>geopm_ctl_destroy</code>()</dt><dd><p>destroys all resources associated with the <em>ctl</em> structure which
 allocated by a previous call to <code>geopm_ctl_create</code>().</p></dd>
-<dt><code>geopm_ctl_step</code>()</dt><dd><p>is called to execute one step in the hierarchical control
-algorithm by the application process.  The call is a blocking call
-for those processes that are the lowest MPI rank on the compute
-node and a no-op for those that are not.  A call to this function
-sends samples up the tree, then policies down the tree, and
-finally if the policy has been changed for the node of the calling
-process then the policy is enforced by writing MSR values.</p></dd>
 <dt><code>geopm_ctl_run</code>()</dt><dd><p>steps the control algorithm continuously until the application
-signals shutdown.  This is equivalent to calling
-<code>geopm_ctl_step</code>() in a loop.</p></dd>
+signals shutdown.</p></dd>
 <dt><code>geopm_ctl_pthread</code>()</dt><dd><p>creates a POSIX thread running the control algorithm continuously
-until the application signals shutdown.  This is equivalent to
-calling <code>geopm_ctl_step</code>() in a loop.  With this method of launch
+until the application signals shutdown.  With this method of launch
 the supporting MPI implementation must be enabled for
 <code>MPI_THREAD_MULTIPLE</code> using <code>MPI_Init_thread</code>().</p></dd>
 </dl>
@@ -149,7 +137,7 @@ to convert them to strings.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>November 2018</li>
+    <li class='tc'>December 2018</li>
     <li class='tr'>geopm_ctl_c(3)</li>
   </ol>
 

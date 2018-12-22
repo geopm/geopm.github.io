@@ -61,14 +61,13 @@
     <a href="#BUILT-IN-AGENTS">BUILT-IN AGENTS</a>
     <a href="#RUNTIME-CONTROL">RUNTIME CONTROL</a>
     <a href="#MISC">MISC</a>
+    <a href="#PLUGIN-EXTENSION">PLUGIN EXTENSION</a>
     <a href="#INTEGRATION-WITH-PMPI">INTEGRATION WITH PMPI</a>
     <a href="#INTEGRATION-WITH-OMPT">INTEGRATION WITH OMPT</a>
     <a href="#LAUNCHING-THE-RUNTIME">LAUNCHING THE RUNTIME</a>
-    <a href="#PLOTTING-REPORT-AND-TRACE-DATA">PLOTTING REPORT AND TRACE DATA</a>
     <a href="#INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</a>
     <a href="#INTERPRETING-THE-TRACE">INTERPRETING THE TRACE</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
-    <a href="#DEPRECATION-NOTICE-AND-BETA-INTERFACE-CHANGES">DEPRECATION NOTICE AND BETA INTERFACE CHANGES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -86,8 +85,8 @@
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>Global Extensible Open Power Manager (GEOPM) is an extensible
-power management framework targeting high performance computing.  The
+<p>Global Extensible Open Power Manager (GEOPM) is an extensible power
+management framework targeting high performance computing.  The
 library can be extended to support new control algorithms and new
 hardware power management features.  The GEOPM package provides built
 in features ranging from static management of power policy for each
@@ -103,8 +102,9 @@ memory with the system resource management daemon to extend the
 hierarchy above the individual MPI job level and enable management of
 system power resources for multiple MPI jobs and multiple users by the
 system resource manager.  The GEOPM package provides the libgeopm
-library, the libgeopmpolicy library, the geopmctl application and the
-geopmpolicy application.  The libgeopm library can be called within
+library, the libgeopmpolicy library, the geopmctl application, and
+several additional applications: geopmagent, geopmendpoint, geopmread,
+geopmwrite, and geopmbench.  The libgeopm library can be called within
 MPI applications to enable application feedback for informing the
 control decisions.  If modification of the target application is not
 desired then the geopmctl application can be run concurrently with the
@@ -114,14 +114,13 @@ inferred by querying the hardware through Model Specific Registers
 hierarchy tree writes processor power policy through MSRs to enact
 policy decisions.  The libgeopmpolicy library is used by a resource
 manager to set energy policy control parameters for MPI jobs.  Some
-features of libgeopmpolicy are available through the geopmpolicy
-application including support for static control.</p>
+features of libgeopmpolicy are available through the geopmwrite,
+geopmread, and geopmagent applications including support for static
+control.</p>
 
 <h2 id="JOB-LAUNCH">JOB LAUNCH</h2>
 
-<p><strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong>: SLURM application launch wrapper</p>
-
-<p><strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>: ALPS application launch wrapper</p>
+<p><strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>: Application launch wrapper</p>
 
 <h2 id="APPLICATION-PROFILING">APPLICATION PROFILING</h2>
 
@@ -130,10 +129,6 @@ application including support for static control.</p>
 <p><strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>: GEOPM Fortran interfaces</p>
 
 <h2 id="ANALYSIS-TOOLS">ANALYSIS TOOLS</h2>
-
-<p><strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>: Run application and visualize results</p>
-
-<p><strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>: Visualize reports and traces</p>
 
 <p><strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong>: Query platform information</p>
 
@@ -165,10 +160,6 @@ application including support for static control.</p>
 
 <p><strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>: Query agent information and create static policies</p>
 
-<p><strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>: GEOPM runtime policy management [DEPRECATED]</p>
-
-<p><strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>: GEOPM configuration creator and static mode enforcer [DEPRECATED]</p>
-
 <h2 id="MISC">MISC</h2>
 
 <p><strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>: Error code descriptions</p>
@@ -176,6 +167,20 @@ application including support for static control.</p>
 <p><strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>: GEOPM library version</p>
 
 <p><strong><a class="man-ref" href="geopm_sched.3.html">geopm_sched<span class="s">(3)</span></a></strong>: Interface with Linux scheduler</p>
+
+<p><strong><a class="man-ref" href="geopm_time.3.html">geopm_time<span class="s">(3)</span></a></strong>: Time related helper functions</p>
+
+<h2 id="PLUGIN-EXTENSION">PLUGIN EXTENSION</h2>
+
+<p><strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong>: Plugin developer guide</p>
+
+<p><strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong>: High level platform abstraction</p>
+
+<p><strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong>: Plugin interface for platform</p>
+
+<p><strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong>: Plugin interface for monitor/control</p>
+
+<p><strong><a class="man-ref" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm<span class="s">(3)</span></a></strong>: Plugin interface for agent communication</p>
 
 <h2 id="INTEGRATION-WITH-PMPI">INTEGRATION WITH PMPI</h2>
 
@@ -194,31 +199,31 @@ description below.</p>
 
 <h2 id="INTEGRATION-WITH-OMPT">INTEGRATION WITH OMPT</h2>
 
-<p>When the OpenMP runtime compiled with GEOPM supports the OMPT
-interface, GEOPM will use the OMPT callbacks to wrap OpenMP parallel
-regions with calls to <code>geopm_prof_enter()</code> and <code>geopm_prof_exit()</code>.
-In this way, any OpenMP parallel region not within another
-application-defined region will be reported to the GEOPM runtime.
-This will appear in the report as a region name beginning with
+<p>Unless the GEOPM runtime is configured to disable OpenMP, the library is compiled
+against the OpenMP runtime.  If the OpenMP implementation
+that GEOPM is compiled against supports the OMPT callbacks, then GEOPM will
+use the OMPT callbacks to wrap OpenMP parallel regions with calls to
+<code>geopm_prof_enter()</code> and <code>geopm_prof_exit()</code>.  In this way, any OpenMP parallel
+region not within another application-defined region will be reported to the GEOPM
+runtime.  This will appear in the report as a region name beginning with
 "[OMPT]" and referencing the object file and function name containing
 the OpenMP parallel region e.g.</p>
 
-<p><code>[OMPT]tutorial_6:geopm::StreamModelRegion::run()</code></p>
+<p><code>[OMPT]geopmbench:geopm::StreamModelRegion::run()</code></p>
 
 <p>To expressly enable this feature, pass the <code>--enable-ompt</code> configure
-flag at GEOPM build time.  This will build and install the LLVM OpenMP
+flag at GEOPM configure time.  This will build and install the LLVM OpenMP
 runtime configured to support OMPT if the default OpenMP runtime does
 not support the OMPT callbacks.  Note that your compiler must be
 compatible with the LLVM OpenMP ABI for extending it in this way.</p>
 
 <h2 id="LAUNCHING-THE-RUNTIME">LAUNCHING THE RUNTIME</h2>
 
-<p>The recommended methods for launching the GEOPM runtime are the job
-launch wrapper scripts <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>.  See
-these man pages for details about the command line interface.  If your
-system does not support <code>aprun</code> or <code>srun</code> for job launch, please make
-a change request for support of the job launch method used on your
-system at the github issues page:</p>
+<p>The recommended method for launching the GEOPM runtime is the job
+launch wrapper script <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>.  See this man page for
+details about the command line interface.  If your system does not support
+<code>aprun</code> or <code>srun</code> for job launch, please make a change request for support
+of the job launch method used on your system at the github issues page:</p>
 
 <p>https://github.com/geopm/geopm/issues</p>
 
@@ -228,7 +233,7 @@ in CONTRIBUTING.md.</p>
 
 <p>If the job launch application is not supported by the geopmpy.launcher
 the recommended method is to use the environment variables described
-in this man page including the <code>GEOPM_PMPI_CTL</code> environment variable.
+in this man page including the <code>GEOPM_CTL</code> environment variable.
 If using the "application" launch method then the <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>
 application should be launched in parallel.</p>
 
@@ -237,26 +242,17 @@ These are documented in <strong><a class="man-ref" href="geopm_ctl_c.3.html">geo
 application-facing interface because their use within an application
 is incompatible with the GEOPM launcher script.</p>
 
-<h2 id="PLOTTING-REPORT-AND-TRACE-DATA">PLOTTING REPORT AND TRACE DATA</h2>
-
-<p>Please see the <strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong> man pages
-for information about the data analysis tools available for
-visualizing the data contained in the GEOPM report and trace files.
-The report file is intended to be human readable, and the trace file
-format can be easily parsed by a wide variety of analysis
-applications.</p>
-
 <h2 id="INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</h2>
 
 <p>If the <code>GEOPM_REPORT</code> environment variable is set then a report will
 be generated.  There is one report file generated for each run.  This
-file has a header that describes the GEOPM version and the policies
-that were used during the run.  This is followed by a breakdown first
-by compute node host name and then by each compute region.  The report
-file gives information about runtime and energy use for each
-identified code region. Additionally, time spent in calls to MPI is
-reported.  In the future the report may contain more data describing
-the application.</p>
+file has a header that describes the GEOPM version, job start time,
+profile name (job description), and agent that were used during the run.
+This is followed by a breakdown first by compute node host name and
+then by each compute region.  The report file gives information about
+runtime and energy use for each identified code region. Additionally,
+time spent in calls to MPI is reported.  There may be Agent specific
+report modifications see <strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong> man page for more information.</p>
 
 <p>It is important to note that per-region accounting in the report
 includes only time spent in the region by all MPI ranks concurrently
@@ -276,7 +272,8 @@ is generated.  A separate trace file is generated for each compute
 node and each file is a pipe (the <code>|</code> character) delimited ASCII
 table. The file begins with a header that is marked by lines that
 start with the <code>#</code> character.  The header contains information about
-the GEOPM version and the policy that was used during the run.</p>
+the GEOPM version, job start time, profile name (job description), and
+agent that were used during the run.</p>
 
 <p>The first row following the header gives a description of each field.
 A simple method for selecting fields from the trace file is with the
@@ -290,19 +287,18 @@ A simple method for selecting fields from the trace file is with the
 
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
-<p>When using the launcher wrapper scripts <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> or
-<strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>, the interface to the GEOPM runtime is controlled
-exclusively by the launcher command line options.  The launcher script
-sets the environment variables described in this section according to
-the options specified on the command line.  Direct use of these
-environment variables is only recommended when launching the GEOPM
-runtime without <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> or <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>.</p>
+<p>When using the launcher wrapper script <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>, the interface
+to the GEOPM runtime is controlled exclusively by the launcher command line
+options.  The launcher script sets the environment variables described in
+this section according to the options specified on the command line.  Direct
+use of these environment variables is only recommended when launching the GEOPM
+runtime <em>without</em> <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>.</p>
 
 <dl>
 <dt><code>LD_DYNAMIC_WEAK</code></dt><dd><p>When dynamically linking an application to libgeopm for any
 features supported by the PMPI profiling of the MPI runtime it may
 be required that the LD_DYNAMIC_WEAK environment variable be set
-at runtime as is documented in the <strong><a class="man-ref" href="http://linux.die.net/man/8/ld.so">ld.so<span class="s">(8)</span></a></strong> man page.  When
+at runtime as is documented in the <strong><a class="man-ref" href="https://linux.die.net/man/8/ld.so">ld.so<span class="s">(8)</span></a></strong> man page.  When
 dynamically linking an application, if care is taken to link the
 libgeopm library before linking the library providing the weak MPI
 symbols, e.g. "-lgeopm -lmpi", linking order precedence will
@@ -328,42 +324,16 @@ add total DRAM energy and power as columns in the trace:</p>
 
 <p><code>GEOPM_TRACE_SIGNALS=ENERGY_DRAM,POWER_DRAM</code></p>
 
-<p>The signals available and their descriptions are listed below.
-"TIME", "REGION_ID#", "REGION_PROGRESS", "REGION_RUNTIME",
-"ENERGY_PACKAGE", "POWER_PACKAGE", and "FREQUENCY" are included
-in the trace by default.</p>
-
-<p><code>TIME</code> - time elaspsed since the beginning of execution. <br />
-<code>REGION_ID#</code> - 64-bit integer region ID that all ranks are
-               running, including MPI flag (bit 62) if applicable.
-               A nested MPI region for the region ID
-               0x0000000012345678 will appear as
-               0x4000000012345678.  If all ranks are not in the
-               same region, it will be recorded as unmarked
-               (0x2000000000000000).  Epoch boundaries are
-               recorded as entry and exit to the epoch region
-               (0x8000000000000000). <br />
-<code>REGION_PROGRESS</code> - minimum per-rank reported progress through the
-                    current region. <br />
-<code>REGION_RUNTIME</code> - maximum per-rank last recorded runtime for the
-                   current region. <br />
-<code>ENERGY_PACKAGE</code> - total energy for all sockets on the node. <br />
-<code>POWER_PACKAGE</code> - total power for all sockets on the node. <br />
-<code>FREQUENCY</code> - average frequency of all cores. <br />
-<code>ENERGY_DRAM</code> - total energy for all DRAM on the node. <br />
-<code>POWER_DRAM</code> - total power for all DRAM on the node. <br />
-<code>POWER_PACKAGE_MIN</code> - minimum setting for package power. <br />
-<code>POWER_PACKAGE_MAX</code> - maximum setting for package power. <br />
-<code>CYCLES_THREAD</code> - average clock cycles executed by cores since the
-                  beginning of execution. <br />
-<code>CYCLES_REFERENCE</code> - average clock reference cycles since the beginning of
-                     execution. <br /></p></dd>
-<dt><code>GEOPM_AGENT</code></dt><dd><p>Used to select the Agent to be used by all Kontrollers.  The Agent
-will take over the role previously held by Deciders in splitting
-policy information to be sent to controllers lower in the tree,
-and aggregating sampled data up the tree.  Available agents are:
-"monitor", "power_balancer", "power_governor", and
-"energy_efficient".</p></dd>
+<p>The signals available and their descriptions are documented in the
+<strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong> man page.  "TIME", "REGION_ID#",
+"REGION_PROGRESS", "REGION_RUNTIME", "ENERGY_PACKAGE",
+"POWER_PACKAGE", and "FREQUENCY" are included in the trace by
+default.</p></dd>
+<dt><code>GEOPM_AGENT</code></dt><dd><p>Used to select the Agent to be used by all Controllers.  The Agent
+will split policy information to be sent to controllers lower in
+the tree, and aggregate sampled data up the tree.  Available
+agents are: "monitor" (default if unset), "power_balancer",
+"power_governor", and "energy_efficient".</p></dd>
 <dt><code>GEOPM_POLICY</code></dt><dd><p>Specifies a JSON file path containing the policy.  If the policy
 is provided through this file, it will only be read once and
 cannot be changed dynamically.  In this mode, samples will not be
@@ -378,12 +348,12 @@ Controller will be "/$(GEOPM_SHMKEY)-$(GEOPM_ENDPOINT).policy" and
 the location for sample values written by the Controller and read
 by the resource manager will be
 "/$(GEOPM_SHMKEY)-$(GEOPM_ENDPOINT).sample".  GEOPM_ENDPOINT and
-GEOPM_POLICY cannot both be set simultaneously; the choice of
+GEOPM_POLICY cannot be set simultaneously; the choice of
 which to set is determined by whether the Controller should use
 shared memory to receive policies dynamically from the resource
 manager, or use a JSON file to read a fixed policy.  One or the
 other must be set when launching the GEOPM controller through the
-PMPI interface (see GEOPM_PMPI_CTL environment variable below).</p></dd>
+PMPI interface (see GEOPM_CTL environment variable below).</p></dd>
 <dt><code>GEOPM_SHMKEY</code></dt><dd><p>Override the default shared memory key base.  The shared memory
 key base prefixes all shared memory keys used by GEOPM to
 communicate between the compute application and the GEOPM runtime.
@@ -398,7 +368,7 @@ any other reason, a simple command to clean up after an aborted
 job is:</p>
 
 <p><code>$ test -n "$GEOPM_SHMKEY" &amp;&amp; rm -f /dev/shm${GEOPM_SHMKEY}* || rm -f /dev/shm/geopm-shm*</code></p></dd>
-<dt><code>GEOPM_PMPI_CTL</code></dt><dd><p>When set to 'process' or 'pthread' this environment variable
+<dt><code>GEOPM_CTL</code></dt><dd><p>When set to 'process' or 'pthread' this environment variable
 enables the launch of the GEOPM controller through the PMPI
 wrappers: in particular the wrappers for MPI_Init() or
 MPI_Init_thread().  In the case of specifying 'process' the
@@ -414,26 +384,27 @@ this feature may require the LD_DYNAMIC_WEAK variable as
 documented above.</p></dd>
 <dt><code>GEOPM_PROFILE</code></dt><dd><p>If set, will override the profile name to the value specified.
 The default profile name is the name of the compute application
-executable.  The profile name is printed in the report and trace
-and can be used to index the report and trace data during
-post-processing.  When launching the GEOPM runtime with the geopmctl
-application, this variable must be set in the environment for
-the compute application and the geopmctl application.  The value
-of the variable must be the same in both contexts.</p></dd>
+executable.  The profile name is printed in the report and trace(s) and
+can be used to index the report and trace data during  post-processing.
+When launching the GEOPM runtime with the geopmctl application, this
+variable must be set in the environment for the compute application
+and the geopmctl application.  The value of the variable must be the
+same in both contexts.</p></dd>
 <dt><code>GEOPM_PROFILE_TIMEOUT</code></dt><dd><p>If set, will enable changing of the GEOPM profiler timeout.  The
 value is in seconds and represents the amount of time any application
 rank will wait for the controller before continuing execution. The
 default timeout is 30 seconds.</p></dd>
-<dt><code>GEOPM_PLUGIN_PATH</code></dt><dd><p>The search path for GEOPM plugins. It is a colon-separated list
-of directories used by GEOPM to search for shared objects which
+<dt><code>GEOPM_PLUGIN_PATH</code></dt><dd><p>The search path for GEOPM plugins. It is a colon-separated list of
+directories used by GEOPM to search for shared objects which
 contain GEOPM plugins.  In order to be available to the GEOPM
 runtime, plugins should register themselves with the appropriate
-factory.  Refer to tutoral/iogroup and tutorial/agent for examples
-of plugins that register themselves at plugin load time. A
-zero-length directory name indicates the current working
+factory.  See <strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> for information about
+the GEOPM plugin interface.  The plugins are loaded</p>
+
+<p>A zero-length directory name indicates the current working
 directory.  A zero-length directory is inferred by a leading or
 trailing colon or two adjacent colons.  The default search
-location is always searched and is determined at library
+location is always loaded first and is determined at library
 configuration time and by way of the 'pkglib' variable (typically
 /usr/lib64/geopm/).</p></dd>
 <dt><code>GEOPM_DEBUG_ATTACH</code></dt><dd><p>Enables a serial debugger such as gdb to attach to a job when the
@@ -443,16 +414,6 @@ attached and the local variable "cont" is set to a non-zero value.
 If set, but not to a numerical value then all ranks are trapped.
 The runtime will print a message explaining the hostname and
 process ID that the debugger should attach to.</p></dd>
-<dt><code>GEOPM_EXEC_WRAPPER</code></dt><dd><p>Configure string for GEOPM launcher to run arbitrary
-application to wrap target job execution.</p>
-
-<p><code>$ export GEOPM_EXEC_WRAPPER="numactl -m 1"</code></p>
-
-<p><code>$ export GEOPM_EXEC_WRAPPER="valgrind --tool=memcheck --vgdb=yes \
-                              --vgdb-error=0"</code></p>
-
-<p><code>$ export GEOPM_EXEC_WRAPPER="$PATH_TO_DDT_CLIENT_BIN --ddtsessionfile \
-                              $PATH_TO_DDT_CLIENT_SESSION_FILE"</code></p></dd>
 <dt><code>GEOPM_REGION_BARRIER</code></dt><dd><p>Enables a node local MPI_Barrier() at time of calling
 <code>geopm_region_enter</code>() or <code>geopm_region_exit</code>() for all
 application ranks that share a node.  Since the GEOPM controller
@@ -463,76 +424,20 @@ feature is primarily used for debugging purposes.  WARNING: If all
 regions marked in the application are not entered synchronously by
 all ranks on a node then enabling this feature will cause a
 deadlock and the application will hang.</p></dd>
-<dt><code>GEOPM_RM</code></dt><dd><p>Used by job launch wrapper (geopmsrun or geopmaprun) to override
-the resource manager to use for job launch.  This environment
-variable serves the same purpose as the <code>--geopm-rm</code> command line
-option.  The valid values for the variable or command line option
-are detailed in the <strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong> or <strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong> man
-pages.  Note that the command line option overrides what is set in
-the environment.  If not set the script will attempt to determine
-the resource manager based on the executable name, your PATH and
-hostname.  This variable is also used by the integration tests.</p></dd>
 <dt><code>GEOPM_COMM</code></dt><dd><p>Used to select the plugin description string for communication.
-The communication plugin is not currently used, but in the future
-the the comm plugin will be used for all communication between
+The comm plugin will be used for all communication between
 Controllers running on different nodes.  The only installed
-communication plugin uses MPI and the description string is "MPIComm".
-The user may wish to implement other communication mechanisms.</p></dd>
-<dt><code>GEOPM_DISABLE_HYPERTHREADS</code></dt><dd><p>Used by job launch wrapper (geopmsrun or geopmaprun) to disable
-the usage of hyperthreads for pinning purposes.  The default behavior
-is to use hyperthreads for pinning.  This environment variable serves
-the same purpose as the <code>--geopm-disable-hyperthreads</code> command line
-option.  If the environment variable is set and/or the command line
-option is specified then hyperthreads will be disabled.</p></dd>
+communication plugin uses MPI and the description string is
+"MPIComm".  The user may wish to implement other communication
+mechanisms.</p></dd>
+<dt><code>GEOPM_DISABLE_HYPERTHREADS</code></dt><dd><p>Used by geopmlaunch job launch wrapper to disable the usage of
+hyperthreads for pinning purposes.  The default behavior is to use
+hyperthreads for pinning.  This environment variable serves the
+same purpose as the <code>--geopm-disable-hyperthreads</code> command line
+option.  If the environment variable is set and/or the command
+line option is specified then hyperthreads will be disabled.</p></dd>
 </dl>
 
-
-<h2 id="DEPRECATION-NOTICE-AND-BETA-INTERFACE-CHANGES">DEPRECATION NOTICE AND BETA INTERFACE CHANGES</h2>
-
-<p>As of the GEOPM version 0.5.0 beta release, a major refactor of the
-controller and plugin architecture is provided as an optional new code
-path.  The old code path is still available for users as long as the
-controller is run without the <code>GEOPM_AGENT</code> environment variable set.
-The new code path will be active if the user selects an agent by name
-with the <code>GEOPM_AGENT</code> environment variable when launching the
-controller.  The old code path is maintained in the current Controller
-object along with the the Decider / Platform / PlatformImp plugins.
-The new code path is maintained in a replacement for the Controller
-which has been temporarily named the Kontroller.  The Kontroller will
-be renamed the Controller after the version 0.5.0 release, and the old
-code path will no longer be available.</p>
-
-<p>The beta release enables a new set of plugin interfaces named the
-IOGroup, Agent, and Comm.  It is through the IOGroup, Agent and Comm
-plugins that the GEOPM runtime can be extended.  The Decider /
-Platform / PlatformImp plugin extensions are deprecated and will be
-removed after this release.  The IOGroup plugin enables a user to add
-new signal and control mechanisms for an Agent to read and write.  The
-Agent plugin enables a user to add new monitor and control algorithms
-to the GEOPM runtime.  MPI use by the GEOPM runtime which is not
-linked by application has been completely encapsulated in Comm object.
-The tutorial has been extended with two new directories: tutorial/agent
-and tutorial/iogroup.  The tutorial/iogroup directory documents how to
-write an IOGroup plugin.  The tutorial/agent directory documents how
-to write an Agent plugin.</p>
-
-<p>The primary motivations for these changes are increasing the
-flexibility of extensions to GEOPM and improving testablity.  One
-significant problem solved by the IOGroup/PlatformIO replacement of
-the Platform/PlatformImp design is the ability to support multiple
-plugins simultaneously for extending telemetry and control.  The Agent
-interface enables a much more fully featured modification of the
-control algorithm.  Additionally the Agent definition enables the
-GEOPM resource manager interface to provide Agent-specific
-requirements.  In related changes to the inter-node communication, the
-GEOPM runtime now supports arbitrary samples and policies to be
-communicated between agents across the network.</p>
-
-<p>For more information regarding these changes and their effects on
-command line executables see: <strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong>.</p>
-
-<p>For more information regarding these changes and their effects on C
-interfaces: <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong> and <strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong></p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
@@ -550,27 +455,47 @@ interfaces: <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c
 <strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_fortran.3.html">geopm_fortran<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_policy_c.3.html">geopm_policy_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_sched.3.html">geopm_sched<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_version.3.html">geopm_version<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_CircularBuffer.3.html">geopm::CircularBuffer<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_CpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_EnergyEfficientAgent.3.html">geopm::EnergyEfficientAgent<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_EnergyEfficientRegion.3.html">geopm::EnergyEfficientRegion<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Helper.3.html">geopm::Helper<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_MPIComm.3.html">geopm::MPIComm<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PowerBalancer.3.html">geopm::PowerBalancer<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PowerBalancerAgent.3.html">geopm::PowerBalancerAgent<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PowerGovernor.3.html">geopm::PowerGovernor<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PowerGovernorAgent.3.html">geopm::PowerGovernorAgent<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_ProfileIOGroup.3.html">geopm::ProfileIOGroup<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_ProfileIOSample.3.html">geopm::ProfileIOSample<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_RegionAggregator.3.html">geopm::RegionAggregator<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmaprun.1.html">geopmaprun<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmbench.1.html">geopmbench<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmplotter.1.html">geopmplotter<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmpolicy.1.html">geopmpolicy<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmsrun.1.html">geopmsrun<span class="s">(1)</span></a></strong>,
 <strong><a class="man-ref" href="geopmwrite.1.html">geopmwrite<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="http://linux.die.net/man/8/ld.so">ld.so<span class="s">(8)</span></a></strong></p>
+<strong><a class="man-ref" href="https://linux.die.net/man/8/ld.so">ld.so<span class="s">(8)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>November 2018</li>
+    <li class='tc'>December 2018</li>
     <li class='tr'>geopm(7)</li>
   </ol>
 

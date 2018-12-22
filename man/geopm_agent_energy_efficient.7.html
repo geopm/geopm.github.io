@@ -83,33 +83,39 @@ run at high frequencies.</p>
 mode, the best frequencies for each region are specified in the
 environment variable <code>GEOPM_EFFICIENT_FREQ_RID_MAP</code>, which is a
 JSON-formatted string mapping region name to frequency in Hertz,
-e.g. '{"region1": 1200000000, "region2": 1500000000}'.  If a frequency
-for a region is not specified, the region hint will be used and the
-frequency will be set to either the minimum or maximum available
-frequency.  See <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong> for the list of region hints.
-These best-fit frequencies can be determined by running the
-application once at each available frequency and checking the
-performance of each region; this frequency sweep is available as an
-analysis type for <code>geopmanalysis</code> described in <strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong>.
+e.g. '{"region1": 1200000000, "region2": 1500000000}'.  For this node,
+the environment variable <code>GEOPM_EFFICIENT_FREQ_ONLINE</code> must be
+unset. If a frequency for a region is not specified, the region hint
+will be used and the frequency will be set to either the minimum or
+maximum available frequency.  See <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong> for the list of
+region hints.  These best-fit frequencies can be determined by running
+the application once at each available frequency and checking the
+performance of each region.
 The online mode finds the optimal frequency for each region
 dynamically by measuring the performance of each region and reducing
 the frequency as long as the performance is still within acceptable
 limits.  The performance metric used is the maximum of the runtimes
 reported by each rank for the last execution of the region in question
-(lower is better).  It also avoids reducing frequency if energy would
-increase (due to performance loss in a frequency-sensitive region). Up
-to 10% performance loss is allowed.  Enable the online mode by setting
-<code>GEOPM_EFFICIENT_FREQ_ONLINE</code> and unsetting
-<code>GEOPM_EFFICIENT_FREQ_RID_MAP</code>.</p>
+(lower is better).  The agent also avoids reducing frequency if energy
+would increase (due to performance loss in a frequency-sensitive
+region). Up to 10% performance loss is allowed.  Enable the online
+mode by setting <code>GEOPM_EFFICIENT_FREQ_ONLINE</code> and unsetting
+<code>GEOPM_EFFICIENT_FREQ_RID_MAP</code>, which is not used by the online mode.</p>
 
 <h2 id="AGENT-BEHAVIOR-HIGHLIGHTS">AGENT BEHAVIOR HIGHLIGHTS</h2>
 
+<p>Policies and samples are vectors of double precision values where each
+value has a meaning defined by the <strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong> implementation.
+The Agent interface also provides methods for the Agent to extend
+reports and traces with additional Agent-specific information.</p>
+
 <dl>
-<dt><code>Agent Name</code></dt><dd><p>Set the <code>GEOPM_AGENT</code> environment variable to "energy_efficient" and
-the Controller will select the EnergyEfficientAgent for its control
-handler.  See <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> for more information about environment
-variables.</p></dd>
-<dt><code>Ordered Policies Descending</code></dt><dd><p>The minimum and maximum frequency are passed down as policies.
+<dt><code>Agent Name</code></dt><dd><p>Set the <code>--geopm-agent</code> launch option or <code>GEOPM_AGENT</code> environment
+variable to "energy_efficient" and the Controller will select the
+EnergyEfficientAgent for its control handler.  See
+<strong><span class="man-ref">geopm_launch<span class="s">(1)</span></span></strong> and <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> for more information about
+launch options and environment variables.</p></dd>
+<dt><code>Agent Policy Definitions</code></dt><dd><p>The minimum and maximum frequency are passed down as policies.
 Setting both to the same value can be used to force the entire
 application to run at one frequency.</p>
 
@@ -120,13 +126,17 @@ application to run at one frequency.</p>
 <p><code>FREQ_MAX</code>: The maximum frequency that the algorithm is allowed to
             choose for any region.  If NAN is passed, it will use
             the maximum available frequency by default.</p></dd>
-<dt><code>Ordered Samples Ascending</code>:</dt><dd><p></p>
+<dt><code>Agent Sample Definitions</code>:</dt><dd><p></p>
 
-<p><code>ENERGY_PACKAGE</code>: Total energy from the packages across all nodes.</p>
+<p><code>ENERGY_PACKAGE</code>: Total energy from the packages across all child
+                  nodes.  At the root, this is the total energy for
+                  all nodes in the job.</p>
 
-<p><code>FREQUENCY</code>: The average frequency across nodes.</p></dd>
-<dt><code>Tracing Modifications</code></dt><dd><p>N/A</p></dd>
-<dt><code>Report Modifiers</code></dt><dd><p>The per-node final frequency for each region is added to the report.
+<p><code>FREQUENCY</code>: The average frequency across child nodes.  At the root,
+             this is the average frequency across all nodes in the
+             job.</p></dd>
+<dt><code>Trace Column Extensions</code></dt><dd><p>N/A</p></dd>
+<dt><code>Report Extensions</code></dt><dd><p>The per-node final frequency for each region is added to the report.
 This reflects the settings from the map or hint in offline mode, or
 the learned best frequency determined by the online mode.</p></dd>
 <dt><code>Control Loop Gate</code></dt><dd><p>The agent gates the Controller's control loop to a cadence of 5ms.
@@ -145,15 +155,16 @@ This agent propagates its ascending signals up the tree every 50ms
 <strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="geopmanalysis.1.html">geopmanalysis<span class="s">(1)</span></a></strong></p>
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>November 2018</li>
+    <li class='tc'>December 2018</li>
     <li class='tr'>geopm_agent_energy_efficient(7)</li>
   </ol>
 

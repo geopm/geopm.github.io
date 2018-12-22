@@ -94,7 +94,7 @@ This tool can be used to write hardware/OS state through
 high-level control aliases and query other information
 about the platform such as the type and number of hardware domains.
 Details of the hardware domains can also be inferred from the output
-of <strong><a class="man-ref" href="http://linux.die.net/man/1/lscpu">lscpu<span class="s">(1)</span></a></strong>.</p>
+of <strong><a class="man-ref" href="https://linux.die.net/man/1/lscpu">lscpu<span class="s">(1)</span></a></strong>.</p>
 
 <p>When run without any arguments, the default behavior is to print a
 summary of available controls.</p>
@@ -105,8 +105,22 @@ DOMAIN_TYPE is hardware domain to which the control should be applied.
 DOMAIN_INDEX is used to indicate which instance of the domain to write
 to; indexing starts from 0 and goes up to the domain size - 1.  VALUE
 is the floating-point number in SI units that the control will be
-adjusted to.  Note that currently controls are only defined for their
-native domain.</p>
+adjusted to.  If the DOMAIN_TYPE is a larger containing domain than
+that of the control, the same value will be applied to every contained
+subdomain.  Refer to the domain hierarchy described in
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo<span class="s">(3)</span></a></strong> for the descriptions of the domains and how
+they are contained within one another.</p>
+
+<p><code>board</code> - domain for node-wide signals and controls <br />
+++<code>package</code> - socket <br />
+++++<code>core</code> - physical core <br />
+++++++<code>cpu</code> - Linux logical CPU <br />
+++++<code>package_memory</code> - on-package memory <br />
+++++<code>package_nic</code> - NIC within the package <br />
+++++<code>package_accelerator</code> - domain for accelerators within the package <br />
+++<code>board_memory</code> - other memory outside the package <br />
+++<code>board_nic</code> - NIC attached to the board <br />
+++<code>board_accelerator</code> - domain for accelerators on the board</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
@@ -140,7 +154,7 @@ package_accelerator  0
 
 <pre><code>$ geopmwrite
 FREQUENCY
-POWER_PACKAGE
+POWER_PACKAGE_LIMIT
 </code></pre>
 
 <p>Show the description for a control:</p>
@@ -162,6 +176,12 @@ $ geopmread FREQUENCY cpu 2
 1.9e9
 </code></pre>
 
+<p>Set all CPUs on package 0 to 1.5 GHz (cpu 1 is on package 0):</p>
+
+<p>   $ geopmwrite FREQUENCY package 0 1.5e9
+   $ geopmread FREQUENCY cpu 1
+   1.5e9</p>
+
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
 <p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
@@ -170,12 +190,12 @@ $ geopmread FREQUENCY cpu 2
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong>,
-<strong><a class="man-ref" href="http://linux.die.net/man/1/lscpu">lscpu<span class="s">(1)</span></a></strong></p>
+<strong><a class="man-ref" href="https://linux.die.net/man/1/lscpu">lscpu<span class="s">(1)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>November 2018</li>
+    <li class='tc'>December 2018</li>
     <li class='tr'>geopmwrite(1)</li>
   </ol>
 
