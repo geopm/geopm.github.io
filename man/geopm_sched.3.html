@@ -80,28 +80,38 @@
 <dl>
 <dt><code>int geopm_sched_num_cpu(</code></dt><dd><p><code>void);</code></p></dd>
 <dt><code>int geopm_sched_get_cpu(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int geopm_sched_proc_cpuset(</code></dt><dd><p><code>int</code> <em>num_cpu</em>, <br />
+<code>cpu_set_t *</code><em>proc_cpuset</em><code>);</code></p></dd>
 <dt><code>int geopm_sched_woomp(</code></dt><dd><p><code>int</code> <em>num_cpu</em>, <br />
 <code>cpu_set_t *</code><em>woomp</em><code>);</code></p></dd>
+<dt><code>int geopm_sched_popen(</code></dt><dd><p><code>const char *</code><em>cmd</em>, <br />
+<code>FILE **</code><em>fid</em><code>);</code></p></dd>
 </dl>
 
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>The <em>geopm_sched.h</em> header defines GEOPM interfaces for interacting with
-the linux scheduler.  This set of interfaces may grow in
-the future.</p>
+the linux scheduler.</p>
 
 <dl>
-<dt><code>geopm_sched_num_cpu</code>()</dt><dd><p>Returns the number of online logical CPUs on the system.</p></dd>
-<dt><code>geopm_sched_get_cpu</code>()</dt><dd><p>Returns the logical CPU index that the calling thread is executing on.</p></dd>
-<dt><code>geopm_sched_woomp</code>()</dt><dd><p>Sets the <strong><a class="man-ref" href="https://linux.die.net/man/3/cpu_set">CPU_SET<span class="s">(3)</span></a></strong> given by <em>woomp</em> such that it includes all
+<dt><code>geopm_sched_num_cpu</code>()</dt><dd><p>Returns the number of online Linux logical CPUs on the system.</p></dd>
+<dt><code>geopm_sched_get_cpu</code>()</dt><dd><p>Returns the Linux logical CPU index that the calling thread is executing on.</p></dd>
+<dt><code>geopm_sched_proc_cpuset</code>()</dt><dd><p>Provides a <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/CPU_SET.3.html">CPU_SET<span class="s">(3)</span></a></strong> bit mask identifying the Linux logical CPUs on
+which the calling process is allowed to run. The user must allocate the bit
+arrary <em>proc_cpu_set</em> prior to calling this function, and the number of bits
+allocated is given by the <em>num_cpu</em> parameter. All of the bits in <em>proc_cpu_set</em>
+will be zeroed except for the offsets corresponding to CPUs that the process has
+access to which will be set to one. Returns zero on success and an error
+code on failure.</p></dd>
+<dt><code>geopm_sched_woomp</code>()</dt><dd><p>Sets the <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/CPU_SET.3.html">CPU_SET<span class="s">(3)</span></a></strong> given by <em>woomp</em> such that it includes all
 CPUs not used in an OpenMP parallel region but available to the
 calling thread.  If there are no CPU's that are part of the mask
-returned by <strong><a class="man-ref" href="https://linux.die.net/man/2/sched_getaffinity">sched_getaffinity<span class="s">(2)</span></a></strong> but not affinitized by an
+returned by <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man2/sched_getaffinity.2.html">sched_getaffinity<span class="s">(2)</span></a></strong> but not affinitized by an
 OpenMP thread then the returned mask will have all bits set,
 allowing the Linux scheduler to dynamically affinitize the thread.
 The cpu mask <em>woomp</em> that is created by this function can be used
-with <strong><a class="man-ref" href="https://linux.die.net/man/3/pthread_attr_setaffinity_np">pthread_attr_setaffinity_np<span class="s">(3)</span></a></strong> to modify the attributes
+with <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/pthread_attr_setaffinity_np.3.html">pthread_attr_setaffinity_np<span class="s">(3)</span></a></strong> to modify the attributes
 passed to <code>geopm_ctl_pthread</code>() so that the pthread created is
 affinitized to CPUs that do not have an OpenMP thread affinity.
 The mask generated when OpenMP threads are not statically
@@ -110,28 +120,39 @@ variable).  The <em>num_cpu</em> parameter specifies size of the CPU_SET
 in terms of number of CPUs.  If an error occurs a non-zero error
 number is returned. See <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong> for a full description
 of the error numbers and how to convert them to strings.</p></dd>
+<dt><code>geopm_sched_popen</code>()</dt><dd><p>Enables calls to <strong><span class="man-ref">popen<span class="s">(3)</span></span></strong> within a process that is running the GEOPM
+Controller without triggering GEOPM's signal handling when the subprocess
+completes. This may be useful for built-in and plugin-loaded actors of the
+GEOPM runtime.  Unlike <strong><span class="man-ref">popen<span class="s">(3)</span></span></strong>, this function blocks until the opened process
+has completed, and it also suppresses the SIGCHILD signal which is raised
+when the opened process completes. The <em>cmd</em> is the shell command that is
+executed, and the <em>fid</em> is a file descriptor that provides the standard output
+from the opened process. Returns zero upon success and an error code on failure.
+Note that opening a child process will result in the MPI runtime killing the job
+with MPICH and possibly other implementations of MPI.</p></dd>
 </dl>
 
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="https://linux.die.net/man/3/cpu_set">CPU_SET<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="https://linux.die.net/man/3/pthread_setaffinity_np">pthread_setaffinity_np<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="https://linux.die.net/man/3/pthread_attr_setaffinity_np">pthread_attr_setaffinity_np<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="https://linux.die.net/man/2/sched_getaffinity">sched_getaffinity<span class="s">(2)</span></a></strong>,
-<strong><a class="man-ref" href="https://linux.die.net/man/3/sched_getcpu">sched_getcpu<span class="s">(3)</span></a></strong></p>
+<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/CPU_SET.3.html">CPU_SET<span class="s">(3)</span></a></strong>,
+<strong><span class="man-ref">popen<span class="s">(3)</span></span></strong>,
+<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/pthread_setaffinity_np.3.html">pthread_setaffinity_np<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/pthread_attr_setaffinity_np.3.html">pthread_attr_setaffinity_np<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man2/sched_getaffinity.2.html">sched_getaffinity<span class="s">(2)</span></a></strong>,
+<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/sched_getcpu.3.html">sched_getcpu<span class="s">(3)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm_sched.h(3)</li>
   </ol>
 

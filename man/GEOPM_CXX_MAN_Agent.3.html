@@ -97,13 +97,14 @@ better rendering of this manual.</p>
 <dt><code>virtual void Agent::init(</code></dt><dd><p><code>int</code> <em>level</em><code>,</code> <br />
 <code>const vector&lt;int> &amp;</code><em>fan_in</em><code>,</code> <br />
 <code>bool</code> <em>is_level_root</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void Agent::validate_policy(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>policy</em><code>) = const 0;</code></p></dd>
 <dt><code>virtual bool Agent::descend(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>in_policy</em><code>,</code> <br />
-<code>vector&lt;vector&lt;double>&gt;&amp;</code> <em>out_policy</em><code>) = 0</code>;</p></dd>
+<code>vector&lt;vector&lt;double>&gt;&amp;</code> <em>out_policy</em><code>) = 0;</code></p></dd>
 <dt><code>virtual bool Agent::ascend(</code></dt><dd><p><code>const vector&lt;vector&lt;double>&gt; &amp;</code><em>in_sample</em><code>,</code> <br />
 <code>vector&lt;double> &amp;</code><em>out_sample</em><code>) = 0;</code></p></dd>
-<dt><code>virtual bool Agent::adjust_platform(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>policy</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual bool Agent::adjust_platform(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>policy</em><code>) = 0;</code></p></dd>
 <dt><code>virtual bool Agent::sample_platform(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>sample</em><code>) = 0;</code></p></dd>
-<dt><code>virtual void Agent::wait(</code></dt><dd><p> <code>void) = 0</code>;</p></dd>
+<dt><code>virtual void Agent::wait(</code></dt><dd><p> <code>void) = 0;</code></p></dd>
 <dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_header(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
 <dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_node(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
 <dt><code>virtual map&lt;uint64_t, vector&lt;pair&lt;string, string>&gt;&gt; Agent::report_region(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
@@ -124,11 +125,13 @@ better rendering of this manual.</p>
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>The <code>Agent</code> class is an abstract pure virtual class that defines the
-fundamental procedures executed by the GEOPM runtime.  By default the
-<strong><a class="man-ref" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent<span class="s">(3)</span></a></strong> is used, but other agents can be selected
-with the <code>--geopm-agent</code> command line option to the <strong><span class="man-ref">geopm_launcher<span class="s">(1)</span></span></strong>
-or <code>GEOPM_AGENT</code> environment variable.  Exactly one agent type is
-used during each execution of the GEOPM runtime.</p>
+fundamental procedures executed by the GEOPM runtime.  In general, the
+Agent is responsible for making decisions about how and what control the
+runtime should exert based on readings of system values.  By default
+the <strong><a class="man-ref" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent<span class="s">(3)</span></a></strong> is used, but other agents can be
+selected with the <code>--geopm-agent</code> command line option to the
+<strong><span class="man-ref">geopm_launcher<span class="s">(1)</span></span></strong> or <code>GEOPM_AGENT</code> environment variable.  Exactly
+one agent type is used during each execution of the GEOPM runtime.</p>
 
 <p>The <strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> man page gives a general overview of
 concepts related to extending GEOPM through plugins.  Please refer to
@@ -220,6 +223,10 @@ parameter is true will the controller call the <code>ascend</code>() or
 </code></pre>
 
 <dl>
+<dt><code>validate_policy</code>()</dt><dd><p>Called by user of Agent class  to validate incoming policy values and
+replace NaNs with defaults.  If a value of <em>policy</em> is not NaN but the
+value is not supported by the Agent the method will throw a geopm::Exception
+with error code GEOPM_ERROR_INVALID.</p></dd>
 <dt><code>descend</code>()</dt><dd><p>Split policy for children at next level down the tree.  The
 <em>in_policy</em> is an input vector of policy values from the parent.
 The <em>out_policy</em> is an output vector of policies to be sent to
@@ -298,7 +305,7 @@ information.  This code is located in the GEOPM source under tutorial/agent.</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -307,7 +314,7 @@ information.  This code is located in the GEOPM source under tutorial/agent.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::Agent(3)</li>
   </ol>
 

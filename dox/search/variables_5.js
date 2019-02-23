@@ -1,12 +1,8 @@
 var searchData=
 [
   ['m_5fagg_5ffunc',['M_AGG_FUNC',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#a40c705432f444e36edd1a398223aee4a',1,'geopm::PowerBalancerAgent::TreeRole']]],
-  ['m_5fcomm',['m_comm',['../classgeopm_1_1_m_p_i_comm.html#a97adf927cd6a3574606fc03dde4c6f67',1,'geopm::MPIComm']]],
   ['m_5fis_5fstep_5fcomplete',['m_is_step_complete',['../classgeopm_1_1_power_balancer_agent_1_1_role.html#a2ef1d92a258bcf18e6ffc2db754d923c',1,'geopm::PowerBalancerAgent::Role']]],
-  ['m_5fis_5ftorn_5fdown',['m_is_torn_down',['../classgeopm_1_1_m_p_i_comm.html#a4cbb1e74223ddc901d001f7c96bad43c',1,'geopm::MPIComm']]],
   ['m_5flast_5fwait',['m_last_wait',['../classgeopm_1_1_power_balancer_agent.html#a483887872a502d214eceec8a7cb74df3',1,'geopm::PowerBalancerAgent']]],
-  ['m_5fmaxdims',['m_maxdims',['../classgeopm_1_1_m_p_i_comm.html#a2a79bea0768affb437daa8b9015167b4',1,'geopm::MPIComm']]],
-  ['m_5fname',['m_name',['../classgeopm_1_1_m_p_i_comm.html#a2557f1fff00d87bf2ecf7a9deef8022a',1,'geopm::MPIComm']]],
   ['m_5fnum_5fchildren',['M_NUM_CHILDREN',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#ad083b5ddee4aadbdd943f870cc90e799',1,'geopm::PowerBalancerAgent::TreeRole']]],
   ['m_5fplatform_5fio',['m_platform_io',['../classgeopm_1_1_power_balancer_agent.html#a95a0158ec67553079f68278112f918cf',1,'geopm::PowerBalancerAgent']]],
   ['m_5fplatform_5ftopo',['m_platform_topo',['../classgeopm_1_1_power_balancer_agent.html#a5926cf351abd01d57a424da3d0ca2a76',1,'geopm::PowerBalancerAgent']]],
@@ -17,6 +13,5 @@ var searchData=
   ['m_5frole',['m_role',['../classgeopm_1_1_power_balancer_agent.html#a50adfa4ff6b6d3dd293c710624d23b90',1,'geopm::PowerBalancerAgent']]],
   ['m_5fstep_5fcount',['m_step_count',['../classgeopm_1_1_power_balancer_agent_1_1_role.html#a093cfb3c43ed3da57339387bba70c877',1,'geopm::PowerBalancerAgent::Role']]],
   ['m_5fstep_5fimp',['M_STEP_IMP',['../classgeopm_1_1_power_balancer_agent_1_1_role.html#aca16d22433deda0c76d31f2b42a37859',1,'geopm::PowerBalancerAgent::Role']]],
-  ['m_5fwait_5fsec',['M_WAIT_SEC',['../classgeopm_1_1_power_balancer_agent.html#a70a1c2e0d8675a0ab761d1f02ad212bb',1,'geopm::PowerBalancerAgent']]],
-  ['m_5fwindows',['m_windows',['../classgeopm_1_1_m_p_i_comm.html#a17175fb916a71c79929557af291b7382',1,'geopm::MPIComm']]]
+  ['m_5fwait_5fsec',['M_WAIT_SEC',['../classgeopm_1_1_power_balancer_agent.html#a70a1c2e0d8675a0ab761d1f02ad212bb',1,'geopm::PowerBalancerAgent']]]
 ];

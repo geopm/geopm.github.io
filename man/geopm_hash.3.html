@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>geopm_region_id_c(3) - application profiling insight interfaces</title>
+  <title>geopm_hash.h(3) - helper methods for encoding</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -61,64 +61,71 @@
   </div>
 
   <ol class='man-decor man-head man head'>
-    <li class='tl'>geopm_region_id_c(3)</li>
+    <li class='tl'>geopm_hash.h(3)</li>
     <li class='tc'></li>
-    <li class='tr'>geopm_region_id_c(3)</li>
+    <li class='tr'>geopm_hash.h(3)</li>
   </ol>
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>geopm_region_id_c</code> - <span class="man-whatis">application profiling insight interfaces</span>
+  <code>geopm_hash.h</code> - <span class="man-whatis">helper methods for encoding</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm_region_id.h">&lt;geopm_region_id.h></a></strong></p>
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm_hash.h">&lt;geopm_hash.h></a></strong></p>
 
-<p><code>Link with -lgeopm</code></p>
+<p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
 <dl>
-<dt><code>int geopm_region_id_is_mpi(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em><code>);</code></p></dd>
-<dt><code>int geopm_region_id_is_unmarked(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em><code>);</code></p></dd>
-<dt><code>int geopm_region_id_hint_is_equal(</code></dt><dd><p><code>uint64_t</code> <em>hint_type</em>, <br />
-<code>uint64_t</code> <em>region_id</em><code>);</code></p></dd>
-<dt><code>uint64_t geopm_region_id_hint(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em><code>);</code></p></dd>
-<dt><code>uint64_t geopm_region_id_hash(</code></dt><dd><p><code>uint64_t</code> <em>region_id</em><code>);</code></p></dd>
+<dt><code>uint64_t geopm_crc32_u64(</code></dt><dd><p><code>uint64_t</code> <em>begin</em>, <br />
+<code>uint64_t</code> <em>key</em><code>);</code></p></dd>
+<dt><code>uint64_t geopm_crc32_str(</code></dt><dd><p><code>uint64_t</code> <em>key</em><code>);</code></p></dd>
+<dt><code>static inline uint64_t geopm_signal_to_field(</code></dt><dd><p><code>double</code> <em>signal</em><code>);</code></p></dd>
+<dt><code>static inline double geopm_field_to_signal(</code></dt><dd><p><code>uint64_t</code> <em>field</em><code>);</code></p></dd>
 </dl>
 
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>The functions described here are intended to provide insight with regard
-to the region being executed by a particular rank as served by the PlatformIO
-<code>REGION_ID#</code> signal.  For more details regarding PlatformIO and signals please see
-<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p>
+<p>The <em>geopm_hash.h</em> header defines GEOPM interfaces for encoding region
+names into 64-bit integers and working with 64-bit integer values
+stored as doubles.</p>
 
 <dl>
-<dt><code>geopm_region_id_is_mpi</code>()</dt><dd><p>returns 1 if <strong>region_id</strong> is currently executing an MPI operation,
-otherwise returns 0.</p></dd>
-<dt><code>geopm_region_id_is_unmarked</code>()</dt><dd><p>returns 1 if <strong>region_id</strong> is currently executing unmarked code,
-otherwise returns 0.</p></dd>
-<dt><code>geopm_region_id_hint_is_equal</code>()</dt><dd><p>returns 1 if <strong>region_id</strong> is associated with <strong>hint_type</strong>,
-otherwise returns 0.</p></dd>
-<dt><code>geopm_region_id_hint</code>()</dt><dd><p>returns hint type that is associated with <strong>region_id</strong>.</p></dd>
-<dt><code>geopm_region_id_hash</code>()</dt><dd><p>returns <strong>region_id</strong> dissociated from hints.</p></dd>
+<dt><code>geopm_crc32_u64</code>()</dt><dd><p>Implements the CRC32 hashing algorithm, which starts with
+the value <em>begin</em> and hashes the value <em>key</em> to produce a 32-bit
+result.  The result is returned as a 64-bit integer.</p></dd>
+<dt><code>geopm_crc32_str</code>()</dt><dd><p>Hashes the string <em>key</em> to produce a 64-bit value.  This function
+is used to produce unique region IDs for named regions.  An
+<code>Agent</code> implementation with specialized behavior for specific
+region names can use this function to figure out the region ID to
+expect for the desired region.  As this uses the CRC32 algorithm,
+only the bottom 32 bits will be filled in, reserving the top 32
+bits for hints and other information.</p></dd>
+<dt><code>geopm_signal_to_field</code>()</dt><dd><p>Convert a double <em>signal</em> into a 64-bit field.  This function is
+especially useful for converting region IDs read as signals from
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong> but may also be used to work with raw MSR
+values.</p></dd>
+<dt><code>geopm_field_to_signal</code>()</dt><dd><p>Convert a 64-bit <em>field</em> into a double representation appropriate
+for a signal returned by an IOGroup.</p></dd>
 </dl>
 
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,</p>
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
-    <li class='tr'>geopm_region_id_c(3)</li>
+    <li class='tc'>February 2019</li>
+    <li class='tr'>geopm_hash.h(3)</li>
   </ol>
 
   </div>

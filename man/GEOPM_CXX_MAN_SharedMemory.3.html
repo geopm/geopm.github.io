@@ -56,6 +56,8 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#SHAREDMEMORY-CLASS-METHODS">SHAREDMEMORY CLASS METHODS</a>
+    <a href="#SHAREDMEMORYUSER-CLASS-METHODS">SHAREDMEMORYUSER CLASS METHODS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -77,14 +79,65 @@
 
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
+<dl>
+<dt><code>SharedMemory(</code></dt><dd><p><code>const std::string &amp;</code><em>shm_key</em><code>,</code><br />
+<code>size_t</code><em>size</em><code>);</code></p></dd>
+<dt><code>~SharedMemory(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>void *SharedMemory::pointer(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>std::string SharedMemory::key(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>size_t SharedMemory::size(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>SharedMemoryUser(</code></dt><dd><p><code>const std::string &amp;</code><em>shm_key</em><code>,</code><br />
+<code>unsigned int</code><em>timeout</em><code>);</code></p></dd>
+<dt><code>SharedMemoryUser(</code></dt><dd><p><code>const std::string &amp;</code><em>shm_key</em><code>);</code></p></dd>
+<dt><code>~SharedMemoryUser(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>void *SharedMemoryUser::pointer(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>std::string SharedMemoryUser::key(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>size_t SharedMemoryUser::size(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>void SharedMemoryUser::unlink(</code></dt><dd><p><code>void);</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_shared_memory.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_shared_memory.html</a>.</p>
+<p>The SharedMemory class encapsulates the creation of inter-process
+shared memory.  The SharedMemoryUser class encapsulates attaching to
+inter-process shared memory.  In the GEOPM runtime, shared memory is
+used to communicate between the user application's MPI calls and calls
+to <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong> methods, and the Controller running on the same
+node.</p>
+
+<h2 id="SHAREDMEMORY-CLASS-METHODS">SHAREDMEMORY CLASS METHODS</h2>
+
+<dl>
+<dt><code>SharedMemory</code>()</dt><dd><p>Constructor creates an inter-process shared memory region with key
+<em>shm_key</em> and <em>size</em>.</p></dd>
+<dt><code>~SharedMemory</code>()</dt><dd><p>Destructor destroys and unlinks the shared memory region.</p></dd>
+<dt><code>pointer</code>()</dt><dd><p>Returns a pointer to the shared memory region.</p></dd>
+<dt class="flush"><code>key</code>()</dt><dd><p>Returns the key to the shared memory region.</p></dd>
+<dt class="flush"><code>size</code>()</dt><dd><p>Returns the size of the shared memory region.</p></dd>
+</dl>
+
+
+<h2 id="SHAREDMEMORYUSER-CLASS-METHODS">SHAREDMEMORYUSER CLASS METHODS</h2>
+
+<dl>
+<dt><code>SharedMemoryUser</code>()</dt><dd><p>Constructor attempts to attach to a inter-process shared memory
+region with key <em>shm_key</em>. This version of the constructor tries
+to attach multiple times until a <em>timeout</em> in seconds is reached.</p></dd>
+<dt><code>SharedMemoryUser</code>()</dt><dd><p>Constructor attempts to attach to a inter-process shared memory
+region with key <em>shm_key</em>. This version of the constructor
+attempts to attach a single time.</p></dd>
+<dt><code>~SharedMemoryUser</code>()</dt><dd><p>Destructor detaches from shared memory region.</p></dd>
+<dt><code>pointer</code>()</dt><dd><p>Returns a pointer to the shared memory region.</p></dd>
+<dt class="flush"><code>key</code>()</dt><dd><p>Returns the key to the shared memory region.</p></dd>
+<dt class="flush"><code>size</code>()</dt><dd><p>Returns the size of the shared memory region.</p></dd>
+<dt><code>unlink</code>()</dt><dd><p>Unlink the shared memory region.</p></dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -93,7 +146,7 @@ page at <a href="https://geopm.github.io/dox/classgeopm_1_1_shared_memory.html" 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::SharedMemory(3)</li>
   </ol>
 

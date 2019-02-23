@@ -2,7 +2,6 @@ var searchData=
 [
   ['_7eagent',['~Agent',['../classgeopm_1_1_agent.html#ae25bcbffb10acf177ac9294f24a6e211',1,'geopm::Agent']]],
   ['_7ecircularbuffer',['~CircularBuffer',['../classgeopm_1_1_circular_buffer.html#a0d96222c70a885e459200b46374a9811',1,'geopm::CircularBuffer']]],
-  ['_7ecomm',['~Comm',['../classgeopm_1_1_comm.html#a8eff6a16350c837bc05e4a77f3b20886',1,'geopm::Comm']]],
   ['_7ecpuinfoiogroup',['~CpuinfoIOGroup',['../classgeopm_1_1_cpuinfo_i_o_group.html#a7a570fdbd1e33aa9ac33e8a11528a8c6',1,'geopm::CpuinfoIOGroup']]],
   ['_7eenergyefficientagent',['~EnergyEfficientAgent',['../classgeopm_1_1_energy_efficient_agent.html#a327c3e33131cef58e4ebca68e891b635',1,'geopm::EnergyEfficientAgent']]],
   ['_7eenergyefficientregion',['~EnergyEfficientRegion',['../classgeopm_1_1_energy_efficient_region.html#a0fc98c43f5f544da7b17befbfbb5b6a7',1,'geopm::EnergyEfficientRegion']]],
@@ -26,7 +25,6 @@ var searchData=
   ['_7eleafrole',['~LeafRole',['../classgeopm_1_1_power_balancer_agent_1_1_leaf_role.html#ae8d328e0520af5824a4486a8219e7f3c',1,'geopm::PowerBalancerAgent::LeafRole']]],
   ['_7emeasureruntimestep',['~MeasureRuntimeStep',['../classgeopm_1_1_power_balancer_agent_1_1_measure_runtime_step.html#a5cc740a236a3ed0551733f87fecd8a6e',1,'geopm::PowerBalancerAgent::MeasureRuntimeStep']]],
   ['_7emonitoragent',['~MonitorAgent',['../classgeopm_1_1_monitor_agent.html#ae3fb435c0927ba2ad5b68fba966ce798',1,'geopm::MonitorAgent']]],
-  ['_7empicomm',['~MPIComm',['../classgeopm_1_1_m_p_i_comm.html#a99dcc38d54e5ff929217946d28a5489a',1,'geopm::MPIComm']]],
   ['_7emsr',['~MSR',['../classgeopm_1_1_m_s_r.html#a13aeb68d71d31b576f8680c21c0e0318',1,'geopm::MSR']]],
   ['_7emsrcontrol',['~MSRControl',['../classgeopm_1_1_m_s_r_control.html#a3c3535723d8c7b5cb8c84e4a9674a394',1,'geopm::MSRControl']]],
   ['_7emsrio',['~MSRIO',['../classgeopm_1_1_m_s_r_i_o.html#adcefc1a814e28b5b16d3eda8c5b47ff0',1,'geopm::MSRIO']]],

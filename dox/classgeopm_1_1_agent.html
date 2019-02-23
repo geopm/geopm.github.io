@@ -96,9 +96,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c94fff3ed8f580526e51aeb25cf4758"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_agent.html#a2c94fff3ed8f580526e51aeb25cf4758">init</a> (int level, const std::vector&lt; int &gt; &amp;fan_in, bool is_level_root)=0</td></tr>
 <tr class="memdesc:a2c94fff3ed8f580526e51aeb25cf4758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the level where this <a class="el" href="classgeopm_1_1_agent.html">Agent</a> is active and push signals/controls for that level.  <a href="#a2c94fff3ed8f580526e51aeb25cf4758">More...</a><br /></td></tr>
 <tr class="separator:a2c94fff3ed8f580526e51aeb25cf4758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a519fba792f9848af4010cd4791a944ae"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_agent.html#a519fba792f9848af4010cd4791a944ae">validate_policy</a> (const std::vector&lt; double &gt; &amp;in_policy) const =0</td></tr>
-<tr class="memdesc:a519fba792f9848af4010cd4791a944ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by Controller to validate incoming policy values and configure defaults requested in incoming policy. Policy sender can request default value with 'NaN' at the desired offset in the policy vector. Returned policy should not contain 'NaN's and be consumeable by descend and adjust_platform.  <a href="#a519fba792f9848af4010cd4791a944ae">More...</a><br /></td></tr>
-<tr class="separator:a519fba792f9848af4010cd4791a944ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76f4eb74c2f1c50b9c85fc988de8c4c0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_agent.html#a76f4eb74c2f1c50b9c85fc988de8c4c0">validate_policy</a> (std::vector&lt; double &gt; &amp;policy) const =0</td></tr>
+<tr class="memdesc:a76f4eb74c2f1c50b9c85fc988de8c4c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by Controller to validate incoming policy values and configure defaults requested in incoming policy. Policy sender can request default value with 'NaN' at the desired offset in the policy vector. Returned policy should not contain 'NaN's and be consumeable by descend and adjust_platform.  <a href="#a76f4eb74c2f1c50b9c85fc988de8c4c0">More...</a><br /></td></tr>
+<tr class="separator:a76f4eb74c2f1c50b9c85fc988de8c4c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a716a3e0cb493e7dd83f2e85d0d7b0d1f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_agent.html#a716a3e0cb493e7dd83f2e85d0d7b0d1f">descend</a> (const std::vector&lt; double &gt; &amp;in_policy, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;out_policy)=0</td></tr>
 <tr class="memdesc:a716a3e0cb493e7dd83f2e85d0d7b0d1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by Controller to split policy for children at next level down the tree.  <a href="#a716a3e0cb493e7dd83f2e85d0d7b0d1f">More...</a><br /></td></tr>
 <tr class="separator:a716a3e0cb493e7dd83f2e85d0d7b0d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -779,8 +779,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a519fba792f9848af4010cd4791a944ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a519fba792f9848af4010cd4791a944ae">&#9670;&nbsp;</a></span>validate_policy()</h2>
+<a id="a76f4eb74c2f1c50b9c85fc988de8c4c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76f4eb74c2f1c50b9c85fc988de8c4c0">&#9670;&nbsp;</a></span>validate_policy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -789,10 +789,10 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::vector&lt;double&gt; geopm::Agent::validate_policy </td>
+          <td class="memname">virtual void geopm::Agent::validate_policy </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>in_policy</em></td><td>)</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>policy</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -806,13 +806,12 @@ Static Public Member Functions</h2></td></tr>
 <p>Called by Controller to validate incoming policy values and configure defaults requested in incoming policy. Policy sender can request default value with 'NaN' at the desired offset in the policy vector. Returned policy should not contain 'NaN's and be consumeable by descend and adjust_platform. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">in_policy</td><td>Policy values from the parent. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">policy</td><td>Policy replace NaN's with defaults. If a value of policy is not NaN but the value is not supported by the <a class="el" href="classgeopm_1_1_agent.html">Agent</a> the method will throw a <a class="el" href="classgeopm_1_1_exception.html" title="Class for all GEOPM-specific exceptions. ">geopm::Exception</a> with error code GEOPM_ERROR_INVALID. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The actionable policy corresponding to the incoming policy request. </dd></dl>
 
-<p>Implemented in <a class="el" href="classgeopm_1_1_power_balancer_agent.html#a1fe341d3dd53a912156297149b57b7ad">geopm::PowerBalancerAgent</a>, <a class="el" href="classgeopm_1_1_power_governor_agent.html#a565741ca8636c53ee5a0ba11464cf323">geopm::PowerGovernorAgent</a>, <a class="el" href="classgeopm_1_1_energy_efficient_agent.html#aad595e43982567c1ed5cd342ef21c24a">geopm::EnergyEfficientAgent</a>, and <a class="el" href="classgeopm_1_1_monitor_agent.html#a951cf10caf4ed80c2c695e9e9959f643">geopm::MonitorAgent</a>.</p>
+<p>Implemented in <a class="el" href="classgeopm_1_1_power_balancer_agent.html#a15d68542efead72ee46c3bf612375798">geopm::PowerBalancerAgent</a>, <a class="el" href="classgeopm_1_1_power_governor_agent.html#ac8c82212e6b983aaed279716dbad9074">geopm::PowerGovernorAgent</a>, <a class="el" href="classgeopm_1_1_energy_efficient_agent.html#ae15020214dc3c92b35f346241cb148ba">geopm::EnergyEfficientAgent</a>, and <a class="el" href="classgeopm_1_1_monitor_agent.html#adcc591f47d60be0b15a16cd1a6a96e86">geopm::MonitorAgent</a>.</p>
 
 </div>
 </div>

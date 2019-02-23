@@ -56,6 +56,7 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -77,28 +78,103 @@
 
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
+<dl>
+<dt><code>void geopm_error_destroy_shmem(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int exception_handler(</code></dt><dd><p><code>std::exception_ptr</code><em>eptr</em><code>,</code><br />
+<code>bool</code><em>do_print</em><code>);</code></p></dd>
+<dt><code>Exception(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>Exception(</code></dt><dd><p><code>const Exception &amp;</code><em>other</em><code>);</code></p></dd>
+<dt><code>Exception(</code></dt><dd><p><code>int</code><em>err</em><code>);</code></p></dd>
+<dt><code>Exception(</code></dt><dd><p><code>const std::string &amp;</code><em>what</em><code>,</code><br />
+<code>int</code><em>err</em><code>);</code></p></dd>
+<dt><code>Exception(</code></dt><dd><p><code>int</code><em>err</em><code>,</code><br />
+<code>const char *</code><em>file</em><code>,</code><br />
+<code>int</code><em>line</em><code>);</code></p></dd>
+<dt><code>Exception(</code></dt><dd><p><code>const std::string &amp;</code><em>what</em><code>,</code><br />
+<code>int</code><em>err</em><code>,</code><br />
+<code>const char *</code><em>file</em><code>,</code><br />
+<code>int</code><em>line</em><code>);</code></p></dd>
+<dt><code>~Exception(</code></dt><dd><p><code>void) = default;</code></p></dd>
+<dt><code>int err_value(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>SignalException(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>SignalException(</code></dt><dd><p><code>int</code><em>signum</em><code>);</code></p></dd>
+<dt><code>SignalException(</code></dt><dd><p><code>const SignalException &amp;</code><em>other</em><code>);</code></p></dd>
+<dt><code>~SignalException(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int sig_value(</code></dt><dd><p><code>void) const;</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>This class is used to format error messages for the GEOPM runtime
 according to the error code.  The list of errors is described in
-<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>.</p>
+<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>.  Positive error codes are system errors (see
+<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></strong>), negative values are GEOPM errors.  If zero is specified
+for the error code, GEOPM_ERROR_RUNTIME (-1) is assumed.</p>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_exception.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_exception.html</a>.</p>
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
+<dt><code>geopm_error_destroy_shmem</code>()</dt><dd><p>Unlinks all shared memory keys in case of error.  Looks in
+/dev/shm for any keys starting with "/geopm-shm" or the
+GEOPM_SHMKEY environment variable if set.  All matching keys are
+unlinked with shm_unlink().</p></dd>
+<dt><code>exception_handler</code>()</dt><dd><p>Handle a thrown exception pointed to by <em>eptr</em> and return an error
+value.  This exception handler is used by every GEOPM C interface
+to handle any exceptions that are thrown during execution of a C++
+implementation.  If GEOPM has been configured with debugging
+enabled and <em>do_print</em> is true, then this handler will print an
+explanatory message to standard error.  In all cases it will
+convert the C++ exception into an error number which can be used
+with geopm_error_message() to obtain an error message.  Note that
+the error message printed when debugging is enabled has more
+specific information than the message produced by
+geopm_error_message().</p></dd>
+<dt><code>Exception</code>()</dt><dd><p>Empty constructor.  Uses errno to determine the error code.
+Enables an abbreviated what() result.</p></dd>
+<dt><code>Exception</code>(int err)</dt><dd><p>Error number only constructor.  User provides error code through
+<em>err</em>.  Enables an abbreviated what() result.</p></dd>
+<dt><code>Exception</code>(const std::string &amp;what, int err)</dt><dd><p>Message and error number constructor.  User provides message
+<em>what</em> and error code <em>err</em>.  The error message provided is
+appended to the abbreviated what() result.</p></dd>
+<dt><code>Exception</code>(int err, const char *file, int line)</dt><dd><p>Error number and line number constructor.  User provides error
+code <em>err</em> and source code location where the exception was
+thrown.  The <em>file</em> name and <em>line</em> number may come from
+preprocessor macros <code>__FILE__</code> and <code>__LINE__</code> respectively.  The
+what() method produces the abbreviated message with the file and
+line number information appended.</p></dd>
+<dt><code>Exception</code>(const std::string &amp;what, int err, const char *file, int line)</dt><dd><p>Message, error number, file and line constructor.  User provides
+message <em>what</em>, error code <em>err</em>, and location where the exception
+was thrown.  The <em>file</em> name and <em>line</em> number may come from
+preprocessor macros <code>__FILE__</code> and <code>__LINE__</code> respectively.  The
+what() method appends the user specified message, file name and
+line number to the abbreviated message.  This is the most verbose
+messaging available with the Exception class.</p></dd>
+<dt><code>err_value</code>()</dt><dd><p>Returns the non-zero error code associated with the
+exception.  Negative error codes are GEOPM-specific
+and documented in the <strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong> man page.
+Positive error codes are system errors and are
+documented in the system <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></strong> man page.  A brief
+description of all error codes can be obtained with
+the geopm_error_message() interface.</p></dd>
+<dt><code>sig_value</code>()</dt><dd><p>Returns the signal number associated with the SignalException.</p></dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong></p>
+<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>,
+**<a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::Exception(3)</li>
   </ol>
 

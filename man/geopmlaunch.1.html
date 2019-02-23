@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>geopmlauncher(1) - application launch wrapper</title>
+  <title>geopmlaunch(1) - application launch wrapper</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -57,7 +57,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#SUPPORTED-LAUNCHERS">SUPPORTED LAUNCHERS</a>
-    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#GEOPM-OPTIONS">GEOPM OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
@@ -65,140 +65,143 @@
   </div>
 
   <ol class='man-decor man-head man head'>
-    <li class='tl'>geopmlauncher(1)</li>
+    <li class='tl'>geopmlaunch(1)</li>
     <li class='tc'></li>
-    <li class='tr'>geopmlauncher(1)</li>
+    <li class='tr'>geopmlaunch(1)</li>
   </ol>
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>geopmlauncher</code> - <span class="man-whatis">application launch wrapper</span>
+  <code>geopmlaunch</code> - <span class="man-whatis">application launch wrapper</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>geopmlaunch</code> launcher [<em>LAUNCHER_OPTIONS</em>] [<em>OPTIONS</em>] <code>--</code> executable [<em>exec-args</em>]</p>
+<p><code>geopmlaunch</code> <em>launcher</em> [<em>launcher_opt</em>] [<em>geopm_opt</em>] <code>--</code> <em>executable</em> [<em>executable_opt</em>]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>The GEOPM launcher enables users to launch the GEOPM runtime with a
-simple command line interface extension to the resource manager's
-underlying job launch mechanism deployed on their system.  The
-currently supported job launch mechanisms are <code>srun</code> from the SLURM
-package and <code>aprun</code> from the ALPS package.  The GEOPM package installs
-the <code>geopmlaunch</code> executable which runs the
-geopmpy.launcher.main() method in the geopmpy python package.  This
-interface extends the resource manager's job launch application with
-GEOPM-specific flags.  All application launch options accepted by the
-underlying launch application (e.g. <code>srun</code> or <code>aprun</code>) can be passed
-to the <code>geopmlaunch</code> wrapper with the exception of CPU affinity related
-options.  The wrapper script reinterprets the command line to set
-environment variables and pass modified options to the underlying job
-launch application.  The reinterpreted command line is echoed to
-standard output by the script before execution.  The wrapper sets
-environment variables used by GEOPM which are described in
-<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>, sets process CPU affinity to meet the requirements of
-GEOPM, and may increase the ranks per node or CPUs per process as
-required by the GEOPM runtime.</p>
+<p>The <code>geopmlaunch</code> application enables execution of the GEOPM runtime
+along with a distributed parallel compute application, <em>executable</em>,
+using the command line interface for the underlying application
+scheduler, <em>launcher</em>, deployed on the HPC system.  The <code>geopmlaunch</code>
+command line interface is designed to support many application
+schedulers including SLURM <code>srun</code>, ALPS <code>aprun</code>, and Intel / MPICH
+<code>mpiexec</code>.  The <code>geopmlaunch</code> command line interface has been designed
+to wrap the underlying application scheduler while reinterpreting the
+command line options, <em>launcher_opt</em>, specified for it.  In this way,
+the user can easily modify an existing job launch command to enable
+the GEOPM runtime by prefixing the command with <code>geopmlaunch</code> and
+extending the existing scheduler options with the the options for the
+GEOPM runtime, <em>geopm_opt</em>.  The GEOPM runtime options control the
+behavior of the GEOPM runtime and are detailed in the <code>GEOPM OPTIONS</code>
+section below.</p>
 
-<p>Note: the primary compute executable and its command line options must
-appear at the end of the command line and be preceded by two dashes:
-<code>--</code>. The GEOPM launcher will stop parsing arguments following the <code>--</code>
-sequence and pass the arguments that follow unaltered while removing
-the first <code>--</code> from the command line.</p>
+<p>All command line options accepted by the underlying job scheduler
+(e.g. <code>srun</code> or <code>aprun</code>) can be passed to the <code>geopmlaunch</code> wrapper
+with the exception of CPU affinity related options.  The wrapper
+script reinterprets the command line to pass modified options and set
+environment variables for the underlying application scheduler.  The
+GEOPM options, <em>geopm_opt</em>, are translated into environment varaibles
+to be interpreted by the GEOPM runtime (see the ENVIRONMENT section of
+<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>).  The reinterpreted command line, including the
+environment modification, is printed to standard output by the script
+before execution.  The command that is printed can be executed in the
+<code>bash</code> shell to replicate the execution without using <code>geopmlaunch</code>
+directly.  The command is modified to support the GEOPM control thread
+by setting CPU affinity for each process and increasing the number of
+processes per node or CPUs per process.</p>
+
+<p>Note: the primary compute <em>executable</em> and its options,
+<em>executable_opt</em>, must appear at the end of the command line and be
+preceded by two dashes: <code>--</code>. The GEOPM launcher will not parse
+arguments to the right of the first <code>--</code> sequence and will pass the
+arguments that follow unaltered while removing the first <code>--</code> from the
+command line.  Refer to the EXAMPLES section below.</p>
 
 <h2 id="SUPPORTED-LAUNCHERS">SUPPORTED LAUNCHERS</h2>
 
-<p>  The first positional argument is required and specifies the desired
-  underlying launch mechanism.  Valid values are "srun", "aprun", or "impi".
-  Additionally the launcher class that supports the resource manager can be
-  selected by name; available launcher classes are "SrunLauncher"
-  (SLURM), "AlpsLauncher" (ALPS), "IMPIExecLauncher" (IMPI), or
-  "SrunTOSSLauncher" (specialization of SLURM for the tri-lab
-  operating system stack).  This command line option overrides other
-  methods of determining the resource manager / launcher.  This option is
-  used by the launcher to set the GEOPM_RM environment variable.  The
-  command line argument will override any value currently set in the environment.
-  See the ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p>
-
-<h2 id="OPTIONS">OPTIONS</h2>
+<p>The launcher is selected by specifying the <em>launcher</em> as the first
+command line parameter.  Available <em>launcher</em> values are
+listed below.</p>
 
 <dl>
-<dt><code>--geopm-ctl</code> <em>process</em>|<em>pthread</em>|<em>application</em></dt><dd><p>Use GEOPM runtime and launch GEOPM with one of three methods:
-<em>process</em>, <em>pthread</em> or <em>application</em>.  The <em>process</em> method
-allocates one extra MPI process per node for the GEOPM controller.
-The <em>pthread</em> method spawns a thread from one MPI process per node
-to run the GEOPM controller.  The <em>application</em> method launches the
-<strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong> application in the background which connects to the
-primary compute application.  The <em>process</em> method can be used in
-the widest variety of cases, but some systems require that each MPI
-process be assigned the same number of CPUs which may waste
-resources by assigning more than one CPU to the GEOPM controller
-process.  The <em>pthread</em> option requires support for
-MPI_THREAD_MULTIPLE which is not enabled at many sites and on some
-systems affinitizing one extra CPU to the MPI process that threads
-out the controller may be not be possible resulting in running the
-GEOPM controller on the same CPU as the main compute application.
-The <em>application</em> method of launch is not compatible with <code>aprun</code>;
-with <code>srun</code>, the call must be made inside of an existing
-allocation made with salloc or sbatch and the command must request
-all of the compute nodes assigned to the allocation.  Note: if the
-<code>--geopm-ctl</code> option is not specified the launcher script simply
-passes all command line arguments to the system application launcher
-without modification.  This option is used by the launcher to set
-the GEOPM_CTL environment variable.  The command line option
-will override any value currently set in the environment.  See the
-ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-policy</code> policy</dt><dd><p>GEOPM policy JSON file used to configure the Agent plugin.  To
-provide a shared memory region name, <code>--geopm-endpoint</code> should be
-used instead.  See <strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong> for
-more information about how to create this input file.  This option
-is used by the launcher to set the GEOPM_POLICY environment
-variable.  The command line option will override any value currently
-set in the environment.  See the ENVIRONMENT section of
-<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-endpoint</code> endpoint:</dt><dd><p></p>
+<dt><em>srun</em>, <em>SrunLauncher</em></dt><dd><p>Wrapper for the SLURM resource manager's <code>srun</code> job launcher.  The
+<code>--cpu_bind</code> and <code>--cpu-bind</code> options are reserved for use by GEOPM;
+do not specify when using <code>geopmlaunch</code>.</p></dd>
+<dt><em>aprun</em>, <em>AlpsLauncher</em></dt><dd><p>Wrapper for the Cray ALPS <code>aprun</code> job launcher.  The <code>-cc</code> and
+<code>--cpu-binding</code> options are reserserved for use by GEOPM; do not
+specify these when using <code>geopmlaunch</code>.</p></dd>
+<dt><em>impi</em>, <em>IMPIExecLauncher</em></dt><dd><p>Wrapper for the Intel MPI <code>mpiexec</code> job launcher.  The
+<code>KMP_AFFINITY</code> <code>I_MPI_PIN_DOMAIN</code>, and <code>MV2_ENABLE_AFFINITY</code>
+environment variables reserved for use by GEOPM and are overwritten
+when using <code>geopmlaunch</code>.</p></dd>
+<dt><em>SrunTOSSLauncher</em></dt><dd><p>Wrapper for <code>srun</code> when used with the Trilab Operating System
+Software stack.  This special launcher was developed to support
+special affinity plugins for SLURM that were deployed at LLNL's
+computing center.  The <code>--cpu_bind</code> and <code>--cpu-bind</code> options are
+reserved for use by GEOPM; do not specify when using <code>geopmlaunch</code>.</p></dd>
+</dl>
 
-<p>Basename for the policy and sample shared memory regions used to
-communicate with the resource manager.  This allows the resource
-manager to dynamically control GEOPM plugins and collect feedback at
-runtime.  See <strong><a class="man-ref" href="geopmendpoint.1.html">geopmendpoint<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong> to
-learn about creating the shared memory region.  This option is used
-by the launcher to set the GEOPM_ENDPOINT environment variable.  The
-command line option will override any value currently set in the
-environment.  See the ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-shmkey</code> key</dt><dd><p>Specify a special prefix to be used with all of the shared memory
-keys generated by the GEOPM runtime.  This is useful for avoiding
-collisions with keys that were not properly cleaned up.  The default
-key prefix is "geopm-shm".  This option is used by the launcher to
-set the GEOPM_SHMKEY environment variable.  The command line option
-will override any value currently set in the environment.  See the
-ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-timeout</code> sec</dt><dd><p>Time in seconds that the application should wait for the GEOPM
-controller to connect over shared memory.  The default value is 30
-seconds.  This option is used by the launcher to set the
-GEOPM_PROFILE_TIMEOUT environment variable.  The command line option
-will override any value currently set in the environment.  See the
-ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-report</code> path</dt><dd><p>Path to the GEOPM report output file describing the profiling
-information collected by GEOPM.  This file is generated at the
-conclusion of the run if this option is given and will be written to
-the file system path specified or current directory if only a file
-name is given.  The report is a single file contains information
-about runtimes, MPI usage, and power consumption for each node.  The
-report is broken down by region if the application has been
-annotated with the GEOPM region interface.  Note that the sampled
-values for 'energy' and 'sync-runtime' are added to the total for a
-region only when all ranks are in a region; otherwise they are added
-to the unmarked region.  The epoch region and application total
-energy are not calculated by sampling but rather through start and
-end values.  When comparing energy and time values from the report,
-care should be taken to use 'runtime' in the case of epoch and
+
+<h2 id="GEOPM-OPTIONS">GEOPM OPTIONS</h2>
+
+<dl>
+<dt><code>--geopm-report</code> path</dt><dd><p>Specifies the path to the GEOPM report output file that is generated
+at the conclusion of the run if this option is provided.  If the
+option is not provided, a report named "geopm.report" will be created.
+The GEOPM report contains a summary of the profiling information
+collected by GEOPM throughout the application execution.  The report
+contains information about runtimes, MPI usage, and energy
+consumption for each compute node used by the application.  The
+report is broken down by compute node and then by region.  The
+regions are defined by use of the <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong> interface to
+mark up the user application or automatic inference of regions based
+on interposing on the MPI or OpenMP interfaces (interposing on
+OpenMP requires that the optional configuration parameter
+--enable-ompt is provided at GEOMP compile time).  Note that the
+sampled values, like 'energy', are accumulated into the sum for a
+region only when all ranks on a compute node are concurrently
+executing the same region; otherwise statistics gathered are
+accumulated within the 'unmarked-region'.  Also note that the
+<code>sync-runtime</code> accumulates the total amount of time when all ranks
+within a compute node were synchronously within the region.  The
+<code>runtime</code> value is the time spent within a region by a rank averaged
+over all ranks on the node regardless of synchronicity of execution.
+The "Application totals" are not calculated by sampling throughout
+the run, but rather by differencing values measured at the start and
+end of the application.  When comparing energy and time values from
+the report, care should be taken to use 'runtime' in the case of
 application totals, and 'sync-runtime' for all other regions.  This
-option is used by the launcher to set the GEOPM_REPORT environment
+option is used by the launcher to set the <code>GEOPM_REPORT</code> environment
 variable.  The command line option will override any value currently
 set in the environment.  See the ENVIRONMENT section of
 <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-report-signals</code> signals</dt><dd><p>Used to insert additional measurements into the report beyond the
+default values.  This feature requires that the requested signals
+are increasing monotonically with time.  Each time a region is
+entered or exited the value of the signals is measured.  When the
+region is exited the value of the signal upon entry is subtracted
+from the value of the signal upon exit.  The total given in the
+report for the signal associated with the region is the cumulative
+sum of the differences for each occurrence of the region.  The value
+must be formatted as a comma-separated list of valid signal names.
+The signals available and their descriptions are documented in the
+<strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong> man page.</p>
+
+<p>By default the signals in the report will be aggregated to the board
+domain.  A domain other than board can be specified by appending the
+signal name with an "@" character and then specifying one of the
+domains.  For example, the following will extend the region and
+application totals sections of the report with package energy for
+each package and DRAM energy summed over the all DIMMs:</p>
+
+<p><code>--geopm-report-signals=ENERGY_PACKAGE@package,ENERGY_DRAM</code></p>
+
+<p>The <strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong> executable enables discovery of signals and
+domains available on your system.  The signal names and domain names
+given for this parameter are specified as in the <strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong>
+command line interface.</p></dd>
 <dt><code>--geopm-trace</code> path</dt><dd><p>The base name and path of the trace file(s) generated if this option
 is specified.  One trace file is generated for each compute node
 used by the application containing a pipe-delimited ASCII table
@@ -211,48 +214,141 @@ node counts due to file system issues.  This option is used by the
 launcher to set the GEOPM_TRACE environment variable.  The command
 line option will override any value currently set in the
 environment.  See the ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-trace-signals</code> signals</dt><dd><p>A comma-separated list of signal names to be added as columns in the
-trace.  This option has no effect unless tracing is enabled with
-<code>--geopm-trace</code>.  The signal names must be valid for the platform
-and will be sampled for the entire node.  Refer to the documentation
-for GEOPM_TRACE_SIGNALS in <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> for a list of valid signal
-names. For example, the following will add total DRAM energy and
-power as columns in the trace:</p>
+<dt><code>--geopm-trace-signals</code> signals</dt><dd><p>Used to insert additional columns into the trace beyond the default
+columns and the columns added by the Agent.  This option has no
+effect unless tracing is enabled with <code>--geopm-trace</code>.  The value
+must be formatted as a comma-separated list of valid signal names.
+When not specified all custom signals added to the trace will be
+sampled and aggregated for the entire node unless the domain is
+specified by appending "@domain_type" to the signal name.  For
+example, the following will add total DRAM energy and power as
+columns in the trace:</p>
 
-<p><code>GEOPM_TRACE_SIGNALS=ENERGY_DRAM,POWER_DRAM</code></p></dd>
-<dt><code>--geopm-agent</code> agent</dt><dd><p>Specify the Agent to be used by all Controllers.  Available agents
-are: "monitor" (default if option not specified), "power_balancer",
-"power_governor", and "energy_efficient".  See
-<strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>, <strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
-<strong><a class="man-ref" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor<span class="s">(7)</span></a></strong>, and <strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong>
-for descriptions of each agent.  This option is used by the launcher
-to set the GEOPM_AGENT environment variable.  The command line option
-will override any value currently set in the environment.  See the
-ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<p><code>--geopm-trace-signals=ENERGY_DRAM,POWER_DRAM</code></p>
+
+<p>The signals available and their descriptions are documented in the
+<strong><span class="man-ref">PlatformIO<span class="s">(3)</span></span></strong> man page.  "TIME", "REGION_HASH", "REGION_HINT",
+"REGION_PROGRESS", "REGION_RUNTIME", "ENERGY_PACKAGE",
+"POWER_PACKAGE", and "FREQUENCY" are included in the trace by
+default.  A domain other than board can be specified by appending
+the signal name with an "@" character and then specifying one of the
+domains, e.g:</p>
+
+<p><code>--geopm-trace-signals=POWER_PACKAGE@package,ENERGY_PACKAGE@package</code></p>
+
+<p>will trace the package power and energy for each package on the
+system.  The <strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong> executable enables discovery of
+signals and domains available on your system.  The signal names and
+domain names given for this parameter are specified as in the
+<strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong> command line interface.  This option is used by the
+launcher to set the GEOPM_TRACE_SIGNALS environment variable.  The
+command line option will override any value currently set in the
+environment.  See the ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
 <dt><code>--geopm-profile</code> name</dt><dd><p>The name of the profile which is printed in the report and trace
 files.  This name can be used to index the data in post-processing.
 For example, when running a sweep of experiments with multiple power
-caps, the profile could contain the power setting for one run.
-This option is used by the launcher to set the GEOPM_PROFILE
-environment variable.  The command line option will override any
-value currently set in the environment.  See the ENVIRONMENT section
-of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-plugin-path</code> path</dt><dd><p>Enables GEOPM to search for plugins in places other than the default
-location.  The option is a ":" separated list of directories to
-search.  This option is used by the launcher to set the GEOPM_PLUGIN_PATH
-environment variable.  The command line option will override any
-value currently set in the environment.  See the ENVIRONMENT section
-of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
-<dt><code>--geopm-debug-attach</code> rank</dt><dd><p>Enables a serial debugger such as gdb to attach to a job when the
-GEOPM PMPI wrappers are enabled.  If set to a numerical value the
-associated rank will be trapped in MPI_Init() until a debugger is
-attached and the local variable "cont" is set to a non-zero value.
-If set, but not to a numerical value then all ranks are trapped.
-The runtime will print a message explaining the hostname and process
-ID that the debugger should attach to.  This option is used by the
-launcher to set the GEOPM_DEBUG_ATTACH environment variable.  The
-command line option will override any value currently set in the
+caps, the profile could contain the power setting for one run.  The
+default profile name is the name of the compute application
+executable.  This option is used by the launcher to set the
+GEOPM_PROFILE environment variable.  The command line option will
+override any value currently set in the environment.  See the
+ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-ctl</code> <em>process</em>|<em>pthread</em>|<em>application</em></dt><dd><p>Use GEOPM runtime and launch GEOPM with one of three methods:
+<em>process</em>, <em>pthread</em> or <em>application</em>.  The <em>process</em> method
+allocates one extra MPI process per node for the GEOPM controller,
+and this is the default method if the <code>--geopm-ctl</code> option is not
+provided.  The <em>pthread</em> method spawns a thread from one MPI process
+per node to run the GEOPM controller.  The <em>application</em> method
+launches the <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong> application in the background which
+connects to the primary compute application.  The <em>process</em> method
+can be used in the widest variety of cases, but some systems require
+that each MPI process be assigned the same number of CPUs which may
+waste resources by assigning more than one CPU to the GEOPM
+controller process.  The <em>pthread</em> option requires support for
+MPI_THREAD_MULTIPLE, which is not enabled at many sites; in
+addition, on some systems affinitizing one extra CPU to the MPI
+process containing the controller thread may be not be possible,
+resulting in running the GEOPM controller on the same CPU as the
+main compute application.  The <em>application</em> method of launch is not
+compatible with <code>aprun</code>; with <code>srun</code>, the call must be made inside
+of an existing allocation made with salloc or sbatch and the command
+must request all of the compute nodes assigned to the allocation.
+This option is used by the launcher to set the GEOPM_CTL environment
+variable.  The command line option will override any value currently
+set in the environment.  See the ENVIRONMENT section of
+<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-agent</code> agent</dt><dd><p>Specify the Agent type.  The Agent defines the control algorithm
+used by the GEOPM runtime.  Available agents are: "monitor" (default
+if option not specified; enables profiling features only),
+"power_balancer" (optimizes runtime under a power cap),
+"power_governor" (enforces a uniform power cap), and
+"energy_efficient" (saves energy).  See <strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor<span class="s">(7)</span></a></strong>, and
+<strong><a class="man-ref" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient<span class="s">(7)</span></a></strong> for descriptions of each agent.
+For more details on the responsibilities of the Agent, see
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong>.  This option is used by the launcher to set the
+GEOPM_AGENT environment variable.  The command line option will
+override any value currently set in the environment.  See the
+ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-policy</code> policy</dt><dd><p>GEOPM policy JSON file used to configure the Agent plugin.  If the
+policy is provided through this file, it will only be read once and
+cannot be changed dynamically.  In this mode, samples will not be
+provided to the resource manager.  To provide a shared memory region
+name, <code>--geopm-endpoint</code> should be used instead; <code>--geopm-policy</code>
+and <code>--geopm-endpoint</code> cannot be set simultaneously.  See
+<strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopm_agent_c.3.html">geopm_agent_c<span class="s">(3)</span></a></strong> for more information
+about how to create this input file.  This option is used by the
+launcher to set the GEOPM_POLICY environment variable.  The command
+line option will override any value currently set in the
 environment.  See the ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-shmkey</code> key</dt><dd><p>Specify a special prefix to be used with all of the shared memory
+keys generated by the GEOPM runtime.  This is useful for avoiding
+collisions with keys that were not properly cleaned up.  The default
+key prefix is "geopm-shm".  A shared memory key must have no
+occurrences of the '/' character.  The base key is used as the
+prefix for each shared memory region used by the runtime.  These
+keys should be cleaned up by the exception handler in case of an
+error or OS signal other than SIGKILL.  If the application is killed
+with SIGKILL or the keys are left behind for any other reason, a
+simple command to clean up after an aborted job is:</p>
+
+<p>  <code>$ test -n "$GEOPM_SHMKEY" &amp;&amp; rm -f /dev/shm${GEOPM_SHMKEY}* || rm -f /dev/shm/geopm-shm*</code></p>
+
+<p>This option is used by the launcher to set the GEOPM_SHMKEY
+environment variable.  The command line option will override any
+value currently set in the environment.  See the ENVIRONMENT section
+of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-timeout</code> sec</dt><dd><p>Time in seconds that the application should wait for the GEOPM
+controller to connect over shared memory.  The default value is 30
+seconds.  This option is used by the launcher to set the
+GEOPM_TIMEOUT environment variable.  The command line option will
+override any value currently set in the environment.  See the
+ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-plugin-path</code> path</dt><dd><p>The search path for GEOPM plugins. It is a colon-separated list of
+directories used by GEOPM to search for shared objects which contain
+GEOPM plugins.  In order to be available to the GEOPM runtime,
+plugins should register themselves with the appropriate factory.
+See <strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> for information about the GEOPM
+plugin interface.  A zero-length directory name indicates the
+current working directory; this can be specified by a leading or
+trailing colon, or two adjacent colons.  The default search location
+is always loaded first and is determined at library configuration
+time and by way of the 'pkglib' variable (typically
+/usr/lib64/geopm/).  This option is used by the launcher to set the
+GEOPM_PLUGIN_PATH environment variable.  The command line option
+will override any value currently set in the environment.  See the
+ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
+<dt><code>--geopm-debug-attach</code> rank</dt><dd><p>Enables a serial debugger such as gdb to attach to a job when the
+GEOPM PMPI wrappers are enabled.  If set to a numerical value, the
+associated rank will wait in MPI_Init() until a debugger is attached
+and the local variable "cont" is set to a non-zero value.  If set,
+but not to a numerical value then all ranks will wait.  The runtime
+will print a message explaining the hostname and process ID that the
+debugger should attach to.  This option is used by the launcher to
+set the GEOPM_DEBUG_ATTACH environment variable.  The command line
+option will override any value currently set in the environment.
+See the ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>.</p></dd>
 <dt><code>--geopm-region-barrier</code></dt><dd><p>Enables a node local MPI_Barrier() at time of calling
 <code>geopm_region_enter</code>() or <code>geopm_region_exit</code>() for all application
 ranks that share a node.  Since the GEOPM controller only considers
@@ -269,11 +365,14 @@ ENVIRONMENT section of <strong><a class="man-ref" href="geopm.7.html">geopm<span
 <dt><code>--geopm-preload</code></dt><dd><p>Use LD_PRELOAD to link libgeopm.so at runtime.  This can be used to
 enable the GEOPM runtime when an application has not been compiled
 against libgeopm.so.</p></dd>
-<dt><code>--geopm-disable-hyperthreads</code></dt><dd><p>Prevent the launcher from trying to use hyperthreads for pinning
+<dt><code>--geopm-hyperthreads-disable</code></dt><dd><p>Prevent the launcher from trying to use hyperthreads for pinning
 purposes when attempting to satisfy the MPI ranks / OMP threads
 configuration specified.  This is done for both the controller and
 the application.  An error is raised if the launcher cannot satisfy
 the current request without hyperthreads.</p></dd>
+<dt><code>--geopm-ctl-disable</code></dt><dd><p>Used to allow passing the command through to the underlying launcher.
+By default, <code>geopmlaunch</code> will launch the GEOPM runtime in process mode.
+When this option is specified, the GEOPM runtime will not be launched.</p></dd>
 </dl>
 
 
@@ -282,30 +381,31 @@ the current request without hyperthreads.</p></dd>
 <p>Use geopmlaunch to queue a job using geopmbench on a SLURM managed system
 requesting two nodes using 32 application MPI process each with four threads:</p>
 
-<pre><code>geopmlaunch srun -N 2 -n 32 -c 4 --geopm-ctl=process \
-                                 --geopm-report=tutorial6.report \
-                                 -- ./geopmbench tutorial6_config.json
+<pre><code>geopmlaunch srun -N 2 -n 32 -c 4 \
+                 --geopm-ctl=process \
+                 --geopm-report=tutorial6.report \
+                 -- ./geopmbench tutorial6_config.json
 </code></pre>
 
 <p>Use geopmlaunch to launch the miniFE executable with the same configuration,
 but on an ALPS managed system:</p>
 
 <pre><code>geopmlaunch aprun -N 2 -n 64 --cpus-per-pe 4 \
-                             --geopm-ctl process \
-                             --geopm-report miniFE.report \
-                             -- ./miniFE.x -nx 256 -ny 256 -nz 256
+                  --geopm-ctl process \
+                  --geopm-report miniFE.report \
+                  -- ./miniFE.x -nx 256 -ny 256 -nz 256
 </code></pre>
 
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
 <p>Every command line option to the launcher can also be specified as an
 environment variable if desired (with the exception of <code>--geopm-ctl</code>).
-For example, instead of specifying <code>--geopm-region-barrier</code> one can instead
-set in the environment <code>GEOPM_REGION_BARRIER=true</code> prior to invoking the launcher
-script.  The environment variables are named the same as the command
-line option but have the hyphens replaced with underscores, and are
-all uppercase.  The command line options take precedence over the
-environment variables.</p>
+For example, instead of specifying <code>--geopm-region-barrier</code> one can
+instead set in the environment <code>GEOPM_REGION_BARRIER=true</code> prior to
+invoking the launcher script.  The environment variables are named the
+same as the command line option but have the hyphens replaced with
+underscores, and are all uppercase.  The command line options take
+precedence over the environment variables.</p>
 
 <p>The usage of <code>--geopm-ctl</code> here is slightly different than how the
 controller handles the <code>GEOPM_CTL</code> environment variable.  In the
@@ -315,9 +415,15 @@ case of the launcher, one can specify <em>process</em>, <em>pthread</em>, or
 launching the controller as a separate application is handled through
 the <code>geopmctl</code> binary.</p>
 
+<p>The <code>KMP_WARNINGS</code> environment variable is set to 'FALSE', thus
+disabling the Intel OpenMP warnings.  This avoids warnings emitted
+because the launcher configures the <code>OMP_PROC_BIND</code> environment
+variable to support applications compiled with a non-Intel
+implementation of OpenMP.</p>
+
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -333,8 +439,8 @@ the <code>geopmctl</code> binary.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
-    <li class='tr'>geopmlauncher(1)</li>
+    <li class='tc'>February 2019</li>
+    <li class='tr'>geopmlaunch(1)</li>
   </ol>
 
   </div>

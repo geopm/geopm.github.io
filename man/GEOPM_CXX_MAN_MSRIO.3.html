@@ -56,6 +56,7 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -77,14 +78,69 @@
 
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
+<dl>
+<dt><code>uint64_t read_msr(</code></dt><dd><p><code>int</code><em>cpu_idx</em><code>,</code><br />
+<code>uint64_t</code><em>offset</em><code>);</code></p></dd>
+<dt><code>void write_msr(</code></dt><dd><p><code>int</code><em>cpu_idx</em><code>,</code><br />
+<code>uint64_t</code><em>offset</em><code>,</code><br />
+<code>uint64_t</code><em>raw_value</em><code>,</code><br />
+<code>uint64_t</code><em>write_mask</em><code>);</code></p></dd>
+<dt><code>void config_batch(</code></dt><dd><p><code>const std::vector&lt;int> &amp;</code><em>read_cpu_idx</em><code>,</code><br />
+<code>const std::vector&lt;uint64_t> &amp;</code><em>read_offset</em><code>,</code><br />
+<code>const std::vector&lt;int> &amp;</code><em>write_cpu_idx</em><code>,</code><br />
+<code>const std::vector&lt;uint64_t> &amp;</code><em>write_offset</em><code>,</code><br />
+<code>const std::vector&lt;uint64_t> &amp;</code><em>write_mask</em><code>);</code></p></dd>
+<dt><code>void read_batch(</code></dt><dd><p><code>std::vector&lt;uint64_t> &amp;</code><em>raw_value</em><code>);</code></p></dd>
+<dt><code>void write_batch(</code></dt><dd><p><code>const std::vector&lt;uint64_t> &amp;</code><em>raw_value</em><code>);</code></p></dd>
+<dt><code>void msr_path(</code></dt><dd><p><code>int</code><em>cpu_idx</em><code>,</code><br />
+<code>bool</code><em>is_fallback</em><code>,</code><br />
+<code>std::string &amp;</code><em>path</em><code>);</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_m_s_r_i_o.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_m_s_r_i_o.html</a>.</p>
+<p>The MSRIO class handles reading and writing to Model-Specific Registers (MSRs).
+The implementation uses msr-safe, found at <a href="https://github.com/LLNL/msr-safe" data-bare-link="true">https://github.com/LLNL/msr-safe</a>
+to allow access to a controlled set of MSRs from user space.
+Refer to <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong> for more details.</p>
+
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
+<dt><code>read_msr</code>()</dt><dd><p>Read from a single MSR at <em>offset</em> on the logicial Linux CPU
+specified by <em>cpu_idx</em>.  Returns the raw encoded MSR value.</p></dd>
+<dt><code>write_msr</code>()</dt><dd><p>Write to a single MSR at <em>offset</em> on the logical Linux CPU
+specified by <em>cpu_idx</em>.  The value in <em>raw_value</em> will be masked
+with <em>write_mask</em> and the value will only be written for bits
+where the mask is 1.  All other bits in the MSR will remain
+unmodified.  If the <em>raw_value</em> tries to write any bits outside
+the mask, an error will be raised.</p></dd>
+<dt><code>config_batch</code>()</dt><dd><p>Initializes internal data structures to batch read and write from
+MSRs.  For reading, the vectors <em>read_cpu_idx</em> and <em>read_offset</em>
+set the logical Linux CPU indices and offsets respectively for
+locations that will be read from when the read_batch() method is
+called().  For writing, the logical Linux CPU indices, offsets,
+and write masks are specified by the <em>write_cpu_idx</em>,
+<em>write_offset</em>, and <em>write_mask</em> vectors respectively.  These
+determine the locations that will be written when the write_batch()
+method is called.</p></dd>
+<dt><code>read_batch</code>()</dt><dd><p>Batch read a set of MSRs configured by a previous call to the
+batch_config() method.  The resulting raw encoded MSR values are
+returned through the <em>raw_value</em> parameter.</p></dd>
+<dt><code>write_batch</code>()</dt><dd><p>Batch write a set of MSRs configured by a previous call to the
+batch_config() method.  The values in the <em>raw_value</em> vector will
+be written to the corresponding configured locations.</p></dd>
+<dt><code>msr_path</code>()</dt><dd><p>Determines the path to the file descriptor to use for the logical
+Linux CPU at <em>cpu_idx</em>.  If <em>is_fallback</em> is set to true, the
+stock MSR driver will be used (requires root permissions).  The
+resulting path is returned through the <em>path</em> parameter.</p></dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -95,7 +151,7 @@ page at <a href="https://geopm.github.io/dox/classgeopm_1_1_m_s_r_i_o.html" data
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::MSRIO(3)</li>
   </ol>
 

@@ -75,23 +75,57 @@
 
 <p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/CircularBuffer.hpp">&lt;geopm/CircularBuffer.hpp></a></strong></p>
 
+<dl>
+<dt><code>void set_capacity(</code></dt><dd><p><code>const unsigned int</code> <em>size</em><code>);</code></p></dd>
+<dt><code>void clear(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int size(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>int capacity(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>void insert(</code></dt><dd><p><code>const T</code> <em>value</em><code>);</code></p></dd>
+<dt><code>const T&amp; value(</code></dt><dd><p><code>const unsigned int</code> <em>index</em><code>) const;</code></p></dd>
+<dt><code>std::vector&lt;T> make_vector(</code></dt><dd><p><code>void) const;</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_circular_buffer.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_circular_buffer.html</a>.</p>
+<p>The CircularBuffer container implements a fixed-size buffer. Once at
+capacity, any new insertions cause the oldest entry to be dropped.</p>
+
+<dl>
+<dt><code>set_capacity</code>()</dt><dd><p>Resets the capacity of the circular buffer to <em>size</em> without
+modifying its current contents.</p></dd>
+<dt class="flush"><code>clear</code>()</dt><dd><p>Clears all entries from the buffer.  The size becomes 0, but the
+capacity is unchanged.</p></dd>
+<dt class="flush"><code>size</code>()</dt><dd><p>Returns the number of items in the buffer.  This value will be less
+than or equal to the current capacity of the buffer.</p></dd>
+<dt><code>capacity</code>()</dt><dd><p>Returns the current size of the circular buffer at the time of the
+call.</p></dd>
+<dt><code>insert</code>()</dt><dd><p>Inserts <em>value</em> into the buffer.  If the buffer is not full, the new
+value is simply added to the buffer. It the buffer is at capacity,
+The head of the buffer is dropped and moved to the next oldest entry
+and the new value is then inserted at the end of the buffer.</p></dd>
+<dt class="flush"><code>value</code>()</dt><dd><p>Accesses the contents of the circular buffer at <em>index</em>. Valid
+indices range from 0 to [size-1], where size is the number of valid
+entries in the buffer.  An attempt to retrieve a value for an out of
+bound index will throw a <strong><a class="man-ref" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception<span class="s">(3)</span></a></strong> with an
+error_value() of GEOPM_ERROR_INVALID.</p></dd>
+<dt><code>make_vector</code>()</dt><dd><p>Create a vector from the circular buffer contents.</p></dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong></p>
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception<span class="s">(3)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::CircularBuffer(3)</li>
   </ol>
 

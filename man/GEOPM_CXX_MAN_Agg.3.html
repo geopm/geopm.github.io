@@ -56,6 +56,7 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -77,27 +78,71 @@
 
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
+<dl>
+<dt><code>static double Agg::sum(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::average(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::median(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::logical_and(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::logical_or(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::min(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::max(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::stddev(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::region_hash(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::region_hint(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::select_first(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+<dt><code>static double Agg::expect_same(</code></dt><dd><p><code>const std::vector&lt;double> &amp;</code><em>operands</em><code>);</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>This class contains helper functions for aggregating multiple
 floating-point samples to a single number.  They can be used to
 simplify Agent implementation.</p>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_agg.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_agg.html</a>.</p>
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
+<dt class="flush"><code>sum</code>()</dt><dd><p>Returns the sum of the input <em>operands</em>.</p></dd>
+<dt><code>average</code>()</dt><dd><p>Returns the average of the input <em>operands</em>.</p></dd>
+<dt><code>median</code>()</dt><dd><p>Returns the median of the input <em>operands</em>.</p></dd>
+<dt><code>logical_and</code>()</dt><dd><p>Returns the output of logical AND over all the <em>operands</em> where
+0.0 is false and all other values are true.</p></dd>
+<dt><code>logical_or</code>()</dt><dd><p>Returns the output of logical OR over all the <em>operands</em> where 0.0
+is false and all other values are true.</p></dd>
+<dt class="flush"><code>min</code>()</dt><dd><p>Returns the minimum value from the input <em>operands</em>.</p></dd>
+<dt class="flush"><code>max</code>()</dt><dd><p>Returns the maximum value from the input <em>operands</em>.</p></dd>
+<dt><code>stddev</code>()</dt><dd><p>Returns the standard deviation of the input <em>operands</em>.</p></dd>
+<dt><code>region_hash</code>()</dt><dd><p>If all <em>operands</em> are the same, returns the common value.
+Otherwise, returns GEOPM_REGION_HASH_UNMARKED.  This is intended for
+situations where all ranks in a domain must be in the same region
+to exert control for that region.</p></dd>
+<dt><code>region_hint</code>()</dt><dd><p>If all <em>operands</em> are the same, returns the common value.
+Otherwise, returns GEOPM_REGION_HINT_UNKNOWN.  This is intended for
+situations where all ranks in a domain must be in the same region
+to exert control for that region.</p></dd>
+<dt><code>select_first</code>()</dt><dd><p>Returns the first value in the <em>operands</em> vector and ignores other
+values.  If the vector is empty, returns 0.0.</p></dd>
+<dt><code>expect_same</code>()</dt><dd><p>Returns the common value if all <em>operands</em> are the same, or NAN
+otherwise.  This function should not be used to aggregate values
+that may be interpreted as NAN such as raw register values or region
+IDs.</p></dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong></p>
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_hash.3.html">geopm_hash<span class="s">(3)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::Agg(3)</li>
   </ol>
 

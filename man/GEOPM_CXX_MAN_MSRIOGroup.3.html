@@ -56,6 +56,8 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
+    <a href="#ENUMERATIONS">ENUMERATIONS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -77,17 +79,152 @@
 
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
+<dl>
+<dt><code>virtual set&lt;string> signal_names(</code></dt><dd><p><code>void) const = 0</code>;</p></dd>
+<dt><code>virtual set&lt;string> control_names(</code></dt><dd><p><code>void) const = 0</code>;</p></dd>
+<dt><code>virtual bool is_valid_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual bool is_valid_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int signal_domain_type(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int control_domain_type(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int push_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual int push_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual void read_batch(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual void write_batch(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual double sample(</code></dt><dd><p><code>int</code> <em>sample_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void adjust(</code></dt><dd><p><code>int</code> <em>control_idx</em><code>,</code> <br />
+<code>double</code> <em>setting</em><code>) = 0;</code></p></dd>
+<dt><code>virtual double read_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void write_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>,</code> <br />
+<code>double</code> <em>setting</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void save_control(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual void restore_control(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual function&lt;double(const vector&lt;double> &amp;)&gt; agg_function(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual string signal_description(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual string control_description(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>std::string msr_whitelist(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>std::string msr_whitelist(</code></dt><dd><p><code>int</code><em>cpuid</em><code>) const;</code></p></dd>
+<dt><code>int cpuid(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>void register_msr_signal(</code></dt><dd><p><code>const std::string &amp;</code><em>signal_name</em><code>);</code></p></dd>
+<dt><code>void register_msr_control(</code></dt><dd><p><code>const std::string &amp;</code><em>control_name</em><code>);</code></p></dd>
+<dt><code>static std::string plugin_name(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>static std::unique_ptr&lt;IOGroup> make_plugin(</code></dt><dd><p><code>void);</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>The MSRIOGroup provides hardware signals and controls using MSRs on Intel
-platforms.  It relies on <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong> and <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO<span class="s">(3)</span></a></strong>.</p>
+<p>The MSRIOGroup implements the <strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong> interface to
+provide hardware signals and controls using MSRs on Intel platforms.
+It relies on <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong> and <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO<span class="s">(3)</span></a></strong>.</p>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_m_s_r_i_o_group.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_m_s_r_i_o_group.html</a>.</p>
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
+<dt><code>signal_names</code>()</dt><dd><p>Returns the list of signal names provided by this IOGroup.  This
+includes aliases for common hardware-based signals such as
+FREQUENCY, as well as the supported MSRs for the current platform.</p></dd>
+<dt><code>control_names</code>()</dt><dd><p>Returns the list of control names provided by this IOGroup.  This
+includes aliases for common hardware-based controls such as
+FREQUENCY, as well as the supported MSRs for the current platform.</p></dd>
+<dt><code>is_valid_signal</code>()</dt><dd><p>Returns whether the given <em>signal_name</em> is supported by the
+MSRIOGroup for the current platform.  Note that different
+platforms may have different supported MSRs.</p></dd>
+<dt><code>is_valid_control</code>()</dt><dd><p>Returns whether the given <em>control_name</em> is supported by the
+MSRIOGroup for the current platform.  Note that different
+platforms may have different supported MSRs.</p></dd>
+<dt><code>signal_domain_type</code>()</dt><dd><p>Returns the domain type for the the signal specified by
+<em>signal_name</em>.  The domain for a signal may be different on
+different platforms.</p></dd>
+<dt><code>control_domain_type</code>()</dt><dd><p>Returns the domain type for the the control specified by
+<em>control_name</em>.  The domain for a control may be different on
+different platforms.</p></dd>
+<dt><code>push_signal</code>()</dt><dd><p>Adds the signal specified by <em>signal_name</em> for <em>domain_type</em> at
+index <em>domain_idx</em> to the list of signals to be read during
+read_batch().  If the domain of a signal spans multiple Linux
+logical CPUs, only one CPU from that domain will be read, since
+all CPUs from the same domain and index will return the same
+value.</p></dd>
+<dt><code>push_control</code>()</dt><dd><p>Adds the control specified by <em>control_name</em> for <em>domain_type</em> at
+index <em>domain_idx</em> to the list of controls to be written during
+write_batch().  If the domain of a control spans multiple Linux
+logical CPUs, values written to that control will be written to
+all CPUs in the domain.</p></dd>
+<dt><code>read_batch</code>()</dt><dd><p>Sets up <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO<span class="s">(3)</span></a></strong> for batch reading if needed, then reads
+all pushed signals through the MSRIO::read_batch() method.</p></dd>
+<dt><code>write_batch</code>()</dt><dd><p>Writes all adjusted values through the <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO<span class="s">(3)</span></a></strong>
+write_batch() method.</p></dd>
+<dt><code>sample</code>()</dt><dd><p>Returns the value of the signal specified by a <em>signal_idx</em>
+returned from push_signal().  The value will have been updated by
+the most recent call to read_batch().</p></dd>
+<dt><code>adjust</code>()</dt><dd><p>Sets the control specified by a <em>control_idx</em> returned from
+push_control() to the value <em>setting</em>.  The value will be written
+to the underlying MSR by the next call to write_batch().</p></dd>
+<dt><code>read_signal</code>()</dt><dd><p> Immediately read and decode the underlying MSR supporting
+<em>signal_name</em> for <em>domain_type</em> at index <em>domain_idx</em> and return
+the result in SI units.</p></dd>
+<dt><code>write_control</code>()</dt><dd><p>Immediately encode the SI unit value <em>setting</em> and write the
+correct bits of the MSR supporting <em>control_name</em> for
+<em>domain_type</em> at <em>domain_idx</em>.</p></dd>
+<dt><code>save_control</code>()</dt><dd><p>Attempts to read and save the current values of all control MSRs
+for the platform.  If any control is not able to be read, it will
+be skipped.</p></dd>
+<dt><code>restore_control</code>()</dt><dd><p>Using the values saved by save_control(), attempts to write back
+the original values of all control MSRs.  Any control that is not
+able to be written will be skipped.</p></dd>
+<dt><code>agg_function</code>()</dt><dd><p>Returns the function that should be used to aggregate
+<em>signal_name</em>.  If one was not previously specified by this class,
+the default function is select_first from <strong><a class="man-ref" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg<span class="s">(3)</span></a></strong>.</p></dd>
+<dt><code>signal_description</code>()</dt><dd><p>Returns a string description for <em>signal_name</em>, if defined.
+Further descriptions of MSR signals can be found in The Intel
+Software Developer's Manual at
+<a href="https://software.intel.com/en-us/articles/intel-sdm" data-bare-link="true">https://software.intel.com/en-us/articles/intel-sdm</a></p></dd>
+<dt><code>control_description</code>()</dt><dd><p>Returns a string description for <em>control_name</em>, if defined.
+Further descriptions of MSR controls can be found in The Intel
+Software Developer's Manual at
+<a href="https://software.intel.com/en-us/articles/intel-sdm" data-bare-link="true">https://software.intel.com/en-us/articles/intel-sdm</a>.</p></dd>
+<dt><code>msr_whitelist</code>()</dt><dd><p>Fill string with the msr-safe whitelist file contents reflecting
+all known MSRs for the current platform, or if <em>cpuid</em> is
+provided, for the platform specified by <em>cpuid</em>.  Returns a string
+formatted to be written to an msr-safe whitelist file.</p></dd>
+<dt class="flush"><code>cpuid</code>()</dt><dd><p>Get the cpuid of the current platform.</p></dd>
+<dt><code>register_msr_signal</code>()</dt><dd><p>Register a single MSR field as a signal. This is called by
+init_msr().  The <em>signal_name</em> is a compound signal name of the
+form "msr_name:field_name" where msr_name is the name of the MSR
+and the field_name is the name of the signal field held in the
+MSR.</p></dd>
+<dt><code>register_msr_control</code>()</dt><dd><p>Register a single MSR field as a control. This is called by
+init_msr().  The <em>control_name</em> is a compound control name of the
+form "msr_name:field_name" where msr_name is the name of the MSR
+and the field_name is the name of the control field held in the
+MSR.</p></dd>
+<dt><code>plugin_name</code>()</dt><dd><p>Returns the name of the plugin to use when this plugin is
+registered with the IOGroup factory; see
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> for more details.</p></dd>
+<dt><code>make_plugin</code>()</dt><dd><p>Returns a pointer to a new MSRIOGroup object; see
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> for more details.</p></dd>
+</dl>
+
+
+<h2 id="ENUMERATIONS">ENUMERATIONS</h2>
+
+<dl>
+<dt><code>enum m_cpuid_e</code></dt><dd>Contains the list of currently-supported cpuid values.  The cpuid
+can be determined by running <code>lscpu</code> and appending the CPU family
+in hex to the Model in hex.</dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -99,7 +236,7 @@ page at <a href="https://geopm.github.io/dox/classgeopm_1_1_m_s_r_i_o_group.html
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::MSRIOGroup(3)</li>
   </ol>
 

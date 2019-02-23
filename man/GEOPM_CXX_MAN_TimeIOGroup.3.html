@@ -56,6 +56,7 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#CLASS-METHODS">CLASS METHODS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
@@ -77,17 +78,87 @@
 
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
+<dl>
+<dt><code>virtual set&lt;string> signal_names(</code></dt><dd><p><code>void) const = 0</code>;</p></dd>
+<dt><code>virtual set&lt;string> control_names(</code></dt><dd><p><code>void) const = 0</code>;</p></dd>
+<dt><code>virtual bool is_valid_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual bool is_valid_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int signal_domain_type(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int control_domain_type(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual int push_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual int push_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0</code>;</p></dd>
+<dt><code>virtual void read_batch(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual void write_batch(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual double sample(</code></dt><dd><p><code>int</code> <em>sample_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void adjust(</code></dt><dd><p><code>int</code> <em>control_idx</em><code>,</code> <br />
+<code>double</code> <em>setting</em><code>) = 0;</code></p></dd>
+<dt><code>virtual double read_signal(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void write_control(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>,</code> <br />
+<code>int</code> <em>domain_type</em><code>,</code> <br />
+<code>int</code> <em>domain_idx</em><code>,</code> <br />
+<code>double</code> <em>setting</em><code>) = 0;</code></p></dd>
+<dt><code>virtual void save_control(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual void restore_control(</code></dt><dd><p><code>void) = 0</code>;</p></dd>
+<dt><code>virtual function&lt;double(const vector&lt;double> &amp;)&gt; agg_function(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual string signal_description(</code></dt><dd><p><code>const string &amp;</code><em>signal_name</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual string control_description(</code></dt><dd><p><code>const string &amp;</code><em>control_name</em><code>) const = 0;</code></p></dd>
+<dt><code>static std::string plugin_name(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>static std::unique_ptr&lt;IOGroup> make_plugin(</code></dt><dd><p><code>void);</code></p></dd>
+</dl>
+
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>This IOGroup provides an implementation of the TIME signal for the
-current time.</p>
+time since GEOPM startup.</p>
 
-<p>For more details, see the doxygen
-page at <a href="https://geopm.github.io/dox/classgeopm_1_1_time_i_o_group.html" data-bare-link="true">https://geopm.github.io/dox/classgeopm_1_1_time_i_o_group.html</a>.</p>
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
+<dt><code>signal_names</code>()</dt><dd><p>Returns the time signal name, "TIME::ELAPSED", and its alias, "TIME".</p></dd>
+<dt><code>control_names</code>()</dt><dd><p>Does nothing; this IOGroup does not provide any controls.</p></dd>
+<dt><code>is_valid_signal</code>()</dt><dd><p>Returns true if the _signal_name is one from the list returned by
+signal_names().</p></dd>
+<dt><code>is_valid_control</code>()</dt><dd><p>Returns false; this IOGroup does not provide any controls.</p></dd>
+<dt><code>signal_domain_type</code>()</dt><dd><p>If the <em>signal_name</em> is valid for this IOGroup, returns
+M_DOMAIN_BOARD.</p></dd>
+<dt><code>control_domain_type</code>()</dt><dd><p>Returns M_DOMAIN_INVALID; this IOGroup does not provide any controls.</p></dd>
+<dt><code>push_signal</code>()</dt><dd><p>Since this IOGroup only provides one signal, returns 0 if the <em>signal_name</em>
+is valid.  The <em>domain_type</em> and <em>domain_idx</em> are ignored.</p></dd>
+<dt><code>push_control</code>()</dt><dd><p>Should not be called; this IOGroup does not provide any controls.</p></dd>
+<dt><code>read_batch</code>()</dt><dd><p>If a time signal has been pushed, updates the time since the
+TimeIOGroup was created.</p></dd>
+<dt><code>write_batch</code>()</dt><dd><p>Does nothing; this IOGroup does not provide any controls.</p></dd>
+<dt><code>sample</code>()</dt><dd><p>Returns the value of the signal specified by a <em>signal_idx</em>
+returned from push_signal().  The value will have been updated by
+the most recent call to read_batch().</p></dd>
+<dt><code>adjust</code>()</dt><dd><p>Should not be called; this IOGroup does not provide any controls.</p></dd>
+<dt><code>read_signal</code>()</dt><dd><p>If <em>signal_name</em> is valid, immediately return the time since the
+TimeIOGroup was created.</p></dd>
+<dt><code>write_control</code>()</dt><dd><p>Should not be called; this IOGroup does not provide any controls.</p></dd>
+<dt><code>save_control</code>()</dt><dd><p>Does nothing; this IOGroup does not provide any controls.</p></dd>
+<dt><code>restore_control</code>()</dt><dd><p>Does nothing; this IOGroup does not provide any controls.</p></dd>
+<dt><code>agg_function</code>()</dt><dd><p>The TIME signal provided by this IOGroup is aggregated using the
+average() function from <strong><a class="man-ref" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg<span class="s">(3)</span></a></strong>.</p></dd>
+<dt><code>signal_description</code>()</dt><dd><p>Returns a string description for <em>signal_name</em>, if defined.</p></dd>
+<dt><code>control_description</code>()</dt><dd><p>Does nothing; this IOGroup does not provide any controls.</p></dd>
+<dt><code>plugin_name</code>()</dt><dd><p>Returns the name of the plugin to use when this plugin is
+registered with the IOGroup factory; see
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> for more details.</p></dd>
+<dt><code>make_plugin</code>()</dt><dd><p>Returns a pointer to a new TimeIOGroup object; see
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory<span class="s">(3)</span></a></strong> for more details.</p></dd>
+</dl>
+
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -97,7 +168,7 @@ page at <a href="https://geopm.github.io/dox/classgeopm_1_1_time_i_o_group.html"
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>December 2018</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>geopm::TimeIOGroup(3)</li>
   </ol>
 

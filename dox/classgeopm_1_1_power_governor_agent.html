@@ -126,9 +126,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0999719c1110fab35fbde5309b322058"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_power_governor_agent.html#a0999719c1110fab35fbde5309b322058">init</a> (int level, const std::vector&lt; int &gt; &amp;fan_in, bool is_level_root) override</td></tr>
 <tr class="memdesc:a0999719c1110fab35fbde5309b322058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the level where this <a class="el" href="classgeopm_1_1_agent.html">Agent</a> is active and push signals/controls for that level.  <a href="#a0999719c1110fab35fbde5309b322058">More...</a><br /></td></tr>
 <tr class="separator:a0999719c1110fab35fbde5309b322058"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a565741ca8636c53ee5a0ba11464cf323"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_power_governor_agent.html#a565741ca8636c53ee5a0ba11464cf323">validate_policy</a> (const std::vector&lt; double &gt; &amp;in_policy) const override</td></tr>
-<tr class="memdesc:a565741ca8636c53ee5a0ba11464cf323"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by Controller to validate incoming policy values and configure defaults requested in incoming policy. Policy sender can request default value with 'NaN' at the desired offset in the policy vector. Returned policy should not contain 'NaN's and be consumeable by descend and adjust_platform.  <a href="#a565741ca8636c53ee5a0ba11464cf323">More...</a><br /></td></tr>
-<tr class="separator:a565741ca8636c53ee5a0ba11464cf323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8c82212e6b983aaed279716dbad9074"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_power_governor_agent.html#ac8c82212e6b983aaed279716dbad9074">validate_policy</a> (std::vector&lt; double &gt; &amp;policy) const override</td></tr>
+<tr class="memdesc:ac8c82212e6b983aaed279716dbad9074"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by Controller to validate incoming policy values and configure defaults requested in incoming policy. Policy sender can request default value with 'NaN' at the desired offset in the policy vector. Returned policy should not contain 'NaN's and be consumeable by descend and adjust_platform.  <a href="#ac8c82212e6b983aaed279716dbad9074">More...</a><br /></td></tr>
+<tr class="separator:ac8c82212e6b983aaed279716dbad9074"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5388b4070814978541d5d0ce6e3b06d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeopm_1_1_power_governor_agent.html#ab5388b4070814978541d5d0ce6e3b06d">descend</a> (const std::vector&lt; double &gt; &amp;in_policy, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;out_policy) override</td></tr>
 <tr class="memdesc:ab5388b4070814978541d5d0ce6e3b06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by Controller to split policy for children at next level down the tree.  <a href="#ab5388b4070814978541d5d0ce6e3b06d">More...</a><br /></td></tr>
 <tr class="separator:ab5388b4070814978541d5d0ce6e3b06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -827,8 +827,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a565741ca8636c53ee5a0ba11464cf323"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a565741ca8636c53ee5a0ba11464cf323">&#9670;&nbsp;</a></span>validate_policy()</h2>
+<a id="ac8c82212e6b983aaed279716dbad9074"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8c82212e6b983aaed279716dbad9074">&#9670;&nbsp;</a></span>validate_policy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -837,10 +837,10 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;double&gt; geopm::PowerGovernorAgent::validate_policy </td>
+          <td class="memname">void geopm::PowerGovernorAgent::validate_policy </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>in_policy</em></td><td>)</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>policy</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -854,13 +854,12 @@ Static Public Member Functions</h2></td></tr>
 <p>Called by Controller to validate incoming policy values and configure defaults requested in incoming policy. Policy sender can request default value with 'NaN' at the desired offset in the policy vector. Returned policy should not contain 'NaN's and be consumeable by descend and adjust_platform. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">in_policy</td><td>Policy values from the parent. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">policy</td><td>Policy replace NaN's with defaults. If a value of policy is not NaN but the value is not supported by the <a class="el" href="classgeopm_1_1_agent.html">Agent</a> the method will throw a <a class="el" href="classgeopm_1_1_exception.html" title="Class for all GEOPM-specific exceptions. ">geopm::Exception</a> with error code GEOPM_ERROR_INVALID. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The actionable policy corresponding to the incoming policy request. </dd></dl>
 
-<p>Implements <a class="el" href="classgeopm_1_1_agent.html#a519fba792f9848af4010cd4791a944ae">geopm::Agent</a>.</p>
+<p>Implements <a class="el" href="classgeopm_1_1_agent.html#a76f4eb74c2f1c50b9c85fc988de8c4c0">geopm::Agent</a>.</p>
 
 </div>
 </div>
