@@ -23,6 +23,7 @@ for the JavaScript code in this file
 */
 var menudata={children:[
 {text:"Main Page",url:"index.html"},
+{text:"Related Pages",url:"pages.html"},
 {text:"Namespaces",url:"namespaces.html",children:[
 {text:"Namespace List",url:"namespaces.html"},
 {text:"Namespace Members",url:"namespacemembers.html",children:[
@@ -42,6 +43,7 @@ var menudata={children:[
 {text:"d",url:"functions_d.html#index_d"},
 {text:"e",url:"functions_e.html#index_e"},
 {text:"f",url:"functions_f.html#index_f"},
+{text:"g",url:"functions_g.html#index_g"},
 {text:"h",url:"functions_h.html#index_h"},
 {text:"i",url:"functions_i.html#index_i"},
 {text:"j",url:"functions_j.html#index_j"},
@@ -66,6 +68,7 @@ var menudata={children:[
 {text:"d",url:"functions_func_d.html#index_d"},
 {text:"e",url:"functions_func_e.html#index_e"},
 {text:"f",url:"functions_func_f.html#index_f"},
+{text:"g",url:"functions_func_g.html#index_g"},
 {text:"h",url:"functions_func_h.html#index_h"},
 {text:"i",url:"functions_func_i.html#index_i"},
 {text:"j",url:"functions_func_j.html#index_j"},
@@ -85,13 +88,7 @@ var menudata={children:[
 {text:"Variables",url:"functions_vars.html"},
 {text:"Typedefs",url:"functions_type.html"},
 {text:"Enumerations",url:"functions_enum.html"},
-{text:"Enumerator",url:"functions_eval.html",children:[
-{text:"a",url:"functions_eval.html#index_a"},
-{text:"b",url:"functions_eval.html#index_b"},
-{text:"m",url:"functions_eval.html#index_m"},
-{text:"n",url:"functions_eval.html#index_n"},
-{text:"o",url:"functions_eval.html#index_o"},
-{text:"s",url:"functions_eval.html#index_s"}]},
+{text:"Enumerator",url:"functions_eval.html"},
 {text:"Related Functions",url:"functions_rela.html"}]}]},
 {text:"Files",url:"files.html",children:[
 {text:"File List",url:"files.html"},
@@ -104,4 +101,5 @@ var menudata={children:[
 {text:"Variables",url:"globals_vars.html"},
 {text:"Typedefs",url:"globals_type.html"},
 {text:"Enumerations",url:"globals_enum.html"},
-{text:"Enumerator",url:"globals_eval.html"}]}]}]}
+{text:"Enumerator",url:"globals_eval.html",children:[
+{text:"g",url:"globals_eval.html#index_g"}]}]}]}]}

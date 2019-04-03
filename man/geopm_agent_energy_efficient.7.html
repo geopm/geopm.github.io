@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>geopm_agent_energy_efficient(7) - agent for saving energy</title>
+  <title>geopm_agent_energy_efficient(7) - agent for saving energy, also finds optimal region frequencies</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -68,7 +68,7 @@
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>geopm_agent_energy_efficient</code> - <span class="man-whatis">agent for saving energy</span>
+  <code>geopm_agent_energy_efficient</code> - <span class="man-whatis">agent for saving energy, also finds optimal region frequencies</span>
 </p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
@@ -79,28 +79,16 @@ per region so that memory- and I/O-bound regions run at lower
 frequencies without increasing runtime but CPU-bound regions are still
 run at high frequencies.</p>
 
-<p>There are two modes available: offline and online.  In the offline
-mode, the best frequencies for each region are specified in the
-environment variable <code>GEOPM_EFFICIENT_FREQ_RID_MAP</code>, which is a
-JSON-formatted string mapping region name to frequency in Hertz,
-e.g. '{"region1": 1200000000, "region2": 1500000000}'.  For this node,
-the environment variable <code>GEOPM_EFFICIENT_FREQ_ONLINE</code> must be
-unset. If a frequency for a region is not specified, the region hint
-will be used and the frequency will be set to either the minimum or
-maximum available frequency.  See <strong><a class="man-ref" href="geopm_prof_c.3.html">geopm_prof_c<span class="s">(3)</span></a></strong> for the list of
-region hints.  These best-fit frequencies can be determined by running
-the application once at each available frequency and checking the
-performance of each region.
-The online mode finds the optimal frequency for each region
+<p>The EnergyEfficientAgent finds the optimal frequency for each region
 dynamically by measuring the performance of each region and reducing
 the frequency as long as the performance is still within acceptable
 limits.  The performance metric used is the maximum of the runtimes
 reported by each rank for the last execution of the region in question
-(lower is better).  The agent also avoids reducing frequency if energy
-would increase (due to performance loss in a frequency-sensitive
-region). Up to 10% performance loss is allowed.  Enable the online
-mode by setting <code>GEOPM_EFFICIENT_FREQ_ONLINE</code> and unsetting
-<code>GEOPM_EFFICIENT_FREQ_RID_MAP</code>, which is not used by the online mode.</p>
+(lower is better).  Up to 10% performance loss is allowed.  To avoid
+increasing energy due to performance loss in frequency-sensitive
+regions, any region marked with the GEOPM_REGION_HINT_COMPUTE or
+GEOPM_REGION_HINT_UNMARKED hints will always run at the maximum
+frequency from the policy.</p>
 
 <h2 id="AGENT-BEHAVIOR-HIGHLIGHTS">AGENT BEHAVIOR HIGHLIGHTS</h2>
 
@@ -126,22 +114,12 @@ application to run at one frequency.</p>
 <p><code>FREQ_MAX</code>: The maximum frequency that the algorithm is allowed to
             choose for any region.  If NAN is passed, it will use
             the maximum available frequency by default.</p></dd>
-<dt><code>Agent Sample Definitions</code>:</dt><dd><p></p>
-
-<p><code>ENERGY_PACKAGE</code>: Total energy from the packages across all child
-                  nodes.  At the root, this is the total energy for
-                  all nodes in the job.</p>
-
-<p><code>FREQUENCY</code>: The average frequency across child nodes.  At the root,
-             this is the average frequency across all nodes in the
-             job.</p></dd>
+<dt><code>Agent Sample Definitions</code></dt><dd><p>N/A</p></dd>
 <dt><code>Trace Column Extensions</code></dt><dd><p>N/A</p></dd>
-<dt><code>Report Extensions</code></dt><dd><p>The per-node final frequency for each region is added to the report.
-This reflects the settings from the map or hint in offline mode, or
-the learned best frequency determined by the online mode.</p></dd>
-<dt><code>Control Loop Gate</code></dt><dd><p>The agent gates the Controller's control loop to a cadence of 5ms.
-This agent propagates its ascending signals up the tree every 50ms
-(10 control cycles).</p></dd>
+<dt><code>Report Extensions</code></dt><dd><p>The per-node learned best-fit frequency for each region is added to
+the report, except for regions with the GEOPM_REGION_HINT_COMPUTE hint,
+which run at maximum frequency.</p></dd>
+<dt><code>Control Loop Gate</code></dt><dd><p>The agent gates the Controller's control loop to a cadence of 5ms.</p></dd>
 </dl>
 
 
@@ -164,7 +142,7 @@ This agent propagates its ascending signals up the tree every 50ms
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>February 2019</li>
+    <li class='tc'>April 2019</li>
     <li class='tr'>geopm_agent_energy_efficient(7)</li>
   </ol>
 

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopm_pio_c(7) - interfaces to query and modify platform</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#INSPECTION-FUNCTIONS">INSPECTION FUNCTIONS</a>
+    <a href="#SERIAL-FUNCTIONS">SERIAL FUNCTIONS</a>
+    <a href="#BATCH-FUNCTIONS">BATCH FUNCTIONS</a>
+    <a href="#RETURN-VALUE">RETURN VALUE</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopm_pio_c(7)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopm_pio_c(7)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopm_pio_c</code> - <span class="man-whatis">interfaces to query and modify platform</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<dl>
+<dt><code>int geopm_pio_num_signal_name(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int geopm_pio_signal_name(</code></dt><dd><p><code>int</code> <em>name_idx</em>, <br />
+<code>size_t</code> <em>result_max</em>, <br />
+<code>char *</code><em>result</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_num_control_name(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int geopm_pio_control_name(</code></dt><dd><p><code>int</code> <em>name_index</em>, <br />
+<code>size_t</code> <em>result_max</em>, <br />
+<code>char *</code><em>result</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_signal_description(</code></dt><dd><p><code>const char *</code><em>signal_name</em>, <br />
+<code>size_t</code> <em>description_max</em>, <br />
+<code>char *</code><em>description</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_control_description(</code></dt><dd><p><code>const char *</code><em>control_name</em>, <br />
+<code>size_t</code> <em>description_max</em>, <br />
+<code>char *</code><em>description</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_signal_domain_type(</code></dt><dd><p><code>const char *</code><em>signal_name</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_control_domain_type(</code></dt><dd><p><code>const char *</code><em>control_name</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_read_signal(</code></dt><dd><p><code>const char *</code><em>signal_name</em>, <br />
+<code>int</code> <em>domain_type</em>, <br />
+<code>int</code> <em>domain_idx</em>, <br />
+<code>double *</code><em>result</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_write_control(</code></dt><dd><p><code>const char *</code><em>control_name</em>, <br />
+<code>int</code> <em>domain_type</em>, <br />
+<code>int</code> <em>domain_idx</em>, <br />
+<code>double</code> <em>setting</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_save_control(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int geopm_pio_restore_control(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int geopm_pio_push_signal(</code></dt><dd><p><code>const char *</code><em>signal_name</em>, <br />
+<code>int</code> <em>domain_type</em>, <br />
+<code>int</code> <em>domain_idx</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_push_control(</code></dt><dd><p><code>const char *</code><em>control_name</em>, <br />
+<code>int</code> <em>domain_type</em>, <br />
+<code>int</code> <em>domain_idx</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_sample(</code></dt><dd><p><code>int</code> <em>signal_idx</em>, <br />
+<code>double *</code><em>result</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_adjust(</code></dt><dd><p><code>int</code> <em>control_idx</em>, <br />
+<code>double</code> <em>setting</em><code>);</code></p></dd>
+<dt><code>int geopm_pio_read_batch(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>int geopm_pio_write_batch(</code></dt><dd><p><code>void);</code></p></dd>
+</dl>
+
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The interfaces described in this man page are the C language bindings
+for the <strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong> C++ class.  Please refer to the
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong> and <strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo<span class="s">(3)</span></a></strong> man pages for
+a general overview of the GEOPM platform interface layer.  The
+<strong><a class="man-ref" href="geopm_topo_c.3.html">geopm_topo_c<span class="s">(3)</span></a></strong> man page describes the C wrappers for the
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo<span class="s">(3)</span></a></strong> C++ class and documents the
+<code>geopm_domain_e</code> enum.  The caller selects from the <code>geopm_domain_e</code>
+enum for the <em>domain_type</em> parameter to many functions in the
+geopm_pio_*() interface.  The return value from
+<code>geopm_pio_signal_domain_type()</code> and <code>geopm_pio_control_domain_type()</code>
+is also a value from the <code>geopm_domain_e</code> enum.</p>
+
+<h2 id="INSPECTION-FUNCTIONS">INSPECTION FUNCTIONS</h2>
+
+<dl>
+<dt><code>geopm_pio_num_signal_name</code>()</dt><dd><p>Returns the number of signal names that can be indexed with the
+<em>name_idx</em> parameter to the <code>geopm_pio_signal_name()</code> function.
+Any error in loading the platform will result in a negative error
+code describing the failure.</p></dd>
+<dt><code>geopm_pio_signal_name</code>()</dt><dd><p>Sets the <em>result</em> string to the name of the signal indexed by
+<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the <em>result</em>
+vector.  If <em>result_max</em> is non-zero the <em>result</em> string will always be
+null terminated.  If <em>name_idx</em> is greater than zero and less than
+the return value from <code>geopm_pio_num_signal_name()</code> the return
+value will be <code>GEOPM_ERROR_INVALID</code>.  The return code will also
+be <code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain
+the signal name.  Any other error will result in a negative error
+code.  Zero is returned on success.</p></dd>
+<dt><code>geopm_pio_num_control_name</code>()</dt><dd><p>Returns the number of control names that can be indexed with the
+<em>name_idx</em> parameter to the <code>geopm_pio_control_name()</code> function.
+Any error in loading the platform will result in a negative error
+code describing the failure.</p></dd>
+<dt><code>geopm_pio_control_name</code>()</dt><dd><p>Sets the <em>result</em> string to the name of the control indexed by
+<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the <em>result</em>
+vector.  If <em>result_max</em> is non-zero the <em>result</em> string will always be
+null terminated.  If <em>name_idx</em> is greater than zero and less than
+the return value from <code>geopm_pio_num_control_name()</code> the return
+value will be <code>GEOPM_ERROR_INVALID</code>.  The return code will also
+be <code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain
+the control name.  Any other error will result in a negative error
+code.  Zero is returned on success.</p></dd>
+<dt><code>geopm_pio_signal_description</code>()</dt><dd><p>Sets the <em>result</em> string to the description associated with
+<em>signal_name</em>.  At most <em>result_max</em> bytes are written to the
+<em>result</em> vector.  If <em>result_max</em> is non-zero the <em>result</em> string
+will always be null terminated.  The return code will be
+<code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain the
+description.  Any other error will result in a negative error
+code.  Zero is returned on success.</p></dd>
+<dt><code>geopm_pio_control_description</code>()</dt><dd><p>Sets the <em>result</em> string to the description associated with
+<em>control_name</em>.  At most <em>result_max</em> bytes are written to the
+<em>result</em> vector.  If <em>result_max</em> is non-zero the <em>result</em> string
+will always be null terminated.  The return code will be
+<code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain the
+description.  Any other error will result in a negative error
+code.  Zero is returned on success.</p></dd>
+<dt><code>geopm_pio_signal_domain_type</code>()</dt><dd><p>Query the domain for the signal with name <em>signal_name</em>.  Returns
+one of the <code>geopm_domain_e</code> values signifying the granularity at
+which the signal is measured.  Will return a negative error code
+if any error occurs, e.g. a request for a <em>signal_name</em> that
+is not supported by the platform.</p></dd>
+<dt><code>geopm_pio_control_domain_type</code>()</dt><dd><p>Query the domain for the control with the name <em>control_name</em>.
+Returns one of the <code>geopm_domain_e</code> values signifying the
+granularity at which the control can be adjusted.  Will return a
+negative error code if any error occurs, e.g. a request for a
+<em>control_name</em> that is not supported by the platform.</p></dd>
+</dl>
+
+
+<h2 id="SERIAL-FUNCTIONS">SERIAL FUNCTIONS</h2>
+
+<dl>
+<dt><code>geopm_pio_read_signal</code>()</dt><dd><p>Read from the platform and interpret into SI units a signal
+associated with <em>signal_name</em> and store the value in <em>result</em>.
+This value is read from the <code>geopm_topo_e</code> <em>domain_type</em> domain
+indexed by <em>domain_idx</em>.  If the signal is native to a domain
+contained within <em>domain_type</em>, the values from the contained
+domains are aggregated to form <em>result</em>.  Calling this function
+does not modify values stored by calling <code>geopm_pio_read_batch()</code>.
+If an error occurs then negative error code is returned.  Zero is
+returned upon success.</p></dd>
+<dt><code>geopm_pio_write_control</code>()</dt><dd><p>Interpret the <em>setting</em> in SI units associated with <em>control_name</em>
+and write it to the platform.  This value is written to the
+<code>geopm_topo_e</code> <em>domain_type</em> domain indexed by <em>domain_idx</em>.  If
+the control is native to a domain contained within <em>domain_type</em>,
+then the <em>setting</em> is written to all contained domains.  Calling
+this function does not modify values stored by calling
+<code>geopm_pio_adjust()</code>.  If an error occurs then negative error code
+is returned.  Zero is returned upon success.</p></dd>
+<dt><code>geopm_pio_save_control</code>()</dt><dd><p>Save the state of all controls so that any subsequent changes made
+through <code>geopm_pio_write_control()</code> or <code>geopm_pio_write_batch()</code>
+may be reverted with a call to <code>geopm_pio_restore_control()</code>.  The
+control settings are stored in memory managed by GEOPM.  If an
+error occurs then negative error code is returned.  Zero is
+returned upon success.</p></dd>
+<dt><code>geopm_pio_restore_control</code>()</dt><dd><p>Restore the state recorded by the last call to
+<code>geopm_pio_save_control()</code> so that all subsequent changes made
+through <code>geopm_pio_write_control()</code> or <code>geopm_pio_write_batch()</code>
+are reverted to their previous settings.  If an error occurs then
+negative error code is returned.  Zero is returned upon success.</p></dd>
+</dl>
+
+
+<h2 id="BATCH-FUNCTIONS">BATCH FUNCTIONS</h2>
+
+<dl>
+<dt><code>geopm_pio_push_signal</code>()</dt><dd><p>Push a signal onto the stack of batch access signals.  The signal
+is defined by selecting a <em>signal_name</em> from one of the values
+returned by the <code>geopm_pio_signal_name()</code> function, the
+<em>domain_type</em> from one of the <code>geopm_domain_e</code> values, and the
+<em>domain_idx</em> between zero to the value returned by
+<code>geopm_topo_num_domain</code>(<em>domain_type</em>).  Subsequent calls to the
+<code>geopm_pio_read_batch()</code> function will read the signal and update
+the internal state used to store batch signals.  The return value
+of <code>geopm_pio_push_signal()</code> is an index that can be passed as the
+<em>sample_idx</em> parameter to <code>geopm_pio_sample()</code> to access the
+signal value stored in the internal state from the last update.  A
+distinct signal index will be returned for each unique combination
+of input parameters.  All signals must be pushed onto the stack
+prior to the first call to <code>geopm_pio_sample()</code> or
+<code>geopm_pio_read_batch()</code>.  Attempts to push a signal onto the
+stack after the first call to <code>geopm_pio_sample()</code> or
+<code>geopm_pio_read_batch()</code> or attempts to push a <em>signal_name</em> that
+is not a value provided by <code>geopm_pio_signal_name()</code> will result
+in a negative return value.</p></dd>
+<dt><code>geopm_pio_push_control</code>()</dt><dd><p>Push a control onto the stack of batch access controls.  The
+control is defined by selecting a <em>control_name</em> from one of the
+values returned by the <code>geopm_pio_control_name()</code> function, the
+<em>domain_type</em> from one of the <code>geopm_domain_e</code> values, and the
+<em>domain_idx</em> between zero to the value returned by
+<code>geopm_topo_num_domain</code>(<em>domain_type</em>).  The return value of
+<code>geopm_pio_push_control()</code> can be passed to the
+<code>geopm_pio_adjust()</code> function which will update the internal state
+used to store batch controls.  Subsequent calls to the
+<code>geopm_pio_write_batch()</code> function access the control values in
+the internal state and write the values to the hardware.  A
+distinct control index will be returned for each unique
+combination of input parameters.  All controls must be pushed onto
+the stack prior to the first call to <code>geopm_pio_adjust()</code> or
+<code>geopm_pio_write_batch()</code>.  Attempts to push a controls onto the
+stack after the first call to <code>geopm_pio_adjust()</code> or
+<code>geopm_pio_write_batch()</code> or attempts to push a <em>control_name</em>
+that is not a value provided by <code>geopm_pio_control_name()</code> will
+result in a negative return value.</p></dd>
+<dt><code>geopm_pio_sample</code>()</dt><dd><p>Samples cached value of a single signal that has been pushed via
+<code>geopm_pio_push_signal()</code> and writes the value into <em>result</em>.  The
+<em>signal_idx</em> provided matches the return value from
+<code>geopm_pio_push_signal()</code> when the signal was pushed. The cached
+value is upated at the time of call to <code>geopm_pio_read_batch()</code>.</p></dd>
+<dt><code>geopm_pio_adjust</code>()</dt><dd><p>Updates cached value for single control that has been pushed via
+<code>geopm_pio_push_control()</code> to the value <em>setting</em>.  The
+<em>controL_idx</em> provided matches the return value from
+<code>goepm_pio_push_control()</code> when the control was pushed.  The
+cached value will be written to the platform at time of call to
+<code>geopm_pio_write_batch()</code>.</p></dd>
+<dt><code>geopm_pio_read_batch</code>()</dt><dd><p>Read all push signals from the platform so that the next call to
+<code>geopm_pio_sample()</code> will reflect the updated data.</p></dd>
+<dt><code>geopm_pio_write_batch</code>()</dt><dd><p>Write all pushed controls so that values provided to
+<code>geopm_pio_adjust()</code> are written to the platform.</p></dd>
+</dl>
+
+
+<h2 id="RETURN-VALUE">RETURN VALUE</h2>
+
+<p>If an error occurs in any call to an interface documented here, the
+return value of the function will be a negative integer
+corresponding to one of the error codes documented in
+<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopm_topo_c.3.html">geopm_topo_c<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo<span class="s">(3)</span></a></strong>,
+<strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Intel Corporation</li>
+    <li class='tc'>April 2019</li>
+    <li class='tr'>geopm_pio_c(7)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

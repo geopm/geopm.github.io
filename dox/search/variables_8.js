@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['t',['t',['../structgeopm__time__s.html#a69112ff3a601269da02aa4cd6bd38997',1,'geopm_time_s']]]
+  ['runtime',['runtime',['../structgeopm__region__info__s.html#a95539c3912abe1ae80bd19c7e04fccc7',1,'geopm_region_info_s']]]
 ];

@@ -97,16 +97,19 @@ better rendering of this manual.</p>
 <dt><code>virtual void Agent::init(</code></dt><dd><p><code>int</code> <em>level</em><code>,</code> <br />
 <code>const vector&lt;int> &amp;</code><em>fan_in</em><code>,</code> <br />
 <code>bool</code> <em>is_level_root</em><code>) = 0;</code></p></dd>
-<dt><code>virtual void Agent::validate_policy(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>policy</em><code>) = const 0;</code></p></dd>
-<dt><code>virtual bool Agent::descend(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>in_policy</em><code>,</code> <br />
+<dt><code>virtual void Agent::validate_policy(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>policy</em><code>) const = 0;</code></p></dd>
+<dt><code>virtual void Agent::split_policy(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>in_policy</em><code>,</code> <br />
 <code>vector&lt;vector&lt;double>&gt;&amp;</code> <em>out_policy</em><code>) = 0;</code></p></dd>
-<dt><code>virtual bool Agent::ascend(</code></dt><dd><p><code>const vector&lt;vector&lt;double>&gt; &amp;</code><em>in_sample</em><code>,</code> <br />
+<dt><code>virtual bool Agent::do_send_policy(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual void Agent::aggregate_sample(</code></dt><dd><p><code>const vector&lt;vector&lt;double>&gt; &amp;</code><em>in_sample</em><code>,</code> <br />
 <code>vector&lt;double> &amp;</code><em>out_sample</em><code>) = 0;</code></p></dd>
-<dt><code>virtual bool Agent::adjust_platform(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>policy</em><code>) = 0;</code></p></dd>
-<dt><code>virtual bool Agent::sample_platform(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>sample</em><code>) = 0;</code></p></dd>
+<dt><code>virtual bool Agent::do_send_sample(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual void Agent::adjust_platform(</code></dt><dd><p><code>const vector&lt;double> &amp;</code><em>policy</em><code>) = 0;</code></p></dd>
+<dt><code>virtual bool Agent::do_write_batch(</code></dt><dd><p><code>void) = 0;</code></p></dd>
+<dt><code>virtual void Agent::sample_platform(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>sample</em><code>) = 0;</code></p></dd>
 <dt><code>virtual void Agent::wait(</code></dt><dd><p> <code>void) = 0;</code></p></dd>
 <dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_header(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
-<dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_node(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
+<dt><code>virtual vector&lt;pair&lt;string, string>&gt; Agent::report_host(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
 <dt><code>virtual map&lt;uint64_t, vector&lt;pair&lt;string, string>&gt;&gt; Agent::report_region(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
 <dt><code>virtual vector&lt;string> Agent::trace_names(</code></dt><dd><p><code>void) const = 0;</code></p></dd>
 <dt><code>virtual void Agent::trace_values(</code></dt><dd><p><code>vector&lt;double> &amp;</code><em>values</em><code>) = 0;</code></p></dd>
@@ -128,7 +131,7 @@ better rendering of this manual.</p>
 fundamental procedures executed by the GEOPM runtime.  In general, the
 Agent is responsible for making decisions about how and what control the
 runtime should exert based on readings of system values.  By default
-the <strong><a class="man-ref" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent<span class="s">(3)</span></a></strong> is used, but other agents can be
+the <strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong> is used, but other agents can be
 selected with the <code>--geopm-agent</code> command line option to the
 <strong><span class="man-ref">geopm_launcher<span class="s">(1)</span></span></strong> or <code>GEOPM_AGENT</code> environment variable.  Exactly
 one agent type is used during each execution of the GEOPM runtime.</p>
@@ -143,8 +146,8 @@ each of these objects creates one or more <code>Agent</code> objects.  The
 <code>Agent</code> objects are related to each other through a balanced tree of
 bi-directional communication.  The "leaf" <code>Agent</code> objects are defined
 to have no children and one parent.  The "tree" <code>Agent</code> objects defined
-to have many children and one Agent as its parent.  The "root" Agent
-objects are defined to have many children and one endpoint as its parent.
+to have many children and one Agent as the parent.  The "root" Agent
+objects are defined to have many children and a static policy as the parent.
 Note that in some cases (e.g. a single node job execution) a "tree" Agent
 may not be involved at all.  The <code>Agent::init</code>() method is called by the
 <code>Controller</code> prior to all other <code>Agent</code> methods.  The parameters passed
@@ -155,7 +158,7 @@ structure.</p>
 
 <p>All <code>Controller</code>s create an <code>Agent</code> object to execute <em>level</em> 0, or
 "leaf" responsibilities.  The leaf responsibilities include monitoring
-signals and deriving samples to send to their parent <code>Agent</code>'s at
+signals and deriving samples to send to their parent <code>Agent</code>s at
 <em>level</em> 1 in the tree.  Additionally a leaf <code>Agent</code> must interpret
 policies received from their parent agent at <em>level</em> 1 and set
 controls which reflect the policy.  Some of the <code>Controller</code> objects
@@ -165,9 +168,7 @@ responsible for aggregating samples from child agents to send to
 parent agents and splitting policy values from parent agents to send
 to child agents.  Note that the <code>Agent</code> running at the root of the
 tree uses the same policy/sample interface to interact with the
-resource manager.  The resource manager implements the role of a
-parent <code>Agent</code> to the root <code>Agent</code> by making calls to the
-<strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong> interface.</p>
+resource manager.</p>
 
 <p>The <code>Agent</code> class is designed to read signals and write controls for
 the hardware and application using the <strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong>
@@ -227,21 +228,28 @@ parameter is true will the controller call the <code>ascend</code>() or
 replace NaNs with defaults.  If a value of <em>policy</em> is not NaN but the
 value is not supported by the Agent the method will throw a geopm::Exception
 with error code GEOPM_ERROR_INVALID.</p></dd>
-<dt><code>descend</code>()</dt><dd><p>Split policy for children at next level down the tree.  The
+<dt><code>split_policy</code>()</dt><dd><p>Split policy for children at next level down the tree.  The
 <em>in_policy</em> is an input vector of policy values from the parent.
 The <em>out_policy</em> is an output vector of policies to be sent to
-each child.  Returns true if out_policy has been updated since
-the last call.</p></dd>
-<dt><code>ascend</code>()</dt><dd><p>Aggregate samples from children for the next level up the tree.
+each child.</p></dd>
+<dt><code>do_send_policy</code>()</dt><dd><p> Used to indicate to the Controller whether to send the output
+ from <code>split_policy()</code> down the tree to the Agent's children.
+ Returns true if the policy has been updated since the last call.</p></dd>
+<dt><code>aggregate_sample</code>()</dt><dd><p>Aggregate samples from children for the next level up the tree.
 The <em>in_sample</em> parameter is a vector of sample vectors, one
 sample vector from each child.  The samples from a given index
 in the input vectors are transformed to a single value at the
 same index in the output.  The <em>out_sample</em> is an output vector
-of aggregated sample values to be sent up to the parent.
-Returns true if out_sample has been updated since the last call.</p></dd>
+of aggregated sample values to be sent up to the parent.</p></dd>
+<dt><code>do_send_sample</code>()</dt><dd><p>Used to indicate to the Controller whether to send the output from
+<code>aggregate_sample()</code> up the tree to the Agent's parent.  Returns
+true if any samples have been updated since the last call.</p></dd>
 <dt><code>adjust_platform</code>()</dt><dd><p>Adjust the platform settings based on the policy from above.
-Settings for each control in the <em>policy</em>.  Returns true if
-the platform was adjusted, false otherwise.</p></dd>
+Settings for each control are in the <em>policy</em>.</p></dd>
+<dt><code>do_write_batch</code>()</dt><dd><p>Used to indicate to the Controller whether to call
+<code>PlatformIO::write_batch()</code> to enact new control values on the
+platform.  Returns true if any control values have been updated
+since the last call.</p></dd>
 <dt><code>sample_platform</code>()</dt><dd><p>Read signals from the platform and interpret/aggregate these
 signals to create a sample which can be sent up the tree.  The
 <em>sample</em> parameter is an output vector of agent specific sample
@@ -250,10 +258,22 @@ updated since the last call.</p></dd>
 <dt class="flush"><code>wait</code>()</dt><dd><p>Called to wait for the sample period to elapse. This controls the
 cadence of the Controller main loop.</p></dd>
 <dt><code>report_header</code>()</dt><dd><p>Custom fields that will be added to the report header when this
-agent is used.</p></dd>
-<dt><code>report_node</code>()</dt><dd><p>Custom fields for the node section of the report.</p></dd>
-<dt><code>report_region</code>()</dt><dd><p>Custom fields for each region in the report.</p></dd>
-<dt><code>trace_names</code>()</dt><dd><p>Column headers to be added to the trace.</p></dd>
+agent is used.  To be consistent with the rest of the header, the
+keys should be title case, e.g. "Start Time"; they must not
+contain the colon character ':'.</p></dd>
+<dt><code>report_host</code>()</dt><dd><p>Custom fields for the Host section of the report.  To be
+consistent with the rest of this section, the keys should have
+the first letter capitalized, e.g. "Final freq map"; they must
+not contain the colon character ':'.</p></dd>
+<dt><code>report_region</code>()</dt><dd><p>Custom fields for each region in the report.  To be consistent
+with the rest of the region report, the string keys that will
+appear at the start of each line should be all lower case with
+words separated by hyphens and followed by the units if applicable,
+e.g "package-energy (joules)".  The field name must not contain the
+colon character ':'.</p></dd>
+<dt><code>trace_names</code>()</dt><dd><p>Column headers to be added to the trace.  These will be
+automatically converted to lower case.  The header names must
+not contain the pipe character '|' or whitespace.</p></dd>
 <dt><code>trace_values</code>()</dt><dd><p>Called to get latest values to be added to the trace.</p></dd>
 <dt><code>num_policy</code>()</dt><dd><p>Used to look up the number of values in the policy vector sent
 down the tree for a specific type of <code>Agent</code>. This should be
@@ -314,7 +334,7 @@ information.  This code is located in the GEOPM source under tutorial/agent.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>February 2019</li>
+    <li class='tc'>April 2019</li>
     <li class='tr'>geopm::Agent(3)</li>
   </ol>
 

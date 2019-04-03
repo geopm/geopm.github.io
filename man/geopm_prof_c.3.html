@@ -123,6 +123,12 @@ periodically the user can alleviate load imbalance on larger time
 scales than the regions provide.  This is done by marking iterations
 through an outer loop in the application, the "epoch".</p>
 
+<p><code>WARNING:</code> All of the functions described herein require that MPI has
+been initialized (via MPI_Init() or MPI_Init_thread()) and is properly
+functioning before they are invoked.  These functions make use of various
+MPI calls in their implementations and will return errors if MPI is not
+initialized.</p>
+
 <dl>
 <dt><code>geopm_prof_region</code>()</dt><dd><p>registers an application region.  The <em>region_name</em> and <em>hint</em> are
 input parameters, and the <em>region_id</em> is output.  The <em>region_id</em>
@@ -147,7 +153,9 @@ Memory bandwidth bound region.</p>
 
 <p><code>GEOPM_REGION_HINT_NETWORK</code>: <br />
 Inter-node network dominated region, default for unnested MPI
-calls.</p>
+calls.  User defined regions that have this hint will have the MPI
+time spent within this region attributed to the region as whole
+for the periods of time when all ranks are within an MPI function.</p>
 
 <p><code>GEOPM_REGION_HINT_IO</code>: <br />
 Disk input/output dominated region.</p>
@@ -311,7 +319,7 @@ to convert them to strings.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>February 2019</li>
+    <li class='tc'>April 2019</li>
     <li class='tr'>geopm_prof_c(3)</li>
   </ol>
 

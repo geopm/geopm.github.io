@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['finalize_5funmarked_5fregion',['finalize_unmarked_region',['../classgeopm_1_1_i_profile_i_o_sample.html#a7358109b15b2548c360bc171cc052ae3',1,'geopm::IProfileIOSample::finalize_unmarked_region()'],['../classgeopm_1_1_profile_i_o_sample.html#ab1eea92ca962074db6eb17ee26669701',1,'geopm::ProfileIOSample::finalize_unmarked_region()']]],
-  ['freq',['freq',['../classgeopm_1_1_energy_efficient_region.html#abe9ced0f162641e8139cf8d6996246d8',1,'geopm::EnergyEfficientRegion']]]
+  ['freq',['freq',['../classgeopm_1_1_energy_efficient_region.html#abe9ced0f162641e8139cf8d6996246d8',1,'geopm::EnergyEfficientRegion']]],
+  ['frequency_5fdomain_5ftype',['frequency_domain_type',['../classgeopm_1_1_frequency_governor.html#a4f1595e635ef7056214d2320cc20a4a4',1,'geopm::FrequencyGovernor']]],
+  ['frequencygovernor',['FrequencyGovernor',['../classgeopm_1_1_frequency_governor.html#a7df712a119b37f7d589ba43d8aaabd53',1,'geopm::FrequencyGovernor']]]
 ];

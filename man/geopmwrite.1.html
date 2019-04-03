@@ -84,6 +84,9 @@
 <p>WRITE CONTROL <br />
 <code>geopmwrite</code> CONTROL_NAME DOMAIN_TYPE DOMAIN_INDEX VALUE</p>
 
+<p>CREATE CACHE <br />
+<code>geopmwrite</code> --cache</p>
+
 <p>GET HELP OR VERSION <br />
 <code>geopmwrite</code> --help | --version</p>
 
@@ -122,11 +125,26 @@ they are contained within one another.</p>
 ++<code>board_nic</code> - NIC attached to the board <br />
 ++<code>board_accelerator</code> - domain for accelerators on the board</p>
 
+<p>This utility can be used to create a geopm::PlatformTopo cache file in
+the tmpfs.  When this file is not present the <strong><a class="man-ref" href="geopmread.1.html">geopmread<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmwrite.1.html">geopmwrite<span class="s">(1)</span></a></strong>, <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong> and <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> will
+<strong><span class="man-ref">popen<span class="s">(1)</span></span></strong> a subprocess which provides the platform topology
+information.  This subprocess will not be created if the cache file
+exists.  See the <code>--cache</code> option below for more information.</p>
+
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
 <dt><code>-d</code>, <code>--domain</code></dt><dd><p>Print domain of a control if CONTROL_NAME is provided, or print a
 list of all domains on the system.</p></dd>
+<dt><code>-i</code>, <code>--info</code></dt><dd><p>Print description of a signal if CONTROL_NAME is provided, or print a
+list of all available controls with their descriptions, if any.</p></dd>
+<dt><code>-c</code>, <code>--cache</code></dt><dd><p>Create a cache file for the geopm::PlatformTopo object if one does
+not exist.  File permissions of the cache file are set to
+"-rw-rw-rw-", i.e. 666. The path for the cache file is
+"/tmp/geopm-topo-cache".  If the file exists no operation will be
+performed.  To force the creation of a new cache file, remove the
+existing cache file prior to executing this command.</p></dd>
 <dt><code>-h</code>, <code>--help</code></dt><dd><p>Print brief summary of the command line usage information,
 then exit.</p></dd>
 <dt><code>-v</code>, <code>--version</code></dt><dd><p>Print version of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> to standard output, then exit.</p></dd>
@@ -195,7 +213,7 @@ $ geopmread FREQUENCY cpu 2
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Intel Corporation</li>
-    <li class='tc'>February 2019</li>
+    <li class='tc'>April 2019</li>
     <li class='tr'>geopmwrite(1)</li>
   </ol>
 
