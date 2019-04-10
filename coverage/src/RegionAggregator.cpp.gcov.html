@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/RegionAggregator.cpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/RegionAggregator.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - RegionAggregator.cpp<span style="font-size: 80%;"> (source / <a href="RegionAggregator.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - RegionAggregator.cpp<span style="font-size: 80%;"> (source / <a href="RegionAggregator.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">57</td>
-            <td class="headerCovTableEntry">57</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntry">50</td>
+            <td class="headerCovTableEntry">54</td>
+            <td class="headerCovTableEntryHi">92.6 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">7</td>
-            <td class="headerCovTableEntry">7</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntryMed">77.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -100,120 +100,122 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &quot;geopm.h&quot;</a>
-<span class="lineNum">      34 </span>            : #include &quot;geopm_internal.h&quot;
-<span class="lineNum">      35 </span>            : #include &quot;geopm_region_id.h&quot;
-<span class="lineNum">      36 </span>            : #include &quot;geopm_hash.h&quot;
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;RegionAggregator.hpp&quot;</a>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;RegionAggregatorImp.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      36 </span>            : #include &quot;geopm_internal.h&quot;
+<a name="37"><span class="lineNum">      37 </span>            : #include &quot;geopm_hash.h&quot;</a>
 <span class="lineNum">      38 </span>            : #include &quot;PlatformIO.hpp&quot;
 <span class="lineNum">      39 </span>            : #include &quot;PlatformTopo.hpp&quot;
 <span class="lineNum">      40 </span>            : #include &quot;Exception.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      42 </span>            : 
-<a name="43"><span class="lineNum">      43 </span>            : namespace geopm</a>
-<span class="lineNum">      44 </span>            : {
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         13 :     RegionAggregator::RegionAggregator()</span></a>
-<span class="lineNum">      46 </span><span class="lineCov">         13 :         : RegionAggregator(platform_io())</span>
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Helper.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      43 </span>            : 
+<a name="44"><span class="lineNum">      44 </span>            : namespace geopm</a>
+<a name="45"><span class="lineNum">      45 </span>            : {</a>
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :     std::unique_ptr&lt;RegionAggregator&gt; make_unique(void)</span>
 <span class="lineNum">      47 </span>            :     {
-<span class="lineNum">      48 </span>            : 
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">         13 :     }</span></a>
+<span class="lineNum">      48 </span><span class="lineNoCov">          0 :         return geopm::make_unique&lt;RegionAggregatorImp&gt;();</span>
+<a name="49"><span class="lineNum">      49 </span>            :     }</a>
 <span class="lineNum">      50 </span>            : 
-<span class="lineNum">      51 </span><span class="lineCov">         15 :     RegionAggregator::RegionAggregator(IPlatformIO &amp;platio)</span>
-<span class="lineNum">      52 </span>            :         : m_platform_io(platio)
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         15 :         , m_in_epoch(false)</span></a>
-<span class="lineNum">      54 </span>            :     {
+<span class="lineNum">      51 </span><span class="lineNoCov">          0 :     std::shared_ptr&lt;RegionAggregator&gt; make_shared(void)</span>
+<span class="lineNum">      52 </span>            :     {
+<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 :         return std::make_shared&lt;RegionAggregatorImp&gt;();</span></a>
+<a name="54"><span class="lineNum">      54 </span>            :     }</a>
 <span class="lineNum">      55 </span>            : 
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">         15 :     }</span></a>
-<a name="57"><span class="lineNum">      57 </span>            : </a>
-<span class="lineNum">      58 </span><span class="lineCov">         15 :     void RegionAggregator::init(void)</span>
-<span class="lineNum">      59 </span>            :     {
-<span class="lineNum">      60 </span><span class="lineCov">         15 :         m_epoch_count_idx = m_platform_io.push_signal(&quot;EPOCH_COUNT&quot;, IPlatformTopo::M_DOMAIN_BOARD, 0);</span>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">         15 :     }</span></a>
-<span class="lineNum">      62 </span>            : 
-<span class="lineNum">      63 </span><span class="lineCov">         73 :     int RegionAggregator::push_signal_total(const std::string &amp;signal_name,</span>
-<span class="lineNum">      64 </span>            :                                             int domain_type,
-<a name="65"><span class="lineNum">      65 </span>            :                                             int domain_idx)</a>
-<span class="lineNum">      66 </span>            :     {
-<span class="lineNum">      67 </span><span class="lineCov">         73 :         int signal_idx = m_platform_io.push_signal(signal_name, domain_type, domain_idx);</span>
-<span class="lineNum">      68 </span><span class="lineCov">         73 :         m_region_id_idx[signal_idx] = m_platform_io.push_signal(&quot;REGION_ID#&quot;, domain_type, domain_idx);</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         73 :         return signal_idx;</span></a>
-<a name="70"><span class="lineNum">      70 </span>            :     }</a>
-<span class="lineNum">      71 </span>            : 
-<span class="lineNum">      72 </span><span class="lineCov">        554 :     double RegionAggregator::sample_total(int signal_idx, uint64_t region_id)</span>
-<a name="73"><span class="lineNum">      73 </span>            :     {</a>
-<span class="lineNum">      74 </span><span class="lineCov">        554 :         if (signal_idx &lt; 0) {</span>
-<span class="lineNum">      75 </span>            :             throw Exception(&quot;RegionAggregator::sample_total(): Invalid signal index&quot;,
-<span class="lineNum">      76 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="77"><span class="lineNum">      77 </span>            :         }</a>
-<span class="lineNum">      78 </span><span class="lineCov">        553 :         if (m_region_id_idx.find(signal_idx) == m_region_id_idx.end()) {</span>
-<span class="lineNum">      79 </span>            :             throw Exception(&quot;RegionAggregator::sample_total(): Cannot call sample_total &quot;
-<span class="lineNum">      80 </span>            :                             &quot;for signal index not pushed with push_signal_total.&quot;,
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">      82 </span>            :         }
-<span class="lineNum">      83 </span><span class="lineCov">        552 :         double current_value = 0.0;</span>
-<span class="lineNum">      84 </span><span class="lineCov">        552 :         uint64_t curr_rid = geopm_signal_to_field(m_platform_io.sample(m_region_id_idx.at(signal_idx)));</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        552 :         curr_rid = geopm_region_id_unset_hint(GEOPM_MASK_REGION_HINT, curr_rid);</span></a>
-<span class="lineNum">      86 </span>            :         // Look up the data for this combination of signal and region ID
-<span class="lineNum">      87 </span><span class="lineCov">        552 :         auto idx = std::make_pair(signal_idx, region_id);</span>
-<span class="lineNum">      88 </span><span class="lineCov">        552 :         auto data_it = m_region_sample_data.find(idx);</span>
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">        552 :         if (data_it != m_region_sample_data.end()) {</span></a>
-<span class="lineNum">      90 </span><span class="lineCov">        285 :             const auto &amp;data = data_it-&gt;second;</span>
-<span class="lineNum">      91 </span><span class="lineCov">        285 :             current_value += data.total;</span>
-<span class="lineNum">      92 </span>            :             // if currently in this region, add current value to total
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        339 :             if (region_id == curr_rid &amp;&amp;</span></a>
-<span class="lineNum">      94 </span><span class="lineCov">         54 :                 !std::isnan(data.last_entry_value)) {</span>
-<span class="lineNum">      95 </span><span class="lineCov">         54 :                 current_value += m_platform_io.sample(signal_idx) - data.last_entry_value;</span>
-<span class="lineNum">      96 </span>            :             }
-<a name="97"><span class="lineNum">      97 </span>            :         }</a>
-<span class="lineNum">      98 </span><span class="lineCov">        552 :         return current_value;</span>
-<a name="99"><span class="lineNum">      99 </span>            :     }</a>
-<span class="lineNum">     100 </span>            : 
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">     139078 :     void RegionAggregator::read_batch(void)</span></a>
-<span class="lineNum">     102 </span>            :     {
-<span class="lineNum">     103 </span><span class="lineCov">     834452 :         for (const auto &amp;it : m_region_id_idx) {</span>
-<span class="lineNum">     104 </span><span class="lineCov">     695374 :             double value = m_platform_io.sample(it.first);</span>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">     695374 :             uint64_t region_id = geopm_signal_to_field(m_platform_io.sample(it.second));</span></a>
-<span class="lineNum">     106 </span><span class="lineCov">     695374 :             bool is_ignore = geopm_region_id_hint_is_equal(GEOPM_REGION_HINT_IGNORE, region_id);</span>
-<span class="lineNum">     107 </span><span class="lineCov">     695374 :             region_id = geopm_region_id_unset_hint(GEOPM_MASK_REGION_HINT, region_id);</span>
-<span class="lineNum">     108 </span><span class="lineCov">     695374 :             m_is_ignore[region_id] = is_ignore;</span>
-<a name="109"><span class="lineNum">     109 </span>            :             // first time sampling this signal</a>
-<span class="lineNum">     110 </span><span class="lineCov">     695374 :             if (m_last_region_id.find(it.first) == m_last_region_id.end()) {</span>
-<span class="lineNum">     111 </span><span class="lineCov">         73 :                 m_last_region_id[it.first] = region_id;</span>
-<span class="lineNum">     112 </span>            :                 // set start value for first region to be recording this signal
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         73 :                 m_region_sample_data[std::make_pair(it.first, region_id)].last_entry_value = value;</span></a>
-<span class="lineNum">     114 </span>            :             }
-<span class="lineNum">     115 </span>            :             else {
-<span class="lineNum">     116 </span><span class="lineCov">     695301 :                 uint64_t last_rid = m_last_region_id[it.first];</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">     695301 :                 last_rid = geopm_region_id_unset_hint(GEOPM_MASK_REGION_HINT, last_rid);</span></a>
-<span class="lineNum">     118 </span>            :                 // region boundary
-<span class="lineNum">     119 </span><span class="lineCov">     695301 :                 if (region_id != last_rid) {</span>
-<span class="lineNum">     120 </span>            :                     // add entry to new region
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">        349 :                     m_region_sample_data[std::make_pair(it.first, region_id)].last_entry_value = value;</span></a>
-<span class="lineNum">     122 </span>            :                     // update total for previous region
-<span class="lineNum">     123 </span><span class="lineCov">        349 :                     double prev_total = value - m_region_sample_data.at(std::make_pair(it.first, last_rid)).last_entry_value;</span>
-<span class="lineNum">     124 </span><span class="lineCov">        349 :                     m_region_sample_data[std::make_pair(it.first, last_rid)].total += prev_total;</span>
-<a name="125"><span class="lineNum">     125 </span>            :                     // update epoch</a>
-<span class="lineNum">     126 </span><span class="lineCov">        349 :                     if (!m_in_epoch &amp;&amp; m_platform_io.sample(m_epoch_count_idx) &gt; -1) {</span>
-<span class="lineNum">     127 </span><span class="lineCov">         14 :                         m_in_epoch = true;</span>
-<span class="lineNum">     128 </span>            :                     }
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">        349 :                     if (m_in_epoch) {</span></a>
-<span class="lineNum">     130 </span><span class="lineCov">        289 :                         m_region_sample_data[std::make_pair(it.first, GEOPM_REGION_ID_EPOCH)].total += prev_total;</span>
-<span class="lineNum">     131 </span>            :                     }
-<span class="lineNum">     132 </span><span class="lineCov">        349 :                     m_last_region_id[it.first] = region_id;</span>
-<a name="133"><span class="lineNum">     133 </span>            :                 }</a>
-<span class="lineNum">     134 </span>            :             }
-<span class="lineNum">     135 </span>            :         }
-<a name="136"><span class="lineNum">     136 </span><span class="lineCov">     139078 :     }</span></a>
-<a name="137"><span class="lineNum">     137 </span>            : </a>
-<span class="lineNum">     138 </span><span class="lineCov">          1 :     std::set&lt;uint64_t&gt; RegionAggregator::tracked_region_ids(void) const</span>
-<span class="lineNum">     139 </span>            :     {
-<span class="lineNum">     140 </span><span class="lineCov">          1 :         std::set&lt;uint64_t&gt; result;</span>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">          4 :         for (const auto &amp;rid : m_is_ignore) {</span></a>
-<span class="lineNum">     142 </span><span class="lineCov">          3 :             result.insert(rid.first);</span>
-<span class="lineNum">     143 </span>            :         }
-<span class="lineNum">     144 </span><span class="lineCov">          1 :         return result;</span>
-<a name="145"><span class="lineNum">     145 </span>            :     }</a>
-<span class="lineNum">     146 </span>            : }
+<span class="lineNum">      56 </span><span class="lineCov">         76 :     RegionAggregatorImp::RegionAggregatorImp()</span>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         76 :         : RegionAggregatorImp(platform_io())</span></a>
+<span class="lineNum">      58 </span>            :     {
+<span class="lineNum">      59 </span>            : 
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">         76 :     }</span></a>
+<a name="61"><span class="lineNum">      61 </span>            : </a>
+<span class="lineNum">      62 </span><span class="lineCov">         80 :     RegionAggregatorImp::RegionAggregatorImp(PlatformIO &amp;platio)</span>
+<span class="lineNum">      63 </span>            :         : m_platform_io(platio)
+<span class="lineNum">      64 </span><span class="lineCov">         80 :         , m_last_epoch_count(-1)</span>
+<a name="65"><span class="lineNum">      65 </span>            :     {</a>
+<span class="lineNum">      66 </span>            : 
+<a name="67"><span class="lineNum">      67 </span><span class="lineCov">         80 :     }</span></a>
+<span class="lineNum">      68 </span>            : 
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         80 :     void RegionAggregatorImp::init(void)</span></a>
+<span class="lineNum">      70 </span>            :     {
+<span class="lineNum">      71 </span><span class="lineCov">         80 :         m_epoch_count_idx = m_platform_io.push_signal(&quot;EPOCH_COUNT&quot;, GEOPM_DOMAIN_BOARD, 0);</span>
+<a name="72"><span class="lineNum">      72 </span><span class="lineCov">         80 :     }</span></a>
+<a name="73"><span class="lineNum">      73 </span>            : </a>
+<span class="lineNum">      74 </span><span class="lineCov">        396 :     int RegionAggregatorImp::push_signal_total(const std::string &amp;signal_name,</span>
+<span class="lineNum">      75 </span>            :                                                int domain_type,
+<span class="lineNum">      76 </span>            :                                                int domain_idx)
+<a name="77"><span class="lineNum">      77 </span>            :     {</a>
+<span class="lineNum">      78 </span><span class="lineCov">        396 :         int signal_idx = m_platform_io.push_signal(signal_name, domain_type, domain_idx);</span>
+<span class="lineNum">      79 </span><span class="lineCov">        396 :         m_region_hash_idx[signal_idx] = m_platform_io.push_signal(&quot;REGION_HASH&quot;, domain_type, domain_idx);</span>
+<span class="lineNum">      80 </span><span class="lineCov">        396 :         return signal_idx;</span>
+<a name="81"><span class="lineNum">      81 </span>            :     }</a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineCov">       1880 :     double RegionAggregatorImp::sample_total(int signal_idx, uint64_t region_hash)</span>
+<span class="lineNum">      84 </span>            :     {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">       1880 :         if (signal_idx &lt; 0) {</span></a>
+<span class="lineNum">      86 </span>            :             throw Exception(&quot;RegionAggregatorImp::sample_total(): Invalid signal index&quot;,
+<span class="lineNum">      87 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">      88 </span>            :         }
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">       1878 :         if (m_region_hash_idx.find(signal_idx) == m_region_hash_idx.end()) {</span></a>
+<span class="lineNum">      90 </span>            :             throw Exception(&quot;RegionAggregatorImp::sample_total(): Cannot call sample_total &quot;
+<span class="lineNum">      91 </span>            :                             &quot;for signal index not pushed with push_signal_total.&quot;,
+<span class="lineNum">      92 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="93"><span class="lineNum">      93 </span>            :         }</a>
+<span class="lineNum">      94 </span><span class="lineCov">       1876 :         double current_value = 0.0;</span>
+<span class="lineNum">      95 </span><span class="lineCov">       1876 :         uint64_t curr_hash = m_platform_io.sample(m_region_hash_idx.at(signal_idx));</span>
+<span class="lineNum">      96 </span><span class="lineCov">       1876 :         m_tracked_region_hash.insert(curr_hash);</span>
+<a name="97"><span class="lineNum">      97 </span>            :         // Look up the data for this combination of signal and region ID</a>
+<span class="lineNum">      98 </span><span class="lineCov">       1876 :         auto idx = std::make_pair(signal_idx, region_hash);</span>
+<span class="lineNum">      99 </span><span class="lineCov">       1876 :         auto data_it = m_region_sample_data.find(idx);</span>
+<span class="lineNum">     100 </span><span class="lineCov">       1876 :         if (data_it != m_region_sample_data.end()) {</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       1774 :             const auto &amp;data = data_it-&gt;second;</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">       1774 :             current_value += data.total;</span>
+<span class="lineNum">     103 </span>            :             // if currently in this region, add current value to total
+<span class="lineNum">     104 </span><span class="lineCov">       2172 :             if (region_hash == curr_hash &amp;&amp;</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">        398 :                 !std::isnan(data.last_entry_value)) {</span></a>
+<span class="lineNum">     106 </span><span class="lineCov">        398 :                 current_value += m_platform_io.sample(signal_idx) - data.last_entry_value;</span>
+<span class="lineNum">     107 </span>            :             }
+<span class="lineNum">     108 </span>            :         }
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">       1876 :         return current_value;</span></a>
+<a name="110"><span class="lineNum">     110 </span>            :     }</a>
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span><span class="lineCov">     625412 :     void RegionAggregatorImp::read_batch(void)</span>
+<a name="113"><span class="lineNum">     113 </span>            :     {</a>
+<span class="lineNum">     114 </span><span class="lineCov">    3752464 :         for (const auto &amp;it : m_region_hash_idx) {</span>
+<span class="lineNum">     115 </span><span class="lineCov">    3127052 :             double value = m_platform_io.sample(it.first);</span>
+<span class="lineNum">     116 </span><span class="lineCov">    3127052 :             const uint64_t region_hash = m_platform_io.sample(it.second);</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">    3127052 :             m_tracked_region_hash.insert(region_hash);</span></a>
+<span class="lineNum">     118 </span>            :             // first time sampling this signal
+<span class="lineNum">     119 </span><span class="lineCov">    3127052 :             if (m_last_region_hash.find(it.first) == m_last_region_hash.end()) {</span>
+<span class="lineNum">     120 </span><span class="lineCov">        396 :                 m_last_region_hash[it.first] = region_hash;</span>
+<a name="121"><span class="lineNum">     121 </span>            :                 // set start value for first region to be recording this signal</a>
+<span class="lineNum">     122 </span><span class="lineCov">        396 :                 m_region_sample_data[std::make_pair(it.first, region_hash)].last_entry_value = value;</span>
+<span class="lineNum">     123 </span>            :             }
+<span class="lineNum">     124 </span>            :             else {
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">    3126656 :                 const uint64_t last_hash = m_last_region_hash[it.first];</span></a>
+<span class="lineNum">     126 </span>            :                 // region boundary
+<span class="lineNum">     127 </span><span class="lineCov">    3126656 :                 if (region_hash != last_hash) {</span>
+<span class="lineNum">     128 </span>            :                     // add entry to new region
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">       1802 :                     m_region_sample_data[std::make_pair(it.first, region_hash)].last_entry_value = value;</span></a>
+<span class="lineNum">     130 </span>            :                     // update total for previous region
+<span class="lineNum">     131 </span><span class="lineCov">       1802 :                     double prev_total = value - m_region_sample_data.at(std::make_pair(it.first, last_hash)).last_entry_value;</span>
+<span class="lineNum">     132 </span><span class="lineCov">       1802 :                     m_region_sample_data[std::make_pair(it.first, last_hash)].total += prev_total;</span>
+<a name="133"><span class="lineNum">     133 </span>            :                     // update epoch</a>
+<span class="lineNum">     134 </span><span class="lineCov">       1802 :                     double curr_epoch_count = m_platform_io.sample(m_epoch_count_idx);</span>
+<span class="lineNum">     135 </span><span class="lineCov">       1802 :                     if (curr_epoch_count != m_last_epoch_count) {</span>
+<span class="lineNum">     136 </span><span class="lineCov">       1604 :                         m_region_sample_data[std::make_pair(it.first, GEOPM_REGION_HASH_EPOCH)].total += prev_total;</span>
+<a name="137"><span class="lineNum">     137 </span>            :                     }</a>
+<span class="lineNum">     138 </span><span class="lineCov">       1802 :                     m_last_region_hash[it.first] = region_hash;</span>
+<span class="lineNum">     139 </span>            :                 }
+<span class="lineNum">     140 </span>            :             }
+<a name="141"><span class="lineNum">     141 </span>            :         }</a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">     625412 :     }</span></a>
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span><span class="lineCov">          2 :     std::set&lt;uint64_t&gt; RegionAggregatorImp::tracked_region_hash(void) const</span>
+<a name="145"><span class="lineNum">     145 </span>            :     {</a>
+<span class="lineNum">     146 </span><span class="lineCov">          2 :         return m_tracked_region_hash;</span>
+<span class="lineNum">     147 </span>            :     }
+<span class="lineNum">     148 </span>            : }
 </pre>
       </td>
     </tr>
@@ -222,7 +224,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

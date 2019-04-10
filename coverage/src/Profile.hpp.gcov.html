@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/Profile.hpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/Profile.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - Profile.hpp<span style="font-size: 80%;"> (source / <a href="Profile.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - Profile.hpp<span style="font-size: 80%;"> (source / <a href="Profile.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">2</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -111,286 +111,292 @@
 <a name="41"><span class="lineNum">      41 </span>            : </a>
 <span class="lineNum">      42 </span>            : namespace geopm
 <span class="lineNum">      43 </span>            : {
-<span class="lineNum">      44 </span>            :     class Comm;
-<a name="45"><span class="lineNum">      45 </span>            :     class ISharedMemoryUser;</a>
-<span class="lineNum">      46 </span>            :     class IControlMessage;
-<span class="lineNum">      47 </span>            :     class IPlatformTopo;
-<span class="lineNum">      48 </span>            :     class IProfileTable;
-<a name="49"><span class="lineNum">      49 </span>            :     class IProfileThreadTable;</a>
-<span class="lineNum">      50 </span>            :     class ISampleScheduler;
-<span class="lineNum">      51 </span>            : 
-<span class="lineNum">      52 </span>            :     /// @brief Enables application profiling and application feedback
-<a name="53"><span class="lineNum">      53 </span>            :     ///        to the control algorithm.</a>
-<span class="lineNum">      54 </span>            :     ///
-<span class="lineNum">      55 </span>            :     /// The information gathered by the Profile class identifies
-<span class="lineNum">      56 </span>            :     /// regions of code, progress within regions, and global
-<a name="57"><span class="lineNum">      57 </span>            :     /// synchronization points in the application.  Regions of code</a>
-<span class="lineNum">      58 </span>            :     /// define periods in the application during which control
-<span class="lineNum">      59 </span>            :     /// parameters are tuned with the expectation that control
-<span class="lineNum">      60 </span>            :     /// parameters for a region can be optimized independently of
-<a name="61"><span class="lineNum">      61 </span>            :     /// other regions.  In this way a region is associated with a set</a>
-<span class="lineNum">      62 </span>            :     /// of control parameters which can be optimized, and future time
-<span class="lineNum">      63 </span>            :     /// intervals associated with the same region will benefit from
-<span class="lineNum">      64 </span>            :     /// the application of control parameters which were determined
-<a name="65"><span class="lineNum">      65 </span>            :     /// from tuning within previous occurrences of the region.  There</a>
-<span class="lineNum">      66 </span>            :     /// are two competing motivations for defining a region within the
-<span class="lineNum">      67 </span>            :     /// application.  The first is to identify a section of code that
-<span class="lineNum">      68 </span>            :     /// has distinct compute, memory or network characteristics.  The
-<a name="69"><span class="lineNum">      69 </span>            :     /// second is to avoid defining these regions such that they are</a>
-<span class="lineNum">      70 </span>            :     /// nested within each other, as nested regions are ignored, and
-<span class="lineNum">      71 </span>            :     /// only the outer most region is used for tuning when nesting
-<span class="lineNum">      72 </span>            :     /// occurs.  Identifying progress within a region can be used to
-<a name="73"><span class="lineNum">      73 </span>            :     /// alleviate load imbalance in the application under the</a>
-<span class="lineNum">      74 </span>            :     /// assumption that the region is bulk synchronous.  Under the
-<span class="lineNum">      75 </span>            :     /// assumption that the application employs an iterative algorithm
-<span class="lineNum">      76 </span>            :     /// which synchronizes periodically the user can alleviate load
-<a name="77"><span class="lineNum">      77 </span>            :     /// imbalance on larger time scales than the regions provide.</a>
-<span class="lineNum">      78 </span>            :     /// This is done by marking the end of the outer most loop, or the
-<span class="lineNum">      79 </span>            :     /// &quot;epoch.&quot;
-<span class="lineNum">      80 </span>            :     ///
-<a name="81"><span class="lineNum">      81 </span>            :     /// The Profile class is the C++ implementation of the</a>
-<span class="lineNum">      82 </span>            :     /// computational application side interface to the GEOPM
-<span class="lineNum">      83 </span>            :     /// profiler.  The class methods support the C interface defined
-<span class="lineNum">      84 </span>            :     /// for use with the geopm_prof_c structure and are named
-<a name="85"><span class="lineNum">      85 </span>            :     /// accordingly.  The geopm_prof_c structure is an opaque</a>
-<span class="lineNum">      86 </span>            :     /// reference to the Profile class.
-<span class="lineNum">      87 </span>            :     class IProfile
-<a name="88"><span class="lineNum">      88 </span>            :     {</a>
-<a name="89"><span class="lineNum">      89 </span>            :         public:</a>
-<a name="90"><span class="lineNum">      90 </span><span class="lineCov">         71 :             IProfile() = default;</span></a>
-<span class="lineNum">      91 </span>            :             IProfile(const IProfile &amp;other) = default;
-<span class="lineNum">      92 </span><span class="lineCov">         71 :             virtual ~IProfile() = default;</span>
-<a name="93"><span class="lineNum">      93 </span>            :             /// @brief Register a region of code to be profiled.</a>
-<span class="lineNum">      94 </span>            :             ///
-<span class="lineNum">      95 </span>            :             /// The statistics gathered for each region are aggregated
-<span class="lineNum">      96 </span>            :             /// in the final report, and the power policy will be
-<a name="97"><span class="lineNum">      97 </span>            :             /// determined distinctly for each region.  The</a>
-<span class="lineNum">      98 </span>            :             /// registration of a region is idempotent, and the first
-<span class="lineNum">      99 </span>            :             /// call will have more overhead than subsequent
-<span class="lineNum">     100 </span>            :             /// attempts to re-register the same region.
-<a name="101"><span class="lineNum">     101 </span>            :             ///</a>
-<span class="lineNum">     102 </span>            :             /// @param [in] region_name Unique name that identifies
-<span class="lineNum">     103 </span>            :             ///        the region being profiled.  This name will be
-<span class="lineNum">     104 </span>            :             ///        printed next to the region statistics in the
-<a name="105"><span class="lineNum">     105 </span>            :             ///        report.</a>
-<span class="lineNum">     106 </span>            :             ///
-<span class="lineNum">     107 </span>            :             /// @param [in] hint Value from the
-<span class="lineNum">     108 </span>            :             ///        #geopm_hint_e structure which is used to
-<a name="109"><span class="lineNum">     109 </span>            :             ///        derive a starting policy before the application</a>
-<span class="lineNum">     110 </span>            :             ///        has been profiled.
-<span class="lineNum">     111 </span>            :             ///
-<span class="lineNum">     112 </span>            :             /// @return Returns the region_id which is a unique
-<a name="113"><span class="lineNum">     113 </span>            :             ///         identifier derived from the region_name.  This</a>
-<span class="lineNum">     114 </span>            :             ///         value is passed to Profile::enter(),
-<span class="lineNum">     115 </span>            :             ///         Profile::exit(), Profile::progress and
-<span class="lineNum">     116 </span>            :             ///         Profile::sample() to associate these calls with
-<a name="117"><span class="lineNum">     117 </span>            :             ///         the registered region.</a>
-<span class="lineNum">     118 </span>            :             virtual uint64_t region(const std::string region_name, long hint) = 0;
-<span class="lineNum">     119 </span>            :             /// @brief Mark a region entry point.
+<span class="lineNum">      44 </span>            :     class ProfileThreadTable;
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<span class="lineNum">      46 </span>            :     /// @brief Enables application profiling and application feedback
+<span class="lineNum">      47 </span>            :     ///        to the control algorithm.
+<span class="lineNum">      48 </span>            :     ///
+<a name="49"><span class="lineNum">      49 </span>            :     /// The information gathered by the Profile class identifies</a>
+<span class="lineNum">      50 </span>            :     /// regions of code, progress within regions, and global
+<span class="lineNum">      51 </span>            :     /// synchronization points in the application.  Regions of code
+<span class="lineNum">      52 </span>            :     /// define periods in the application during which control
+<a name="53"><span class="lineNum">      53 </span>            :     /// parameters are tuned with the expectation that control</a>
+<span class="lineNum">      54 </span>            :     /// parameters for a region can be optimized independently of
+<span class="lineNum">      55 </span>            :     /// other regions.  In this way a region is associated with a set
+<span class="lineNum">      56 </span>            :     /// of control parameters which can be optimized, and future time
+<a name="57"><span class="lineNum">      57 </span>            :     /// intervals associated with the same region will benefit from</a>
+<span class="lineNum">      58 </span>            :     /// the application of control parameters which were determined
+<span class="lineNum">      59 </span>            :     /// from tuning within previous occurrences of the region.  There
+<span class="lineNum">      60 </span>            :     /// are two competing motivations for defining a region within the
+<a name="61"><span class="lineNum">      61 </span>            :     /// application.  The first is to identify a section of code that</a>
+<span class="lineNum">      62 </span>            :     /// has distinct compute, memory or network characteristics.  The
+<span class="lineNum">      63 </span>            :     /// second is to avoid defining these regions such that they are
+<span class="lineNum">      64 </span>            :     /// nested within each other, as nested regions are ignored, and
+<a name="65"><span class="lineNum">      65 </span>            :     /// only the outer most region is used for tuning when nesting</a>
+<span class="lineNum">      66 </span>            :     /// occurs.  Identifying progress within a region can be used to
+<span class="lineNum">      67 </span>            :     /// alleviate load imbalance in the application under the
+<span class="lineNum">      68 </span>            :     /// assumption that the region is bulk synchronous.  Under the
+<a name="69"><span class="lineNum">      69 </span>            :     /// assumption that the application employs an iterative algorithm</a>
+<span class="lineNum">      70 </span>            :     /// which synchronizes periodically the user can alleviate load
+<span class="lineNum">      71 </span>            :     /// imbalance on larger time scales than the regions provide.
+<span class="lineNum">      72 </span>            :     /// This is done by marking the end of the outer most loop, or the
+<a name="73"><span class="lineNum">      73 </span>            :     /// &quot;epoch.&quot;</a>
+<span class="lineNum">      74 </span>            :     ///
+<span class="lineNum">      75 </span>            :     /// The Profile class is the C++ implementation of the
+<span class="lineNum">      76 </span>            :     /// computational application side interface to the GEOPM
+<a name="77"><span class="lineNum">      77 </span>            :     /// profiler.  The class methods support the C interface defined</a>
+<span class="lineNum">      78 </span>            :     /// for use with the geopm_prof_c structure and are named
+<span class="lineNum">      79 </span>            :     /// accordingly.  The geopm_prof_c structure is an opaque
+<span class="lineNum">      80 </span>            :     /// reference to the Profile class.
+<a name="81"><span class="lineNum">      81 </span>            :     class Profile</a>
+<a name="82"><span class="lineNum">      82 </span>            :     {</a>
+<span class="lineNum">      83 </span>            :         public:
+<a name="84"><span class="lineNum">      84 </span><span class="lineCov">        332 :             Profile() = default;</span></a>
+<a name="85"><span class="lineNum">      85 </span>            :             Profile(const Profile &amp;other) = default;</a>
+<span class="lineNum">      86 </span><span class="lineCov">        332 :             virtual ~Profile() = default;</span>
+<span class="lineNum">      87 </span>            :             /// @brief Register a region of code to be profiled.
+<span class="lineNum">      88 </span>            :             ///
+<a name="89"><span class="lineNum">      89 </span>            :             /// The statistics gathered for each region are aggregated</a>
+<span class="lineNum">      90 </span>            :             /// in the final report, and the power policy will be
+<span class="lineNum">      91 </span>            :             /// determined distinctly for each region.  The
+<span class="lineNum">      92 </span>            :             /// registration of a region is idempotent, and the first
+<a name="93"><span class="lineNum">      93 </span>            :             /// call will have more overhead than subsequent</a>
+<span class="lineNum">      94 </span>            :             /// attempts to re-register the same region.
+<span class="lineNum">      95 </span>            :             ///
+<span class="lineNum">      96 </span>            :             /// @param [in] region_name Unique name that identifies
+<a name="97"><span class="lineNum">      97 </span>            :             ///        the region being profiled.  This name will be</a>
+<span class="lineNum">      98 </span>            :             ///        printed next to the region statistics in the
+<span class="lineNum">      99 </span>            :             ///        report.
+<span class="lineNum">     100 </span>            :             ///
+<a name="101"><span class="lineNum">     101 </span>            :             /// @param [in] hint Value from the</a>
+<span class="lineNum">     102 </span>            :             ///        #geopm_hint_e structure which is used to
+<span class="lineNum">     103 </span>            :             ///        derive a starting policy before the application
+<span class="lineNum">     104 </span>            :             ///        has been profiled.
+<a name="105"><span class="lineNum">     105 </span>            :             ///</a>
+<span class="lineNum">     106 </span>            :             /// @return Returns the region_id which is a unique
+<span class="lineNum">     107 </span>            :             ///         identifier derived from the region_name.  This
+<span class="lineNum">     108 </span>            :             ///         value is passed to Profile::enter(),
+<a name="109"><span class="lineNum">     109 </span>            :             ///         Profile::exit(), Profile::progress and</a>
+<span class="lineNum">     110 </span>            :             ///         Profile::sample() to associate these calls with
+<span class="lineNum">     111 </span>            :             ///         the registered region.
+<span class="lineNum">     112 </span>            :             virtual uint64_t region(const std::string region_name, long hint) = 0;
+<a name="113"><span class="lineNum">     113 </span>            :             /// @brief Mark a region entry point.</a>
+<span class="lineNum">     114 </span>            :             ///
+<span class="lineNum">     115 </span>            :             /// Called to denote the beginning of region of code that
+<span class="lineNum">     116 </span>            :             /// was assigned the region_id when it was registered.
+<a name="117"><span class="lineNum">     117 </span>            :             /// Nesting of regions is not supported: calls to this</a>
+<span class="lineNum">     118 </span>            :             /// method from within a region previously entered but not
+<span class="lineNum">     119 </span>            :             /// yet exited are silently ignored.
 <span class="lineNum">     120 </span>            :             ///
-<a name="121"><span class="lineNum">     121 </span>            :             /// Called to denote the beginning of region of code that</a>
-<span class="lineNum">     122 </span>            :             /// was assigned the region_id when it was registered.
-<span class="lineNum">     123 </span>            :             /// Nesting of regions is not supported: calls to this
-<span class="lineNum">     124 </span>            :             /// method from within a region previously entered but not
-<a name="125"><span class="lineNum">     125 </span>            :             /// yet exited are silently ignored.</a>
+<a name="121"><span class="lineNum">     121 </span>            :             /// @param [in] region_id The identifier returned by</a>
+<span class="lineNum">     122 </span>            :             ///        Profile::region() when the region was
+<span class="lineNum">     123 </span>            :             ///        registered.
+<span class="lineNum">     124 </span>            :             virtual void enter(uint64_t region_id) = 0;
+<a name="125"><span class="lineNum">     125 </span>            :             /// @brief Mark a region exit point.</a>
 <span class="lineNum">     126 </span>            :             ///
-<span class="lineNum">     127 </span>            :             /// @param [in] region_id The identifier returned by
-<span class="lineNum">     128 </span>            :             ///        Profile::region() when the region was
-<a name="129"><span class="lineNum">     129 </span>            :             ///        registered.</a>
-<span class="lineNum">     130 </span>            :             virtual void enter(uint64_t region_id) = 0;
-<span class="lineNum">     131 </span>            :             /// @brief Mark a region exit point.
-<span class="lineNum">     132 </span>            :             ///
-<a name="133"><span class="lineNum">     133 </span>            :             /// Called to denote the end of a region of code that was</a>
-<span class="lineNum">     134 </span>            :             /// assigned the region_id when it was registered.
-<span class="lineNum">     135 </span>            :             /// Nesting of regions is not supported: calls to this
-<span class="lineNum">     136 </span>            :             /// method that are not exiting from the oldest unclosed
-<a name="137"><span class="lineNum">     137 </span>            :             /// entry point with the same region_id are silently</a>
-<span class="lineNum">     138 </span>            :             /// ignored.
+<span class="lineNum">     127 </span>            :             /// Called to denote the end of a region of code that was
+<span class="lineNum">     128 </span>            :             /// assigned the region_id when it was registered.
+<a name="129"><span class="lineNum">     129 </span>            :             /// Nesting of regions is not supported: calls to this</a>
+<span class="lineNum">     130 </span>            :             /// method that are not exiting from the oldest unclosed
+<span class="lineNum">     131 </span>            :             /// entry point with the same region_id are silently
+<span class="lineNum">     132 </span>            :             /// ignored.
+<a name="133"><span class="lineNum">     133 </span>            :             ///</a>
+<span class="lineNum">     134 </span>            :             /// @param [in] region_id The identifier returned by
+<span class="lineNum">     135 </span>            :             ///        Profile::region() when the region was
+<span class="lineNum">     136 </span>            :             ///        registered.
+<a name="137"><span class="lineNum">     137 </span>            :             virtual void exit(uint64_t region_id) = 0;</a>
+<span class="lineNum">     138 </span>            :             /// @brief Signal fractional progress through a region.
 <span class="lineNum">     139 </span>            :             ///
-<span class="lineNum">     140 </span>            :             /// @param [in] region_id The identifier returned by
-<a name="141"><span class="lineNum">     141 </span>            :             ///        Profile::region() when the region was</a>
-<span class="lineNum">     142 </span>            :             ///        registered.
-<span class="lineNum">     143 </span>            :             virtual void exit(uint64_t region_id) = 0;
-<span class="lineNum">     144 </span>            :             /// @brief Signal fractional progress through a region.
-<a name="145"><span class="lineNum">     145 </span>            :             ///</a>
-<span class="lineNum">     146 </span>            :             /// Signals the fractional amount of work completed within
-<span class="lineNum">     147 </span>            :             /// the phase.  This normalized progress reporting is used
-<span class="lineNum">     148 </span>            :             /// to identify processes that are closer or further away
-<a name="149"><span class="lineNum">     149 </span>            :             /// from completion, and resources can be shifted to those</a>
-<span class="lineNum">     150 </span>            :             /// processes which are further behind.  Calls to this
-<span class="lineNum">     151 </span>            :             /// method from within a nested region are ignored.
-<span class="lineNum">     152 </span>            :             ///
-<a name="153"><span class="lineNum">     153 </span>            :             /// @param [in] region_id The identifier returned by</a>
-<span class="lineNum">     154 </span>            :             ///        Profile::region() when the region was
-<span class="lineNum">     155 </span>            :             ///        registered.
+<span class="lineNum">     140 </span>            :             /// Signals the fractional amount of work completed within
+<a name="141"><span class="lineNum">     141 </span>            :             /// the phase.  This normalized progress reporting is used</a>
+<span class="lineNum">     142 </span>            :             /// to identify processes that are closer or further away
+<span class="lineNum">     143 </span>            :             /// from completion, and resources can be shifted to those
+<span class="lineNum">     144 </span>            :             /// processes which are further behind.  Calls to this
+<a name="145"><span class="lineNum">     145 </span>            :             /// method from within a nested region are ignored.</a>
+<span class="lineNum">     146 </span>            :             ///
+<span class="lineNum">     147 </span>            :             /// @param [in] region_id The identifier returned by
+<span class="lineNum">     148 </span>            :             ///        Profile::region() when the region was
+<a name="149"><span class="lineNum">     149 </span>            :             ///        registered.</a>
+<span class="lineNum">     150 </span>            :             ///
+<span class="lineNum">     151 </span>            :             /// @param [in] fraction The fractional progress
+<span class="lineNum">     152 </span>            :             ///        normalized to be between 0.0 and 1.0 (zero on
+<a name="153"><span class="lineNum">     153 </span>            :             ///        entry one on completion).</a>
+<span class="lineNum">     154 </span>            :             virtual void progress(uint64_t region_id, double fraction) = 0;
+<span class="lineNum">     155 </span>            :             /// @brief Signal pass through outer loop.
 <span class="lineNum">     156 </span>            :             ///
-<a name="157"><span class="lineNum">     157 </span>            :             /// @param [in] fraction The fractional progress</a>
-<span class="lineNum">     158 </span>            :             ///        normalized to be between 0.0 and 1.0 (zero on
-<span class="lineNum">     159 </span>            :             ///        entry one on completion).
-<span class="lineNum">     160 </span>            :             virtual void progress(uint64_t region_id, double fraction) = 0;
-<a name="161"><span class="lineNum">     161 </span>            :             /// @brief Signal pass through outer loop.</a>
-<span class="lineNum">     162 </span>            :             ///
-<span class="lineNum">     163 </span>            :             /// Called once for each pass through the outer most
-<span class="lineNum">     164 </span>            :             /// computational loop executed by the application.  This
-<a name="165"><span class="lineNum">     165 </span>            :             /// function call should occur exactly once in the</a>
-<span class="lineNum">     166 </span>            :             /// application source at the beginning of the loop that
-<span class="lineNum">     167 </span>            :             /// encapsulates the primary computational region of the
-<span class="lineNum">     168 </span>            :             /// application.
-<a name="169"><span class="lineNum">     169 </span>            :             virtual void epoch(void) = 0;</a>
-<span class="lineNum">     170 </span>            :             virtual void shutdown(void) = 0;
-<span class="lineNum">     171 </span>            :             virtual std::shared_ptr&lt;IProfileThreadTable&gt; tprof_table(void) = 0;
-<span class="lineNum">     172 </span>            :     };
-<a name="173"><span class="lineNum">     173 </span>            : </a>
-<span class="lineNum">     174 </span>            :     class Profile : public IProfile
-<span class="lineNum">     175 </span>            :     {
-<span class="lineNum">     176 </span>            :         public:
-<a name="177"><span class="lineNum">     177 </span>            :             /// @brief Profile constructor.</a>
-<span class="lineNum">     178 </span>            :             ///
-<span class="lineNum">     179 </span>            :             /// The Profile object is used by the application to
-<span class="lineNum">     180 </span>            :             /// instrument regions of code and post profile
-<a name="181"><span class="lineNum">     181 </span>            :             /// information to a shared memory region to be read by</a>
-<span class="lineNum">     182 </span>            :             /// the geopm::Controller process.
-<span class="lineNum">     183 </span>            :             ///
-<span class="lineNum">     184 </span>            :             /// @param [in] prof_name Name associated with the
-<a name="185"><span class="lineNum">     185 </span>            :             ///        profile.  This name will be printed in the</a>
-<span class="lineNum">     186 </span>            :             ///        header of the report.
-<span class="lineNum">     187 </span>            :             ///
-<span class="lineNum">     188 </span>            :             /// @param [in] comm The application's MPI communicator.
-<a name="189"><span class="lineNum">     189 </span>            :             ///        Each rank of this communicator will report to a</a>
-<span class="lineNum">     190 </span>            :             ///        separate shared memory region.  One
-<span class="lineNum">     191 </span>            :             ///        geopm::Controller on each compute node will
-<span class="lineNum">     192 </span>            :             ///        consume the output from each rank running on
-<a name="193"><span class="lineNum">     193 </span>            :             ///        the compute node.</a>
-<span class="lineNum">     194 </span>            :             Profile(const std::string &amp;prof_name, std::unique_ptr&lt;Comm&gt; comm);
-<span class="lineNum">     195 </span>            :             /// @brief Profile testable constructor.
-<span class="lineNum">     196 </span>            :             ///
-<a name="197"><span class="lineNum">     197 </span>            :             /// @param [in] prof_name Name associated with the</a>
-<span class="lineNum">     198 </span>            :             ///        profile.  This name will be printed in the
-<span class="lineNum">     199 </span>            :             ///        header of the report.
-<span class="lineNum">     200 </span>            :             ///
-<a name="201"><span class="lineNum">     201 </span>            :             /// @param [in] key_base Shmem key prefix.</a>
-<span class="lineNum">     202 </span>            :             ///
-<span class="lineNum">     203 </span>            :             /// @param [in] comm The application's MPI communicator.
-<span class="lineNum">     204 </span>            :             ///        Each rank of this communicator will report to a
-<a name="205"><span class="lineNum">     205 </span>            :             ///        separate shared memory region.  One</a>
-<span class="lineNum">     206 </span>            :             ///        geopm::Controller on each compute node will
-<span class="lineNum">     207 </span>            :             ///        consume the output from each rank running on
-<span class="lineNum">     208 </span>            :             ///        the compute node.
-<a name="209"><span class="lineNum">     209 </span>            :             ///</a>
-<span class="lineNum">     210 </span>            :             /// @param [in] ctl_msg Preconstructed ControlMessage instance,
-<span class="lineNum">     211 </span>            :             ///        bypasses shmem creation.
-<span class="lineNum">     212 </span>            :             ///
-<a name="213"><span class="lineNum">     213 </span>            :             /// @param [in] topo Preconstructed PlatformTopo instance,</a>
-<span class="lineNum">     214 </span>            :             ///        bypasses singleton discovery.
-<span class="lineNum">     215 </span>            :             ///
-<span class="lineNum">     216 </span>            :             /// @param [in] ctl_msg Preconstructed ProfileTable instance,
-<a name="217"><span class="lineNum">     217 </span>            :             ///        bypasses shmem creation.</a>
-<span class="lineNum">     218 </span>            :             ///
-<span class="lineNum">     219 </span>            :             /// @param [in] ctl_msg Preconstructed ProfileThreadTable instance,
-<span class="lineNum">     220 </span>            :             ///        bypasses shmem creation.
-<a name="221"><span class="lineNum">     221 </span>            :             ///</a>
-<span class="lineNum">     222 </span>            :             /// @param [in] ctl_msg Preconstructed SampleScheduler instance.
-<span class="lineNum">     223 </span>            :             Profile(const std::string &amp;prof_name, const std::string &amp;key_base, std::unique_ptr&lt;Comm&gt; comm,
-<span class="lineNum">     224 </span>            :                     std::unique_ptr&lt;IControlMessage&gt; ctl_msg, IPlatformTopo &amp;topo, std::unique_ptr&lt;IProfileTable&gt; table,
-<a name="225"><span class="lineNum">     225 </span>            :                     std::shared_ptr&lt;IProfileThreadTable&gt; t_table, std::unique_ptr&lt;ISampleScheduler&gt; scheduler);</a>
-<span class="lineNum">     226 </span>            :             /// @brief Test constructor.
-<span class="lineNum">     227 </span>            :             Profile(const std::string &amp;prof_name, const std::string &amp;key_base, std::unique_ptr&lt;Comm&gt; comm,
-<span class="lineNum">     228 </span>            :                     std::unique_ptr&lt;IControlMessage&gt; ctl_msg, IPlatformTopo &amp;topo, std::unique_ptr&lt;IProfileTable&gt; table,
-<a name="229"><span class="lineNum">     229 </span>            :                     std::shared_ptr&lt;IProfileThreadTable&gt; t_table, std::unique_ptr&lt;ISampleScheduler&gt; scheduler,</a>
-<span class="lineNum">     230 </span>            :                     std::shared_ptr&lt;Comm&gt; reduce_comm);
-<span class="lineNum">     231 </span>            :             /// @brief Profile destructor, virtual.
-<span class="lineNum">     232 </span>            :             virtual ~Profile();
-<a name="233"><span class="lineNum">     233 </span>            :             uint64_t region(const std::string region_name, long hint) override;</a>
-<span class="lineNum">     234 </span>            :             void enter(uint64_t region_id) override;
-<span class="lineNum">     235 </span>            :             void exit(uint64_t region_id) override;
-<span class="lineNum">     236 </span>            :             void progress(uint64_t region_id, double fraction) override;
-<a name="237"><span class="lineNum">     237 </span>            :             void epoch(void) override;</a>
-<span class="lineNum">     238 </span>            :             void shutdown(void) override;
-<span class="lineNum">     239 </span>            :             std::shared_ptr&lt;IProfileThreadTable&gt; tprof_table(void) override;
-<span class="lineNum">     240 </span>            :             void init_prof_comm(std::unique_ptr&lt;Comm&gt; comm, int &amp;shm_num_rank);
-<a name="241"><span class="lineNum">     241 </span>            :             void init_ctl_msg(const std::string &amp;sample_key);</a>
-<span class="lineNum">     242 </span>            :             /// @brief Fill in rank affinity list.
-<span class="lineNum">     243 </span>            :             ///
-<span class="lineNum">     244 </span>            :             /// Uses PlatformTopo to determine the cpuset the current
-<a name="245"><span class="lineNum">     245 </span>            :             /// process is bound to. This information is used to fill</a>
-<span class="lineNum">     246 </span>            :             /// in a set containing all CPUs we can run on. This is used
-<span class="lineNum">     247 </span>            :             /// to communicate with the geopm runtime the number of ranks
-<span class="lineNum">     248 </span>            :             /// as well as their affinity masks.
-<a name="249"><span class="lineNum">     249 </span>            :             void init_cpu_list(int num_cpu);</a>
-<span class="lineNum">     250 </span>            :             void init_cpu_affinity(int shm_num_rank);
-<span class="lineNum">     251 </span>            :             void init_tprof_table(const std::string &amp;tprof_key, IPlatformTopo &amp;topo);
-<span class="lineNum">     252 </span>            :             void init_table(const std::string &amp;sample_key);
-<a name="253"><span class="lineNum">     253 </span>            :         private:</a>
-<span class="lineNum">     254 </span>            :             enum m_profile_const_e {
-<span class="lineNum">     255 </span>            :                 M_PROF_SAMPLE_PERIOD = 1,
-<span class="lineNum">     256 </span>            :             };
-<a name="257"><span class="lineNum">     257 </span>            : </a>
-<span class="lineNum">     258 </span>            :             /// @brief Post profile sample.
-<span class="lineNum">     259 </span>            :             ///
-<span class="lineNum">     260 </span>            :             /// Called to derive a sample based on the profiling
-<a name="261"><span class="lineNum">     261 </span>            :             /// information collected.  This sample is posted to the</a>
-<span class="lineNum">     262 </span>            :             /// geopm::Controller through shared memory.
-<span class="lineNum">     263 </span>            :             void sample(void);
-<span class="lineNum">     264 </span>            :             /// @brief Print profile report to a file.
-<a name="265"><span class="lineNum">     265 </span>            :             ///</a>
-<span class="lineNum">     266 </span>            :             /// Writes a profile report to a file with the given
-<span class="lineNum">     267 </span>            :             /// file_name.  This should be called only after all
-<span class="lineNum">     268 </span>            :             /// profile data has been collected, just prior to
-<a name="269"><span class="lineNum">     269 </span>            :             /// application termination.</a>
-<span class="lineNum">     270 </span>            :             ///
-<span class="lineNum">     271 </span>            :             /// @param [in] file_name The base file name for the
-<span class="lineNum">     272 </span>            :             ///        output report.  There may be suffixes appended
-<a name="273"><span class="lineNum">     273 </span>            :             ///        to this name if multiple files are created.</a>
-<span class="lineNum">     274 </span>            :             ///
-<span class="lineNum">     275 </span>            :             void print(const std::string file_name);
-<span class="lineNum">     276 </span>            :             bool m_is_enabled;
-<a name="277"><span class="lineNum">     277 </span>            :             /// @brief holds the string name of the profile.</a>
-<span class="lineNum">     278 </span>            :             std::string m_prof_name;
-<span class="lineNum">     279 </span>            :             /// @brief Holds the 64 bit unique region identifier
-<span class="lineNum">     280 </span>            :             ///        for the current region.
-<a name="281"><span class="lineNum">     281 </span>            :             uint64_t m_curr_region_id;</a>
-<span class="lineNum">     282 </span>            :             /// @brief Holds the number of ranks that enter a region in
-<span class="lineNum">     283 </span>            :             ///        order to keep track of nested regions.
-<span class="lineNum">     284 </span>            :             int m_num_enter;
-<a name="285"><span class="lineNum">     285 </span>            :             /// @brief Holds the rank's current progress in the region.</a>
-<span class="lineNum">     286 </span>            :             double m_progress;
-<span class="lineNum">     287 </span>            :             /// @brief Attaches to the shared memory region for
-<span class="lineNum">     288 </span>            :             ///        control messages.
-<a name="289"><span class="lineNum">     289 </span>            :             std::unique_ptr&lt;ISharedMemoryUser&gt; m_ctl_shmem;</a>
-<span class="lineNum">     290 </span>            :             /// @brief Holds a pointer to the shared memory region
-<span class="lineNum">     291 </span>            :             ///        used to pass control messages to and from the geopm
-<span class="lineNum">     292 </span>            :             ///        runtime.
-<a name="293"><span class="lineNum">     293 </span>            :             std::unique_ptr&lt;IControlMessage&gt; m_ctl_msg;</a>
-<span class="lineNum">     294 </span>            :             /// @brief Attaches to the shared memory region for
-<span class="lineNum">     295 </span>            :             ///        passing samples to the geopm runtime.
-<span class="lineNum">     296 </span>            :             std::unique_ptr&lt;ISharedMemoryUser&gt; m_table_shmem;
-<a name="297"><span class="lineNum">     297 </span>            :             /// @brief Hash table for sample messages contained in</a>
-<span class="lineNum">     298 </span>            :             ///        shared memory.
-<span class="lineNum">     299 </span>            :             std::unique_ptr&lt;IProfileTable&gt; m_table;
-<span class="lineNum">     300 </span>            :             std::unique_ptr&lt;ISharedMemoryUser&gt; m_tprof_shmem;
-<a name="301"><span class="lineNum">     301 </span>            :             std::shared_ptr&lt;IProfileThreadTable&gt; m_tprof_table;</a>
-<span class="lineNum">     302 </span>            :             std::unique_ptr&lt;ISampleScheduler&gt; m_scheduler;
-<span class="lineNum">     303 </span>            :             /// @brief Holds a list of cpus that the rank process is
-<span class="lineNum">     304 </span>            :             ///        bound to.
-<a name="305"><span class="lineNum">     305 </span>            :             std::list&lt;int&gt; m_cpu_list;</a>
-<span class="lineNum">     306 </span>            :             /// @brief Communicator consisting of the root rank on each
-<span class="lineNum">     307 </span>            :             ///        compute node.
-<span class="lineNum">     308 </span>            :             std::shared_ptr&lt;Comm&gt; m_shm_comm;
-<a name="309"><span class="lineNum">     309 </span>            :             /// @brief The process's rank in MPI_COMM_WORLD.</a>
-<span class="lineNum">     310 </span>            :             int m_rank;
-<span class="lineNum">     311 </span>            :             /// @brief The process's rank in m_shm_comm.
-<span class="lineNum">     312 </span>            :             int m_shm_rank;
-<a name="313"><span class="lineNum">     313 </span>            :             uint64_t m_parent_region;</a>
-<span class="lineNum">     314 </span>            :             double m_parent_progress;
-<span class="lineNum">     315 </span>            :             int m_parent_num_enter;
-<span class="lineNum">     316 </span>            :             std::shared_ptr&lt;Comm&gt; m_reduce_comm;
-<a name="317"><span class="lineNum">     317 </span>            :             double m_overhead_time;</a>
-<span class="lineNum">     318 </span>            :             double m_overhead_time_startup;
-<span class="lineNum">     319 </span>            :             double m_overhead_time_shutdown;
-<span class="lineNum">     320 </span>            :     };
-<a name="321"><span class="lineNum">     321 </span>            : }</a>
-<span class="lineNum">     322 </span>            : 
-<span class="lineNum">     323 </span>            : #endif
+<a name="157"><span class="lineNum">     157 </span>            :             /// Called once for each pass through the outer most</a>
+<span class="lineNum">     158 </span>            :             /// computational loop executed by the application.  This
+<span class="lineNum">     159 </span>            :             /// function call should occur exactly once in the
+<span class="lineNum">     160 </span>            :             /// application source at the beginning of the loop that
+<a name="161"><span class="lineNum">     161 </span>            :             /// encapsulates the primary computational region of the</a>
+<span class="lineNum">     162 </span>            :             /// application.
+<span class="lineNum">     163 </span>            :             virtual void epoch(void) = 0;
+<span class="lineNum">     164 </span>            :             virtual void shutdown(void) = 0;
+<a name="165"><span class="lineNum">     165 </span>            :             virtual std::shared_ptr&lt;ProfileThreadTable&gt; tprof_table(void) = 0;</a>
+<span class="lineNum">     166 </span>            :     };
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span>            :     class Comm;
+<a name="169"><span class="lineNum">     169 </span>            :     class SharedMemoryUser;</a>
+<span class="lineNum">     170 </span>            :     class ControlMessage;
+<span class="lineNum">     171 </span>            :     class PlatformTopo;
+<span class="lineNum">     172 </span>            :     class ProfileTable;
+<a name="173"><span class="lineNum">     173 </span>            :     class SampleScheduler;</a>
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            :     class ProfileImp : public Profile
+<span class="lineNum">     176 </span>            :     {
+<a name="177"><span class="lineNum">     177 </span>            :         public:</a>
+<span class="lineNum">     178 </span>            :             /// @brief ProfileImp constructor.
+<span class="lineNum">     179 </span>            :             ///
+<span class="lineNum">     180 </span>            :             /// The ProfileImp object is used by the application to
+<a name="181"><span class="lineNum">     181 </span>            :             /// instrument regions of code and post profile</a>
+<span class="lineNum">     182 </span>            :             /// information to a shared memory region to be read by
+<span class="lineNum">     183 </span>            :             /// the geopm::Controller process.
+<span class="lineNum">     184 </span>            :             ///
+<a name="185"><span class="lineNum">     185 </span>            :             /// @param [in] prof_name Name associated with the</a>
+<span class="lineNum">     186 </span>            :             ///        profile.  This name will be printed in the
+<span class="lineNum">     187 </span>            :             ///        header of the report.
+<span class="lineNum">     188 </span>            :             ///
+<a name="189"><span class="lineNum">     189 </span>            :             /// @param [in] comm The application's MPI communicator.</a>
+<span class="lineNum">     190 </span>            :             ///        Each rank of this communicator will report to a
+<span class="lineNum">     191 </span>            :             ///        separate shared memory region.  One
+<span class="lineNum">     192 </span>            :             ///        geopm::Controller on each compute node will
+<a name="193"><span class="lineNum">     193 </span>            :             ///        consume the output from each rank running on</a>
+<span class="lineNum">     194 </span>            :             ///        the compute node.
+<span class="lineNum">     195 </span>            :             ProfileImp(const std::string &amp;prof_name, std::unique_ptr&lt;Comm&gt; comm);
+<span class="lineNum">     196 </span>            :             /// @brief ProfileImp testable constructor.
+<a name="197"><span class="lineNum">     197 </span>            :             ///</a>
+<span class="lineNum">     198 </span>            :             /// @param [in] prof_name Name associated with the
+<span class="lineNum">     199 </span>            :             ///        profile.  This name will be printed in the
+<span class="lineNum">     200 </span>            :             ///        header of the report.
+<a name="201"><span class="lineNum">     201 </span>            :             ///</a>
+<span class="lineNum">     202 </span>            :             /// @param [in] key_base Shmem key prefix.
+<span class="lineNum">     203 </span>            :             ///
+<span class="lineNum">     204 </span>            :             /// @param [in] comm The application's MPI communicator.
+<a name="205"><span class="lineNum">     205 </span>            :             ///        Each rank of this communicator will report to a</a>
+<span class="lineNum">     206 </span>            :             ///        separate shared memory region.  One
+<span class="lineNum">     207 </span>            :             ///        geopm::Controller on each compute node will
+<span class="lineNum">     208 </span>            :             ///        consume the output from each rank running on
+<a name="209"><span class="lineNum">     209 </span>            :             ///        the compute node.</a>
+<span class="lineNum">     210 </span>            :             ///
+<span class="lineNum">     211 </span>            :             /// @param [in] ctl_msg Preconstructed ControlMessage instance,
+<span class="lineNum">     212 </span>            :             ///        bypasses shmem creation.
+<a name="213"><span class="lineNum">     213 </span>            :             ///</a>
+<span class="lineNum">     214 </span>            :             /// @param [in] topo Preconstructed PlatformTopo instance,
+<span class="lineNum">     215 </span>            :             ///        bypasses singleton discovery.
+<span class="lineNum">     216 </span>            :             ///
+<a name="217"><span class="lineNum">     217 </span>            :             /// @param [in] ctl_msg Preconstructed ProfileTable instance,</a>
+<span class="lineNum">     218 </span>            :             ///        bypasses shmem creation.
+<span class="lineNum">     219 </span>            :             ///
+<span class="lineNum">     220 </span>            :             /// @param [in] ctl_msg Preconstructed ProfileThreadTable instance,
+<a name="221"><span class="lineNum">     221 </span>            :             ///        bypasses shmem creation.</a>
+<span class="lineNum">     222 </span>            :             ///
+<span class="lineNum">     223 </span>            :             /// @param [in] ctl_msg Preconstructed SampleScheduler instance.
+<span class="lineNum">     224 </span>            :             ProfileImp(const std::string &amp;prof_name, const std::string &amp;key_base,
+<a name="225"><span class="lineNum">     225 </span>            :                        std::unique_ptr&lt;Comm&gt; comm, std::unique_ptr&lt;ControlMessage&gt; ctl_msg,</a>
+<span class="lineNum">     226 </span>            :                        PlatformTopo &amp;topo, std::unique_ptr&lt;ProfileTable&gt; table,
+<span class="lineNum">     227 </span>            :                        std::shared_ptr&lt;ProfileThreadTable&gt; t_table,
+<span class="lineNum">     228 </span>            :                        std::unique_ptr&lt;SampleScheduler&gt; scheduler);
+<a name="229"><span class="lineNum">     229 </span>            :             /// @brief Test constructor.</a>
+<span class="lineNum">     230 </span>            :             ProfileImp(const std::string &amp;prof_name, const std::string &amp;key_base,
+<span class="lineNum">     231 </span>            :                        std::unique_ptr&lt;Comm&gt; comm, std::unique_ptr&lt;ControlMessage&gt; ctl_msg,
+<span class="lineNum">     232 </span>            :                        PlatformTopo &amp;topo, std::unique_ptr&lt;ProfileTable&gt; table,
+<a name="233"><span class="lineNum">     233 </span>            :                        std::shared_ptr&lt;ProfileThreadTable&gt; t_table,</a>
+<span class="lineNum">     234 </span>            :                        std::unique_ptr&lt;SampleScheduler&gt; scheduler,
+<span class="lineNum">     235 </span>            :                        std::shared_ptr&lt;Comm&gt; reduce_comm);
+<span class="lineNum">     236 </span>            :             /// @brief ProfileImp destructor, virtual.
+<a name="237"><span class="lineNum">     237 </span>            :             virtual ~ProfileImp();</a>
+<span class="lineNum">     238 </span>            :             uint64_t region(const std::string region_name, long hint) override;
+<span class="lineNum">     239 </span>            :             void enter(uint64_t region_id) override;
+<span class="lineNum">     240 </span>            :             void exit(uint64_t region_id) override;
+<a name="241"><span class="lineNum">     241 </span>            :             void progress(uint64_t region_id, double fraction) override;</a>
+<span class="lineNum">     242 </span>            :             void epoch(void) override;
+<span class="lineNum">     243 </span>            :             void shutdown(void) override;
+<span class="lineNum">     244 </span>            :             std::shared_ptr&lt;ProfileThreadTable&gt; tprof_table(void) override;
+<a name="245"><span class="lineNum">     245 </span>            :             void init_prof_comm(std::unique_ptr&lt;Comm&gt; comm, int &amp;shm_num_rank);</a>
+<span class="lineNum">     246 </span>            :             void init_ctl_msg(const std::string &amp;sample_key);
+<span class="lineNum">     247 </span>            :             /// @brief Fill in rank affinity list.
+<span class="lineNum">     248 </span>            :             ///
+<a name="249"><span class="lineNum">     249 </span>            :             /// Uses PlatformTopo to determine the cpuset the current</a>
+<span class="lineNum">     250 </span>            :             /// process is bound to. This information is used to fill
+<span class="lineNum">     251 </span>            :             /// in a set containing all CPUs we can run on. This is used
+<span class="lineNum">     252 </span>            :             /// to communicate with the geopm runtime the number of ranks
+<a name="253"><span class="lineNum">     253 </span>            :             /// as well as their affinity masks.</a>
+<span class="lineNum">     254 </span>            :             void init_cpu_list(int num_cpu);
+<span class="lineNum">     255 </span>            :             void init_cpu_affinity(int shm_num_rank);
+<span class="lineNum">     256 </span>            :             void init_tprof_table(const std::string &amp;tprof_key, PlatformTopo &amp;topo);
+<a name="257"><span class="lineNum">     257 </span>            :             void init_table(const std::string &amp;sample_key);</a>
+<span class="lineNum">     258 </span>            :         protected:
+<span class="lineNum">     259 </span>            :             bool m_is_enabled;
+<span class="lineNum">     260 </span>            :         private:
+<a name="261"><span class="lineNum">     261 </span>            :             enum m_profile_const_e {</a>
+<span class="lineNum">     262 </span>            :                 M_PROF_SAMPLE_PERIOD = 1,
+<span class="lineNum">     263 </span>            :             };
+<span class="lineNum">     264 </span>            : 
+<a name="265"><span class="lineNum">     265 </span>            :             /// @brief Post profile sample.</a>
+<span class="lineNum">     266 </span>            :             ///
+<span class="lineNum">     267 </span>            :             /// Called to derive a sample based on the profiling
+<span class="lineNum">     268 </span>            :             /// information collected.  This sample is posted to the
+<a name="269"><span class="lineNum">     269 </span>            :             /// geopm::Controller through shared memory.</a>
+<span class="lineNum">     270 </span>            :             void sample(void);
+<span class="lineNum">     271 </span>            :             /// @brief Print profile report to a file.
+<span class="lineNum">     272 </span>            :             ///
+<a name="273"><span class="lineNum">     273 </span>            :             /// Writes a profile report to a file with the given</a>
+<span class="lineNum">     274 </span>            :             /// file_name.  This should be called only after all
+<span class="lineNum">     275 </span>            :             /// profile data has been collected, just prior to
+<span class="lineNum">     276 </span>            :             /// application termination.
+<a name="277"><span class="lineNum">     277 </span>            :             ///</a>
+<span class="lineNum">     278 </span>            :             /// @param [in] file_name The base file name for the
+<span class="lineNum">     279 </span>            :             ///        output report.  There may be suffixes appended
+<span class="lineNum">     280 </span>            :             ///        to this name if multiple files are created.
+<a name="281"><span class="lineNum">     281 </span>            :             ///</a>
+<span class="lineNum">     282 </span>            :             void print(const std::string file_name);
+<span class="lineNum">     283 </span>            :             /// @brief holds the string name of the profile.
+<span class="lineNum">     284 </span>            :             std::string m_prof_name;
+<a name="285"><span class="lineNum">     285 </span>            :             /// @brief Holds the 64 bit unique region identifier</a>
+<span class="lineNum">     286 </span>            :             ///        for the current region.
+<span class="lineNum">     287 </span>            :             uint64_t m_curr_region_id;
+<span class="lineNum">     288 </span>            :             /// @brief Holds the number of ranks that enter a region in
+<a name="289"><span class="lineNum">     289 </span>            :             ///        order to keep track of nested regions.</a>
+<span class="lineNum">     290 </span>            :             int m_num_enter;
+<span class="lineNum">     291 </span>            :             /// @brief Holds the rank's current progress in the region.
+<span class="lineNum">     292 </span>            :             double m_progress;
+<a name="293"><span class="lineNum">     293 </span>            :             /// @brief Attaches to the shared memory region for</a>
+<span class="lineNum">     294 </span>            :             ///        control messages.
+<span class="lineNum">     295 </span>            :             std::unique_ptr&lt;SharedMemoryUser&gt; m_ctl_shmem;
+<span class="lineNum">     296 </span>            :             /// @brief Holds a pointer to the shared memory region
+<a name="297"><span class="lineNum">     297 </span>            :             ///        used to pass control messages to and from the geopm</a>
+<span class="lineNum">     298 </span>            :             ///        runtime.
+<span class="lineNum">     299 </span>            :             std::unique_ptr&lt;ControlMessage&gt; m_ctl_msg;
+<span class="lineNum">     300 </span>            :             /// @brief Attaches to the shared memory region for
+<a name="301"><span class="lineNum">     301 </span>            :             ///        passing samples to the geopm runtime.</a>
+<span class="lineNum">     302 </span>            :             std::unique_ptr&lt;SharedMemoryUser&gt; m_table_shmem;
+<span class="lineNum">     303 </span>            :             /// @brief Hash table for sample messages contained in
+<span class="lineNum">     304 </span>            :             ///        shared memory.
+<a name="305"><span class="lineNum">     305 </span>            :             std::unique_ptr&lt;ProfileTable&gt; m_table;</a>
+<span class="lineNum">     306 </span>            :             std::unique_ptr&lt;SharedMemoryUser&gt; m_tprof_shmem;
+<span class="lineNum">     307 </span>            :             std::shared_ptr&lt;ProfileThreadTable&gt; m_tprof_table;
+<span class="lineNum">     308 </span>            :             std::unique_ptr&lt;SampleScheduler&gt; m_scheduler;
+<a name="309"><span class="lineNum">     309 </span>            :             /// @brief Holds a list of cpus that the rank process is</a>
+<span class="lineNum">     310 </span>            :             ///        bound to.
+<span class="lineNum">     311 </span>            :             std::list&lt;int&gt; m_cpu_list;
+<span class="lineNum">     312 </span>            :             /// @brief Communicator consisting of the root rank on each
+<a name="313"><span class="lineNum">     313 </span>            :             ///        compute node.</a>
+<span class="lineNum">     314 </span>            :             std::shared_ptr&lt;Comm&gt; m_shm_comm;
+<span class="lineNum">     315 </span>            :             /// @brief The process's rank in MPI_COMM_WORLD.
+<span class="lineNum">     316 </span>            :             int m_rank;
+<a name="317"><span class="lineNum">     317 </span>            :             /// @brief The process's rank in m_shm_comm.</a>
+<span class="lineNum">     318 </span>            :             int m_shm_rank;
+<span class="lineNum">     319 </span>            :             uint64_t m_parent_region;
+<span class="lineNum">     320 </span>            :             double m_parent_progress;
+<a name="321"><span class="lineNum">     321 </span>            :             int m_parent_num_enter;</a>
+<span class="lineNum">     322 </span>            :             std::shared_ptr&lt;Comm&gt; m_reduce_comm;
+<span class="lineNum">     323 </span>            :             double m_overhead_time;
+<span class="lineNum">     324 </span>            :             double m_overhead_time_startup;
+<a name="325"><span class="lineNum">     325 </span>            :             double m_overhead_time_shutdown;</a>
+<span class="lineNum">     326 </span>            :     };
+<span class="lineNum">     327 </span>            : }
+<span class="lineNum">     328 </span>            : 
+<a name="329"><span class="lineNum">     329 </span>            : #endif</a>
 </pre>
       </td>
     </tr>
@@ -399,7 +405,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

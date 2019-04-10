@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/MSR.hpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/MSR.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - MSR.hpp<span style="font-size: 80%;"> (source / <a href="MSR.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - MSR.hpp<span style="font-size: 80%;"> (source / <a href="MSR.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">9</td>
-            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">10</td>
-            <td class="headerCovTableEntry">13</td>
-            <td class="headerCovTableEntryMed">76.9 %</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -105,23 +105,23 @@
 <span class="lineNum">      35 </span>            : 
 <span class="lineNum">      36 </span>            : #include &lt;stdint.h&gt;
 <a name="37"><span class="lineNum">      37 </span>            : #include &lt;string&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;vector&gt;
-<span class="lineNum">      39 </span>            : #include &lt;map&gt;
-<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      38 </span>            : #include &lt;map&gt;
+<span class="lineNum">      39 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      40 </span>            : #include &lt;vector&gt;
 <a name="41"><span class="lineNum">      41 </span>            : </a>
 <span class="lineNum">      42 </span>            : namespace geopm
 <span class="lineNum">      43 </span>            : {
 <span class="lineNum">      44 </span>            :     /// @brief Class describing all of the encoded values within a
 <a name="45"><span class="lineNum">      45 </span>            :     /// single MSR register.  This class encodes how to access fields</a>
 <span class="lineNum">      46 </span>            :     /// within an MSR, but does not hold the state of any registers.
-<span class="lineNum">      47 </span>            :     class IMSR
+<span class="lineNum">      47 </span>            :     class MSR
 <span class="lineNum">      48 </span>            :     {
 <a name="49"><span class="lineNum">      49 </span>            :         public:</a>
 <span class="lineNum">      50 </span>            :             /// @brief Structure describing a bit field in an MSR.
 <span class="lineNum">      51 </span>            :             struct m_encode_s {
 <span class="lineNum">      52 </span>            :                 int begin_bit;  /// First bit of the field, inclusive.
 <a name="53"><span class="lineNum">      53 </span>            :                 int end_bit;    /// Last bit of the field, exclusive.</a>
-<span class="lineNum">      54 </span>            :                 int domain;     /// Domain over which the MSR is shared (geopm_domain_type_e).
+<span class="lineNum">      54 </span>            :                 int domain;     /// Domain over which the MSR is shared.
 <span class="lineNum">      55 </span>            :                 int function;   /// Function which converts the bit field into an integer to be scaled (m_function_e).
 <span class="lineNum">      56 </span>            :                 int units;      /// Scalar converts the integer output of function into units (m_units_e).
 <a name="57"><span class="lineNum">      57 </span>            :                 double scalar;  /// Scale factor to convert integer output of function to SI units.</a>
@@ -137,16 +137,16 @@
 <span class="lineNum">      67 </span>            :             enum m_units_e {
 <span class="lineNum">      68 </span>            :                 M_UNITS_NONE,
 <a name="69"><span class="lineNum">      69 </span>            :                 M_UNITS_SECONDS,</a>
-<span class="lineNum">      70 </span>            :                 M_UNITS_HZ,
+<span class="lineNum">      70 </span>            :                 M_UNITS_HERTZ,
 <span class="lineNum">      71 </span>            :                 M_UNITS_WATTS,
 <span class="lineNum">      72 </span>            :                 M_UNITS_JOULES,
 <a name="73"><span class="lineNum">      73 </span>            :                 M_UNITS_CELSIUS,</a>
 <a name="74"><span class="lineNum">      74 </span>            :             };</a>
 <a name="75"><span class="lineNum">      75 </span>            : </a>
-<span class="lineNum">      76 </span><span class="lineCov">        827 :             IMSR() = default;</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">        827 :             virtual ~IMSR() = default;</span></a>
+<span class="lineNum">      76 </span><span class="lineCov">      18216 :             MSR() = default;</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">      18216 :             virtual ~MSR() = default;</span></a>
 <span class="lineNum">      78 </span>            :             /// @brief Query the name of the MSR.
-<span class="lineNum">      79 </span>            :             /// @param msr_name [out] The name of the MSR.
+<span class="lineNum">      79 </span>            :             /// @return The name of the MSR.
 <span class="lineNum">      80 </span>            :             virtual std::string name(void) const = 0;
 <a name="81"><span class="lineNum">      81 </span>            :             /// @brief The byte offset for the MSR.</a>
 <span class="lineNum">      82 </span>            :             /// @return The 64-bit offset to the register.
@@ -162,12 +162,12 @@
 <span class="lineNum">      92 </span>            :             /// @brief Query the name of a signal bit field.
 <a name="93"><span class="lineNum">      93 </span>            :             /// @param [in] signal_idx The index of the bit field in</a>
 <span class="lineNum">      94 </span>            :             ///        range from to 0 to num_signal() - 1.
-<span class="lineNum">      95 </span>            :             /// @param [out] name The name of a signal bit field.
+<span class="lineNum">      95 </span>            :             /// @return The name of a signal bit field.
 <span class="lineNum">      96 </span>            :             virtual std::string signal_name(int signal_idx) const = 0;
 <a name="97"><span class="lineNum">      97 </span>            :             /// @brief Query the name of a control bit field.</a>
 <span class="lineNum">      98 </span>            :             /// @param [in] control_idx The index of the bit field in
 <span class="lineNum">      99 </span>            :             ///        range from to 0 to num_control() - 1.
-<span class="lineNum">     100 </span>            :             /// @param [out] name The name of a control bit field.
+<span class="lineNum">     100 </span>            :             /// @return The name of a control bit field.
 <a name="101"><span class="lineNum">     101 </span>            :             virtual std::string control_name(int control_idx) const = 0;</a>
 <span class="lineNum">     102 </span>            :             /// @brief Query for the signal index given a name.
 <span class="lineNum">     103 </span>            :             /// @param [in] name The name of the signal bit field.
@@ -182,254 +182,65 @@
 <span class="lineNum">     112 </span>            :             /// @brief Extract a signal from a raw MSR value.
 <a name="113"><span class="lineNum">     113 </span>            :             /// @param [in] signal_idx Index of the signal bit field.</a>
 <span class="lineNum">     114 </span>            :             /// @param [in] field the 64-bit register value to decode.
-<span class="lineNum">     115 </span>            :             /// @param [in] last_field Previous value of the MSR.
+<span class="lineNum">     115 </span>            :             /// @param [in, out] last_field Previous value of the MSR.
 <span class="lineNum">     116 </span>            :             ///        Only relevant if the decode function is
 <a name="117"><span class="lineNum">     117 </span>            :             ///        M_FUNCTION_OVERFLOW.</a>
-<span class="lineNum">     118 </span>            :             /// @return The decoded signal in SI units.
-<span class="lineNum">     119 </span>            :             virtual double signal(int signal_idx,
-<span class="lineNum">     120 </span>            :                                   uint64_t field,
-<a name="121"><span class="lineNum">     121 </span>            :                                   uint64_t &amp;last_field,</a>
-<span class="lineNum">     122 </span>            :                                   uint64_t &amp;num_overflow) const = 0;
-<span class="lineNum">     123 </span>            :             /// @brief Set a control bit field in a raw MSR value.
-<span class="lineNum">     124 </span>            :             /// @param [in] control_idx Index of the control bit
-<a name="125"><span class="lineNum">     125 </span>            :             ///        field.</a>
-<span class="lineNum">     126 </span>            :             /// @param [in] value The value in SI units that will be
-<span class="lineNum">     127 </span>            :             ///        encoded.
-<span class="lineNum">     128 </span>            :             /// @param [out] mask The write mask to be used when
-<a name="129"><span class="lineNum">     129 </span>            :             ///        writing the field.</a>
-<span class="lineNum">     130 </span>            :             /// @param [out] field The register value to write into
-<span class="lineNum">     131 </span>            :             ///        the MSR.
-<span class="lineNum">     132 </span>            :             virtual void control(int control_idx,
-<a name="133"><span class="lineNum">     133 </span>            :                                  double value,</a>
-<span class="lineNum">     134 </span>            :                                  uint64_t &amp;field,
-<span class="lineNum">     135 </span>            :                                  uint64_t &amp;mask) const = 0;
-<span class="lineNum">     136 </span>            :             /// @brief Get mask given a control index.
-<a name="137"><span class="lineNum">     137 </span>            :             /// @param [in] control_idx Index of the control bit</a>
-<span class="lineNum">     138 </span>            :             ///        field.
-<span class="lineNum">     139 </span>            :             /// @return The write mask to be used when writing the
-<span class="lineNum">     140 </span>            :             ///         field.
-<a name="141"><span class="lineNum">     141 </span>            :             virtual uint64_t mask(int control_idx) const = 0;</a>
-<span class="lineNum">     142 </span>            :             /// @brief The type of the domain that the MSR encodes.
-<span class="lineNum">     143 </span>            :             /// @return The domain type that the MSR pertains to as
-<span class="lineNum">     144 </span>            :             ///         defined in the m_domain_e enum
-<a name="145"><span class="lineNum">     145 </span>            :             ///         from the PlatformTopo.hpp header.</a>
-<span class="lineNum">     146 </span>            :             virtual int domain_type(void) const = 0;
-<span class="lineNum">     147 </span>            :             /// @brief The function used to decode the MSR value as defined
-<span class="lineNum">     148 </span>            :             ///        in the m_function_e enum.
-<a name="149"><span class="lineNum">     149 </span>            :             virtual int decode_function(int signal_idx) const = 0;</a>
-<span class="lineNum">     150 </span>            :     };
-<span class="lineNum">     151 </span>            : 
-<span class="lineNum">     152 </span>            :     class IMSRSignal
-<a name="153"><span class="lineNum">     153 </span>            :     {</a>
-<a name="154"><span class="lineNum">     154 </span>            :         public:</a>
-<span class="lineNum">     155 </span><span class="lineCov">     502818 :             IMSRSignal() = default;</span>
-<span class="lineNum">     156 </span><span class="lineCov">     502818 :             virtual ~IMSRSignal() = default;</span>
-<a name="157"><span class="lineNum">     157 </span>            :             /// @brief Get the signal parameter name.</a>
-<span class="lineNum">     158 </span>            :             /// @return The name of the feature being measured.
-<span class="lineNum">     159 </span>            :             virtual std::string name(void) const = 0;
-<span class="lineNum">     160 </span>            :             /// @brief Get the type of the domain under measurement.
-<a name="161"><span class="lineNum">     161 </span>            :             /// @return One of the values from the IPlatformTopo::m_domain_e</a>
-<span class="lineNum">     162 </span>            :             ///         enum described in PlatformTopo.hpp.
-<span class="lineNum">     163 </span>            :             virtual int domain_type(void) const = 0;
-<span class="lineNum">     164 </span>            :             /// @brief Get the index of the cpu in the domain under measurement.
-<a name="165"><span class="lineNum">     165 </span>            :             /// @return The index of the domain within the set of</a>
-<span class="lineNum">     166 </span>            :             ///         domains of the same type on the platform.
-<span class="lineNum">     167 </span>            :             virtual int cpu_idx(void) const = 0;
-<span class="lineNum">     168 </span>            :             /// @brief Get the value of the signal.
-<a name="169"><span class="lineNum">     169 </span>            :             /// @return The value of the parameter measured in SI</a>
-<span class="lineNum">     170 </span>            :             ///         units.
-<span class="lineNum">     171 </span>            :             virtual double sample(void) = 0;
-<span class="lineNum">     172 </span>            :             /// @brief Gets the MSR offset for each of the MSRs that are
-<a name="173"><span class="lineNum">     173 </span>            :             ///        combined to provide a signal.</a>
-<span class="lineNum">     174 </span>            :             /// @param [out] offset The MSR offset values.
-<span class="lineNum">     175 </span>            :             virtual uint64_t offset(void) const = 0;
-<span class="lineNum">     176 </span>            :             /// @brief Map 64 bits of memory storing the raw value of
-<a name="177"><span class="lineNum">     177 </span>            :             ///        an MSR that will be referenced when calculating</a>
-<span class="lineNum">     178 </span>            :             ///        the signal.
-<span class="lineNum">     179 </span>            :             /// @param [in] Pointer to the memory containing the raw
-<span class="lineNum">     180 </span>            :             ///        MSR value.
-<a name="181"><span class="lineNum">     181 </span>            :             virtual void map_field(const uint64_t *field) = 0;</a>
-<a name="182"><span class="lineNum">     182 </span>            :     };</a>
-<span class="lineNum">     183 </span>            : 
-<span class="lineNum">     184 </span><span class="lineCov">      58048 :     class IMSRControl</span>
-<a name="185"><span class="lineNum">     185 </span>            :     {</a>
-<a name="186"><span class="lineNum">     186 </span>            :         public:</a>
-<span class="lineNum">     187 </span><span class="lineCov">     246417 :             IMSRControl() = default;</span>
-<span class="lineNum">     188 </span><span class="lineCov">     304465 :             virtual ~IMSRControl() = default;</span>
-<a name="189"><span class="lineNum">     189 </span>            :             /// @brief Get the control parameter name.</a>
-<span class="lineNum">     190 </span>            :             /// @return The name of the feature under control.
-<span class="lineNum">     191 </span>            :             virtual std::string name(void) const = 0;
-<span class="lineNum">     192 </span>            :             /// @brief Get the type of the domain under control.
-<a name="193"><span class="lineNum">     193 </span>            :             /// @return One of the values from the m_domain_e</a>
-<span class="lineNum">     194 </span>            :             ///         enum described in PlatformTopo.hpp.
-<span class="lineNum">     195 </span>            :             virtual int domain_type(void) const = 0;
-<span class="lineNum">     196 </span>            :             /// @brief Get the index of the cpu in the domain under control.
-<a name="197"><span class="lineNum">     197 </span>            :             /// @return The index of the domain within the set of</a>
-<span class="lineNum">     198 </span>            :             ///        domains of the same type on the platform.
-<span class="lineNum">     199 </span>            :             virtual int cpu_idx(void) const = 0;
-<span class="lineNum">     200 </span>            :             /// @brief Set the value for the control.
-<a name="201"><span class="lineNum">     201 </span>            :             /// @param [in] setting Value in SI units of the parameter</a>
-<span class="lineNum">     202 </span>            :             ///        controlled by the object.
-<span class="lineNum">     203 </span>            :             virtual void adjust(double setting) = 0;
-<span class="lineNum">     204 </span>            :             /// @brief Gets the MSR offset for each of the MSRs that are
-<a name="205"><span class="lineNum">     205 </span>            :             ///        set by the control.</a>
-<span class="lineNum">     206 </span>            :             /// @param [out] offset The MSR offset values.
-<span class="lineNum">     207 </span>            :             virtual uint64_t offset(void) const = 0;
-<span class="lineNum">     208 </span>            :             /// @brief Gets the mask for each of the MSRs that are
-<a name="209"><span class="lineNum">     209 </span>            :             ///        written by the control.</a>
-<span class="lineNum">     210 </span>            :             /// @param [out] mask The write mask values.
-<span class="lineNum">     211 </span>            :             virtual uint64_t mask(void) const = 0;
-<span class="lineNum">     212 </span>            :             /// @brief Map 64 bits of memory storing the raw value of
-<a name="213"><span class="lineNum">     213 </span>            :             ///        an MSR that will be referenced when enforcing</a>
-<span class="lineNum">     214 </span>            :             ///        the control.
-<span class="lineNum">     215 </span>            :             /// @param [in] field Pointer to the memory containing the
-<span class="lineNum">     216 </span>            :             ///        raw MSR value.
-<a name="217"><span class="lineNum">     217 </span>            :             /// @param [in] mask Pointer to mask that is applied when</a>
-<span class="lineNum">     218 </span>            :             ///        writing value.
-<span class="lineNum">     219 </span>            :             virtual void map_field(uint64_t *field,
-<span class="lineNum">     220 </span>            :                                    uint64_t *mask) = 0;
-<a name="221"><span class="lineNum">     221 </span>            :     };</a>
-<span class="lineNum">     222 </span>            : 
-<span class="lineNum">     223 </span>            :     class MSREncode;
-<span class="lineNum">     224 </span>            : 
-<a name="225"><span class="lineNum">     225 </span>            :     class MSR : public IMSR</a>
-<span class="lineNum">     226 </span>            :     {
-<span class="lineNum">     227 </span>            :         public:
-<span class="lineNum">     228 </span>            :             /// @brief Constructor for the MSR class for fixed MSRs.
-<a name="229"><span class="lineNum">     229 </span>            :             /// @param [in] msr_name The name of the MSR.</a>
-<span class="lineNum">     230 </span>            :             /// @param [in] offset The byte offset of the MSR.
-<span class="lineNum">     231 </span>            :             /// @param [in] signal Vector of signal name and encode
-<span class="lineNum">     232 </span>            :             ///        struct pairs describing all signals embedded in
-<a name="233"><span class="lineNum">     233 </span>            :             ///        the MSR.</a>
-<span class="lineNum">     234 </span>            :             /// @param [in] control Vector of control name and encode
-<span class="lineNum">     235 </span>            :             /// struct pairs describing all controls embedded in the
-<span class="lineNum">     236 </span>            :             /// MSR.
-<a name="237"><span class="lineNum">     237 </span>            :             MSR(const std::string &amp;msr_name,</a>
-<span class="lineNum">     238 </span>            :                 uint64_t offset,
-<span class="lineNum">     239 </span>            :                 const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;signal,
-<span class="lineNum">     240 </span>            :                 const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;control);
-<a name="241"><span class="lineNum">     241 </span>            :             /// @brief MSR class destructor.</a>
-<span class="lineNum">     242 </span>            :             virtual ~MSR();
-<span class="lineNum">     243 </span>            :             std::string name(void) const override;
-<span class="lineNum">     244 </span>            :             uint64_t offset(void) const override;
-<a name="245"><span class="lineNum">     245 </span>            :             int num_signal(void) const override;</a>
-<span class="lineNum">     246 </span>            :             int num_control(void) const override;
-<span class="lineNum">     247 </span>            :             std::string signal_name(int signal_idx) const override;
-<span class="lineNum">     248 </span>            :             std::string control_name(int control_idx) const override;
-<a name="249"><span class="lineNum">     249 </span>            :             int signal_index(const std::string &amp;name) const override;</a>
-<span class="lineNum">     250 </span>            :             int control_index(const std::string &amp;name) const override;
-<span class="lineNum">     251 </span>            :             double signal(int signal_idx,
-<span class="lineNum">     252 </span>            :                           uint64_t field,
-<a name="253"><span class="lineNum">     253 </span>            :                           uint64_t &amp;last_field,</a>
-<span class="lineNum">     254 </span>            :                           uint64_t &amp;num_overflow) const override;
-<span class="lineNum">     255 </span>            :             void control(int control_idx,
-<span class="lineNum">     256 </span>            :                          double value,
-<a name="257"><span class="lineNum">     257 </span>            :                          uint64_t &amp;field,</a>
-<span class="lineNum">     258 </span>            :                          uint64_t &amp;mask) const override;
-<span class="lineNum">     259 </span>            :             uint64_t mask(int control_idx) const override;
-<span class="lineNum">     260 </span>            :             int domain_type(void) const override;
-<a name="261"><span class="lineNum">     261 </span>            :             int decode_function(int signal_idx) const override;</a>
-<span class="lineNum">     262 </span>            :         private:
-<span class="lineNum">     263 </span>            :             void init(const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;signal,
-<span class="lineNum">     264 </span>            :                       const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;control);
-<a name="265"><span class="lineNum">     265 </span>            :             std::string m_name;</a>
-<span class="lineNum">     266 </span>            :             uint64_t m_offset;
-<span class="lineNum">     267 </span>            :             std::vector&lt;MSREncode *&gt; m_signal_encode;
-<span class="lineNum">     268 </span>            :             std::vector&lt;MSREncode *&gt; m_control_encode;
-<a name="269"><span class="lineNum">     269 </span>            :             std::map&lt;std::string, int&gt; m_signal_map;</a>
-<span class="lineNum">     270 </span>            :             std::map&lt;std::string, int&gt; m_control_map;
-<span class="lineNum">     271 </span>            :             int m_domain_type;
-<span class="lineNum">     272 </span>            :             const std::vector&lt;const IMSR *&gt; m_prog_msr;
-<a name="273"><span class="lineNum">     273 </span>            :             const std::vector&lt;std::string&gt; m_prog_field_name;</a>
-<span class="lineNum">     274 </span>            :             const std::vector&lt;double&gt; m_prog_value;
-<span class="lineNum">     275 </span>            : 
-<span class="lineNum">     276 </span>            :     };
-<a name="277"><span class="lineNum">     277 </span>            : </a>
-<span class="lineNum">     278 </span>            :     class MSRSignal : public IMSRSignal
-<span class="lineNum">     279 </span>            :     {
-<span class="lineNum">     280 </span>            :         public:
-<a name="281"><span class="lineNum">     281 </span>            :             /// @brief Constructor for the MSRSignal class used when the</a>
-<span class="lineNum">     282 </span>            :             ///        signal is determined by a single bit field in a
-<span class="lineNum">     283 </span>            :             ///        single MSR.
-<span class="lineNum">     284 </span>            :             /// @param [in] msr_obj Pointer to the MSR object
-<a name="285"><span class="lineNum">     285 </span>            :             ///        describing the MSR that contains the signal.</a>
-<span class="lineNum">     286 </span>            :             /// @param [in] cpu_idx The logical Linux CPU index to
-<span class="lineNum">     287 </span>            :             ///        query for the MSR.
-<span class="lineNum">     288 </span>            :             /// @param [in] signal_idx The index of the signal within
-<a name="289"><span class="lineNum">     289 </span>            :             ///        the MSR that the class represents.</a>
-<span class="lineNum">     290 </span>            :             MSRSignal(const IMSR &amp;msr_obj,
-<span class="lineNum">     291 </span>            :                       int domain_type,
-<span class="lineNum">     292 </span>            :                       int cpu_idx,
-<a name="293"><span class="lineNum">     293 </span>            :                       int signal_idx);</a>
-<span class="lineNum">     294 </span>            :             /// @brief Constructor for an MSRSignal corresponding to the raw
-<span class="lineNum">     295 </span>            :             ///        value of the entire MSR.
-<span class="lineNum">     296 </span>            :             MSRSignal(const IMSR &amp;msr_obj,
-<a name="297"><span class="lineNum">     297 </span>            :                       int domain_type,</a>
-<span class="lineNum">     298 </span>            :                       int cpu_idx);
-<span class="lineNum">     299 </span>            :             /// @brief Copy constructor.  After copying, map field
-<span class="lineNum">     300 </span>            :             ///        must be called again on the new MSRSignal.
-<a name="301"><span class="lineNum">     301 </span>            :             MSRSignal(const MSRSignal &amp;other);</a>
-<span class="lineNum">     302 </span>            :             MSRSignal &amp;operator=(const MSRSignal &amp;other) = delete;
-<span class="lineNum">     303 </span><span class="lineCov">    1004514 :             virtual ~MSRSignal() = default;</span>
-<span class="lineNum">     304 </span>            :             virtual std::string name(void) const override;
-<a name="305"><span class="lineNum">     305 </span>            :             int domain_type(void) const override;</a>
-<span class="lineNum">     306 </span>            :             int cpu_idx(void) const override;
-<span class="lineNum">     307 </span>            :             double sample(void) override;
-<span class="lineNum">     308 </span>            :             uint64_t offset(void) const override;
-<a name="309"><span class="lineNum">     309 </span>            :             void map_field(const uint64_t *field) override;</a>
-<span class="lineNum">     310 </span>            :         private:
-<span class="lineNum">     311 </span>            :             const std::string m_name;
-<span class="lineNum">     312 </span>            :             const IMSR &amp;m_msr_obj;
-<a name="313"><span class="lineNum">     313 </span>            :             const int m_domain_type;</a>
-<span class="lineNum">     314 </span>            :             const int m_cpu_idx;
-<span class="lineNum">     315 </span>            :             const int m_signal_idx;
-<span class="lineNum">     316 </span>            :             const uint64_t *m_field_ptr;
-<a name="317"><span class="lineNum">     317 </span>            :             uint64_t m_field_last;</a>
-<span class="lineNum">     318 </span>            :             uint64_t m_num_overflow;
-<span class="lineNum">     319 </span>            :             bool m_is_field_mapped;
-<span class="lineNum">     320 </span>            :             bool m_is_raw;
-<a name="321"><span class="lineNum">     321 </span>            :     };</a>
-<span class="lineNum">     322 </span>            : 
-<span class="lineNum">     323 </span>            :     class MSRControl : public IMSRControl
-<span class="lineNum">     324 </span>            :     {
-<a name="325"><span class="lineNum">     325 </span>            :         public:</a>
-<span class="lineNum">     326 </span>            :             /// @brief Constructor for the MSRControl class used when the
-<span class="lineNum">     327 </span>            :             ///        control is enforced with a single bit field in a
-<span class="lineNum">     328 </span>            :             ///        single MSR.
-<a name="329"><span class="lineNum">     329 </span>            :             /// @param [in] msr_obj Pointer to the MSR object</a>
-<span class="lineNum">     330 </span>            :             ///        describing the MSR that contains the control.
-<span class="lineNum">     331 </span>            :             /// @param [in] cpu_idx The logical Linux CPU index to
-<span class="lineNum">     332 </span>            :             ///        write the MSR.
-<a name="333"><span class="lineNum">     333 </span>            :             /// @param [in] control_idx The index of the control within</a>
-<span class="lineNum">     334 </span>            :             ///        the MSR that the class represents.
-<span class="lineNum">     335 </span>            :             MSRControl(const IMSR &amp;msr_obj,
-<span class="lineNum">     336 </span>            :                        int domain_type,
-<a name="337"><span class="lineNum">     337 </span>            :                        int cpu_idx,</a>
-<span class="lineNum">     338 </span>            :                        int control_idx);
-<span class="lineNum">     339 </span><span class="lineCov">      58048 :             MSRControl(const MSRControl &amp;other) = default;</span>
-<span class="lineNum">     340 </span>            :             MSRControl &amp;operator=(const MSRControl &amp;other) = default;
-<a name="341"><span class="lineNum">     341 </span>            :             virtual ~MSRControl();</a>
-<span class="lineNum">     342 </span>            :             virtual std::string name(void) const override;
-<span class="lineNum">     343 </span>            :             int domain_type(void) const override;
-<span class="lineNum">     344 </span>            :             int cpu_idx(void) const override;
-<a name="345"><span class="lineNum">     345 </span>            :             void adjust(double setting) override;</a>
-<span class="lineNum">     346 </span>            :             uint64_t offset(void) const override;
-<span class="lineNum">     347 </span>            :             uint64_t mask(void) const override;
-<span class="lineNum">     348 </span>            :             void map_field(uint64_t *field, uint64_t *mask) override;
-<a name="349"><span class="lineNum">     349 </span>            :         private:</a>
-<span class="lineNum">     350 </span>            :             const std::string m_name;
-<span class="lineNum">     351 </span>            :             const IMSR &amp;m_msr_obj;
-<span class="lineNum">     352 </span>            :             const int m_domain_type;
-<a name="353"><span class="lineNum">     353 </span>            :             const int m_cpu_idx;</a>
-<span class="lineNum">     354 </span>            :             const int m_control_idx;
-<span class="lineNum">     355 </span>            :             uint64_t *m_field_ptr;
-<span class="lineNum">     356 </span>            :             uint64_t *m_mask_ptr;
-<a name="357"><span class="lineNum">     357 </span>            :             bool m_is_field_mapped;</a>
-<span class="lineNum">     358 </span>            :     };
-<span class="lineNum">     359 </span>            : 
-<span class="lineNum">     360 </span>            : }
-<a name="361"><span class="lineNum">     361 </span>            : </a>
-<span class="lineNum">     362 </span>            : #endif
+<span class="lineNum">     118 </span>            :             /// @param [in, out] num_overflow Number of times the
+<span class="lineNum">     119 </span>            :             ///        register has overflowed. Only relevant if the
+<span class="lineNum">     120 </span>            :             ///        decode function is M_FUNCTION_OVERFLOW.
+<a name="121"><span class="lineNum">     121 </span>            :             /// @return The decoded signal in SI units.</a>
+<span class="lineNum">     122 </span>            :             virtual double signal(int signal_idx,
+<span class="lineNum">     123 </span>            :                                   uint64_t field,
+<span class="lineNum">     124 </span>            :                                   uint64_t &amp;last_field,
+<a name="125"><span class="lineNum">     125 </span>            :                                   uint64_t &amp;num_overflow) const = 0;</a>
+<span class="lineNum">     126 </span>            :             /// @brief Set a control bit field in a raw MSR value.
+<span class="lineNum">     127 </span>            :             /// @param [in] control_idx Index of the control bit
+<span class="lineNum">     128 </span>            :             ///        field.
+<a name="129"><span class="lineNum">     129 </span>            :             /// @param [in] value The value in SI units that will be</a>
+<span class="lineNum">     130 </span>            :             ///        encoded.
+<span class="lineNum">     131 </span>            :             /// @param [out] mask The write mask to be used when
+<span class="lineNum">     132 </span>            :             ///        writing the field.
+<a name="133"><span class="lineNum">     133 </span>            :             /// @param [out] field The register value to write into</a>
+<span class="lineNum">     134 </span>            :             ///        the MSR.
+<span class="lineNum">     135 </span>            :             virtual void control(int control_idx,
+<span class="lineNum">     136 </span>            :                                  double value,
+<a name="137"><span class="lineNum">     137 </span>            :                                  uint64_t &amp;field,</a>
+<span class="lineNum">     138 </span>            :                                  uint64_t &amp;mask) const = 0;
+<span class="lineNum">     139 </span>            :             /// @brief Get mask given a control index.
+<span class="lineNum">     140 </span>            :             /// @param [in] control_idx Index of the control bit
+<a name="141"><span class="lineNum">     141 </span>            :             ///        field.</a>
+<span class="lineNum">     142 </span>            :             /// @return The write mask to be used when writing the
+<span class="lineNum">     143 </span>            :             ///         field.
+<span class="lineNum">     144 </span>            :             virtual uint64_t mask(int control_idx) const = 0;
+<a name="145"><span class="lineNum">     145 </span>            :             /// @brief The type of the domain that the MSR encodes.</a>
+<span class="lineNum">     146 </span>            :             /// @return The domain type that the MSR pertains to as
+<span class="lineNum">     147 </span>            :             ///         defined in the m_domain_e enum
+<span class="lineNum">     148 </span>            :             ///         from the PlatformTopo.hpp header.
+<a name="149"><span class="lineNum">     149 </span>            :             virtual int domain_type(void) const = 0;</a>
+<span class="lineNum">     150 </span>            :             /// @brief The function used to decode the MSR value as defined
+<span class="lineNum">     151 </span>            :             ///        in the m_function_e enum.
+<span class="lineNum">     152 </span>            :             virtual int decode_function(int signal_idx) const = 0;
+<a name="153"><span class="lineNum">     153 </span>            : </a>
+<span class="lineNum">     154 </span>            :             /// @brief Convert a string to the corresponding m_function_e value
+<span class="lineNum">     155 </span>            :             static m_function_e string_to_function(const std::string &amp;str);
+<span class="lineNum">     156 </span>            :             /// @brief Convert a string to the corresponding m_function_e value
+<a name="157"><span class="lineNum">     157 </span>            :             /// @todo Consider leaving units field as a string.  enum is not being used.</a>
+<span class="lineNum">     158 </span>            :             static m_units_e string_to_units(const std::string &amp;str);
+<span class="lineNum">     159 </span>            :             static std::shared_ptr&lt;MSR&gt; make_shared(const std::string &amp;msr_name,
+<span class="lineNum">     160 </span>            :                                                     uint64_t offset,
+<a name="161"><span class="lineNum">     161 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,</a>
+<span class="lineNum">     162 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control);
+<span class="lineNum">     163 </span>            :             static std::unique_ptr&lt;MSR&gt; make_unique(const std::string &amp;msr_name,
+<span class="lineNum">     164 </span>            :                                                     uint64_t offset,
+<a name="165"><span class="lineNum">     165 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,</a>
+<span class="lineNum">     166 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control);
+<span class="lineNum">     167 </span>            :         private:
+<span class="lineNum">     168 </span>            :             static const std::map&lt;std::string, m_function_e&gt; M_FUNCTION_STRING;
+<a name="169"><span class="lineNum">     169 </span>            :             static const std::map&lt;std::string, m_units_e&gt; M_UNITS_STRING;</a>
+<span class="lineNum">     170 </span>            :     };
+<span class="lineNum">     171 </span>            : }
+<span class="lineNum">     172 </span>            : 
+<a name="173"><span class="lineNum">     173 </span>            : #endif</a>
 </pre>
       </td>
     </tr>
@@ -438,7 +249,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

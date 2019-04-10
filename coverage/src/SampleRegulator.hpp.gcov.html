@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/SampleRegulator.hpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/SampleRegulator.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - SampleRegulator.hpp<span style="font-size: 80%;"> (source / <a href="SampleRegulator.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - SampleRegulator.hpp<span style="font-size: 80%;"> (source / <a href="SampleRegulator.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">3</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -112,94 +112,94 @@
 <span class="lineNum">      42 </span>            : 
 <span class="lineNum">      43 </span>            : namespace geopm
 <span class="lineNum">      44 </span>            : {
-<a name="45"><span class="lineNum">      45 </span>            :     template &lt;class type&gt;</a>
-<span class="lineNum">      46 </span>            :     class ICircularBuffer;
-<span class="lineNum">      47 </span>            : 
-<span class="lineNum">      48 </span>            :     /// @brief Class merges Platform and Profile time series data.
-<a name="49"><span class="lineNum">      49 </span>            :     ///</a>
-<span class="lineNum">      50 </span>            :     /// The SampleRegulator class is a functor used by the Controller
-<span class="lineNum">      51 </span>            :     /// to create coherent samples while merging data collected from
-<span class="lineNum">      52 </span>            :     /// the Platform and the ProfileSampler.  The ProfileSampler
-<a name="53"><span class="lineNum">      53 </span>            :     /// progress and runtime data is collected asynchronously by each</a>
-<span class="lineNum">      54 </span>            :     /// MPI rank whenever the application MPI ranks use the Profile
-<span class="lineNum">      55 </span>            :     /// interface.  The Platform sample comprises a vector of doubles
-<span class="lineNum">      56 </span>            :     /// collected synchronously.  The cadence of the Platform samples
-<a name="57"><span class="lineNum">      57 </span>            :     /// is determined by the Controller.  The application progress and</a>
-<span class="lineNum">      58 </span>            :     /// runtime data for the region are written some time prior to the
-<span class="lineNum">      59 </span>            :     /// collection of the Platform sample and each have an associated
-<span class="lineNum">      60 </span>            :     /// time stamp.  The SampleRegulator extrapolates the application
-<a name="61"><span class="lineNum">      61 </span>            :     /// provided progress and runtime for each MPI rank to the time</a>
-<span class="lineNum">      62 </span>            :     /// when the Platform was sampled.  The extrapolated application
-<span class="lineNum">      63 </span>            :     /// data is then bundled with the hardware data.  This bundled
-<span class="lineNum">      64 </span>            :     /// data is transformed into a basis that linearly combines
-<a name="65"><span class="lineNum">      65 </span>            :     /// measurements of the same metric so that the combination is</a>
-<span class="lineNum">      66 </span>            :     /// representative of the given metric for each domain of control.
-<span class="lineNum">      67 </span>            :     /// This transformation matrix is an input which is provided by
-<span class="lineNum">      68 </span>            :     /// the Platform.
-<a name="69"><span class="lineNum">      69 </span>            :     ///</a>
-<span class="lineNum">      70 </span>            :     /// The class is a functor and has only one public member
-<span class="lineNum">      71 </span>            :     /// function, the operator ().  This class has been separated from
-<span class="lineNum">      72 </span>            :     /// the Controller to encapsulate this one operation and
-<a name="73"><span class="lineNum">      73 </span>            :     /// facilitate independent testing of this feature.  The</a>
-<span class="lineNum">      74 </span>            :     /// operator () method is broken down into four steps, each
-<span class="lineNum">      75 </span>            :     /// represented by a private method, this enables individual
-<span class="lineNum">      76 </span>            :     /// testing of each step.
-<a name="77"><span class="lineNum">      77 </span>            :     class ISampleRegulator</a>
-<a name="78"><span class="lineNum">      78 </span>            :     {</a>
-<span class="lineNum">      79 </span>            :         public:
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">          3 :             ISampleRegulator() = default;</span></a>
-<a name="81"><span class="lineNum">      81 </span>            :             ISampleRegulator(const ISampleRegulator &amp;other) = default;</a>
-<span class="lineNum">      82 </span><span class="lineCov">          3 :             virtual ~ISampleRegulator() = default;</span>
-<span class="lineNum">      83 </span>            :             /// @brief The parenthesis operator which implements the
-<span class="lineNum">      84 </span>            :             /// SampleRegulator functor.
-<a name="85"><span class="lineNum">      85 </span>            :             ///</a>
-<span class="lineNum">      86 </span>            :             /// This operator implements the public functionality of
-<span class="lineNum">      87 </span>            :             /// the SampleRegulator class, see class description for
-<span class="lineNum">      88 </span>            :             /// more details.  In short, the data from the Platform
-<a name="89"><span class="lineNum">      89 </span>            :             /// object is bundled with extrapolated ProfileSampler</a>
-<span class="lineNum">      90 </span>            :             /// data and transformed to describe the domains of
-<span class="lineNum">      91 </span>            :             /// control.
-<span class="lineNum">      92 </span>            :             ///
-<a name="93"><span class="lineNum">      93 </span>            :             /// @param [in] platform_sample_time The time when the</a>
-<span class="lineNum">      94 </span>            :             /// Platform was sampled which is the time that the
-<span class="lineNum">      95 </span>            :             /// ProfileSampler data is extrapolated to.
-<span class="lineNum">      96 </span>            :             ///
-<a name="97"><span class="lineNum">      97 </span>            :             /// @param [in] signal_domain_matrix Matrix used to</a>
-<span class="lineNum">      98 </span>            :             /// transform the extrapolated data to model the domains
-<span class="lineNum">      99 </span>            :             /// of control.  This matrix is provided by the Platform.
-<span class="lineNum">     100 </span>            :             /// See the Platform for more information.
+<a name="45"><span class="lineNum">      45 </span>            :     /// @brief Class merges Platform and Profile time series data.</a>
+<span class="lineNum">      46 </span>            :     ///
+<span class="lineNum">      47 </span>            :     /// The SampleRegulator class is a functor used by the Controller
+<span class="lineNum">      48 </span>            :     /// to create coherent samples while merging data collected from
+<a name="49"><span class="lineNum">      49 </span>            :     /// the Platform and the ProfileSampler.  The ProfileSampler</a>
+<span class="lineNum">      50 </span>            :     /// progress and runtime data is collected asynchronously by each
+<span class="lineNum">      51 </span>            :     /// MPI rank whenever the application MPI ranks use the Profile
+<span class="lineNum">      52 </span>            :     /// interface.  The Platform sample comprises a vector of doubles
+<a name="53"><span class="lineNum">      53 </span>            :     /// collected synchronously.  The cadence of the Platform samples</a>
+<span class="lineNum">      54 </span>            :     /// is determined by the Controller.  The application progress and
+<span class="lineNum">      55 </span>            :     /// runtime data for the region are written some time prior to the
+<span class="lineNum">      56 </span>            :     /// collection of the Platform sample and each have an associated
+<a name="57"><span class="lineNum">      57 </span>            :     /// time stamp.  The SampleRegulator extrapolates the application</a>
+<span class="lineNum">      58 </span>            :     /// provided progress and runtime for each MPI rank to the time
+<span class="lineNum">      59 </span>            :     /// when the Platform was sampled.  The extrapolated application
+<span class="lineNum">      60 </span>            :     /// data is then bundled with the hardware data.  This bundled
+<a name="61"><span class="lineNum">      61 </span>            :     /// data is transformed into a basis that linearly combines</a>
+<span class="lineNum">      62 </span>            :     /// measurements of the same metric so that the combination is
+<span class="lineNum">      63 </span>            :     /// representative of the given metric for each domain of control.
+<span class="lineNum">      64 </span>            :     /// This transformation matrix is an input which is provided by
+<a name="65"><span class="lineNum">      65 </span>            :     /// the Platform.</a>
+<span class="lineNum">      66 </span>            :     ///
+<span class="lineNum">      67 </span>            :     /// The class is a functor and has only one public member
+<span class="lineNum">      68 </span>            :     /// function, the operator ().  This class has been separated from
+<a name="69"><span class="lineNum">      69 </span>            :     /// the Controller to encapsulate this one operation and</a>
+<span class="lineNum">      70 </span>            :     /// facilitate independent testing of this feature.  The
+<span class="lineNum">      71 </span>            :     /// operator () method is broken down into four steps, each
+<span class="lineNum">      72 </span>            :     /// represented by a private method, this enables individual
+<a name="73"><span class="lineNum">      73 </span>            :     /// testing of each step.</a>
+<span class="lineNum">      74 </span>            :     class SampleRegulator
+<a name="75"><span class="lineNum">      75 </span>            :     {</a>
+<span class="lineNum">      76 </span>            :         public:
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">          6 :             SampleRegulator() = default;</span></a>
+<span class="lineNum">      78 </span>            :             SampleRegulator(const SampleRegulator &amp;other) = default;
+<span class="lineNum">      79 </span><span class="lineCov">          6 :             virtual ~SampleRegulator() = default;</span>
+<span class="lineNum">      80 </span>            :             /// @brief The parenthesis operator which implements the
+<a name="81"><span class="lineNum">      81 </span>            :             /// SampleRegulator functor.</a>
+<span class="lineNum">      82 </span>            :             ///
+<span class="lineNum">      83 </span>            :             /// This operator implements the public functionality of
+<span class="lineNum">      84 </span>            :             /// the SampleRegulator class, see class description for
+<a name="85"><span class="lineNum">      85 </span>            :             /// more details.  In short, the data from the Platform</a>
+<span class="lineNum">      86 </span>            :             /// object is bundled with extrapolated ProfileSampler
+<span class="lineNum">      87 </span>            :             /// data and transformed to describe the domains of
+<span class="lineNum">      88 </span>            :             /// control.
+<a name="89"><span class="lineNum">      89 </span>            :             ///</a>
+<span class="lineNum">      90 </span>            :             /// @param [in] platform_sample_time The time when the
+<span class="lineNum">      91 </span>            :             /// Platform was sampled which is the time that the
+<span class="lineNum">      92 </span>            :             /// ProfileSampler data is extrapolated to.
+<a name="93"><span class="lineNum">      93 </span>            :             ///</a>
+<span class="lineNum">      94 </span>            :             /// @param [in] signal_domain_matrix Matrix used to
+<span class="lineNum">      95 </span>            :             /// transform the extrapolated data to model the domains
+<span class="lineNum">      96 </span>            :             /// of control.  This matrix is provided by the Platform.
+<a name="97"><span class="lineNum">      97 </span>            :             /// See the Platform for more information.</a>
+<span class="lineNum">      98 </span>            :             ///
+<span class="lineNum">      99 </span>            :             /// @param [in] platform_sample_begin A vector iterator
+<span class="lineNum">     100 </span>            :             /// referencing the beginning of the Platform sample data.
 <a name="101"><span class="lineNum">     101 </span>            :             ///</a>
-<span class="lineNum">     102 </span>            :             /// @param [in] platform_sample_begin A vector iterator
-<span class="lineNum">     103 </span>            :             /// referencing the beginning of the Platform sample data.
+<span class="lineNum">     102 </span>            :             /// @param [in] platform_sample_end A vector iterator
+<span class="lineNum">     103 </span>            :             /// referencing the end of the Platform sample data.
 <span class="lineNum">     104 </span>            :             ///
-<a name="105"><span class="lineNum">     105 </span>            :             /// @param [in] platform_sample_end A vector iterator</a>
-<span class="lineNum">     106 </span>            :             /// referencing the end of the Platform sample data.
-<span class="lineNum">     107 </span>            :             ///
-<span class="lineNum">     108 </span>            :             /// @param [in] prof_sample_begin A vector iterator
-<a name="109"><span class="lineNum">     109 </span>            :             /// referencing the beginning of the ProfileSampler sample</a>
-<span class="lineNum">     110 </span>            :             /// data.
+<a name="105"><span class="lineNum">     105 </span>            :             /// @param [in] prof_sample_begin A vector iterator</a>
+<span class="lineNum">     106 </span>            :             /// referencing the beginning of the ProfileSampler sample
+<span class="lineNum">     107 </span>            :             /// data.
+<span class="lineNum">     108 </span>            :             ///
+<a name="109"><span class="lineNum">     109 </span>            :             /// @param [in] prof_sample_end A vector iterator</a>
+<span class="lineNum">     110 </span>            :             /// referencing the end of the ProfileSampler sample data.
 <span class="lineNum">     111 </span>            :             ///
-<span class="lineNum">     112 </span>            :             /// @param [in] prof_sample_end A vector iterator
-<a name="113"><span class="lineNum">     113 </span>            :             /// referencing the end of the ProfileSampler sample data.</a>
-<span class="lineNum">     114 </span>            :             ///
-<span class="lineNum">     115 </span>            :             /// @param [out] telemetry A vector of
-<span class="lineNum">     116 </span>            :             /// geopm_telemetry_message_s structures which are in
-<a name="117"><span class="lineNum">     117 </span>            :             /// the order of the domains of control defined in a</a>
-<span class="lineNum">     118 </span>            :             /// Policy object.
-<span class="lineNum">     119 </span>            :             virtual void operator () (const struct geopm_time_s &amp;platform_sample_time,
-<span class="lineNum">     120 </span>            :                                       std::vector&lt;double&gt;::const_iterator platform_sample_begin,
-<a name="121"><span class="lineNum">     121 </span>            :                                       std::vector&lt;double&gt;::const_iterator platform_sample_end,</a>
-<span class="lineNum">     122 </span>            :                                       std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::const_iterator prof_sample_begin,
-<span class="lineNum">     123 </span>            :                                       std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::const_iterator prof_sample_end,
-<span class="lineNum">     124 </span>            :                                       std::vector&lt;double&gt; &amp;aligned_signal,
-<a name="125"><span class="lineNum">     125 </span>            :                                       std::vector&lt;uint64_t&gt; &amp;region_id) = 0;</a>
-<span class="lineNum">     126 </span>            :             virtual const std::map&lt;int, int&gt; &amp;rank_idx_map(void) const = 0;
-<span class="lineNum">     127 </span>            :     };
+<span class="lineNum">     112 </span>            :             /// @param [out] telemetry A vector of
+<a name="113"><span class="lineNum">     113 </span>            :             /// geopm_telemetry_message_s structures which are in</a>
+<span class="lineNum">     114 </span>            :             /// the order of the domains of control defined in a
+<span class="lineNum">     115 </span>            :             /// Policy object.
+<span class="lineNum">     116 </span>            :             virtual void operator () (const struct geopm_time_s &amp;platform_sample_time,
+<a name="117"><span class="lineNum">     117 </span>            :                                       std::vector&lt;double&gt;::const_iterator platform_sample_begin,</a>
+<span class="lineNum">     118 </span>            :                                       std::vector&lt;double&gt;::const_iterator platform_sample_end,
+<span class="lineNum">     119 </span>            :                                       std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::const_iterator prof_sample_begin,
+<span class="lineNum">     120 </span>            :                                       std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::const_iterator prof_sample_end,
+<a name="121"><span class="lineNum">     121 </span>            :                                       std::vector&lt;double&gt; &amp;aligned_signal,</a>
+<span class="lineNum">     122 </span>            :                                       std::vector&lt;uint64_t&gt; &amp;region_id) = 0;
+<span class="lineNum">     123 </span>            :             virtual const std::map&lt;int, int&gt; &amp;rank_idx_map(void) const = 0;
+<span class="lineNum">     124 </span>            :     };
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span>            :     template &lt;class type&gt;
+<span class="lineNum">     127 </span>            :     class CircularBuffer;
 <span class="lineNum">     128 </span>            : 
-<a name="129"><span class="lineNum">     129 </span>            :     class SampleRegulator : public ISampleRegulator</a>
+<a name="129"><span class="lineNum">     129 </span>            :     class SampleRegulatorImp : public SampleRegulator</a>
 <span class="lineNum">     130 </span>            :     {
 <span class="lineNum">     131 </span>            :         public:
-<span class="lineNum">     132 </span>            :             /// @brief SampleRegulator constructor.
+<span class="lineNum">     132 </span>            :             /// @brief SampleRegulatorImp constructor.
 <a name="133"><span class="lineNum">     133 </span>            :             ///</a>
 <span class="lineNum">     134 </span>            :             /// Creates data structures used for mapping rank reported
 <span class="lineNum">     135 </span>            :             /// in the profile message to the node local rank which is
@@ -211,9 +211,9 @@
 <a name="141"><span class="lineNum">     141 </span>            :             /// Note that each rank may run on multiple CPUs but it is</a>
 <span class="lineNum">     142 </span>            :             /// assumed that each CPU is allocated to a specific MPI
 <span class="lineNum">     143 </span>            :             /// rank.
-<a name="144"><span class="lineNum">     144 </span>            :             SampleRegulator(const std::vector&lt;int&gt; &amp;cpu_rank);</a>
-<a name="145"><span class="lineNum">     145 </span>            :             /// @brief SampleRegulator destructor, virtual.</a>
-<span class="lineNum">     146 </span><span class="lineCov">          3 :             virtual ~SampleRegulator() = default;</span>
+<a name="144"><span class="lineNum">     144 </span>            :             SampleRegulatorImp(const std::vector&lt;int&gt; &amp;cpu_rank);</a>
+<a name="145"><span class="lineNum">     145 </span>            :             /// @brief SampleRegulatorImp destructor, virtual.</a>
+<span class="lineNum">     146 </span><span class="lineCov">          6 :             virtual ~SampleRegulatorImp() = default;</span>
 <span class="lineNum">     147 </span>            :             void operator () (const struct geopm_time_s &amp;platform_sample_time,
 <span class="lineNum">     148 </span>            :                               std::vector&lt;double&gt;::const_iterator platform_sample_begin,
 <a name="149"><span class="lineNum">     149 </span>            :                               std::vector&lt;double&gt;::const_iterator platform_sample_end,</a>
@@ -255,7 +255,7 @@
 <a name="185"><span class="lineNum">     185 </span>            :             std::vector&lt;uint64_t&gt; m_region_id;</a>
 <span class="lineNum">     186 </span>            :             /// @brief Per rank record of last profile samples in
 <span class="lineNum">     187 </span>            :             /// m_region_id_prev
-<span class="lineNum">     188 </span>            :             std::vector&lt;std::unique_ptr&lt;ICircularBuffer&lt;struct m_rank_sample_s&gt; &gt; &gt; m_rank_sample_prev;
+<span class="lineNum">     188 </span>            :             std::vector&lt;std::unique_ptr&lt;CircularBuffer&lt;struct m_rank_sample_s&gt; &gt; &gt; m_rank_sample_prev;
 <a name="189"><span class="lineNum">     189 </span>            :             /// @brief The platform sample time.</a>
 <span class="lineNum">     190 </span>            :             struct geopm_time_s m_aligned_time;
 <span class="lineNum">     191 </span>            :             /// @brief Vector to multiply with signal_domain_matrix to
@@ -274,7 +274,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

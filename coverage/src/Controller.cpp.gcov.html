@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/Controller.cpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/Controller.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - Controller.cpp<span style="font-size: 80%;"> (source / <a href="Controller.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - Controller.cpp<span style="font-size: 80%;"> (source / <a href="Controller.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">164</td>
-            <td class="headerCovTableEntry">195</td>
-            <td class="headerCovTableEntryMed">84.1 %</td>
+            <td class="headerCovTableEntry">190</td>
+            <td class="headerCovTableEntry">204</td>
+            <td class="headerCovTableEntryHi">93.1 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntry">19</td>
             <td class="headerCovTableEntry">20</td>
-            <td class="headerCovTableEntryMed">75.0 %</td>
+            <td class="headerCovTableEntryHi">95.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -103,358 +103,366 @@
 <a name="33"><span class="lineNum">      33 </span>            : #include &lt;algorithm&gt;</a>
 <span class="lineNum">      34 </span>            : #include &lt;cmath&gt;
 <span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span>            : #include &quot;PluginFactory.hpp&quot;
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;geopm_env.h&quot;</a>
-<span class="lineNum">      38 </span>            : #include &quot;geopm_signal_handler.h&quot;
-<span class="lineNum">      39 </span>            : #include &quot;Controller.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;ApplicationIO.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Reporter.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;Tracer.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;Comm.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;PlatformTopo.hpp&quot;</a>
-<span class="lineNum">      46 </span>            : #include &quot;PlatformIO.hpp&quot;
-<span class="lineNum">      47 </span>            : #include &quot;Agent.hpp&quot;
-<span class="lineNum">      48 </span>            : #include &quot;TreeComm.hpp&quot;
-<a name="49"><span class="lineNum">      49 </span>            : #include &quot;ManagerIO.hpp&quot;</a>
-<span class="lineNum">      50 </span>            : #include &quot;Helper.hpp&quot;
-<span class="lineNum">      51 </span>            : #include &quot;config.h&quot;
-<span class="lineNum">      52 </span>            : 
-<a name="53"><span class="lineNum">      53 </span>            : extern &quot;C&quot;</a>
-<span class="lineNum">      54 </span>            : {
-<span class="lineNum">      55 </span>            :     static int geopm_run_imp(struct geopm_ctl_c *ctl);
-<span class="lineNum">      56 </span>            :     /// forward declaration instead of include geopm_ctl.h to avoid mpi.h inclusion
-<a name="57"><span class="lineNum">      57 </span>            :     int geopm_ctl_run(struct geopm_ctl_c *ctl);</a>
-<span class="lineNum">      58 </span>            : 
-<span class="lineNum">      59 </span><span class="lineNoCov">          0 :     int geopm_ctl_pthread(struct geopm_ctl_c *ctl,</span>
-<span class="lineNum">      60 </span>            :                           const pthread_attr_t *attr,
-<a name="61"><span class="lineNum">      61 </span>            :                           pthread_t *thread)</a>
-<span class="lineNum">      62 </span>            :     {
-<span class="lineNum">      63 </span><span class="lineNoCov">          0 :         long err = 0;</span>
-<span class="lineNum">      64 </span><span class="lineNoCov">          0 :         geopm::Controller *ctl_obj = (geopm::Controller *)ctl;</span>
-<a name="65"><span class="lineNum">      65 </span>            :         try {</a>
-<span class="lineNum">      66 </span><span class="lineNoCov">          0 :             ctl_obj-&gt;pthread(attr, thread);</span>
-<span class="lineNum">      67 </span>            :         }
-<span class="lineNum">      68 </span><span class="lineNoCov">          0 :         catch (...) {</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineNoCov">          0 :             ctl_obj-&gt;abort();</span></a>
-<span class="lineNum">      70 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), true);</span>
-<span class="lineNum">      71 </span>            :         }
-<span class="lineNum">      72 </span><span class="lineNoCov">          0 :         return err;</span>
-<a name="73"><span class="lineNum">      73 </span>            :     }</a>
-<span class="lineNum">      74 </span>            : 
-<span class="lineNum">      75 </span><span class="lineNoCov">          0 :     static void *geopm_threaded_run(void *args)</span>
-<span class="lineNum">      76 </span>            :     {
-<a name="77"><span class="lineNum">      77 </span><span class="lineNoCov">          0 :         return (void *) (long) geopm_run_imp((struct geopm_ctl_c *)args);</span></a>
-<a name="78"><span class="lineNum">      78 </span>            :     }</a>
-<span class="lineNum">      79 </span>            : 
-<span class="lineNum">      80 </span><span class="lineNoCov">          0 :     int geopmctl_main(void)</span>
-<a name="81"><span class="lineNum">      81 </span>            :     {</a>
-<span class="lineNum">      82 </span><span class="lineNoCov">          0 :         int err = 0;</span>
-<span class="lineNum">      83 </span>            :         try {
-<span class="lineNum">      84 </span><span class="lineNoCov">          0 :             auto tmp_comm = geopm::comm_factory().make_plugin(geopm_env_comm());</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineNoCov">          0 :             geopm::Controller ctl(std::move(tmp_comm));</span></a>
-<span class="lineNum">      86 </span><span class="lineNoCov">          0 :             err = geopm_ctl_run((struct geopm_ctl_c *)&amp;ctl);</span>
-<span class="lineNum">      87 </span>            :         }
-<span class="lineNum">      88 </span><span class="lineNoCov">          0 :         catch (...) {</span>
-<a name="89"><span class="lineNum">      89 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), true);</span></a>
-<span class="lineNum">      90 </span>            :         }
-<span class="lineNum">      91 </span><span class="lineNoCov">          0 :         return err;</span>
-<a name="92"><span class="lineNum">      92 </span>            :     }</a>
-<a name="93"><span class="lineNum">      93 </span>            : </a>
-<span class="lineNum">      94 </span><span class="lineCov">         13 :     int geopm_ctl_destroy(struct geopm_ctl_c *ctl)</span>
-<span class="lineNum">      95 </span>            :     {
-<span class="lineNum">      96 </span><span class="lineCov">         13 :         int err = 0;</span>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         13 :         geopm::Controller *ctl_obj = (geopm::Controller *)ctl;</span></a>
-<span class="lineNum">      98 </span>            :         try {
-<span class="lineNum">      99 </span><span class="lineCov">         13 :             delete ctl_obj;</span>
-<span class="lineNum">     100 </span>            :         }
-<a name="101"><span class="lineNum">     101 </span>            :         catch (...) {</a>
-<span class="lineNum">     102 </span>            :             err = geopm::exception_handler(std::current_exception(), true);
-<span class="lineNum">     103 </span>            :         }
-<span class="lineNum">     104 </span><span class="lineCov">         13 :         return err;</span>
-<a name="105"><span class="lineNum">     105 </span>            :     }</a>
-<span class="lineNum">     106 </span>            : 
-<span class="lineNum">     107 </span><span class="lineCov">         13 :     static int geopm_run_imp(struct geopm_ctl_c *ctl)</span>
-<span class="lineNum">     108 </span>            :     {
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         13 :         int err = 0;</span></a>
-<span class="lineNum">     110 </span><span class="lineCov">         13 :         geopm::Controller *ctl_obj = (geopm::Controller *)ctl;</span>
-<span class="lineNum">     111 </span>            :         try {
-<span class="lineNum">     112 </span><span class="lineCov">         13 :             ctl_obj-&gt;run();</span>
-<a name="113"><span class="lineNum">     113 </span>            :         }</a>
-<span class="lineNum">     114 </span><span class="lineNoCov">          0 :         catch (...) {</span>
-<span class="lineNum">     115 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), true);</span>
-<span class="lineNum">     116 </span>            :         }
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         13 :         return err;</span></a>
-<a name="118"><span class="lineNum">     118 </span>            :     }</a>
-<span class="lineNum">     119 </span>            : 
-<span class="lineNum">     120 </span><span class="lineCov">         13 :     int geopm_ctl_run(struct geopm_ctl_c *ctl)</span>
-<a name="121"><span class="lineNum">     121 </span>            :     {</a>
-<span class="lineNum">     122 </span><span class="lineCov">         13 :         return geopm_run_imp(ctl);</span>
-<span class="lineNum">     123 </span>            :     }
-<span class="lineNum">     124 </span>            : }
-<a name="125"><span class="lineNum">     125 </span>            : </a>
-<a name="126"><span class="lineNum">     126 </span>            : namespace geopm</a>
-<span class="lineNum">     127 </span>            : {
-<span class="lineNum">     128 </span><span class="lineCov">         26 :     static std::string get_start_time()</span>
-<a name="129"><span class="lineNum">     129 </span>            :     {</a>
-<span class="lineNum">     130 </span>            :         static bool once = true;
-<span class="lineNum">     131 </span><span class="lineCov">         26 :         static std::string ret;</span>
-<span class="lineNum">     132 </span>            : 
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         26 :         if (once) {</span></a>
-<span class="lineNum">     134 </span><span class="lineCov">         13 :             const int buf_size = 64;</span>
-<span class="lineNum">     135 </span>            :             char time_buff[buf_size];
-<span class="lineNum">     136 </span><span class="lineCov">         13 :             geopm_time_string(buf_size, time_buff);</span>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         26 :             std::string tmp(time_buff);</span></a>
-<span class="lineNum">     138 </span><span class="lineCov">         13 :             tmp.erase(std::remove(tmp.begin(), tmp.end(), '\n'), tmp.end());</span>
-<span class="lineNum">     139 </span><span class="lineCov">         13 :             ret = tmp;</span>
-<span class="lineNum">     140 </span><span class="lineCov">         13 :             once = false;</span>
-<a name="141"><span class="lineNum">     141 </span>            :         }</a>
-<span class="lineNum">     142 </span><span class="lineCov">         26 :         return ret;</span>
-<a name="143"><span class="lineNum">     143 </span>            :     }</a>
-<span class="lineNum">     144 </span>            : 
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         13 :     Controller::Controller(std::shared_ptr&lt;Comm&gt; ppn1_comm)</span></a>
-<span class="lineNum">     146 </span>            :         : Controller(ppn1_comm,
-<span class="lineNum">     147 </span><span class="lineCov">         13 :                      platform_io(),</span>
-<span class="lineNum">     148 </span>            :                      geopm_env_agent(),
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         26 :                      Agent::num_policy(agent_factory().dictionary(geopm_env_agent())),</span></a>
-<span class="lineNum">     150 </span><span class="lineCov">         26 :                      Agent::num_sample(agent_factory().dictionary(geopm_env_agent())),</span>
-<span class="lineNum">     151 </span>            :                      std::unique_ptr&lt;ITreeComm&gt;(new TreeComm(ppn1_comm,
-<span class="lineNum">     152 </span><span class="lineCov">         26 :                          Agent::num_policy(agent_factory().dictionary(geopm_env_agent())),</span>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         39 :                          Agent::num_sample(agent_factory().dictionary(geopm_env_agent())))),</span></a>
-<span class="lineNum">     154 </span><span class="lineCov">         13 :                      std::shared_ptr&lt;IApplicationIO&gt;(new ApplicationIO(geopm_env_shmkey())),</span>
-<span class="lineNum">     155 </span><span class="lineCov">         52 :                      std::unique_ptr&lt;IReporter&gt;(new Reporter(get_start_time(), geopm_env_report(), platform_io(), ppn1_comm-&gt;rank())),</span>
-<span class="lineNum">     156 </span>            :                      nullptr,
-<a name="157"><span class="lineNum">     157 </span>            :                      std::vector&lt;std::unique_ptr&lt;Agent&gt; &gt;{},</a>
-<span class="lineNum">     158 </span><span class="lineCov">        182 :                      std::unique_ptr&lt;IManagerIOSampler&gt;(new ManagerIOSampler(geopm_env_policy(), true)))</span>
-<span class="lineNum">     159 </span>            :     {
-<span class="lineNum">     160 </span>            : 
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">         13 :     }</span></a>
-<span class="lineNum">     162 </span>            : 
-<span class="lineNum">     163 </span><span class="lineCov">         17 :     Controller::Controller(std::shared_ptr&lt;Comm&gt; comm,</span>
-<span class="lineNum">     164 </span>            :                            IPlatformIO &amp;plat_io,
-<a name="165"><span class="lineNum">     165 </span>            :                            const std::string &amp;agent_name,</a>
-<span class="lineNum">     166 </span>            :                            int num_send_down,
-<span class="lineNum">     167 </span>            :                            int num_send_up,
-<span class="lineNum">     168 </span>            :                            std::unique_ptr&lt;ITreeComm&gt; tree_comm,
-<a name="169"><span class="lineNum">     169 </span>            :                            std::shared_ptr&lt;IApplicationIO&gt; application_io,</a>
-<span class="lineNum">     170 </span>            :                            std::unique_ptr&lt;IReporter&gt; reporter,
-<span class="lineNum">     171 </span>            :                            std::unique_ptr&lt;ITracer&gt; tracer,
-<span class="lineNum">     172 </span>            :                            std::vector&lt;std::unique_ptr&lt;Agent&gt; &gt; level_agent,
-<a name="173"><span class="lineNum">     173 </span>            :                            std::unique_ptr&lt;IManagerIOSampler&gt; manager_io_sampler)</a>
-<span class="lineNum">     174 </span>            :         : m_comm(comm)
-<span class="lineNum">     175 </span>            :         , m_platform_io(plat_io)
-<span class="lineNum">     176 </span>            :         , m_agent_name(agent_name)
-<a name="177"><span class="lineNum">     177 </span>            :         , m_num_send_down(num_send_down)</a>
-<span class="lineNum">     178 </span>            :         , m_num_send_up(num_send_up)
-<span class="lineNum">     179 </span><span class="lineCov">         17 :         , m_tree_comm(std::move(tree_comm))</span>
-<span class="lineNum">     180 </span><span class="lineCov">         17 :         , m_num_level_ctl(m_tree_comm-&gt;num_level_controlled())</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineCov">         17 :         , m_max_level(m_num_level_ctl + 1)</span></a>
-<span class="lineNum">     182 </span><span class="lineCov">         17 :         , m_root_level(m_tree_comm-&gt;root_level())</span>
-<span class="lineNum">     183 </span><span class="lineCov">         17 :         , m_application_io(std::move(application_io))</span>
-<span class="lineNum">     184 </span><span class="lineCov">         17 :         , m_reporter(std::move(reporter))</span>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">         17 :         , m_tracer(std::move(tracer))</span></a>
-<span class="lineNum">     186 </span><span class="lineCov">         17 :         , m_agent(std::move(level_agent))</span>
-<span class="lineNum">     187 </span><span class="lineCov">         17 :         , m_is_root(m_num_level_ctl == m_root_level)</span>
-<span class="lineNum">     188 </span><span class="lineCov">         17 :         , m_in_policy(m_num_send_down, NAN)</span>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">         17 :         , m_out_policy(m_num_level_ctl)</span></a>
-<span class="lineNum">     190 </span><span class="lineCov">         17 :         , m_in_sample(m_num_level_ctl)</span>
-<span class="lineNum">     191 </span><span class="lineCov">         17 :         , m_out_sample(m_num_send_up, NAN)</span>
-<span class="lineNum">     192 </span><span class="lineCov">        238 :         , m_manager_io_sampler(std::move(manager_io_sampler))</span>
-<a name="193"><span class="lineNum">     193 </span>            :     {</a>
-<span class="lineNum">     194 </span>            :         // Three dimensional vector over levels, children, and message
-<span class="lineNum">     195 </span>            :         // index.  These are used as temporary storage when passing
-<span class="lineNum">     196 </span>            :         // messages up and down the tree.
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">         23 :         for (int level = 0; level != m_num_level_ctl; ++level) {</span></a>
-<span class="lineNum">     198 </span><span class="lineCov">          6 :             int num_children = m_tree_comm-&gt;level_size(level);</span>
-<span class="lineNum">     199 </span><span class="lineCov">         18 :             m_out_policy[level] = std::vector&lt;std::vector&lt;double&gt; &gt;(num_children,</span>
-<span class="lineNum">     200 </span><span class="lineCov">         12 :                                                                     std::vector&lt;double&gt;(m_num_send_down, NAN));</span>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         18 :             m_in_sample[level] = std::vector&lt;std::vector&lt;double&gt; &gt;(num_children,</span></a>
-<span class="lineNum">     202 </span><span class="lineCov">         12 :                                                                    std::vector&lt;double&gt;(m_num_send_up, NAN));</span>
-<span class="lineNum">     203 </span>            :         }
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">         17 :     }</span></a>
-<a name="205"><span class="lineNum">     205 </span>            : </a>
-<span class="lineNum">     206 </span><span class="lineCov">         47 :     Controller::~Controller()</span>
-<span class="lineNum">     207 </span>            :     {
-<span class="lineNum">     208 </span><span class="lineCov">         17 :         geopm_signal_handler_check();</span>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         17 :         geopm_signal_handler_revert();</span></a>
-<span class="lineNum">     210 </span><span class="lineCov">         17 :         m_platform_io.restore_control();</span>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">         30 :     }</span></a>
-<span class="lineNum">     212 </span>            : 
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         13 :     void Controller::init_agents(void)</span></a>
-<span class="lineNum">     214 </span>            :     {
-<span class="lineNum">     215 </span><span class="lineCov">         26 :         std::vector&lt;int&gt; fan_in(m_tree_comm-&gt;root_level());</span>
-<span class="lineNum">     216 </span><span class="lineCov">         13 :         int level = 0;</span>
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         25 :         for (auto &amp;it : fan_in) {</span></a>
-<span class="lineNum">     218 </span><span class="lineCov">         12 :             it = m_tree_comm-&gt;level_size(level);</span>
-<span class="lineNum">     219 </span><span class="lineCov">         12 :             ++level;</span>
-<span class="lineNum">     220 </span>            :         }
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         13 :         if (m_agent.size() == 0) {</span></a>
-<span class="lineNum">     222 </span><span class="lineCov">         29 :             for (level = 0; level &lt; m_max_level; ++level) {</span>
-<span class="lineNum">     223 </span><span class="lineCov">         16 :                 m_agent.push_back(agent_factory().make_plugin(m_agent_name));</span>
-<span class="lineNum">     224 </span><span class="lineCov">         16 :                 m_agent.back()-&gt;init(level, fan_in, (level &lt; m_tree_comm-&gt;num_level_controlled()));</span>
-<a name="225"><span class="lineNum">     225 </span>            :             }</a>
-<span class="lineNum">     226 </span>            :         }
-<span class="lineNum">     227 </span>            : 
-<span class="lineNum">     228 </span>            :         /// @todo move somewhere else: need to happen after Agents are constructed
-<a name="229"><span class="lineNum">     229 </span>            :         // sanity checks</a>
-<span class="lineNum">     230 </span><span class="lineCov">         13 :         if (m_agent.size() == 0) {</span>
-<span class="lineNum">     231 </span>            :             throw Exception(&quot;Controller requires at least one Agent&quot;,
-<span class="lineNum">     232 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="233"><span class="lineNum">     233 </span>            :         }</a>
-<span class="lineNum">     234 </span><span class="lineCov">         13 :         if (m_max_level != (int)m_agent.size()) {</span>
-<span class="lineNum">     235 </span>            :             throw Exception(&quot;Controller number of agents is incorrect&quot;,
-<span class="lineNum">     236 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="237"><span class="lineNum">     237 </span>            :         }</a>
-<a name="238"><span class="lineNum">     238 </span><span class="lineCov">         13 :     }</span></a>
-<span class="lineNum">     239 </span>            : 
-<span class="lineNum">     240 </span><span class="lineCov">         13 :     void Controller::run(void)</span>
-<a name="241"><span class="lineNum">     241 </span>            :     {</a>
-<span class="lineNum">     242 </span><span class="lineCov">         13 :         m_application_io-&gt;connect();</span>
-<span class="lineNum">     243 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     244 </span><span class="lineCov">         13 :         m_platform_io.save_control();</span>
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span></a>
-<span class="lineNum">     246 </span><span class="lineCov">         13 :         init_agents();</span>
-<span class="lineNum">     247 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     248 </span><span class="lineCov">         13 :         m_reporter-&gt;init();</span>
-<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span></a>
-<span class="lineNum">     250 </span><span class="lineCov">         13 :         setup_trace();</span>
-<span class="lineNum">     251 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     252 </span><span class="lineCov">         13 :         m_application_io-&gt;controller_ready();</span>
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span></a>
-<span class="lineNum">     254 </span>            : 
-<span class="lineNum">     255 </span><span class="lineCov">         13 :         m_application_io-&gt;update(m_comm);</span>
-<span class="lineNum">     256 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<a name="257"><span class="lineNum">     257 </span><span class="lineCov">         13 :         m_platform_io.read_batch();</span></a>
-<span class="lineNum">     258 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     259 </span><span class="lineCov">         13 :         m_tracer-&gt;update(m_trace_sample, m_application_io-&gt;region_info());</span>
-<span class="lineNum">     260 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<a name="261"><span class="lineNum">     261 </span><span class="lineCov">         13 :         m_application_io-&gt;clear_region_info();</span></a>
-<span class="lineNum">     262 </span>            : 
-<span class="lineNum">     263 </span><span class="lineCov">     278137 :         while (!m_application_io-&gt;do_shutdown()) {</span>
-<span class="lineNum">     264 </span><span class="lineCov">     139062 :             step();</span>
-<a name="265"><span class="lineNum">     265 </span>            :         }</a>
-<span class="lineNum">     266 </span><span class="lineCov">         13 :         m_application_io-&gt;update(m_comm);</span>
-<span class="lineNum">     267 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     268 </span><span class="lineCov">         13 :         m_platform_io.read_batch();</span>
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span></a>
-<span class="lineNum">     270 </span><span class="lineCov">         13 :         m_tracer-&gt;update(m_trace_sample, m_application_io-&gt;region_info());</span>
-<span class="lineNum">     271 </span><span class="lineCov">         13 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     272 </span><span class="lineCov">         13 :         m_application_io-&gt;clear_region_info();</span>
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         13 :         generate();</span></a>
-<span class="lineNum">     274 </span><span class="lineCov">         13 :         m_platform_io.restore_control();</span>
-<a name="275"><span class="lineNum">     275 </span><span class="lineCov">         13 :     }</span></a>
-<span class="lineNum">     276 </span>            : 
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         17 :     void Controller::generate(void)</span></a>
-<span class="lineNum">     278 </span>            :     {
-<span class="lineNum">     279 </span><span class="lineCov">         34 :         std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; agent_report_header;</span>
-<span class="lineNum">     280 </span><span class="lineCov">         17 :         if (m_is_root) {</span>
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">          6 :             agent_report_header = m_agent[m_root_level]-&gt;report_header();</span></a>
-<span class="lineNum">     282 </span>            :         }
-<span class="lineNum">     283 </span>            : 
-<span class="lineNum">     284 </span><span class="lineCov">         34 :         auto agent_node_report = m_agent[0]-&gt;report_node();</span>
-<a name="285"><span class="lineNum">     285 </span>            : </a>
-<span class="lineNum">     286 </span><span class="lineCov">         68 :         m_reporter-&gt;generate(m_agent_name,</span>
-<span class="lineNum">     287 </span>            :                              agent_report_header,
-<span class="lineNum">     288 </span>            :                              agent_node_report,
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">         34 :                              m_agent[0]-&gt;report_region(),</span></a>
-<span class="lineNum">     290 </span><span class="lineCov">         17 :                              *m_application_io,</span>
-<span class="lineNum">     291 </span>            :                              m_comm,
-<span class="lineNum">     292 </span><span class="lineCov">         34 :                              *m_tree_comm);</span>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         17 :         m_tracer-&gt;flush();</span></a>
-<a name="294"><span class="lineNum">     294 </span><span class="lineCov">         17 :     }</span></a>
-<span class="lineNum">     295 </span>            : 
-<span class="lineNum">     296 </span><span class="lineCov">     139074 :     void Controller::step(void)</span>
-<a name="297"><span class="lineNum">     297 </span>            :     {</a>
-<span class="lineNum">     298 </span><span class="lineCov">     139074 :         walk_down();</span>
-<span class="lineNum">     299 </span><span class="lineCov">     139074 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     300 </span>            : 
-<a name="301"><span class="lineNum">     301 </span><span class="lineCov">     139074 :         walk_up();</span></a>
-<span class="lineNum">     302 </span><span class="lineCov">     139074 :         geopm_signal_handler_check();</span>
-<span class="lineNum">     303 </span><span class="lineCov">     139074 :         m_agent[0]-&gt;wait();</span>
-<span class="lineNum">     304 </span><span class="lineCov">     139074 :         geopm_signal_handler_check();</span>
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">     139074 :     }</span></a>
-<span class="lineNum">     306 </span>            : 
-<span class="lineNum">     307 </span><span class="lineCov">     139074 :     void Controller::walk_down(void)</span>
-<span class="lineNum">     308 </span>            :     {
-<a name="309"><span class="lineNum">     309 </span><span class="lineCov">     139074 :         bool do_send = false;</span></a>
-<span class="lineNum">     310 </span><span class="lineCov">     139074 :         if (m_is_root) {</span>
-<span class="lineNum">     311 </span>            :             /// @todo Pass m_in_policy by reference into the sampler, and return an is_updated bool.
-<span class="lineNum">     312 </span><span class="lineCov">      53768 :             m_in_policy = m_manager_io_sampler-&gt;sample();</span>
-<a name="313"><span class="lineNum">     313 </span><span class="lineCov">      53768 :             do_send = true;</span></a>
-<span class="lineNum">     314 </span>            :         }
-<span class="lineNum">     315 </span>            :         else {
-<span class="lineNum">     316 </span><span class="lineCov">      85306 :             do_send = m_tree_comm-&gt;receive_down(m_num_level_ctl, m_in_policy);</span>
+<span class="lineNum">      36 </span>            : #include &quot;geopm_env.h&quot;
+<a name="37"><span class="lineNum">      37 </span>            : #include &quot;geopm_signal_handler.h&quot;</a>
+<span class="lineNum">      38 </span>            : #include &quot;Controller.hpp&quot;
+<span class="lineNum">      39 </span>            : #include &quot;ApplicationIO.hpp&quot;
+<span class="lineNum">      40 </span>            : #include &quot;Reporter.hpp&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Tracer.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;Comm.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;PlatformIO.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;Agent.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;TreeComm.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;ManagerIO.hpp&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;Helper.hpp&quot;</a>
+<span class="lineNum">      50 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span>            : extern &quot;C&quot;
+<a name="53"><span class="lineNum">      53 </span>            : {</a>
+<span class="lineNum">      54 </span>            :     static int geopm_run_imp(struct geopm_ctl_c *ctl);
+<span class="lineNum">      55 </span>            :     /// forward declaration instead of include geopm_ctl.h to avoid mpi.h inclusion
+<a name="56"><span class="lineNum">      56 </span>            :     int geopm_ctl_run(struct geopm_ctl_c *ctl);</a>
+<a name="57"><span class="lineNum">      57 </span>            : </a>
+<span class="lineNum">      58 </span><span class="lineCov">          4 :     int geopm_ctl_pthread(struct geopm_ctl_c *ctl,</span>
+<span class="lineNum">      59 </span>            :                           const pthread_attr_t *attr,
+<span class="lineNum">      60 </span>            :                           pthread_t *thread)
+<a name="61"><span class="lineNum">      61 </span>            :     {</a>
+<span class="lineNum">      62 </span><span class="lineCov">          4 :         long err = 0;</span>
+<span class="lineNum">      63 </span><span class="lineCov">          4 :         geopm::Controller *ctl_obj = (geopm::Controller *)ctl;</span>
+<span class="lineNum">      64 </span>            :         try {
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">          4 :             ctl_obj-&gt;pthread(attr, thread);</span></a>
+<span class="lineNum">      66 </span>            :         }
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :             ctl_obj-&gt;abort();</span>
+<a name="69"><span class="lineNum">      69 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), true);</span></a>
+<span class="lineNum">      70 </span>            :         }
+<span class="lineNum">      71 </span><span class="lineCov">          4 :         return err;</span>
+<a name="72"><span class="lineNum">      72 </span>            :     }</a>
+<a name="73"><span class="lineNum">      73 </span>            : </a>
+<span class="lineNum">      74 </span><span class="lineCov">          4 :     static void *geopm_threaded_run(void *args)</span>
+<span class="lineNum">      75 </span>            :     {
+<span class="lineNum">      76 </span><span class="lineCov">          4 :         return (void *) (long) geopm_run_imp((struct geopm_ctl_c *)args);</span>
+<a name="77"><span class="lineNum">      77 </span>            :     }</a>
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span><span class="lineCov">         12 :     int geopmctl_main(void)</span>
+<span class="lineNum">      80 </span>            :     {
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         12 :         int err = 0;</span></a>
+<span class="lineNum">      82 </span>            :         try {
+<span class="lineNum">      83 </span><span class="lineCov">         24 :             auto tmp_comm = geopm::comm_factory().make_plugin(geopm_env_comm());</span>
+<span class="lineNum">      84 </span><span class="lineCov">         24 :             geopm::Controller ctl(std::move(tmp_comm));</span>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         12 :             err = geopm_ctl_run((struct geopm_ctl_c *)&amp;ctl);</span></a>
+<span class="lineNum">      86 </span>            :         }
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), true);</span>
+<a name="89"><span class="lineNum">      89 </span>            :         }</a>
+<span class="lineNum">      90 </span><span class="lineCov">         12 :         return err;</span>
+<a name="91"><span class="lineNum">      91 </span>            :     }</a>
+<span class="lineNum">      92 </span>            : 
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         64 :     int geopm_ctl_destroy(struct geopm_ctl_c *ctl)</span></a>
+<span class="lineNum">      94 </span>            :     {
+<span class="lineNum">      95 </span><span class="lineCov">         64 :         int err = 0;</span>
+<span class="lineNum">      96 </span><span class="lineCov">         64 :         geopm::Controller *ctl_obj = (geopm::Controller *)ctl;</span>
+<a name="97"><span class="lineNum">      97 </span>            :         try {</a>
+<span class="lineNum">      98 </span><span class="lineCov">         64 :             delete ctl_obj;</span>
+<span class="lineNum">      99 </span>            :         }
+<span class="lineNum">     100 </span>            :         catch (...) {
+<a name="101"><span class="lineNum">     101 </span>            :             err = geopm::exception_handler(std::current_exception(), true);</a>
+<span class="lineNum">     102 </span>            :         }
+<span class="lineNum">     103 </span><span class="lineCov">         64 :         return err;</span>
+<a name="104"><span class="lineNum">     104 </span>            :     }</a>
+<a name="105"><span class="lineNum">     105 </span>            : </a>
+<span class="lineNum">     106 </span><span class="lineCov">         76 :     static int geopm_run_imp(struct geopm_ctl_c *ctl)</span>
+<span class="lineNum">     107 </span>            :     {
+<span class="lineNum">     108 </span><span class="lineCov">         76 :         int err = 0;</span>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         76 :         geopm::Controller *ctl_obj = (geopm::Controller *)ctl;</span></a>
+<span class="lineNum">     110 </span>            :         try {
+<span class="lineNum">     111 </span><span class="lineCov">         76 :             ctl_obj-&gt;run();</span>
+<span class="lineNum">     112 </span>            :         }
+<a name="113"><span class="lineNum">     113 </span><span class="lineNoCov">          0 :         catch (...) {</span></a>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), true);</span>
+<span class="lineNum">     115 </span>            :         }
+<span class="lineNum">     116 </span><span class="lineCov">         76 :         return err;</span>
+<a name="117"><span class="lineNum">     117 </span>            :     }</a>
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span><span class="lineCov">         72 :     int geopm_ctl_run(struct geopm_ctl_c *ctl)</span>
+<span class="lineNum">     120 </span>            :     {
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">         72 :         return geopm_run_imp(ctl);</span></a>
+<span class="lineNum">     122 </span>            :     }
+<span class="lineNum">     123 </span>            : }
+<span class="lineNum">     124 </span>            : 
+<a name="125"><span class="lineNum">     125 </span>            : namespace geopm</a>
+<span class="lineNum">     126 </span>            : {
+<span class="lineNum">     127 </span><span class="lineCov">        152 :     static std::string get_start_time()</span>
+<span class="lineNum">     128 </span>            :     {
+<a name="129"><span class="lineNum">     129 </span>            :         static bool once = true;</a>
+<span class="lineNum">     130 </span><span class="lineCov">        152 :         static std::string ret;</span>
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span><span class="lineCov">        152 :         if (once) {</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         76 :             const int buf_size = 64;</span></a>
+<span class="lineNum">     134 </span>            :             char time_buff[buf_size];
+<span class="lineNum">     135 </span><span class="lineCov">         76 :             geopm_time_string(buf_size, time_buff);</span>
+<span class="lineNum">     136 </span><span class="lineCov">        152 :             std::string tmp(time_buff);</span>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         76 :             tmp.erase(std::remove(tmp.begin(), tmp.end(), '\n'), tmp.end());</span></a>
+<span class="lineNum">     138 </span><span class="lineCov">         76 :             ret = tmp;</span>
+<span class="lineNum">     139 </span><span class="lineCov">         76 :             once = false;</span>
+<span class="lineNum">     140 </span>            :         }
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        152 :         return ret;</span></a>
+<a name="142"><span class="lineNum">     142 </span>            :     }</a>
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span><span class="lineCov">         76 :     Controller::Controller(std::shared_ptr&lt;Comm&gt; ppn1_comm)</span>
+<a name="145"><span class="lineNum">     145 </span>            :         : Controller(ppn1_comm,</a>
+<span class="lineNum">     146 </span><span class="lineCov">         42 :                      platform_io(),</span>
+<span class="lineNum">     147 </span>            :                      geopm_env_agent(),
+<span class="lineNum">     148 </span><span class="lineCov">        118 :                      Agent::num_policy(agent_factory().dictionary(geopm_env_agent())),</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        118 :                      Agent::num_sample(agent_factory().dictionary(geopm_env_agent())),</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">        136 :                      std::unique_ptr&lt;TreeComm&gt;(new TreeCommImp(ppn1_comm,</span>
+<span class="lineNum">     151 </span><span class="lineCov">        152 :                          Agent::num_policy(agent_factory().dictionary(geopm_env_agent())),</span>
+<span class="lineNum">     152 </span><span class="lineCov">        194 :                          Agent::num_sample(agent_factory().dictionary(geopm_env_agent())))),</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        110 :                      std::shared_ptr&lt;ApplicationIO&gt;(new ApplicationIOImp(geopm_env_shmkey())),</span></a>
+<span class="lineNum">     154 </span><span class="lineCov">        186 :                      std::unique_ptr&lt;Reporter&gt;(new ReporterImp(get_start_time(),</span>
+<span class="lineNum">     155 </span>            :                                                                 geopm_env_report(),
+<span class="lineNum">     156 </span>            :                                                                 platform_io(),
+<a name="157"><span class="lineNum">     157 </span>            :                                                                 platform_topo(),</a>
+<span class="lineNum">     158 </span><span class="lineCov">        118 :                                                                 ppn1_comm-&gt;rank())),</span>
+<span class="lineNum">     159 </span>            :                      nullptr,
+<span class="lineNum">     160 </span><span class="lineCov">         68 :                      std::vector&lt;std::unique_ptr&lt;Agent&gt; &gt;{},</span>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        792 :                      std::unique_ptr&lt;ManagerIOSampler&gt;(new ManagerIOSamplerImp(geopm_env_policy(), true)))</span></a>
+<span class="lineNum">     162 </span>            :     {
+<span class="lineNum">     163 </span>            : 
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">         76 :     }</span></a>
+<a name="165"><span class="lineNum">     165 </span>            : </a>
+<span class="lineNum">     166 </span><span class="lineCov">         84 :     Controller::Controller(std::shared_ptr&lt;Comm&gt; comm,</span>
+<span class="lineNum">     167 </span>            :                            PlatformIO &amp;plat_io,
+<span class="lineNum">     168 </span>            :                            const std::string &amp;agent_name,
+<a name="169"><span class="lineNum">     169 </span>            :                            int num_send_down,</a>
+<span class="lineNum">     170 </span>            :                            int num_send_up,
+<span class="lineNum">     171 </span>            :                            std::unique_ptr&lt;TreeComm&gt; tree_comm,
+<span class="lineNum">     172 </span>            :                            std::shared_ptr&lt;ApplicationIO&gt; application_io,
+<a name="173"><span class="lineNum">     173 </span>            :                            std::unique_ptr&lt;Reporter&gt; reporter,</a>
+<span class="lineNum">     174 </span>            :                            std::unique_ptr&lt;Tracer&gt; tracer,
+<span class="lineNum">     175 </span>            :                            std::vector&lt;std::unique_ptr&lt;Agent&gt; &gt; level_agent,
+<span class="lineNum">     176 </span><span class="lineCov">         38 :                            std::unique_ptr&lt;ManagerIOSampler&gt; manager_io_sampler)</span>
+<a name="177"><span class="lineNum">     177 </span>            :         : m_comm(comm)</a>
+<span class="lineNum">     178 </span>            :         , m_platform_io(plat_io)
+<span class="lineNum">     179 </span>            :         , m_agent_name(agent_name)
+<span class="lineNum">     180 </span>            :         , m_num_send_down(num_send_down)
+<a name="181"><span class="lineNum">     181 </span>            :         , m_num_send_up(num_send_up)</a>
+<span class="lineNum">     182 </span><span class="lineCov">         84 :         , m_tree_comm(std::move(tree_comm))</span>
+<span class="lineNum">     183 </span><span class="lineCov">         84 :         , m_num_level_ctl(m_tree_comm-&gt;num_level_controlled())</span>
+<span class="lineNum">     184 </span><span class="lineCov">         84 :         , m_max_level(m_num_level_ctl + 1)</span>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">         84 :         , m_root_level(m_tree_comm-&gt;root_level())</span></a>
+<span class="lineNum">     186 </span><span class="lineCov">         84 :         , m_application_io(std::move(application_io))</span>
+<span class="lineNum">     187 </span><span class="lineCov">         84 :         , m_reporter(std::move(reporter))</span>
+<span class="lineNum">     188 </span><span class="lineCov">         84 :         , m_tracer(std::move(tracer))</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">         84 :         , m_agent(std::move(level_agent))</span></a>
+<span class="lineNum">     190 </span><span class="lineCov">         84 :         , m_is_root(m_num_level_ctl == m_root_level)</span>
+<span class="lineNum">     191 </span><span class="lineCov">        122 :         , m_in_policy(m_num_send_down, NAN)</span>
+<span class="lineNum">     192 </span><span class="lineCov">         84 :         , m_out_policy(m_num_level_ctl)</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">         84 :         , m_in_sample(m_num_level_ctl)</span></a>
+<span class="lineNum">     194 </span><span class="lineCov">        122 :         , m_out_sample(m_num_send_up, NAN)</span>
+<span class="lineNum">     195 </span><span class="lineCov">       1252 :         , m_manager_io_sampler(std::move(manager_io_sampler))</span>
+<span class="lineNum">     196 </span>            :     {
+<a name="197"><span class="lineNum">     197 </span>            :         // Three dimensional vector over levels, children, and message</a>
+<span class="lineNum">     198 </span>            :         // index.  These are used as temporary storage when passing
+<span class="lineNum">     199 </span>            :         // messages up and down the tree.
+<span class="lineNum">     200 </span><span class="lineCov">        106 :         for (int level = 0; level != m_num_level_ctl; ++level) {</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         22 :             int num_children = m_tree_comm-&gt;level_size(level);</span></a>
+<span class="lineNum">     202 </span><span class="lineCov">         66 :             m_out_policy[level] = std::vector&lt;std::vector&lt;double&gt; &gt;(num_children,</span>
+<span class="lineNum">     203 </span><span class="lineCov">         44 :                                                                     std::vector&lt;double&gt;(m_num_send_down, NAN));</span>
+<span class="lineNum">     204 </span><span class="lineCov">         66 :             m_in_sample[level] = std::vector&lt;std::vector&lt;double&gt; &gt;(num_children,</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         44 :                                                                    std::vector&lt;double&gt;(m_num_send_up, NAN));</span></a>
+<span class="lineNum">     206 </span>            :         }
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">         84 :     }</span></a>
+<span class="lineNum">     208 </span>            : 
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">        232 :     Controller::~Controller()</span></a>
+<span class="lineNum">     210 </span>            :     {
+<span class="lineNum">     211 </span><span class="lineCov">         84 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     212 </span><span class="lineCov">         84 :         geopm_signal_handler_revert();</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         84 :         m_platform_io.restore_control();</span></a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">        148 :     }</span></a>
+<span class="lineNum">     215 </span>            : 
+<span class="lineNum">     216 </span><span class="lineCov">         76 :     void Controller::init_agents(void)</span>
+<a name="217"><span class="lineNum">     217 </span>            :     {</a>
+<span class="lineNum">     218 </span><span class="lineCov">        152 :         std::vector&lt;int&gt; fan_in(m_tree_comm-&gt;root_level());</span>
+<span class="lineNum">     219 </span><span class="lineCov">         76 :         int level = 0;</span>
+<span class="lineNum">     220 </span><span class="lineCov">        140 :         for (auto &amp;it : fan_in) {</span>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         64 :             it = m_tree_comm-&gt;level_size(level);</span></a>
+<span class="lineNum">     222 </span><span class="lineCov">         64 :             ++level;</span>
+<span class="lineNum">     223 </span>            :         }
+<span class="lineNum">     224 </span><span class="lineCov">         76 :         if (m_agent.size() == 0) {</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">        168 :             for (level = 0; level &lt; m_max_level; ++level) {</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">         92 :                 m_agent.push_back(agent_factory().make_plugin(m_agent_name));</span>
+<span class="lineNum">     227 </span><span class="lineCov">         92 :                 m_agent.back()-&gt;init(level, fan_in, (level &lt; m_tree_comm-&gt;num_level_controlled()));</span>
+<span class="lineNum">     228 </span>            :             }
+<a name="229"><span class="lineNum">     229 </span>            :         }</a>
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span>            :         /// @todo move somewhere else: need to happen after Agents are constructed
+<span class="lineNum">     232 </span>            :         // sanity checks
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">         76 :         if (m_agent.size() == 0) {</span></a>
+<span class="lineNum">     234 </span>            :             throw Exception(&quot;Controller requires at least one Agent&quot;,
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     236 </span>            :         }
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         76 :         if (m_max_level != (int)m_agent.size()) {</span></a>
+<span class="lineNum">     238 </span>            :             throw Exception(&quot;Controller number of agents is incorrect&quot;,
+<span class="lineNum">     239 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     240 </span>            :         }
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         76 :     }</span></a>
+<span class="lineNum">     242 </span>            : 
+<span class="lineNum">     243 </span><span class="lineCov">         76 :     void Controller::run(void)</span>
+<span class="lineNum">     244 </span>            :     {
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         76 :         m_application_io-&gt;connect();</span></a>
+<span class="lineNum">     246 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     247 </span><span class="lineCov">         76 :         m_platform_io.save_control();</span>
+<span class="lineNum">     248 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         76 :         init_agents();</span></a>
+<span class="lineNum">     250 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     251 </span><span class="lineCov">         76 :         m_reporter-&gt;init();</span>
+<span class="lineNum">     252 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         76 :         setup_trace();</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     255 </span><span class="lineCov">         76 :         m_application_io-&gt;controller_ready();</span>
+<span class="lineNum">     256 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<a name="257"><span class="lineNum">     257 </span>            : </a>
+<span class="lineNum">     258 </span><span class="lineCov">         76 :         m_application_io-&gt;update(m_comm);</span>
+<span class="lineNum">     259 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     260 </span><span class="lineCov">         76 :         m_platform_io.read_batch();</span>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span></a>
+<span class="lineNum">     262 </span><span class="lineCov">         76 :         m_tracer-&gt;update(m_trace_sample, m_application_io-&gt;region_info());</span>
+<span class="lineNum">     263 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     264 </span><span class="lineCov">         76 :         m_application_io-&gt;clear_region_info();</span>
+<a name="265"><span class="lineNum">     265 </span>            : </a>
+<span class="lineNum">     266 </span><span class="lineCov">    1250848 :         while (!m_application_io-&gt;do_shutdown()) {</span>
+<span class="lineNum">     267 </span><span class="lineCov">     625386 :             step();</span>
+<span class="lineNum">     268 </span>            :         }
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         76 :         m_application_io-&gt;update(m_comm);</span></a>
+<span class="lineNum">     270 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     271 </span><span class="lineCov">         76 :         m_platform_io.read_batch();</span>
+<span class="lineNum">     272 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         76 :         m_tracer-&gt;update(m_trace_sample, m_application_io-&gt;region_info());</span></a>
+<span class="lineNum">     274 </span><span class="lineCov">         76 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     275 </span><span class="lineCov">         76 :         m_application_io-&gt;clear_region_info();</span>
+<span class="lineNum">     276 </span><span class="lineCov">         76 :         generate();</span>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         76 :         m_platform_io.restore_control();</span></a>
+<a name="278"><span class="lineNum">     278 </span><span class="lineCov">         76 :     }</span></a>
+<span class="lineNum">     279 </span>            : 
+<span class="lineNum">     280 </span><span class="lineCov">         84 :     void Controller::generate(void)</span>
+<a name="281"><span class="lineNum">     281 </span>            :     {</a>
+<span class="lineNum">     282 </span><span class="lineCov">        168 :         std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; agent_report_header;</span>
+<span class="lineNum">     283 </span><span class="lineCov">         84 :         if (m_is_root) {</span>
+<span class="lineNum">     284 </span><span class="lineCov">         32 :             agent_report_header = m_agent[m_root_level]-&gt;report_header();</span>
+<a name="285"><span class="lineNum">     285 </span>            :         }</a>
+<span class="lineNum">     286 </span>            : 
+<span class="lineNum">     287 </span><span class="lineCov">        168 :         auto agent_host_report = m_agent[0]-&gt;report_host();</span>
+<span class="lineNum">     288 </span>            : 
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">        336 :         m_reporter-&gt;generate(m_agent_name,</span></a>
+<span class="lineNum">     290 </span>            :                              agent_report_header,
+<span class="lineNum">     291 </span>            :                              agent_host_report,
+<span class="lineNum">     292 </span><span class="lineCov">        168 :                              m_agent[0]-&gt;report_region(),</span>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         84 :                              *m_application_io,</span></a>
+<span class="lineNum">     294 </span>            :                              m_comm,
+<span class="lineNum">     295 </span><span class="lineCov">        130 :                              *m_tree_comm);</span>
+<span class="lineNum">     296 </span><span class="lineCov">         84 :         m_tracer-&gt;flush();</span>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         84 :     }</span></a>
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span><span class="lineCov">     625410 :     void Controller::step(void)</span>
+<span class="lineNum">     300 </span>            :     {
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">     625410 :         walk_down();</span></a>
+<span class="lineNum">     302 </span><span class="lineCov">     625410 :         geopm_signal_handler_check();</span>
+<span class="lineNum">     303 </span>            : 
+<span class="lineNum">     304 </span><span class="lineCov">     625410 :         walk_up();</span>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">     625410 :         geopm_signal_handler_check();</span></a>
+<span class="lineNum">     306 </span><span class="lineCov">     625410 :         m_agent[0]-&gt;wait();</span>
+<span class="lineNum">     307 </span><span class="lineCov">     625410 :         geopm_signal_handler_check();</span>
+<a name="308"><span class="lineNum">     308 </span><span class="lineCov">     625410 :     }</span></a>
+<a name="309"><span class="lineNum">     309 </span>            : </a>
+<span class="lineNum">     310 </span><span class="lineCov">     625410 :     void Controller::walk_down(void)</span>
+<span class="lineNum">     311 </span>            :     {
+<span class="lineNum">     312 </span><span class="lineCov">     625410 :         bool do_send = false;</span>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">     625410 :         if (m_is_root) {</span></a>
+<span class="lineNum">     314 </span>            :             /// @todo Pass m_in_policy by reference into the sampler, and return an is_updated bool.
+<span class="lineNum">     315 </span><span class="lineCov">     249702 :             m_in_policy = m_manager_io_sampler-&gt;sample();</span>
+<span class="lineNum">     316 </span><span class="lineCov">     249702 :             do_send = true;</span>
 <a name="317"><span class="lineNum">     317 </span>            :         }</a>
-<span class="lineNum">     318 </span><span class="lineCov">     192785 :         for (int level = m_num_level_ctl - 1; level &gt; -1; --level) {</span>
-<span class="lineNum">     319 </span><span class="lineCov">      53711 :             if (do_send) {</span>
-<span class="lineNum">     320 </span><span class="lineCov">     107422 :                 std::vector&lt;double&gt; tmp_policy = m_agent[level + 1]-&gt;validate_policy(m_in_policy);</span>
-<a name="321"><span class="lineNum">     321 </span><span class="lineCov">      53711 :                 do_send = m_agent[level + 1]-&gt;descend(tmp_policy, m_out_policy[level]);</span></a>
-<span class="lineNum">     322 </span>            :             }
-<span class="lineNum">     323 </span><span class="lineCov">      53711 :             if (do_send) {</span>
-<span class="lineNum">     324 </span><span class="lineCov">         12 :                 m_tree_comm-&gt;send_down(level, m_out_policy[level]);</span>
-<a name="325"><span class="lineNum">     325 </span>            :             }</a>
-<span class="lineNum">     326 </span><span class="lineCov">      53711 :             do_send = m_tree_comm-&gt;receive_down(level, m_in_policy);</span>
-<span class="lineNum">     327 </span>            :         }
-<span class="lineNum">     328 </span><span class="lineCov">     139074 :         if (m_agent[0]-&gt;adjust_platform(m_agent[0]-&gt;validate_policy(m_in_policy))) {</span>
-<a name="329"><span class="lineNum">     329 </span><span class="lineCov">         28 :             m_platform_io.write_batch();</span></a>
-<span class="lineNum">     330 </span>            :         }
-<a name="331"><span class="lineNum">     331 </span><span class="lineCov">     139074 :     }</span></a>
-<span class="lineNum">     332 </span>            : 
-<a name="333"><span class="lineNum">     333 </span><span class="lineCov">     139074 :     void Controller::walk_up(void)</span></a>
-<span class="lineNum">     334 </span>            :     {
-<span class="lineNum">     335 </span><span class="lineCov">     139074 :         m_application_io-&gt;update(m_comm);</span>
-<span class="lineNum">     336 </span><span class="lineCov">     139074 :         m_platform_io.read_batch();</span>
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">     139074 :         bool do_send = m_agent[0]-&gt;sample_platform(m_out_sample);</span></a>
-<span class="lineNum">     338 </span><span class="lineCov">     139074 :         m_reporter-&gt;update();</span>
-<span class="lineNum">     339 </span><span class="lineCov">     139074 :         m_agent[0]-&gt;trace_values(m_trace_sample);</span>
-<span class="lineNum">     340 </span><span class="lineCov">     139074 :         m_tracer-&gt;update(m_trace_sample, m_application_io-&gt;region_info());</span>
-<a name="341"><span class="lineNum">     341 </span><span class="lineCov">     139074 :         m_application_io-&gt;clear_region_info();</span></a>
-<span class="lineNum">     342 </span>            : 
-<span class="lineNum">     343 </span><span class="lineCov">     192785 :         for (int level = 0; level &lt; m_num_level_ctl; ++level) {</span>
-<span class="lineNum">     344 </span><span class="lineCov">      53711 :             if (do_send) {</span>
-<a name="345"><span class="lineNum">     345 </span><span class="lineCov">      53665 :                 m_tree_comm-&gt;send_up(level, m_out_sample);</span></a>
-<span class="lineNum">     346 </span>            :             }
-<span class="lineNum">     347 </span><span class="lineCov">      53711 :             do_send = m_tree_comm-&gt;receive_up(level, m_in_sample[level]);</span>
-<span class="lineNum">     348 </span><span class="lineCov">      53711 :             if (do_send) {</span>
-<a name="349"><span class="lineNum">     349 </span><span class="lineCov">      26830 :                 do_send = m_agent[level + 1]-&gt;ascend(m_in_sample[level], m_out_sample);</span></a>
-<span class="lineNum">     350 </span>            :             }
-<span class="lineNum">     351 </span>            :         }
-<span class="lineNum">     352 </span><span class="lineCov">     139074 :         if (do_send) {</span>
-<a name="353"><span class="lineNum">     353 </span><span class="lineCov">      87894 :             if (!m_is_root) {</span></a>
-<span class="lineNum">     354 </span><span class="lineCov">      85168 :                 m_tree_comm-&gt;send_up(m_num_level_ctl, m_out_sample);</span>
-<span class="lineNum">     355 </span>            :             }
-<span class="lineNum">     356 </span>            :             else {
-<a name="357"><span class="lineNum">     357 </span>            :                 /// @todo At the root of the tree, send signals up to the</a>
-<span class="lineNum">     358 </span>            :                 /// resource manager.
-<span class="lineNum">     359 </span>            :             }
-<span class="lineNum">     360 </span>            :         }
-<a name="361"><span class="lineNum">     361 </span><span class="lineCov">     139074 :     }</span></a>
-<span class="lineNum">     362 </span>            : 
-<span class="lineNum">     363 </span><span class="lineNoCov">          0 :     void Controller::pthread(const pthread_attr_t *attr, pthread_t *thread)</span>
-<span class="lineNum">     364 </span>            :     {
-<a name="365"><span class="lineNum">     365 </span><span class="lineNoCov">          0 :         int err = pthread_create(thread, attr, geopm_threaded_run, (void *)this);</span></a>
-<span class="lineNum">     366 </span><span class="lineNoCov">          0 :         if (err) {</span>
-<span class="lineNum">     367 </span>            :             throw Exception(&quot;Controller::pthread(): pthread_create() failed&quot;,
-<span class="lineNum">     368 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
-<a name="369"><span class="lineNum">     369 </span>            :         }</a>
-<a name="370"><span class="lineNum">     370 </span><span class="lineNoCov">          0 :     }</span></a>
-<span class="lineNum">     371 </span>            : 
-<span class="lineNum">     372 </span><span class="lineCov">         17 :     void Controller::setup_trace(void)</span>
-<a name="373"><span class="lineNum">     373 </span>            :     {</a>
-<span class="lineNum">     374 </span><span class="lineCov">         17 :         if (m_tracer == nullptr) {</span>
-<span class="lineNum">     375 </span><span class="lineCov">         13 :             m_tracer = geopm::make_unique&lt;Tracer&gt;(get_start_time());</span>
-<span class="lineNum">     376 </span>            :         }
-<a name="377"><span class="lineNum">     377 </span><span class="lineCov">         34 :         auto agent_cols = m_agent[0]-&gt;trace_names();</span></a>
-<span class="lineNum">     378 </span><span class="lineCov">         17 :         m_tracer-&gt;columns(agent_cols);</span>
-<span class="lineNum">     379 </span><span class="lineCov">         17 :         m_trace_sample.resize(agent_cols.size());</span>
-<a name="380"><span class="lineNum">     380 </span><span class="lineCov">         17 :     }</span></a>
-<a name="381"><span class="lineNum">     381 </span>            : </a>
-<span class="lineNum">     382 </span><span class="lineNoCov">          0 :     void Controller::abort(void)</span>
-<span class="lineNum">     383 </span>            :     {
-<span class="lineNum">     384 </span><span class="lineNoCov">          0 :         m_application_io-&gt;abort();</span>
-<a name="385"><span class="lineNum">     385 </span><span class="lineNoCov">          0 :         m_platform_io.restore_control();</span></a>
-<span class="lineNum">     386 </span><span class="lineNoCov">          0 :     }</span>
-<span class="lineNum">     387 </span>            : }
+<span class="lineNum">     318 </span>            :         else {
+<span class="lineNum">     319 </span><span class="lineCov">     375708 :             do_send = m_tree_comm-&gt;receive_down(m_num_level_ctl, m_in_policy);</span>
+<span class="lineNum">     320 </span>            :         }
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">     856530 :         for (int level = m_num_level_ctl - 1; level &gt; -1; --level) {</span></a>
+<span class="lineNum">     322 </span><span class="lineCov">     231120 :             if (do_send) {</span>
+<span class="lineNum">     323 </span><span class="lineCov">     231120 :                 m_agent[level + 1]-&gt;validate_policy(m_in_policy);</span>
+<span class="lineNum">     324 </span><span class="lineCov">     231120 :                 m_agent[level + 1]-&gt;split_policy(m_in_policy, m_out_policy[level]);</span>
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">     231120 :                 do_send = m_agent[level + 1]-&gt;do_send_policy();</span></a>
+<span class="lineNum">     326 </span>            :             }
+<span class="lineNum">     327 </span><span class="lineCov">     231120 :             if (do_send) {</span>
+<span class="lineNum">     328 </span><span class="lineCov">         34 :                 m_tree_comm-&gt;send_down(level, m_out_policy[level]);</span>
+<a name="329"><span class="lineNum">     329 </span>            :             }</a>
+<span class="lineNum">     330 </span><span class="lineCov">     231120 :             do_send = m_tree_comm-&gt;receive_down(level, m_in_policy);</span>
+<span class="lineNum">     331 </span>            :         }
+<span class="lineNum">     332 </span><span class="lineCov">     625410 :         m_agent[0]-&gt;validate_policy(m_in_policy);</span>
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">     625410 :         m_agent[0]-&gt;adjust_platform(m_in_policy);</span></a>
+<span class="lineNum">     334 </span><span class="lineCov">     625410 :         if (m_agent[0]-&gt;do_write_batch()) {</span>
+<span class="lineNum">     335 </span><span class="lineCov">        136 :             m_platform_io.write_batch();</span>
+<span class="lineNum">     336 </span>            :         }
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">     625410 :     }</span></a>
+<span class="lineNum">     338 </span>            : 
+<span class="lineNum">     339 </span><span class="lineCov">     625410 :     void Controller::walk_up(void)</span>
+<span class="lineNum">     340 </span>            :     {
+<a name="341"><span class="lineNum">     341 </span><span class="lineCov">     625410 :         m_application_io-&gt;update(m_comm);</span></a>
+<span class="lineNum">     342 </span><span class="lineCov">     625410 :         m_platform_io.read_batch();</span>
+<span class="lineNum">     343 </span><span class="lineCov">     625410 :         m_agent[0]-&gt;sample_platform(m_out_sample);</span>
+<span class="lineNum">     344 </span><span class="lineCov">     625410 :         bool do_send = m_agent[0]-&gt;do_send_sample();</span>
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">     625410 :         m_reporter-&gt;update();</span></a>
+<span class="lineNum">     346 </span><span class="lineCov">     625410 :         m_agent[0]-&gt;trace_values(m_trace_sample);</span>
+<span class="lineNum">     347 </span><span class="lineCov">     625410 :         m_tracer-&gt;update(m_trace_sample, m_application_io-&gt;region_info());</span>
+<span class="lineNum">     348 </span><span class="lineCov">     625410 :         m_application_io-&gt;clear_region_info();</span>
+<a name="349"><span class="lineNum">     349 </span>            : </a>
+<span class="lineNum">     350 </span><span class="lineCov">     856530 :         for (int level = 0; level &lt; m_num_level_ctl; ++level) {</span>
+<span class="lineNum">     351 </span><span class="lineCov">     231120 :             if (do_send) {</span>
+<span class="lineNum">     352 </span><span class="lineCov">     230875 :                 m_tree_comm-&gt;send_up(level, m_out_sample);</span>
+<a name="353"><span class="lineNum">     353 </span>            :             }</a>
+<span class="lineNum">     354 </span><span class="lineCov">     231120 :             do_send = m_tree_comm-&gt;receive_up(level, m_in_sample[level]);</span>
+<span class="lineNum">     355 </span><span class="lineCov">     231120 :             if (do_send) {</span>
+<span class="lineNum">     356 </span><span class="lineCov">     115454 :                 m_agent[level + 1]-&gt;aggregate_sample(m_in_sample[level], m_out_sample);</span>
+<a name="357"><span class="lineNum">     357 </span><span class="lineCov">     115454 :                 do_send = m_agent[level + 1]-&gt;do_send_sample();</span></a>
+<span class="lineNum">     358 </span>            :             }
+<span class="lineNum">     359 </span>            :         }
+<span class="lineNum">     360 </span><span class="lineCov">     625410 :         if (do_send) {</span>
+<a name="361"><span class="lineNum">     361 </span><span class="lineCov">     400169 :             if (!m_is_root) {</span></a>
+<span class="lineNum">     362 </span><span class="lineCov">     374973 :                 m_tree_comm-&gt;send_up(m_num_level_ctl, m_out_sample);</span>
+<span class="lineNum">     363 </span>            :             }
+<span class="lineNum">     364 </span>            :             else {
+<a name="365"><span class="lineNum">     365 </span>            :                 /// @todo At the root of the tree, send signals up to the</a>
+<span class="lineNum">     366 </span>            :                 /// resource manager.
+<span class="lineNum">     367 </span>            :             }
+<span class="lineNum">     368 </span>            :         }
+<a name="369"><span class="lineNum">     369 </span><span class="lineCov">     625410 :     }</span></a>
+<span class="lineNum">     370 </span>            : 
+<span class="lineNum">     371 </span><span class="lineCov">          4 :     void Controller::pthread(const pthread_attr_t *attr, pthread_t *thread)</span>
+<span class="lineNum">     372 </span>            :     {
+<a name="373"><span class="lineNum">     373 </span><span class="lineCov">          4 :         int err = pthread_create(thread, attr, geopm_threaded_run, (void *)this);</span></a>
+<span class="lineNum">     374 </span><span class="lineCov">          4 :         if (err) {</span>
+<span class="lineNum">     375 </span>            :             throw Exception(&quot;Controller::pthread(): pthread_create() failed&quot;,
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :                             err, __FILE__, __LINE__);</span>
+<a name="377"><span class="lineNum">     377 </span>            :         }</a>
+<a name="378"><span class="lineNum">     378 </span><span class="lineCov">          4 :     }</span></a>
+<span class="lineNum">     379 </span>            : 
+<span class="lineNum">     380 </span><span class="lineCov">         84 :     void Controller::setup_trace(void)</span>
+<a name="381"><span class="lineNum">     381 </span>            :     {</a>
+<span class="lineNum">     382 </span><span class="lineCov">         84 :         if (m_tracer == nullptr) {</span>
+<span class="lineNum">     383 </span><span class="lineCov">         76 :             m_tracer = geopm::make_unique&lt;TracerImp&gt;(get_start_time());</span>
+<span class="lineNum">     384 </span>            :         }
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">        168 :         auto agent_cols = m_agent[0]-&gt;trace_names();</span></a>
+<span class="lineNum">     386 </span><span class="lineCov">         84 :         m_tracer-&gt;columns(agent_cols);</span>
+<span class="lineNum">     387 </span><span class="lineCov">         84 :         m_trace_sample.resize(agent_cols.size());</span>
+<a name="388"><span class="lineNum">     388 </span><span class="lineCov">         84 :     }</span></a>
+<a name="389"><span class="lineNum">     389 </span>            : </a>
+<span class="lineNum">     390 </span><span class="lineNoCov">          0 :     void Controller::abort(void)</span>
+<span class="lineNum">     391 </span>            :     {
+<span class="lineNum">     392 </span><span class="lineNoCov">          0 :         m_application_io-&gt;abort();</span>
+<a name="393"><span class="lineNum">     393 </span><span class="lineNoCov">          0 :         m_platform_io.restore_control();</span></a>
+<span class="lineNum">     394 </span><span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">     395 </span>            : }
 </pre>
       </td>
     </tr>
@@ -463,7 +471,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

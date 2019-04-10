@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/ProfileSampler.cpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/ProfileSampler.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - ProfileSampler.cpp<span style="font-size: 80%;"> (source / <a href="ProfileSampler.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - ProfileSampler.cpp<span style="font-size: 80%;"> (source / <a href="ProfileSampler.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">139</td>
-            <td class="headerCovTableEntry">150</td>
-            <td class="headerCovTableEntryHi">92.7 %</td>
+            <td class="headerCovTableEntry">136</td>
+            <td class="headerCovTableEntry">147</td>
+            <td class="headerCovTableEntryHi">92.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">23</td>
-            <td class="headerCovTableEntry">26</td>
-            <td class="headerCovTableEntryMed">88.5 %</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntryMed">88.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -130,267 +130,261 @@
 <span class="lineNum">      60 </span>            : #include &quot;SampleScheduler.hpp&quot;
 <a name="61"><span class="lineNum">      61 </span>            : #include &quot;Comm.hpp&quot;</a>
 <span class="lineNum">      62 </span>            : #include &quot;ControlMessage.hpp&quot;
-<span class="lineNum">      63 </span>            : #include &quot;SharedMemory.hpp&quot;
+<span class="lineNum">      63 </span>            : #include &quot;SharedMemoryImp.hpp&quot;
 <span class="lineNum">      64 </span>            : #include &quot;Exception.hpp&quot;
 <a name="65"><span class="lineNum">      65 </span>            : #include &quot;config.h&quot;</a>
 <span class="lineNum">      66 </span>            : 
-<span class="lineNum">      67 </span><span class="lineCov">       3500 : static bool geopm_prof_compare(const std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &amp;aa, const std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &amp;bb)</span>
+<span class="lineNum">      67 </span>            : namespace geopm
 <span class="lineNum">      68 </span>            : {
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">       3500 :     return geopm_time_comp(&amp;(aa.second.timestamp), &amp;(bb.second.timestamp));</span></a>
-<span class="lineNum">      70 </span>            : }
-<span class="lineNum">      71 </span>            : 
-<span class="lineNum">      72 </span>            : namespace geopm
-<a name="73"><span class="lineNum">      73 </span>            : {</a>
-<a name="74"><span class="lineNum">      74 </span>            :     const struct geopm_prof_message_s GEOPM_INVALID_PROF_MSG = {-1, 0, GEOPM_TIME_REF, -1.0};</a>
+<a name="69"><span class="lineNum">      69 </span>            :     const struct geopm_prof_message_s GEOPM_INVALID_PROF_MSG = {-1, 0, GEOPM_TIME_REF, -1.0};</a>
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span><span class="lineCov">         76 :     ProfileSamplerImp::ProfileSamplerImp(size_t table_size)</span>
+<span class="lineNum">      72 </span><span class="lineCov">         76 :         : ProfileSamplerImp(platform_topo(), table_size)</span>
+<a name="73"><span class="lineNum">      73 </span>            :     {</a>
+<a name="74"><span class="lineNum">      74 </span><span class="lineCov">         76 :     }</span></a>
 <span class="lineNum">      75 </span>            : 
-<span class="lineNum">      76 </span><span class="lineCov">         13 :     ProfileSampler::ProfileSampler(size_t table_size)</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         13 :         : ProfileSampler(platform_topo(), table_size)</span></a>
-<span class="lineNum">      78 </span>            :     {
-<a name="79"><span class="lineNum">      79 </span><span class="lineCov">         13 :     }</span></a>
-<span class="lineNum">      80 </span>            : 
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         13 :     ProfileSampler::ProfileSampler(IPlatformTopo &amp;topo, size_t table_size)</span></a>
-<span class="lineNum">      82 </span>            :         : m_ctl_shmem(nullptr)
-<span class="lineNum">      83 </span>            :         , m_ctl_msg(nullptr)
-<span class="lineNum">      84 </span>            :         , m_table_size(table_size)
-<a name="85"><span class="lineNum">      85 </span>            :         , m_do_report(false)</a>
-<span class="lineNum">      86 </span>            :         , m_tprof_shmem(nullptr)
-<span class="lineNum">      87 </span>            :         , m_tprof_table(nullptr)
-<span class="lineNum">      88 </span><span class="lineCov">         13 :         , m_rank_per_node(0)</span>
-<a name="89"><span class="lineNum">      89 </span>            :     {</a>
-<span class="lineNum">      90 </span><span class="lineCov">         26 :         std::string sample_key(geopm_env_shmkey());</span>
-<span class="lineNum">      91 </span><span class="lineCov">         13 :         sample_key += &quot;-sample&quot;;</span>
-<span class="lineNum">      92 </span><span class="lineCov">         26 :         std::string sample_key_path(&quot;/dev/shm/&quot; + sample_key);</span>
-<a name="93"><span class="lineNum">      93 </span>            :         // Remove shared memory file if one already exists.</a>
-<span class="lineNum">      94 </span><span class="lineCov">         13 :         (void)unlink(sample_key_path.c_str());</span>
-<span class="lineNum">      95 </span><span class="lineCov">         13 :         m_ctl_shmem = geopm::make_unique&lt;SharedMemory&gt;(sample_key, sizeof(struct geopm_ctl_message_s));</span>
-<span class="lineNum">      96 </span><span class="lineCov">         13 :         m_ctl_msg = geopm::make_unique&lt;ControlMessage&gt;(*(struct geopm_ctl_message_s *)m_ctl_shmem-&gt;pointer(), true, true);</span>
-<a name="97"><span class="lineNum">      97 </span>            : </a>
-<span class="lineNum">      98 </span><span class="lineCov">         26 :         std::string tprof_key(geopm_env_shmkey());</span>
-<span class="lineNum">      99 </span><span class="lineCov">         13 :         tprof_key += &quot;-tprof&quot;;</span>
-<span class="lineNum">     100 </span><span class="lineCov">         26 :         std::string tprof_key_path(&quot;/dev/shm/&quot; + tprof_key);</span>
-<a name="101"><span class="lineNum">     101 </span>            :         // Remove shared memory file if one already exists.</a>
-<span class="lineNum">     102 </span><span class="lineCov">         13 :         (void)unlink(tprof_key_path.c_str());</span>
-<span class="lineNum">     103 </span><span class="lineCov">         13 :         size_t tprof_size = 64 * topo.num_domain(IPlatformTopo::M_DOMAIN_CPU);</span>
-<span class="lineNum">     104 </span><span class="lineCov">         13 :         m_tprof_shmem = geopm::make_unique&lt;SharedMemory&gt;(tprof_key, tprof_size);</span>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         13 :         m_tprof_table = geopm::make_unique&lt;ProfileThreadTable&gt;(tprof_size, m_tprof_shmem-&gt;pointer());</span></a>
-<span class="lineNum">     106 </span><span class="lineCov">         13 :         errno = 0; // Ignore errors from the unlink calls.</span>
-<span class="lineNum">     107 </span><span class="lineCov">         13 :     }</span>
-<span class="lineNum">     108 </span>            : 
-<a name="109"><span class="lineNum">     109 </span>            :     ProfileSampler::~ProfileSampler() = default;</a>
-<span class="lineNum">     110 </span>            : 
-<span class="lineNum">     111 </span><span class="lineCov">         13 :     void ProfileSampler::initialize(void)</span>
-<span class="lineNum">     112 </span>            :     {
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         26 :         std::ostringstream shm_key;</span></a>
-<span class="lineNum">     114 </span>            : 
-<span class="lineNum">     115 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;wait(); // M_STATUS_MAP_BEGIN</span>
-<span class="lineNum">     116 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;step(); // M_STATUS_MAP_BEGIN</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;wait(); // M_STATUS_MAP_END</span></a>
-<span class="lineNum">     118 </span>            : 
-<span class="lineNum">     119 </span><span class="lineCov">         26 :         std::set&lt;int&gt; rank_set;</span>
-<span class="lineNum">     120 </span><span class="lineCov">       9997 :         for (int i = 0; i &lt; GEOPM_MAX_NUM_CPU; i++) {</span>
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">       9984 :             if (m_ctl_msg-&gt;cpu_rank(i) &gt;= 0) {</span></a>
-<span class="lineNum">     122 </span><span class="lineCov">         52 :                 (void) rank_set.insert(m_ctl_msg-&gt;cpu_rank(i));</span>
-<span class="lineNum">     123 </span>            :             }
-<span class="lineNum">     124 </span>            :         }
-<a name="125"><span class="lineNum">     125 </span>            : </a>
-<span class="lineNum">     126 </span><span class="lineCov">         65 :         for (auto it = rank_set.begin(); it != rank_set.end(); ++it) {</span>
-<span class="lineNum">     127 </span><span class="lineCov">         52 :             shm_key.str(&quot;&quot;);</span>
-<span class="lineNum">     128 </span><span class="lineCov">         52 :             shm_key &lt;&lt; m_ctl_shmem-&gt;key() &lt;&lt;  &quot;-&quot;  &lt;&lt; *it;</span>
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         52 :             m_rank_sampler.push_front(geopm::make_unique&lt;ProfileRankSampler&gt;(shm_key.str(), m_table_size));</span></a>
-<span class="lineNum">     130 </span>            :         }
-<span class="lineNum">     131 </span><span class="lineCov">         13 :         m_rank_per_node = rank_set.size();</span>
-<span class="lineNum">     132 </span><span class="lineCov">         13 :         if (m_rank_per_node == 0) {</span>
-<a name="133"><span class="lineNum">     133 </span><span class="lineNoCov">          0 :             m_ctl_msg-&gt;abort();</span></a>
-<span class="lineNum">     134 </span>            :             throw Exception(&quot;ProfileSampler::initialize(): Application ranks were not listed as running on any CPUs.&quot;,
-<span class="lineNum">     135 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     136 </span>            :         }
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;step(); // M_STATUS_MAP_END</span></a>
-<a name="138"><span class="lineNum">     138 </span><span class="lineCov">         13 :     }</span></a>
-<span class="lineNum">     139 </span>            : 
-<span class="lineNum">     140 </span><span class="lineCov">         13 :     void ProfileSampler::controller_ready(void)</span>
-<a name="141"><span class="lineNum">     141 </span>            :     {</a>
-<span class="lineNum">     142 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;wait();  // M_STATUS_SAMPLE_BEGIN</span>
-<span class="lineNum">     143 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;step();  // M_STATUS_SAMPLE_BEGIN</span>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">         13 :     }</span></a>
+<span class="lineNum">      76 </span><span class="lineCov">         76 :     ProfileSamplerImp::ProfileSamplerImp(PlatformTopo &amp;topo, size_t table_size)</span>
+<a name="77"><span class="lineNum">      77 </span>            :         : m_ctl_shmem(nullptr)</a>
+<span class="lineNum">      78 </span>            :         , m_ctl_msg(nullptr)
+<span class="lineNum">      79 </span>            :         , m_table_size(table_size)
+<span class="lineNum">      80 </span>            :         , m_do_report(false)
+<a name="81"><span class="lineNum">      81 </span>            :         , m_tprof_shmem(nullptr)</a>
+<span class="lineNum">      82 </span>            :         , m_tprof_table(nullptr)
+<span class="lineNum">      83 </span><span class="lineCov">         76 :         , m_rank_per_node(0)</span>
+<span class="lineNum">      84 </span>            :     {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        152 :         std::string sample_key(geopm_env_shmkey());</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">         76 :         sample_key += &quot;-sample&quot;;</span>
+<span class="lineNum">      87 </span><span class="lineCov">        152 :         std::string sample_key_path(&quot;/dev/shm/&quot; + sample_key);</span>
+<span class="lineNum">      88 </span>            :         // Remove shared memory file if one already exists.
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         76 :         (void)unlink(sample_key_path.c_str());</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">         76 :         m_ctl_shmem = geopm::make_unique&lt;SharedMemoryImp&gt;(sample_key, sizeof(struct geopm_ctl_message_s));</span>
+<span class="lineNum">      91 </span><span class="lineCov">         76 :         m_ctl_msg = geopm::make_unique&lt;ControlMessageImp&gt;(*(struct geopm_ctl_message_s *)m_ctl_shmem-&gt;pointer(), true, true);</span>
+<span class="lineNum">      92 </span>            : 
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        152 :         std::string tprof_key(geopm_env_shmkey());</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">         76 :         tprof_key += &quot;-tprof&quot;;</span>
+<span class="lineNum">      95 </span><span class="lineCov">        152 :         std::string tprof_key_path(&quot;/dev/shm/&quot; + tprof_key);</span>
+<span class="lineNum">      96 </span>            :         // Remove shared memory file if one already exists.
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         76 :         (void)unlink(tprof_key_path.c_str());</span></a>
+<span class="lineNum">      98 </span><span class="lineCov">         76 :         size_t tprof_size = 64 * topo.num_domain(GEOPM_DOMAIN_CPU);</span>
+<span class="lineNum">      99 </span><span class="lineCov">         76 :         m_tprof_shmem = geopm::make_unique&lt;SharedMemoryImp&gt;(tprof_key, tprof_size);</span>
+<span class="lineNum">     100 </span><span class="lineCov">         76 :         m_tprof_table = geopm::make_unique&lt;ProfileThreadTableImp&gt;(tprof_size, m_tprof_shmem-&gt;pointer());</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         76 :         errno = 0; // Ignore errors from the unlink calls.</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">         76 :     }</span>
+<span class="lineNum">     103 </span>            : 
+<a name="104"><span class="lineNum">     104 </span>            :     ProfileSamplerImp::~ProfileSamplerImp() = default;</a>
+<a name="105"><span class="lineNum">     105 </span>            : </a>
+<span class="lineNum">     106 </span><span class="lineCov">         76 :     void ProfileSamplerImp::initialize(void)</span>
+<span class="lineNum">     107 </span>            :     {
+<span class="lineNum">     108 </span><span class="lineCov">        152 :         std::ostringstream shm_key;</span>
+<a name="109"><span class="lineNum">     109 </span>            : </a>
+<span class="lineNum">     110 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;wait(); // M_STATUS_MAP_BEGIN</span>
+<span class="lineNum">     111 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;step(); // M_STATUS_MAP_BEGIN</span>
+<span class="lineNum">     112 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;wait(); // M_STATUS_MAP_END</span>
+<a name="113"><span class="lineNum">     113 </span>            : </a>
+<span class="lineNum">     114 </span><span class="lineCov">        152 :         std::set&lt;int&gt; rank_set;</span>
+<span class="lineNum">     115 </span><span class="lineCov">      58444 :         for (int i = 0; i &lt; GEOPM_MAX_NUM_CPU; i++) {</span>
+<span class="lineNum">     116 </span><span class="lineCov">      58368 :             if (m_ctl_msg-&gt;cpu_rank(i) &gt;= 0) {</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">        294 :                 (void) rank_set.insert(m_ctl_msg-&gt;cpu_rank(i));</span></a>
+<span class="lineNum">     118 </span>            :             }
+<span class="lineNum">     119 </span>            :         }
+<span class="lineNum">     120 </span>            : 
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">        370 :         for (auto it = rank_set.begin(); it != rank_set.end(); ++it) {</span></a>
+<span class="lineNum">     122 </span><span class="lineCov">        294 :             shm_key.str(&quot;&quot;);</span>
+<span class="lineNum">     123 </span><span class="lineCov">        294 :             shm_key &lt;&lt; m_ctl_shmem-&gt;key() &lt;&lt;  &quot;-&quot;  &lt;&lt; *it;</span>
+<span class="lineNum">     124 </span><span class="lineCov">        294 :             m_rank_sampler.push_front(geopm::make_unique&lt;ProfileRankSamplerImp&gt;(shm_key.str(), m_table_size));</span>
+<a name="125"><span class="lineNum">     125 </span>            :         }</a>
+<span class="lineNum">     126 </span><span class="lineCov">         76 :         m_rank_per_node = rank_set.size();</span>
+<span class="lineNum">     127 </span><span class="lineCov">         76 :         if (m_rank_per_node == 0) {</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :             m_ctl_msg-&gt;abort();</span>
+<a name="129"><span class="lineNum">     129 </span>            :             throw Exception(&quot;ProfileSamplerImp::initialize(): Application ranks were not listed as running on any CPUs.&quot;,</a>
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     131 </span>            :         }
+<span class="lineNum">     132 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;step(); // M_STATUS_MAP_END</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         76 :     }</span></a>
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span><span class="lineCov">         76 :     void ProfileSamplerImp::controller_ready(void)</span>
+<span class="lineNum">     136 </span>            :     {
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;wait();  // M_STATUS_SAMPLE_BEGIN</span></a>
+<span class="lineNum">     138 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;step();  // M_STATUS_SAMPLE_BEGIN</span>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">         76 :     }</span></a>
+<span class="lineNum">     140 </span>            : 
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">         76 :     int ProfileSamplerImp::rank_per_node(void) const</span></a>
+<span class="lineNum">     142 </span>            :     {
+<span class="lineNum">     143 </span><span class="lineCov">         76 :         return m_rank_per_node;</span>
+<a name="144"><span class="lineNum">     144 </span>            :     }</a>
 <a name="145"><span class="lineNum">     145 </span>            : </a>
-<span class="lineNum">     146 </span><span class="lineCov">         13 :     int ProfileSampler::rank_per_node(void) const</span>
+<span class="lineNum">     146 </span><span class="lineCov">         76 :     std::vector&lt;int&gt; ProfileSamplerImp::cpu_rank(void) const</span>
 <span class="lineNum">     147 </span>            :     {
-<span class="lineNum">     148 </span><span class="lineCov">         13 :         return m_rank_per_node;</span>
-<a name="149"><span class="lineNum">     149 </span>            :     }</a>
-<span class="lineNum">     150 </span>            : 
-<span class="lineNum">     151 </span><span class="lineCov">         13 :     std::vector&lt;int&gt; ProfileSampler::cpu_rank(void) const</span>
-<span class="lineNum">     152 </span>            :     {
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         13 :         uint32_t num_cpu = geopm_sched_num_cpu();</span></a>
-<span class="lineNum">     154 </span><span class="lineCov">         13 :         std::vector&lt;int&gt; result(num_cpu);</span>
-<span class="lineNum">     155 </span><span class="lineCov">         13 :         if (num_cpu &gt; GEOPM_MAX_NUM_CPU) {</span>
-<span class="lineNum">     156 </span>            :             throw Exception(&quot;ProfileSampler::cpu_rank: Number of online CPUs is greater than GEOPM_MAX_NUM_CPU&quot;,
-<a name="157"><span class="lineNum">     157 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     158 </span>            :         }
-<span class="lineNum">     159 </span>            : 
-<span class="lineNum">     160 </span><span class="lineCov">       3341 :         for (unsigned cpu = 0; cpu &lt; num_cpu; ++cpu) {</span>
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">       3328 :             result[cpu] = m_ctl_msg-&gt;cpu_rank(cpu);</span></a>
-<span class="lineNum">     162 </span>            :         }
-<span class="lineNum">     163 </span><span class="lineCov">         13 :         return result;</span>
-<a name="164"><span class="lineNum">     164 </span>            :     }</a>
-<a name="165"><span class="lineNum">     165 </span>            : </a>
-<span class="lineNum">     166 </span><span class="lineCov">         13 :     size_t ProfileSampler::capacity(void) const</span>
-<span class="lineNum">     167 </span>            :     {
-<span class="lineNum">     168 </span><span class="lineCov">         13 :         size_t result = 0;</span>
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">         65 :         for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span></a>
-<span class="lineNum">     170 </span><span class="lineCov">         52 :             result += (*it)-&gt;capacity();</span>
-<span class="lineNum">     171 </span>            :         }
-<span class="lineNum">     172 </span><span class="lineCov">         13 :         return result;</span>
-<a name="173"><span class="lineNum">     173 </span>            :     }</a>
-<span class="lineNum">     174 </span>            : 
-<span class="lineNum">     175 </span><span class="lineCov">     139088 :     void ProfileSampler::sample(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt; &amp;content, size_t &amp;length, std::shared_ptr&lt;Comm&gt; comm)</span>
-<span class="lineNum">     176 </span>            :     {
-<a name="177"><span class="lineNum">     177 </span><span class="lineCov">     139088 :         length = 0;</span></a>
-<span class="lineNum">     178 </span><span class="lineCov">     139114 :         if (m_ctl_msg-&gt;is_sample_begin() ||</span>
-<span class="lineNum">     179 </span><span class="lineCov">         26 :             m_ctl_msg-&gt;is_sample_end()) {</span>
-<span class="lineNum">     180 </span><span class="lineCov">     139075 :             auto content_it = content.begin();</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineCov">    2086125 :             for (auto rank_sampler_it = m_rank_sampler.begin();</span></a>
-<span class="lineNum">     182 </span><span class="lineCov">    1390750 :                  rank_sampler_it != m_rank_sampler.end();</span>
-<span class="lineNum">     183 </span>            :                  ++rank_sampler_it) {
-<span class="lineNum">     184 </span><span class="lineCov">     556300 :                 size_t rank_length = 0;</span>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     556300 :                 (*rank_sampler_it)-&gt;sample(content_it, rank_length);</span></a>
-<span class="lineNum">     186 </span><span class="lineCov">     556300 :                 content_it += rank_length;</span>
-<span class="lineNum">     187 </span><span class="lineCov">     556300 :                 length += rank_length;</span>
-<span class="lineNum">     188 </span>            :             }
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">     139075 :             if (m_ctl_msg-&gt;is_sample_end()) {  // M_STATUS_SAMPLE_END</span></a>
-<span class="lineNum">     190 </span><span class="lineCov">         13 :                 comm-&gt;barrier();</span>
-<span class="lineNum">     191 </span><span class="lineCov">         13 :                 m_ctl_msg-&gt;step();</span>
-<span class="lineNum">     192 </span><span class="lineCov">     214120 :                 while (!m_ctl_msg-&gt;is_name_begin() &amp;&amp;</span>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">      71369 :                        !m_ctl_msg-&gt;is_shutdown()) {</span></a>
-<span class="lineNum">     194 </span><span class="lineCov">      71369 :                     geopm_signal_handler_check();</span>
-<span class="lineNum">     195 </span>            :                 }
-<span class="lineNum">     196 </span><span class="lineCov">         13 :                 if (m_ctl_msg-&gt;is_name_begin()) {  // M_STATUS_NAME_BEGIN</span>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">         13 :                     region_names();</span></a>
-<span class="lineNum">     198 </span>            :                 }
-<span class="lineNum">     199 </span>            :             }
-<span class="lineNum">     200 </span>            :         }
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         13 :         else if (!m_ctl_msg-&gt;is_shutdown()) {</span></a>
-<span class="lineNum">     202 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileSampler: invalid application status, expected shutdown status&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     203 </span>            :         }
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">     139088 :     }</span></a>
+<span class="lineNum">     148 </span><span class="lineCov">         76 :         uint32_t num_cpu = geopm_sched_num_cpu();</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         76 :         std::vector&lt;int&gt; result(num_cpu);</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">         76 :         if (num_cpu &gt; GEOPM_MAX_NUM_CPU) {</span>
+<span class="lineNum">     151 </span>            :             throw Exception(&quot;ProfileSamplerImp::cpu_rank: Number of online CPUs is greater than GEOPM_MAX_NUM_CPU&quot;,
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<a name="153"><span class="lineNum">     153 </span>            :         }</a>
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span><span class="lineCov">      13820 :         for (unsigned cpu = 0; cpu &lt; num_cpu; ++cpu) {</span>
+<span class="lineNum">     156 </span><span class="lineCov">      13744 :             result[cpu] = m_ctl_msg-&gt;cpu_rank(cpu);</span>
+<a name="157"><span class="lineNum">     157 </span>            :         }</a>
+<span class="lineNum">     158 </span><span class="lineCov">         76 :         return result;</span>
+<a name="159"><span class="lineNum">     159 </span>            :     }</a>
+<span class="lineNum">     160 </span>            : 
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">         76 :     size_t ProfileSamplerImp::capacity(void) const</span></a>
+<span class="lineNum">     162 </span>            :     {
+<span class="lineNum">     163 </span><span class="lineCov">         76 :         size_t result = 0;</span>
+<span class="lineNum">     164 </span><span class="lineCov">        370 :         for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        294 :             result += (*it)-&gt;capacity();</span></a>
+<span class="lineNum">     166 </span>            :         }
+<span class="lineNum">     167 </span><span class="lineCov">         76 :         return result;</span>
+<a name="168"><span class="lineNum">     168 </span>            :     }</a>
+<a name="169"><span class="lineNum">     169 </span>            : </a>
+<span class="lineNum">     170 </span><span class="lineCov">     625538 :     void ProfileSamplerImp::sample(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt; &amp;content, size_t &amp;length, std::shared_ptr&lt;Comm&gt; comm)</span>
+<span class="lineNum">     171 </span>            :     {
+<span class="lineNum">     172 </span><span class="lineCov">     625538 :         length = 0;</span>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">     625690 :         if (m_ctl_msg-&gt;is_sample_begin() ||</span></a>
+<span class="lineNum">     174 </span><span class="lineCov">        152 :             m_ctl_msg-&gt;is_sample_end()) {</span>
+<span class="lineNum">     175 </span><span class="lineCov">     625462 :             auto content_it = content.begin();</span>
+<span class="lineNum">     176 </span><span class="lineCov">    6570792 :             for (auto rank_sampler_it = m_rank_sampler.begin();</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">    4832731 :                  rank_sampler_it != m_rank_sampler.end();</span></a>
+<span class="lineNum">     178 </span>            :                  ++rank_sampler_it) {
+<span class="lineNum">     179 </span><span class="lineCov">    2469208 :                 size_t rank_length = 0;</span>
+<span class="lineNum">     180 </span><span class="lineCov">    2469208 :                 (*rank_sampler_it)-&gt;sample(content_it, rank_length);</span>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">    2469208 :                 content_it += rank_length;</span></a>
+<span class="lineNum">     182 </span><span class="lineCov">    2469208 :                 length += rank_length;</span>
+<span class="lineNum">     183 </span>            :             }
+<span class="lineNum">     184 </span><span class="lineCov">     625462 :             if (m_ctl_msg-&gt;is_sample_end()) {  // M_STATUS_SAMPLE_END</span>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">         76 :                 comm-&gt;barrier();</span></a>
+<span class="lineNum">     186 </span><span class="lineCov">         76 :                 m_ctl_msg-&gt;step();</span>
+<span class="lineNum">     187 </span><span class="lineCov">      68278 :                 while (!m_ctl_msg-&gt;is_name_begin() &amp;&amp;</span>
+<span class="lineNum">     188 </span><span class="lineCov">      22734 :                        !m_ctl_msg-&gt;is_shutdown()) {</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">      22734 :                     geopm_signal_handler_check();</span></a>
+<span class="lineNum">     190 </span>            :                 }
+<span class="lineNum">     191 </span><span class="lineCov">         76 :                 if (m_ctl_msg-&gt;is_name_begin()) {  // M_STATUS_NAME_BEGIN</span>
+<span class="lineNum">     192 </span><span class="lineCov">         76 :                     region_names();</span>
+<a name="193"><span class="lineNum">     193 </span>            :                 }</a>
+<span class="lineNum">     194 </span>            :             }
+<span class="lineNum">     195 </span>            :         }
+<span class="lineNum">     196 </span><span class="lineCov">         76 :         else if (!m_ctl_msg-&gt;is_shutdown()) {</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileSamplerImp: invalid application status, expected shutdown status&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     198 </span>            :         }
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">     625538 :     }</span></a>
+<span class="lineNum">     200 </span>            : 
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">     625462 :     bool ProfileSamplerImp::do_shutdown(void) const</span></a>
+<span class="lineNum">     202 </span>            :     {
+<span class="lineNum">     203 </span><span class="lineCov">     625462 :         return m_ctl_msg-&gt;is_shutdown();</span>
+<a name="204"><span class="lineNum">     204 </span>            :     }</a>
 <a name="205"><span class="lineNum">     205 </span>            : </a>
-<span class="lineNum">     206 </span><span class="lineCov">     139075 :     bool ProfileSampler::do_shutdown(void) const</span>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :     bool ProfileSamplerImp::do_report(void) const</span>
 <span class="lineNum">     207 </span>            :     {
-<span class="lineNum">     208 </span><span class="lineCov">     139075 :         return m_ctl_msg-&gt;is_shutdown();</span>
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :         return m_do_report;</span>
 <a name="209"><span class="lineNum">     209 </span>            :     }</a>
 <span class="lineNum">     210 </span>            : 
-<span class="lineNum">     211 </span><span class="lineNoCov">          0 :     bool ProfileSampler::do_report(void) const</span>
+<span class="lineNum">     211 </span><span class="lineCov">         76 :     void ProfileSamplerImp::region_names(void)</span>
 <span class="lineNum">     212 </span>            :     {
-<a name="213"><span class="lineNum">     213 </span><span class="lineNoCov">          0 :         return m_do_report;</span></a>
-<a name="214"><span class="lineNum">     214 </span>            :     }</a>
-<span class="lineNum">     215 </span>            : 
-<span class="lineNum">     216 </span><span class="lineCov">         13 :     void ProfileSampler::region_names(void)</span>
-<a name="217"><span class="lineNum">     217 </span>            :     {</a>
-<span class="lineNum">     218 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;step();  // M_STATUS_NAME_BEGIN</span>
-<span class="lineNum">     219 </span>            : 
-<span class="lineNum">     220 </span><span class="lineCov">         13 :         bool is_all_done = false;</span>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         39 :         while (!is_all_done) {</span></a>
-<span class="lineNum">     222 </span><span class="lineCov">         13 :             m_ctl_msg-&gt;loop_begin();  // M_STATUS_NAME_LOOP_BEGIN</span>
-<span class="lineNum">     223 </span><span class="lineCov">         13 :             m_ctl_msg-&gt;wait();        // M_STATUS_NAME_LOOP_END</span>
-<span class="lineNum">     224 </span><span class="lineCov">         13 :             is_all_done = true;</span>
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         65 :             for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span></a>
-<span class="lineNum">     226 </span><span class="lineCov">         52 :                 if (!(*it)-&gt;name_fill(m_name_set)) {</span>
-<span class="lineNum">     227 </span><span class="lineNoCov">          0 :                     is_all_done = false;</span>
-<span class="lineNum">     228 </span>            :                 }
-<a name="229"><span class="lineNum">     229 </span>            :             }</a>
-<span class="lineNum">     230 </span><span class="lineCov">         13 :             m_ctl_msg-&gt;step();  // M_STATUS_NAME_LOOP_END</span>
-<span class="lineNum">     231 </span><span class="lineCov">         13 :             if (!is_all_done &amp;&amp; m_ctl_msg-&gt;is_shutdown()) {</span>
-<span class="lineNum">     232 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileSampler::region_names(): Application shutdown while report was being generated&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="233"><span class="lineNum">     233 </span>            :             }</a>
-<span class="lineNum">     234 </span>            :         }
-<span class="lineNum">     235 </span><span class="lineCov">         13 :         m_rank_sampler.front()-&gt;report_name(m_report_name);</span>
-<span class="lineNum">     236 </span><span class="lineCov">         13 :         m_rank_sampler.front()-&gt;profile_name(m_profile_name);</span>
-<a name="237"><span class="lineNum">     237 </span>            :         // report and profile names may have been inserted as region names</a>
-<span class="lineNum">     238 </span><span class="lineCov">         13 :         m_name_set.erase(m_report_name);</span>
-<span class="lineNum">     239 </span><span class="lineCov">         13 :         m_name_set.erase(m_profile_name);</span>
-<span class="lineNum">     240 </span>            : 
-<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         13 :         m_do_report = true;</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;step();  // M_STATUS_NAME_BEGIN</span></a>
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span><span class="lineCov">         76 :         bool is_all_done = false;</span>
+<span class="lineNum">     216 </span><span class="lineCov">        228 :         while (!is_all_done) {</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         76 :             m_ctl_msg-&gt;loop_begin();  // M_STATUS_NAME_LOOP_BEGIN</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">         76 :             m_ctl_msg-&gt;wait();        // M_STATUS_NAME_LOOP_END</span>
+<span class="lineNum">     219 </span><span class="lineCov">         76 :             is_all_done = true;</span>
+<span class="lineNum">     220 </span><span class="lineCov">        370 :             for (auto it = m_rank_sampler.begin(); it != m_rank_sampler.end(); ++it) {</span>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">        294 :                 if (!(*it)-&gt;name_fill(m_name_set)) {</span></a>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :                     is_all_done = false;</span>
+<span class="lineNum">     223 </span>            :                 }
+<span class="lineNum">     224 </span>            :             }
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         76 :             m_ctl_msg-&gt;step();  // M_STATUS_NAME_LOOP_END</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">         76 :             if (!is_all_done &amp;&amp; m_ctl_msg-&gt;is_shutdown()) {</span>
+<span class="lineNum">     227 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileSamplerImp::region_names(): Application shutdown while report was being generated&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     228 </span>            :             }
+<a name="229"><span class="lineNum">     229 </span>            :         }</a>
+<span class="lineNum">     230 </span><span class="lineCov">         76 :         m_rank_sampler.front()-&gt;report_name(m_report_name);</span>
+<span class="lineNum">     231 </span><span class="lineCov">         76 :         m_rank_sampler.front()-&gt;profile_name(m_profile_name);</span>
+<span class="lineNum">     232 </span>            :         // report and profile names may have been inserted as region names
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">         76 :         m_name_set.erase(m_report_name);</span></a>
+<span class="lineNum">     234 </span><span class="lineCov">         76 :         m_name_set.erase(m_profile_name);</span>
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span><span class="lineCov">         76 :         m_do_report = true;</span>
+<a name="237"><span class="lineNum">     237 </span>            : </a>
+<span class="lineNum">     238 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;wait();  // M_STATUS_NAME_END</span>
+<span class="lineNum">     239 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;step();  // M_STATUS_NAME_END</span>
+<span class="lineNum">     240 </span><span class="lineCov">         76 :         m_ctl_msg-&gt;wait();  // M_STATUS_SHUTDOWN</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         76 :     }</span></a>
 <span class="lineNum">     242 </span>            : 
-<span class="lineNum">     243 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;wait();  // M_STATUS_NAME_END</span>
-<span class="lineNum">     244 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;step();  // M_STATUS_NAME_END</span>
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         13 :         m_ctl_msg-&gt;wait();  // M_STATUS_SHUTDOWN</span></a>
-<a name="246"><span class="lineNum">     246 </span><span class="lineCov">         13 :     }</span></a>
+<span class="lineNum">     243 </span><span class="lineCov">         76 :     std::set&lt;std::string&gt; ProfileSamplerImp::name_set(void) const</span>
+<span class="lineNum">     244 </span>            :     {
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         76 :         return m_name_set;</span></a>
+<a name="246"><span class="lineNum">     246 </span>            :     }</a>
 <span class="lineNum">     247 </span>            : 
-<span class="lineNum">     248 </span><span class="lineCov">          9 :     std::set&lt;std::string&gt; ProfileSampler::name_set(void) const</span>
+<span class="lineNum">     248 </span><span class="lineCov">         76 :     std::string ProfileSamplerImp::report_name(void) const</span>
 <a name="249"><span class="lineNum">     249 </span>            :     {</a>
-<span class="lineNum">     250 </span><span class="lineCov">          9 :         return m_name_set;</span>
+<span class="lineNum">     250 </span><span class="lineCov">         76 :         return m_report_name;</span>
 <a name="251"><span class="lineNum">     251 </span>            :     }</a>
 <span class="lineNum">     252 </span>            : 
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         13 :     std::string ProfileSampler::report_name(void) const</span></a>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         28 :     std::string ProfileSamplerImp::profile_name(void) const</span></a>
 <span class="lineNum">     254 </span>            :     {
-<span class="lineNum">     255 </span><span class="lineCov">         13 :         return m_report_name;</span>
+<span class="lineNum">     255 </span><span class="lineCov">         28 :         return m_profile_name;</span>
 <a name="256"><span class="lineNum">     256 </span>            :     }</a>
 <a name="257"><span class="lineNum">     257 </span>            : </a>
-<span class="lineNum">     258 </span><span class="lineCov">          3 :     std::string ProfileSampler::profile_name(void) const</span>
+<span class="lineNum">     258 </span><span class="lineCov">     625538 :     std::shared_ptr&lt;ProfileThreadTable&gt; ProfileSamplerImp::tprof_table(void) const</span>
 <span class="lineNum">     259 </span>            :     {
-<span class="lineNum">     260 </span><span class="lineCov">          3 :         return m_profile_name;</span>
+<span class="lineNum">     260 </span><span class="lineCov">     625538 :         return m_tprof_table;</span>
 <a name="261"><span class="lineNum">     261 </span>            :     }</a>
 <span class="lineNum">     262 </span>            : 
-<span class="lineNum">     263 </span><span class="lineCov">     139088 :     std::shared_ptr&lt;IProfileThreadTable&gt; ProfileSampler::tprof_table(void) const</span>
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :     void ProfileSamplerImp::abort(void)</span>
 <span class="lineNum">     264 </span>            :     {
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">     139088 :         return m_tprof_table;</span></a>
-<a name="266"><span class="lineNum">     266 </span>            :     }</a>
+<a name="265"><span class="lineNum">     265 </span><span class="lineNoCov">          0 :         m_ctl_msg-&gt;abort();</span></a>
+<a name="266"><span class="lineNum">     266 </span><span class="lineNoCov">          0 :     }</span></a>
 <span class="lineNum">     267 </span>            : 
-<span class="lineNum">     268 </span><span class="lineNoCov">          0 :     void ProfileSampler::abort(void)</span>
-<a name="269"><span class="lineNum">     269 </span>            :     {</a>
-<span class="lineNum">     270 </span><span class="lineNoCov">          0 :         m_ctl_msg-&gt;abort();</span>
-<a name="271"><span class="lineNum">     271 </span><span class="lineNoCov">          0 :     }</span></a>
-<span class="lineNum">     272 </span>            : 
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         52 :     ProfileRankSampler::ProfileRankSampler(const std::string shm_key, size_t table_size)</span></a>
-<span class="lineNum">     274 </span>            :         : m_table_shmem(nullptr)
-<span class="lineNum">     275 </span>            :         , m_table(nullptr)
-<span class="lineNum">     276 </span>            :         , m_region_entry(GEOPM_INVALID_PROF_MSG)
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         52 :         , m_is_name_finished(false)</span></a>
-<span class="lineNum">     278 </span>            :     {
-<span class="lineNum">     279 </span><span class="lineCov">        104 :         std::string key_path(&quot;/dev/shm/&quot; + shm_key);</span>
-<span class="lineNum">     280 </span><span class="lineCov">         52 :         (void)unlink(key_path.c_str());</span>
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">         52 :         errno = 0; // Ignore errors from the unlink call.</span></a>
-<span class="lineNum">     282 </span><span class="lineCov">         52 :         m_table_shmem = geopm::make_unique&lt;SharedMemory&gt;(shm_key, table_size);</span>
-<span class="lineNum">     283 </span><span class="lineCov">         52 :         m_table = geopm::make_unique&lt;ProfileTable&gt;(m_table_shmem-&gt;size(), m_table_shmem-&gt;pointer());</span>
-<a name="284"><span class="lineNum">     284 </span><span class="lineCov">         52 :     }</span></a>
+<span class="lineNum">     268 </span><span class="lineCov">        294 :     ProfileRankSamplerImp::ProfileRankSamplerImp(const std::string shm_key, size_t table_size)</span>
+<a name="269"><span class="lineNum">     269 </span>            :         : m_table_shmem(nullptr)</a>
+<span class="lineNum">     270 </span>            :         , m_table(nullptr)
+<span class="lineNum">     271 </span>            :         , m_region_entry(GEOPM_INVALID_PROF_MSG)
+<span class="lineNum">     272 </span><span class="lineCov">        294 :         , m_is_name_finished(false)</span>
+<a name="273"><span class="lineNum">     273 </span>            :     {</a>
+<span class="lineNum">     274 </span><span class="lineCov">        588 :         std::string key_path(&quot;/dev/shm/&quot; + shm_key);</span>
+<span class="lineNum">     275 </span><span class="lineCov">        294 :         (void)unlink(key_path.c_str());</span>
+<span class="lineNum">     276 </span><span class="lineCov">        294 :         errno = 0; // Ignore errors from the unlink call.</span>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">        294 :         m_table_shmem = geopm::make_unique&lt;SharedMemoryImp&gt;(shm_key, table_size);</span></a>
+<span class="lineNum">     278 </span><span class="lineCov">        294 :         m_table = geopm::make_unique&lt;ProfileTableImp&gt;(m_table_shmem-&gt;size(), m_table_shmem-&gt;pointer());</span>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">        294 :     }</span></a>
+<span class="lineNum">     280 </span>            : 
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">        294 :     size_t ProfileRankSamplerImp::capacity(void) const</span></a>
+<span class="lineNum">     282 </span>            :     {
+<span class="lineNum">     283 </span><span class="lineCov">        294 :         return m_table-&gt;capacity();</span>
+<a name="284"><span class="lineNum">     284 </span>            :     }</a>
 <a name="285"><span class="lineNum">     285 </span>            : </a>
-<span class="lineNum">     286 </span><span class="lineCov">         52 :     size_t ProfileRankSampler::capacity(void) const</span>
+<span class="lineNum">     286 </span><span class="lineCov">    2469208 :     void ProfileRankSamplerImp::sample(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content_begin, size_t &amp;length)</span>
 <span class="lineNum">     287 </span>            :     {
-<span class="lineNum">     288 </span><span class="lineCov">         52 :         return m_table-&gt;capacity();</span>
-<a name="289"><span class="lineNum">     289 </span>            :     }</a>
+<span class="lineNum">     288 </span><span class="lineCov">    2469208 :         m_table-&gt;dump(content_begin, length);</span>
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">    2469208 :     }</span></a>
 <span class="lineNum">     290 </span>            : 
-<span class="lineNum">     291 </span><span class="lineCov">     556300 :     void ProfileRankSampler::sample(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content_begin, size_t &amp;length)</span>
+<span class="lineNum">     291 </span><span class="lineCov">        294 :     bool ProfileRankSamplerImp::name_fill(std::set&lt;std::string&gt; &amp;name_set)</span>
 <span class="lineNum">     292 </span>            :     {
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">     556300 :         m_table-&gt;dump(content_begin, length);</span></a>
-<span class="lineNum">     294 </span><span class="lineCov">     556300 :         std::stable_sort(content_begin, content_begin + length, geopm_prof_compare);</span>
-<a name="295"><span class="lineNum">     295 </span><span class="lineCov">     556300 :     }</span></a>
-<span class="lineNum">     296 </span>            : 
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         52 :     bool ProfileRankSampler::name_fill(std::set&lt;std::string&gt; &amp;name_set)</span></a>
-<span class="lineNum">     298 </span>            :     {
-<span class="lineNum">     299 </span><span class="lineCov">         52 :         size_t header_offset = 0;</span>
-<span class="lineNum">     300 </span>            : 
-<a name="301"><span class="lineNum">     301 </span><span class="lineCov">         52 :         if (!m_is_name_finished) {</span></a>
-<span class="lineNum">     302 </span><span class="lineCov">         52 :             if (name_set.empty()) {</span>
-<span class="lineNum">     303 </span><span class="lineCov">         13 :                 m_report_name = (char *)m_table_shmem-&gt;pointer();</span>
-<span class="lineNum">     304 </span><span class="lineCov">         13 :                 header_offset += m_report_name.length() + 1;</span>
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         13 :                 m_prof_name = (char *)m_table_shmem-&gt;pointer() + header_offset;</span></a>
-<span class="lineNum">     306 </span><span class="lineCov">         13 :                 header_offset += m_prof_name.length() + 1;</span>
-<span class="lineNum">     307 </span>            :             }
-<span class="lineNum">     308 </span><span class="lineCov">         52 :             m_is_name_finished = m_table-&gt;name_set(header_offset, name_set);</span>
-<a name="309"><span class="lineNum">     309 </span>            :         }</a>
-<span class="lineNum">     310 </span>            : 
-<span class="lineNum">     311 </span><span class="lineCov">         52 :         return m_is_name_finished;</span>
-<a name="312"><span class="lineNum">     312 </span>            :     }</a>
-<a name="313"><span class="lineNum">     313 </span>            : </a>
-<span class="lineNum">     314 </span><span class="lineCov">         13 :     void ProfileRankSampler::report_name(std::string &amp;report_str) const</span>
-<span class="lineNum">     315 </span>            :     {
-<span class="lineNum">     316 </span><span class="lineCov">         13 :         report_str = m_report_name;</span>
-<a name="317"><span class="lineNum">     317 </span><span class="lineCov">         13 :     }</span></a>
-<span class="lineNum">     318 </span>            : 
-<span class="lineNum">     319 </span><span class="lineCov">         13 :     void ProfileRankSampler::profile_name(std::string &amp;prof_str) const</span>
-<span class="lineNum">     320 </span>            :     {
-<a name="321"><span class="lineNum">     321 </span><span class="lineCov">         13 :         prof_str = m_prof_name;</span></a>
-<span class="lineNum">     322 </span><span class="lineCov">         13 :     }</span>
-<span class="lineNum">     323 </span><span class="lineCov">        849 : }</span>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">        294 :         size_t header_offset = 0;</span></a>
+<span class="lineNum">     294 </span>            : 
+<span class="lineNum">     295 </span><span class="lineCov">        294 :         if (!m_is_name_finished) {</span>
+<span class="lineNum">     296 </span><span class="lineCov">        294 :             if (name_set.empty()) {</span>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         76 :                 m_report_name = (char *)m_table_shmem-&gt;pointer();</span></a>
+<span class="lineNum">     298 </span><span class="lineCov">         76 :                 header_offset += m_report_name.length() + 1;</span>
+<span class="lineNum">     299 </span><span class="lineCov">         76 :                 m_prof_name = (char *)m_table_shmem-&gt;pointer() + header_offset;</span>
+<span class="lineNum">     300 </span><span class="lineCov">         76 :                 header_offset += m_prof_name.length() + 1;</span>
+<a name="301"><span class="lineNum">     301 </span>            :             }</a>
+<span class="lineNum">     302 </span><span class="lineCov">        294 :             m_is_name_finished = m_table-&gt;name_set(header_offset, name_set);</span>
+<span class="lineNum">     303 </span>            :         }
+<span class="lineNum">     304 </span>            : 
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">        294 :         return m_is_name_finished;</span></a>
+<a name="306"><span class="lineNum">     306 </span>            :     }</a>
+<span class="lineNum">     307 </span>            : 
+<span class="lineNum">     308 </span><span class="lineCov">         76 :     void ProfileRankSamplerImp::report_name(std::string &amp;report_str) const</span>
+<a name="309"><span class="lineNum">     309 </span>            :     {</a>
+<span class="lineNum">     310 </span><span class="lineCov">         76 :         report_str = m_report_name;</span>
+<a name="311"><span class="lineNum">     311 </span><span class="lineCov">         76 :     }</span></a>
+<span class="lineNum">     312 </span>            : 
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">         76 :     void ProfileRankSamplerImp::profile_name(std::string &amp;prof_str) const</span></a>
+<span class="lineNum">     314 </span>            :     {
+<a name="315"><span class="lineNum">     315 </span><span class="lineCov">         76 :         prof_str = m_prof_name;</span></a>
+<span class="lineNum">     316 </span><span class="lineCov">         76 :     }</span>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">       4701 : }</span></a>
 </pre>
       </td>
     </tr>
@@ -399,7 +393,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/SharedMemory.cpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/SharedMemory.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - SharedMemory.cpp<span style="font-size: 80%;"> (source / <a href="SharedMemory.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - SharedMemory.cpp<span style="font-size: 80%;"> (source / <a href="SharedMemory.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">70</td>
-            <td class="headerCovTableEntry">111</td>
-            <td class="headerCovTableEntryLo">63.1 %</td>
+            <td class="headerCovTableEntry">67</td>
+            <td class="headerCovTableEntry">116</td>
+            <td class="headerCovTableEntryLo">57.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">15</td>
-            <td class="headerCovTableEntry">17</td>
-            <td class="headerCovTableEntryMed">88.2 %</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">20</td>
+            <td class="headerCovTableEntryLo">70.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -100,201 +100,217 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;limits.h&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;unistd.h&gt;
-<span class="lineNum">      35 </span>            : #include &lt;fcntl.h&gt;
-<span class="lineNum">      36 </span>            : #include &lt;sys/mman.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;sys/stat.h&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;sys/types.h&gt;
-<span class="lineNum">      39 </span>            : #include &lt;string.h&gt;
-<span class="lineNum">      40 </span>            : #include &lt;iostream&gt;
-<a name="41"><span class="lineNum">      41 </span>            : #include &lt;sstream&gt;</a>
-<span class="lineNum">      42 </span>            : 
-<span class="lineNum">      43 </span>            : #include &quot;geopm_time.h&quot;
-<span class="lineNum">      44 </span>            : #include &quot;SharedMemory.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;Exception.hpp&quot;</a>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;SharedMemoryImp.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;limits.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;unistd.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;fcntl.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;sys/mman.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;sys/stat.h&gt;
+<span class="lineNum">      40 </span>            : #include &lt;sys/types.h&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;string.h&gt;</a>
+<span class="lineNum">      42 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      43 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">      44 </span>            : 
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;geopm_time.h&quot;</a>
 <span class="lineNum">      46 </span>            : #include &quot;geopm_signal_handler.h&quot;
-<span class="lineNum">      47 </span>            : #include &quot;config.h&quot;
-<span class="lineNum">      48 </span>            : 
-<a name="49"><span class="lineNum">      49 </span>            : namespace geopm</a>
-<span class="lineNum">      50 </span>            : {
-<span class="lineNum">      51 </span><span class="lineCov">        216 :     SharedMemory::SharedMemory(const std::string &amp;shm_key, size_t size)</span>
-<span class="lineNum">      52 </span>            :         : m_shm_key(shm_key)
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        309 :         , m_size(size)</span></a>
+<span class="lineNum">      47 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;Helper.hpp&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      50 </span>            : 
+<a name="51"><span class="lineNum">      51 </span>            : namespace geopm</a>
+<span class="lineNum">      52 </span>            : {
+<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 :     std::unique_ptr&lt;SharedMemory&gt; SharedMemory::make_unique(const std::string &amp;shm_key, size_t size)</span></a>
 <span class="lineNum">      54 </span>            :     {
-<span class="lineNum">      55 </span><span class="lineCov">        216 :         if (!size) {</span>
-<span class="lineNum">      56 </span><span class="lineCov">          1 :             throw Exception(&quot;SharedMemory: Cannot create shared memory region of zero size&quot;,  GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="57"><span class="lineNum">      57 </span>            :         }</a>
-<span class="lineNum">      58 </span><span class="lineCov">        215 :         mode_t old_mask = umask(0);</span>
-<span class="lineNum">      59 </span><span class="lineCov">        215 :         int shm_id = shm_open(m_shm_key.c_str(), O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP| S_IWGRP | S_IROTH| S_IWOTH);</span>
-<span class="lineNum">      60 </span><span class="lineCov">        215 :         if (shm_id &lt; 0) {</span>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">        184 :             std::ostringstream ex_str;</span></a>
-<span class="lineNum">      62 </span><span class="lineCov">         92 :             ex_str &lt;&lt; &quot;SharedMemory: Could not open shared memory with key &quot; &lt;&lt; m_shm_key;</span>
-<span class="lineNum">      63 </span><span class="lineCov">         92 :             throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">      64 </span>            :         }
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        123 :         int err = ftruncate(shm_id, size);</span></a>
-<span class="lineNum">      66 </span><span class="lineCov">        123 :         if (err) {</span>
-<span class="lineNum">      67 </span><span class="lineNoCov">          0 :             (void) close(shm_id);</span>
-<span class="lineNum">      68 </span><span class="lineNoCov">          0 :             (void) shm_unlink(m_shm_key.c_str());</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineNoCov">          0 :             (void) umask(old_mask);</span></a>
-<span class="lineNum">      70 </span><span class="lineNoCov">          0 :             std::ostringstream ex_str;</span>
-<span class="lineNum">      71 </span><span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;SharedMemory: Could not extend shared memory to size &quot;  &lt;&lt; size;</span>
-<span class="lineNum">      72 </span><span class="lineNoCov">          0 :             throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="73"><span class="lineNum">      73 </span>            :         }</a>
-<span class="lineNum">      74 </span><span class="lineCov">        123 :         m_ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_id, 0);</span>
-<span class="lineNum">      75 </span><span class="lineCov">        123 :         if (m_ptr == MAP_FAILED) {</span>
-<span class="lineNum">      76 </span><span class="lineNoCov">          0 :             (void) close(shm_id);</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineNoCov">          0 :             (void) shm_unlink(m_shm_key.c_str());</span></a>
-<span class="lineNum">      78 </span><span class="lineNoCov">          0 :             (void) umask(old_mask);</span>
-<span class="lineNum">      79 </span><span class="lineNoCov">          0 :             throw Exception(&quot;SharedMemory: Could not mmap shared memory region&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">      80 </span>            :         }
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">        123 :         err = close(shm_id);</span></a>
-<span class="lineNum">      82 </span><span class="lineCov">        123 :         if (err) {</span>
-<span class="lineNum">      83 </span><span class="lineNoCov">          0 :             (void) umask(old_mask);</span>
-<span class="lineNum">      84 </span><span class="lineNoCov">          0 :             throw Exception(&quot;SharedMemory: Could not close shared memory file&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="85"><span class="lineNum">      85 </span>            :         }</a>
-<span class="lineNum">      86 </span><span class="lineCov">        123 :         umask(old_mask);</span>
-<a name="87"><span class="lineNum">      87 </span><span class="lineCov">        123 :     }</span></a>
-<span class="lineNum">      88 </span>            : 
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">        368 :     SharedMemory::~SharedMemory()</span></a>
-<span class="lineNum">      90 </span>            :     {
-<span class="lineNum">      91 </span><span class="lineCov">        123 :         if (munmap(m_ptr, m_size)) {</span>
-<span class="lineNum">      92 </span>            : #ifdef GEOPM_DEBUG
-<a name="93"><span class="lineNum">      93 </span><span class="lineNoCov">          0 :             std::cerr &lt;&lt; &quot;Warning: &quot; &lt;&lt; Exception(&quot;SharedMemory: Could not unmap pointer&quot;,</span></a>
-<span class="lineNum">      94 </span><span class="lineNoCov">          0 :                                                   errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__).what() &lt;&lt; std::endl;</span>
-<span class="lineNum">      95 </span>            : #endif
-<span class="lineNum">      96 </span>            :         }
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        123 :         (void) shm_unlink(m_shm_key.c_str());</span></a>
-<a name="98"><span class="lineNum">      98 </span><span class="lineCov">        245 :     }</span></a>
-<span class="lineNum">      99 </span>            : 
-<span class="lineNum">     100 </span><span class="lineCov">        134 :     void *SharedMemory::pointer(void) const</span>
-<a name="101"><span class="lineNum">     101 </span>            :     {</a>
-<span class="lineNum">     102 </span><span class="lineCov">        134 :         return m_ptr;</span>
-<a name="103"><span class="lineNum">     103 </span>            :     }</a>
-<span class="lineNum">     104 </span>            : 
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         52 :     std::string SharedMemory::key(void) const</span></a>
-<span class="lineNum">     106 </span>            :     {
-<span class="lineNum">     107 </span><span class="lineCov">         52 :         return m_shm_key;</span>
-<a name="108"><span class="lineNum">     108 </span>            :     }</a>
-<a name="109"><span class="lineNum">     109 </span>            : </a>
-<span class="lineNum">     110 </span><span class="lineCov">         52 :     size_t SharedMemory::size(void) const</span>
-<span class="lineNum">     111 </span>            :     {
-<span class="lineNum">     112 </span><span class="lineCov">         52 :         return m_size;</span>
-<a name="113"><span class="lineNum">     113 </span>            :     }</a>
-<span class="lineNum">     114 </span>            : 
-<span class="lineNum">     115 </span><span class="lineCov">          3 :     SharedMemoryUser::SharedMemoryUser(const std::string &amp;shm_key)</span>
-<span class="lineNum">     116 </span><span class="lineCov">          3 :         : SharedMemoryUser(shm_key, INT_MAX)</span>
-<a name="117"><span class="lineNum">     117 </span>            :     {</a>
-<span class="lineNum">     118 </span>            : 
-<a name="119"><span class="lineNum">     119 </span><span class="lineCov">          3 :     }</span></a>
-<span class="lineNum">     120 </span>            : 
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">        271 :     SharedMemoryUser::SharedMemoryUser(const std::string &amp;shm_key, unsigned int timeout)</span></a>
-<span class="lineNum">     122 </span>            :         : m_shm_key(shm_key)
-<span class="lineNum">     123 </span>            :         , m_size(0)
-<span class="lineNum">     124 </span><span class="lineCov">        276 :         , m_is_linked(false)</span>
-<a name="125"><span class="lineNum">     125 </span>            :     {</a>
-<span class="lineNum">     126 </span><span class="lineCov">        271 :         int shm_id = -1;</span>
-<span class="lineNum">     127 </span>            :         struct stat stat_struct;
-<span class="lineNum">     128 </span><span class="lineCov">        271 :         int err = 0;</span>
-<a name="129"><span class="lineNum">     129 </span>            : </a>
-<span class="lineNum">     130 </span><span class="lineCov">        271 :         if (!timeout) {</span>
-<span class="lineNum">     131 </span><span class="lineNoCov">          0 :             shm_id = shm_open(shm_key.c_str(), O_RDWR, 0);</span>
-<span class="lineNum">     132 </span><span class="lineNoCov">          0 :             if (shm_id &lt; 0) {</span>
-<a name="133"><span class="lineNum">     133 </span><span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span></a>
-<span class="lineNum">     134 </span><span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;SharedMemoryUser: Could not open shared memory with key \&quot;&quot;  &lt;&lt;  shm_key &lt;&lt; &quot;\&quot;&quot;;</span>
-<span class="lineNum">     135 </span><span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     136 </span>            :             }
-<a name="137"><span class="lineNum">     137 </span><span class="lineNoCov">          0 :             err = fstat(shm_id, &amp;stat_struct);</span></a>
-<span class="lineNum">     138 </span><span class="lineNoCov">          0 :             if (err) {</span>
-<span class="lineNum">     139 </span><span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span>
-<span class="lineNum">     140 </span><span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;SharedMemoryUser: fstat() error on shared memory with key \&quot;&quot; &lt;&lt; shm_key &lt;&lt; &quot;\&quot;&quot;;</span>
-<a name="141"><span class="lineNum">     141 </span><span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     142 </span>            :             }
-<span class="lineNum">     143 </span><span class="lineNoCov">          0 :             m_size = stat_struct.st_size;</span>
-<span class="lineNum">     144 </span>            : 
-<a name="145"><span class="lineNum">     145 </span><span class="lineNoCov">          0 :             m_ptr = mmap(NULL, m_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_id, 0);</span></a>
-<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             if (m_ptr == MAP_FAILED) {</span>
-<span class="lineNum">     147 </span><span class="lineNoCov">          0 :                 (void) close(shm_id);</span>
-<span class="lineNum">     148 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;SharedMemoryUser: Could not mmap shared memory region&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="149"><span class="lineNum">     149 </span>            :             }</a>
-<span class="lineNum">     150 </span>            :         }
-<span class="lineNum">     151 </span>            :         else {
-<span class="lineNum">     152 </span>            :             struct geopm_time_s begin_time;
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        271 :             geopm_time(&amp;begin_time);</span></a>
-<span class="lineNum">     154 </span><span class="lineCov">    6746173 :             while (shm_id &lt; 0 &amp;&amp; geopm_time_since(&amp;begin_time) &lt; (double)timeout) {</span>
-<span class="lineNum">     155 </span><span class="lineCov">    3372951 :                 geopm_signal_handler_check();</span>
-<span class="lineNum">     156 </span><span class="lineCov">    3372951 :                 shm_id = shm_open(shm_key.c_str(), O_RDWR, 0);</span>
-<a name="157"><span class="lineNum">     157 </span>            :             }</a>
-<span class="lineNum">     158 </span><span class="lineCov">        271 :             if (shm_id &lt; 0) {</span>
-<span class="lineNum">     159 </span><span class="lineCov">         10 :                 std::ostringstream ex_str;</span>
-<span class="lineNum">     160 </span><span class="lineCov">          5 :                 ex_str &lt;&lt; &quot;SharedMemoryUser: Could not open shared memory with key \&quot;&quot; &lt;&lt; shm_key &lt;&lt; &quot;\&quot;&quot;;</span>
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">          5 :                 throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     162 </span>            :             }
-<span class="lineNum">     163 </span>            : 
-<span class="lineNum">     164 </span><span class="lineCov">       1630 :             while (!m_size &amp;&amp; geopm_time_since(&amp;begin_time) &lt; (double)timeout) {</span>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        682 :                 geopm_signal_handler_check();</span></a>
-<span class="lineNum">     166 </span><span class="lineCov">        682 :                 err = fstat(shm_id, &amp;stat_struct);</span>
-<span class="lineNum">     167 </span><span class="lineCov">        682 :                 if (!err) {</span>
-<span class="lineNum">     168 </span><span class="lineCov">        682 :                     m_size = stat_struct.st_size;</span>
-<a name="169"><span class="lineNum">     169 </span>            :                 }</a>
-<span class="lineNum">     170 </span>            :             }
-<span class="lineNum">     171 </span><span class="lineCov">        266 :             if (!m_size) {</span>
-<span class="lineNum">     172 </span><span class="lineNoCov">          0 :                 (void) close(shm_id);</span>
-<a name="173"><span class="lineNum">     173 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;SharedMemoryUser: Opened shared memory region, but it is zero length&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     174 </span>            :             }
-<span class="lineNum">     175 </span>            : 
-<span class="lineNum">     176 </span><span class="lineCov">        266 :             m_ptr = mmap(NULL, m_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_id, 0);</span>
-<a name="177"><span class="lineNum">     177 </span><span class="lineCov">        266 :             if (m_ptr == MAP_FAILED) {</span></a>
-<span class="lineNum">     178 </span><span class="lineNoCov">          0 :                 (void) close(shm_id);</span>
-<span class="lineNum">     179 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;SharedMemoryUser: Could not mmap shared memory region&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     180 </span>            :             }
-<a name="181"><span class="lineNum">     181 </span>            :         }</a>
-<span class="lineNum">     182 </span>            : 
-<span class="lineNum">     183 </span><span class="lineCov">        266 :         err = close(shm_id);</span>
-<span class="lineNum">     184 </span><span class="lineCov">        266 :         if (err) {</span>
-<a name="185"><span class="lineNum">     185 </span><span class="lineNoCov">          0 :             throw Exception(&quot;SharedMemoryUser: Could not close shared memory file&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     186 </span>            :         }
-<span class="lineNum">     187 </span><span class="lineCov">        266 :         m_is_linked = true;</span>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">        266 :     }</span></a>
-<a name="189"><span class="lineNum">     189 </span>            : </a>
-<span class="lineNum">     190 </span><span class="lineCov">        798 :     SharedMemoryUser::~SharedMemoryUser()</span>
-<span class="lineNum">     191 </span>            :     {
-<span class="lineNum">     192 </span><span class="lineCov">        266 :         if (munmap(m_ptr, m_size)) {</span>
-<a name="193"><span class="lineNum">     193 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     194 </span><span class="lineNoCov">          0 :             std::cerr &lt;&lt; &quot;Warning: &quot; &lt;&lt; Exception(&quot;SharedMemory: Could not unmap pointer&quot;,</span>
-<span class="lineNum">     195 </span><span class="lineNoCov">          0 :                                                   errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__).what() &lt;&lt; std::endl;</span>
-<span class="lineNum">     196 </span>            : #endif
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :         return geopm::make_unique&lt;SharedMemoryImp&gt;(shm_key, size);</span>
+<a name="56"><span class="lineNum">      56 </span>            :     }</a>
+<a name="57"><span class="lineNum">      57 </span>            : </a>
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 :     std::shared_ptr&lt;SharedMemory&gt; SharedMemory::make_shared(const std::string &amp;shm_key, size_t size)</span>
+<span class="lineNum">      59 </span>            :     {
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :         return std::make_shared&lt;SharedMemoryImp&gt;(shm_key, size);</span>
+<a name="61"><span class="lineNum">      61 </span>            :     }</a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :     std::unique_ptr&lt;SharedMemoryUser&gt; SharedMemoryUser::make_unique(const std::string &amp;shm_key, unsigned int timeout)</span>
+<span class="lineNum">      64 </span>            :     {
+<a name="65"><span class="lineNum">      65 </span><span class="lineNoCov">          0 :         return geopm::make_unique&lt;SharedMemoryUserImp&gt;(shm_key, timeout);</span></a>
+<a name="66"><span class="lineNum">      66 </span>            :     }</a>
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :     std::shared_ptr&lt;SharedMemoryUser&gt; SharedMemoryUser::make_shared(const std::string &amp;shm_key, unsigned int timeout)</span>
+<a name="69"><span class="lineNum">      69 </span>            :     {</a>
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 :         return std::make_shared&lt;SharedMemoryUserImp&gt;(shm_key, timeout);</span>
+<a name="71"><span class="lineNum">      71 </span>            :     }</a>
+<span class="lineNum">      72 </span>            : 
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">       1096 :     SharedMemoryImp::SharedMemoryImp(const std::string &amp;shm_key, size_t size)</span></a>
+<span class="lineNum">      74 </span>            :         : m_shm_key(shm_key)
+<span class="lineNum">      75 </span><span class="lineCov">       1568 :         , m_size(size)</span>
+<span class="lineNum">      76 </span>            :     {
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       1096 :         if (!size) {</span></a>
+<span class="lineNum">      78 </span><span class="lineCov">          2 :             throw Exception(&quot;SharedMemoryImp: Cannot create shared memory region of zero size&quot;,  GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">      79 </span>            :         }
+<span class="lineNum">      80 </span><span class="lineCov">       1094 :         mode_t old_mask = umask(0);</span>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">       1094 :         int shm_id = shm_open(m_shm_key.c_str(), O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP| S_IWGRP | S_IROTH| S_IWOTH);</span></a>
+<span class="lineNum">      82 </span><span class="lineCov">       1094 :         if (shm_id &lt; 0) {</span>
+<span class="lineNum">      83 </span><span class="lineCov">        940 :             std::ostringstream ex_str;</span>
+<span class="lineNum">      84 </span><span class="lineCov">        470 :             ex_str &lt;&lt; &quot;SharedMemoryImp: Could not open shared memory with key &quot; &lt;&lt; m_shm_key;</span>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        470 :             throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      86 </span>            :         }
+<span class="lineNum">      87 </span><span class="lineCov">        624 :         int err = ftruncate(shm_id, size);</span>
+<span class="lineNum">      88 </span><span class="lineCov">        624 :         if (err) {</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineNoCov">          0 :             (void) close(shm_id);</span></a>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :             (void) shm_unlink(m_shm_key.c_str());</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :             (void) umask(old_mask);</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :             std::ostringstream ex_str;</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineNoCov">          0 :             ex_str &lt;&lt; &quot;SharedMemoryImp: Could not extend shared memory to size &quot;  &lt;&lt; size;</span></a>
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :             throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">      95 </span>            :         }
+<span class="lineNum">      96 </span><span class="lineCov">        624 :         m_ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_id, 0);</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        624 :         if (m_ptr == MAP_FAILED) {</span></a>
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :             (void) close(shm_id);</span>
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :             (void) shm_unlink(m_shm_key.c_str());</span>
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 :             (void) umask(old_mask);</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineNoCov">          0 :             throw Exception(&quot;SharedMemoryImp: Could not mmap shared memory region&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     102 </span>            :         }
+<span class="lineNum">     103 </span><span class="lineCov">        624 :         err = close(shm_id);</span>
+<span class="lineNum">     104 </span><span class="lineCov">        624 :         if (err) {</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineNoCov">          0 :             (void) umask(old_mask);</span></a>
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :             throw Exception(&quot;SharedMemoryImp: Could not close shared memory file&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     107 </span>            :         }
+<span class="lineNum">     108 </span><span class="lineCov">        624 :         umask(old_mask);</span>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        624 :     }</span></a>
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span><span class="lineCov">       1730 :     SharedMemoryImp::~SharedMemoryImp()</span>
+<span class="lineNum">     112 </span>            :     {
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">        624 :         if (munmap(m_ptr, m_size)) {</span></a>
+<span class="lineNum">     114 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :             std::cerr &lt;&lt; &quot;Warning: &quot; &lt;&lt; Exception(&quot;SharedMemoryImp: Could not unmap pointer&quot;,</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :                                                   errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__).what() &lt;&lt; std::endl;</span>
+<a name="117"><span class="lineNum">     117 </span>            : #endif</a>
+<span class="lineNum">     118 </span>            :         }
+<span class="lineNum">     119 </span><span class="lineCov">        624 :         (void) shm_unlink(m_shm_key.c_str());</span>
+<a name="120"><span class="lineNum">     120 </span><span class="lineCov">       1106 :     }</span></a>
+<a name="121"><span class="lineNum">     121 </span>            : </a>
+<span class="lineNum">     122 </span><span class="lineCov">        746 :     void *SharedMemoryImp::pointer(void) const</span>
+<span class="lineNum">     123 </span>            :     {
+<span class="lineNum">     124 </span><span class="lineCov">        746 :         return m_ptr;</span>
+<a name="125"><span class="lineNum">     125 </span>            :     }</a>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineCov">        294 :     std::string SharedMemoryImp::key(void) const</span>
+<span class="lineNum">     128 </span>            :     {
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">        294 :         return m_shm_key;</span></a>
+<a name="130"><span class="lineNum">     130 </span>            :     }</a>
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span><span class="lineCov">        294 :     size_t SharedMemoryImp::size(void) const</span>
+<a name="133"><span class="lineNum">     133 </span>            :     {</a>
+<span class="lineNum">     134 </span><span class="lineCov">        294 :         return m_size;</span>
+<a name="135"><span class="lineNum">     135 </span>            :     }</a>
+<span class="lineNum">     136 </span>            : 
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">       1392 :     SharedMemoryUserImp::SharedMemoryUserImp(const std::string &amp;shm_key, unsigned int timeout)</span></a>
+<span class="lineNum">     138 </span>            :         : m_shm_key(shm_key)
+<span class="lineNum">     139 </span>            :         , m_size(0)
+<span class="lineNum">     140 </span><span class="lineCov">       1402 :         , m_is_linked(false)</span>
+<a name="141"><span class="lineNum">     141 </span>            :     {</a>
+<span class="lineNum">     142 </span><span class="lineCov">       1392 :         int shm_id = -1;</span>
+<span class="lineNum">     143 </span>            :         struct stat stat_struct;
+<span class="lineNum">     144 </span><span class="lineCov">       1392 :         int err = 0;</span>
+<a name="145"><span class="lineNum">     145 </span>            : </a>
+<span class="lineNum">     146 </span><span class="lineCov">       1392 :         if (!timeout) {</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :             shm_id = shm_open(shm_key.c_str(), O_RDWR, 0);</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :             if (shm_id &lt; 0) {</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span></a>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;SharedMemoryUserImp: Could not open shared memory with key \&quot;&quot;  &lt;&lt;  shm_key &lt;&lt; &quot;\&quot;&quot;;</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     152 </span>            :             }
+<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :             err = fstat(shm_id, &amp;stat_struct);</span></a>
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :             if (err) {</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :                 std::ostringstream ex_str;</span>
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :                 ex_str &lt;&lt; &quot;SharedMemoryUserImp: fstat() error on shared memory with key \&quot;&quot; &lt;&lt; shm_key &lt;&lt; &quot;\&quot;&quot;;</span>
+<a name="157"><span class="lineNum">     157 </span><span class="lineNoCov">          0 :                 throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     158 </span>            :             }
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :             m_size = stat_struct.st_size;</span>
+<span class="lineNum">     160 </span>            : 
+<a name="161"><span class="lineNum">     161 </span><span class="lineNoCov">          0 :             m_ptr = mmap(NULL, m_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_id, 0);</span></a>
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :             if (m_ptr == MAP_FAILED) {</span>
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :                 (void) close(shm_id);</span>
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;SharedMemoryUserImp: Could not mmap shared memory region&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<a name="165"><span class="lineNum">     165 </span>            :             }</a>
+<span class="lineNum">     166 </span>            :         }
+<span class="lineNum">     167 </span>            :         else {
+<span class="lineNum">     168 </span>            :             struct geopm_time_s begin_time;
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">       1392 :             geopm_time(&amp;begin_time);</span></a>
+<span class="lineNum">     170 </span><span class="lineCov">  109533110 :             while (shm_id &lt; 0 &amp;&amp; geopm_time_since(&amp;begin_time) &lt; (double)timeout) {</span>
+<span class="lineNum">     171 </span><span class="lineCov">   54765859 :                 geopm_signal_handler_check();</span>
+<span class="lineNum">     172 </span><span class="lineCov">   54765859 :                 shm_id = shm_open(shm_key.c_str(), O_RDWR, 0);</span>
+<a name="173"><span class="lineNum">     173 </span>            :             }</a>
+<span class="lineNum">     174 </span><span class="lineCov">       1392 :             if (shm_id &lt; 0) {</span>
+<span class="lineNum">     175 </span><span class="lineCov">         20 :                 std::ostringstream ex_str;</span>
+<span class="lineNum">     176 </span><span class="lineCov">         10 :                 ex_str &lt;&lt; &quot;SharedMemoryUserImp: Could not open shared memory with key \&quot;&quot; &lt;&lt; shm_key &lt;&lt; &quot;\&quot;&quot;;</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">         10 :                 throw Exception(ex_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     178 </span>            :             }
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span><span class="lineCov">       6746 :             while (!m_size &amp;&amp; geopm_time_since(&amp;begin_time) &lt; (double)timeout) {</span>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">       2682 :                 geopm_signal_handler_check();</span></a>
+<span class="lineNum">     182 </span><span class="lineCov">       2682 :                 err = fstat(shm_id, &amp;stat_struct);</span>
+<span class="lineNum">     183 </span><span class="lineCov">       2682 :                 if (!err) {</span>
+<span class="lineNum">     184 </span><span class="lineCov">       2682 :                     m_size = stat_struct.st_size;</span>
+<a name="185"><span class="lineNum">     185 </span>            :                 }</a>
+<span class="lineNum">     186 </span>            :             }
+<span class="lineNum">     187 </span><span class="lineCov">       1382 :             if (!m_size) {</span>
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :                 (void) close(shm_id);</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;SharedMemoryUserImp: Opened shared memory region, but it is zero length&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     190 </span>            :             }
+<span class="lineNum">     191 </span>            : 
+<span class="lineNum">     192 </span><span class="lineCov">       1382 :             m_ptr = mmap(NULL, m_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_id, 0);</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">       1382 :             if (m_ptr == MAP_FAILED) {</span></a>
+<span class="lineNum">     194 </span><span class="lineNoCov">          0 :                 (void) close(shm_id);</span>
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;SharedMemoryUserImp: Could not mmap shared memory region&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     196 </span>            :             }
 <a name="197"><span class="lineNum">     197 </span>            :         }</a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">        532 :     }</span></a>
-<span class="lineNum">     199 </span>            : 
-<span class="lineNum">     200 </span><span class="lineCov">        318 :     void *SharedMemoryUser::pointer(void) const</span>
-<a name="201"><span class="lineNum">     201 </span>            :     {</a>
-<span class="lineNum">     202 </span><span class="lineCov">        318 :         return m_ptr;</span>
-<a name="203"><span class="lineNum">     203 </span>            :     }</a>
-<span class="lineNum">     204 </span>            : 
-<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :     std::string SharedMemoryUser::key(void) const</span></a>
-<span class="lineNum">     206 </span>            :     {
-<span class="lineNum">     207 </span><span class="lineNoCov">          0 :         return m_shm_key;</span>
-<a name="208"><span class="lineNum">     208 </span>            :     }</a>
-<a name="209"><span class="lineNum">     209 </span>            : </a>
-<span class="lineNum">     210 </span><span class="lineCov">        279 :     size_t SharedMemoryUser::size(void) const</span>
-<span class="lineNum">     211 </span>            :     {
-<span class="lineNum">     212 </span><span class="lineCov">        279 :         return m_size;</span>
-<a name="213"><span class="lineNum">     213 </span>            :     }</a>
-<span class="lineNum">     214 </span>            : 
-<span class="lineNum">     215 </span><span class="lineCov">         90 :     void SharedMemoryUser::unlink(void)</span>
-<span class="lineNum">     216 </span>            :     {
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         90 :         if (m_is_linked) {</span></a>
-<span class="lineNum">     218 </span><span class="lineCov">         90 :             int err = shm_unlink(m_shm_key.c_str());</span>
-<span class="lineNum">     219 </span><span class="lineCov">         90 :             if (err) {</span>
-<span class="lineNum">     220 </span><span class="lineNoCov">          0 :                 std::ostringstream tmp_str;</span>
-<a name="221"><span class="lineNum">     221 </span><span class="lineNoCov">          0 :                 tmp_str &lt;&lt; &quot;SharedMemoryUser::unlink() Call to shm_unlink(&quot; &lt;&lt; m_shm_key  &lt;&lt; &quot;) failed&quot;;</span></a>
-<span class="lineNum">     222 </span><span class="lineNoCov">          0 :                 throw Exception(tmp_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     223 </span>            :             }
-<span class="lineNum">     224 </span><span class="lineCov">         90 :             m_is_linked = false;</span>
-<a name="225"><span class="lineNum">     225 </span>            :         }</a>
-<span class="lineNum">     226 </span><span class="lineCov">         90 :     }</span>
-<span class="lineNum">     227 </span><span class="lineCov">        849 : }</span>
+<span class="lineNum">     198 </span>            : 
+<span class="lineNum">     199 </span><span class="lineCov">       1382 :         err = close(shm_id);</span>
+<span class="lineNum">     200 </span><span class="lineCov">       1382 :         if (err) {</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :             throw Exception(&quot;SharedMemoryUserImp: Could not close shared memory file&quot;, errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     202 </span>            :         }
+<span class="lineNum">     203 </span><span class="lineCov">       1382 :         m_is_linked = true;</span>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">       1382 :     }</span></a>
+<a name="205"><span class="lineNum">     205 </span>            : </a>
+<span class="lineNum">     206 </span><span class="lineCov">       3678 :     SharedMemoryUserImp::~SharedMemoryUserImp()</span>
+<span class="lineNum">     207 </span>            :     {
+<span class="lineNum">     208 </span><span class="lineCov">       1382 :         if (munmap(m_ptr, m_size)) {</span>
+<a name="209"><span class="lineNum">     209 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :             std::cerr &lt;&lt; &quot;Warning: &quot; &lt;&lt; Exception(&quot;SharedMemory: Could not unmap pointer&quot;,</span>
+<span class="lineNum">     211 </span><span class="lineNoCov">          0 :                                                   errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__).what() &lt;&lt; std::endl;</span>
+<span class="lineNum">     212 </span>            : #endif
+<a name="213"><span class="lineNum">     213 </span>            :         }</a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">       2296 :     }</span></a>
+<span class="lineNum">     215 </span>            : 
+<span class="lineNum">     216 </span><span class="lineCov">       1682 :     void *SharedMemoryUserImp::pointer(void) const</span>
+<a name="217"><span class="lineNum">     217 </span>            :     {</a>
+<span class="lineNum">     218 </span><span class="lineCov">       1682 :         return m_ptr;</span>
+<a name="219"><span class="lineNum">     219 </span>            :     }</a>
+<span class="lineNum">     220 </span>            : 
+<a name="221"><span class="lineNum">     221 </span><span class="lineNoCov">          0 :     std::string SharedMemoryUserImp::key(void) const</span></a>
+<span class="lineNum">     222 </span>            :     {
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :         return m_shm_key;</span>
+<a name="224"><span class="lineNum">     224 </span>            :     }</a>
+<a name="225"><span class="lineNum">     225 </span>            : </a>
+<span class="lineNum">     226 </span><span class="lineCov">       1508 :     size_t SharedMemoryUserImp::size(void) const</span>
+<span class="lineNum">     227 </span>            :     {
+<span class="lineNum">     228 </span><span class="lineCov">       1508 :         return m_size;</span>
+<a name="229"><span class="lineNum">     229 </span>            :     }</a>
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span><span class="lineCov">        470 :     void SharedMemoryUserImp::unlink(void)</span>
+<span class="lineNum">     232 </span>            :     {
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        470 :         if (m_is_linked) {</span></a>
+<span class="lineNum">     234 </span><span class="lineCov">        470 :             int err = shm_unlink(m_shm_key.c_str());</span>
+<span class="lineNum">     235 </span><span class="lineCov">        470 :             if (err) {</span>
+<span class="lineNum">     236 </span><span class="lineNoCov">          0 :                 std::ostringstream tmp_str;</span>
+<a name="237"><span class="lineNum">     237 </span><span class="lineNoCov">          0 :                 tmp_str &lt;&lt; &quot;SharedMemoryUserImp::unlink() Call to shm_unlink(&quot; &lt;&lt; m_shm_key  &lt;&lt; &quot;) failed&quot;;</span></a>
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 :                 throw Exception(tmp_str.str(), errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     239 </span>            :             }
+<span class="lineNum">     240 </span><span class="lineCov">        470 :             m_is_linked = false;</span>
+<a name="241"><span class="lineNum">     241 </span>            :         }</a>
+<span class="lineNum">     242 </span><span class="lineCov">        470 :     }</span>
+<span class="lineNum">     243 </span><span class="lineCov">       4701 : }</span>
 </pre>
       </td>
     </tr>
@@ -303,7 +319,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

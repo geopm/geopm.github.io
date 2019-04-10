@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/geopm_hash.h</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/geopm_hash.h</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - geopm_hash.h<span style="font-size: 80%;"> (source / <a href="geopm_hash.h.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - geopm_hash.h<span style="font-size: 80%;"> (source / <a href="geopm_hash.h.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,20 +28,20 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">8</td>
-            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">3</td>
-            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -103,48 +103,44 @@
 <a name="33"><span class="lineNum">      33 </span>            : #define GEOPM_HASH_H_INCLUDE</a>
 <span class="lineNum">      34 </span>            : 
 <span class="lineNum">      35 </span>            : #include &lt;stdint.h&gt;
-<span class="lineNum">      36 </span>            : #include &lt;smmintrin.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;string.h&gt;</a>
-<span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span>            : #ifdef __cplusplus
-<span class="lineNum">      40 </span>            : extern &quot;C&quot;
-<a name="41"><span class="lineNum">      41 </span>            : {</a>
-<span class="lineNum">      42 </span>            : #endif
-<span class="lineNum">      43 </span><span class="lineCov">       1453 : static inline uint64_t geopm_crc32_u64(uint64_t begin, uint64_t key)</span>
-<span class="lineNum">      44 </span>            : {
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">       1453 :     return _mm_crc32_u64(begin, key);</span></a>
-<span class="lineNum">      46 </span>            : }
-<span class="lineNum">      47 </span>            : 
-<span class="lineNum">      48 </span>            : uint64_t geopm_crc32_str(uint64_t begin, const char *key);
-<a name="49"><span class="lineNum">      49 </span>            : </a>
-<span class="lineNum">      50 </span>            : /// @brief Convert a signal that is implicitly a 64-bit field
-<span class="lineNum">      51 </span>            : ///        especially useful for converting region IDs.
-<span class="lineNum">      52 </span>            : /// @param [in] signal value returned by PlatformIO::sample() or
-<a name="53"><span class="lineNum">      53 </span>            : ///        PlatformIO::read_signal() for a signal with a name that</a>
-<span class="lineNum">      54 </span>            : ///        ends with the '#' character.
-<span class="lineNum">      55 </span><span class="lineCov">  208519974 : static inline uint64_t geopm_signal_to_field(double signal)</span>
-<span class="lineNum">      56 </span>            : {
-<a name="57"><span class="lineNum">      57 </span>            :     uint64_t result;</a>
-<span class="lineNum">      58 </span><span class="lineCov">  208519974 :     memcpy(&amp;result, &amp;signal, sizeof(result));</span>
-<span class="lineNum">      59 </span><span class="lineCov">  208519974 :     return result;</span>
-<span class="lineNum">      60 </span>            : }
-<a name="61"><span class="lineNum">      61 </span>            : </a>
-<span class="lineNum">      62 </span>            : /// @brief Convert a 64-bit field into a double representation
-<span class="lineNum">      63 </span>            : ///        appropriate for a signal returned by an IOGroup.
-<a name="64"><span class="lineNum">      64 </span>            : /// @param [in] field Arbitrary 64-bit field to be stored in a</a>
-<a name="65"><span class="lineNum">      65 </span>            : ///        double precision value.</a>
-<span class="lineNum">      66 </span><span class="lineCov">  214436243 : static inline double geopm_field_to_signal(uint64_t field)</span>
-<span class="lineNum">      67 </span>            : {
-<span class="lineNum">      68 </span>            :     double result;
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">  214436243 :     memcpy(&amp;result, &amp;field, sizeof(result));</span></a>
-<span class="lineNum">      70 </span><span class="lineCov">  214436243 :     return result;</span>
-<span class="lineNum">      71 </span>            : }
+<span class="lineNum">      36 </span>            : #include &lt;string.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : </a>
+<span class="lineNum">      38 </span>            : #ifdef __cplusplus
+<span class="lineNum">      39 </span>            : extern &quot;C&quot;
+<span class="lineNum">      40 </span>            : {
+<a name="41"><span class="lineNum">      41 </span>            : #endif</a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : uint64_t geopm_crc32_u64(uint64_t begin, uint64_t key);
+<span class="lineNum">      44 </span>            : uint64_t geopm_crc32_str(const char *key);
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<span class="lineNum">      46 </span>            : /// @brief Convert a signal that is implicitly a 64-bit field
+<span class="lineNum">      47 </span>            : ///        especially useful for converting region IDs.
+<span class="lineNum">      48 </span>            : /// @param [in] signal value returned by PlatformIO::sample() or
+<a name="49"><span class="lineNum">      49 </span>            : ///        PlatformIO::read_signal() for a signal with a name that</a>
+<span class="lineNum">      50 </span>            : ///        ends with the '#' character.
+<span class="lineNum">      51 </span><span class="lineCov">         55 : static inline uint64_t geopm_signal_to_field(double signal)</span>
+<span class="lineNum">      52 </span>            : {
+<a name="53"><span class="lineNum">      53 </span>            :     uint64_t result;</a>
+<span class="lineNum">      54 </span><span class="lineCov">         55 :     memcpy(&amp;result, &amp;signal, sizeof(result));</span>
+<span class="lineNum">      55 </span><span class="lineCov">         55 :     return result;</span>
+<span class="lineNum">      56 </span>            : }
+<a name="57"><span class="lineNum">      57 </span>            : </a>
+<span class="lineNum">      58 </span>            : /// @brief Convert a 64-bit field into a double representation
+<span class="lineNum">      59 </span>            : ///        appropriate for a signal returned by an IOGroup.
+<a name="60"><span class="lineNum">      60 </span>            : /// @param [in] field Arbitrary 64-bit field to be stored in a</a>
+<a name="61"><span class="lineNum">      61 </span>            : ///        double precision value.</a>
+<span class="lineNum">      62 </span><span class="lineCov">      59249 : static inline double geopm_field_to_signal(uint64_t field)</span>
+<span class="lineNum">      63 </span>            : {
+<span class="lineNum">      64 </span>            :     double result;
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      59249 :     memcpy(&amp;result, &amp;field, sizeof(result));</span></a>
+<span class="lineNum">      66 </span><span class="lineCov">      59249 :     return result;</span>
+<span class="lineNum">      67 </span>            : }
+<span class="lineNum">      68 </span>            : 
+<a name="69"><span class="lineNum">      69 </span>            : #ifdef __cplusplus</a>
+<span class="lineNum">      70 </span>            : }
+<span class="lineNum">      71 </span>            : #endif
 <span class="lineNum">      72 </span>            : 
-<a name="73"><span class="lineNum">      73 </span>            : #ifdef __cplusplus</a>
-<span class="lineNum">      74 </span>            : }
-<span class="lineNum">      75 </span>            : #endif
-<span class="lineNum">      76 </span>            : 
-<a name="77"><span class="lineNum">      77 </span>            : #endif</a>
+<a name="73"><span class="lineNum">      73 </span>            : #endif</a>
 </pre>
       </td>
     </tr>
@@ -153,7 +149,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/EpochRuntimeRegulator.hpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/EpochRuntimeRegulator.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - EpochRuntimeRegulator.hpp<span style="font-size: 80%;"> (source / <a href="EpochRuntimeRegulator.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - EpochRuntimeRegulator.hpp<span style="font-size: 80%;"> (source / <a href="EpochRuntimeRegulator.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">3</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -111,167 +111,172 @@
 <a name="41"><span class="lineNum">      41 </span>            : #include &lt;list&gt;</a>
 <span class="lineNum">      42 </span>            : 
 <span class="lineNum">      43 </span>            : #include &quot;geopm_time.h&quot;
-<span class="lineNum">      44 </span>            : #include &quot;geopm_internal.h&quot;
-<a name="45"><span class="lineNum">      45 </span>            : </a>
-<span class="lineNum">      46 </span>            : namespace geopm
-<span class="lineNum">      47 </span>            : {
-<span class="lineNum">      48 </span>            :     class IRuntimeRegulator;
-<a name="49"><span class="lineNum">      49 </span>            : </a>
-<span class="lineNum">      50 </span>            :     class IEpochRuntimeRegulator
-<a name="51"><span class="lineNum">      51 </span>            :     {</a>
-<a name="52"><span class="lineNum">      52 </span>            :         public:</a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         26 :             IEpochRuntimeRegulator() = default;</span></a>
-<span class="lineNum">      54 </span><span class="lineCov">         26 :             virtual ~IEpochRuntimeRegulator() = default;</span>
-<span class="lineNum">      55 </span>            :             /// @brief Handle the initial entry into the unmarked
-<span class="lineNum">      56 </span>            :             ///        region when the application starts.
-<a name="57"><span class="lineNum">      57 </span>            :             virtual void init_unmarked_region() = 0;</a>
-<span class="lineNum">      58 </span>            :             /// @brief Record a transition between epochs with
-<span class="lineNum">      59 </span>            :             ///        entry/exit into the epoch region.
-<span class="lineNum">      60 </span>            :             virtual void epoch(int rank, struct geopm_time_s epoch_time) = 0;
-<a name="61"><span class="lineNum">      61 </span>            :             /// @brief Record entry into a region for one rank at the</a>
-<span class="lineNum">      62 </span>            :             ///        given time.
-<span class="lineNum">      63 </span>            :             /// @param [in] region_id The ID of the region.
-<span class="lineNum">      64 </span>            :             /// @param [in] rank Rank tht entered the region.
-<a name="65"><span class="lineNum">      65 </span>            :             /// @param [in] entry_time Time of entry.</a>
-<span class="lineNum">      66 </span>            :             virtual void record_entry(uint64_t region_id, int rank, struct geopm_time_s entry_time) = 0;
-<span class="lineNum">      67 </span>            :             /// @brief Record exit from a region for one rank at the
-<span class="lineNum">      68 </span>            :             ///        given time.  Also aggregates totals for the
-<a name="69"><span class="lineNum">      69 </span>            :             ///        epoch region.</a>
-<span class="lineNum">      70 </span>            :             /// @param [in] region_id The ID of the region.
-<span class="lineNum">      71 </span>            :             /// @param [in] rank Rank that exited the region.
-<span class="lineNum">      72 </span>            :             /// @param [in] exit_time Time of exit.
-<a name="73"><span class="lineNum">      73 </span>            :             virtual void record_exit(uint64_t region_id, int rank, struct geopm_time_s exit_time) = 0;</a>
-<span class="lineNum">      74 </span>            :             /// @brief Returns a reference to the RuntimeRegulator for
-<span class="lineNum">      75 </span>            :             ///        a given region.  This method is intended for
-<span class="lineNum">      76 </span>            :             ///        internal use by the ApplicationIO.
-<a name="77"><span class="lineNum">      77 </span>            :             /// @param [in] region_id The ID of the region.</a>
-<span class="lineNum">      78 </span>            :             virtual const IRuntimeRegulator &amp;region_regulator(uint64_t region_id) const = 0;
-<span class="lineNum">      79 </span>            :             /// @brief Returns whether or not the region is being
-<span class="lineNum">      80 </span>            :             ///        tracked by the EpochRuntimeRegulator.
-<a name="81"><span class="lineNum">      81 </span>            :             /// @param [in] region_id The ID of the region.</a>
-<span class="lineNum">      82 </span>            :             virtual bool is_regulated(uint64_t region_id) const = 0;
-<span class="lineNum">      83 </span>            :             /// @brief Returns the total runtime of the last iteration
-<span class="lineNum">      84 </span>            :             ///        of the epoch for each rank.
-<a name="85"><span class="lineNum">      85 </span>            :             virtual std::vector&lt;double&gt; last_epoch_runtime() const = 0;</a>
-<span class="lineNum">      86 </span>            :             /// @brief Returns the total mpi runtime of the last iteration
-<span class="lineNum">      87 </span>            :             ///        of the epoch for each rank.
-<span class="lineNum">      88 </span>            :             virtual std::vector&lt;double&gt; last_epoch_runtime_mpi() const = 0;
-<a name="89"><span class="lineNum">      89 </span>            :             /// @brief Returns the total ignore runtime of the last iteration</a>
-<span class="lineNum">      90 </span>            :             ///        of the epoch for each rank.
-<span class="lineNum">      91 </span>            :             virtual std::vector&lt;double&gt; last_epoch_runtime_ignore() const = 0;
-<span class="lineNum">      92 </span>            :             /// @brief Returns the number of epoch calls seen by each
-<a name="93"><span class="lineNum">      93 </span>            :             ///        rank.</a>
-<span class="lineNum">      94 </span>            :             virtual std::vector&lt;double&gt; epoch_count() const = 0;
-<span class="lineNum">      95 </span>            :             /// @brief Returns the total runtime recorded for the
-<span class="lineNum">      96 </span>            :             ///        given region.
-<a name="97"><span class="lineNum">      97 </span>            :             /// @param [in] region_id The ID of the region.</a>
-<span class="lineNum">      98 </span>            :             virtual double total_region_runtime(uint64_t region_id) const = 0;
-<span class="lineNum">      99 </span>            :             /// @brief Returns the total time spent in MPI for a given
-<span class="lineNum">     100 </span>            :             ///        region.
-<a name="101"><span class="lineNum">     101 </span>            :             /// @param [in] region_id The ID of the region.</a>
-<span class="lineNum">     102 </span>            :             virtual double total_region_runtime_mpi(uint64_t region_id) const = 0;
-<span class="lineNum">     103 </span>            :             /// @brief Returns the total runtime since the first epoch
-<span class="lineNum">     104 </span>            :             ///        call.  This total does not include MPI time or
-<a name="105"><span class="lineNum">     105 </span>            :             ///        ignore time.</a>
-<span class="lineNum">     106 </span>            :             virtual double total_epoch_runtime(void) const = 0;
-<span class="lineNum">     107 </span>            :             /// @brief Returns the total time spent in MPI after the
-<span class="lineNum">     108 </span>            :             ///        first epoch call.
-<a name="109"><span class="lineNum">     109 </span>            :             virtual double total_epoch_runtime_mpi(void) const = 0;</a>
-<span class="lineNum">     110 </span>            :             /// @brief Returns the total time spent in regions marked
-<span class="lineNum">     111 </span>            :             ///        with GEOPM_REGION_ID_HINT_IGNORE after the
+<span class="lineNum">      44 </span>            : 
+<a name="45"><span class="lineNum">      45 </span>            : struct geopm_region_info_s;</a>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            : namespace geopm
+<span class="lineNum">      48 </span>            : {
+<a name="49"><span class="lineNum">      49 </span>            :     class RuntimeRegulator;</a>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            :     class EpochRuntimeRegulator
+<a name="52"><span class="lineNum">      52 </span>            :     {</a>
+<a name="53"><span class="lineNum">      53 </span>            :         public:</a>
+<span class="lineNum">      54 </span><span class="lineCov">        102 :             EpochRuntimeRegulator() = default;</span>
+<span class="lineNum">      55 </span><span class="lineCov">        102 :             virtual ~EpochRuntimeRegulator() = default;</span>
+<span class="lineNum">      56 </span>            :             /// @brief Handle the initial entry into the unmarked
+<a name="57"><span class="lineNum">      57 </span>            :             ///        region when the application starts.</a>
+<span class="lineNum">      58 </span>            :             virtual void init_unmarked_region() = 0;
+<span class="lineNum">      59 </span>            :             /// @brief Record a transition between epochs with
+<span class="lineNum">      60 </span>            :             ///        entry/exit into the epoch region.
+<a name="61"><span class="lineNum">      61 </span>            :             virtual void epoch(int rank, struct geopm_time_s epoch_time) = 0;</a>
+<span class="lineNum">      62 </span>            :             /// @brief Record entry into a region for one rank at the
+<span class="lineNum">      63 </span>            :             ///        given time.
+<span class="lineNum">      64 </span>            :             /// @param [in] region_id The ID of the region.
+<a name="65"><span class="lineNum">      65 </span>            :             /// @param [in] rank Rank tht entered the region.</a>
+<span class="lineNum">      66 </span>            :             /// @param [in] entry_time Time of entry.
+<span class="lineNum">      67 </span>            :             virtual void record_entry(uint64_t region_id, int rank, struct geopm_time_s entry_time) = 0;
+<span class="lineNum">      68 </span>            :             /// @brief Record exit from a region for one rank at the
+<a name="69"><span class="lineNum">      69 </span>            :             ///        given time.  Also aggregates totals for the</a>
+<span class="lineNum">      70 </span>            :             ///        epoch region.
+<span class="lineNum">      71 </span>            :             /// @param [in] region_id The ID of the region.
+<span class="lineNum">      72 </span>            :             /// @param [in] rank Rank that exited the region.
+<a name="73"><span class="lineNum">      73 </span>            :             /// @param [in] exit_time Time of exit.</a>
+<span class="lineNum">      74 </span>            :             virtual void record_exit(uint64_t region_id, int rank, struct geopm_time_s exit_time) = 0;
+<span class="lineNum">      75 </span>            :             /// @brief Returns a reference to the RuntimeRegulator for
+<span class="lineNum">      76 </span>            :             ///        a given region.  This method is intended for
+<a name="77"><span class="lineNum">      77 </span>            :             ///        internal use by the ApplicationIO.</a>
+<span class="lineNum">      78 </span>            :             /// @param [in] region_id The ID of the region.
+<span class="lineNum">      79 </span>            :             virtual const RuntimeRegulator &amp;region_regulator(uint64_t region_id) const = 0;
+<span class="lineNum">      80 </span>            :             /// @brief Returns whether or not the region is being
+<a name="81"><span class="lineNum">      81 </span>            :             ///        tracked by the EpochRuntimeRegulator.</a>
+<span class="lineNum">      82 </span>            :             /// @param [in] region_id The ID of the region.
+<span class="lineNum">      83 </span>            :             virtual bool is_regulated(uint64_t region_id) const = 0;
+<span class="lineNum">      84 </span>            :             /// @brief Returns the total runtime of the last iteration
+<a name="85"><span class="lineNum">      85 </span>            :             ///        of the epoch for each rank.</a>
+<span class="lineNum">      86 </span>            :             virtual std::vector&lt;double&gt; last_epoch_runtime() const = 0;
+<span class="lineNum">      87 </span>            :             /// @brief Returns the total mpi runtime of the last iteration
+<span class="lineNum">      88 </span>            :             ///        of the epoch for each rank.
+<a name="89"><span class="lineNum">      89 </span>            :             virtual std::vector&lt;double&gt; last_epoch_runtime_mpi() const = 0;</a>
+<span class="lineNum">      90 </span>            :             /// @brief Returns the total ignore runtime of the last iteration
+<span class="lineNum">      91 </span>            :             ///        of the epoch for each rank.
+<span class="lineNum">      92 </span>            :             virtual std::vector&lt;double&gt; last_epoch_runtime_ignore() const = 0;
+<a name="93"><span class="lineNum">      93 </span>            :             /// @brief Returns the number of epoch calls seen by each</a>
+<span class="lineNum">      94 </span>            :             ///        rank.
+<span class="lineNum">      95 </span>            :             virtual std::vector&lt;double&gt; epoch_count() const = 0;
+<span class="lineNum">      96 </span>            :             /// @brief Returns the total runtime recorded for the
+<a name="97"><span class="lineNum">      97 </span>            :             ///        given region.</a>
+<span class="lineNum">      98 </span>            :             /// @param [in] region_id The ID of the region.
+<span class="lineNum">      99 </span>            :             virtual double total_region_runtime(uint64_t region_id) const = 0;
+<span class="lineNum">     100 </span>            :             /// @brief Returns the total time spent in MPI for a given
+<a name="101"><span class="lineNum">     101 </span>            :             ///        region.</a>
+<span class="lineNum">     102 </span>            :             /// @param [in] region_id The ID of the region.
+<span class="lineNum">     103 </span>            :             virtual double total_region_runtime_mpi(uint64_t region_id) const = 0;
+<span class="lineNum">     104 </span>            :             /// @brief Returns the maximum number of epoch calls seen by each
+<a name="105"><span class="lineNum">     105 </span>            :             ///        rank.</a>
+<span class="lineNum">     106 </span>            :             virtual int total_epoch_count() const = 0;
+<span class="lineNum">     107 </span>            :             /// @brief Returns the total runtime since the first epoch
+<span class="lineNum">     108 </span>            :             ///        call.  This total does not include MPI time or
+<a name="109"><span class="lineNum">     109 </span>            :             ///        ignore time.</a>
+<span class="lineNum">     110 </span>            :             virtual double total_epoch_runtime(void) const = 0;
+<span class="lineNum">     111 </span>            :             /// @brief Returns the total time spent in MPI after the
 <span class="lineNum">     112 </span>            :             ///        first epoch call.
-<a name="113"><span class="lineNum">     113 </span>            :             virtual double total_epoch_runtime_ignore(void) const = 0;</a>
-<span class="lineNum">     114 </span>            :             /// @brief Returns the total package energy since the
-<span class="lineNum">     115 </span>            :             ///        first epoch call.
-<span class="lineNum">     116 </span>            :             virtual double total_epoch_energy_pkg(void) const = 0;
-<a name="117"><span class="lineNum">     117 </span>            :             /// @brief Returns the total dram energy since the first</a>
-<span class="lineNum">     118 </span>            :             ///        epoch call.
-<span class="lineNum">     119 </span>            :             virtual double total_epoch_energy_dram(void) const = 0;
-<span class="lineNum">     120 </span>            :             /// @brief Returns the total time spent in MPI calls since
-<a name="121"><span class="lineNum">     121 </span>            :             ///        the start of the application.</a>
-<span class="lineNum">     122 </span>            :             virtual double total_app_runtime_mpi(void) const = 0;
-<span class="lineNum">     123 </span>            :             /// @brief Returns the total ignore time since
-<span class="lineNum">     124 </span>            :             ///        the start of the application.
-<a name="125"><span class="lineNum">     125 </span>            :             virtual double total_app_runtime_ignore(void) const = 0;</a>
-<span class="lineNum">     126 </span>            :             /// @brief Returns the total number of times a region was
-<span class="lineNum">     127 </span>            :             ///        entered and exited.
-<span class="lineNum">     128 </span>            :             /// @param [in] region_id The ID of the region.
-<a name="129"><span class="lineNum">     129 </span>            :             virtual int total_count(uint64_t region_id) const = 0;</a>
-<span class="lineNum">     130 </span>            :             /// @todo this level of pass through will go away once
-<span class="lineNum">     131 </span>            :             ///       this class is merged with ApplicationIO
-<span class="lineNum">     132 </span>            :             /// @brief Returns the list of all regions entered or
-<a name="133"><span class="lineNum">     133 </span>            :             ///        exited since the last call to</a>
-<span class="lineNum">     134 </span>            :             ///        clear_region_info().
-<span class="lineNum">     135 </span>            :             virtual std::list&lt;geopm_region_info_s&gt; region_info(void) const = 0;
-<span class="lineNum">     136 </span>            :             /// @brief Resets the internal list of region entries and
-<a name="137"><span class="lineNum">     137 </span>            :             ///        exits.</a>
-<span class="lineNum">     138 </span>            :             virtual void clear_region_info(void) = 0;
-<span class="lineNum">     139 </span>            :     };
-<span class="lineNum">     140 </span>            : 
-<a name="141"><span class="lineNum">     141 </span>            :     class IPlatformIO;</a>
-<a name="142"><span class="lineNum">     142 </span>            :     class IPlatformTopo;</a>
-<span class="lineNum">     143 </span>            : 
-<span class="lineNum">     144 </span><span class="lineCov">         31 :     class EpochRuntimeRegulator : public IEpochRuntimeRegulator</span>
-<a name="145"><span class="lineNum">     145 </span>            :     {</a>
-<span class="lineNum">     146 </span>            :         public:
-<span class="lineNum">     147 </span>            :             EpochRuntimeRegulator() = delete;
-<span class="lineNum">     148 </span>            :             EpochRuntimeRegulator(int rank_per_node, IPlatformIO &amp;platform_io,
-<a name="149"><span class="lineNum">     149 </span>            :                                   IPlatformTopo &amp;platform_topo);</a>
-<span class="lineNum">     150 </span>            :             virtual ~EpochRuntimeRegulator();
-<span class="lineNum">     151 </span>            :             virtual void init_unmarked_region() override;
-<span class="lineNum">     152 </span>            :             void epoch(int rank, struct geopm_time_s epoch_time) override;
-<a name="153"><span class="lineNum">     153 </span>            :             void record_entry(uint64_t region_id, int rank, struct geopm_time_s entry_time) override;</a>
-<span class="lineNum">     154 </span>            :             void record_exit(uint64_t region_id, int rank, struct geopm_time_s exit_time) override;
-<span class="lineNum">     155 </span>            :             const IRuntimeRegulator &amp;region_regulator(uint64_t region_id) const override;
-<span class="lineNum">     156 </span>            :             bool is_regulated(uint64_t region_id) const override;
-<a name="157"><span class="lineNum">     157 </span>            :             std::vector&lt;double&gt; last_epoch_runtime() const override;</a>
-<span class="lineNum">     158 </span>            :             std::vector&lt;double&gt; last_epoch_runtime_mpi() const override;
-<span class="lineNum">     159 </span>            :             std::vector&lt;double&gt; last_epoch_runtime_ignore() const override;
-<span class="lineNum">     160 </span>            :             std::vector&lt;double&gt; epoch_count() const override;
-<a name="161"><span class="lineNum">     161 </span>            :             double total_region_runtime(uint64_t region_id) const override;</a>
-<span class="lineNum">     162 </span>            :             double total_region_runtime_mpi(uint64_t region_id) const override;
-<span class="lineNum">     163 </span>            :             double total_epoch_runtime(void) const override;
-<span class="lineNum">     164 </span>            :             double total_epoch_runtime_mpi(void) const override;
-<a name="165"><span class="lineNum">     165 </span>            :             double total_epoch_runtime_ignore(void) const override;</a>
-<span class="lineNum">     166 </span>            :             double total_epoch_energy_pkg(void) const override;
-<span class="lineNum">     167 </span>            :             double total_epoch_energy_dram(void) const override;
-<span class="lineNum">     168 </span>            :             double total_app_runtime_mpi(void) const override;
-<a name="169"><span class="lineNum">     169 </span>            :             double total_app_runtime_ignore(void) const override;</a>
-<span class="lineNum">     170 </span>            :             int total_count(uint64_t region_id) const override;
-<span class="lineNum">     171 </span>            :             std::list&lt;geopm_region_info_s&gt; region_info(void) const override;
-<span class="lineNum">     172 </span>            :             void clear_region_info(void) override;
-<a name="173"><span class="lineNum">     173 </span>            :         private:</a>
-<span class="lineNum">     174 </span>            :             std::vector&lt;double&gt; per_rank_last_runtime(uint64_t region_id) const;
-<span class="lineNum">     175 </span>            :             double current_energy_pkg(void) const;
-<span class="lineNum">     176 </span>            :             double current_energy_dram(void) const;
-<a name="177"><span class="lineNum">     177 </span>            :             int m_rank_per_node;</a>
-<span class="lineNum">     178 </span>            :             IPlatformIO &amp;m_platform_io;
-<span class="lineNum">     179 </span>            :             IPlatformTopo &amp;m_platform_topo;
-<span class="lineNum">     180 </span>            :             std::map&lt;uint64_t, std::unique_ptr&lt;IRuntimeRegulator&gt; &gt; m_rid_regulator_map;
-<a name="181"><span class="lineNum">     181 </span>            :             bool m_is_energy_recorded;</a>
-<span class="lineNum">     182 </span>            :             std::vector&lt;bool&gt; m_seen_first_epoch;
-<span class="lineNum">     183 </span>            :             std::vector&lt;double&gt; m_curr_runtime_ignore;
-<span class="lineNum">     184 </span>            :             std::vector&lt;double&gt; m_agg_epoch_runtime_ignore;
-<a name="185"><span class="lineNum">     185 </span>            :             std::vector&lt;double&gt; m_curr_runtime_mpi;</a>
-<span class="lineNum">     186 </span>            :             std::vector&lt;double&gt; m_agg_epoch_runtime_mpi;
-<span class="lineNum">     187 </span>            :             std::vector&lt;double&gt; m_agg_runtime_mpi;
-<span class="lineNum">     188 </span>            :             std::vector&lt;double&gt; m_last_epoch_runtime;
-<a name="189"><span class="lineNum">     189 </span>            :             std::vector&lt;double&gt; m_last_epoch_runtime_mpi;</a>
-<span class="lineNum">     190 </span>            :             std::vector&lt;double&gt; m_last_epoch_runtime_ignore;
-<span class="lineNum">     191 </span>            :             std::vector&lt;double&gt; m_agg_epoch_runtime;
-<span class="lineNum">     192 </span>            :             std::vector&lt;double&gt; m_agg_pre_epoch_runtime_mpi;
-<a name="193"><span class="lineNum">     193 </span>            :             std::vector&lt;double&gt; m_agg_pre_epoch_runtime_ignore;</a>
-<span class="lineNum">     194 </span>            :             std::vector&lt;std::set&lt;uint64_t&gt; &gt; m_pre_epoch_region;
-<span class="lineNum">     195 </span>            :             std::list&lt;geopm_region_info_s&gt; m_region_info;
-<span class="lineNum">     196 </span>            :             double m_epoch_start_energy_pkg;
-<a name="197"><span class="lineNum">     197 </span>            :             double m_epoch_start_energy_dram;</a>
-<span class="lineNum">     198 </span>            :             double m_epoch_total_energy_pkg;
-<span class="lineNum">     199 </span>            :             double m_epoch_total_energy_dram;
-<span class="lineNum">     200 </span>            :             std::map&lt;uint64_t, int&gt; m_region_rank_count;
-<a name="201"><span class="lineNum">     201 </span>            :     };</a>
-<span class="lineNum">     202 </span>            : }
-<span class="lineNum">     203 </span>            : 
-<span class="lineNum">     204 </span>            : #endif
+<a name="113"><span class="lineNum">     113 </span>            :             virtual double total_epoch_runtime_mpi(void) const = 0;</a>
+<span class="lineNum">     114 </span>            :             /// @brief Returns the total time spent in regions marked
+<span class="lineNum">     115 </span>            :             ///        with GEOPM_REGION_ID_HINT_IGNORE after the
+<span class="lineNum">     116 </span>            :             ///        first epoch call.
+<a name="117"><span class="lineNum">     117 </span>            :             virtual double total_epoch_runtime_ignore(void) const = 0;</a>
+<span class="lineNum">     118 </span>            :             /// @brief Returns the total package energy since the
+<span class="lineNum">     119 </span>            :             ///        first epoch call.
+<span class="lineNum">     120 </span>            :             virtual double total_epoch_energy_pkg(void) const = 0;
+<a name="121"><span class="lineNum">     121 </span>            :             /// @brief Returns the total dram energy since the first</a>
+<span class="lineNum">     122 </span>            :             ///        epoch call.
+<span class="lineNum">     123 </span>            :             virtual double total_epoch_energy_dram(void) const = 0;
+<span class="lineNum">     124 </span>            :             /// @brief Returns the total time spent in MPI calls since
+<a name="125"><span class="lineNum">     125 </span>            :             ///        the start of the application.</a>
+<span class="lineNum">     126 </span>            :             virtual double total_app_runtime_mpi(void) const = 0;
+<span class="lineNum">     127 </span>            :             /// @brief Returns the total ignore time since
+<span class="lineNum">     128 </span>            :             ///        the start of the application.
+<a name="129"><span class="lineNum">     129 </span>            :             virtual double total_app_runtime_ignore(void) const = 0;</a>
+<span class="lineNum">     130 </span>            :             /// @brief Returns the total number of times a region was
+<span class="lineNum">     131 </span>            :             ///        entered and exited.
+<span class="lineNum">     132 </span>            :             /// @param [in] region_id The ID of the region.
+<a name="133"><span class="lineNum">     133 </span>            :             virtual int total_count(uint64_t region_id) const = 0;</a>
+<span class="lineNum">     134 </span>            :             /// @todo this level of pass through will go away once
+<span class="lineNum">     135 </span>            :             ///       this class is merged with ApplicationIO
+<span class="lineNum">     136 </span>            :             /// @brief Returns the list of all regions entered or
+<a name="137"><span class="lineNum">     137 </span>            :             ///        exited since the last call to</a>
+<span class="lineNum">     138 </span>            :             ///        clear_region_info().
+<span class="lineNum">     139 </span>            :             virtual std::list&lt;geopm_region_info_s&gt; region_info(void) const = 0;
+<span class="lineNum">     140 </span>            :             /// @brief Resets the internal list of region entries and
+<a name="141"><span class="lineNum">     141 </span>            :             ///        exits.</a>
+<span class="lineNum">     142 </span>            :             virtual void clear_region_info(void) = 0;
+<span class="lineNum">     143 </span>            :     };
+<span class="lineNum">     144 </span>            : 
+<a name="145"><span class="lineNum">     145 </span>            :     class PlatformIO;</a>
+<a name="146"><span class="lineNum">     146 </span>            :     class PlatformTopo;</a>
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span><span class="lineCov">        162 :     class EpochRuntimeRegulatorImp : public EpochRuntimeRegulator</span>
+<a name="149"><span class="lineNum">     149 </span>            :     {</a>
+<span class="lineNum">     150 </span>            :         public:
+<span class="lineNum">     151 </span>            :             EpochRuntimeRegulatorImp() = delete;
+<span class="lineNum">     152 </span>            :             EpochRuntimeRegulatorImp(int rank_per_node, PlatformIO &amp;platform_io,
+<a name="153"><span class="lineNum">     153 </span>            :                                      PlatformTopo &amp;platform_topo);</a>
+<span class="lineNum">     154 </span>            :             virtual ~EpochRuntimeRegulatorImp();
+<span class="lineNum">     155 </span>            :             virtual void init_unmarked_region() override;
+<span class="lineNum">     156 </span>            :             void epoch(int rank, struct geopm_time_s epoch_time) override;
+<a name="157"><span class="lineNum">     157 </span>            :             void record_entry(uint64_t region_id, int rank, struct geopm_time_s entry_time) override;</a>
+<span class="lineNum">     158 </span>            :             void record_exit(uint64_t region_id, int rank, struct geopm_time_s exit_time) override;
+<span class="lineNum">     159 </span>            :             const RuntimeRegulator &amp;region_regulator(uint64_t region_id) const override;
+<span class="lineNum">     160 </span>            :             bool is_regulated(uint64_t region_id) const override;
+<a name="161"><span class="lineNum">     161 </span>            :             std::vector&lt;double&gt; last_epoch_runtime() const override;</a>
+<span class="lineNum">     162 </span>            :             std::vector&lt;double&gt; last_epoch_runtime_mpi() const override;
+<span class="lineNum">     163 </span>            :             std::vector&lt;double&gt; last_epoch_runtime_ignore() const override;
+<span class="lineNum">     164 </span>            :             std::vector&lt;double&gt; epoch_count() const override;
+<a name="165"><span class="lineNum">     165 </span>            :             double total_region_runtime(uint64_t region_id) const override;</a>
+<span class="lineNum">     166 </span>            :             double total_region_runtime_mpi(uint64_t region_id) const override;
+<span class="lineNum">     167 </span>            :             int total_epoch_count() const override;
+<span class="lineNum">     168 </span>            :             double total_epoch_runtime(void) const override;
+<a name="169"><span class="lineNum">     169 </span>            :             double total_epoch_runtime_mpi(void) const override;</a>
+<span class="lineNum">     170 </span>            :             double total_epoch_runtime_ignore(void) const override;
+<span class="lineNum">     171 </span>            :             double total_epoch_energy_pkg(void) const override;
+<span class="lineNum">     172 </span>            :             double total_epoch_energy_dram(void) const override;
+<a name="173"><span class="lineNum">     173 </span>            :             double total_app_runtime_mpi(void) const override;</a>
+<span class="lineNum">     174 </span>            :             double total_app_runtime_ignore(void) const override;
+<span class="lineNum">     175 </span>            :             int total_count(uint64_t region_id) const override;
+<span class="lineNum">     176 </span>            :             std::list&lt;geopm_region_info_s&gt; region_info(void) const override;
+<a name="177"><span class="lineNum">     177 </span>            :             void clear_region_info(void) override;</a>
+<span class="lineNum">     178 </span>            :         private:
+<span class="lineNum">     179 </span>            :             std::vector&lt;double&gt; per_rank_last_runtime(uint64_t region_id) const;
+<span class="lineNum">     180 </span>            :             double current_energy_pkg(void) const;
+<a name="181"><span class="lineNum">     181 </span>            :             double current_energy_dram(void) const;</a>
+<span class="lineNum">     182 </span>            :             int m_rank_per_node;
+<span class="lineNum">     183 </span>            :             PlatformIO &amp;m_platform_io;
+<span class="lineNum">     184 </span>            :             PlatformTopo &amp;m_platform_topo;
+<a name="185"><span class="lineNum">     185 </span>            :             std::map&lt;uint64_t, std::unique_ptr&lt;RuntimeRegulator&gt; &gt; m_rid_regulator_map;</a>
+<span class="lineNum">     186 </span>            :             bool m_is_energy_recorded;
+<span class="lineNum">     187 </span>            :             std::vector&lt;bool&gt; m_seen_first_epoch;
+<span class="lineNum">     188 </span>            :             std::vector&lt;double&gt; m_curr_runtime_ignore;
+<a name="189"><span class="lineNum">     189 </span>            :             std::vector&lt;double&gt; m_agg_epoch_runtime_ignore;</a>
+<span class="lineNum">     190 </span>            :             std::vector&lt;double&gt; m_curr_runtime_mpi;
+<span class="lineNum">     191 </span>            :             std::vector&lt;double&gt; m_agg_epoch_runtime_mpi;
+<span class="lineNum">     192 </span>            :             std::vector&lt;double&gt; m_agg_runtime_mpi;
+<a name="193"><span class="lineNum">     193 </span>            :             std::vector&lt;double&gt; m_last_epoch_runtime;</a>
+<span class="lineNum">     194 </span>            :             std::vector&lt;double&gt; m_last_epoch_runtime_mpi;
+<span class="lineNum">     195 </span>            :             std::vector&lt;double&gt; m_last_epoch_runtime_ignore;
+<span class="lineNum">     196 </span>            :             std::vector&lt;double&gt; m_agg_epoch_runtime;
+<a name="197"><span class="lineNum">     197 </span>            :             std::vector&lt;double&gt; m_agg_pre_epoch_runtime_mpi;</a>
+<span class="lineNum">     198 </span>            :             std::vector&lt;double&gt; m_agg_pre_epoch_runtime_ignore;
+<span class="lineNum">     199 </span>            :             std::vector&lt;std::set&lt;uint64_t&gt; &gt; m_pre_epoch_region;
+<span class="lineNum">     200 </span>            :             std::list&lt;geopm_region_info_s&gt; m_region_info;
+<a name="201"><span class="lineNum">     201 </span>            :             double m_epoch_start_energy_pkg;</a>
+<span class="lineNum">     202 </span>            :             double m_epoch_start_energy_dram;
+<span class="lineNum">     203 </span>            :             double m_epoch_total_energy_pkg;
+<span class="lineNum">     204 </span>            :             double m_epoch_total_energy_dram;
+<a name="205"><span class="lineNum">     205 </span>            :             std::map&lt;uint64_t, int&gt; m_region_rank_count;</a>
+<span class="lineNum">     206 </span>            :     };
+<span class="lineNum">     207 </span>            : }
+<span class="lineNum">     208 </span>            : 
+<a name="209"><span class="lineNum">     209 </span>            : #endif</a>
 </pre>
       </td>
     </tr>
@@ -280,7 +285,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

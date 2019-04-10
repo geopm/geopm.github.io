@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/PlatformTopo.cpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/PlatformTopo.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - PlatformTopo.cpp<span style="font-size: 80%;"> (source / <a href="PlatformTopo.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - PlatformTopo.cpp<span style="font-size: 80%;"> (source / <a href="PlatformTopo.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">206</td>
-            <td class="headerCovTableEntry">251</td>
-            <td class="headerCovTableEntryMed">82.1 %</td>
+            <td class="headerCovTableEntry">319</td>
+            <td class="headerCovTableEntry">371</td>
+            <td class="headerCovTableEntryMed">86.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">16</td>
-            <td class="headerCovTableEntry">17</td>
-            <td class="headerCovTableEntryHi">94.1 %</td>
+            <td class="headerCovTableEntry">28</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntryHi">90.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -99,493 +99,672 @@
 <a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
-<span class="lineNum">      32 </span>            : #include &lt;signal.h&gt;
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;map&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;sstream&gt;
-<span class="lineNum">      35 </span>            : #include &lt;string&gt;
-<span class="lineNum">      36 </span>            : #include &lt;cpuid.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : </a>
-<span class="lineNum">      38 </span>            : #include &quot;geopm_sched.h&quot;
-<span class="lineNum">      39 </span>            : #include &quot;PlatformTopo.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;PlatformTopoImp.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;signal.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;sys/types.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;sys/stat.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;unistd.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;cpuid.h&gt;
+<span class="lineNum">      40 </span>            : #include &lt;string.h&gt;
 <a name="41"><span class="lineNum">      41 </span>            : </a>
-<a name="42"><span class="lineNum">      42 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      43 </span>            : 
-<span class="lineNum">      44 </span><span class="lineNoCov">          0 : int geopm_read_cpuid(void)</span>
-<a name="45"><span class="lineNum">      45 </span>            : {</a>
-<span class="lineNum">      46 </span><span class="lineNoCov">          0 :     uint32_t key = 1; //processor features</span>
-<span class="lineNum">      47 </span><span class="lineNoCov">          0 :     uint32_t proc_info = 0;</span>
-<span class="lineNum">      48 </span>            :     uint32_t model;
-<a name="49"><span class="lineNum">      49 </span>            :     uint32_t family;</a>
-<span class="lineNum">      50 </span>            :     uint32_t ext_model;
-<span class="lineNum">      51 </span>            :     uint32_t ext_family;
-<span class="lineNum">      52 </span>            :     uint32_t ebx, ecx, edx;
-<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 :     const uint32_t model_mask = 0xF0;</span></a>
-<span class="lineNum">      54 </span><span class="lineNoCov">          0 :     const uint32_t family_mask = 0xF00;</span>
-<span class="lineNum">      55 </span><span class="lineNoCov">          0 :     const uint32_t extended_model_mask = 0xF0000;</span>
-<span class="lineNum">      56 </span><span class="lineNoCov">          0 :     const uint32_t extended_family_mask = 0xFF00000;</span>
-<a name="57"><span class="lineNum">      57 </span>            : </a>
-<span class="lineNum">      58 </span><span class="lineNoCov">          0 :     __get_cpuid(key, &amp;proc_info, &amp;ebx, &amp;ecx, &amp;edx);</span>
-<span class="lineNum">      59 </span>            : 
-<span class="lineNum">      60 </span><span class="lineNoCov">          0 :     model = (proc_info &amp; model_mask) &gt;&gt; 4;</span>
-<a name="61"><span class="lineNum">      61 </span><span class="lineNoCov">          0 :     family = (proc_info &amp; family_mask) &gt;&gt; 8;</span></a>
-<span class="lineNum">      62 </span><span class="lineNoCov">          0 :     ext_model = (proc_info &amp; extended_model_mask) &gt;&gt; 16;</span>
-<span class="lineNum">      63 </span><span class="lineNoCov">          0 :     ext_family = (proc_info &amp; extended_family_mask) &gt;&gt; 20;</span>
+<span class="lineNum">      42 </span>            : #include &lt;map&gt;
+<span class="lineNum">      43 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">      44 </span>            : #include &lt;string&gt;
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<span class="lineNum">      46 </span>            : #include &quot;geopm_sched.h&quot;
+<span class="lineNum">      47 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      48 </span>            : 
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span><span class="lineNoCov">          0 : int geopm_read_cpuid(void)</span>
+<span class="lineNum">      52 </span>            : {
+<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 :     uint32_t key = 1; //processor features</span></a>
+<span class="lineNum">      54 </span><span class="lineNoCov">          0 :     uint32_t proc_info = 0;</span>
+<span class="lineNum">      55 </span>            :     uint32_t model;
+<span class="lineNum">      56 </span>            :     uint32_t family;
+<a name="57"><span class="lineNum">      57 </span>            :     uint32_t ext_model;</a>
+<span class="lineNum">      58 </span>            :     uint32_t ext_family;
+<span class="lineNum">      59 </span>            :     uint32_t ebx, ecx, edx;
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :     const uint32_t model_mask = 0xF0;</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineNoCov">          0 :     const uint32_t family_mask = 0xF00;</span></a>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :     const uint32_t extended_model_mask = 0xF0000;</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :     const uint32_t extended_family_mask = 0xFF00000;</span>
 <span class="lineNum">      64 </span>            : 
-<a name="65"><span class="lineNum">      65 </span><span class="lineNoCov">          0 :     if (family == 6) {</span></a>
-<span class="lineNum">      66 </span><span class="lineNoCov">          0 :         model+=(ext_model &lt;&lt; 4);</span>
-<span class="lineNum">      67 </span>            :     }
-<span class="lineNum">      68 </span><span class="lineNoCov">          0 :     else if (family == 15) {</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineNoCov">          0 :         model+=(ext_model &lt;&lt; 4);</span></a>
-<span class="lineNum">      70 </span><span class="lineNoCov">          0 :         family+=ext_family;</span>
-<span class="lineNum">      71 </span>            :     }
-<span class="lineNum">      72 </span>            : 
-<a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 :     return ((family &lt;&lt; 8) + model);</span></a>
-<span class="lineNum">      74 </span>            : }
-<span class="lineNum">      75 </span>            : 
-<a name="76"><span class="lineNum">      76 </span>            : namespace geopm</a>
-<a name="77"><span class="lineNum">      77 </span>            : {</a>
-<span class="lineNum">      78 </span><span class="lineCov">        173 :     IPlatformTopo &amp;platform_topo(void)</span>
-<span class="lineNum">      79 </span>            :     {
-<span class="lineNum">      80 </span><span class="lineCov">        173 :         static PlatformTopo instance;</span>
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">        173 :         return instance;</span></a>
-<a name="82"><span class="lineNum">      82 </span>            :     }</a>
-<span class="lineNum">      83 </span>            : 
-<span class="lineNum">      84 </span><span class="lineCov">         73 :     PlatformTopo::PlatformTopo()</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         73 :         : PlatformTopo(&quot;&quot;)</span></a>
-<span class="lineNum">      86 </span>            :     {
-<span class="lineNum">      87 </span>            : 
-<a name="88"><span class="lineNum">      88 </span><span class="lineCov">         73 :     }</span></a>
-<a name="89"><span class="lineNum">      89 </span>            : </a>
-<span class="lineNum">      90 </span><span class="lineCov">         86 :     PlatformTopo::PlatformTopo(const std::string &amp;lscpu_file_name)</span>
-<span class="lineNum">      91 </span>            :         : M_LSCPU_FILE_NAME(&quot;/tmp/geopm-lscpu.log&quot;)
-<span class="lineNum">      92 </span>            :         , M_TEST_LSCPU_FILE_NAME(lscpu_file_name)
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         93 :         , m_do_fclose(true)</span></a>
-<span class="lineNum">      94 </span>            :     {
-<span class="lineNum">      95 </span><span class="lineCov">        172 :         std::map&lt;std::string, std::string&gt; lscpu_map;</span>
-<span class="lineNum">      96 </span><span class="lineCov">         86 :         lscpu(lscpu_map);</span>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         86 :         parse_lscpu(lscpu_map, m_num_package, m_core_per_package, m_thread_per_core);</span></a>
-<span class="lineNum">      98 </span><span class="lineCov">         79 :         parse_lscpu_numa(lscpu_map, m_numa_map);</span>
-<a name="99"><span class="lineNum">      99 </span><span class="lineCov">         79 :     }</span></a>
-<span class="lineNum">     100 </span>            : 
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">      97459 :     int PlatformTopo::num_domain(int domain_type) const</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineNoCov">          0 :     __get_cpuid(key, &amp;proc_info, &amp;ebx, &amp;ecx, &amp;edx);</span></a>
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :     model = (proc_info &amp; model_mask) &gt;&gt; 4;</span>
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :     family = (proc_info &amp; family_mask) &gt;&gt; 8;</span>
+<a name="69"><span class="lineNum">      69 </span><span class="lineNoCov">          0 :     ext_model = (proc_info &amp; extended_model_mask) &gt;&gt; 16;</span></a>
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 :     ext_family = (proc_info &amp; extended_family_mask) &gt;&gt; 20;</span>
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :     if (family == 6) {</span>
+<a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 :         model+=(ext_model &lt;&lt; 4);</span></a>
+<span class="lineNum">      74 </span>            :     }
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :     else if (family == 15) {</span>
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :         model+=(ext_model &lt;&lt; 4);</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineNoCov">          0 :         family+=ext_family;</span></a>
+<span class="lineNum">      78 </span>            :     }
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :     return ((family &lt;&lt; 8) + model);</span>
+<a name="81"><span class="lineNum">      81 </span>            : }</a>
+<span class="lineNum">      82 </span>            : 
+<a name="83"><span class="lineNum">      83 </span>            : namespace geopm</a>
+<span class="lineNum">      84 </span>            : {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">       1567 :     const std::string PlatformTopoImp::M_CACHE_FILE_NAME = &quot;/tmp/geopm-topo-cache&quot;;</span></a>
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span><span class="lineCov">       2857 :     PlatformTopo &amp;platform_topo(void)</span>
+<span class="lineNum">      88 </span>            :     {
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">       2857 :         static PlatformTopoImp instance;</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">       2857 :         return instance;</span>
+<a name="91"><span class="lineNum">      91 </span>            :     }</a>
+<span class="lineNum">      92 </span>            : 
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        957 :     PlatformTopoImp::PlatformTopoImp()</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">        957 :         : PlatformTopoImp(&quot;&quot;)</span>
+<span class="lineNum">      95 </span>            :     {
+<span class="lineNum">      96 </span>            : 
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        957 :     }</span></a>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineCov">        987 :     PlatformTopoImp::PlatformTopoImp(const std::string &amp;test_cache_file_name)</span>
+<span class="lineNum">     100 </span>            :         : M_TEST_CACHE_FILE_NAME(test_cache_file_name)
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       1001 :         , m_do_fclose(true)</span></a>
 <span class="lineNum">     102 </span>            :     {
-<span class="lineNum">     103 </span><span class="lineCov">      97459 :         int result = 0;</span>
-<span class="lineNum">     104 </span><span class="lineCov">      97459 :         switch (domain_type) {</span>
-<a name="105"><span class="lineNum">     105 </span>            :             case M_DOMAIN_BOARD:</a>
-<span class="lineNum">     106 </span><span class="lineCov">          6 :                 result = 1;</span>
-<span class="lineNum">     107 </span><span class="lineCov">          6 :                 break;</span>
-<span class="lineNum">     108 </span>            :             case M_DOMAIN_PACKAGE:
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">       1214 :                 result = m_num_package;</span></a>
-<span class="lineNum">     110 </span><span class="lineCov">       1214 :                 break;</span>
-<span class="lineNum">     111 </span>            :             case M_DOMAIN_CORE:
-<span class="lineNum">     112 </span><span class="lineCov">          6 :                 result = m_num_package * m_core_per_package;</span>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          6 :                 break;</span></a>
-<span class="lineNum">     114 </span>            :             case M_DOMAIN_CPU:
-<span class="lineNum">     115 </span><span class="lineCov">      95159 :                 result = m_num_package * m_core_per_package * m_thread_per_core;</span>
-<span class="lineNum">     116 </span><span class="lineCov">      95159 :                 break;</span>
-<a name="117"><span class="lineNum">     117 </span>            :             case M_DOMAIN_BOARD_MEMORY:</a>
-<span class="lineNum">     118 </span><span class="lineCov">       3188 :                 for (const auto &amp;it : m_numa_map) {</span>
-<span class="lineNum">     119 </span><span class="lineCov">       2125 :                     if (it.size()) {</span>
-<span class="lineNum">     120 </span><span class="lineCov">       1065 :                         ++result;</span>
-<a name="121"><span class="lineNum">     121 </span>            :                     }</a>
-<span class="lineNum">     122 </span>            :                 }
-<span class="lineNum">     123 </span><span class="lineCov">       1063 :                 break;</span>
-<span class="lineNum">     124 </span>            :             case M_DOMAIN_PACKAGE_MEMORY:
-<a name="125"><span class="lineNum">     125 </span><span class="lineCov">         17 :                 for (const auto &amp;it : m_numa_map) {</span></a>
-<span class="lineNum">     126 </span><span class="lineCov">         11 :                     if (!it.size()) {</span>
-<span class="lineNum">     127 </span><span class="lineCov">          3 :                         ++result;</span>
-<span class="lineNum">     128 </span>            :                     }
-<a name="129"><span class="lineNum">     129 </span>            :                 }</a>
-<span class="lineNum">     130 </span><span class="lineCov">          6 :                 break;</span>
-<span class="lineNum">     131 </span>            :             case M_DOMAIN_BOARD_NIC:
-<span class="lineNum">     132 </span>            :             case M_DOMAIN_PACKAGE_NIC:
-<a name="133"><span class="lineNum">     133 </span>            :             case M_DOMAIN_BOARD_ACCELERATOR:</a>
-<span class="lineNum">     134 </span>            :             case M_DOMAIN_PACKAGE_ACCELERATOR:
-<span class="lineNum">     135 </span>            :                 /// @todo Add support for NIC and accelerators to PlatformTopo.
-<span class="lineNum">     136 </span><span class="lineCov">          4 :                 result = 0;</span>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          4 :                 break;</span></a>
-<span class="lineNum">     138 </span>            :             case M_DOMAIN_INVALID:
-<span class="lineNum">     139 </span>            :                 throw Exception(&quot;PlatformTopo::num_domain(): invalid domain specified&quot;,
-<span class="lineNum">     140 </span><span class="lineCov">          1 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="141"><span class="lineNum">     141 </span>            :                 break;</a>
-<span class="lineNum">     142 </span>            :             default:
-<span class="lineNum">     143 </span>            :                 throw Exception(&quot;PlatformTopo::num_domain(): invalid domain specified&quot;,
-<span class="lineNum">     144 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="145"><span class="lineNum">     145 </span>            :                 break;</a>
-<span class="lineNum">     146 </span>            :         }
-<span class="lineNum">     147 </span><span class="lineCov">      97458 :         return result;</span>
-<a name="148"><span class="lineNum">     148 </span>            :     }</a>
-<a name="149"><span class="lineNum">     149 </span>            : </a>
-<span class="lineNum">     150 </span><span class="lineCov">      57887 :     std::set&lt;int&gt; PlatformTopo::domain_cpus(int domain_type,</span>
-<span class="lineNum">     151 </span>            :                                             int domain_idx) const
-<span class="lineNum">     152 </span>            :     {
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">      57887 :         std::set&lt;int&gt; cpu_idx;</span></a>
-<span class="lineNum">     154 </span><span class="lineCov">      57887 :         switch (domain_type) {</span>
-<span class="lineNum">     155 </span>            :             case M_DOMAIN_BOARD:
-<span class="lineNum">     156 </span><span class="lineCov">        318 :                 for (auto numa_cpus : m_numa_map) {</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">        212 :                     cpu_idx.insert(numa_cpus.begin(), numa_cpus.end());</span></a>
-<span class="lineNum">     158 </span>            :                 }
-<span class="lineNum">     159 </span><span class="lineCov">        106 :                 break;</span>
-<span class="lineNum">     160 </span>            :             case M_DOMAIN_PACKAGE:
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">       3291 :                 for (int thread_idx = 0;</span></a>
-<span class="lineNum">     162 </span><span class="lineCov">       3291 :                      thread_idx != m_thread_per_core;</span>
-<span class="lineNum">     163 </span>            :                      ++thread_idx) {
-<span class="lineNum">     164 </span><span class="lineCov">     170896 :                     for (int core_idx = domain_idx * m_core_per_package;</span>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">     170896 :                          core_idx != (domain_idx + 1) * m_core_per_package;</span></a>
-<span class="lineNum">     166 </span>            :                          ++core_idx) {
-<span class="lineNum">     167 </span><span class="lineCov">     168264 :                         cpu_idx.insert(core_idx + thread_idx * m_core_per_package * m_num_package);</span>
-<span class="lineNum">     168 </span>            :                     }
-<a name="169"><span class="lineNum">     169 </span>            :                 }</a>
-<span class="lineNum">     170 </span><span class="lineCov">        659 :                 break;</span>
-<span class="lineNum">     171 </span>            :             case M_DOMAIN_CORE:
-<span class="lineNum">     172 </span><span class="lineCov">          6 :                 for (int thread_idx = 0;</span>
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          6 :                      thread_idx != m_thread_per_core;</span></a>
-<span class="lineNum">     174 </span>            :                      ++thread_idx) {
-<span class="lineNum">     175 </span><span class="lineCov">          4 :                     cpu_idx.insert(domain_idx + thread_idx * m_core_per_package * m_num_package);</span>
+<span class="lineNum">     103 </span><span class="lineCov">       1974 :         std::map&lt;std::string, std::string&gt; lscpu_map;</span>
+<span class="lineNum">     104 </span><span class="lineCov">        987 :         lscpu(lscpu_map);</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">        987 :         parse_lscpu(lscpu_map, m_num_package, m_core_per_package, m_thread_per_core);</span></a>
+<span class="lineNum">     106 </span><span class="lineCov">        973 :         parse_lscpu_numa(lscpu_map, m_numa_map);</span>
+<a name="107"><span class="lineNum">     107 </span><span class="lineCov">        973 :     }</span></a>
+<span class="lineNum">     108 </span>            : 
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">    5222838 :     int PlatformTopoImp::num_domain(int domain_type) const</span></a>
+<span class="lineNum">     110 </span>            :     {
+<span class="lineNum">     111 </span><span class="lineCov">    5222838 :         int result = 0;</span>
+<span class="lineNum">     112 </span><span class="lineCov">    5222838 :         switch (domain_type) {</span>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">       2080 :             case GEOPM_DOMAIN_BOARD:</span></a>
+<span class="lineNum">     114 </span><span class="lineCov">       4450 :                 result = 1;</span>
+<span class="lineNum">     115 </span><span class="lineCov">       4450 :                 break;</span>
+<span class="lineNum">     116 </span><span class="lineCov">       7794 :             case GEOPM_DOMAIN_PACKAGE:</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">      13314 :                 result = m_num_package;</span></a>
+<span class="lineNum">     118 </span><span class="lineCov">      13314 :                 break;</span>
+<span class="lineNum">     119 </span><span class="lineCov">      15073 :             case GEOPM_DOMAIN_CORE:</span>
+<span class="lineNum">     120 </span><span class="lineCov">      29870 :                 result = m_num_package * m_core_per_package;</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">      29870 :                 break;</span></a>
+<span class="lineNum">     122 </span><span class="lineCov">    1263100 :             case GEOPM_DOMAIN_CPU:</span>
+<span class="lineNum">     123 </span><span class="lineCov">    5165460 :                 result = m_num_package * m_core_per_package * m_thread_per_core;</span>
+<span class="lineNum">     124 </span><span class="lineCov">    5165460 :                 break;</span>
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">       6004 :             case GEOPM_DOMAIN_BOARD_MEMORY:</span></a>
+<span class="lineNum">     126 </span><span class="lineCov">      29086 :                 for (const auto &amp;it : m_numa_map) {</span>
+<span class="lineNum">     127 </span><span class="lineCov">      19390 :                     if (it.size()) {</span>
+<span class="lineNum">     128 </span><span class="lineCov">      15705 :                         ++result;</span>
+<a name="129"><span class="lineNum">     129 </span>            :                     }</a>
+<span class="lineNum">     130 </span>            :                 }
+<span class="lineNum">     131 </span><span class="lineCov">       9696 :                 break;</span>
+<span class="lineNum">     132 </span><span class="lineCov">          9 :             case GEOPM_DOMAIN_PACKAGE_MEMORY:</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         52 :                 for (const auto &amp;it : m_numa_map) {</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">         34 :                     if (!it.size()) {</span>
+<span class="lineNum">     135 </span><span class="lineCov">          6 :                         ++result;</span>
+<span class="lineNum">     136 </span>            :                     }
+<a name="137"><span class="lineNum">     137 </span>            :                 }</a>
+<span class="lineNum">     138 </span><span class="lineCov">         18 :                 break;</span>
+<span class="lineNum">     139 </span><span class="lineCov">         13 :             case GEOPM_DOMAIN_BOARD_NIC:</span>
+<span class="lineNum">     140 </span>            :             case GEOPM_DOMAIN_PACKAGE_NIC:
+<a name="141"><span class="lineNum">     141 </span>            :             case GEOPM_DOMAIN_BOARD_ACCELERATOR:</a>
+<span class="lineNum">     142 </span>            :             case GEOPM_DOMAIN_PACKAGE_ACCELERATOR:
+<span class="lineNum">     143 </span>            :                 /// @todo Add support for NIC and accelerators to PlatformTopo.
+<span class="lineNum">     144 </span><span class="lineCov">         26 :                 result = 0;</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         26 :                 break;</span></a>
+<span class="lineNum">     146 </span><span class="lineCov">          1 :             case GEOPM_DOMAIN_INVALID:</span>
+<span class="lineNum">     147 </span>            :                 throw Exception(&quot;PlatformTopoImp::num_domain(): invalid domain specified&quot;,
+<span class="lineNum">     148 </span><span class="lineCov">          2 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="149"><span class="lineNum">     149 </span>            :                 break;</a>
+<span class="lineNum">     150 </span><span class="lineCov">          1 :             default:</span>
+<span class="lineNum">     151 </span>            :                 throw Exception(&quot;PlatformTopoImp::num_domain(): invalid domain specified&quot;,
+<span class="lineNum">     152 </span><span class="lineCov">          2 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="153"><span class="lineNum">     153 </span>            :                 break;</a>
+<span class="lineNum">     154 </span>            :         }
+<span class="lineNum">     155 </span><span class="lineCov">    5222834 :         return result;</span>
+<a name="156"><span class="lineNum">     156 </span>            :     }</a>
+<a name="157"><span class="lineNum">     157 </span>            : </a>
+<span class="lineNum">     158 </span><span class="lineCov">    1318297 :     std::set&lt;int&gt; PlatformTopoImp::domain_cpus(int domain_type,</span>
+<span class="lineNum">     159 </span>            :                                                int domain_idx) const
+<span class="lineNum">     160 </span>            :     {
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">    1318297 :         if (domain_type &lt; 0 || domain_type &gt;= GEOPM_NUM_DOMAIN) {</span></a>
+<span class="lineNum">     162 </span>            :             throw Exception(&quot;PlatformTopoImp::domain_cpus(): domain_type out of range&quot;,
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     164 </span>            :         }
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">    1318297 :         int num_dom = num_domain(domain_type);</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">    1318297 :         if (domain_idx &lt; 0 || domain_idx &gt;= num_dom) {</span>
+<span class="lineNum">     167 </span>            :             throw Exception(&quot;PlatformTopoImp::domain_cpus(): domain_idx out of range&quot;,
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="169"><span class="lineNum">     169 </span>            :         }</a>
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span><span class="lineCov">    1318297 :         std::set&lt;int&gt; cpu_idx;</span>
+<span class="lineNum">     172 </span><span class="lineCov">    1318297 :         switch (domain_type) {</span>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">        663 :             case GEOPM_DOMAIN_BOARD:</span></a>
+<span class="lineNum">     174 </span><span class="lineCov">       4183 :                 for (auto numa_cpus : m_numa_map) {</span>
+<span class="lineNum">     175 </span><span class="lineCov">       2788 :                     cpu_idx.insert(numa_cpus.begin(), numa_cpus.end());</span>
 <span class="lineNum">     176 </span>            :                 }
-<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          2 :                 break;</span></a>
-<span class="lineNum">     178 </span>            :             case M_DOMAIN_CPU:
-<span class="lineNum">     179 </span><span class="lineCov">      56578 :                 cpu_idx.insert(domain_idx);</span>
-<span class="lineNum">     180 </span><span class="lineCov">      56578 :                 break;</span>
-<a name="181"><span class="lineNum">     181 </span>            :             case M_DOMAIN_BOARD_MEMORY:</a>
-<span class="lineNum">     182 </span><span class="lineCov">        537 :                 cpu_idx = m_numa_map[domain_idx];</span>
-<span class="lineNum">     183 </span><span class="lineCov">        537 :                 break;</span>
-<span class="lineNum">     184 </span>            :             default:
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">         10 :                 throw Exception(&quot;PlatformTopo::domain_cpus(domain_type=&quot; +</span></a>
-<span class="lineNum">     186 </span><span class="lineCov">         20 :                                 std::to_string(domain_type) +</span>
-<span class="lineNum">     187 </span>            :                                 &quot;) support not yet implemented&quot;,
-<span class="lineNum">     188 </span><span class="lineCov">         15 :                                 GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
-<a name="189"><span class="lineNum">     189 </span>            :                 break;</a>
-<span class="lineNum">     190 </span>            :         }
-<span class="lineNum">     191 </span><span class="lineCov">      57882 :         return cpu_idx;</span>
-<a name="192"><span class="lineNum">     192 </span>            :     }</a>
-<a name="193"><span class="lineNum">     193 </span>            : </a>
-<span class="lineNum">     194 </span><span class="lineCov">      27044 :     int PlatformTopo::domain_idx(int domain_type,</span>
-<span class="lineNum">     195 </span>            :                                  int cpu_idx) const
-<span class="lineNum">     196 </span>            :     {
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">      27044 :         int result = -1;</span></a>
-<span class="lineNum">     198 </span><span class="lineCov">      27044 :         int num_cpu = num_domain(M_DOMAIN_CPU);</span>
-<span class="lineNum">     199 </span><span class="lineCov">      27044 :         int core_idx = 0;</span>
-<span class="lineNum">     200 </span><span class="lineCov">      27044 :         int numa_idx = 0;</span>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">      27044 :         if (cpu_idx &gt;= 0 &amp;&amp; cpu_idx &lt; num_cpu) {</span></a>
-<span class="lineNum">     202 </span><span class="lineCov">      27041 :             switch (domain_type) {</span>
-<span class="lineNum">     203 </span>            :                 case M_DOMAIN_BOARD:
-<span class="lineNum">     204 </span><span class="lineCov">          1 :                     result = 0;</span>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          1 :                     break;</span></a>
-<span class="lineNum">     206 </span>            :                 case M_DOMAIN_PACKAGE:
-<span class="lineNum">     207 </span><span class="lineCov">       5636 :                     core_idx = cpu_idx % (m_num_package * m_core_per_package);</span>
-<span class="lineNum">     208 </span><span class="lineCov">       5636 :                     result = core_idx / m_core_per_package;</span>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">       5636 :                     break;</span></a>
-<span class="lineNum">     210 </span>            :                 case M_DOMAIN_CORE:
-<span class="lineNum">     211 </span><span class="lineCov">          6 :                     result = cpu_idx % (m_num_package * m_core_per_package);</span>
-<span class="lineNum">     212 </span><span class="lineCov">          6 :                     break;</span>
-<a name="213"><span class="lineNum">     213 </span>            :                 case M_DOMAIN_CPU:</a>
-<span class="lineNum">     214 </span><span class="lineCov">      17992 :                     result = cpu_idx;</span>
-<span class="lineNum">     215 </span><span class="lineCov">      17992 :                     break;</span>
-<span class="lineNum">     216 </span>            :                 case M_DOMAIN_BOARD_MEMORY:
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       3400 :                     numa_idx = 0;</span></a>
-<span class="lineNum">     218 </span><span class="lineCov">       3436 :                     for (const auto &amp;set_it : m_numa_map) {</span>
-<span class="lineNum">     219 </span><span class="lineCov">     430312 :                         for (const auto &amp;cpu_it : set_it) {</span>
-<span class="lineNum">     220 </span><span class="lineCov">     430276 :                             if (cpu_it == cpu_idx) {</span>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">       3400 :                                 result = numa_idx;</span></a>
-<span class="lineNum">     222 </span>            :                                 // Find the lowest index numa node that contains the cpu.
-<span class="lineNum">     223 </span><span class="lineCov">       3400 :                                 break;</span>
-<span class="lineNum">     224 </span>            :                             }
-<a name="225"><span class="lineNum">     225 </span>            :                         }</a>
-<span class="lineNum">     226 </span><span class="lineCov">       3436 :                         if (result != -1) {</span>
-<span class="lineNum">     227 </span>            :                             // Find the lowest index numa node that contains the cpu.
-<span class="lineNum">     228 </span><span class="lineCov">       3400 :                             break;</span>
-<a name="229"><span class="lineNum">     229 </span>            :                         }</a>
-<span class="lineNum">     230 </span><span class="lineCov">         36 :                         ++numa_idx;</span>
-<span class="lineNum">     231 </span>            :                     }
-<span class="lineNum">     232 </span><span class="lineCov">       3400 :                     break;</span>
-<a name="233"><span class="lineNum">     233 </span>            :                 case M_DOMAIN_PACKAGE_MEMORY:</a>
-<span class="lineNum">     234 </span>            :                 case M_DOMAIN_BOARD_NIC:
-<span class="lineNum">     235 </span>            :                 case M_DOMAIN_PACKAGE_NIC:
-<span class="lineNum">     236 </span>            :                 case M_DOMAIN_BOARD_ACCELERATOR:
-<a name="237"><span class="lineNum">     237 </span>            :                 case M_DOMAIN_PACKAGE_ACCELERATOR:</a>
-<span class="lineNum">     238 </span>            :                     /// @todo Add support for package memory NIC and accelerators to domain_idx() method.
-<span class="lineNum">     239 </span>            :                     throw Exception(&quot;PlatformTopo::domain_idx() no support yet for PACKAGE_MEMORY, NIC, or ACCELERATOR&quot;,
-<span class="lineNum">     240 </span><span class="lineCov">          5 :                                     GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
-<a name="241"><span class="lineNum">     241 </span>            :                     break;</a>
-<span class="lineNum">     242 </span>            :                 case M_DOMAIN_INVALID:
-<span class="lineNum">     243 </span>            :                 default:
-<span class="lineNum">     244 </span>            :                     throw Exception(&quot;PlatformTopo::domain_idx() invalid domain specified&quot;,
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">          1 :                                     GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     246 </span>            :                     break;
-<span class="lineNum">     247 </span><span class="lineCov">      27035 :             }</span>
-<span class="lineNum">     248 </span>            :         }
-<a name="249"><span class="lineNum">     249 </span>            :         else {</a>
-<span class="lineNum">     250 </span>            :             throw Exception(&quot;PlatformTopo::domain_idx() cpu index (cpu_idx) out of range&quot;,
-<span class="lineNum">     251 </span><span class="lineCov">          3 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     252 </span>            :         }
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">      27035 :         return result;</span></a>
-<a name="254"><span class="lineNum">     254 </span>            :     }</a>
-<span class="lineNum">     255 </span>            : 
-<span class="lineNum">     256 </span><span class="lineCov">        105 :     bool PlatformTopo::is_domain_within(int inner_domain, int outer_domain) const</span>
-<a name="257"><span class="lineNum">     257 </span>            :     {</a>
-<span class="lineNum">     258 </span><span class="lineCov">        105 :         bool result = false;</span>
-<span class="lineNum">     259 </span>            :         static const std::set&lt;int&gt; package_domain = {
-<span class="lineNum">     260 </span>            :             M_DOMAIN_CPU,
-<a name="261"><span class="lineNum">     261 </span>            :             M_DOMAIN_CORE,</a>
-<span class="lineNum">     262 </span>            :             M_DOMAIN_PACKAGE_MEMORY,
-<span class="lineNum">     263 </span>            :             M_DOMAIN_PACKAGE_NIC,
-<span class="lineNum">     264 </span>            :             M_DOMAIN_PACKAGE_ACCELERATOR,
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">        105 :         };</span></a>
-<span class="lineNum">     266 </span><span class="lineCov">        105 :         if (inner_domain == outer_domain) {</span>
-<span class="lineNum">     267 </span><span class="lineNoCov">          0 :             result = true;</span>
-<span class="lineNum">     268 </span>            :         }
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">        105 :         else if (outer_domain == M_DOMAIN_BOARD) {</span></a>
-<span class="lineNum">     270 </span>            :             // All domains are within the board domain
-<span class="lineNum">     271 </span><span class="lineCov">        105 :             result = true;</span>
-<span class="lineNum">     272 </span>            :         }
-<a name="273"><span class="lineNum">     273 </span><span class="lineNoCov">          0 :         else if (outer_domain == M_DOMAIN_CORE &amp;&amp;</span></a>
-<span class="lineNum">     274 </span><span class="lineNoCov">          0 :                  inner_domain == M_DOMAIN_CPU) {</span>
-<span class="lineNum">     275 </span>            :             // Only the CPU domain is within the core.
-<span class="lineNum">     276 </span><span class="lineNoCov">          0 :             result = true;</span>
-<a name="277"><span class="lineNum">     277 </span>            :         }</a>
-<span class="lineNum">     278 </span><span class="lineNoCov">          0 :         else if (outer_domain == M_DOMAIN_PACKAGE &amp;&amp;</span>
-<span class="lineNum">     279 </span><span class="lineNoCov">          0 :                  package_domain.find(inner_domain) != package_domain.end()) {</span>
-<span class="lineNum">     280 </span>            :             // Everything under the package scope is in the package_domain set.
-<a name="281"><span class="lineNum">     281 </span><span class="lineNoCov">          0 :             result = true;</span></a>
-<span class="lineNum">     282 </span>            :         }
-<span class="lineNum">     283 </span><span class="lineNoCov">          0 :         else if (outer_domain == M_DOMAIN_BOARD_MEMORY &amp;&amp;</span>
-<span class="lineNum">     284 </span><span class="lineNoCov">          0 :                  inner_domain == M_DOMAIN_CPU) {</span>
-<a name="285"><span class="lineNum">     285 </span>            :             // To support mapping CPU signals to DRAM domain (e.g. power)</a>
-<span class="lineNum">     286 </span><span class="lineNoCov">          0 :             result = true;</span>
-<span class="lineNum">     287 </span>            :         }
-<span class="lineNum">     288 </span><span class="lineCov">        105 :         return result;</span>
-<a name="289"><span class="lineNum">     289 </span>            :     }</a>
-<span class="lineNum">     290 </span>            : 
-<span class="lineNum">     291 </span><span class="lineCov">         21 :     std::vector&lt;std::string&gt; IPlatformTopo::domain_names(void)</span>
-<span class="lineNum">     292 </span>            :     {
-<a name="293"><span class="lineNum">     293 </span>            :         return {</a>
-<span class="lineNum">     294 </span>            :             &quot;invalid&quot;,
-<span class="lineNum">     295 </span>            :             &quot;board&quot;,
-<span class="lineNum">     296 </span>            :             &quot;package&quot;,
-<a name="297"><span class="lineNum">     297 </span>            :             &quot;core&quot;,</a>
-<span class="lineNum">     298 </span>            :             &quot;cpu&quot;,
-<span class="lineNum">     299 </span>            :             &quot;board_memory&quot;,
-<span class="lineNum">     300 </span>            :             &quot;package_memory&quot;,
-<a name="301"><span class="lineNum">     301 </span>            :             &quot;board_nic&quot;,</a>
-<span class="lineNum">     302 </span>            :             &quot;package_nic&quot;,
-<span class="lineNum">     303 </span>            :             &quot;board_accelerator&quot;,
-<span class="lineNum">     304 </span>            :             &quot;package_accelerator&quot;,
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         21 :         };</span></a>
-<a name="306"><span class="lineNum">     306 </span>            :     }</a>
-<span class="lineNum">     307 </span>            : 
-<span class="lineNum">     308 </span><span class="lineCov">         11 :     std::map&lt;std::string, int&gt; IPlatformTopo::domain_types(void)</span>
-<a name="309"><span class="lineNum">     309 </span>            :     {</a>
-<span class="lineNum">     310 </span><span class="lineCov">         11 :         std::map&lt;std::string, int&gt; result;</span>
-<span class="lineNum">     311 </span><span class="lineCov">         11 :         int domain_type = M_DOMAIN_INVALID;</span>
-<span class="lineNum">     312 </span><span class="lineCov">         22 :         auto names = domain_names();</span>
-<a name="313"><span class="lineNum">     313 </span><span class="lineCov">        132 :         for (const auto &amp;name : names) {</span></a>
-<span class="lineNum">     314 </span><span class="lineCov">        121 :             result[name] = domain_type;</span>
-<span class="lineNum">     315 </span><span class="lineCov">        121 :             ++domain_type;</span>
-<span class="lineNum">     316 </span>            :         }
-<a name="317"><span class="lineNum">     317 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     318 </span><span class="lineCov">         11 :         if (names.size() != M_NUM_DOMAIN) {</span>
-<span class="lineNum">     319 </span>            :             throw Exception(&quot;IPlatformTopo::m_domain_name has incorrect size.  &quot;
-<span class="lineNum">     320 </span>            :                             &quot;Domains must match m_domain_e in number and order.&quot;,
-<a name="321"><span class="lineNum">     321 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC);</span></a>
-<span class="lineNum">     322 </span>            :         }
-<span class="lineNum">     323 </span><span class="lineCov">         11 :         if (result.size() != M_NUM_DOMAIN) {</span>
-<span class="lineNum">     324 </span>            :             throw Exception(&quot;IPlatformTopo::m_domain_type has incorrect size.  &quot;
-<a name="325"><span class="lineNum">     325 </span>            :                             &quot;Domain type mapping must match m_domain_name.&quot;,</a>
-<span class="lineNum">     326 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC);</span>
-<span class="lineNum">     327 </span>            :         }
-<span class="lineNum">     328 </span>            : #endif
-<a name="329"><span class="lineNum">     329 </span><span class="lineCov">         22 :         return result;</span></a>
-<a name="330"><span class="lineNum">     330 </span>            :     }</a>
-<span class="lineNum">     331 </span>            : 
-<span class="lineNum">     332 </span><span class="lineCov">         11 :     std::string IPlatformTopo::domain_type_to_name(int domain_type)</span>
-<a name="333"><span class="lineNum">     333 </span>            :     {</a>
-<span class="lineNum">     334 </span><span class="lineCov">         11 :         if (domain_type &lt;= M_DOMAIN_INVALID || domain_type &gt; M_NUM_DOMAIN) {</span>
-<span class="lineNum">     335 </span><span class="lineCov">          2 :             throw Exception(&quot;PlatformTopo::domain_type_to_name(): unrecognized domain_type: &quot; + std::to_string(domain_type),</span>
-<span class="lineNum">     336 </span><span class="lineCov">          3 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="337"><span class="lineNum">     337 </span>            :         }</a>
-<span class="lineNum">     338 </span><span class="lineCov">         10 :         return domain_names()[domain_type];</span>
-<a name="339"><span class="lineNum">     339 </span>            :     }</a>
-<span class="lineNum">     340 </span>            : 
-<a name="341"><span class="lineNum">     341 </span><span class="lineCov">         11 :     int IPlatformTopo::domain_name_to_type(const std::string &amp;domain_name)</span></a>
-<span class="lineNum">     342 </span>            :     {
-<span class="lineNum">     343 </span><span class="lineCov">         22 :         auto m_domain_type = domain_types();</span>
-<span class="lineNum">     344 </span><span class="lineCov">         11 :         auto it = m_domain_type.find(domain_name);</span>
-<a name="345"><span class="lineNum">     345 </span><span class="lineCov">         11 :         if (it == m_domain_type.end()) {</span></a>
-<span class="lineNum">     346 </span><span class="lineCov">          2 :             throw Exception(&quot;PlatformTopo::domain_name_to_type(): unrecognized domain_name: &quot; + domain_name,</span>
-<span class="lineNum">     347 </span><span class="lineCov">          3 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     348 </span>            :         }
-<a name="349"><span class="lineNum">     349 </span><span class="lineCov">         20 :         return it-&gt;second;</span></a>
-<a name="350"><span class="lineNum">     350 </span>            :     }</a>
-<span class="lineNum">     351 </span>            : 
-<span class="lineNum">     352 </span><span class="lineCov">         86 :     void PlatformTopo::parse_lscpu(const std::map&lt;std::string, std::string&gt; &amp;lscpu_map,</span>
-<a name="353"><span class="lineNum">     353 </span>            :                                    int &amp;num_package,</a>
-<span class="lineNum">     354 </span>            :                                    int &amp;core_per_package,
-<span class="lineNum">     355 </span>            :                                    int &amp;thread_per_core)
-<span class="lineNum">     356 </span>            :     {
-<a name="357"><span class="lineNum">     357 </span>            :         const std::string keys[6] = {&quot;CPU(s)&quot;,</a>
-<span class="lineNum">     358 </span>            :                                      &quot;Thread(s) per core&quot;,
-<span class="lineNum">     359 </span>            :                                      &quot;Core(s) per socket&quot;,
-<span class="lineNum">     360 </span>            :                                      &quot;Socket(s)&quot;,
-<a name="361"><span class="lineNum">     361 </span>            :                                      &quot;NUMA node(s)&quot;,</a>
-<span class="lineNum">     362 </span><span class="lineCov">        172 :                                      &quot;On-line CPU(s) mask&quot;};</span>
-<span class="lineNum">     363 </span><span class="lineCov">        172 :         std::vector&lt;std::string&gt; values(6);</span>
-<span class="lineNum">     364 </span>            : 
-<a name="365"><span class="lineNum">     365 </span><span class="lineCov">        580 :         for (size_t i = 0; i &lt; values.size(); ++i) {</span></a>
-<span class="lineNum">     366 </span><span class="lineCov">        501 :             auto it = lscpu_map.find(keys[i]);</span>
-<span class="lineNum">     367 </span><span class="lineCov">        501 :             if (it == lscpu_map.end()) {</span>
-<span class="lineNum">     368 </span><span class="lineCov">         14 :                 throw Exception(&quot;PlatformTopo: parsing lscpu output, key not found: \&quot;&quot; + keys[i] + &quot;\&quot;&quot;,</span>
-<a name="369"><span class="lineNum">     369 </span><span class="lineCov">         21 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     370 </span>            :             }
-<span class="lineNum">     371 </span><span class="lineCov">        494 :             values[i] = it-&gt;second;</span>
-<span class="lineNum">     372 </span><span class="lineCov">        494 :             if (values[i].size() == 0) {</span>
-<a name="373"><span class="lineNum">     373 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;PlatformTopo: parsing lscpu output, value not recorded: &quot; + it-&gt;second,</span></a>
-<span class="lineNum">     374 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     375 </span>            :             }
-<span class="lineNum">     376 </span>            :         }
-<a name="377"><span class="lineNum">     377 </span><span class="lineCov">         79 :         num_package = atoi(values[3].c_str());</span></a>
-<span class="lineNum">     378 </span><span class="lineCov">         79 :         int num_core = atoi(values[2].c_str()) * num_package;</span>
-<span class="lineNum">     379 </span><span class="lineCov">         79 :         core_per_package = num_core / num_package;</span>
-<span class="lineNum">     380 </span><span class="lineCov">         79 :         thread_per_core = atoi(values[1].c_str());</span>
-<a name="381"><span class="lineNum">     381 </span>            : </a>
-<span class="lineNum">     382 </span><span class="lineCov">         79 :         int total_cores_expected_online = num_package * core_per_package * thread_per_core;</span>
-<span class="lineNum">     383 </span><span class="lineCov">         79 :         if (total_cores_expected_online != atoi(values[0].c_str())) {</span>
-<span class="lineNum">     384 </span>            :             // Check how many CPUs are actually online
-<a name="385"><span class="lineNum">     385 </span><span class="lineCov">          2 :             std::string online_cpu_mask = values[5];</span></a>
-<span class="lineNum">     386 </span>            : 
-<span class="lineNum">     387 </span><span class="lineCov">          4 :             if (online_cpu_mask.size() &lt; 2 ||</span>
-<span class="lineNum">     388 </span><span class="lineCov">          4 :                 online_cpu_mask.substr(0,2) != &quot;0x&quot;) {</span>
-<a name="389"><span class="lineNum">     389 </span>            :                 throw Exception(&quot;PlatformTopo: parsing lscpu output, online CPU mask does not begin with 0x&quot;,</a>
-<span class="lineNum">     390 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     391 </span>            :             }
-<span class="lineNum">     392 </span><span class="lineCov">          1 :             online_cpu_mask = online_cpu_mask.substr(2);</span>
-<a name="393"><span class="lineNum">     393 </span><span class="lineCov">          1 :             int online_cpus = 0;</span></a>
-<span class="lineNum">     394 </span><span class="lineCov">         40 :             for (auto hmc = online_cpu_mask.rbegin(); hmc != online_cpu_mask.rend(); ++hmc) {</span>
-<span class="lineNum">     395 </span><span class="lineCov">         39 :                 uint32_t hmb = std::stoul(std::string(1, *hmc), 0, 16);</span>
-<span class="lineNum">     396 </span><span class="lineCov">        195 :                 for (int bit_idx = 0; bit_idx != 4; ++bit_idx) {</span>
-<a name="397"><span class="lineNum">     397 </span><span class="lineCov">        156 :                     if (hmb &amp; 1U) {</span></a>
-<span class="lineNum">     398 </span><span class="lineCov">         20 :                         ++online_cpus;</span>
-<span class="lineNum">     399 </span>            :                     }
-<span class="lineNum">     400 </span><span class="lineCov">        156 :                     hmb = hmb &gt;&gt; 1;</span>
-<a name="401"><span class="lineNum">     401 </span>            :                 }</a>
-<span class="lineNum">     402 </span>            :             }
-<span class="lineNum">     403 </span><span class="lineCov">          1 :             if (total_cores_expected_online != online_cpus) {</span>
-<span class="lineNum">     404 </span>            :                 throw Exception(&quot;PlatformTopo: parsing lscpu output, inconsistent values or unable to determine online CPUs&quot;,
-<a name="405"><span class="lineNum">     405 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     406 </span>            :             }
-<span class="lineNum">     407 </span>            :         }
-<a name="408"><span class="lineNum">     408 </span><span class="lineCov">         79 :     }</span></a>
-<a name="409"><span class="lineNum">     409 </span>            : </a>
-<span class="lineNum">     410 </span><span class="lineCov">         79 :     void PlatformTopo::parse_lscpu_numa(std::map&lt;std::string, std::string&gt; lscpu_map,</span>
-<span class="lineNum">     411 </span>            :                                         std::vector&lt;std::set&lt;int&gt; &gt; &amp;numa_map)
-<span class="lineNum">     412 </span>            :     {
-<a name="413"><span class="lineNum">     413 </span>            :         // TODO: what to do if there are no numa node lines?</a>
-<span class="lineNum">     414 </span><span class="lineCov">         79 :         bool is_node_found = true;</span>
-<span class="lineNum">     415 </span><span class="lineCov">        315 :         for (int node_idx = 0; is_node_found; ++node_idx) {</span>
-<span class="lineNum">     416 </span><span class="lineCov">        472 :             std::ostringstream numa_key;</span>
-<a name="417"><span class="lineNum">     417 </span><span class="lineCov">        236 :             numa_key &lt;&lt; &quot;NUMA node&quot; &lt;&lt; node_idx &lt;&lt; &quot; CPU(s)&quot;;</span></a>
-<span class="lineNum">     418 </span><span class="lineCov">        236 :             auto lscpu_it = lscpu_map.find(numa_key.str());</span>
-<span class="lineNum">     419 </span><span class="lineCov">        236 :             if (lscpu_it == lscpu_map.end()) {</span>
-<span class="lineNum">     420 </span><span class="lineCov">         79 :                 is_node_found = false;</span>
-<a name="421"><span class="lineNum">     421 </span>            :             }</a>
-<span class="lineNum">     422 </span>            :             else {
-<span class="lineNum">     423 </span><span class="lineCov">        157 :                 numa_map.push_back({});</span>
-<span class="lineNum">     424 </span><span class="lineCov">        157 :                 auto cpu_set_it = numa_map.end() - 1;</span>
-<a name="425"><span class="lineNum">     425 </span><span class="lineCov">        628 :                 if (lscpu_it-&gt;second.size() &lt; 2 ||</span></a>
-<span class="lineNum">     426 </span><span class="lineCov">        628 :                     lscpu_it-&gt;second.substr(0,2) != &quot;0x&quot;) {</span>
-<span class="lineNum">     427 </span>            :                     throw Exception(&quot;PlatformTopo: parsing lscpu output, numa mask does not begin with 0x&quot;,
-<span class="lineNum">     428 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="429"><span class="lineNum">     429 </span>            :                 }</a>
-<span class="lineNum">     430 </span><span class="lineCov">        314 :                 std::string hex_mask = lscpu_it-&gt;second.substr(2);</span>
-<span class="lineNum">     431 </span><span class="lineCov">        157 :                 int cpu_idx = 0;</span>
-<span class="lineNum">     432 </span><span class="lineCov">       5122 :                 for (auto hmc = hex_mask.rbegin(); hmc != hex_mask.rend(); ++hmc) {</span>
-<a name="433"><span class="lineNum">     433 </span><span class="lineCov">       4965 :                     uint32_t hmb = std::stoul(std::string(1, *hmc), 0, 16);</span></a>
-<span class="lineNum">     434 </span><span class="lineCov">      24825 :                     for (int bit_idx = 0; bit_idx != 4; ++bit_idx) {</span>
-<span class="lineNum">     435 </span><span class="lineCov">      19860 :                         if (hmb &amp; 1U) {</span>
-<span class="lineNum">     436 </span><span class="lineCov">      19182 :                             cpu_set_it-&gt;insert(cpu_idx);</span>
-<a name="437"><span class="lineNum">     437 </span>            :                         }</a>
-<span class="lineNum">     438 </span><span class="lineCov">      19860 :                         hmb = hmb &gt;&gt; 1;</span>
-<span class="lineNum">     439 </span><span class="lineCov">      19860 :                         ++cpu_idx;</span>
-<span class="lineNum">     440 </span>            :                     }
-<a name="441"><span class="lineNum">     441 </span>            :                 }</a>
-<span class="lineNum">     442 </span>            :             }
-<span class="lineNum">     443 </span>            :         }
-<a name="444"><span class="lineNum">     444 </span><span class="lineCov">         79 :     }</span></a>
-<a name="445"><span class="lineNum">     445 </span>            : </a>
-<span class="lineNum">     446 </span><span class="lineCov">         86 :     FILE *PlatformTopo::open_lscpu(void)</span>
-<span class="lineNum">     447 </span>            :     {
-<span class="lineNum">     448 </span><span class="lineCov">         86 :         FILE *result = nullptr;</span>
-<a name="449"><span class="lineNum">     449 </span><span class="lineCov">         86 :         if (M_TEST_LSCPU_FILE_NAME.size()) {</span></a>
-<span class="lineNum">     450 </span><span class="lineCov">         13 :             result = fopen(M_TEST_LSCPU_FILE_NAME.c_str(), &quot;r&quot;);</span>
-<span class="lineNum">     451 </span><span class="lineCov">         13 :             if (!result) {</span>
-<span class="lineNum">     452 </span>            :                 throw Exception(&quot;PlatformTopo::open_lscpu(): Could not open test lscpu file&quot;,
-<a name="453"><span class="lineNum">     453 </span><span class="lineNoCov">          0 :                                 errno ? errno : GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     454 </span>            :             }
-<span class="lineNum">     455 </span>            :         }
-<span class="lineNum">     456 </span>            :         else {
-<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         73 :             result = fopen(M_LSCPU_FILE_NAME.c_str(), &quot;r&quot;);</span></a>
-<span class="lineNum">     458 </span><span class="lineCov">         73 :             if (!result) {</span>
-<span class="lineNum">     459 </span><span class="lineNoCov">          0 :                 int err = geopm_sched_popen(&quot;lscpu -x&quot;, &amp;result);</span>
-<span class="lineNum">     460 </span><span class="lineNoCov">          0 :                 if (err) {</span>
-<a name="461"><span class="lineNum">     461 </span>            :                     throw Exception(&quot;PlatformTopo::open_lscpu(): Could not popen lscpu command&quot;,</a>
-<span class="lineNum">     462 </span><span class="lineNoCov">          0 :                                     errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     463 </span>            :                 }
-<span class="lineNum">     464 </span><span class="lineNoCov">          0 :                 m_do_fclose = false;</span>
-<a name="465"><span class="lineNum">     465 </span>            :             }</a>
-<span class="lineNum">     466 </span>            :         }
-<span class="lineNum">     467 </span><span class="lineCov">         86 :         return result;</span>
-<a name="468"><span class="lineNum">     468 </span>            :     }</a>
-<a name="469"><span class="lineNum">     469 </span>            : </a>
-<span class="lineNum">     470 </span><span class="lineCov">         86 :     void PlatformTopo::close_lscpu(FILE *fid)</span>
-<span class="lineNum">     471 </span>            :     {
-<span class="lineNum">     472 </span><span class="lineCov">         86 :         if (m_do_fclose) {</span>
-<a name="473"><span class="lineNum">     473 </span><span class="lineCov">         86 :             int err = fclose(fid);</span></a>
-<span class="lineNum">     474 </span><span class="lineCov">         86 :             if (err) {</span>
-<span class="lineNum">     475 </span>            :                 throw Exception(&quot;PlatformTopo::close_lscpu(): Could not fclose lscpu file&quot;,
-<span class="lineNum">     476 </span><span class="lineNoCov">          0 :                                 errno ? errno : GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">       1395 :                 break;</span></a>
+<span class="lineNum">     178 </span><span class="lineCov">       2325 :             case GEOPM_DOMAIN_PACKAGE:</span>
+<span class="lineNum">     179 </span><span class="lineCov">      14618 :                 for (int thread_idx = 0;</span>
+<span class="lineNum">     180 </span><span class="lineCov">      14618 :                      thread_idx != m_thread_per_core;</span>
+<a name="181"><span class="lineNum">     181 </span>            :                      ++thread_idx) {</a>
+<span class="lineNum">     182 </span><span class="lineCov">     503630 :                     for (int core_idx = domain_idx * m_core_per_package;</span>
+<span class="lineNum">     183 </span><span class="lineCov">     503630 :                          core_idx != (domain_idx + 1) * m_core_per_package;</span>
+<span class="lineNum">     184 </span>            :                          ++core_idx) {
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     492868 :                         cpu_idx.insert(core_idx + thread_idx * m_core_per_package * m_num_package);</span></a>
+<span class="lineNum">     186 </span>            :                     }
+<span class="lineNum">     187 </span>            :                 }
+<span class="lineNum">     188 </span><span class="lineCov">       3856 :                 break;</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">       5024 :             case GEOPM_DOMAIN_CORE:</span></a>
+<span class="lineNum">     190 </span><span class="lineCov">      39724 :                 for (int thread_idx = 0;</span>
+<span class="lineNum">     191 </span><span class="lineCov">      39724 :                      thread_idx != m_thread_per_core;</span>
+<span class="lineNum">     192 </span>            :                      ++thread_idx) {
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">      29768 :                     cpu_idx.insert(domain_idx + thread_idx * m_core_per_package * m_num_package);</span></a>
+<span class="lineNum">     194 </span>            :                 }
+<span class="lineNum">     195 </span><span class="lineCov">       9956 :                 break;</span>
+<span class="lineNum">     196 </span><span class="lineCov">     324548 :             case GEOPM_DOMAIN_CPU:</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">    1300422 :                 cpu_idx.insert(domain_idx);</span></a>
+<span class="lineNum">     198 </span><span class="lineCov">    1300422 :                 break;</span>
+<span class="lineNum">     199 </span><span class="lineCov">       1730 :             case GEOPM_DOMAIN_BOARD_MEMORY:</span>
+<span class="lineNum">     200 </span><span class="lineCov">       2668 :                 cpu_idx = m_numa_map[domain_idx];</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">       2668 :                 break;</span></a>
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 :             default:</span>
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;PlatformTopoImp::domain_cpus(domain_type=&quot; +</span>
+<span class="lineNum">     204 </span><span class="lineNoCov">          0 :                                 std::to_string(domain_type) +</span>
+<a name="205"><span class="lineNum">     205 </span>            :                                 &quot;) support not yet implemented&quot;,</a>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
+<span class="lineNum">     207 </span>            :                 break;
+<span class="lineNum">     208 </span>            :         }
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">    1318297 :         return cpu_idx;</span></a>
+<a name="210"><span class="lineNum">     210 </span>            :     }</a>
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span><span class="lineCov">    2383126 :     int PlatformTopoImp::domain_idx(int domain_type,</span>
+<a name="213"><span class="lineNum">     213 </span>            :                                     int cpu_idx) const</a>
+<span class="lineNum">     214 </span>            :     {
+<span class="lineNum">     215 </span><span class="lineCov">    2383126 :         int result = -1;</span>
+<span class="lineNum">     216 </span><span class="lineCov">    2383126 :         int num_cpu = num_domain(GEOPM_DOMAIN_CPU);</span>
+<a name="217"><span class="lineNum">     217 </span>            : </a>
+<span class="lineNum">     218 </span><span class="lineCov">    2383126 :         if (domain_type &lt; 0 || domain_type &gt;= GEOPM_NUM_DOMAIN) {</span>
+<span class="lineNum">     219 </span>            :             throw Exception(&quot;PlatformTopoImp::domain_idx(): domain_type out of range&quot;,
+<span class="lineNum">     220 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="221"><span class="lineNum">     221 </span>            :         }</a>
+<span class="lineNum">     222 </span><span class="lineCov">    2383124 :         if (cpu_idx &lt; 0 || cpu_idx &gt;= num_cpu) {</span>
+<span class="lineNum">     223 </span>            :             throw Exception(&quot;PlatformTopoImp::domain_idx(): cpu_idx out of range&quot;,
+<span class="lineNum">     224 </span><span class="lineCov">         10 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="225"><span class="lineNum">     225 </span>            :         }</a>
+<span class="lineNum">     226 </span>            : 
+<span class="lineNum">     227 </span><span class="lineCov">    2383114 :         int core_idx = 0;</span>
+<span class="lineNum">     228 </span><span class="lineCov">    2383114 :         int numa_idx = 0;</span>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">    2383114 :         if (cpu_idx &gt;= 0 &amp;&amp; cpu_idx &lt; num_cpu) {</span></a>
+<span class="lineNum">     230 </span><span class="lineCov">    2383114 :             switch (domain_type) {</span>
+<span class="lineNum">     231 </span><span class="lineCov">         75 :                 case GEOPM_DOMAIN_BOARD:</span>
+<span class="lineNum">     232 </span><span class="lineCov">        150 :                     result = 0;</span>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        150 :                     break;</span></a>
+<span class="lineNum">     234 </span><span class="lineCov">      13260 :                 case GEOPM_DOMAIN_PACKAGE:</span>
+<span class="lineNum">     235 </span><span class="lineCov">      68448 :                     core_idx = cpu_idx % (m_num_package * m_core_per_package);</span>
+<span class="lineNum">     236 </span><span class="lineCov">      68448 :                     result = core_idx / m_core_per_package;</span>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">      68448 :                     break;</span></a>
+<span class="lineNum">     238 </span><span class="lineCov">      10186 :                 case GEOPM_DOMAIN_CORE:</span>
+<span class="lineNum">     239 </span><span class="lineCov">      30052 :                     result = cpu_idx % (m_num_package * m_core_per_package);</span>
+<span class="lineNum">     240 </span><span class="lineCov">      30052 :                     break;</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">     543134 :                 case GEOPM_DOMAIN_CPU:</span></a>
+<span class="lineNum">     242 </span><span class="lineCov">    2265030 :                     result = cpu_idx;</span>
+<span class="lineNum">     243 </span><span class="lineCov">    2265030 :                     break;</span>
+<span class="lineNum">     244 </span><span class="lineCov">       4616 :                 case GEOPM_DOMAIN_BOARD_MEMORY:</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">      19424 :                     numa_idx = 0;</span></a>
+<span class="lineNum">     246 </span><span class="lineCov">      21840 :                     for (const auto &amp;set_it : m_numa_map) {</span>
+<span class="lineNum">     247 </span><span class="lineCov">    2089056 :                         for (const auto &amp;cpu_it : set_it) {</span>
+<span class="lineNum">     248 </span><span class="lineCov">    2086640 :                             if (cpu_it == cpu_idx) {</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">      19424 :                                 result = numa_idx;</span></a>
+<span class="lineNum">     250 </span>            :                                 // Find the lowest index numa node that contains the cpu.
+<span class="lineNum">     251 </span><span class="lineCov">      19424 :                                 break;</span>
+<span class="lineNum">     252 </span>            :                             }
+<a name="253"><span class="lineNum">     253 </span>            :                         }</a>
+<span class="lineNum">     254 </span><span class="lineCov">      21840 :                         if (result != -1) {</span>
+<span class="lineNum">     255 </span>            :                             // Find the lowest index numa node that contains the cpu.
+<span class="lineNum">     256 </span><span class="lineCov">      19424 :                             break;</span>
+<a name="257"><span class="lineNum">     257 </span>            :                         }</a>
+<span class="lineNum">     258 </span><span class="lineCov">       2416 :                         ++numa_idx;</span>
+<span class="lineNum">     259 </span>            :                     }
+<span class="lineNum">     260 </span><span class="lineCov">      19424 :                     break;</span>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          5 :                 case GEOPM_DOMAIN_PACKAGE_MEMORY:</span></a>
+<span class="lineNum">     262 </span>            :                 case GEOPM_DOMAIN_BOARD_NIC:
+<span class="lineNum">     263 </span>            :                 case GEOPM_DOMAIN_PACKAGE_NIC:
+<span class="lineNum">     264 </span>            :                 case GEOPM_DOMAIN_BOARD_ACCELERATOR:
+<a name="265"><span class="lineNum">     265 </span>            :                 case GEOPM_DOMAIN_PACKAGE_ACCELERATOR:</a>
+<span class="lineNum">     266 </span>            :                     /// @todo Add support for package memory NIC and accelerators to domain_idx() method.
+<span class="lineNum">     267 </span>            :                     throw Exception(&quot;PlatformTopoImp::domain_idx() no support yet for PACKAGE_MEMORY, NIC, or ACCELERATOR&quot;,
+<span class="lineNum">     268 </span><span class="lineCov">         10 :                                     GEOPM_ERROR_NOT_IMPLEMENTED, __FILE__, __LINE__);</span>
+<a name="269"><span class="lineNum">     269 </span>            :                     break;</a>
+<span class="lineNum">     270 </span><span class="lineNoCov">          0 :                 case GEOPM_DOMAIN_INVALID:</span>
+<span class="lineNum">     271 </span>            :                 default:
+<span class="lineNum">     272 </span>            :                     throw Exception(&quot;PlatformTopoImp::domain_idx() invalid domain specified&quot;,
+<a name="273"><span class="lineNum">     273 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     274 </span>            :                     break;
+<span class="lineNum">     275 </span><span class="lineCov">    2383104 :             }</span>
+<span class="lineNum">     276 </span>            :         }
+<a name="277"><span class="lineNum">     277 </span>            :         else {</a>
+<span class="lineNum">     278 </span>            :             throw Exception(&quot;PlatformTopoImp::domain_idx() cpu index (cpu_idx) out of range&quot;,
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     280 </span>            :         }
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">    2383104 :         return result;</span></a>
+<a name="282"><span class="lineNum">     282 </span>            :     }</a>
+<span class="lineNum">     283 </span>            : 
+<span class="lineNum">     284 </span><span class="lineCov">    1319758 :     bool PlatformTopoImp::is_nested_domain(int inner_domain, int outer_domain) const</span>
+<a name="285"><span class="lineNum">     285 </span>            :     {</a>
+<span class="lineNum">     286 </span><span class="lineCov">    1319758 :         bool result = false;</span>
+<span class="lineNum">     287 </span>            :         static const std::set&lt;int&gt; package_domain = {
+<span class="lineNum">     288 </span>            :             GEOPM_DOMAIN_CPU,
+<a name="289"><span class="lineNum">     289 </span>            :             GEOPM_DOMAIN_CORE,</a>
+<span class="lineNum">     290 </span>            :             GEOPM_DOMAIN_PACKAGE_MEMORY,
+<span class="lineNum">     291 </span>            :             GEOPM_DOMAIN_PACKAGE_NIC,
+<span class="lineNum">     292 </span>            :             GEOPM_DOMAIN_PACKAGE_ACCELERATOR,
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">    1319758 :         };</span></a>
+<span class="lineNum">     294 </span><span class="lineCov">    1319758 :         if (inner_domain == outer_domain) {</span>
+<span class="lineNum">     295 </span><span class="lineCov">    1300444 :             result = true;</span>
+<span class="lineNum">     296 </span>            :         }
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">      19314 :         else if (outer_domain == GEOPM_DOMAIN_BOARD) {</span></a>
+<span class="lineNum">     298 </span>            :             // All domains are within the board domain
+<span class="lineNum">     299 </span><span class="lineCov">       2798 :             result = true;</span>
+<span class="lineNum">     300 </span>            :         }
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">      26474 :         else if (outer_domain == GEOPM_DOMAIN_CORE &amp;&amp;</span></a>
+<span class="lineNum">     302 </span><span class="lineCov">       9958 :                  inner_domain == GEOPM_DOMAIN_CPU) {</span>
+<span class="lineNum">     303 </span>            :             // Only the CPU domain is within the core.
+<span class="lineNum">     304 </span><span class="lineCov">       9954 :             result = true;</span>
+<a name="305"><span class="lineNum">     305 </span>            :         }</a>
+<span class="lineNum">     306 </span><span class="lineCov">      21011 :         else if (outer_domain == GEOPM_DOMAIN_PACKAGE &amp;&amp;</span>
+<span class="lineNum">     307 </span><span class="lineCov">      15031 :                  package_domain.find(inner_domain) != package_domain.end()) {</span>
+<span class="lineNum">     308 </span>            :             // Everything under the package scope is in the package_domain set.
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">       3862 :             result = true;</span></a>
+<span class="lineNum">     310 </span>            :         }
+<span class="lineNum">     311 </span><span class="lineCov">       5366 :         else if (outer_domain == GEOPM_DOMAIN_BOARD_MEMORY &amp;&amp;</span>
+<span class="lineNum">     312 </span><span class="lineCov">       2666 :                  inner_domain == GEOPM_DOMAIN_CPU) {</span>
+<a name="313"><span class="lineNum">     313 </span>            :             // To support mapping CPU signals to DRAM domain (e.g. power)</a>
+<span class="lineNum">     314 </span><span class="lineCov">       2666 :             result = true;</span>
+<span class="lineNum">     315 </span>            :         }
+<span class="lineNum">     316 </span><span class="lineCov">    1319758 :         return result;</span>
+<a name="317"><span class="lineNum">     317 </span>            :     }</a>
+<span class="lineNum">     318 </span>            : 
+<span class="lineNum">     319 </span><span class="lineCov">    1318313 :     std::set&lt;int&gt; PlatformTopoImp::domain_nested(int inner_domain, int outer_domain, int outer_idx) const</span>
+<span class="lineNum">     320 </span>            :     {
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">    1318313 :         if (!is_nested_domain(inner_domain, outer_domain)) {</span></a>
+<span class="lineNum">     322 </span><span class="lineCov">         32 :             throw Exception(&quot;PlatformTopoImp::domain_nested(): domain type &quot; + std::to_string(inner_domain) +</span>
+<span class="lineNum">     323 </span><span class="lineCov">         64 :                             &quot; is not contained within domain type &quot; + std::to_string(outer_domain),</span>
+<span class="lineNum">     324 </span><span class="lineCov">         48 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="325"><span class="lineNum">     325 </span>            :         }</a>
+<span class="lineNum">     326 </span><span class="lineCov">    1318297 :         std::set&lt;int&gt; inner_domain_idx;</span>
+<span class="lineNum">     327 </span><span class="lineCov">    2636594 :         std::set&lt;int&gt; cpus = domain_cpus(outer_domain, outer_idx);</span>
+<span class="lineNum">     328 </span><span class="lineCov">    3701087 :         for (auto cc : cpus) {</span>
+<a name="329"><span class="lineNum">     329 </span><span class="lineCov">    2382790 :             inner_domain_idx.insert(domain_idx(inner_domain, cc));</span></a>
+<span class="lineNum">     330 </span>            :         }
+<span class="lineNum">     331 </span><span class="lineCov">    2636594 :         return inner_domain_idx;</span>
+<a name="332"><span class="lineNum">     332 </span>            :     }</a>
+<a name="333"><span class="lineNum">     333 </span>            : </a>
+<span class="lineNum">     334 </span><span class="lineCov">         82 :     std::vector&lt;std::string&gt; PlatformTopo::domain_names(void)</span>
+<span class="lineNum">     335 </span>            :     {
+<span class="lineNum">     336 </span><span class="lineCov">         82 :         std::vector&lt;std::string&gt; result(GEOPM_NUM_DOMAIN);</span>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">        902 :         for (const auto &amp;it : domain_types()) {</span></a>
+<span class="lineNum">     338 </span><span class="lineCov">        820 :             result.at(it.second) = it.first;</span>
+<span class="lineNum">     339 </span>            :         }
+<span class="lineNum">     340 </span><span class="lineCov">         82 :         return result;</span>
+<a name="341"><span class="lineNum">     341 </span>            :     }</a>
+<span class="lineNum">     342 </span>            : 
+<span class="lineNum">     343 </span><span class="lineCov">      90079 :     std::map&lt;std::string, int&gt; PlatformTopo::domain_types(void)</span>
+<span class="lineNum">     344 </span>            :     {
+<a name="345"><span class="lineNum">     345 </span>            :         return {</a>
+<span class="lineNum">     346 </span>            :             {&quot;board&quot;, GEOPM_DOMAIN_BOARD},
+<span class="lineNum">     347 </span>            :             {&quot;package&quot;, GEOPM_DOMAIN_PACKAGE},
+<span class="lineNum">     348 </span>            :             {&quot;core&quot;, GEOPM_DOMAIN_CORE},
+<a name="349"><span class="lineNum">     349 </span>            :             {&quot;cpu&quot;, GEOPM_DOMAIN_CPU},</a>
+<span class="lineNum">     350 </span>            :             {&quot;board_memory&quot;, GEOPM_DOMAIN_BOARD_MEMORY},
+<span class="lineNum">     351 </span>            :             {&quot;package_memory&quot;, GEOPM_DOMAIN_PACKAGE_MEMORY},
+<span class="lineNum">     352 </span>            :             {&quot;board_nic&quot;, GEOPM_DOMAIN_BOARD_NIC},
+<a name="353"><span class="lineNum">     353 </span>            :             {&quot;package_nic&quot;, GEOPM_DOMAIN_PACKAGE_NIC},</a>
+<span class="lineNum">     354 </span>            :             {&quot;board_accelerator&quot;, GEOPM_DOMAIN_BOARD_ACCELERATOR},
+<span class="lineNum">     355 </span>            :             {&quot;package_accelerator&quot;, GEOPM_DOMAIN_PACKAGE_ACCELERATOR}
+<span class="lineNum">     356 </span><span class="lineCov">      90079 :         };</span>
+<a name="357"><span class="lineNum">     357 </span>            :     }</a>
+<span class="lineNum">     358 </span>            : 
+<span class="lineNum">     359 </span><span class="lineCov">         86 :     std::string PlatformTopo::domain_type_to_name(int domain_type)</span>
+<span class="lineNum">     360 </span>            :     {
+<a name="361"><span class="lineNum">     361 </span><span class="lineCov">         86 :         if (domain_type &lt;= GEOPM_DOMAIN_INVALID || domain_type &gt;= GEOPM_NUM_DOMAIN) {</span></a>
+<span class="lineNum">     362 </span><span class="lineCov">          8 :             throw Exception(&quot;PlatformTopo::domain_type_to_name(): unrecognized domain_type: &quot; + std::to_string(domain_type),</span>
+<span class="lineNum">     363 </span><span class="lineCov">         12 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     364 </span>            :         }
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">         82 :         return domain_names()[domain_type];</span></a>
+<a name="366"><span class="lineNum">     366 </span>            :     }</a>
+<span class="lineNum">     367 </span>            : 
+<span class="lineNum">     368 </span><span class="lineCov">      89997 :     int PlatformTopo::domain_name_to_type(const std::string &amp;domain_name)</span>
+<a name="369"><span class="lineNum">     369 </span>            :     {</a>
+<span class="lineNum">     370 </span><span class="lineCov">     179994 :         auto m_domain_type = domain_types();</span>
+<span class="lineNum">     371 </span><span class="lineCov">      89997 :         auto it = m_domain_type.find(domain_name);</span>
+<span class="lineNum">     372 </span><span class="lineCov">      89997 :         if (it == m_domain_type.end()) {</span>
+<a name="373"><span class="lineNum">     373 </span><span class="lineCov">         12 :             throw Exception(&quot;PlatformTopo::domain_name_to_type(): unrecognized domain_name: &quot; + domain_name,</span></a>
+<span class="lineNum">     374 </span><span class="lineCov">         18 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     375 </span>            :         }
+<span class="lineNum">     376 </span><span class="lineCov">     179982 :         return it-&gt;second;</span>
+<a name="377"><span class="lineNum">     377 </span>            :     }</a>
+<span class="lineNum">     378 </span>            : 
+<span class="lineNum">     379 </span><span class="lineCov">        114 :     void PlatformTopo::create_cache(void)</span>
+<span class="lineNum">     380 </span>            :     {
+<a name="381"><span class="lineNum">     381 </span><span class="lineCov">        114 :         PlatformTopoImp::create_cache();</span></a>
+<a name="382"><span class="lineNum">     382 </span><span class="lineCov">        114 :     }</span></a>
+<span class="lineNum">     383 </span>            : 
+<span class="lineNum">     384 </span><span class="lineCov">        114 :     void PlatformTopoImp::create_cache(void)</span>
+<a name="385"><span class="lineNum">     385 </span>            :     {</a>
+<span class="lineNum">     386 </span><span class="lineCov">        114 :         PlatformTopoImp::create_cache(M_CACHE_FILE_NAME);</span>
+<a name="387"><span class="lineNum">     387 </span><span class="lineCov">        114 :     }</span></a>
+<span class="lineNum">     388 </span>            : 
+<a name="389"><span class="lineNum">     389 </span><span class="lineCov">        120 :     void PlatformTopoImp::create_cache(const std::string &amp;cache_file_name)</span></a>
+<span class="lineNum">     390 </span>            :     {
+<span class="lineNum">     391 </span>            :         // If cache file is not present, create it
+<span class="lineNum">     392 </span>            :         struct stat cache_stat;
+<a name="393"><span class="lineNum">     393 </span><span class="lineCov">        120 :         if (stat(cache_file_name.c_str(), &amp;cache_stat)) {</span></a>
+<span class="lineNum">     394 </span><span class="lineCov">          8 :             std::string cmd = &quot;out=&quot; + cache_file_name + &quot;;&quot;</span>
+<span class="lineNum">     395 </span>            :                               &quot;lscpu -x &gt; $out &amp;&amp; &quot;
+<span class="lineNum">     396 </span><span class="lineCov">          8 :                               &quot;chmod a+rw $out&quot;;</span>
+<a name="397"><span class="lineNum">     397 </span>            :             FILE *pid;</a>
+<span class="lineNum">     398 </span><span class="lineCov">          4 :             int err = geopm_sched_popen(cmd.c_str(), &amp;pid);</span>
+<span class="lineNum">     399 </span><span class="lineCov">          4 :             if (err) {</span>
+<span class="lineNum">     400 </span><span class="lineNoCov">          0 :                 unlink(cache_file_name.c_str());</span>
+<a name="401"><span class="lineNum">     401 </span>            :                 throw Exception(&quot;PlatformTopo::create_cache(): Could not popen lscpu command: &quot;,</a>
+<span class="lineNum">     402 </span><span class="lineNoCov">          0 :                          err, __FILE__, __LINE__);</span>
+<span class="lineNum">     403 </span>            :             }
+<span class="lineNum">     404 </span><span class="lineCov">          4 :             if (pclose(pid)) {</span>
+<a name="405"><span class="lineNum">     405 </span><span class="lineCov">          2 :                 unlink(cache_file_name.c_str());</span></a>
+<span class="lineNum">     406 </span>            :                 throw Exception(&quot;PlatformTopo::create_cache(): Could not pclose lscpu command: &quot;,
+<span class="lineNum">     407 </span><span class="lineCov">          2 :                          errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     408 </span>            :             }
+<a name="409"><span class="lineNum">     409 </span>            :         }</a>
+<a name="410"><span class="lineNum">     410 </span><span class="lineCov">        118 :     }</span></a>
+<span class="lineNum">     411 </span>            : 
+<span class="lineNum">     412 </span><span class="lineCov">        987 :     void PlatformTopoImp::parse_lscpu(const std::map&lt;std::string, std::string&gt; &amp;lscpu_map,</span>
+<a name="413"><span class="lineNum">     413 </span>            :                                       int &amp;num_package,</a>
+<span class="lineNum">     414 </span>            :                                       int &amp;core_per_package,
+<span class="lineNum">     415 </span>            :                                       int &amp;thread_per_core)
+<span class="lineNum">     416 </span>            :     {
+<a name="417"><span class="lineNum">     417 </span>            :         const std::string keys[6] = {&quot;CPU(s)&quot;,</a>
+<span class="lineNum">     418 </span>            :                                      &quot;Thread(s) per core&quot;,
+<span class="lineNum">     419 </span>            :                                      &quot;Core(s) per socket&quot;,
+<span class="lineNum">     420 </span>            :                                      &quot;Socket(s)&quot;,
+<a name="421"><span class="lineNum">     421 </span>            :                                      &quot;NUMA node(s)&quot;,</a>
+<span class="lineNum">     422 </span><span class="lineCov">       1974 :                                      &quot;On-line CPU(s) mask&quot;};</span>
+<span class="lineNum">     423 </span><span class="lineCov">       1974 :         std::vector&lt;std::string&gt; values(6);</span>
+<span class="lineNum">     424 </span>            : 
+<a name="425"><span class="lineNum">     425 </span><span class="lineCov">       6865 :         for (size_t i = 0; i &lt; values.size(); ++i) {</span></a>
+<span class="lineNum">     426 </span><span class="lineCov">       5892 :             auto it = lscpu_map.find(keys[i]);</span>
+<span class="lineNum">     427 </span><span class="lineCov">       5892 :             if (it == lscpu_map.end()) {</span>
+<span class="lineNum">     428 </span><span class="lineCov">         28 :                 throw Exception(&quot;PlatformTopoImp: parsing lscpu output, key not found: \&quot;&quot; + keys[i] + &quot;\&quot;&quot;,</span>
+<a name="429"><span class="lineNum">     429 </span><span class="lineCov">         42 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     430 </span>            :             }
+<span class="lineNum">     431 </span><span class="lineCov">       5878 :             values[i] = it-&gt;second;</span>
+<span class="lineNum">     432 </span><span class="lineCov">       5878 :             if (values[i].size() == 0) {</span>
+<a name="433"><span class="lineNum">     433 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;PlatformTopoImp: parsing lscpu output, value not recorded: &quot; + it-&gt;second,</span></a>
+<span class="lineNum">     434 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     435 </span>            :             }
+<span class="lineNum">     436 </span>            :         }
+<a name="437"><span class="lineNum">     437 </span><span class="lineCov">        973 :         num_package = atoi(values[3].c_str());</span></a>
+<span class="lineNum">     438 </span><span class="lineCov">        973 :         int num_core = atoi(values[2].c_str()) * num_package;</span>
+<span class="lineNum">     439 </span><span class="lineCov">        973 :         core_per_package = num_core / num_package;</span>
+<span class="lineNum">     440 </span><span class="lineCov">        973 :         thread_per_core = atoi(values[1].c_str());</span>
+<a name="441"><span class="lineNum">     441 </span>            : </a>
+<span class="lineNum">     442 </span><span class="lineCov">        973 :         int total_cores_expected_online = num_package * core_per_package * thread_per_core;</span>
+<span class="lineNum">     443 </span><span class="lineCov">        973 :         if (total_cores_expected_online != atoi(values[0].c_str())) {</span>
+<span class="lineNum">     444 </span>            :             // Check how many CPUs are actually online
+<a name="445"><span class="lineNum">     445 </span><span class="lineCov">          4 :             std::string online_cpu_mask = values[5];</span></a>
+<span class="lineNum">     446 </span><span class="lineCov">          2 :             if (online_cpu_mask.substr(0,2) == &quot;0x&quot;) {</span>
+<span class="lineNum">     447 </span><span class="lineCov">          2 :                 online_cpu_mask = online_cpu_mask.substr(2);</span>
+<span class="lineNum">     448 </span>            :             }
+<a name="449"><span class="lineNum">     449 </span><span class="lineCov">          2 :             int online_cpus = 0;</span></a>
+<span class="lineNum">     450 </span><span class="lineCov">         80 :             for (auto hmc = online_cpu_mask.rbegin(); hmc != online_cpu_mask.rend(); ++hmc) {</span>
+<span class="lineNum">     451 </span><span class="lineCov">         78 :                 uint32_t hmb = std::stoul(std::string(1, *hmc), 0, 16);</span>
+<span class="lineNum">     452 </span><span class="lineCov">        390 :                 for (int bit_idx = 0; bit_idx != 4; ++bit_idx) {</span>
+<a name="453"><span class="lineNum">     453 </span><span class="lineCov">        312 :                     if (hmb &amp; 1U) {</span></a>
+<span class="lineNum">     454 </span><span class="lineCov">         40 :                         ++online_cpus;</span>
+<span class="lineNum">     455 </span>            :                     }
+<span class="lineNum">     456 </span><span class="lineCov">        312 :                     hmb = hmb &gt;&gt; 1;</span>
+<a name="457"><span class="lineNum">     457 </span>            :                 }</a>
+<span class="lineNum">     458 </span>            :             }
+<span class="lineNum">     459 </span><span class="lineCov">          2 :             if (total_cores_expected_online != online_cpus) {</span>
+<span class="lineNum">     460 </span>            :                 throw Exception(&quot;PlatformTopoImp: parsing lscpu output, inconsistent values or unable to determine online CPUs&quot;,
+<a name="461"><span class="lineNum">     461 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     462 </span>            :             }
+<span class="lineNum">     463 </span>            :         }
+<a name="464"><span class="lineNum">     464 </span><span class="lineCov">        973 :     }</span></a>
+<a name="465"><span class="lineNum">     465 </span>            : </a>
+<span class="lineNum">     466 </span><span class="lineCov">        973 :     void PlatformTopoImp::parse_lscpu_numa(std::map&lt;std::string, std::string&gt; lscpu_map,</span>
+<span class="lineNum">     467 </span>            :                                            std::vector&lt;std::set&lt;int&gt; &gt; &amp;numa_map)
+<span class="lineNum">     468 </span>            :     {
+<a name="469"><span class="lineNum">     469 </span>            :         // TODO: what to do if there are no numa node lines?</a>
+<span class="lineNum">     470 </span><span class="lineCov">        973 :         bool is_node_found = true;</span>
+<span class="lineNum">     471 </span><span class="lineCov">       3888 :         for (int node_idx = 0; is_node_found; ++node_idx) {</span>
+<span class="lineNum">     472 </span><span class="lineCov">       5830 :             std::ostringstream numa_key;</span>
+<a name="473"><span class="lineNum">     473 </span><span class="lineCov">       2915 :             numa_key &lt;&lt; &quot;NUMA node&quot; &lt;&lt; node_idx &lt;&lt; &quot; CPU(s)&quot;;</span></a>
+<span class="lineNum">     474 </span><span class="lineCov">       2915 :             auto lscpu_it = lscpu_map.find(numa_key.str());</span>
+<span class="lineNum">     475 </span><span class="lineCov">       2915 :             if (lscpu_it == lscpu_map.end()) {</span>
+<span class="lineNum">     476 </span><span class="lineCov">        973 :                 is_node_found = false;</span>
 <a name="477"><span class="lineNum">     477 </span>            :             }</a>
-<span class="lineNum">     478 </span>            :         }
-<span class="lineNum">     479 </span>            :         else {
-<span class="lineNum">     480 </span><span class="lineNoCov">          0 :             int err = pclose(fid);</span>
-<a name="481"><span class="lineNum">     481 </span><span class="lineNoCov">          0 :             if (err) {</span></a>
-<span class="lineNum">     482 </span>            :                 throw Exception(&quot;PlatformTopo::close_lscpu(): Could not pclose lscpu file&quot;,
-<span class="lineNum">     483 </span><span class="lineNoCov">          0 :                                 errno ? errno : GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span>
-<span class="lineNum">     484 </span>            :             }
-<a name="485"><span class="lineNum">     485 </span>            :         }</a>
-<a name="486"><span class="lineNum">     486 </span><span class="lineCov">         86 :     }</span></a>
-<span class="lineNum">     487 </span>            : 
-<span class="lineNum">     488 </span><span class="lineCov">         86 :     void PlatformTopo::lscpu(std::map&lt;std::string, std::string&gt; &amp;lscpu_map)</span>
-<a name="489"><span class="lineNum">     489 </span>            :     {</a>
-<span class="lineNum">     490 </span><span class="lineCov">        172 :         std::string result;</span>
-<span class="lineNum">     491 </span>            : 
-<span class="lineNum">     492 </span><span class="lineCov">         86 :         FILE *fid = open_lscpu();</span>
-<a name="493"><span class="lineNum">     493 </span>            : </a>
-<span class="lineNum">     494 </span><span class="lineCov">        172 :         std::string line;</span>
-<span class="lineNum">     495 </span><span class="lineCov">       4678 :         while (!feof(fid)) {</span>
-<span class="lineNum">     496 </span><span class="lineCov">       2296 :             char cline[1024] = {};</span>
-<a name="497"><span class="lineNum">     497 </span><span class="lineCov">       2296 :             if (fgets(cline, 1024, fid)) {</span></a>
-<span class="lineNum">     498 </span><span class="lineCov">       2210 :                 line = cline;</span>
-<span class="lineNum">     499 </span><span class="lineCov">       2210 :                 size_t colon_pos = line.find(&quot;:&quot;);</span>
-<span class="lineNum">     500 </span><span class="lineCov">       2210 :                 if (colon_pos != std::string::npos) {</span>
-<a name="501"><span class="lineNum">     501 </span><span class="lineCov">       4420 :                     std::string key(line.substr(0, colon_pos));</span></a>
-<span class="lineNum">     502 </span><span class="lineCov">       4420 :                     std::string value(line.substr(colon_pos + 1));</span>
-<span class="lineNum">     503 </span><span class="lineCov">       2210 :                     size_t ws_pos = value.find_first_not_of(&quot; \t&quot;);</span>
-<span class="lineNum">     504 </span><span class="lineCov">       4420 :                     if (ws_pos &amp;&amp;</span>
-<a name="505"><span class="lineNum">     505 </span><span class="lineCov">       4420 :                         ws_pos &lt; value.size() - 1 &amp;&amp;</span></a>
-<span class="lineNum">     506 </span>            :                         ws_pos != std::string::npos) {
-<span class="lineNum">     507 </span>            :                         // Trim leading white space and '\n' from end of line
-<span class="lineNum">     508 </span><span class="lineCov">       2210 :                         value = value.substr(ws_pos, value.size() - ws_pos - 1);</span>
-<a name="509"><span class="lineNum">     509 </span>            :                     }</a>
-<span class="lineNum">     510 </span><span class="lineCov">       2210 :                     if (key.size()) {</span>
-<span class="lineNum">     511 </span><span class="lineCov">       2210 :                         lscpu_map.emplace(key, value);</span>
-<span class="lineNum">     512 </span>            :                     }
-<a name="513"><span class="lineNum">     513 </span>            :                 }</a>
-<span class="lineNum">     514 </span>            :             }
-<span class="lineNum">     515 </span>            :         }
-<span class="lineNum">     516 </span><span class="lineCov">         86 :         close_lscpu(fid);</span>
-<a name="517"><span class="lineNum">     517 </span><span class="lineCov">         86 :     }</span></a>
-<span class="lineNum">     518 </span>            : }
+<span class="lineNum">     478 </span>            :             else {
+<span class="lineNum">     479 </span><span class="lineCov">       1942 :                 numa_map.push_back({});</span>
+<span class="lineNum">     480 </span><span class="lineCov">       1942 :                 auto cpu_set_it = numa_map.end() - 1;</span>
+<a name="481"><span class="lineNum">     481 </span><span class="lineCov">       3884 :                 std::string hex_mask = lscpu_it-&gt;second;</span></a>
+<span class="lineNum">     482 </span><span class="lineCov">       1942 :                 if (hex_mask.substr(0,2) == &quot;0x&quot;) {</span>
+<span class="lineNum">     483 </span><span class="lineCov">       1938 :                     hex_mask = hex_mask.substr(2);</span>
+<span class="lineNum">     484 </span>            :                 }
+<a name="485"><span class="lineNum">     485 </span><span class="lineCov">       1942 :                 int cpu_idx = 0;</span></a>
+<span class="lineNum">     486 </span><span class="lineCov">      52289 :                 for (auto hmc = hex_mask.rbegin(); hmc != hex_mask.rend(); ++hmc) {</span>
+<span class="lineNum">     487 </span><span class="lineCov">      50347 :                     uint32_t hmb = std::stoul(std::string(1, *hmc), 0, 16);</span>
+<span class="lineNum">     488 </span><span class="lineCov">     251735 :                     for (int bit_idx = 0; bit_idx != 4; ++bit_idx) {</span>
+<a name="489"><span class="lineNum">     489 </span><span class="lineCov">     201388 :                         if (hmb &amp; 1U) {</span></a>
+<span class="lineNum">     490 </span><span class="lineCov">     166296 :                             cpu_set_it-&gt;insert(cpu_idx);</span>
+<span class="lineNum">     491 </span>            :                         }
+<span class="lineNum">     492 </span><span class="lineCov">     201388 :                         hmb = hmb &gt;&gt; 1;</span>
+<a name="493"><span class="lineNum">     493 </span><span class="lineCov">     201388 :                         ++cpu_idx;</span></a>
+<span class="lineNum">     494 </span>            :                     }
+<span class="lineNum">     495 </span>            :                 }
+<span class="lineNum">     496 </span>            :             }
+<a name="497"><span class="lineNum">     497 </span>            :         }</a>
+<a name="498"><span class="lineNum">     498 </span><span class="lineCov">        973 :     }</span></a>
+<span class="lineNum">     499 </span>            : 
+<span class="lineNum">     500 </span><span class="lineCov">        987 :     FILE *PlatformTopoImp::open_lscpu(void)</span>
+<a name="501"><span class="lineNum">     501 </span>            :     {</a>
+<span class="lineNum">     502 </span><span class="lineCov">        987 :         FILE *result = nullptr;</span>
+<span class="lineNum">     503 </span><span class="lineCov">        987 :         if (M_TEST_CACHE_FILE_NAME.size()) {</span>
+<span class="lineNum">     504 </span><span class="lineCov">         30 :             result = fopen(M_TEST_CACHE_FILE_NAME.c_str(), &quot;r&quot;);</span>
+<a name="505"><span class="lineNum">     505 </span><span class="lineCov">         30 :             if (!result) {</span></a>
+<span class="lineNum">     506 </span>            :                 throw Exception(&quot;PlatformTopoImp::open_lscpu(): Could not open test lscpu file&quot;,
+<span class="lineNum">     507 </span><span class="lineNoCov">          0 :                                 errno ? errno : GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span>
+<span class="lineNum">     508 </span>            :             }
+<a name="509"><span class="lineNum">     509 </span>            :         }</a>
+<span class="lineNum">     510 </span>            :         else {
+<span class="lineNum">     511 </span><span class="lineCov">        957 :             result = fopen(M_CACHE_FILE_NAME.c_str(), &quot;r&quot;);</span>
+<span class="lineNum">     512 </span><span class="lineCov">        957 :             if (!result) {</span>
+<a name="513"><span class="lineNum">     513 </span><span class="lineCov">         16 :                 int err = geopm_sched_popen(&quot;lscpu -x&quot;, &amp;result);</span></a>
+<span class="lineNum">     514 </span><span class="lineCov">         16 :                 if (err) {</span>
+<span class="lineNum">     515 </span>            :                     throw Exception(&quot;PlatformTopoImp::open_lscpu(): Could not popen lscpu command&quot;,
+<span class="lineNum">     516 </span><span class="lineNoCov">          0 :                                     errno ? errno : GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<a name="517"><span class="lineNum">     517 </span>            :                 }</a>
+<span class="lineNum">     518 </span><span class="lineCov">         16 :                 m_do_fclose = false;</span>
+<span class="lineNum">     519 </span>            :             }
+<span class="lineNum">     520 </span>            :         }
+<a name="521"><span class="lineNum">     521 </span><span class="lineCov">        987 :         return result;</span></a>
+<a name="522"><span class="lineNum">     522 </span>            :     }</a>
+<span class="lineNum">     523 </span>            : 
+<span class="lineNum">     524 </span><span class="lineCov">        987 :     void PlatformTopoImp::close_lscpu(FILE *fid)</span>
+<a name="525"><span class="lineNum">     525 </span>            :     {</a>
+<span class="lineNum">     526 </span><span class="lineCov">        987 :         if (m_do_fclose) {</span>
+<span class="lineNum">     527 </span><span class="lineCov">        971 :             int err = fclose(fid);</span>
+<span class="lineNum">     528 </span><span class="lineCov">        971 :             if (err) {</span>
+<a name="529"><span class="lineNum">     529 </span>            :                 throw Exception(&quot;PlatformTopoImp::close_lscpu(): Could not fclose lscpu file&quot;,</a>
+<span class="lineNum">     530 </span><span class="lineNoCov">          0 :                                 errno ? errno : GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span>
+<span class="lineNum">     531 </span>            :             }
+<span class="lineNum">     532 </span>            :         }
+<a name="533"><span class="lineNum">     533 </span>            :         else {</a>
+<span class="lineNum">     534 </span><span class="lineCov">         16 :             int err = pclose(fid);</span>
+<span class="lineNum">     535 </span><span class="lineCov">         16 :             if (err) {</span>
+<span class="lineNum">     536 </span>            :                 throw Exception(&quot;PlatformTopoImp::close_lscpu(): Could not pclose lscpu file&quot;,
+<a name="537"><span class="lineNum">     537 </span><span class="lineNoCov">          0 :                                 errno ? errno : GEOPM_ERROR_FILE_PARSE, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     538 </span>            :             }
+<span class="lineNum">     539 </span>            :         }
+<a name="540"><span class="lineNum">     540 </span><span class="lineCov">        987 :     }</span></a>
+<a name="541"><span class="lineNum">     541 </span>            : </a>
+<span class="lineNum">     542 </span><span class="lineCov">        987 :     void PlatformTopoImp::lscpu(std::map&lt;std::string, std::string&gt; &amp;lscpu_map)</span>
+<span class="lineNum">     543 </span>            :     {
+<span class="lineNum">     544 </span><span class="lineCov">       1974 :         std::string result;</span>
+<a name="545"><span class="lineNum">     545 </span>            : </a>
+<span class="lineNum">     546 </span><span class="lineCov">        987 :         FILE *fid = open_lscpu();</span>
+<span class="lineNum">     547 </span>            : 
+<span class="lineNum">     548 </span><span class="lineCov">       1974 :         std::string line;</span>
+<a name="549"><span class="lineNum">     549 </span><span class="lineCov">      48793 :         while (!feof(fid)) {</span></a>
+<span class="lineNum">     550 </span><span class="lineCov">      23903 :             char cline[1024] = {};</span>
+<span class="lineNum">     551 </span><span class="lineCov">      23903 :             if (fgets(cline, 1024, fid)) {</span>
+<span class="lineNum">     552 </span><span class="lineCov">      22916 :                 line = cline;</span>
+<a name="553"><span class="lineNum">     553 </span><span class="lineCov">      22916 :                 size_t colon_pos = line.find(&quot;:&quot;);</span></a>
+<span class="lineNum">     554 </span><span class="lineCov">      22916 :                 if (colon_pos != std::string::npos) {</span>
+<span class="lineNum">     555 </span><span class="lineCov">      45832 :                     std::string key(line.substr(0, colon_pos));</span>
+<span class="lineNum">     556 </span><span class="lineCov">      45832 :                     std::string value(line.substr(colon_pos + 1));</span>
+<a name="557"><span class="lineNum">     557 </span><span class="lineCov">      22916 :                     size_t ws_pos = value.find_first_not_of(&quot; \t&quot;);</span></a>
+<span class="lineNum">     558 </span><span class="lineCov">      45832 :                     if (ws_pos &amp;&amp;</span>
+<span class="lineNum">     559 </span><span class="lineCov">      45832 :                         ws_pos &lt; value.size() - 1 &amp;&amp;</span>
+<span class="lineNum">     560 </span>            :                         ws_pos != std::string::npos) {
+<a name="561"><span class="lineNum">     561 </span>            :                         // Trim leading white space and '\n' from end of line</a>
+<span class="lineNum">     562 </span><span class="lineCov">      22916 :                         value = value.substr(ws_pos, value.size() - ws_pos - 1);</span>
+<span class="lineNum">     563 </span>            :                     }
+<span class="lineNum">     564 </span><span class="lineCov">      22916 :                     if (key.size()) {</span>
+<a name="565"><span class="lineNum">     565 </span><span class="lineCov">      22916 :                         lscpu_map.emplace(key, value);</span></a>
+<span class="lineNum">     566 </span>            :                     }
+<span class="lineNum">     567 </span>            :                 }
+<span class="lineNum">     568 </span>            :             }
+<a name="569"><span class="lineNum">     569 </span>            :         }</a>
+<span class="lineNum">     570 </span><span class="lineCov">        987 :         close_lscpu(fid);</span>
+<span class="lineNum">     571 </span><span class="lineCov">        987 :     }</span>
+<span class="lineNum">     572 </span>            : }
+<a name="573"><span class="lineNum">     573 </span>            : </a>
+<a name="574"><span class="lineNum">     574 </span>            : extern &quot;C&quot;</a>
+<span class="lineNum">     575 </span>            : {
+<span class="lineNum">     576 </span><span class="lineCov">          6 :     int geopm_topo_num_domain(int domain_type)</span>
+<a name="577"><span class="lineNum">     577 </span>            :     {</a>
+<span class="lineNum">     578 </span><span class="lineCov">          6 :         int result = 0;</span>
+<span class="lineNum">     579 </span>            :         try {
+<span class="lineNum">     580 </span><span class="lineCov">          6 :             result = geopm::platform_topo().num_domain(domain_type);</span>
+<a name="581"><span class="lineNum">     581 </span>            :         }</a>
+<span class="lineNum">     582 </span><span class="lineCov">          4 :         catch (...) {</span>
+<span class="lineNum">     583 </span><span class="lineCov">          2 :             result = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     584 </span><span class="lineCov">          2 :             result = result &lt; 0 ? result : GEOPM_ERROR_RUNTIME;</span>
+<a name="585"><span class="lineNum">     585 </span>            :         }</a>
+<span class="lineNum">     586 </span><span class="lineCov">          6 :         return result;</span>
+<a name="587"><span class="lineNum">     587 </span>            :     }</a>
+<span class="lineNum">     588 </span>            : 
+<a name="589"><span class="lineNum">     589 </span><span class="lineCov">          8 :     int geopm_topo_domain_idx(int domain_type, int cpu_idx)</span></a>
+<span class="lineNum">     590 </span>            :     {
+<span class="lineNum">     591 </span><span class="lineCov">          8 :         int result = 0;</span>
+<span class="lineNum">     592 </span>            :         try {
+<a name="593"><span class="lineNum">     593 </span><span class="lineCov">          8 :             result = geopm::platform_topo().domain_idx(domain_type, cpu_idx);</span></a>
+<span class="lineNum">     594 </span>            :         }
+<span class="lineNum">     595 </span><span class="lineCov">          8 :         catch (...) {</span>
+<span class="lineNum">     596 </span><span class="lineCov">          4 :             result = geopm::exception_handler(std::current_exception());</span>
+<a name="597"><span class="lineNum">     597 </span><span class="lineCov">          4 :             result = result &lt; 0 ? result : GEOPM_ERROR_RUNTIME;</span></a>
+<span class="lineNum">     598 </span>            :         }
+<span class="lineNum">     599 </span><span class="lineCov">          8 :         return result;</span>
+<a name="600"><span class="lineNum">     600 </span>            :     }</a>
+<a name="601"><span class="lineNum">     601 </span>            : </a>
+<span class="lineNum">     602 </span><span class="lineCov">          8 :     int geopm_topo_num_domain_nested(int inner_domain, int outer_domain)</span>
+<span class="lineNum">     603 </span>            :     {
+<span class="lineNum">     604 </span><span class="lineCov">          8 :         int result = GEOPM_ERROR_INVALID;</span>
+<a name="605"><span class="lineNum">     605 </span>            :         try {</a>
+<span class="lineNum">     606 </span><span class="lineCov">          8 :             if (geopm::platform_topo().is_nested_domain(inner_domain, outer_domain)) {</span>
+<span class="lineNum">     607 </span><span class="lineCov">          4 :                 int num_inner_domain = geopm::platform_topo().num_domain(inner_domain);</span>
+<span class="lineNum">     608 </span><span class="lineCov">          4 :                 int num_outer_domain = geopm::platform_topo().num_domain(outer_domain);</span>
+<a name="609"><span class="lineNum">     609 </span><span class="lineCov">          4 :                 if (num_outer_domain &gt; 0 &amp;&amp; num_inner_domain &gt; 0) {</span></a>
+<span class="lineNum">     610 </span><span class="lineCov">          4 :                     result = num_inner_domain / num_outer_domain;</span>
+<span class="lineNum">     611 </span>            :                 }
+<span class="lineNum">     612 </span>            :             }
+<a name="613"><span class="lineNum">     613 </span>            :         }</a>
+<span class="lineNum">     614 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     615 </span><span class="lineNoCov">          0 :             result = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     616 </span><span class="lineNoCov">          0 :             result = result &lt; 0 ? result : GEOPM_ERROR_RUNTIME;</span>
+<a name="617"><span class="lineNum">     617 </span>            :         }</a>
+<span class="lineNum">     618 </span><span class="lineCov">          8 :         return result;</span>
+<a name="619"><span class="lineNum">     619 </span>            :     }</a>
+<span class="lineNum">     620 </span>            : 
+<a name="621"><span class="lineNum">     621 </span><span class="lineCov">          4 :     int geopm_topo_domain_nested(int inner_domain, int outer_domain, int outer_idx,</span></a>
+<span class="lineNum">     622 </span>            :                                  size_t num_domain_nested, int *domain_nested)
+<span class="lineNum">     623 </span>            :     {
+<span class="lineNum">     624 </span><span class="lineCov">          4 :         int err = 0;</span>
+<a name="625"><span class="lineNum">     625 </span>            :         try {</a>
+<span class="lineNum">     626 </span><span class="lineCov">          4 :             int num_domain_nested_ref = geopm_topo_num_domain_nested(inner_domain, outer_domain);</span>
+<span class="lineNum">     627 </span><span class="lineCov">          6 :             if (num_domain_nested_ref &gt; 0 &amp;&amp;</span>
+<span class="lineNum">     628 </span><span class="lineCov">          2 :                 num_domain_nested == (size_t)num_domain_nested_ref) {</span>
+<a name="629"><span class="lineNum">     629 </span><span class="lineCov">          4 :                 std::set&lt;int&gt; nested_set(geopm::platform_topo().domain_nested(inner_domain, outer_domain, outer_idx));</span></a>
+<span class="lineNum">     630 </span><span class="lineCov">          2 :                 if (nested_set.size() == (size_t)num_domain_nested) {</span>
+<span class="lineNum">     631 </span><span class="lineCov">          2 :                     int idx = 0;</span>
+<span class="lineNum">     632 </span><span class="lineCov">          6 :                     for (const auto &amp;domain : nested_set) {</span>
+<a name="633"><span class="lineNum">     633 </span><span class="lineCov">          4 :                         domain_nested[idx] = domain;</span></a>
+<span class="lineNum">     634 </span><span class="lineCov">          4 :                         ++idx;</span>
+<span class="lineNum">     635 </span>            :                     }
+<span class="lineNum">     636 </span>            :                 }
+<a name="637"><span class="lineNum">     637 </span>            :                 else {</a>
+<span class="lineNum">     638 </span><span class="lineNoCov">          0 :                     err = GEOPM_ERROR_RUNTIME;</span>
+<span class="lineNum">     639 </span><span class="lineCov">          2 :                 }</span>
+<span class="lineNum">     640 </span>            :             }
+<a name="641"><span class="lineNum">     641 </span>            :             else {</a>
+<span class="lineNum">     642 </span><span class="lineCov">          2 :                 err = num_domain_nested_ref;</span>
+<span class="lineNum">     643 </span>            :             }
+<span class="lineNum">     644 </span>            :         }
+<a name="645"><span class="lineNum">     645 </span><span class="lineNoCov">          0 :         catch (...) {</span></a>
+<span class="lineNum">     646 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     647 </span><span class="lineNoCov">          0 :             err = err &lt; 0 ? err : GEOPM_ERROR_RUNTIME;</span>
+<span class="lineNum">     648 </span>            :         }
+<a name="649"><span class="lineNum">     649 </span><span class="lineCov">          4 :         return err;</span></a>
+<a name="650"><span class="lineNum">     650 </span>            :     }</a>
+<span class="lineNum">     651 </span>            : 
+<span class="lineNum">     652 </span><span class="lineCov">          4 :     int geopm_topo_domain_name(int domain_type, size_t domain_name_max,</span>
+<a name="653"><span class="lineNum">     653 </span>            :                                char *domain_name)</a>
+<span class="lineNum">     654 </span>            :     {
+<span class="lineNum">     655 </span><span class="lineCov">          4 :         int err = 0;</span>
+<span class="lineNum">     656 </span>            :         try {
+<a name="657"><span class="lineNum">     657 </span><span class="lineCov">          6 :             std::string domain_name_string = geopm::platform_topo().domain_type_to_name(domain_type);</span></a>
+<span class="lineNum">     658 </span><span class="lineCov">          2 :             domain_name[domain_name_max - 1] = '\0';</span>
+<span class="lineNum">     659 </span><span class="lineCov">          2 :             strncpy(domain_name, domain_name_string.c_str(), domain_name_max);</span>
+<span class="lineNum">     660 </span><span class="lineCov">          2 :             if (domain_name[domain_name_max - 1] != '\0') {</span>
+<a name="661"><span class="lineNum">     661 </span><span class="lineNoCov">          0 :                 domain_name[domain_name_max - 1] = '\0';</span></a>
+<span class="lineNum">     662 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">     663 </span>            :             }
+<span class="lineNum">     664 </span>            :         }
+<a name="665"><span class="lineNum">     665 </span><span class="lineCov">          4 :         catch (...) {</span></a>
+<span class="lineNum">     666 </span><span class="lineCov">          2 :             err = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     667 </span><span class="lineCov">          2 :             err = err &lt; 0 ? err : GEOPM_ERROR_RUNTIME;</span>
+<span class="lineNum">     668 </span>            :         }
+<a name="669"><span class="lineNum">     669 </span><span class="lineCov">          4 :         return err;</span></a>
+<a name="670"><span class="lineNum">     670 </span>            :     }</a>
+<span class="lineNum">     671 </span>            : 
+<span class="lineNum">     672 </span><span class="lineCov">          4 :     int geopm_topo_domain_type(const char *domain_name)</span>
+<a name="673"><span class="lineNum">     673 </span>            :     {</a>
+<span class="lineNum">     674 </span><span class="lineCov">          4 :         int result = 0;</span>
+<span class="lineNum">     675 </span>            :         try {
+<span class="lineNum">     676 </span><span class="lineCov">          6 :             result = geopm::platform_topo().domain_name_to_type(domain_name);</span>
+<a name="677"><span class="lineNum">     677 </span>            :         }</a>
+<span class="lineNum">     678 </span><span class="lineCov">          4 :         catch (...) {</span>
+<span class="lineNum">     679 </span><span class="lineCov">          2 :             result = geopm::exception_handler(std::current_exception());</span>
+<span class="lineNum">     680 </span><span class="lineCov">          2 :             result = result &lt; 0 ? result : GEOPM_ERROR_RUNTIME;</span>
+<a name="681"><span class="lineNum">     681 </span>            :         }</a>
+<span class="lineNum">     682 </span><span class="lineCov">          4 :         return result;</span>
+<a name="683"><span class="lineNum">     683 </span>            :     }</a>
+<span class="lineNum">     684 </span>            : 
+<a name="685"><span class="lineNum">     685 </span><span class="lineNoCov">          0 :     int geopm_topo_create_cache(void)</span></a>
+<span class="lineNum">     686 </span>            :     {
+<span class="lineNum">     687 </span><span class="lineNoCov">          0 :         int err = 0;</span>
+<span class="lineNum">     688 </span>            :         try {
+<a name="689"><span class="lineNum">     689 </span><span class="lineNoCov">          0 :             geopm::PlatformTopo::create_cache();</span></a>
+<span class="lineNum">     690 </span>            :         }
+<span class="lineNum">     691 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     692 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception());</span>
+<a name="693"><span class="lineNum">     693 </span><span class="lineNoCov">          0 :             err = err &lt; 0 ? err : GEOPM_ERROR_RUNTIME;</span></a>
+<span class="lineNum">     694 </span>            :         }
+<a name="695"><span class="lineNum">     695 </span><span class="lineNoCov">          0 :         return err;</span></a>
+<span class="lineNum">     696 </span>            :     }
+<a name="697"><span class="lineNum">     697 </span><span class="lineCov">       4701 : }</span></a>
 </pre>
       </td>
     </tr>
@@ -594,7 +773,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

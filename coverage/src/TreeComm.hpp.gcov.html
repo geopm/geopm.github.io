@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/TreeComm.hpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/TreeComm.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - TreeComm.hpp<span style="font-size: 80%;"> (source / <a href="TreeComm.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - TreeComm.hpp<span style="font-size: 80%;"> (source / <a href="TreeComm.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">2</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -108,92 +108,93 @@
 <span class="lineNum">      38 </span>            : namespace geopm
 <span class="lineNum">      39 </span>            : {
 <span class="lineNum">      40 </span>            :     class Comm;
-<a name="41"><span class="lineNum">      41 </span>            :     class ITreeCommLevel;</a>
-<span class="lineNum">      42 </span>            : 
-<span class="lineNum">      43 </span>            :     class ITreeComm
-<a name="44"><span class="lineNum">      44 </span>            :     {</a>
-<a name="45"><span class="lineNum">      45 </span>            :         public:</a>
-<span class="lineNum">      46 </span><span class="lineCov">         22 :             ITreeComm() = default;</span>
-<span class="lineNum">      47 </span><span class="lineCov">         22 :             virtual ~ITreeComm() = default;</span>
-<span class="lineNum">      48 </span>            :             /// @brief Returns the number of tree levels controlled by
-<a name="49"><span class="lineNum">      49 </span>            :             ///        the Controller on this node.  This determines</a>
-<span class="lineNum">      50 </span>            :             ///        which levels can be used for send_down() and
-<span class="lineNum">      51 </span>            :             ///        receive_up().
-<span class="lineNum">      52 </span>            :             virtual int num_level_controlled(void) const = 0;
-<a name="53"><span class="lineNum">      53 </span>            :             /// @brief Returns the number of tree levels participated</a>
-<span class="lineNum">      54 </span>            :             ///        in by the Controller on this node.  This
-<span class="lineNum">      55 </span>            :             ///        determines which levels can be used for sending
-<span class="lineNum">      56 </span>            :             ///        or receiving, including with the parent.
-<a name="57"><span class="lineNum">      57 </span>            :             virtual int max_level(void) const = 0;</a>
-<span class="lineNum">      58 </span>            :             /// @brief Returns the level of the root of the tree,
-<span class="lineNum">      59 </span>            :             ///        which is equal to the number of levels in the
-<span class="lineNum">      60 </span>            :             ///        tree.
-<a name="61"><span class="lineNum">      61 </span>            :             virtual int root_level(void) const = 0;</a>
-<span class="lineNum">      62 </span>            :             /// @brief Returns the rank of the given level.
-<span class="lineNum">      63 </span>            :             virtual int level_rank(int level) const = 0;
-<span class="lineNum">      64 </span>            :             /// @brief Returns the number of children for each parent
-<a name="65"><span class="lineNum">      65 </span>            :             ///        in the given level.</a>
-<span class="lineNum">      66 </span>            :             virtual int level_size(int level) const = 0;
-<span class="lineNum">      67 </span>            :             /// @brief Send samples up to the parent within a level.
-<span class="lineNum">      68 </span>            :             virtual void send_up(int level, const std::vector&lt;double&gt; &amp;sample) = 0;
-<a name="69"><span class="lineNum">      69 </span>            :             /// @brief Send policies down to children within a level.</a>
-<span class="lineNum">      70 </span>            :             virtual void send_down(int level, const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy) = 0;
-<span class="lineNum">      71 </span>            :             /// @brief Receive samples from children within a level.
-<span class="lineNum">      72 </span>            :             virtual bool receive_up(int level, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample) = 0;
-<a name="73"><span class="lineNum">      73 </span>            :             /// @brief Receive policies from the parent within a level.</a>
-<span class="lineNum">      74 </span>            :             virtual bool receive_down(int level, std::vector&lt;double&gt; &amp;policy) = 0;
-<span class="lineNum">      75 </span>            :             /// @brief Returns the total number of bytes sent from the
-<span class="lineNum">      76 </span>            :             ///        entire tree.
-<a name="77"><span class="lineNum">      77 </span>            :             virtual size_t overhead_send(void) const = 0;</a>
-<span class="lineNum">      78 </span>            :             /// @brief Returns the number of children at each level.
-<span class="lineNum">      79 </span>            :             static std::vector&lt;int&gt; fan_out(const std::shared_ptr&lt;Comm&gt; &amp;comm);
-<span class="lineNum">      80 </span>            :     };
-<a name="81"><span class="lineNum">      81 </span>            : </a>
-<span class="lineNum">      82 </span>            :     class TreeComm : public ITreeComm
-<span class="lineNum">      83 </span>            :     {
-<span class="lineNum">      84 </span>            :         public:
-<a name="85"><span class="lineNum">      85 </span>            :             TreeComm(std::shared_ptr&lt;Comm&gt; comm,</a>
-<span class="lineNum">      86 </span>            :                      int num_send_down,
-<span class="lineNum">      87 </span>            :                      int num_send_up);
-<span class="lineNum">      88 </span>            :             TreeComm(std::shared_ptr&lt;Comm&gt; comm,
-<a name="89"><span class="lineNum">      89 </span>            :                      const std::vector&lt;int&gt; &amp;fan_out,</a>
-<span class="lineNum">      90 </span>            :                      int num_level_ctl,
-<span class="lineNum">      91 </span>            :                      int num_send_down,
-<span class="lineNum">      92 </span>            :                      int num_send_up,
-<a name="93"><span class="lineNum">      93 </span>            :                      std::vector&lt;std::unique_ptr&lt;ITreeCommLevel&gt; &gt; mock_level);</a>
-<span class="lineNum">      94 </span>            :             virtual ~TreeComm();
-<span class="lineNum">      95 </span>            :             int num_level_controlled(void) const override;
-<span class="lineNum">      96 </span>            :             int max_level(void) const override;
-<a name="97"><span class="lineNum">      97 </span>            :             int root_level(void) const override;</a>
-<span class="lineNum">      98 </span>            :             int level_rank(int level) const override;
-<span class="lineNum">      99 </span>            :             int level_size(int level) const override;
-<span class="lineNum">     100 </span>            :             void send_down(int level, const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy) override;
-<a name="101"><span class="lineNum">     101 </span>            :             void send_up(int level, const std::vector&lt;double&gt; &amp;sample) override;</a>
-<span class="lineNum">     102 </span>            :             bool receive_down(int level, std::vector&lt;double&gt; &amp;policy) override;
-<span class="lineNum">     103 </span>            :             bool receive_up(int level, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample) override;
-<span class="lineNum">     104 </span>            :             size_t overhead_send(void) const override;
-<a name="105"><span class="lineNum">     105 </span>            :         private:</a>
-<span class="lineNum">     106 </span>            :             int num_level_controlled(std::vector&lt;int&gt; coords);
-<span class="lineNum">     107 </span>            :             std::vector&lt;std::unique_ptr&lt;ITreeCommLevel&gt; &gt; init_level(
-<span class="lineNum">     108 </span>            :                 std::shared_ptr&lt;Comm&gt; comm_cart, int root_level);
-<a name="109"><span class="lineNum">     109 </span>            :             std::shared_ptr&lt;Comm&gt; m_comm;</a>
-<span class="lineNum">     110 </span>            :             /// Tree fan out from root to leaf. Note levels go from
-<span class="lineNum">     111 </span>            :             /// leaf to root
-<span class="lineNum">     112 </span>            :             std::vector&lt;int&gt; m_fan_out;
-<a name="113"><span class="lineNum">     113 </span>            :             int m_root_level;</a>
-<span class="lineNum">     114 </span>            :             /// Number of levels the rank controls
-<span class="lineNum">     115 </span>            :             int m_num_level_ctl;
-<span class="lineNum">     116 </span>            :             /// Number of levels this rank participates in, including its parent
-<a name="117"><span class="lineNum">     117 </span>            :             int m_max_level;</a>
-<span class="lineNum">     118 </span>            :             /// @brief Number of nodes in the job.
-<span class="lineNum">     119 </span>            :             int m_num_node;
-<span class="lineNum">     120 </span>            :             int m_num_send_down;
-<a name="121"><span class="lineNum">     121 </span>            :             int m_num_send_up;</a>
-<span class="lineNum">     122 </span>            :             std::vector&lt;std::unique_ptr&lt;ITreeCommLevel&gt; &gt; m_level_ctl;
-<span class="lineNum">     123 </span>            :     };
-<span class="lineNum">     124 </span>            : }
-<a name="125"><span class="lineNum">     125 </span>            : </a>
-<span class="lineNum">     126 </span>            : #endif
+<a name="41"><span class="lineNum">      41 </span>            : </a>
+<span class="lineNum">      42 </span>            :     class TreeComm
+<a name="43"><span class="lineNum">      43 </span>            :     {</a>
+<a name="44"><span class="lineNum">      44 </span>            :         public:</a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         94 :             TreeComm() = default;</span></a>
+<span class="lineNum">      46 </span><span class="lineCov">         94 :             virtual ~TreeComm() = default;</span>
+<span class="lineNum">      47 </span>            :             /// @brief Returns the number of tree levels controlled by
+<span class="lineNum">      48 </span>            :             ///        the Controller on this node.  This determines
+<a name="49"><span class="lineNum">      49 </span>            :             ///        which levels can be used for send_down() and</a>
+<span class="lineNum">      50 </span>            :             ///        receive_up().
+<span class="lineNum">      51 </span>            :             virtual int num_level_controlled(void) const = 0;
+<span class="lineNum">      52 </span>            :             /// @brief Returns the number of tree levels participated
+<a name="53"><span class="lineNum">      53 </span>            :             ///        in by the Controller on this node.  This</a>
+<span class="lineNum">      54 </span>            :             ///        determines which levels can be used for sending
+<span class="lineNum">      55 </span>            :             ///        or receiving, including with the parent.
+<span class="lineNum">      56 </span>            :             virtual int max_level(void) const = 0;
+<a name="57"><span class="lineNum">      57 </span>            :             /// @brief Returns the level of the root of the tree,</a>
+<span class="lineNum">      58 </span>            :             ///        which is equal to the number of levels in the
+<span class="lineNum">      59 </span>            :             ///        tree.
+<span class="lineNum">      60 </span>            :             virtual int root_level(void) const = 0;
+<a name="61"><span class="lineNum">      61 </span>            :             /// @brief Returns the rank of the given level.</a>
+<span class="lineNum">      62 </span>            :             virtual int level_rank(int level) const = 0;
+<span class="lineNum">      63 </span>            :             /// @brief Returns the number of children for each parent
+<span class="lineNum">      64 </span>            :             ///        in the given level.
+<a name="65"><span class="lineNum">      65 </span>            :             virtual int level_size(int level) const = 0;</a>
+<span class="lineNum">      66 </span>            :             /// @brief Send samples up to the parent within a level.
+<span class="lineNum">      67 </span>            :             virtual void send_up(int level, const std::vector&lt;double&gt; &amp;sample) = 0;
+<span class="lineNum">      68 </span>            :             /// @brief Send policies down to children within a level.
+<a name="69"><span class="lineNum">      69 </span>            :             virtual void send_down(int level, const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy) = 0;</a>
+<span class="lineNum">      70 </span>            :             /// @brief Receive samples from children within a level.
+<span class="lineNum">      71 </span>            :             virtual bool receive_up(int level, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample) = 0;
+<span class="lineNum">      72 </span>            :             /// @brief Receive policies from the parent within a level.
+<a name="73"><span class="lineNum">      73 </span>            :             virtual bool receive_down(int level, std::vector&lt;double&gt; &amp;policy) = 0;</a>
+<span class="lineNum">      74 </span>            :             /// @brief Returns the total number of bytes sent from the
+<span class="lineNum">      75 </span>            :             ///        entire tree.
+<span class="lineNum">      76 </span>            :             virtual size_t overhead_send(void) const = 0;
+<a name="77"><span class="lineNum">      77 </span>            :             /// @brief Returns the number of children at each level.</a>
+<span class="lineNum">      78 </span>            :             static std::vector&lt;int&gt; fan_out(const std::shared_ptr&lt;Comm&gt; &amp;comm);
+<span class="lineNum">      79 </span>            :     };
+<span class="lineNum">      80 </span>            : 
+<a name="81"><span class="lineNum">      81 </span>            :     class TreeCommLevel;</a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            :     class TreeCommImp : public TreeComm
+<span class="lineNum">      84 </span>            :     {
+<a name="85"><span class="lineNum">      85 </span>            :         public:</a>
+<span class="lineNum">      86 </span>            :             TreeCommImp(std::shared_ptr&lt;Comm&gt; comm,
+<span class="lineNum">      87 </span>            :                         int num_send_down,
+<span class="lineNum">      88 </span>            :                         int num_send_up);
+<a name="89"><span class="lineNum">      89 </span>            :             TreeCommImp(std::shared_ptr&lt;Comm&gt; comm,</a>
+<span class="lineNum">      90 </span>            :                         const std::vector&lt;int&gt; &amp;fan_out,
+<span class="lineNum">      91 </span>            :                         int num_level_ctl,
+<span class="lineNum">      92 </span>            :                         int num_send_down,
+<a name="93"><span class="lineNum">      93 </span>            :                         int num_send_up,</a>
+<span class="lineNum">      94 </span>            :                         std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; mock_level);
+<span class="lineNum">      95 </span>            :             virtual ~TreeCommImp();
+<span class="lineNum">      96 </span>            :             int num_level_controlled(void) const override;
+<a name="97"><span class="lineNum">      97 </span>            :             int max_level(void) const override;</a>
+<span class="lineNum">      98 </span>            :             int root_level(void) const override;
+<span class="lineNum">      99 </span>            :             int level_rank(int level) const override;
+<span class="lineNum">     100 </span>            :             int level_size(int level) const override;
+<a name="101"><span class="lineNum">     101 </span>            :             void send_down(int level, const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy) override;</a>
+<span class="lineNum">     102 </span>            :             void send_up(int level, const std::vector&lt;double&gt; &amp;sample) override;
+<span class="lineNum">     103 </span>            :             bool receive_down(int level, std::vector&lt;double&gt; &amp;policy) override;
+<span class="lineNum">     104 </span>            :             bool receive_up(int level, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample) override;
+<a name="105"><span class="lineNum">     105 </span>            :             size_t overhead_send(void) const override;</a>
+<span class="lineNum">     106 </span>            :         private:
+<span class="lineNum">     107 </span>            :             int num_level_controlled(std::vector&lt;int&gt; coords);
+<span class="lineNum">     108 </span>            :             std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; init_level(
+<a name="109"><span class="lineNum">     109 </span>            :                 std::shared_ptr&lt;Comm&gt; comm_cart, int root_level);</a>
+<span class="lineNum">     110 </span>            :             std::shared_ptr&lt;Comm&gt; m_comm;
+<span class="lineNum">     111 </span>            :             /// Tree fan out from root to leaf. Note levels go from
+<span class="lineNum">     112 </span>            :             /// leaf to root
+<a name="113"><span class="lineNum">     113 </span>            :             std::vector&lt;int&gt; m_fan_out;</a>
+<span class="lineNum">     114 </span>            :             int m_root_level;
+<span class="lineNum">     115 </span>            :             /// Number of levels the rank controls
+<span class="lineNum">     116 </span>            :             int m_num_level_ctl;
+<a name="117"><span class="lineNum">     117 </span>            :             /// Number of levels this rank participates in, including its parent</a>
+<span class="lineNum">     118 </span>            :             int m_max_level;
+<span class="lineNum">     119 </span>            :             /// @brief Number of nodes in the job.
+<span class="lineNum">     120 </span>            :             int m_num_node;
+<a name="121"><span class="lineNum">     121 </span>            :             int m_num_send_down;</a>
+<span class="lineNum">     122 </span>            :             int m_num_send_up;
+<span class="lineNum">     123 </span>            :             std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; m_level_ctl;
+<span class="lineNum">     124 </span>            :     };
+<a name="125"><span class="lineNum">     125 </span>            : }</a>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span>            : #endif
 </pre>
       </td>
     </tr>
@@ -202,7 +203,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

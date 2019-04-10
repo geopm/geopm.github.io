@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v0.6.0-142-gb6330da - src/MSR.cpp</title>
+  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/MSR.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - MSR.cpp<span style="font-size: 80%;"> (source / <a href="MSR.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - MSR.cpp<span style="font-size: 80%;"> (source / <a href="MSR.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v0.6.0-142-gb6330da</td>
+            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">192</td>
-            <td class="headerCovTableEntry">206</td>
-            <td class="headerCovTableEntryHi">93.2 %</td>
+            <td class="headerCovTableEntry">156</td>
+            <td class="headerCovTableEntry">173</td>
+            <td class="headerCovTableEntryHi">90.2 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-12-21</td>
+            <td class="headerValue">2019-04-09 15:28:17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">42</td>
-            <td class="headerCovTableEntry">44</td>
-            <td class="headerCovTableEntryHi">95.5 %</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntryHi">90.6 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -69,7 +69,7 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : /*</a>
-<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, Intel Corporation
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
 <span class="lineNum">       3 </span>            :  *
 <span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
 <a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
@@ -100,490 +100,390 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;sys/ioctl.h&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;sys/types.h&gt;
-<span class="lineNum">      35 </span>            : #include &lt;sys/stat.h&gt;
-<span class="lineNum">      36 </span>            : #include &lt;unistd.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;fcntl.h&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;string.h&gt;
-<span class="lineNum">      39 </span>            : #include &lt;cfloat&gt;
-<span class="lineNum">      40 </span>            : #include &lt;cmath&gt;
-<a name="41"><span class="lineNum">      41 </span>            : #include &lt;sstream&gt;</a>
-<span class="lineNum">      42 </span>            : #include &lt;numeric&gt;
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;MSRImp.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;sys/ioctl.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;sys/types.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;sys/stat.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;unistd.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;fcntl.h&gt;
+<span class="lineNum">      40 </span>            : #include &lt;string.h&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;cfloat&gt;</a>
+<span class="lineNum">      42 </span>            : #include &lt;cmath&gt;
 <span class="lineNum">      43 </span>            : 
-<span class="lineNum">      44 </span>            : #include &quot;MSR.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;MSRIO.hpp&quot;</a>
-<span class="lineNum">      46 </span>            : #include &quot;PlatformTopo.hpp&quot;
-<span class="lineNum">      47 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      48 </span>            : #include &quot;geopm_sched.h&quot;
-<a name="49"><span class="lineNum">      49 </span>            : #include &quot;geopm_hash.h&quot;</a>
-<span class="lineNum">      50 </span>            : #include &quot;config.h&quot;
-<span class="lineNum">      51 </span>            : 
-<span class="lineNum">      52 </span>            : #define  GEOPM_IOC_MSR_BATCH _IOWR('c', 0xA2, struct MSRIO::m_msr_batch_array)
-<a name="53"><span class="lineNum">      53 </span>            : </a>
-<span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span>            : namespace geopm
-<span class="lineNum">      56 </span>            : {
-<a name="57"><span class="lineNum">      57 </span>            :     /// @brief Class for translating between a double precision value</a>
-<span class="lineNum">      58 </span>            :     /// and the encoded 64 bit MSR value.
-<span class="lineNum">      59 </span>            :     class MSREncode
-<span class="lineNum">      60 </span>            :     {
-<a name="61"><span class="lineNum">      61 </span>            :         public:</a>
-<a name="62"><span class="lineNum">      62 </span>            :             MSREncode(const struct IMSR::m_encode_s &amp;msre);</a>
-<span class="lineNum">      63 </span>            :             MSREncode(int begin_bit, int end_bit, int function, double scalar);
-<span class="lineNum">      64 </span><span class="lineCov">       8302 :             virtual ~MSREncode() = default;</span>
-<a name="65"><span class="lineNum">      65 </span>            :             double decode(uint64_t field, uint64_t &amp;last_field, uint64_t &amp;num_overflow);</a>
-<span class="lineNum">      66 </span>            :             uint64_t encode(double value);
-<span class="lineNum">      67 </span>            :             uint64_t mask(void);
-<span class="lineNum">      68 </span>            :             int decode_function(void);
-<a name="69"><span class="lineNum">      69 </span>            :         private:</a>
-<span class="lineNum">      70 </span>            :             const int m_function;
-<span class="lineNum">      71 </span>            :             int m_shift;
-<span class="lineNum">      72 </span>            :             int m_num_bit;
-<a name="73"><span class="lineNum">      73 </span>            :             uint64_t m_mask;</a>
-<span class="lineNum">      74 </span>            :             uint64_t m_subfield_max;
-<span class="lineNum">      75 </span>            :             double m_scalar;
-<span class="lineNum">      76 </span>            :             double m_inverse;
-<a name="77"><span class="lineNum">      77 </span>            :     };</a>
-<a name="78"><span class="lineNum">      78 </span>            : </a>
-<span class="lineNum">      79 </span>            : 
-<span class="lineNum">      80 </span><span class="lineCov">       4151 :     MSREncode::MSREncode(const struct IMSR::m_encode_s &amp;msre)</span>
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">       4151 :         : MSREncode(msre.begin_bit, msre.end_bit, msre.function, msre.scalar)</span></a>
-<span class="lineNum">      82 </span>            :     {
-<span class="lineNum">      83 </span>            : 
-<a name="84"><span class="lineNum">      84 </span><span class="lineCov">       4151 :     }</span></a>
-<a name="85"><span class="lineNum">      85 </span>            : </a>
-<span class="lineNum">      86 </span><span class="lineCov">       4151 :     MSREncode::MSREncode(int begin_bit, int end_bit, int function, double scalar)</span>
-<span class="lineNum">      87 </span>            :         : m_function(function)
-<span class="lineNum">      88 </span>            :         , m_shift(begin_bit)
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">       4151 :         , m_num_bit(end_bit - begin_bit)</span></a>
-<span class="lineNum">      90 </span><span class="lineCov">       4151 :         , m_mask(((1ULL &lt;&lt; (end_bit - begin_bit)) - 1) &lt;&lt; begin_bit)</span>
-<span class="lineNum">      91 </span><span class="lineCov">       4151 :         , m_subfield_max((1ULL &lt;&lt; m_num_bit) - 1)</span>
-<span class="lineNum">      92 </span>            :         , m_scalar(scalar)
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">      16604 :         , m_inverse(1.0 / scalar)</span></a>
-<span class="lineNum">      94 </span>            :     {
-<span class="lineNum">      95 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">      96 </span><span class="lineCov">       4151 :         if (m_num_bit &gt;= 64) {</span>
-<a name="97"><span class="lineNum">      97 </span>            :             throw Exception(&quot;MSREncode: 64 bit fields are not supported.&quot;,</a>
-<span class="lineNum">      98 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">      99 </span>            :         }
-<span class="lineNum">     100 </span>            : #endif
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       4151 :     }</span></a>
-<span class="lineNum">     102 </span>            : 
-<span class="lineNum">     103 </span><span class="lineCov">  143389527 :     double MSREncode::decode(uint64_t field, uint64_t &amp;last_field, uint64_t &amp;num_overflow)</span>
-<span class="lineNum">     104 </span>            :     {
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">  143389527 :         double result = NAN;</span></a>
-<span class="lineNum">     106 </span><span class="lineCov">  143389527 :         uint64_t subfield = (field &amp; m_mask) &gt;&gt; m_shift;</span>
-<span class="lineNum">     107 </span><span class="lineCov">  143389527 :         uint64_t subfield_last = (last_field &amp; m_mask) &gt;&gt; m_shift;</span>
-<span class="lineNum">     108 </span>            :         uint64_t float_y, float_z;
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">  143389527 :         switch (m_function) {</span></a>
-<span class="lineNum">     110 </span>            :             case IMSR::M_FUNCTION_LOG_HALF:
-<span class="lineNum">     111 </span>            :                 // F = S * 2.0 ^ -X
-<span class="lineNum">     112 </span><span class="lineCov">          2 :                 result = 1.0 / (1ULL &lt;&lt; subfield);</span>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          2 :                 break;</span></a>
-<span class="lineNum">     114 </span>            :             case IMSR::M_FUNCTION_7_BIT_FLOAT:
-<span class="lineNum">     115 </span>            :                 // F = S * 2 ^ Y * (1.0 + Z / 4.0)
-<span class="lineNum">     116 </span>            :                 // Y in bits [0:5) and Z in bits [5:7)
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">          2 :                 float_y = subfield &amp; 0x1F;</span></a>
-<span class="lineNum">     118 </span><span class="lineCov">          2 :                 float_z = subfield &gt;&gt; 5;</span>
-<span class="lineNum">     119 </span><span class="lineCov">          2 :                 result = (1ULL &lt;&lt; float_y) * (1.0 + float_z / 4.0);</span>
-<span class="lineNum">     120 </span><span class="lineCov">          2 :                 break;</span>
-<a name="121"><span class="lineNum">     121 </span>            :             case IMSR::M_FUNCTION_OVERFLOW:</a>
-<span class="lineNum">     122 </span><span class="lineCov">  143250896 :                 if (subfield_last &gt; subfield) {</span>
-<span class="lineNum">     123 </span><span class="lineCov">        150 :                     ++num_overflow;</span>
-<span class="lineNum">     124 </span>            :                 }
-<a name="125"><span class="lineNum">     125 </span><span class="lineCov">  143250896 :                 result = subfield + ((m_subfield_max + 1.0) * num_overflow);</span></a>
-<span class="lineNum">     126 </span><span class="lineCov">  143250896 :                 break;</span>
-<span class="lineNum">     127 </span>            :             case IMSR::M_FUNCTION_SCALE:
-<span class="lineNum">     128 </span><span class="lineCov">     138627 :                 result = subfield;</span>
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">     138627 :                 break;</span></a>
-<span class="lineNum">     130 </span>            :             default:
-<span class="lineNum">     131 </span><span class="lineNoCov">          0 :                 break;</span>
-<span class="lineNum">     132 </span>            :         }
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">  143389527 :         result *= m_scalar;</span></a>
-<span class="lineNum">     134 </span><span class="lineCov">  143389527 :         last_field = field;</span>
-<span class="lineNum">     135 </span><span class="lineCov">  143389527 :         return result;</span>
-<a name="136"><span class="lineNum">     136 </span>            :     }</a>
-<a name="137"><span class="lineNum">     137 </span>            : </a>
-<span class="lineNum">     138 </span><span class="lineCov">      58219 :     uint64_t MSREncode::encode(double value)</span>
-<span class="lineNum">     139 </span>            :     {
-<span class="lineNum">     140 </span><span class="lineCov">      58219 :         uint64_t result = 0;</span>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">      58219 :         double value_inferred = 0.0;</span></a>
-<span class="lineNum">     142 </span>            :         uint64_t float_y, float_z;
-<span class="lineNum">     143 </span><span class="lineCov">      58219 :         switch (m_function) {</span>
-<span class="lineNum">     144 </span>            :             case IMSR::M_FUNCTION_SCALE:
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">      54882 :                 result = (uint64_t)(m_inverse * value);</span></a>
-<span class="lineNum">     146 </span><span class="lineCov">      54882 :                 break;</span>
-<span class="lineNum">     147 </span>            :             case IMSR::M_FUNCTION_LOG_HALF:
-<span class="lineNum">     148 </span>            :                 // F = S * 2.0 ^ -X =&gt;
-<a name="149"><span class="lineNum">     149 </span>            :                 // X = log2(S / F)</a>
-<span class="lineNum">     150 </span><span class="lineCov">          2 :                 result = (uint64_t)std::log2(m_scalar / value);</span>
-<span class="lineNum">     151 </span><span class="lineCov">          2 :                 break;</span>
-<span class="lineNum">     152 </span>            :             case IMSR::M_FUNCTION_7_BIT_FLOAT:
-<a name="153"><span class="lineNum">     153 </span>            :                 // F = S * 2 ^ Y * (1.0 + Z / 4.0)</a>
-<span class="lineNum">     154 </span>            :                 // Y in bits [0:5) and Z in bits [5:7)
-<span class="lineNum">     155 </span><span class="lineCov">       3335 :                 if (value &gt; 0) {</span>
-<span class="lineNum">     156 </span><span class="lineCov">       3334 :                     value *= m_inverse;</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">       3334 :                     float_y = (uint64_t)std::log2(value);</span></a>
-<span class="lineNum">     158 </span><span class="lineCov">       3334 :                     float_z = (uint64_t)(4.0 * (value / (1 &lt;&lt; float_y) - 1.0));</span>
-<span class="lineNum">     159 </span><span class="lineCov">       3334 :                     if ((float_y &amp;&amp; (float_y &gt;&gt; 5) != 0) ||</span>
-<span class="lineNum">     160 </span><span class="lineCov">       3328 :                         (float_z &amp;&amp; (float_z &gt;&gt; 2) != 0)) {</span>
-<a name="161"><span class="lineNum">     161 </span>            :                         throw Exception(&quot;MSR::encode(): integer overflow in M_FUNCTION_7_BIT_FLOAT datatype encoding&quot;,</a>
-<span class="lineNum">     162 </span><span class="lineCov">          1 :                                         EOVERFLOW, __FILE__, __LINE__);</span>
-<span class="lineNum">     163 </span>            :                     }
-<span class="lineNum">     164 </span><span class="lineCov">       3333 :                     value_inferred = (1 &lt;&lt; float_y) * (1.0 + (float_z / 4.0));</span>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">       3333 :                     if ((value - value_inferred) &gt; (value  * 0.25)) {</span></a>
-<span class="lineNum">     166 </span>            :                         throw Exception(&quot;MSR::encode(): inferred value from encoded value is inaccurate&quot;,
-<span class="lineNum">     167 </span><span class="lineNoCov">          0 :                                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     168 </span>            :                     }
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">       3333 :                     result = float_y | (float_z &lt;&lt; 5);</span></a>
-<span class="lineNum">     170 </span>            :                 }
-<span class="lineNum">     171 </span>            :                 else {
-<span class="lineNum">     172 </span>            :                     throw Exception(&quot;MSR::encode(): input value &lt;= 0 for M_FUNCTION_7_BIT_FLOAT&quot;,
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          1 :                                     GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     174 </span>            :                 }
-<span class="lineNum">     175 </span><span class="lineCov">       3333 :                 break;</span>
-<span class="lineNum">     176 </span>            :             case IMSR::M_FUNCTION_OVERFLOW:
-<a name="177"><span class="lineNum">     177 </span><span class="lineNoCov">          0 :                 result = (uint64_t)value;</span></a>
-<span class="lineNum">     178 </span><span class="lineNoCov">          0 :                 break;</span>
-<span class="lineNum">     179 </span>            :             default:
-<span class="lineNum">     180 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;MSR::encode(): unimplemented scale function: &quot; + std::to_string(m_function),</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_NOT_IMPLEMENTED,  __FILE__, __LINE__);</span></a>
-<span class="lineNum">     182 </span>            :                 break;
-<span class="lineNum">     183 </span>            :         }
-<span class="lineNum">     184 </span><span class="lineCov">      58217 :         result = (result &lt;&lt; m_shift) &amp; m_mask;</span>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">      58217 :         return result;</span></a>
-<a name="186"><span class="lineNum">     186 </span>            :     }</a>
-<span class="lineNum">     187 </span>            : 
-<span class="lineNum">     188 </span><span class="lineCov">     214726 :     uint64_t MSREncode::mask(void)</span>
-<a name="189"><span class="lineNum">     189 </span>            :     {</a>
-<span class="lineNum">     190 </span><span class="lineCov">     214726 :         return m_mask;</span>
-<a name="191"><span class="lineNum">     191 </span>            :     }</a>
-<span class="lineNum">     192 </span>            : 
-<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 :     int MSREncode::decode_function(void)</span></a>
-<span class="lineNum">     194 </span>            :     {
-<span class="lineNum">     195 </span><span class="lineNoCov">          0 :         return m_function;</span>
-<a name="196"><span class="lineNum">     196 </span>            :     }</a>
-<a name="197"><span class="lineNum">     197 </span>            : </a>
-<span class="lineNum">     198 </span><span class="lineCov">        827 :     MSR::MSR(const std::string &amp;msr_name,</span>
-<span class="lineNum">     199 </span>            :              uint64_t offset,
-<span class="lineNum">     200 </span>            :              const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;signal,
-<a name="201"><span class="lineNum">     201 </span>            :              const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;control)</a>
-<span class="lineNum">     202 </span>            :         : m_name(msr_name)
-<span class="lineNum">     203 </span>            :         , m_offset(offset)
-<span class="lineNum">     204 </span>            :         , m_signal_encode(signal.size(), NULL)
-<a name="205"><span class="lineNum">     205 </span>            :         , m_control_encode(control.size())</a>
-<span class="lineNum">     206 </span>            :         , m_domain_type(IPlatformTopo::M_DOMAIN_INVALID)
-<span class="lineNum">     207 </span>            :         , m_prog_msr(0)
-<span class="lineNum">     208 </span>            :         , m_prog_field_name(0)
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">        827 :         , m_prog_value(0)</span></a>
-<span class="lineNum">     210 </span>            : 
-<span class="lineNum">     211 </span>            :     {
-<span class="lineNum">     212 </span><span class="lineCov">        827 :         init(signal, control);</span>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">        827 :     }</span></a>
-<span class="lineNum">     214 </span>            : 
-<span class="lineNum">     215 </span><span class="lineCov">       1666 :     MSR::~MSR()</span>
-<span class="lineNum">     216 </span>            :     {
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       2573 :         for (auto it = m_control_encode.rbegin(); it != m_control_encode.rend(); ++it) {</span></a>
-<span class="lineNum">     218 </span><span class="lineCov">       1746 :             delete (*it);</span>
-<span class="lineNum">     219 </span>            :         }
-<span class="lineNum">     220 </span><span class="lineCov">       3232 :         for (auto it = m_signal_encode.rbegin(); it != m_signal_encode.rend(); ++it) {</span>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">       2405 :             delete (*it);</span></a>
-<span class="lineNum">     222 </span>            :         }
-<a name="223"><span class="lineNum">     223 </span><span class="lineCov">        839 :     }</span></a>
-<span class="lineNum">     224 </span>            : 
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">        827 :     void MSR::init(const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;signal,</span></a>
-<span class="lineNum">     226 </span>            :                    const std::vector&lt;std::pair&lt;std::string, struct IMSR::m_encode_s&gt; &gt; &amp;control)
-<span class="lineNum">     227 </span>            :     {
-<span class="lineNum">     228 </span>            : 
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">        827 :         int idx = 0;</span></a>
-<span class="lineNum">     230 </span><span class="lineCov">       3232 :         for (auto it = signal.begin(); it != signal.end(); ++it, ++idx) {</span>
-<span class="lineNum">     231 </span><span class="lineCov">       2405 :             m_signal_map.insert(std::pair&lt;std::string, int&gt;(it-&gt;first, idx));</span>
-<span class="lineNum">     232 </span><span class="lineCov">       2405 :             m_signal_encode[idx] = new MSREncode(it-&gt;second);</span>
-<a name="233"><span class="lineNum">     233 </span>            :         }</a>
-<span class="lineNum">     234 </span><span class="lineCov">        827 :         idx = 0;</span>
-<span class="lineNum">     235 </span><span class="lineCov">       2573 :         for (auto it = control.begin(); it != control.end(); ++it, ++idx) {</span>
-<span class="lineNum">     236 </span><span class="lineCov">       1746 :             m_control_map.insert(std::pair&lt;std::string, int&gt;(it-&gt;first, idx));</span>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">       1746 :             m_control_encode[idx] = new MSREncode(it-&gt;second);</span></a>
-<span class="lineNum">     238 </span>            :         }
-<span class="lineNum">     239 </span><span class="lineCov">        827 :         if (signal.size() != 0) {</span>
-<span class="lineNum">     240 </span><span class="lineCov">        666 :             m_domain_type = signal[0].second.domain;</span>
-<a name="241"><span class="lineNum">     241 </span>            :         }</a>
-<span class="lineNum">     242 </span><span class="lineCov">        161 :         else if (control.size() != 0) {</span>
-<span class="lineNum">     243 </span><span class="lineCov">        161 :             m_domain_type = control[0].second.domain;</span>
-<span class="lineNum">     244 </span>            :         }
-<a name="245"><span class="lineNum">     245 </span>            :         else {</a>
-<span class="lineNum">     246 </span>            :             throw Exception(&quot;MSR::init(): both signal and control vectors are empty&quot;,
-<span class="lineNum">     247 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     248 </span>            :         }
-<a name="249"><span class="lineNum">     249 </span><span class="lineCov">        827 :     }</span></a>
-<span class="lineNum">     250 </span>            : 
-<span class="lineNum">     251 </span><span class="lineCov">     754369 :     std::string MSR::name(void) const</span>
-<span class="lineNum">     252 </span>            :     {
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">     754369 :         return m_name;</span></a>
-<a name="254"><span class="lineNum">     254 </span>            :     }</a>
-<span class="lineNum">     255 </span>            : 
-<span class="lineNum">     256 </span><span class="lineCov">     275652 :     uint64_t MSR::offset(void) const</span>
-<a name="257"><span class="lineNum">     257 </span>            :     {</a>
-<span class="lineNum">     258 </span><span class="lineCov">     275652 :         return m_offset;</span>
-<a name="259"><span class="lineNum">     259 </span>            :     }</a>
-<span class="lineNum">     260 </span>            : 
-<a name="261"><span class="lineNum">     261 </span><span class="lineCov">  143787383 :     int MSR::num_signal(void) const</span></a>
-<span class="lineNum">     262 </span>            :     {
-<span class="lineNum">     263 </span><span class="lineCov">  143787383 :         return m_signal_encode.size();</span>
-<a name="264"><span class="lineNum">     264 </span>            :     }</a>
-<a name="265"><span class="lineNum">     265 </span>            : </a>
-<span class="lineNum">     266 </span><span class="lineCov">     309325 :     int MSR::num_control(void) const</span>
-<span class="lineNum">     267 </span>            :     {
-<span class="lineNum">     268 </span><span class="lineCov">     309325 :         return m_control_encode.size();</span>
-<a name="269"><span class="lineNum">     269 </span>            :     }</a>
-<span class="lineNum">     270 </span>            : 
-<span class="lineNum">     271 </span><span class="lineCov">     394362 :     std::string MSR::signal_name(int signal_idx) const</span>
-<span class="lineNum">     272 </span>            :     {
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">     394362 :         if (signal_idx &lt; 0 || signal_idx &gt;= num_signal()) {</span></a>
-<span class="lineNum">     274 </span>            :             throw Exception(&quot;MSR::signal_name(): signal_idx out of range&quot;,
-<span class="lineNum">     275 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     276 </span>            :         }
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">     394361 :         std::string result = &quot;&quot;;</span></a>
-<span class="lineNum">     278 </span><span class="lineCov">    1688121 :         for (auto it = m_signal_map.begin(); it != m_signal_map.end(); ++it) {</span>
-<span class="lineNum">     279 </span><span class="lineCov">    1688121 :             if (it-&gt;second == signal_idx) {</span>
-<span class="lineNum">     280 </span><span class="lineCov">     394361 :                 result = it-&gt;first;</span>
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">     394361 :                 break;</span></a>
-<span class="lineNum">     282 </span>            :             }
-<span class="lineNum">     283 </span>            :         }
-<span class="lineNum">     284 </span><span class="lineCov">     394361 :         return result;</span>
-<a name="285"><span class="lineNum">     285 </span>            :     }</a>
-<span class="lineNum">     286 </span>            : 
-<span class="lineNum">     287 </span><span class="lineCov">     248307 :     std::string MSR::control_name(int control_idx) const</span>
-<span class="lineNum">     288 </span>            :     {
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">     248307 :         if (control_idx &lt; 0 || control_idx &gt;= num_control()) {</span></a>
-<span class="lineNum">     290 </span>            :             throw Exception(&quot;MSR::control_name(): control_idx out of range&quot;,
-<span class="lineNum">     291 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     292 </span>            :         }
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">     248306 :         std::string result = &quot;&quot;;</span></a>
-<span class="lineNum">     294 </span><span class="lineCov">     899801 :         for (auto it = m_control_map.begin(); it != m_control_map.end(); ++it) {</span>
-<span class="lineNum">     295 </span><span class="lineCov">     899801 :             if (it-&gt;second == control_idx) {</span>
-<span class="lineNum">     296 </span><span class="lineCov">     248306 :                 result = it-&gt;first;</span>
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">     248306 :                 break;</span></a>
-<span class="lineNum">     298 </span>            :             }
-<span class="lineNum">     299 </span>            :         }
-<span class="lineNum">     300 </span><span class="lineCov">     248306 :         return result;</span>
-<a name="301"><span class="lineNum">     301 </span>            :     }</a>
-<span class="lineNum">     302 </span>            : 
-<span class="lineNum">     303 </span><span class="lineCov">       3118 :     int MSR::signal_index(const std::string &amp;name) const</span>
-<span class="lineNum">     304 </span>            :     {
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">       3118 :         int result = -1;</span></a>
-<span class="lineNum">     306 </span><span class="lineCov">       3118 :         auto it = m_signal_map.find(name);</span>
-<span class="lineNum">     307 </span><span class="lineCov">       3118 :         if (it != m_signal_map.end()) {</span>
-<span class="lineNum">     308 </span><span class="lineCov">       3117 :             result = it-&gt;second;</span>
-<a name="309"><span class="lineNum">     309 </span>            :         }</a>
-<span class="lineNum">     310 </span><span class="lineCov">       3118 :         return result;</span>
-<a name="311"><span class="lineNum">     311 </span>            :     }</a>
-<span class="lineNum">     312 </span>            : 
-<a name="313"><span class="lineNum">     313 </span><span class="lineCov">       2013 :     int MSR::control_index(const std::string &amp;name) const</span></a>
-<span class="lineNum">     314 </span>            :     {
-<span class="lineNum">     315 </span><span class="lineCov">       2013 :         int result = -1;</span>
-<span class="lineNum">     316 </span><span class="lineCov">       2013 :         auto it = m_control_map.find(name);</span>
-<a name="317"><span class="lineNum">     317 </span><span class="lineCov">       2013 :         if (it != m_control_map.end()) {</span></a>
-<span class="lineNum">     318 </span><span class="lineCov">       2012 :             result = it-&gt;second;</span>
-<span class="lineNum">     319 </span>            :         }
-<span class="lineNum">     320 </span><span class="lineCov">       2013 :         return result;</span>
-<a name="321"><span class="lineNum">     321 </span>            :     }</a>
-<span class="lineNum">     322 </span>            : 
-<span class="lineNum">     323 </span><span class="lineCov">  143389527 :     double MSR::signal(int signal_idx,</span>
-<span class="lineNum">     324 </span>            :                        uint64_t field,
-<a name="325"><span class="lineNum">     325 </span>            :                        uint64_t &amp;last_field,</a>
-<span class="lineNum">     326 </span>            :                        uint64_t &amp;num_overflow) const
-<span class="lineNum">     327 </span>            :     {
-<span class="lineNum">     328 </span><span class="lineCov">  143389527 :         if (signal_idx &lt; 0 || signal_idx &gt;= num_signal()) {</span>
-<a name="329"><span class="lineNum">     329 </span>            :             throw Exception(&quot;MSR::signal(): signal_idx out of range&quot;,</a>
-<span class="lineNum">     330 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     331 </span>            :         }
-<span class="lineNum">     332 </span><span class="lineCov">  143389527 :         return m_signal_encode[signal_idx]-&gt;decode(field, last_field, num_overflow);</span>
-<a name="333"><span class="lineNum">     333 </span>            :     }</a>
-<span class="lineNum">     334 </span>            : 
-<span class="lineNum">     335 </span><span class="lineCov">      58219 :     void MSR::control(int control_idx,</span>
-<span class="lineNum">     336 </span>            :                       double value,
-<a name="337"><span class="lineNum">     337 </span>            :                       uint64_t &amp;field,</a>
-<span class="lineNum">     338 </span>            :                       uint64_t &amp;mask) const
-<span class="lineNum">     339 </span>            :     {
-<span class="lineNum">     340 </span><span class="lineCov">      58219 :         if (control_idx &lt; 0 || control_idx &gt;= num_control()) {</span>
-<a name="341"><span class="lineNum">     341 </span>            :             throw Exception(&quot;MSR::control(): control_idx out of range&quot;,</a>
-<span class="lineNum">     342 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     343 </span>            :         }
-<span class="lineNum">     344 </span><span class="lineCov">      58219 :         field = m_control_encode[control_idx]-&gt;encode(value);</span>
-<a name="345"><span class="lineNum">     345 </span><span class="lineCov">      58217 :         mask = m_control_encode[control_idx]-&gt;mask();</span></a>
-<a name="346"><span class="lineNum">     346 </span><span class="lineCov">      58217 :     }</span></a>
-<span class="lineNum">     347 </span>            : 
-<span class="lineNum">     348 </span><span class="lineCov">     156509 :     uint64_t MSR::mask(int control_idx) const</span>
-<a name="349"><span class="lineNum">     349 </span>            :     {</a>
-<span class="lineNum">     350 </span><span class="lineCov">     156509 :         return m_control_encode[control_idx]-&gt;mask();</span>
-<a name="351"><span class="lineNum">     351 </span>            :     }</a>
-<span class="lineNum">     352 </span>            : 
-<a name="353"><span class="lineNum">     353 </span><span class="lineCov">     748115 :     int MSR::domain_type(void) const</span></a>
-<span class="lineNum">     354 </span>            :     {
-<span class="lineNum">     355 </span><span class="lineCov">     748115 :         return m_domain_type;</span>
-<a name="356"><span class="lineNum">     356 </span>            :     }</a>
-<a name="357"><span class="lineNum">     357 </span>            : </a>
-<span class="lineNum">     358 </span><span class="lineNoCov">          0 :     int MSR::decode_function(int signal_idx) const</span>
-<span class="lineNum">     359 </span>            :     {
-<span class="lineNum">     360 </span><span class="lineNoCov">          0 :         return m_signal_encode[signal_idx]-&gt;decode_function();</span>
-<a name="361"><span class="lineNum">     361 </span>            :     }</a>
-<span class="lineNum">     362 </span>            : 
-<span class="lineNum">     363 </span><span class="lineCov">     391777 :     MSRSignal::MSRSignal(const IMSR &amp;msr_obj,</span>
-<span class="lineNum">     364 </span>            :                          int domain_type,
-<a name="365"><span class="lineNum">     365 </span>            :                          int cpu_idx,</a>
-<span class="lineNum">     366 </span>            :                          int signal_idx)
-<span class="lineNum">     367 </span><span class="lineCov">     783554 :         : m_name(msr_obj.name() + &quot;:&quot; + msr_obj.signal_name(signal_idx))</span>
-<span class="lineNum">     368 </span>            :         , m_msr_obj(msr_obj)
-<a name="369"><span class="lineNum">     369 </span>            :         , m_domain_type(domain_type)</a>
-<span class="lineNum">     370 </span>            :         , m_cpu_idx(cpu_idx)
-<span class="lineNum">     371 </span>            :         , m_signal_idx(signal_idx)
-<span class="lineNum">     372 </span>            :         , m_field_ptr(nullptr)
-<a name="373"><span class="lineNum">     373 </span>            :         , m_field_last(0)</a>
-<span class="lineNum">     374 </span>            :         , m_num_overflow(0)
-<span class="lineNum">     375 </span>            :         , m_is_field_mapped(false)
-<span class="lineNum">     376 </span><span class="lineCov">    1175331 :         , m_is_raw(false)</span>
-<a name="377"><span class="lineNum">     377 </span>            :     {</a>
-<span class="lineNum">     378 </span>            : 
-<a name="379"><span class="lineNum">     379 </span><span class="lineCov">     391777 :     }</span></a>
-<span class="lineNum">     380 </span>            : 
-<a name="381"><span class="lineNum">     381 </span><span class="lineCov">     109920 :     MSRSignal::MSRSignal(const IMSR &amp;msr_obj,</span></a>
-<span class="lineNum">     382 </span>            :                          int domain_type,
-<span class="lineNum">     383 </span>            :                          int cpu_idx)
-<span class="lineNum">     384 </span><span class="lineCov">     219840 :         : m_name(msr_obj.name() + &quot;#&quot;)</span>
-<a name="385"><span class="lineNum">     385 </span>            :         , m_msr_obj(msr_obj)</a>
-<span class="lineNum">     386 </span>            :         , m_domain_type(domain_type)
-<span class="lineNum">     387 </span>            :         , m_cpu_idx(cpu_idx)
-<span class="lineNum">     388 </span>            :         , m_signal_idx(0)
-<a name="389"><span class="lineNum">     389 </span>            :         , m_field_ptr(nullptr)</a>
-<span class="lineNum">     390 </span>            :         , m_field_last(0)
-<span class="lineNum">     391 </span>            :         , m_num_overflow(0)
-<span class="lineNum">     392 </span>            :         , m_is_field_mapped(false)
-<a name="393"><span class="lineNum">     393 </span><span class="lineCov">     329760 :         , m_is_raw(true)</span></a>
-<span class="lineNum">     394 </span>            :     {
-<span class="lineNum">     395 </span>            : 
-<a name="396"><span class="lineNum">     396 </span><span class="lineCov">     109920 :     }</span></a>
-<a name="397"><span class="lineNum">     397 </span>            : </a>
-<span class="lineNum">     398 </span><span class="lineCov">       1121 :     MSRSignal::MSRSignal(const MSRSignal &amp;other)</span>
-<span class="lineNum">     399 </span>            :         : m_name(other.m_name)
-<span class="lineNum">     400 </span><span class="lineCov">       1121 :         , m_msr_obj(other.m_msr_obj)</span>
-<a name="401"><span class="lineNum">     401 </span><span class="lineCov">       1121 :         , m_domain_type(other.m_domain_type)</span></a>
-<span class="lineNum">     402 </span><span class="lineCov">       1121 :         , m_cpu_idx(other.m_cpu_idx)</span>
-<span class="lineNum">     403 </span><span class="lineCov">       1121 :         , m_signal_idx(other.m_signal_idx)</span>
-<span class="lineNum">     404 </span>            :         , m_field_ptr(nullptr)
-<a name="405"><span class="lineNum">     405 </span><span class="lineCov">       1121 :         , m_field_last(other.m_field_last)</span></a>
-<span class="lineNum">     406 </span><span class="lineCov">       1121 :         , m_num_overflow(other.m_num_overflow)</span>
-<span class="lineNum">     407 </span>            :         , m_is_field_mapped(false)
-<span class="lineNum">     408 </span><span class="lineCov">       7847 :         , m_is_raw(other.m_is_raw)</span>
-<a name="409"><span class="lineNum">     409 </span>            :     {</a>
-<span class="lineNum">     410 </span>            : 
-<a name="411"><span class="lineNum">     411 </span><span class="lineCov">       1121 :     }</span></a>
-<span class="lineNum">     412 </span>            : 
-<a name="413"><span class="lineNum">     413 </span><span class="lineCov">    3437139 :     std::string MSRSignal::name(void) const</span></a>
-<span class="lineNum">     414 </span>            :     {
-<span class="lineNum">     415 </span><span class="lineCov">    3437139 :         return m_name;</span>
-<a name="416"><span class="lineNum">     416 </span>            :     }</a>
-<a name="417"><span class="lineNum">     417 </span>            : </a>
-<span class="lineNum">     418 </span><span class="lineCov">      14738 :     int MSRSignal::domain_type(void) const</span>
-<span class="lineNum">     419 </span>            :     {
-<span class="lineNum">     420 </span><span class="lineCov">      14738 :         return m_domain_type;</span>
-<a name="421"><span class="lineNum">     421 </span>            :     }</a>
-<span class="lineNum">     422 </span>            : 
-<span class="lineNum">     423 </span><span class="lineCov">     848646 :     int MSRSignal::cpu_idx(void) const</span>
-<span class="lineNum">     424 </span>            :     {
-<a name="425"><span class="lineNum">     425 </span><span class="lineCov">     848646 :         return m_cpu_idx;</span></a>
-<a name="426"><span class="lineNum">     426 </span>            :     }</a>
-<span class="lineNum">     427 </span>            : 
-<span class="lineNum">     428 </span><span class="lineCov">  143389518 :     double MSRSignal::sample(void)</span>
-<a name="429"><span class="lineNum">     429 </span>            :     {</a>
-<span class="lineNum">     430 </span><span class="lineCov">  143389518 :         if (!m_is_field_mapped) {</span>
-<span class="lineNum">     431 </span>            :             throw Exception(&quot;MSRSignal::sample(): must call map() method before sample() can be called&quot;,
-<span class="lineNum">     432 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="433"><span class="lineNum">     433 </span>            :         }</a>
-<span class="lineNum">     434 </span><span class="lineCov">  143389517 :         double result = NAN;</span>
-<span class="lineNum">     435 </span><span class="lineCov">  143389517 :         if (!m_is_raw) {</span>
-<span class="lineNum">     436 </span><span class="lineCov">  143389515 :             result = m_msr_obj.signal(m_signal_idx, *m_field_ptr, m_field_last, m_num_overflow);</span>
-<a name="437"><span class="lineNum">     437 </span>            :         }</a>
-<span class="lineNum">     438 </span>            :         else {
-<span class="lineNum">     439 </span><span class="lineCov">          2 :             result = geopm_field_to_signal(*m_field_ptr);</span>
-<span class="lineNum">     440 </span>            :         }
-<a name="441"><span class="lineNum">     441 </span><span class="lineCov">  143389517 :         return result;</span></a>
-<a name="442"><span class="lineNum">     442 </span>            :     }</a>
-<span class="lineNum">     443 </span>            : 
-<span class="lineNum">     444 </span><span class="lineCov">       7822 :     uint64_t MSRSignal::offset(void) const</span>
-<a name="445"><span class="lineNum">     445 </span>            :     {</a>
-<span class="lineNum">     446 </span><span class="lineCov">       7822 :         return m_msr_obj.offset();</span>
-<a name="447"><span class="lineNum">     447 </span>            :     }</a>
-<span class="lineNum">     448 </span>            : 
-<a name="449"><span class="lineNum">     449 </span><span class="lineCov">       7819 :     void MSRSignal::map_field(const uint64_t *field)</span></a>
-<span class="lineNum">     450 </span>            :     {
-<span class="lineNum">     451 </span><span class="lineCov">       7819 :         m_field_ptr = field;</span>
-<span class="lineNum">     452 </span><span class="lineCov">       7819 :         m_is_field_mapped = true;</span>
-<a name="453"><span class="lineNum">     453 </span><span class="lineCov">       7819 :     }</span></a>
-<span class="lineNum">     454 </span>            : 
-<span class="lineNum">     455 </span><span class="lineCov">     246417 :     MSRControl::MSRControl(const IMSR &amp;msr_obj,</span>
-<span class="lineNum">     456 </span>            :                            int domain_type,
-<a name="457"><span class="lineNum">     457 </span>            :                            int cpu_idx,</a>
-<span class="lineNum">     458 </span>            :                            int control_idx)
-<span class="lineNum">     459 </span><span class="lineCov">     492834 :         : m_name(msr_obj.name() + &quot;:&quot; + msr_obj.control_name(control_idx))</span>
-<span class="lineNum">     460 </span>            :         , m_msr_obj(msr_obj)
-<a name="461"><span class="lineNum">     461 </span>            :         , m_domain_type(domain_type)</a>
-<span class="lineNum">     462 </span>            :         , m_cpu_idx(cpu_idx)
-<span class="lineNum">     463 </span>            :         , m_control_idx(control_idx)
-<span class="lineNum">     464 </span>            :         , m_field_ptr(nullptr)
-<a name="465"><span class="lineNum">     465 </span>            :         , m_mask_ptr(nullptr)</a>
-<span class="lineNum">     466 </span><span class="lineCov">     739251 :         , m_is_field_mapped(false)</span>
-<span class="lineNum">     467 </span>            :     {
-<span class="lineNum">     468 </span>            : 
-<a name="469"><span class="lineNum">     469 </span><span class="lineCov">     246417 :     }</span></a>
-<span class="lineNum">     470 </span>            : 
-<span class="lineNum">     471 </span><span class="lineCov">     550881 :     MSRControl::~MSRControl()</span>
-<span class="lineNum">     472 </span>            :     {
-<a name="473"><span class="lineNum">     473 </span>            : </a>
-<a name="474"><span class="lineNum">     474 </span><span class="lineCov">     550881 :     }</span></a>
-<span class="lineNum">     475 </span>            : 
-<span class="lineNum">     476 </span><span class="lineCov">          9 :     std::string MSRControl::name() const</span>
-<a name="477"><span class="lineNum">     477 </span>            :     {</a>
-<span class="lineNum">     478 </span><span class="lineCov">          9 :         return m_name;</span>
-<a name="479"><span class="lineNum">     479 </span>            :     }</a>
-<span class="lineNum">     480 </span>            : 
-<a name="481"><span class="lineNum">     481 </span><span class="lineCov">      51516 :     int MSRControl::domain_type(void) const</span></a>
-<span class="lineNum">     482 </span>            :     {
-<span class="lineNum">     483 </span><span class="lineCov">      51516 :         return m_domain_type;</span>
-<a name="484"><span class="lineNum">     484 </span>            :     }</a>
-<a name="485"><span class="lineNum">     485 </span>            : </a>
-<span class="lineNum">     486 </span><span class="lineCov">     366083 :     int MSRControl::cpu_idx(void) const</span>
-<span class="lineNum">     487 </span>            :     {
-<span class="lineNum">     488 </span><span class="lineCov">     366083 :         return m_cpu_idx;</span>
-<a name="489"><span class="lineNum">     489 </span>            :     }</a>
-<span class="lineNum">     490 </span>            : 
-<span class="lineNum">     491 </span><span class="lineCov">      58168 :     void MSRControl::adjust(double setting)</span>
-<span class="lineNum">     492 </span>            :     {
-<a name="493"><span class="lineNum">     493 </span><span class="lineCov">      58168 :         if (!m_is_field_mapped) {</span></a>
-<span class="lineNum">     494 </span>            :             throw Exception(&quot;MSRControl::adjust(): must call map() method before adjust() can be called&quot;,
-<span class="lineNum">     495 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     496 </span>            :         }
-<a name="497"><span class="lineNum">     497 </span><span class="lineCov">      58167 :         m_msr_obj.control(m_control_idx, setting, *m_field_ptr, *m_mask_ptr);</span></a>
-<a name="498"><span class="lineNum">     498 </span><span class="lineCov">      58167 :     }</span></a>
-<span class="lineNum">     499 </span>            : 
-<span class="lineNum">     500 </span><span class="lineCov">     267806 :     uint64_t MSRControl::offset(void) const</span>
-<a name="501"><span class="lineNum">     501 </span>            :     {</a>
-<span class="lineNum">     502 </span><span class="lineCov">     267806 :         return m_msr_obj.offset();</span>
-<a name="503"><span class="lineNum">     503 </span>            :     }</a>
-<span class="lineNum">     504 </span>            : 
-<a name="505"><span class="lineNum">     505 </span><span class="lineCov">     156509 :     uint64_t MSRControl::mask(void) const</span></a>
-<span class="lineNum">     506 </span>            :     {
-<span class="lineNum">     507 </span><span class="lineCov">     156509 :         return m_msr_obj.mask(m_control_idx);</span>
-<a name="508"><span class="lineNum">     508 </span>            :     }</a>
-<a name="509"><span class="lineNum">     509 </span>            : </a>
-<span class="lineNum">     510 </span><span class="lineCov">      58110 :     void MSRControl::map_field(uint64_t *field, uint64_t *mask)</span>
-<span class="lineNum">     511 </span>            :     {
-<span class="lineNum">     512 </span><span class="lineCov">      58110 :         m_field_ptr = field;</span>
-<a name="513"><span class="lineNum">     513 </span><span class="lineCov">      58110 :         m_mask_ptr = mask;</span></a>
-<span class="lineNum">     514 </span><span class="lineCov">      58110 :         m_is_field_mapped = true;</span>
-<span class="lineNum">     515 </span><span class="lineCov">      58110 :     }</span>
-<span class="lineNum">     516 </span>            : }
+<span class="lineNum">      44 </span>            : #include &lt;sstream&gt;
+<a name="45"><span class="lineNum">      45 </span>            : #include &lt;numeric&gt;</a>
+<span class="lineNum">      46 </span>            : #include &lt;map&gt;
+<span class="lineNum">      47 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      48 </span>            : 
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;MSRIO.hpp&quot;</a>
+<span class="lineNum">      50 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<span class="lineNum">      51 </span>            : #include &quot;Helper.hpp&quot;
+<span class="lineNum">      52 </span>            : #include &quot;Exception.hpp&quot;
+<a name="53"><span class="lineNum">      53 </span>            : #include &quot;geopm_sched.h&quot;</a>
+<span class="lineNum">      54 </span>            : #include &quot;geopm_hash.h&quot;
+<span class="lineNum">      55 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      56 </span>            : 
+<a name="57"><span class="lineNum">      57 </span>            : #define  GEOPM_IOC_MSR_BATCH _IOWR('c', 0xA2, struct MSRIO::m_msr_batch_array)</a>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            : 
+<a name="60"><span class="lineNum">      60 </span>            : namespace geopm</a>
+<a name="61"><span class="lineNum">      61 </span>            : {</a>
+<span class="lineNum">      62 </span><span class="lineCov">       7835 :     const std::map&lt;std::string, MSR::m_function_e&gt; MSR::M_FUNCTION_STRING = {</span>
+<span class="lineNum">      63 </span>            :         {&quot;scale&quot;, M_FUNCTION_SCALE},
+<span class="lineNum">      64 </span>            :         {&quot;log_half&quot;, M_FUNCTION_LOG_HALF},
+<a name="65"><span class="lineNum">      65 </span>            :         {&quot;7_bit_float&quot;, M_FUNCTION_7_BIT_FLOAT},</a>
+<span class="lineNum">      66 </span>            :         {&quot;overflow&quot;, M_FUNCTION_OVERFLOW}
+<span class="lineNum">      67 </span><span class="lineCov">       6268 :     };</span>
+<span class="lineNum">      68 </span>            : 
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">      10969 :     const std::map&lt;std::string, MSR::m_units_e&gt; MSR::M_UNITS_STRING = {</span></a>
+<span class="lineNum">      70 </span>            :         {&quot;none&quot;, M_UNITS_NONE},
+<span class="lineNum">      71 </span>            :         {&quot;seconds&quot;, M_UNITS_SECONDS},
+<span class="lineNum">      72 </span>            :         {&quot;hertz&quot;, M_UNITS_HERTZ},
+<a name="73"><span class="lineNum">      73 </span>            :         {&quot;watts&quot;, M_UNITS_WATTS},</a>
+<span class="lineNum">      74 </span>            :         {&quot;joules&quot;, M_UNITS_JOULES},
+<span class="lineNum">      75 </span>            :         {&quot;celsius&quot;, M_UNITS_CELSIUS}
+<span class="lineNum">      76 </span><span class="lineCov">       9402 :     };</span>
+<a name="77"><span class="lineNum">      77 </span>            : </a>
+<span class="lineNum">      78 </span>            :     /// @brief Class for translating between a double precision value
+<span class="lineNum">      79 </span>            :     /// and the encoded 64 bit MSR value.
+<span class="lineNum">      80 </span>            :     class MSREncode
+<a name="81"><span class="lineNum">      81 </span>            :     {</a>
+<span class="lineNum">      82 </span>            :         public:
+<a name="83"><span class="lineNum">      83 </span>            :             MSREncode(const struct MSR::m_encode_s &amp;msre);</a>
+<span class="lineNum">      84 </span>            :             MSREncode(int begin_bit, int end_bit, int function, double scalar);
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">     218044 :             virtual ~MSREncode() = default;</span></a>
+<span class="lineNum">      86 </span>            :             double decode(uint64_t field, uint64_t &amp;last_field, uint64_t &amp;num_overflow);
+<span class="lineNum">      87 </span>            :             uint64_t encode(double value);
+<span class="lineNum">      88 </span>            :             uint64_t mask(void);
+<a name="89"><span class="lineNum">      89 </span>            :             int decode_function(void);</a>
+<span class="lineNum">      90 </span>            :         private:
+<span class="lineNum">      91 </span>            :             const int m_function;
+<span class="lineNum">      92 </span>            :             int m_shift;
+<a name="93"><span class="lineNum">      93 </span>            :             int m_num_bit;</a>
+<span class="lineNum">      94 </span>            :             uint64_t m_mask;
+<span class="lineNum">      95 </span>            :             uint64_t m_subfield_max;
+<span class="lineNum">      96 </span>            :             double m_scalar;
+<a name="97"><span class="lineNum">      97 </span>            :             double m_inverse;</a>
+<span class="lineNum">      98 </span>            :     };
+<a name="99"><span class="lineNum">      99 </span>            : </a>
+<span class="lineNum">     100 </span>            : 
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">     109022 :     MSREncode::MSREncode(const struct MSR::m_encode_s &amp;msre)</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">     109022 :         : MSREncode(msre.begin_bit, msre.end_bit, msre.function, msre.scalar)</span>
+<span class="lineNum">     103 </span>            :     {
+<span class="lineNum">     104 </span>            : 
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">     109022 :     }</span></a>
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span><span class="lineCov">     109022 :     MSREncode::MSREncode(int begin_bit, int end_bit, int function, double scalar)</span>
+<span class="lineNum">     108 </span>            :         : m_function(function)
+<a name="109"><span class="lineNum">     109 </span>            :         , m_shift(begin_bit)</a>
+<span class="lineNum">     110 </span><span class="lineCov">     109022 :         , m_num_bit(end_bit - begin_bit + 1)</span>
+<span class="lineNum">     111 </span><span class="lineCov">     109022 :         , m_mask(((1ULL &lt;&lt; m_num_bit) - 1) &lt;&lt; begin_bit)</span>
+<span class="lineNum">     112 </span><span class="lineCov">     109022 :         , m_subfield_max((1ULL &lt;&lt; m_num_bit) - 1)</span>
+<a name="113"><span class="lineNum">     113 </span>            :         , m_scalar(scalar)</a>
+<span class="lineNum">     114 </span><span class="lineCov">     436088 :         , m_inverse(1.0 / scalar)</span>
+<span class="lineNum">     115 </span>            :     {
+<span class="lineNum">     116 </span>            : #ifdef GEOPM_DEBUG
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">     109022 :         if (m_num_bit &gt;= 64) {</span></a>
+<span class="lineNum">     118 </span>            :             throw Exception(&quot;MSREncode: 64 bit fields are not supported.&quot;,
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     120 </span>            :         }
+<a name="121"><span class="lineNum">     121 </span>            : #endif</a>
+<a name="122"><span class="lineNum">     122 </span><span class="lineCov">     109022 :     }</span></a>
+<span class="lineNum">     123 </span>            : 
+<span class="lineNum">     124 </span><span class="lineCov">  460670936 :     double MSREncode::decode(uint64_t field, uint64_t &amp;last_field, uint64_t &amp;num_overflow)</span>
+<a name="125"><span class="lineNum">     125 </span>            :     {</a>
+<span class="lineNum">     126 </span><span class="lineCov">  460670936 :         double result = NAN;</span>
+<span class="lineNum">     127 </span><span class="lineCov">  460670936 :         uint64_t subfield = (field &amp; m_mask) &gt;&gt; m_shift;</span>
+<span class="lineNum">     128 </span><span class="lineCov">  460670936 :         uint64_t subfield_last = (last_field &amp; m_mask) &gt;&gt; m_shift;</span>
+<a name="129"><span class="lineNum">     129 </span>            :         uint64_t float_y, float_z;</a>
+<span class="lineNum">     130 </span><span class="lineCov">  460670936 :         switch (m_function) {</span>
+<span class="lineNum">     131 </span><span class="lineCov">        104 :             case MSR::M_FUNCTION_LOG_HALF:</span>
+<span class="lineNum">     132 </span>            :                 // F = S * 2.0 ^ -X
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">        157 :                 result = 1.0 / (1ULL &lt;&lt; subfield);</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">        157 :                 break;</span>
+<span class="lineNum">     135 </span><span class="lineCov">        172 :             case MSR::M_FUNCTION_7_BIT_FLOAT:</span>
+<span class="lineNum">     136 </span>            :                 // F = S * 2 ^ Y * (1.0 + Z / 4.0)
+<a name="137"><span class="lineNum">     137 </span>            :                 // Y in bits [0:5) and Z in bits [5:7)</a>
+<span class="lineNum">     138 </span><span class="lineCov">        259 :                 float_y = subfield &amp; 0x1F;</span>
+<span class="lineNum">     139 </span><span class="lineCov">        259 :                 float_z = subfield &gt;&gt; 5;</span>
+<span class="lineNum">     140 </span><span class="lineCov">        259 :                 result = (1ULL &lt;&lt; float_y) * (1.0 + float_z / 4.0);</span>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        259 :                 break;</span></a>
+<span class="lineNum">     142 </span><span class="lineCov">   84690378 :             case MSR::M_FUNCTION_OVERFLOW:</span>
+<span class="lineNum">     143 </span><span class="lineCov">  395300122 :                 if (subfield_last &gt; subfield) {</span>
+<span class="lineNum">     144 </span><span class="lineCov">       1016 :                     ++num_overflow;</span>
+<a name="145"><span class="lineNum">     145 </span>            :                 }</a>
+<span class="lineNum">     146 </span><span class="lineCov">  395300122 :                 result = subfield + ((m_subfield_max + 1.0) * num_overflow);</span>
+<span class="lineNum">     147 </span><span class="lineCov">  395300122 :                 break;</span>
+<span class="lineNum">     148 </span><span class="lineCov">   33287386 :             case MSR::M_FUNCTION_SCALE:</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">   65370398 :                 result = subfield;</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">   65370398 :                 break;</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :             default:</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                 break;</span>
+<a name="153"><span class="lineNum">     153 </span>            :         }</a>
+<span class="lineNum">     154 </span><span class="lineCov">  460670936 :         result *= m_scalar;</span>
+<span class="lineNum">     155 </span><span class="lineCov">  460670936 :         last_field = field;</span>
+<span class="lineNum">     156 </span><span class="lineCov">  460670936 :         return result;</span>
+<a name="157"><span class="lineNum">     157 </span>            :     }</a>
+<span class="lineNum">     158 </span>            : 
+<span class="lineNum">     159 </span><span class="lineCov">    1304843 :     uint64_t MSREncode::encode(double value)</span>
+<span class="lineNum">     160 </span>            :     {
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">    1304843 :         uint64_t result = 0;</span></a>
+<span class="lineNum">     162 </span><span class="lineCov">    1304843 :         double value_inferred = 0.0;</span>
+<span class="lineNum">     163 </span>            :         uint64_t float_y, float_z;
+<span class="lineNum">     164 </span><span class="lineCov">    1304843 :         switch (m_function) {</span>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">     321256 :             case MSR::M_FUNCTION_SCALE:</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">    1291081 :                 result = (uint64_t)(m_inverse * value);</span>
+<span class="lineNum">     167 </span><span class="lineCov">    1291081 :                 break;</span>
+<span class="lineNum">     168 </span><span class="lineCov">          2 :             case MSR::M_FUNCTION_LOG_HALF:</span>
+<a name="169"><span class="lineNum">     169 </span>            :                 // F = S * 2.0 ^ -X =&gt;</a>
+<span class="lineNum">     170 </span>            :                 // X = log2(S / F)
+<span class="lineNum">     171 </span><span class="lineCov">          4 :                 result = (uint64_t)std::log2(m_scalar / value);</span>
+<span class="lineNum">     172 </span><span class="lineCov">          4 :                 break;</span>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">       2999 :             case MSR::M_FUNCTION_7_BIT_FLOAT:</span></a>
+<span class="lineNum">     174 </span>            :                 // F = S * 2 ^ Y * (1.0 + Z / 4.0)
+<span class="lineNum">     175 </span>            :                 // Y in bits [0:5) and Z in bits [5:7)
+<span class="lineNum">     176 </span><span class="lineCov">      13758 :                 if (value &gt; 0) {</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">      13756 :                     value *= m_inverse;</span></a>
+<span class="lineNum">     178 </span><span class="lineCov">      13756 :                     float_y = (uint64_t)std::log2(value);</span>
+<span class="lineNum">     179 </span><span class="lineCov">      13756 :                     float_z = (uint64_t)(4.0 * (value / (1 &lt;&lt; float_y) - 1.0));</span>
+<span class="lineNum">     180 </span><span class="lineCov">      13756 :                     if ((float_y &amp;&amp; (float_y &gt;&gt; 5) != 0) ||</span>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">      13744 :                         (float_z &amp;&amp; (float_z &gt;&gt; 2) != 0)) {</span></a>
+<span class="lineNum">     182 </span>            :                         throw Exception(&quot;MSR::encode(): integer overflow in M_FUNCTION_7_BIT_FLOAT datatype encoding&quot;,
+<span class="lineNum">     183 </span><span class="lineCov">          2 :                                         EOVERFLOW, __FILE__, __LINE__);</span>
+<span class="lineNum">     184 </span>            :                     }
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">      13754 :                     value_inferred = (1 &lt;&lt; float_y) * (1.0 + (float_z / 4.0));</span></a>
+<span class="lineNum">     186 </span><span class="lineCov">      13754 :                     if ((value - value_inferred) &gt; (value  * 0.25)) {</span>
+<span class="lineNum">     187 </span>            :                         throw Exception(&quot;MSR::encode(): inferred value from encoded value is inaccurate&quot;,
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :                                         GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="189"><span class="lineNum">     189 </span>            :                     }</a>
+<span class="lineNum">     190 </span><span class="lineCov">      13754 :                     result = float_y | (float_z &lt;&lt; 5);</span>
+<span class="lineNum">     191 </span>            :                 }
+<span class="lineNum">     192 </span>            :                 else {
+<a name="193"><span class="lineNum">     193 </span>            :                     throw Exception(&quot;MSR::encode(): input value &lt;= 0 for M_FUNCTION_7_BIT_FLOAT&quot;,</a>
+<span class="lineNum">     194 </span><span class="lineCov">          2 :                                     GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     195 </span>            :                 }
+<span class="lineNum">     196 </span><span class="lineCov">      13754 :                 break;</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineNoCov">          0 :             case MSR::M_FUNCTION_OVERFLOW:</span></a>
+<span class="lineNum">     198 </span><span class="lineNoCov">          0 :                 result = (uint64_t)value;</span>
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :                 break;</span>
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :             default:</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;MSR::encode(): unimplemented scale function: &quot; + std::to_string(m_function),</span></a>
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_NOT_IMPLEMENTED,  __FILE__, __LINE__);</span>
+<span class="lineNum">     203 </span>            :                 break;
+<span class="lineNum">     204 </span>            :         }
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">    1304839 :         result = (result &lt;&lt; m_shift) &amp; m_mask;</span></a>
+<span class="lineNum">     206 </span><span class="lineCov">    1304839 :         return result;</span>
+<a name="207"><span class="lineNum">     207 </span>            :     }</a>
+<span class="lineNum">     208 </span>            : 
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">    2020667 :     uint64_t MSREncode::mask(void)</span></a>
+<span class="lineNum">     210 </span>            :     {
+<span class="lineNum">     211 </span><span class="lineCov">    2020667 :         return m_mask;</span>
+<a name="212"><span class="lineNum">     212 </span>            :     }</a>
+<a name="213"><span class="lineNum">     213 </span>            : </a>
+<span class="lineNum">     214 </span><span class="lineNoCov">          0 :     int MSREncode::decode_function(void)</span>
+<span class="lineNum">     215 </span>            :     {
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :         return m_function;</span>
+<a name="217"><span class="lineNum">     217 </span>            :     }</a>
+<span class="lineNum">     218 </span>            : 
+<span class="lineNum">     219 </span><span class="lineCov">      18216 :     MSRImp::MSRImp(const std::string &amp;msr_name,</span>
+<span class="lineNum">     220 </span>            :                    uint64_t offset,
+<a name="221"><span class="lineNum">     221 </span>            :                    const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,</a>
+<span class="lineNum">     222 </span><span class="lineCov">       9744 :                    const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control)</span>
+<span class="lineNum">     223 </span>            :         : m_name(msr_name)
+<span class="lineNum">     224 </span>            :         , m_offset(offset)
+<a name="225"><span class="lineNum">     225 </span>            :         , m_signal_encode(signal.size(), NULL)</a>
+<span class="lineNum">     226 </span>            :         , m_control_encode(control.size())
+<span class="lineNum">     227 </span>            :         , m_domain_type(GEOPM_DOMAIN_INVALID)
+<span class="lineNum">     228 </span>            :         , m_prog_msr(0)
+<a name="229"><span class="lineNum">     229 </span>            :         , m_prog_field_name(0)</a>
+<span class="lineNum">     230 </span><span class="lineCov">      18216 :         , m_prog_value(0)</span>
+<span class="lineNum">     231 </span>            :     {
+<span class="lineNum">     232 </span><span class="lineCov">      18216 :         init(signal, control);</span>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">      18216 :     }</span></a>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineCov">      54612 :     MSRImp::~MSRImp()</span>
+<span class="lineNum">     236 </span>            :     {
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">      55946 :         for (auto it = m_control_encode.rbegin(); it != m_control_encode.rend(); ++it) {</span></a>
+<span class="lineNum">     238 </span><span class="lineCov">      37730 :             delete (*it);</span>
+<span class="lineNum">     239 </span>            :         }
+<span class="lineNum">     240 </span><span class="lineCov">      89508 :         for (auto it = m_signal_encode.rbegin(); it != m_signal_encode.rend(); ++it) {</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">      71292 :             delete (*it);</span></a>
+<span class="lineNum">     242 </span>            :         }
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">      36396 :     }</span></a>
+<span class="lineNum">     244 </span>            : 
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">      18216 :     void MSRImp::init(const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,</span></a>
+<span class="lineNum">     246 </span>            :                       const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control)
+<span class="lineNum">     247 </span>            :     {
+<span class="lineNum">     248 </span><span class="lineCov">      18216 :         int idx = 0;</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">      89508 :         for (auto it = signal.begin(); it != signal.end(); ++it, ++idx) {</span></a>
+<span class="lineNum">     250 </span><span class="lineCov">      71292 :             m_signal_map.insert(std::pair&lt;std::string, int&gt;(it-&gt;first, idx));</span>
+<span class="lineNum">     251 </span><span class="lineCov">      71292 :             m_signal_encode[idx] = new MSREncode(it-&gt;second);</span>
+<span class="lineNum">     252 </span>            :         }
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">      18216 :         idx = 0;</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">      55946 :         for (auto it = control.begin(); it != control.end(); ++it, ++idx) {</span>
+<span class="lineNum">     255 </span><span class="lineCov">      37730 :             m_control_map.insert(std::pair&lt;std::string, int&gt;(it-&gt;first, idx));</span>
+<span class="lineNum">     256 </span><span class="lineCov">      37730 :             m_control_encode[idx] = new MSREncode(it-&gt;second);</span>
+<a name="257"><span class="lineNum">     257 </span>            :         }</a>
+<span class="lineNum">     258 </span><span class="lineCov">      18216 :         if (signal.size() != 0) {</span>
+<span class="lineNum">     259 </span><span class="lineCov">      18204 :             m_domain_type = signal[0].second.domain;</span>
+<span class="lineNum">     260 </span>            :         }
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">         12 :         else if (control.size() != 0) {</span></a>
+<span class="lineNum">     262 </span><span class="lineCov">         12 :             m_domain_type = control[0].second.domain;</span>
+<span class="lineNum">     263 </span>            :         }
+<span class="lineNum">     264 </span>            :         else {
+<a name="265"><span class="lineNum">     265 </span>            :             throw Exception(&quot;MSRImp::init(): both signal and control vectors are empty&quot;,</a>
+<span class="lineNum">     266 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     267 </span>            :         }
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">      18216 :     }</span></a>
+<a name="269"><span class="lineNum">     269 </span>            : </a>
+<span class="lineNum">     270 </span><span class="lineCov">   21140974 :     std::string MSRImp::name(void) const</span>
+<span class="lineNum">     271 </span>            :     {
+<span class="lineNum">     272 </span><span class="lineCov">   21140974 :         return m_name;</span>
+<a name="273"><span class="lineNum">     273 </span>            :     }</a>
+<span class="lineNum">     274 </span>            : 
+<span class="lineNum">     275 </span><span class="lineCov">    2300449 :     uint64_t MSRImp::offset(void) const</span>
+<span class="lineNum">     276 </span>            :     {
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">    2300449 :         return m_offset;</span></a>
+<a name="278"><span class="lineNum">     278 </span>            :     }</a>
+<span class="lineNum">     279 </span>            : 
+<span class="lineNum">     280 </span><span class="lineCov">  473133796 :     int MSRImp::num_signal(void) const</span>
+<a name="281"><span class="lineNum">     281 </span>            :     {</a>
+<span class="lineNum">     282 </span><span class="lineCov">  473133796 :         return m_signal_encode.size();</span>
+<a name="283"><span class="lineNum">     283 </span>            :     }</a>
+<span class="lineNum">     284 </span>            : 
+<a name="285"><span class="lineNum">     285 </span><span class="lineCov">    7275909 :     int MSRImp::num_control(void) const</span></a>
+<span class="lineNum">     286 </span>            :     {
+<span class="lineNum">     287 </span><span class="lineCov">    7275909 :         return m_control_encode.size();</span>
+<a name="288"><span class="lineNum">     288 </span>            :     }</a>
+<a name="289"><span class="lineNum">     289 </span>            : </a>
+<span class="lineNum">     290 </span><span class="lineCov">   12373538 :     std::string MSRImp::signal_name(int signal_idx) const</span>
+<span class="lineNum">     291 </span>            :     {
+<span class="lineNum">     292 </span><span class="lineCov">   12373538 :         if (signal_idx &lt; 0 || signal_idx &gt;= num_signal()) {</span>
+<a name="293"><span class="lineNum">     293 </span>            :             throw Exception(&quot;MSRImp::signal_name(): signal_idx out of range&quot;,</a>
+<span class="lineNum">     294 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     295 </span>            :         }
+<span class="lineNum">     296 </span><span class="lineCov">   12373536 :         std::string result = &quot;&quot;;</span>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">   49921300 :         for (auto it = m_signal_map.begin(); it != m_signal_map.end(); ++it) {</span></a>
+<span class="lineNum">     298 </span><span class="lineCov">   49921300 :             if (it-&gt;second == signal_idx) {</span>
+<span class="lineNum">     299 </span><span class="lineCov">   12373536 :                 result = it-&gt;first;</span>
+<span class="lineNum">     300 </span><span class="lineCov">   12373536 :                 break;</span>
+<a name="301"><span class="lineNum">     301 </span>            :             }</a>
+<span class="lineNum">     302 </span>            :         }
+<span class="lineNum">     303 </span><span class="lineCov">   12373536 :         return result;</span>
+<a name="304"><span class="lineNum">     304 </span>            :     }</a>
+<a name="305"><span class="lineNum">     305 </span>            : </a>
+<span class="lineNum">     306 </span><span class="lineCov">    5915252 :     std::string MSRImp::control_name(int control_idx) const</span>
+<span class="lineNum">     307 </span>            :     {
+<span class="lineNum">     308 </span><span class="lineCov">    5915252 :         if (control_idx &lt; 0 || control_idx &gt;= num_control()) {</span>
+<a name="309"><span class="lineNum">     309 </span>            :             throw Exception(&quot;MSRImp::control_name(): control_idx out of range&quot;,</a>
+<span class="lineNum">     310 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     311 </span>            :         }
+<span class="lineNum">     312 </span><span class="lineCov">    5915250 :         std::string result = &quot;&quot;;</span>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">   21703676 :         for (auto it = m_control_map.begin(); it != m_control_map.end(); ++it) {</span></a>
+<span class="lineNum">     314 </span><span class="lineCov">   21703676 :             if (it-&gt;second == control_idx) {</span>
+<span class="lineNum">     315 </span><span class="lineCov">    5915250 :                 result = it-&gt;first;</span>
+<span class="lineNum">     316 </span><span class="lineCov">    5915250 :                 break;</span>
+<a name="317"><span class="lineNum">     317 </span>            :             }</a>
+<span class="lineNum">     318 </span>            :         }
+<span class="lineNum">     319 </span><span class="lineCov">    5915250 :         return result;</span>
+<a name="320"><span class="lineNum">     320 </span>            :     }</a>
+<a name="321"><span class="lineNum">     321 </span>            : </a>
+<span class="lineNum">     322 </span><span class="lineCov">      80385 :     int MSRImp::signal_index(const std::string &amp;name) const</span>
+<span class="lineNum">     323 </span>            :     {
+<span class="lineNum">     324 </span><span class="lineCov">      80385 :         int result = -1;</span>
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">      80385 :         auto it = m_signal_map.find(name);</span></a>
+<span class="lineNum">     326 </span><span class="lineCov">      80385 :         if (it != m_signal_map.end()) {</span>
+<span class="lineNum">     327 </span><span class="lineCov">      80383 :             result = it-&gt;second;</span>
+<span class="lineNum">     328 </span>            :         }
+<a name="329"><span class="lineNum">     329 </span><span class="lineCov">      80385 :         return result;</span></a>
+<a name="330"><span class="lineNum">     330 </span>            :     }</a>
+<span class="lineNum">     331 </span>            : 
+<span class="lineNum">     332 </span><span class="lineCov">      39747 :     int MSRImp::control_index(const std::string &amp;name) const</span>
+<a name="333"><span class="lineNum">     333 </span>            :     {</a>
+<span class="lineNum">     334 </span><span class="lineCov">      39747 :         int result = -1;</span>
+<span class="lineNum">     335 </span><span class="lineCov">      39747 :         auto it = m_control_map.find(name);</span>
+<span class="lineNum">     336 </span><span class="lineCov">      39747 :         if (it != m_control_map.end()) {</span>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">      39745 :             result = it-&gt;second;</span></a>
+<span class="lineNum">     338 </span>            :         }
+<span class="lineNum">     339 </span><span class="lineCov">      39747 :         return result;</span>
+<a name="340"><span class="lineNum">     340 </span>            :     }</a>
+<a name="341"><span class="lineNum">     341 </span>            : </a>
+<span class="lineNum">     342 </span><span class="lineCov">  460670936 :     double MSRImp::signal(int signal_idx,</span>
+<span class="lineNum">     343 </span>            :                           uint64_t field,
+<span class="lineNum">     344 </span>            :                           uint64_t &amp;last_field,
+<a name="345"><span class="lineNum">     345 </span>            :                           uint64_t &amp;num_overflow) const</a>
+<span class="lineNum">     346 </span>            :     {
+<span class="lineNum">     347 </span><span class="lineCov">  460670936 :         if (signal_idx &lt; 0 || signal_idx &gt;= num_signal()) {</span>
+<span class="lineNum">     348 </span>            :             throw Exception(&quot;MSR::signal(): signal_idx out of range&quot;,
+<a name="349"><span class="lineNum">     349 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     350 </span>            :         }
+<span class="lineNum">     351 </span><span class="lineCov">  460670936 :         return m_signal_encode[signal_idx]-&gt;decode(field, last_field, num_overflow);</span>
+<a name="352"><span class="lineNum">     352 </span>            :     }</a>
+<a name="353"><span class="lineNum">     353 </span>            : </a>
+<span class="lineNum">     354 </span><span class="lineCov">    1304843 :     void MSRImp::control(int control_idx,</span>
+<span class="lineNum">     355 </span>            :                          double value,
+<span class="lineNum">     356 </span>            :                          uint64_t &amp;field,
+<a name="357"><span class="lineNum">     357 </span>            :                          uint64_t &amp;mask) const</a>
+<span class="lineNum">     358 </span>            :     {
+<span class="lineNum">     359 </span><span class="lineCov">    1304843 :         if (control_idx &lt; 0 || control_idx &gt;= num_control()) {</span>
+<span class="lineNum">     360 </span>            :             throw Exception(&quot;MSR::control(): control_idx out of range&quot;,
+<a name="361"><span class="lineNum">     361 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     362 </span>            :         }
+<span class="lineNum">     363 </span><span class="lineCov">    1304843 :         field = m_control_encode[control_idx]-&gt;encode(value);</span>
+<span class="lineNum">     364 </span><span class="lineCov">    1304839 :         mask = m_control_encode[control_idx]-&gt;mask();</span>
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">    1304839 :     }</span></a>
+<span class="lineNum">     366 </span>            : 
+<span class="lineNum">     367 </span><span class="lineCov">     715828 :     uint64_t MSRImp::mask(int control_idx) const</span>
+<span class="lineNum">     368 </span>            :     {
+<a name="369"><span class="lineNum">     369 </span><span class="lineCov">     715828 :         return m_control_encode[control_idx]-&gt;mask();</span></a>
+<a name="370"><span class="lineNum">     370 </span>            :     }</a>
+<span class="lineNum">     371 </span>            : 
+<span class="lineNum">     372 </span><span class="lineCov">   20995930 :     int MSRImp::domain_type(void) const</span>
+<a name="373"><span class="lineNum">     373 </span>            :     {</a>
+<span class="lineNum">     374 </span><span class="lineCov">   20995930 :         return m_domain_type;</span>
+<a name="375"><span class="lineNum">     375 </span>            :     }</a>
+<span class="lineNum">     376 </span>            : 
+<a name="377"><span class="lineNum">     377 </span><span class="lineNoCov">          0 :     int MSRImp::decode_function(int signal_idx) const</span></a>
+<span class="lineNum">     378 </span>            :     {
+<span class="lineNum">     379 </span><span class="lineNoCov">          0 :         return m_signal_encode[signal_idx]-&gt;decode_function();</span>
+<a name="380"><span class="lineNum">     380 </span>            :     }</a>
+<a name="381"><span class="lineNum">     381 </span>            : </a>
+<span class="lineNum">     382 </span><span class="lineCov">      71226 :     MSR::m_function_e MSR::string_to_function(const std::string &amp;str)</span>
+<span class="lineNum">     383 </span>            :     {
+<span class="lineNum">     384 </span><span class="lineCov">      71226 :         auto it = M_FUNCTION_STRING.find(str);</span>
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">      71226 :         if (it == M_FUNCTION_STRING.end()) {</span></a>
+<span class="lineNum">     386 </span>            :             throw Exception(&quot;MSR::string_to_units(): invalid function string&quot;,
+<span class="lineNum">     387 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     388 </span>            :         }
+<a name="389"><span class="lineNum">     389 </span><span class="lineCov">      71224 :         return it-&gt;second;</span></a>
+<a name="390"><span class="lineNum">     390 </span>            :     }</a>
+<span class="lineNum">     391 </span>            : 
+<span class="lineNum">     392 </span><span class="lineCov">      71230 :     MSR::m_units_e MSR::string_to_units(const std::string &amp;str)</span>
+<a name="393"><span class="lineNum">     393 </span>            :     {</a>
+<span class="lineNum">     394 </span><span class="lineCov">      71230 :         auto it = M_UNITS_STRING.find(str);</span>
+<span class="lineNum">     395 </span><span class="lineCov">      71230 :         if (it == M_UNITS_STRING.end()) {</span>
+<span class="lineNum">     396 </span>            :             throw Exception(&quot;MSR::string_to_units(): invalid units string&quot;,
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     398 </span>            :         }
+<span class="lineNum">     399 </span><span class="lineCov">      71228 :         return it-&gt;second;</span>
+<a name="400"><span class="lineNum">     400 </span>            :     }</a>
+<a name="401"><span class="lineNum">     401 </span>            : </a>
+<span class="lineNum">     402 </span><span class="lineCov">         36 :     std::shared_ptr&lt;MSR&gt; MSR::make_shared(const std::string &amp;msr_name,</span>
+<span class="lineNum">     403 </span>            :                                           uint64_t offset,
+<span class="lineNum">     404 </span>            :                                           const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,
+<a name="405"><span class="lineNum">     405 </span>            :                                           const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control)</a>
+<span class="lineNum">     406 </span>            :     {
+<a name="407"><span class="lineNum">     407 </span><span class="lineCov">         36 :         return std::make_shared&lt;MSRImp&gt;(msr_name, offset, signal, control);</span></a>
+<span class="lineNum">     408 </span>            :     }
+<a name="409"><span class="lineNum">     409 </span><span class="lineCov">      18180 :     std::unique_ptr&lt;MSR&gt; MSR::make_unique(const std::string &amp;msr_name,</span></a>
+<span class="lineNum">     410 </span>            :                                           uint64_t offset,
+<span class="lineNum">     411 </span>            :                                           const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,
+<span class="lineNum">     412 </span>            :                                           const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control)
+<a name="413"><span class="lineNum">     413 </span>            :     {</a>
+<a name="414"><span class="lineNum">     414 </span><span class="lineCov">      18180 :         return geopm::make_unique&lt;MSRImp&gt;(msr_name, offset, signal, control);</span></a>
+<span class="lineNum">     415 </span>            :     }
+<span class="lineNum">     416 </span><span class="lineCov">       4701 : }</span>
 </pre>
       </td>
     </tr>
@@ -592,7 +492,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 
