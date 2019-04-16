@@ -76,6 +76,10 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm_pio.h">&lt;geopm_pio.h></a></strong></p>
+
+<p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
+
 <dl>
 <dt><code>int geopm_pio_num_signal_name(</code></dt><dd><p><code>void);</code></p></dd>
 <dt><code>int geopm_pio_signal_name(</code></dt><dd><p><code>int</code> <em>name_idx</em>, <br />
@@ -140,41 +144,43 @@ is also a value from the <code>geopm_domain_e</code> enum.</p>
 Any error in loading the platform will result in a negative error
 code describing the failure.</p></dd>
 <dt><code>geopm_pio_signal_name</code>()</dt><dd><p>Sets the <em>result</em> string to the name of the signal indexed by
-<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the <em>result</em>
-vector.  If <em>result_max</em> is non-zero the <em>result</em> string will always be
-null terminated.  If <em>name_idx</em> is greater than zero and less than
-the return value from <code>geopm_pio_num_signal_name()</code> the return
-value will be <code>GEOPM_ERROR_INVALID</code>.  The return code will also
-be <code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain
-the signal name.  Any other error will result in a negative error
-code.  Zero is returned on success.</p></dd>
+<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the
+<em>result</em> string.  The value of <em>name_idx</em> must be greater than
+zero and less than the return value from
+<code>geopm_pio_num_signal_name()</code> or else an error will occur.
+Providing a string of <code>NAME_MAX</code> length (from <code>limits.h</code>) will be
+sufficient for storing any result.  If <em>result_max</em> is too small
+to contain the signal name an error will occur.  Zero is returned
+on success and a negative error code is returned if any error
+occurs.</p></dd>
 <dt><code>geopm_pio_num_control_name</code>()</dt><dd><p>Returns the number of control names that can be indexed with the
 <em>name_idx</em> parameter to the <code>geopm_pio_control_name()</code> function.
 Any error in loading the platform will result in a negative error
 code describing the failure.</p></dd>
 <dt><code>geopm_pio_control_name</code>()</dt><dd><p>Sets the <em>result</em> string to the name of the control indexed by
-<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the <em>result</em>
-vector.  If <em>result_max</em> is non-zero the <em>result</em> string will always be
-null terminated.  If <em>name_idx</em> is greater than zero and less than
-the return value from <code>geopm_pio_num_control_name()</code> the return
-value will be <code>GEOPM_ERROR_INVALID</code>.  The return code will also
-be <code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain
-the control name.  Any other error will result in a negative error
-code.  Zero is returned on success.</p></dd>
-<dt><code>geopm_pio_signal_description</code>()</dt><dd><p>Sets the <em>result</em> string to the description associated with
+<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the
+<em>result</em> string.  The value of <em>name_idx</em> must be greater than
+zero and less than the return value from
+<code>geopm_pio_num_control_name()</code> or else an error will occur.
+Providing a string of <code>NAME_MAX</code> length (from <code>limits.h</code>) will be
+sufficient for storing any result.  If <em>result_max</em> is too small
+to contain the control name an error will occur.  Zero is returned
+on success and a negative error code is returned if any error
+occurs.</p></dd>
+<dt><code>geopm_pio_signal_description</code>()</dt><dd><p>Sets the <em>result</em> string to the signal description associated with
 <em>signal_name</em>.  At most <em>result_max</em> bytes are written to the
-<em>result</em> vector.  If <em>result_max</em> is non-zero the <em>result</em> string
-will always be null terminated.  The return code will be
-<code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain the
-description.  Any other error will result in a negative error
-code.  Zero is returned on success.</p></dd>
-<dt><code>geopm_pio_control_description</code>()</dt><dd><p>Sets the <em>result</em> string to the description associated with
+<em>result</em> string.  Providing a string of <code>NAME_MAX</code> length (from
+<code>limits.h</code>) will be sufficient for storing any result.  If
+<em>result_max</em> is too small to contain the description an error will
+occur.  Zero is returned on success and a negative error code is
+returned if any error occurs.</p></dd>
+<dt><code>geopm_pio_control_description</code>()</dt><dd><p>Sets the <em>result</em> string to the control description associated with
 <em>control_name</em>.  At most <em>result_max</em> bytes are written to the
-<em>result</em> vector.  If <em>result_max</em> is non-zero the <em>result</em> string
-will always be null terminated.  The return code will be
-<code>GEOPM_ERROR_INVALID</code> if <em>result_max</em> is too small to contain the
-description.  Any other error will result in a negative error
-code.  Zero is returned on success.</p></dd>
+<em>result</em> string.  Providing a string of <code>NAME_MAX</code> length (from
+<code>limits.h</code>) will be sufficient for storing any result.  If
+<em>result_max</em> is too small to contain the description an error will
+occur.  Zero is returned on success and a negative error code is
+returned if any error occurs.</p></dd>
 <dt><code>geopm_pio_signal_domain_type</code>()</dt><dd><p>Query the domain for the signal with name <em>signal_name</em>.  Returns
 one of the <code>geopm_domain_e</code> values signifying the granularity at
 which the signal is measured.  Will return a negative error code
@@ -267,11 +273,11 @@ result in a negative return value.</p></dd>
 <code>geopm_pio_push_signal()</code> and writes the value into <em>result</em>.  The
 <em>signal_idx</em> provided matches the return value from
 <code>geopm_pio_push_signal()</code> when the signal was pushed. The cached
-value is upated at the time of call to <code>geopm_pio_read_batch()</code>.</p></dd>
+value is updated at the time of call to <code>geopm_pio_read_batch()</code>.</p></dd>
 <dt><code>geopm_pio_adjust</code>()</dt><dd><p>Updates cached value for single control that has been pushed via
 <code>geopm_pio_push_control()</code> to the value <em>setting</em>.  The
-<em>controL_idx</em> provided matches the return value from
-<code>goepm_pio_push_control()</code> when the control was pushed.  The
+<em>control_idx</em> provided matches the return value from
+<code>geopm_pio_push_control()</code> when the control was pushed.  The
 cached value will be written to the platform at time of call to
 <code>geopm_pio_write_batch()</code>.</p></dd>
 <dt><code>geopm_pio_read_batch</code>()</dt><dd><p>Read all push signals from the platform so that the next call to

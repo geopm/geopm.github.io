@@ -4,7 +4,7 @@ var searchData=
   ['parse_5fjson_5fmsrs',['parse_json_msrs',['../classgeopm_1_1_m_s_r_i_o_group.html#a11c9b18e0947d32a740f3544cb85f420',1,'geopm::MSRIOGroup']]],
   ['parse_5fmulti',['parse_multi',['../classjson11_1_1_json.html#a7325d8835866b416eafc8c502fb33302',1,'json11::Json::parse_multi(const std::string &amp;in, std::string::size_type &amp;parser_stop_pos, std::string &amp;err, JsonParse strategy=JsonParse::STANDARD)'],['../classjson11_1_1_json.html#a33413aabf941e4fa089e4af468a3819e',1,'json11::Json::parse_multi(const std::string &amp;in, std::string &amp;err, JsonParse strategy=JsonParse::STANDARD)']]],
   ['platform_5fio',['platform_io',['../namespacegeopm.html#a1bf5ae9d62d44fc88f5eba52de837f9f',1,'geopm']]],
-  ['platform_5ftopo',['platform_topo',['../namespacegeopm.html#a30f797414450091ad42684be9ab17eac',1,'geopm']]],
+  ['platform_5ftopo',['platform_topo',['../namespacegeopm.html#a75f00704caec21c4e360d393f89d5fc3',1,'geopm']]],
   ['platformio',['PlatformIO',['../classgeopm_1_1_platform_i_o.html',1,'geopm::PlatformIO'],['../classgeopm_1_1_platform_i_o.html#ae0f96286597c65f2e09261ae98c99d93',1,'geopm::PlatformIO::PlatformIO()']]],
   ['platformio_2ehpp',['PlatformIO.hpp',['../_platform_i_o_8hpp.html',1,'']]],
   ['platformtopo',['PlatformTopo',['../classgeopm_1_1_platform_topo.html',1,'geopm::PlatformTopo'],['../classgeopm_1_1_platform_topo.html#afdfbf3e3614b30b6824c85950a1ba93f',1,'geopm::PlatformTopo::PlatformTopo()']]],
