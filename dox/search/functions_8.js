@@ -8,6 +8,7 @@ var searchData=
   ['iogroup_5ffactory',['iogroup_factory',['../namespacegeopm.html#a889673d94a464fdf80118cc14f19d3e5',1,'geopm']]],
   ['is_5farray',['is_array',['../classjson11_1_1_json.html#a19bae712f89c9bd771fead54b447611a',1,'json11::Json']]],
   ['is_5fbool',['is_bool',['../classjson11_1_1_json.html#a58226c2f5b5a69c5492de0add2ebb569',1,'json11::Json']]],
+  ['is_5flearning',['is_learning',['../classgeopm_1_1_energy_efficient_region.html#a72d417c3f0f3deb3df24494efe477336',1,'geopm::EnergyEfficientRegion::is_learning()'],['../classgeopm_1_1_energy_efficient_region_imp.html#a4303c416d9592208e743502a4eebe0da',1,'geopm::EnergyEfficientRegionImp::is_learning()']]],
   ['is_5fnested_5fdomain',['is_nested_domain',['../classgeopm_1_1_platform_topo.html#af5b56b64d9331da05fbf26cb129d787e',1,'geopm::PlatformTopo']]],
   ['is_5fnull',['is_null',['../classjson11_1_1_json.html#a4ae030733f6ebd910882afb9e2364b1a',1,'json11::Json']]],
   ['is_5fnumber',['is_number',['../classjson11_1_1_json.html#ad93187192190f5aa497bea86afc1717f',1,'json11::Json']]],

@@ -4,6 +4,7 @@ var searchData=
   ['_7ecircularbuffer',['~CircularBuffer',['../classgeopm_1_1_circular_buffer.html#a0d96222c70a885e459200b46374a9811',1,'geopm::CircularBuffer']]],
   ['_7ecpuinfoiogroup',['~CpuinfoIOGroup',['../classgeopm_1_1_cpuinfo_i_o_group.html#a7a570fdbd1e33aa9ac33e8a11528a8c6',1,'geopm::CpuinfoIOGroup']]],
   ['_7eenergyefficientregion',['~EnergyEfficientRegion',['../classgeopm_1_1_energy_efficient_region.html#a0fc98c43f5f544da7b17befbfbb5b6a7',1,'geopm::EnergyEfficientRegion']]],
+  ['_7eenergyefficientregionimp',['~EnergyEfficientRegionImp',['../classgeopm_1_1_energy_efficient_region_imp.html#a67adb6ad7e3bcf74fdb421233b1de134',1,'geopm::EnergyEfficientRegionImp']]],
   ['_7eexception',['~Exception',['../classgeopm_1_1_exception.html#a48fe1badc6871ddf393c5cf5ee1ace19',1,'geopm::Exception']]],
   ['_7efrequencygovernor',['~FrequencyGovernor',['../classgeopm_1_1_frequency_governor.html#a13f17935c7c6b11db4f0014878e243f5',1,'geopm::FrequencyGovernor']]],
   ['_7eiogroup',['~IOGroup',['../classgeopm_1_1_i_o_group.html#ab20aa2da80d318f1eb54682f4b35d54e',1,'geopm::IOGroup']]],

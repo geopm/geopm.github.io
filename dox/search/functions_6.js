@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['geopm_5fagent_5fenforce_5fpolicy',['geopm_agent_enforce_policy',['../geopm__agent_8h.html#a71319abb6603a777bb4fd5a7a2b2fc47',1,'geopm_agent.h']]],
   ['geopm_5fagent_5fname',['geopm_agent_name',['../geopm__agent_8h.html#adebe6e964ea6f9fbf99afb0d1f4cb78e',1,'geopm_agent.h']]],
   ['geopm_5fagent_5fnum_5favail',['geopm_agent_num_avail',['../geopm__agent_8h.html#a166c3e44ed60115c321e8d235567ec01',1,'geopm_agent.h']]],
   ['geopm_5fagent_5fnum_5fpolicy',['geopm_agent_num_policy',['../geopm__agent_8h.html#aa04455c7de9e3d34c52f9e73a793bf66',1,'geopm_agent.h']]],

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopmanalysis(1) - run application and visualize results</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#ANALYSIS-TYPES">ANALYSIS TYPES</a>
+    <a href="#COMMON-OPTIONS-FOR-ALL-ANALYSIS-TYPES">COMMON OPTIONS FOR ALL ANALYSIS TYPES</a>
+    <a href="#OPTIONS-FOR-FREQ_SWEEP-ANALYSIS">OPTIONS FOR FREQ_SWEEP ANALYSIS</a>
+    <a href="#OPTIONS-FOR-POWER_SWEEP-ANALYSIS">OPTIONS FOR POWER_SWEEP ANALYSIS</a>
+    <a href="#OPTIONS-FOR-BALANCER-ANALYSIS">OPTIONS FOR BALANCER ANALYSIS</a>
+    <a href="#OPTIONS-FOR-NODE_EFFICIENCY-ANALYSIS">OPTIONS FOR NODE_EFFICIENCY ANALYSIS</a>
+    <a href="#OPTIONS-FOR-NODE_POWER-ANALYSIS">OPTIONS FOR NODE_POWER ANALYSIS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopmanalysis(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopmanalysis(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopmanalysis</code> - <span class="man-whatis">run application and visualize results</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>geopmanalysis</code> <em>ANALYSIS_TYPE</em> [<em>ANALYSIS_OPTIONS</em>] [<em>LAUNCH_OPTIONS</em>] -- <em>EXEC</em> [<em>EXEC_ARGS</em>]</p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>Used to run applications and analyze results for specific GEOPM use
+cases.  An application must be launched at least once to generate
+report files. When using geopmanalysis to launch applications, it
+should be run within an allocation to ensure that all runs use the
+same set of nodes. Once all the required reports have been generated,
+the analysis can be rerun without needing an allocation using the
+<code>--geopm-analysis-skip-launch</code> option.  Using the
+<code>--geopm-analysis-output-dir</code> option to specify a unique directory for
+each analysis is highly recommended so that reports and traces from
+different experiments are not combined by mistake.  Note that any
+arguments to the launcher are also accepted by geopmanalysis; see
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> for more details.</p>
+
+<h2 id="ANALYSIS-TYPES">ANALYSIS TYPES</h2>
+
+<p>The available analysis types are:</p>
+
+<dl>
+<dt><em>freq_sweep</em></dt><dd><p>Runs the application at each available frequency. Compared to the baseline
+frequency, finds the lowest frequency for each region at which the performance
+will not be degraded by more than a given margin.</p></dd>
+<dt class="flush"><em>offline</em></dt><dd><p>Compares the energy_efficient agent in offline mode to the
+baseline at sticker frequency.</p></dd>
+<dt class="flush"><em>online</em></dt><dd><p>Compares the energy_efficient agent in online mode to the
+baseline at sticker frequency.</p></dd>
+<dt class="flush"><em>hint</em></dt><dd><p>Compares the energy_efficient agent using per-region hints to the
+baseline at sticker frequency.</p></dd>
+<dt><em>stream_mix</em></dt><dd><p>Runs a full frequency sweep, then offline and online modes of the
+energy_efficient agent. The energy and runtime of the application
+best-fit, per-phase offline mode, and per-phase online mode are
+compared to the run at sticker frequency.  Note: unlike other
+analysis types, this analysis uses the geopmbench application, and
+application arguments should <em>not</em> be passed to it.</p></dd>
+<dt><em>power_sweep</em></dt><dd><p>Runs the application under a range of socket power limits.</p></dd>
+<dt><em>balancer</em></dt><dd><p>Runs the application under a given range of power caps using the
+power governor and power balancer agents.  Compares the performance
+of the two agents at each power cap.</p></dd>
+<dt><em>node_efficiency</em></dt><dd><p>Runs a power sweep, then calculates the achieved frequency of each
+node at each power cap.</p></dd>
+<dt><em>node_power</em></dt><dd><p>Runs the application without any policy settings and plots the
+average power achieved by each node.</p></dd>
+</dl>
+
+
+<h2 id="COMMON-OPTIONS-FOR-ALL-ANALYSIS-TYPES">COMMON OPTIONS FOR ALL ANALYSIS TYPES</h2>
+
+<dl>
+<dt><code>-h</code>, <code>--help</code></dt><dd><p>Show help message and exit.  When used with an analysis type, it
+shows additional options for that analysis.</p></dd>
+<dt><code>--version</code></dt><dd><p>Show the GEOPM version number and exit.</p></dd>
+<dt><code>--geopm-analysis-skip-launch</code></dt><dd><p>Do not launch jobs, only analyze existing data.  Required unless
+<code>--geopm-analysis-launcher</code> is set.</p></dd>
+<dt><code>--geopm-analysis-launcher</code> <em>GEOPM_LAUNCHER</em></dt><dd><p>Required unless <code>--geopm-analysis-skip-launch</code> is set.  Specifies the
+underlying launch mechanism for the analysis job.  See <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>
+for more information.</p></dd>
+<dt><code>--geopm-analysis-output-dir</code> <em>OUTPUT_DIR</em></dt><dd><p>The output directory for reports, traces, and plots (default: '.').</p></dd>
+<dt><code>--geopm-analysis-profile-prefix</code> <em>PREFIX</em></dt><dd><p>Prefix to prepend to profile name when launching. Depending on the
+type of analysis, several profiles will be generated. For example,
+the freq_sweep analysis appends the frequency for each run to this
+prefix.</p></dd>
+<dt><code>--geopm-analysis-summary</code></dt><dd><p>Print a summary of the data depending on the analysis type.</p></dd>
+<dt><code>--geopm-analysis-plot</code></dt><dd><p>Generate plots of the data.</p></dd>
+<dt><code>--geopm-analysis-verbose</code></dt><dd><p>Print verbose debugging information.</p></dd>
+<dt><code>--geopm-analysis-iterations</code> <em>NUM_ITERATIONS</em></dt><dd><p>Number of iterations to perform for every type of analysis.
+E.g. for the OfflineFrequencyAnalysis, <em>NUM_ITERATIONS</em> runs will be
+performed at every available frequency.  The data is averaged
+together prior to evaluating what the best per-region frequency
+is. (default: <em>1</em>)</p></dd>
+</dl>
+
+
+<h2 id="OPTIONS-FOR-FREQ_SWEEP-ANALYSIS">OPTIONS FOR FREQ_SWEEP ANALYSIS</h2>
+
+<p>The same options are also used for <em>offline</em>, <em>online</em>, and <em>hint</em>.</p>
+
+<dl>
+<dt><code>--geopm-analysis-min-freq</code></dt><dd><p>The minimum frequency to use for the sweep and analysis.  If out of
+range, the minimum available frequency on the platform will be used.</p></dd>
+<dt><code>--geopm-analysis-max-freq</code></dt><dd><p>The maximum frequency to use for the sweep and analysis.  If out of
+range, the maximum available frequency on the platform will be used.</p></dd>
+<dt><code>--geopm-analysis-enable-turbo</code></dt><dd><p>When calculating the best per region frequencies, this flag
+stipulates that frequencies in the turbo range should be considered.
+By default, this flag is not set meaning frequencies in the turbo
+range are not considered.</p></dd>
+</dl>
+
+
+<h2 id="OPTIONS-FOR-POWER_SWEEP-ANALYSIS">OPTIONS FOR POWER_SWEEP ANALYSIS</h2>
+
+<dl>
+<dt><code>--geopm-analysis-min-power</code></dt><dd><p>The minimum package power to use for the sweep and analysis.  If out
+of range, the minimum power for the platform will be used.</p></dd>
+<dt><code>--geopm-analysis-max-power</code></dt><dd><p>The maximum package power to use for the sweep and analysis.  If out
+of range, the maximum power for the platform will be used.</p></dd>
+<dt><code>--geopm-analysis-step-power</code></dt><dd><p>Step size in watts between power settings for the sweep.  The
+default step size is 10W.</p></dd>
+<dt><code>--geopm-analysis-agent-type</code></dt><dd><p>Which agent to use.  This should be an agent that requires a power
+cap as part of the policy, i.e. power_governor or power_balancer.</p></dd>
+</dl>
+
+
+<h2 id="OPTIONS-FOR-BALANCER-ANALYSIS">OPTIONS FOR BALANCER ANALYSIS</h2>
+
+<p>This analysis type accepts the options for <em>power_sweep</em> analysis, plus
+the following additional options:</p>
+
+<dl>
+<dt><code>--geopm-analysis-metric</code></dt><dd><p>Metric to plot for comparison (<em>runtime</em>, <em>power</em>, or <em>energy</em>).</p></dd>
+<dt><code>--geopm-analysis-normalize</code></dt><dd><p>Whether to normalize results to governor at highest power budget.</p></dd>
+<dt><code>--geopm-analysis-speedup</code></dt><dd><p>Plot the inverse of the target data to show speedup as a positive change.</p></dd>
+</dl>
+
+
+<h2 id="OPTIONS-FOR-NODE_EFFICIENCY-ANALYSIS">OPTIONS FOR NODE_EFFICIENCY ANALYSIS</h2>
+
+<p>This analysis type accepts the options for <em>power_sweep</em> analysis, plus
+the following additional options:</p>
+
+<dl>
+<dt><code>--geopm-analysis-min-freq</code></dt><dd><p>Minimum frequency to display for plotting.  Default is 0.5 GHz.</p></dd>
+<dt><code>--geopm-analysis-max-freq</code></dt><dd><p>Maximum frequency to display for plotting.  Default is 3.0 GHz.</p></dd>
+<dt><code>--geopm-analysis-step-freq</code></dt><dd><p>Size of frequency bins to use for plotting.  Default is 100 MHz.</p></dd>
+<dt><code>--geopm-analysis-sticker-freq</code></dt><dd><p>Sticker frequency of the system where data was collected.  If not
+provided, the current system sticker frequency will be used.</p></dd>
+<dt><code>--geopm-analysis-nodelist</code></dt><dd><p>Range of nodes separated by '-' to use for analysis. This option is
+not used for launch and should contain a range of nodes for which
+previously collected data is available.</p></dd>
+</dl>
+
+
+<h2 id="OPTIONS-FOR-NODE_POWER-ANALYSIS">OPTIONS FOR NODE_POWER ANALYSIS</h2>
+
+<dl>
+<dt><code>--geopm-analysis-min-power</code></dt><dd><p>Minimum power to display for plotting.  Default is 120W.</p></dd>
+<dt><code>--geopm-analysis-max-power</code></dt><dd><p>Maximum power to display for plotting.  Default is 200W.</p></dd>
+<dt><code>--geopm-analysis-step-power</code></dt><dd><p>Size of power bins to use for plotting.  Default is 10W.</p></dd>
+</dl>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>  Once the geopmpy modules are installed, you can invoke this utility
+  directly from the command line.  You can either run the utility from
+  inside a directory containing data, or from a remote directory.
+  Some examples follow:</p>
+
+<p>  The <em>freq_sweep</em> analysis type runs the application once at each
+  available frequency on the platform. The summary generated from this
+  analysis can be used for other types of analysis. The output from
+  the frequency sweep is a mapping of the best-fit frequency for each
+  region that saves energy while not letting the runtime increase more
+  than 10%.  It can also generate plots of the runtime and energy of
+  each region at each frequency setting.  In this example, options
+  beginning with --geopm-analysis- control the output from analysis,
+  --geopm-ctl is passed though to the geopm launcher
+  (<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>), and -N1 and -n1 are passed through to the
+  underlying resource manager.</p>
+
+<pre><code>geopmanalysis freq_sweep --geopm-analysis-profile-prefix myprof \
+                         --geopm-analysis-output-dir mydir \
+                         --geopm-analysis-summary \
+                         --geopm-ctl process \
+                         --geopm-analysis-launcher srun \
+                         -N1 -n1 -- ./build/bin/geopmbench config.json
+</code></pre>
+
+<p>  The <em>offline</em> analysis type runs a frequency sweep (if reports are
+  not already present) to determine the best-fit frequency for each
+  region of the application. Then it runs the application using the
+  EnergyEfficientAgent plugin, which uses this mapping to change the
+  frequency when entering each region. The <em>online</em> analysis type is
+  similar except that it determines the best-fit frequency through
+  online training.</p>
+
+<pre><code>geopmanalysis offline --geopm-analysis-profile-prefix myprof \
+                      --geopm-analysis-output-dir mydir \
+                      --geopm-ctl process \
+                      --geopm-analysis-launcher srun \
+                      -N1 -n1 -- ./build/bin/geopmbench config.json
+</code></pre>
+
+<p>  If an analysis launch has been run once, the same data can be reused
+  using the --geopm-analysis-skip-launch option without supplying
+  launcher options (--geopm-analysis-launcher, number of nodes,
+  --geopm-ctl, etc.) or application arguments.  This option can also
+  be used to analyze reports and traces generated through another
+  launch method, provided that the profile names and file names are
+  consistent with what the analysis expects.  For example, the
+  following command generates plots for the previous analysis:</p>
+
+<pre><code>geopmanalysis offline --geopm-analysis-profile-prefix myprof \
+                      --geopm-analysis-output-dir myprof \
+                      --geopm-analysis-plot \
+                      --geopm-analysis-skip-launch \
+                      --geopm-analysis-min-freq 1.0e9 \
+                      --geopm-analysis-max-freq 2.0e9
+</code></pre>
+
+<p>  The <em>stream_mix</em> analysis type uses the geopmbench application and
+  varies the ratio between the runtimes of the stream and dgemm
+  regions from around 20% stream to around 80% stream. For each ratio,
+  it launches a frequency sweep and the offline and online analysis
+  modes described above. The resulting analysis produces plots
+  comparing the runtime and energy savings of the different plugin
+  modes at each stream mix ratio.  Note that no application arguments
+  are passed to the command below, although other launch arguments are
+  required.</p>
+
+<pre><code>geopmanalysis stream_mix --geopm-analysis-profile-prefix myprof \
+                         --geopm-analysis-output-dir myprof \
+                         --geopm-analysis-plot \
+                         --geopm-ctl=process
+                         --geopm-analysis-launcher srun \
+                         -N1 -n1
+</code></pre>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopmpy.7.html">geopmpy<span class="s">(7)</span></a></strong>,
+<strong><a class="man-ref" href="geopmbench.1.html">geopmbench<span class="s">(1)</span></a></strong>,
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>,
+<strong><span class="man-ref">geopmplotter<span class="s">(1)</span></span></strong>,</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>GEOPM 1.0.0+dev46g300667f</li>
+    <li class='tc'>June 2019</li>
+    <li class='tr'>geopmanalysis(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

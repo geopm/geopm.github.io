@@ -2,6 +2,7 @@ var searchData=
 [
   ['decode_5ffunction',['decode_function',['../classgeopm_1_1_m_s_r.html#a5959df21778086facdeec4b7c81707ac',1,'geopm::MSR']]],
   ['dictionary',['dictionary',['../classgeopm_1_1_plugin_factory.html#a985600eb3ffdc8e3d50c64b573b31c01',1,'geopm::PluginFactory']]],
+  ['disable',['disable',['../classgeopm_1_1_energy_efficient_region.html#aa57eae56ebce3b276a16af507b9b91e9',1,'geopm::EnergyEfficientRegion::disable()'],['../classgeopm_1_1_energy_efficient_region_imp.html#ae048d6d45fbd019cfaef2893276756ee',1,'geopm::EnergyEfficientRegionImp::disable()']]],
   ['do_5fsend_5fpolicy',['do_send_policy',['../classgeopm_1_1_agent.html#aa31a7c9beb554f2e992b8ba3f550edd0',1,'geopm::Agent']]],
   ['do_5fsend_5fsample',['do_send_sample',['../classgeopm_1_1_agent.html#a0ba9bc5764872dd01f8b02759f7f2563',1,'geopm::Agent']]],
   ['do_5fwrite_5fbatch',['do_write_batch',['../classgeopm_1_1_agent.html#afb97f2b7119ab9b38af3ccc18f935324',1,'geopm::Agent::do_write_batch()'],['../classgeopm_1_1_frequency_governor.html#ac76469cf2efc5b5db69f8f963507d785',1,'geopm::FrequencyGovernor::do_write_batch()'],['../classgeopm_1_1_power_governor.html#ad8cee16cfe5bfcba517218c89ce13472',1,'geopm::PowerGovernor::do_write_batch()']]],

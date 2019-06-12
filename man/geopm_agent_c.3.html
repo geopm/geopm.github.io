@@ -100,6 +100,7 @@
 <dt><code>int geopm_agent_name(</code></dt><dd><p><code>int</code> <em>agent_idx</em>, <br />
 <code>size_t</code> <em>agent_name_max</em>, <br />
 <code>char *</code><em>agent_name</em><code>);</code></p></dd>
+<dt><code>int geopm_agent_enforce_policy(</code></dt><dd><p><code>void);</code></p></dd>
 </dl>
 
 
@@ -149,6 +150,18 @@ result is stored in <em>agent_name</em>.  The number of bytes reserved for the
 output string is specified in <em>agent_name_max</em>.  Returns zero if the
 <em>agent_idx</em> is in range, and the agent name can be stored in the output
 string (<em>agent_name</em>).  Otherwise an error code is returned.</p></dd>
+<dt><code>geopm_agent_enforce_policy</code>()</dt><dd><p>queries the environment for the <code>GEOPM_AGENT</code> and <code>GEOPM_POLICY</code>
+and enforces the policy for the agent by writing controls to the
+platform (see <strong><a class="man-ref" href="geopm_pio_c.3.html">geopm_pio_c<span class="s">(3)</span></a></strong>).  A resource manager can use
+this function to enforce the GEOPM configured policy (see
+<strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>) prior to releasing compute nodes for a user
+allocation.  More generally this function allows one-time use of
+an Agent outside of the context of an MPI runtime or the use of a
+GEOPM Controller.  Note that the enforcement of the policy will
+not support any of the dynamic features of the agent.  For instance,
+calling <code>geopm_agent_enforce_policy</code>() for the power_balancer will
+set all nodes to the same power limit, and those limits will not
+vary with time.</p></dd>
 </dl>
 
 
@@ -175,8 +188,8 @@ to convert them to strings.</p>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Intel Corporation</li>
-    <li class='tc'>April 2019</li>
+    <li class='tl'>GEOPM 1.0.0+dev46g300667f</li>
+    <li class='tc'>June 2019</li>
     <li class='tr'>geopm_agent_c(3)</li>
   </ol>
 

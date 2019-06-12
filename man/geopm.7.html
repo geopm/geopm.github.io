@@ -92,7 +92,7 @@ simple use case is reading hardware counters and setting hardware
 controls with platform independant syntax using a command line tool on
 a particular compute node.  An advanced use case is dynamically
 coordinating hardware settings across all compute nodes used by an
-application is response to the application's behavior and requests
+application in response to the application's behavior and requests
 from the resource manager.  The dynamic coordination is implemented as
 a hierarchical control system for scalable communication and
 decentralized control. The hierarchical control system can optimize
@@ -280,27 +280,35 @@ A simple method for selecting fields from the trace file is with the
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
 <p>When using the launcher wrapper script <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>, the
-interface to the GEOPM runtime is controlled exclusively by the
-launcher command line options.  The launcher script sets the
-environment variables described in this section according to the
-options specified on the command line.  Direct use of these
-environment variables is only recommended when launching the GEOPM
-runtime <em>without</em> <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>.  If launching the GEOPM
-controller in application mode without <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>, the
-environment variables documented below must be set to the same values
-in the contexts where <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong> and the compute application are
-executed.</p>
+interface to the GEOPM runtime is controlled by the launcher command
+line options.  The launcher script sets the environment variables
+described in this section according to the options specified on the
+command line.  Direct use of these environment variables is only
+recommended when launching the GEOPM runtime <em>without</em>
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>.  If launching the GEOPM controller in application
+mode without <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>, the environment variables documented
+below must be set to the same values in the contexts where
+<strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong> and the compute application are executed.</p>
+
+<p>In addition to the environment, there are two node-local configuration
+files that will impact the way the GEOPM behaves.  These are located
+in the following paths:</p>
+
+<pre><code>/etc/geopm/environment-default.json
+/etc/geopm/environment-override.json
+</code></pre>
+
+<p>These files contain JSON objects that map GEOPM environment variables
+to default or override values.  The <code>environment-default.json</code> file
+will determine default values for the GEOPM runtime in the case where
+the values are not set in the calling environment.  The
+<code>environment-override.json</code> file will enforce that any GEOPM process
+running on the compute node will use the values specified regardless
+of the values set in the calling environment.</p>
+
+<p><code>GEOPM ENVIRONMENT VARIABLES</code></p>
 
 <dl>
-<dt><code>LD_DYNAMIC_WEAK</code></dt><dd><p>When dynamically linking an application to libgeopm for any
-features supported by the PMPI profiling of the MPI runtime it may
-be required that the LD_DYNAMIC_WEAK environment variable be set
-at runtime as is documented in the <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so<span class="s">(8)</span></a></strong> man page.  When
-dynamically linking an application, if care is taken to link the
-libgeopm library before linking the library providing the weak MPI
-symbols, e.g. "-lgeopm -lmpi", linking order precedence will
-enforce the required override of the MPI interface symbols and the
-LD_DYNAMIC_WEAK environment variable is not required at runtime.</p></dd>
 <dt><code>GEOPM_REPORT</code></dt><dd><p>See documentation for equivalent command line option to
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-report</code>.</p></dd>
 <dt><code>GEOPM_REPORT_SIGNALS</code></dt><dd><p>See documentation for equivalent command line option to
@@ -331,6 +339,21 @@ LD_DYNAMIC_WEAK environment variable is not required at runtime.</p></dd>
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-region-barrier</code>.</p></dd>
 <dt><code>GEOPM_DISABLE_HYPERTHREADS</code></dt><dd><p>See documentation for equivalent command line option to
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-hyperthreads-disable</code>.</p></dd>
+</dl>
+
+
+<p><code>OTHER ENVIRONMENT VARIABLES</code></p>
+
+<dl>
+<dt><code>LD_DYNAMIC_WEAK</code></dt><dd>When dynamically linking an application to libgeopm for any
+features supported by the PMPI profiling of the MPI runtime it may
+be required that the LD_DYNAMIC_WEAK environment variable be set
+at runtime as is documented in the <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so<span class="s">(8)</span></a></strong> man page.  When
+dynamically linking an application, if care is taken to link the
+libgeopm library before linking the library providing the weak MPI
+symbols, e.g. "-lgeopm -lmpi", linking order precedence will
+enforce the required override of the MPI interface symbols and the
+LD_DYNAMIC_WEAK environment variable is not required at runtime.</dd>
 </dl>
 
 
@@ -390,8 +413,8 @@ LD_DYNAMIC_WEAK environment variable is not required at runtime.</p></dd>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Intel Corporation</li>
-    <li class='tc'>April 2019</li>
+    <li class='tl'>GEOPM 1.0.0+dev46g300667f</li>
+    <li class='tc'>June 2019</li>
     <li class='tr'>geopm(7)</li>
   </ol>
 
