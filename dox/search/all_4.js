@@ -3,7 +3,7 @@ var searchData=
   ['end_5fbit',['end_bit',['../structgeopm_1_1_m_s_r_1_1m__encode__s.html#ae4a5e0fb26ba6f9f6a6f0d8b66bac4d8',1,'geopm::MSR::m_encode_s']]],
   ['energyefficientregion',['EnergyEfficientRegion',['../classgeopm_1_1_energy_efficient_region.html',1,'geopm']]],
   ['energyefficientregion_2ehpp',['EnergyEfficientRegion.hpp',['../_energy_efficient_region_8hpp.html',1,'']]],
-  ['energyefficientregionimp',['EnergyEfficientRegionImp',['../classgeopm_1_1_energy_efficient_region_imp.html',1,'geopm::EnergyEfficientRegionImp'],['../classgeopm_1_1_energy_efficient_region_imp.html#a1d5fd4e5ab96ac1146172f0925adb61b',1,'geopm::EnergyEfficientRegionImp::EnergyEfficientRegionImp()']]],
+  ['energyefficientregionimp',['EnergyEfficientRegionImp',['../classgeopm_1_1_energy_efficient_region_imp.html',1,'geopm::EnergyEfficientRegionImp'],['../classgeopm_1_1_energy_efficient_region_imp.html#a8392eee99356f1c2d2a958a16bd87c6f',1,'geopm::EnergyEfficientRegionImp::EnergyEfficientRegionImp()']]],
   ['enforce_5fpolicy',['enforce_policy',['../classgeopm_1_1_agent.html#ae1d9f22783ee1dfd84557947f06a7623',1,'geopm::Agent']]],
   ['equals',['equals',['../classjson11_1_1_json_value.html#a2730125126e440ecb6ef5de9f2ce8ddf',1,'json11::JsonValue']]],
   ['err_5fvalue',['err_value',['../classgeopm_1_1_exception.html#a0b972f3a24662591a735075607fc5b77',1,'geopm::Exception']]],

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['name',['name',['../structgeopm_1_1_platform_i_o_1_1m__request__s.html#ac71e10de9104eb8a441f6e9659c238b6',1,'geopm::PlatformIO::m_request_s::name()'],['../classgeopm_1_1_m_s_r.html#a93d0010cec165422b9a63823ea38813d',1,'geopm::MSR::name()'],['../classgeopm_1_1_m_s_r_control.html#a99642adf41cd789f397340e04c46f422',1,'geopm::MSRControl::name()'],['../classgeopm_1_1_m_s_r_signal.html#a26cc69ab08b3a8a85a5d3f1cfdf2481a',1,'geopm::MSRSignal::name()']]],
+  ['name',['name',['../classgeopm_1_1_m_s_r.html#a93d0010cec165422b9a63823ea38813d',1,'geopm::MSR::name()'],['../classgeopm_1_1_m_s_r_control.html#a99642adf41cd789f397340e04c46f422',1,'geopm::MSRControl::name()'],['../classgeopm_1_1_m_s_r_signal.html#a26cc69ab08b3a8a85a5d3f1cfdf2481a',1,'geopm::MSRSignal::name()']]],
   ['nul',['NUL',['../classjson11_1_1_json.html#a51a2f5c0508c32c3336bcf42ae0233e5ab6068e23b66fa17f6193d29ba0b916ab',1,'json11::Json']]],
   ['num_5fcontrol',['num_control',['../classgeopm_1_1_m_s_r.html#aabeeb202cdd467cac4b231f930fe009d',1,'geopm::MSR']]],
   ['num_5fdomain',['num_domain',['../classgeopm_1_1_platform_topo.html#ad9d4e996c177464098f3b5e4a67b255e',1,'geopm::PlatformTopo']]],

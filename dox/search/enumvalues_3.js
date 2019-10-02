@@ -13,6 +13,7 @@ var searchData=
   ['geopm_5fdomain_5fpackage_5fnic',['GEOPM_DOMAIN_PACKAGE_NIC',['../geopm__topo_8h.html#aa76c17d18cff1840930f342ac01f4fbcac1ac1cb483b0a3a5f999fcc73f8aeee2',1,'geopm_topo.h']]],
   ['geopm_5ferror_5faffinity',['GEOPM_ERROR_AFFINITY',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991ab915cfdd48484609b168a5feca4e9cfb',1,'geopm_error.h']]],
   ['geopm_5ferror_5fagent_5funsupported',['GEOPM_ERROR_AGENT_UNSUPPORTED',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a53bff05836c36ee655a4743a0d4a178e',1,'geopm_error.h']]],
+  ['geopm_5ferror_5fdata_5fstore',['GEOPM_ERROR_DATA_STORE',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a0b806b1c596ab40147fe4526afcd0131',1,'geopm_error.h']]],
   ['geopm_5ferror_5ffile_5fparse',['GEOPM_ERROR_FILE_PARSE',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a0ba0b2928c81e8f64e944e4f50819b08',1,'geopm_error.h']]],
   ['geopm_5ferror_5finvalid',['GEOPM_ERROR_INVALID',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a3ee98896f8a937409312a88b96977e1b',1,'geopm_error.h']]],
   ['geopm_5ferror_5flevel_5frange',['GEOPM_ERROR_LEVEL_RANGE',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a4b7523fd92c4b8c68b0463842a7ccfcd',1,'geopm_error.h']]],

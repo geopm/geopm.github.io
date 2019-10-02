@@ -75,7 +75,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>geopmagent</code> [<code>-a</code> <em>AGENT</em>] [<code>-p</code> <em>POLICY0</em>,<em>POLICY1</em>,...]</p>
+<p><code>geopmagent</code> [<code>-a</code> <em>AGENT</em>] [<code>-p</code> <em>POLICY0</em>[,<em>POLICY1</em>,...] ]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -103,8 +103,10 @@ then exit.</p></dd>
 <dt><code>--version</code></dt><dd><p>Print version of <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> to standard output, then exit.</p></dd>
 <dt><code>-a</code> <em>AGENT</em></dt><dd><p>Specify the name of the agent.</p></dd>
 <dt><code>-p</code> <em>POLICY0</em>,<em>POLICY1</em>,...</dt><dd><p>The values to be set for each policy in a comma-separated list.
-If the agent does not require any policy values this option must
-be specified as "None" or "none".</p></dd>
+Values other than the first policy are optional and will be set to
+NAN if not provided, indicating that the Agent should use a
+default value.  If the agent does not require any policy values
+this option must be specified as "None" or "none".</p></dd>
 </dl>
 
 
@@ -114,30 +116,31 @@ be specified as "None" or "none".</p></dd>
 
 <pre><code>$ geopmagent
 energy_efficient
+frequency_map
 monitor
 power_balancer
 power_governor
 </code></pre>
 
-<p>Get power_balancing agent policy and sample names:</p>
+<p>Get power_balancer agent policy and sample names:</p>
 
 <pre><code>$ geopmagent -a power_balancer
-Policy: POWER
-Sample: POWER,IS_CONVERGED,EPOCH_RUNTIME
+Policy: POWER_CAP,STEP_COUNT,MAX_EPOCH_RUNTIME,POWER_SLACK
+Sample: STEP_COUNT,MAX_EPOCH_RUNTIME,SUM_POWER_SLACK,MIN_POWER_HEADROOM
 </code></pre>
 
-<p>Create policy for power_governor agent with 250 Watts per node power
+<p>Create policy for power_governor agent with 250 watts per node power
 budget:</p>
 
 <pre><code>$ geopmagent -a power_governor -p 250
 {"POWER" : 250}
 </code></pre>
 
-<p>Create policy for power_balancer agent with 250 Watts per node power
-budget:</p>
+<p>Create policy for power_balancer agent with 250 watts per node power
+budget and other policies set to default:</p>
 
-<pre><code>$ geopmagent -a power_balancer -p 250,0,0,0
-{"POWER_CAP" : 250, "STEP_COUNT" : 0, "MAX_EPOCH_RUNTIME" : 0, "POWER_SLACK" : 0}
+<pre><code>$ geopmagent -a power_balancer -p 250
+{"POWER_CAP" : 250}
 </code></pre>
 
 <p>Create policy for energy_efficient agent with minimum frequency of 1.2
@@ -145,6 +148,13 @@ GHz and maximum frequency of 2.4 GHz:</p>
 
 <pre><code>$ geopmagent -a energy_efficient -p 1.2e9,2.4e9
 {"FREQ_MIN" : 1.2e+09, "FREQ_MAX" : 2.4e+09}
+</code></pre>
+
+<p>Create policy for energy_efficient agent with default minimum and
+maximum frequency, with a performance margin of 5%:</p>
+
+<pre><code>$ geopmagent -a energy_efficient -p NAN,NAN,0.5
+{"FREQ_MIN" : "NAN", "FREQ_MAX" : "NAN", "PERF_MARGIN": 0.5}
 </code></pre>
 
 <p>Create policy for monitor agent which does not require any policies.
@@ -171,8 +181,8 @@ specifying <code>--geopm-agent</code> and <code>--geopm-policy</code> are option
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>GEOPM 1.0.0+dev46g300667f</li>
-    <li class='tc'>June 2019</li>
+    <li class='tl'>GEOPM 1.0.0+dev198ga6ad1a7</li>
+    <li class='tc'>October 2019</li>
     <li class='tr'>geopmagent(1)</li>
   </ol>
 

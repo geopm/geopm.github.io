@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['progress',['progress',['../structgeopm__region__info__s.html#ad3163ac3daf91a3c10c3cb633c6f7f28',1,'geopm_region_info_s']]]
+  ['runtime',['runtime',['../structgeopm__region__info__s.html#a95539c3912abe1ae80bd19c7e04fccc7',1,'geopm_region_info_s']]]
 ];

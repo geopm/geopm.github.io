@@ -1,7 +1,6 @@
 var searchData=
 [
   ['m_5fencode_5fs',['m_encode_s',['../structgeopm_1_1_m_s_r_1_1m__encode__s.html',1,'geopm::MSR']]],
-  ['m_5frequest_5fs',['m_request_s',['../structgeopm_1_1_platform_i_o_1_1m__request__s.html',1,'geopm::PlatformIO']]],
   ['msr',['MSR',['../classgeopm_1_1_m_s_r.html',1,'geopm']]],
   ['msrcontrol',['MSRControl',['../classgeopm_1_1_m_s_r_control.html',1,'geopm']]],
   ['msrio',['MSRIO',['../classgeopm_1_1_m_s_r_i_o.html',1,'geopm']]],

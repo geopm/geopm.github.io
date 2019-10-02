@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>geopm_policystore_c(3) - geopm resource policy store interface</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>geopm_policystore_c(3)</li>
+    <li class='tc'></li>
+    <li class='tr'>geopm_policystore_c(3)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>geopm_policystore_c</code> - <span class="man-whatis">geopm resource policy store interface</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><strong>#include <a href="https://github.com/geopm/geopm/blob/dev/src/geopm_policystore.h">&lt;geopm_policystore.h></a></strong></p>
+
+<p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
+
+<ul>
+<li><p><code>int geopm_policystore_connect(</code>:
+<code>const char *</code><em>data_path</em><code>);</code></p></li>
+<li><p><code>int geopm_policystore_disconnect();</code></p></li>
+<li><p><code>int geopm_policystore_get_best(</code>:
+<code>const char *</code><em>profile_name</em><code>,</code><br />
+<code>const char *</code><em>agent_name</em><code>,</code><br />
+<code>size_t</code> <em>max_policy_vals</em><code>,</code><br />
+<code>double *</code><em>policy_vals</em><code>);</code></p></li>
+<li><p><code>int geopm_policystore_set_best(</code>:
+<code>const char *</code><em>profile_name</em><code>,</code><br />
+<code>const char *</code><em>agent_name</em><code>,</code><br />
+<code>size_t</code><em>num_policy_vals</em><code>,</code><br />
+<code>const double *</code><em>policy_vals</em><code>);</code></p></li>
+<li><p><code>int geopm_policystore_set_default(</code>:
+<code>const char *</code><em>agent_name</em><code>,</code><br />
+<code>size_t</code><em>num_policy_vals</em><code>,</code><br />
+<code>const double *</code><em>policy_vals</em><code>);</code></p></li>
+</ul>
+
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>These interfaces expose records of best known policies for profiles used with agents.
+The records include the best reported policies, as well as the default policies
+to apply when a best run has not yet been recorded.  Policies are shared as
+arrays of doubles.  See <code>geopm_agent_policy_json_partial()</code> in <strong><span class="man-ref">geopm_agent<span class="s">(3)</span></span></strong>
+for information about interpreting them as json strings.</p>
+
+<dl>
+<dt><code>geopm_policystore_connect</code>()</dt><dd><p>Connects to a data store at the path specified in <em>data_path</em>, creating a
+new one if necessary.  Returns zero on success, or an error code on failure.</p></dd>
+<dt><code>geopm_policystore_disconnect</code>()</dt><dd><p>Disconnects the data store if one is connected.</p></dd>
+<dt><code>geopm_policystore_get_best</code>()</dt><dd><p>Gets the best known policy for a given <em>profile_name</em> and <em>agent_name</em> in
+the policy store.  Gets the agent's default policy if no best policy has
+been reported.  Returns GEOPM_ERROR_INVALID if not connected to a store, or
+if <em>policy_vals</em> would be truncated.  Returns GEOPM_ERROR_DATA_STORE if no
+applicable policy exists in the data store, or if any data store errors
+occur.  Returns zero on success, and up to <em>max_policy_vals</em> values of the
+found policy are written to <em>policy_vals</em>.</p></dd>
+<dt><code>geopm_policystore_set_best</code>()</dt><dd><p>Sets the best known policy for a given <em>profile_name</em> and <em>agent_name</em> to
+<em>policy_vals</em> in the store.  <em>num_policy_vals</em> specifies how many values to
+store.  Returns GEOPM_ERROR_INVALID if not connected to a store. Returns
+GEOPM_ERROR_DATA_STORE if any data store errors occur. Returns zero on
+success.</p></dd>
+<dt><code>geopm_policystore_set_default</code>()</dt><dd><p>Sets the default policy for a given <em>agent_name</em> to <em>policy_vals</em> in
+the store.  _num_policy_vals specifies how many values to store. Returns
+GEOPM_ERROR_INVALID if not connected to a store.  Returns
+GEOPM_ERROR_DATA_STORE if any data store errors occur.  Returns zero on
+success.</p></dd>
+</dl>
+
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
+<strong><span class="man-ref">geopm_agent<span class="s">(3)</span></span></strong>,
+<strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>GEOPM 1.0.0+dev198ga6ad1a7</li>
+    <li class='tc'>October 2019</li>
+    <li class='tr'>geopm_policystore_c(3)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

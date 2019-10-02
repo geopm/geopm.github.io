@@ -21,6 +21,7 @@ var searchData=
   ['_7epowergovernor',['~PowerGovernor',['../classgeopm_1_1_power_governor.html#a81983e1e0ee6be83eb5aa2a1aae5dabb',1,'geopm::PowerGovernor']]],
   ['_7eregionaggregator',['~RegionAggregator',['../classgeopm_1_1_region_aggregator.html#a58d126c1d4c6335fb638a37cc2d7cb14',1,'geopm::RegionAggregator']]],
   ['_7esharedmemory',['~SharedMemory',['../classgeopm_1_1_shared_memory.html#abfdc5f8f4aceb897e8b5a53753bdb07f',1,'geopm::SharedMemory']]],
+  ['_7esharedmemoryscopedlock',['~SharedMemoryScopedLock',['../classgeopm_1_1_shared_memory_scoped_lock.html#a26644cf09bb2a4eaac6e891c7ab57505',1,'geopm::SharedMemoryScopedLock']]],
   ['_7esharedmemoryuser',['~SharedMemoryUser',['../classgeopm_1_1_shared_memory_user.html#af03ead67f9edf7364fcc38a34249484c',1,'geopm::SharedMemoryUser']]],
   ['_7esignalexception',['~SignalException',['../classgeopm_1_1_signal_exception.html#a474388a028750ca50df50fa64f260477',1,'geopm::SignalException']]],
   ['_7etimeiogroup',['~TimeIOGroup',['../classgeopm_1_1_time_i_o_group.html#ac524e94e110ddab811cc5eeab271564c',1,'geopm::TimeIOGroup']]]

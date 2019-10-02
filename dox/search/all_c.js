@@ -13,7 +13,6 @@ var searchData=
   ['m_5ffunction_5flog_5fhalf',['M_FUNCTION_LOG_HALF',['../classgeopm_1_1_m_s_r.html#adbe244b126ed149cd6a3f4037f78812ea93072bceb695ad27b666a59c6e4a2316',1,'geopm::MSR']]],
   ['m_5ffunction_5foverflow',['M_FUNCTION_OVERFLOW',['../classgeopm_1_1_m_s_r.html#adbe244b126ed149cd6a3f4037f78812ea0dd2a4efae6f21d7e9a501956892c4d7',1,'geopm::MSR']]],
   ['m_5ffunction_5fscale',['M_FUNCTION_SCALE',['../classgeopm_1_1_m_s_r.html#adbe244b126ed149cd6a3f4037f78812eab3d15fc350957080a277b54469a5fc4d',1,'geopm::MSR']]],
-  ['m_5frequest_5fs',['m_request_s',['../structgeopm_1_1_platform_i_o_1_1m__request__s.html',1,'geopm::PlatformIO']]],
   ['m_5funits_5fcelsius',['M_UNITS_CELSIUS',['../classgeopm_1_1_m_s_r.html#ad73ba83dda18a80ceebdc7a380e52609ad186ac7d193d8653c4e09fd896bb0a1d',1,'geopm::MSR']]],
   ['m_5funits_5fe',['m_units_e',['../classgeopm_1_1_m_s_r.html#ad73ba83dda18a80ceebdc7a380e52609',1,'geopm::MSR']]],
   ['m_5funits_5fhertz',['M_UNITS_HERTZ',['../classgeopm_1_1_m_s_r.html#ad73ba83dda18a80ceebdc7a380e52609a1af4537e815dac7ae3f5effb01f7ff6e',1,'geopm::MSR']]],

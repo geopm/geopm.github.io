@@ -99,8 +99,8 @@ $(function() {
 <h2>BUILD REQUIREMENTS </h2>
 <p>In order to build the GEOPM package from source, the below requirements must be met.</p>
 <p>The GEOPM package requires a compiler that supports the MPI 2.2 and C++11 standards. These requirements can be met by using GCC version 4.7 or greater and installing the openmpi-devel package version 1.7 or greater on RHEL or SLES Linux. Documentation creation including man pages further requires the rubygems package, and the ruby-devel package.</p>
-<p>RHEL: </p><pre class="fragment">yum install openmpi-devel ruby-devel rubygems
-</pre><p>SUSE: </p><pre class="fragment">zypper install openmpi-devel ruby-devel rubygems
+<p>RHEL: </p><pre class="fragment">yum install openmpi-devel elfutils-libelf-devel ruby-devel rubygems
+</pre><p>SUSE: </p><pre class="fragment">zypper install openmpi-devel elfutils-libelf-devel ruby-devel rubygems
 </pre><p>Alternatively these can be installed from source, and an alternate MPI implementation to OpenMPI can be selected (e.g. one provided by OpenMPI). See </p><pre class="fragment">./configure --help
 </pre><p>for details on how to use non-standard install locations for build requirements through the </p><pre class="fragment">./configure --with-&lt;feature&gt;
 </pre><p>options.</p>
@@ -126,7 +126,13 @@ export MPICXX=mpicxx
 <p>RHEL: </p><pre class="fragment">yum install openmpi
 </pre><p>SUSE: </p><pre class="fragment">zypper install openmpi
 </pre><p>Alternatively the MPI requirement can be met by using OpenHPC packages.</p>
-<h3>SYSTEMD CONFIGURATION</h3>
+<h3>USER ENVIRONMENT</h3>
+<p>The libraries, binaries and python tools will not be installed into the standard system paths if GEOPM is built from source and configured with the <code>--prefix</code> option. In this case, it is required that the user augment their environment to specify the installed location. If the configure option is specified as above: </p><pre class="fragment">GEOPM_PREFIX=$HOME/build/geopm
+./configure --prefix=$GEOPM_PREFIX
+</pre><p>then the following modifications to the user's environment should be made prior to running any GEOPM tools: </p><pre class="fragment">export LD_LIBRARY_PATH=$GEOPM_PREFIX/lib:$LD_LIBRARY_PATH
+export PATH=$GEOPM_PREFIX/bin:$PATH
+export PYTHONPATH=$GEOPM_PREFIX/lib/python2.7/site-packages:$PYTHONPATH
+</pre><h3>SYSTEMD CONFIGURATION</h3>
 <p>In order for GEOPM to properly use shared memory to communicate between the Controller and the application, it may be necessary to alter the configuration for systemd. The default behavior of systemd is to clean-up all inter-process communication for non-system users. This causes issues with GEOPM's initialization routines for shared memory. This can be disabled by ensuring that <code>RemoveIPC=no</code> is set in <code>/etc/systemd/logind.conf</code>. Most Linux distributions change the default setting to disable this behavior. More information can be found <a href="https://superuser.com/a/1179962">here</a>.</p>
 <h3>MSR DRIVER</h3>
 <p>The msr-safe kernel driver must be loaded at runtime to support user-level read and write of whitelisted MSRs. The msr-safe kernel driver is distributed with OpenHPC and can be installed using the RPMs distributed there (see INSTALL section above).</p>
@@ -151,7 +157,7 @@ make checkprogs -j
 make check
 </pre><p>The unit tests can be executed on any development system, including VMs and containers, that meets the BUILD REQUIREMENTS section above.</p>
 <p>The integration tests are located in the "test_integration" directory. These tests require a system meeting all of the requirements discussed in the RUN REQUIREMENTS section above and can be executed as follows: </p><pre class="fragment">cd test_integration
-./geopm_test_integration.py
+python .
 </pre><p>These integration tests are based on pyunit and leverage the geopmpy python package to validate the runtime. Please report failures of these tests as issues.</p>
 <h2>RESOURCE MANAGER INTEGRATION </h2>
 <p>The GEOPM package can be integrated with a compute cluster resource manager by modifying the resource manager daemon running on the cluster compute nodes. An example of integration with the SLURM resource manager via a SPANK plugin can be found here:</p>
