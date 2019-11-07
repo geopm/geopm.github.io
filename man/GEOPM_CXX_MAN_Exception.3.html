@@ -56,6 +56,7 @@
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#FUNCTIONS">FUNCTIONS</a>
     <a href="#CLASS-METHODS">CLASS METHODS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
@@ -79,7 +80,6 @@
 <p><code>Link with -lgeopm (MPI) or -lgeopmpolicy (non-MPI)</code></p>
 
 <dl>
-<dt><code>void geopm_error_destroy_shmem(</code></dt><dd><p><code>void);</code></p></dd>
 <dt><code>int exception_handler(</code></dt><dd><p><code>std::exception_ptr</code><em>eptr</em><code>,</code><br />
 <code>bool</code><em>do_print</em><code>);</code></p></dd>
 <dt><code>Exception(</code></dt><dd><p><code>void);</code></p></dd>
@@ -95,12 +95,7 @@
 <code>const char *</code><em>file</em><code>,</code><br />
 <code>int</code><em>line</em><code>);</code></p></dd>
 <dt><code>~Exception(</code></dt><dd><p><code>void) = default;</code></p></dd>
-<dt><code>int err_value(</code></dt><dd><p><code>void) const;</code></p></dd>
-<dt><code>SignalException(</code></dt><dd><p><code>void);</code></p></dd>
-<dt><code>SignalException(</code></dt><dd><p><code>int</code><em>signum</em><code>);</code></p></dd>
-<dt><code>SignalException(</code></dt><dd><p><code>const SignalException &amp;</code><em>other</em><code>);</code></p></dd>
-<dt><code>~SignalException(</code></dt><dd><p><code>void);</code></p></dd>
-<dt><code>int sig_value(</code></dt><dd><p><code>void) const;</code></p></dd>
+<dt><code>int Exception::err_value(</code></dt><dd><p><code>void) const;</code></p></dd>
 </dl>
 
 
@@ -112,14 +107,10 @@ according to the error code.  The list of errors is described in
 <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></strong>), negative values are GEOPM errors.  If zero is specified
 for the error code, GEOPM_ERROR_RUNTIME (-1) is assumed.</p>
 
-<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+<h2 id="FUNCTIONS">FUNCTIONS</h2>
 
 <dl>
-<dt><code>geopm_error_destroy_shmem</code>()</dt><dd><p>Unlinks all shared memory keys in case of error.  Looks in
-/dev/shm for any keys starting with "/geopm-shm" or the
-GEOPM_SHMKEY environment variable if set.  All matching keys are
-unlinked with shm_unlink().</p></dd>
-<dt><code>exception_handler</code>()</dt><dd><p>Handle a thrown exception pointed to by <em>eptr</em> and return an error
+<dt><code>exception_handler</code>()</dt><dd>Handle a thrown exception pointed to by <em>eptr</em> and return an error
 value.  This exception handler is used by every GEOPM C interface
 to handle any exceptions that are thrown during execution of a C++
 implementation.  If GEOPM has been configured with debugging
@@ -129,7 +120,13 @@ convert the C++ exception into an error number which can be used
 with geopm_error_message() to obtain an error message.  Note that
 the error message printed when debugging is enabled has more
 specific information than the message produced by
-geopm_error_message().</p></dd>
+geopm_error_message().</dd>
+</dl>
+
+
+<h2 id="CLASS-METHODS">CLASS METHODS</h2>
+
+<dl>
 <dt><code>Exception</code>()</dt><dd><p>Empty constructor.  Uses errno to determine the error code.
 Enables an abbreviated what() result.</p></dd>
 <dt><code>Exception</code>(int err)</dt><dd><p>Error number only constructor.  User provides error code through
@@ -157,7 +154,6 @@ Positive error codes are system errors and are
 documented in the system <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></strong> man page.  A brief
 description of all error codes can be obtained with
 the geopm_error_message() interface.</p></dd>
-<dt><code>sig_value</code>()</dt><dd><p>Returns the signal number associated with the SignalException.</p></dd>
 </dl>
 
 
@@ -173,8 +169,8 @@ the geopm_error_message() interface.</p></dd>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>GEOPM 1.0.0+dev198ga6ad1a7</li>
-    <li class='tc'>October 2019</li>
+    <li class='tl'>GEOPM 1.1.0</li>
+    <li class='tc'>November 2019</li>
     <li class='tr'>geopm::Exception(3)</li>
   </ol>
 

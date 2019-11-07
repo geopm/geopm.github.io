@@ -7,7 +7,6 @@ var searchData=
   ['geopm_5fhash_2eh',['geopm_hash.h',['../geopm__hash_8h.html',1,'']]],
   ['geopm_5fimbalancer_2eh',['geopm_imbalancer.h',['../geopm__imbalancer_8h.html',1,'']]],
   ['geopm_5fpio_2eh',['geopm_pio.h',['../geopm__pio_8h.html',1,'']]],
-  ['geopm_5fpolicystore_2eh',['geopm_policystore.h',['../geopm__policystore_8h.html',1,'']]],
   ['geopm_5fsched_2eh',['geopm_sched.h',['../geopm__sched_8h.html',1,'']]],
   ['geopm_5ftime_2eh',['geopm_time.h',['../geopm__time_8h.html',1,'']]],
   ['geopm_5ftopo_2eh',['geopm_topo.h',['../geopm__topo_8h.html',1,'']]],

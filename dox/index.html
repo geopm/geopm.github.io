@@ -68,7 +68,7 @@ $(function() {
 <div class="textblock"><h2>DISCLAIMER </h2>
 <p>SEE COPYING FILE FOR LICENSE INFORMATION.</p>
 <h2>LAST UPDATE </h2>
-<p>2019 April 16</p>
+<p>2019 October 29</p>
 <p>Christopher Cantalupo <a href="#" onclick="location.href='mai'+'lto:'+'chr'+'is'+'top'+'he'+'r.m'+'.c'+'ant'+'al'+'upo'+'@i'+'nte'+'l.'+'com'; return false;">chris<span style="display: none;">.nosp@m.</span>toph<span style="display: none;">.nosp@m.</span>er.m.<span style="display: none;">.nosp@m.</span>cant<span style="display: none;">.nosp@m.</span>alupo<span style="display: none;">.nosp@m.</span>@int<span style="display: none;">.nosp@m.</span>el.co<span style="display: none;">.nosp@m.</span>m</a> <br />
 </p>
 <h2>WEB PAGES </h2>
@@ -98,9 +98,11 @@ $(function() {
 </pre><p>Note this installs only the GEOPM python tools and does not install the full GEOPM runtime.</p>
 <h2>BUILD REQUIREMENTS </h2>
 <p>In order to build the GEOPM package from source, the below requirements must be met.</p>
-<p>The GEOPM package requires a compiler that supports the MPI 2.2 and C++11 standards. These requirements can be met by using GCC version 4.7 or greater and installing the openmpi-devel package version 1.7 or greater on RHEL or SLES Linux. Documentation creation including man pages further requires the rubygems package, and the ruby-devel package.</p>
+<p>The GEOPM package requires a compiler that supports the MPI 2.2 and C++11 standards. These requirements can be met by using GCC version 4.7 or greater and installing the openmpi-devel package version 1.7 or greater on RHEL and SLES Linux, and libopenmpi-dev on Ubuntu. Documentation creation including man pages further requires the rubygems and ruby-devel package on RHEL and SLES, or ruby and ruby-dev on Ubuntu.</p>
 <p>RHEL: </p><pre class="fragment">yum install openmpi-devel elfutils-libelf-devel ruby-devel rubygems
 </pre><p>SUSE: </p><pre class="fragment">zypper install openmpi-devel elfutils-libelf-devel ruby-devel rubygems
+</pre><p>UBUNTU (as of 18.04.3 LTS): </p><pre class="fragment">apt install libtool automake libopenmpi-dev build-essential gfortran \
+    libelf-dev ruby ruby-dev python libsqlite3-dev
 </pre><p>Alternatively these can be installed from source, and an alternate MPI implementation to OpenMPI can be selected (e.g. one provided by OpenMPI). See </p><pre class="fragment">./configure --help
 </pre><p>for details on how to use non-standard install locations for build requirements through the </p><pre class="fragment">./configure --with-&lt;feature&gt;
 </pre><p>options.</p>
@@ -131,8 +133,9 @@ export MPICXX=mpicxx
 ./configure --prefix=$GEOPM_PREFIX
 </pre><p>then the following modifications to the user's environment should be made prior to running any GEOPM tools: </p><pre class="fragment">export LD_LIBRARY_PATH=$GEOPM_PREFIX/lib:$LD_LIBRARY_PATH
 export PATH=$GEOPM_PREFIX/bin:$PATH
-export PYTHONPATH=$GEOPM_PREFIX/lib/python2.7/site-packages:$PYTHONPATH
-</pre><h3>SYSTEMD CONFIGURATION</h3>
+export PYTHONPATH=$(ls -d $GEOPM_PREFIX/lib/python*/site-packages | tail -n1):$PYTHONPATH
+</pre><p>Use a PYTHONPATH that points to the site-packages created by the geopm build. The version created is for whichever version of python 3 was used in the configure step. If a different version of python is desired, override the default with the &ndash;with-python option in the configure script.</p>
+<h3>SYSTEMD CONFIGURATION</h3>
 <p>In order for GEOPM to properly use shared memory to communicate between the Controller and the application, it may be necessary to alter the configuration for systemd. The default behavior of systemd is to clean-up all inter-process communication for non-system users. This causes issues with GEOPM's initialization routines for shared memory. This can be disabled by ensuring that <code>RemoveIPC=no</code> is set in <code>/etc/systemd/logind.conf</code>. Most Linux distributions change the default setting to disable this behavior. More information can be found <a href="https://superuser.com/a/1179962">here</a>.</p>
 <h3>MSR DRIVER</h3>
 <p>The msr-safe kernel driver must be loaded at runtime to support user-level read and write of whitelisted MSRs. The msr-safe kernel driver is distributed with OpenHPC and can be installed using the RPMs distributed there (see INSTALL section above).</p>

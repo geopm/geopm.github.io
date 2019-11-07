@@ -95,11 +95,24 @@ error codes.  A returned error number of zero by a GEOPM API indicates
 success.  If the error number returned by a GEOPM API is positive then
 this indicates a generic system error, and if the error number is
 negative this indicates a <strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong> specific error has occurred.
-Any non-zero error number can be converted into a descriptive string
-with the <strong>geopm_error_message()</strong> function.  The GEOPM specific error
-numbers are enumerated in the <em>geopm_error.h</em> header file and they are
-described below.  The system error numbers are documented in the
-<strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></strong> man page.</p>
+The GEOPM specific error numbers are enumerated in the <em>geopm_error.h</em>
+header file and they are described below.  The system error numbers
+are documented in the <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man3/errno.3.html">errno<span class="s">(3)</span></a></strong> man page.</p>
+
+<p>Any non-zero error number can be passed as the <em>err</em> parameter to the
+<strong>geopm_error_message()</strong> function and it will be converted into a
+descriptive string <em>msg</em>.  The string <em>msg</em> is user allocated buffer
+of length <em>size</em> bytes.  The result, <em>msg</em> will always be NULL
+terminated even if the message is truncated to fit in the <em>msg</em>
+buffer.</p>
+
+<p>When a geopm C interface returns a non-zero value and this value is
+subsequently passed as the <em>err</em> argument to
+<strong>geopm_error_message()</strong>, the message may contain detailed
+information about the failure that most recently occurred.  The
+details may include the source file, line number, and a detailed
+description of the error condition.  If possible, please provide this
+message when reporting a bug to the GEOPM developers.</p>
 
 <h2 id="ERROR-NUMBERS">ERROR NUMBERS</h2>
 
@@ -136,8 +149,8 @@ described below.  The system error numbers are documented in the
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>GEOPM 1.0.0+dev198ga6ad1a7</li>
-    <li class='tc'>October 2019</li>
+    <li class='tl'>GEOPM 1.1.0</li>
+    <li class='tc'>November 2019</li>
     <li class='tr'>geopm_error(3)</li>
   </ol>
 
