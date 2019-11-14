@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/TreeCommLevel.cpp</title>
+  <title>LCOV - v1.1.0 - src/TreeCommLevel.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">113</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">15</td>
@@ -100,207 +100,208 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;string.h&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;cmath&gt;
-<span class="lineNum">      35 </span>            : #include &lt;algorithm&gt;
-<span class="lineNum">      36 </span>            : 
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;Comm.hpp&quot;</a>
-<span class="lineNum">      38 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      39 </span>            : #include &quot;TreeCommLevel.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;config.h&quot;
-<a name="41"><span class="lineNum">      41 </span>            : </a>
-<a name="42"><span class="lineNum">      42 </span>            : namespace geopm</a>
-<span class="lineNum">      43 </span>            : {
-<span class="lineNum">      44 </span><span class="lineCov">         94 :     TreeCommLevelImp::TreeCommLevelImp(std::shared_ptr&lt;Comm&gt; comm, int num_send_up, int num_send_down)</span>
-<a name="45"><span class="lineNum">      45 </span>            :         : m_comm(comm)</a>
-<span class="lineNum">      46 </span><span class="lineCov">         94 :         , m_size(comm-&gt;num_rank())</span>
-<span class="lineNum">      47 </span><span class="lineCov">         94 :         , m_rank(comm-&gt;rank())</span>
-<span class="lineNum">      48 </span>            :         , m_sample_mailbox(nullptr)
-<a name="49"><span class="lineNum">      49 </span>            :         , m_policy_mailbox(nullptr)</a>
-<span class="lineNum">      50 </span>            :         , m_sample_window(0)
-<span class="lineNum">      51 </span>            :         , m_policy_window(0)
-<span class="lineNum">      52 </span>            :         , m_overhead_send(0)
-<a name="53"><span class="lineNum">      53 </span>            :         , m_num_send_up(num_send_up)</a>
-<span class="lineNum">      54 </span><span class="lineCov">        282 :         , m_num_send_down(num_send_down)</span>
-<span class="lineNum">      55 </span>            :     {
-<span class="lineNum">      56 </span><span class="lineCov">         94 :         if (!m_rank) {</span>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         30 :             m_policy_last.resize(m_size, std::vector&lt;double&gt;(num_send_down, 0.0));</span></a>
-<span class="lineNum">      58 </span>            :         }
-<span class="lineNum">      59 </span><span class="lineCov">         94 :         create_window();</span>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">         94 :     }</span></a>
-<a name="61"><span class="lineNum">      61 </span>            : </a>
-<span class="lineNum">      62 </span><span class="lineCov">        252 :     TreeCommLevelImp::~TreeCommLevelImp()</span>
-<span class="lineNum">      63 </span>            :     {
-<span class="lineNum">      64 </span><span class="lineCov">         94 :         m_comm-&gt;barrier();</span>
-<a name="65"><span class="lineNum">      65 </span>            :         // Destroy sample window</a>
-<span class="lineNum">      66 </span><span class="lineCov">         94 :         m_comm-&gt;window_destroy(m_sample_window);</span>
-<span class="lineNum">      67 </span><span class="lineCov">         94 :         if (m_sample_mailbox) {</span>
-<span class="lineNum">      68 </span><span class="lineCov">         94 :             m_comm-&gt;free_mem(m_sample_mailbox);</span>
-<a name="69"><span class="lineNum">      69 </span>            :         }</a>
-<span class="lineNum">      70 </span>            :         // Destroy policy window
-<span class="lineNum">      71 </span><span class="lineCov">         94 :         m_comm-&gt;window_destroy(m_policy_window);</span>
-<span class="lineNum">      72 </span><span class="lineCov">         94 :         if (m_policy_mailbox) {</span>
-<a name="73"><span class="lineNum">      73 </span><span class="lineCov">         94 :             m_comm-&gt;free_mem(m_policy_mailbox);</span></a>
-<span class="lineNum">      74 </span>            :         }
-<a name="75"><span class="lineNum">      75 </span><span class="lineCov">        158 :     }</span></a>
-<span class="lineNum">      76 </span>            : 
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">          2 :     int TreeCommLevelImp::level_rank(void) const</span></a>
-<span class="lineNum">      78 </span>            :     {
-<span class="lineNum">      79 </span><span class="lineCov">          2 :         return m_rank;</span>
-<a name="80"><span class="lineNum">      80 </span>            :     }</a>
-<a name="81"><span class="lineNum">      81 </span>            : </a>
-<span class="lineNum">      82 </span><span class="lineCov">     605824 :     void TreeCommLevelImp::send_up(const std::vector&lt;double&gt; &amp;sample)</span>
-<span class="lineNum">      83 </span>            :     {
-<span class="lineNum">      84 </span><span class="lineCov">     605824 :         if (sample.size() != m_num_send_up) {</span>
-<a name="85"><span class="lineNum">      85 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_up(): sample vector is not sized correctly.&quot;,</a>
-<span class="lineNum">      86 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">      87 </span>            :         }
-<span class="lineNum">      88 </span><span class="lineCov">     605822 :         size_t msg_size = m_num_send_up * sizeof(double);</span>
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">     605822 :         double is_ready = 1.0;</span></a>
-<span class="lineNum">      90 </span><span class="lineCov">     605822 :         if (m_rank) {</span>
-<span class="lineNum">      91 </span><span class="lineCov">     374963 :             size_t base_off = m_rank * (msg_size + sizeof(double));</span>
-<span class="lineNum">      92 </span><span class="lineCov">     374963 :             m_comm-&gt;window_lock(m_sample_window, true, 0, 0);</span>
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">     374963 :             m_comm-&gt;window_put(&amp;is_ready, sizeof(double), 0, base_off, m_sample_window);</span></a>
-<span class="lineNum">      94 </span><span class="lineCov">     374963 :             m_comm-&gt;window_put(sample.data(), msg_size, 0, base_off + sizeof(double), m_sample_window);</span>
-<span class="lineNum">      95 </span><span class="lineCov">     374963 :             m_comm-&gt;window_unlock(m_sample_window, 0);</span>
-<span class="lineNum">      96 </span><span class="lineCov">     374963 :             m_overhead_send += sizeof(double) + msg_size;</span>
-<a name="97"><span class="lineNum">      97 </span>            :         }</a>
-<span class="lineNum">      98 </span>            :         else {
-<span class="lineNum">      99 </span><span class="lineCov">     230859 :             m_sample_mailbox[0] = 1.0;</span>
-<span class="lineNum">     100 </span><span class="lineCov">     230859 :             memcpy(m_sample_mailbox + 1, sample.data(), msg_size);</span>
-<a name="101"><span class="lineNum">     101 </span>            :         }</a>
-<a name="102"><span class="lineNum">     102 </span><span class="lineCov">     605822 :     }</span></a>
-<span class="lineNum">     103 </span>            : 
-<span class="lineNum">     104 </span><span class="lineCov">         22 :     void TreeCommLevelImp::send_down(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy)</span>
-<a name="105"><span class="lineNum">     105 </span>            :     {</a>
-<span class="lineNum">     106 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     107 </span><span class="lineCov">         22 :         if (m_rank != 0) {</span>
-<span class="lineNum">     108 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_down() called from rank not at root of level&quot;,
-<a name="109"><span class="lineNum">     109 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     110 </span>            :         }
-<span class="lineNum">     111 </span>            : #endif
-<span class="lineNum">     112 </span><span class="lineCov">         22 :         size_t num_down = m_num_send_down;</span>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         42 :         if (m_size != (int)policy.size() ||</span></a>
-<span class="lineNum">     114 </span><span class="lineCov">         20 :             std::any_of(policy.begin(), policy.end(),</span>
-<span class="lineNum">     115 </span><span class="lineCov">         74 :                         [num_down](std::vector&lt;double&gt; it)</span>
-<span class="lineNum">     116 </span><span class="lineCov">         74 :                         {return it.size() != num_down;})) {</span>
-<a name="117"><span class="lineNum">     117 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_down(): policy vector is not sized correctly.&quot;,</a>
-<span class="lineNum">     118 </span><span class="lineCov">          4 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     119 </span>            :         }
-<span class="lineNum">     120 </span><span class="lineCov">         18 :         size_t msg_size = sizeof(double) * m_num_send_down;</span>
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">         18 :         double is_ready = 1.0;</span></a>
-<span class="lineNum">     122 </span><span class="lineCov">         18 :         m_policy_mailbox[0] = is_ready;</span>
-<span class="lineNum">     123 </span>            :         // Copy message to self for rank zero
-<span class="lineNum">     124 </span><span class="lineCov">         18 :         memcpy(m_policy_mailbox + 1, policy[0].data(), msg_size);</span>
-<a name="125"><span class="lineNum">     125 </span>            : </a>
-<span class="lineNum">     126 </span><span class="lineCov">         72 :         for (int child_rank = 1; child_rank != m_size; ++child_rank) {</span>
-<span class="lineNum">     127 </span><span class="lineCov">         54 :             if (policy[child_rank] != m_policy_last[child_rank]) {</span>
-<span class="lineNum">     128 </span><span class="lineCov">         54 :                 m_comm-&gt;window_lock(m_policy_window, true, child_rank, 0);</span>
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         54 :                 m_comm-&gt;window_put(&amp;is_ready, sizeof(double), child_rank, 0, m_policy_window);</span></a>
-<span class="lineNum">     130 </span><span class="lineCov">         54 :                 m_comm-&gt;window_put(policy[child_rank].data(), msg_size, child_rank, sizeof(double), m_policy_window);</span>
-<span class="lineNum">     131 </span><span class="lineCov">         54 :                 m_comm-&gt;window_unlock(m_policy_window, child_rank);</span>
-<span class="lineNum">     132 </span><span class="lineCov">         54 :                 m_overhead_send += sizeof(double) + msg_size;</span>
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         54 :                 m_policy_last[child_rank] = policy[child_rank];</span></a>
-<span class="lineNum">     134 </span>            :             }
-<span class="lineNum">     135 </span>            :         }
-<a name="136"><span class="lineNum">     136 </span><span class="lineCov">         18 :     }</span></a>
-<a name="137"><span class="lineNum">     137 </span>            : </a>
-<span class="lineNum">     138 </span><span class="lineCov">     231106 :     bool TreeCommLevelImp::receive_up(std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample)</span>
-<span class="lineNum">     139 </span>            :     {
-<span class="lineNum">     140 </span>            : #ifdef GEOPM_DEBUG
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">     231106 :         if (m_rank != 0) {</span></a>
-<span class="lineNum">     142 </span>            :             throw Exception(&quot;TreeCommunicatorLevel::receive_up(): Only zero rank of the level can call receive_up()&quot;,
-<span class="lineNum">     143 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     144 </span>            :         }
-<a name="145"><span class="lineNum">     145 </span>            : #endif</a>
-<span class="lineNum">     146 </span><span class="lineCov">     231106 :         size_t num_up = m_num_send_up;</span>
-<a name="147"><span class="lineNum">     147 </span><span class="lineCov">     462212 :         if (m_size != (int)sample.size() ||</span></a>
-<span class="lineNum">     148 </span><span class="lineCov">     231106 :             std::any_of(sample.begin(), sample.end(),</span>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">     924424 :                         [num_up](std::vector&lt;double&gt; it)</span></a>
-<span class="lineNum">     150 </span><span class="lineCov">     924424 :                         {return it.size() != num_up;})) {</span>
-<span class="lineNum">     151 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_down(): policy vector is not sized correctly.&quot;,
-<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="153"><span class="lineNum">     153 </span>            :         }</a>
-<span class="lineNum">     154 </span>            : 
-<span class="lineNum">     155 </span><span class="lineCov">     231106 :         bool is_complete = true;</span>
-<span class="lineNum">     156 </span><span class="lineCov">     231106 :         m_comm-&gt;window_lock(m_sample_window, false, 0, 0);</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">     924006 :         for (int child_rank = 0; is_complete &amp;&amp; child_rank &lt; m_size; ++child_rank) {</span></a>
-<span class="lineNum">     158 </span><span class="lineCov">     692900 :             if (m_sample_mailbox[child_rank * (m_num_send_up + 1)] == 0.0) {</span>
-<span class="lineNum">     159 </span><span class="lineCov">     115668 :                 is_complete = false;</span>
-<span class="lineNum">     160 </span>            :             }
-<a name="161"><span class="lineNum">     161 </span>            :         }</a>
-<span class="lineNum">     162 </span><span class="lineCov">     231106 :         m_comm-&gt;window_unlock(m_sample_window, 0);</span>
-<span class="lineNum">     163 </span><span class="lineCov">     231106 :         if (is_complete) {</span>
-<span class="lineNum">     164 </span><span class="lineCov">     115438 :             m_comm-&gt;window_lock(m_sample_window, true, 0, 0);</span>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">     577190 :             for (int child_rank = 0; child_rank != m_size; ++child_rank) {</span></a>
-<span class="lineNum">     166 </span><span class="lineCov">    1847008 :                 memcpy(sample[child_rank].data(),</span>
-<span class="lineNum">     167 </span><span class="lineCov">    1385256 :                        m_sample_mailbox + child_rank * (m_num_send_up + 1) + 1,</span>
-<span class="lineNum">     168 </span><span class="lineCov">     732728 :                        sizeof(double) * m_num_send_up);</span>
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">     461752 :                 m_sample_mailbox[child_rank * (m_num_send_up + 1)] = 0.0;</span></a>
-<span class="lineNum">     170 </span>            :             }
-<span class="lineNum">     171 </span><span class="lineCov">     115438 :             m_comm-&gt;window_unlock(m_sample_window, 0);</span>
-<span class="lineNum">     172 </span>            :         }
-<a name="173"><span class="lineNum">     173 </span>            : </a>
-<a name="174"><span class="lineNum">     174 </span><span class="lineCov">     346544 :         is_complete = is_complete &amp;&amp;</span></a>
-<span class="lineNum">     175 </span><span class="lineCov">     414288 :                       std::none_of(sample.begin(), sample.end(),</span>
-<span class="lineNum">     176 </span><span class="lineCov">     461752 :                                    [](const std::vector&lt;double&gt; &amp;vec)</span>
-<a name="177"><span class="lineNum">     177 </span>            :                                    {</a>
-<span class="lineNum">     178 </span><span class="lineCov">     923504 :                                        return std::any_of(vec.begin(), vec.end(),</span>
-<span class="lineNum">     179 </span><span class="lineCov">    1385256 :                                                           [](double val){return std::isnan(val);});</span>
-<span class="lineNum">     180 </span><span class="lineCov">    1126994 :                                    });</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineCov">     231106 :         return is_complete;</span></a>
-<a name="182"><span class="lineNum">     182 </span>            :     }</a>
-<span class="lineNum">     183 </span>            : 
-<span class="lineNum">     184 </span><span class="lineCov">     606806 :     bool TreeCommLevelImp::receive_down(std::vector&lt;double&gt; &amp;policy)</span>
-<a name="185"><span class="lineNum">     185 </span>            :     {</a>
-<span class="lineNum">     186 </span><span class="lineCov">     606806 :         bool is_complete = false;</span>
-<span class="lineNum">     187 </span><span class="lineCov">     606806 :         if (m_rank) {</span>
-<span class="lineNum">     188 </span><span class="lineCov">     375700 :             m_comm-&gt;window_lock(m_policy_window, false, m_rank, 0);</span>
-<a name="189"><span class="lineNum">     189 </span>            :         }</a>
-<span class="lineNum">     190 </span><span class="lineCov">     606806 :         if (m_policy_mailbox[0] == 1.0) {</span>
-<span class="lineNum">     191 </span><span class="lineCov">     606278 :             is_complete = true;</span>
-<span class="lineNum">     192 </span><span class="lineCov">     606278 :             policy.resize(m_num_send_down);</span>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">     606278 :             memcpy(policy.data(), m_policy_mailbox + 1, sizeof(double) * m_num_send_down);</span></a>
-<span class="lineNum">     194 </span>            :         }
-<span class="lineNum">     195 </span><span class="lineCov">     606806 :         if (m_rank) {</span>
-<span class="lineNum">     196 </span><span class="lineCov">     375700 :             m_comm-&gt;window_unlock(m_policy_window, m_rank);</span>
-<a name="197"><span class="lineNum">     197 </span>            :         }</a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">    1213084 :         is_complete = is_complete &amp;&amp;</span></a>
-<span class="lineNum">     199 </span><span class="lineCov">    1557493 :                       std::none_of(policy.begin(), policy.end(),</span>
-<span class="lineNum">     200 </span><span class="lineCov">     951527 :                                    [](double val){return std::isnan(val);});</span>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">     606806 :         return is_complete;</span></a>
-<a name="202"><span class="lineNum">     202 </span>            :     }</a>
-<span class="lineNum">     203 </span>            : 
-<span class="lineNum">     204 </span><span class="lineCov">         76 :     size_t TreeCommLevelImp::overhead_send(void) const</span>
-<a name="205"><span class="lineNum">     205 </span>            :     {</a>
-<span class="lineNum">     206 </span><span class="lineCov">         76 :         return m_overhead_send;</span>
-<a name="207"><span class="lineNum">     207 </span>            :     }</a>
-<span class="lineNum">     208 </span>            : 
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         94 :     void TreeCommLevelImp::create_window()</span></a>
-<span class="lineNum">     210 </span>            :     {
-<span class="lineNum">     211 </span>            :         // Create policy window
-<span class="lineNum">     212 </span>            :         // Note mem_size includes extra is_complete element
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         94 :         size_t mem_size = sizeof(double) * (m_num_send_down + 1);</span></a>
-<span class="lineNum">     214 </span><span class="lineCov">         94 :         m_comm-&gt;alloc_mem(mem_size, (void **)(&amp;m_policy_mailbox));</span>
-<span class="lineNum">     215 </span><span class="lineCov">         94 :         memset(m_policy_mailbox, 0, mem_size);</span>
-<span class="lineNum">     216 </span><span class="lineCov">         94 :         if (m_rank) {</span>
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         64 :             m_policy_window = m_comm-&gt;window_create(mem_size, (void *)(m_policy_mailbox));</span></a>
-<span class="lineNum">     218 </span>            :         }
-<span class="lineNum">     219 </span>            :         else {
-<span class="lineNum">     220 </span><span class="lineCov">         30 :             m_policy_window = m_comm-&gt;window_create(0, NULL);</span>
-<a name="221"><span class="lineNum">     221 </span>            :         }</a>
-<span class="lineNum">     222 </span>            :         // Create sample window
-<span class="lineNum">     223 </span><span class="lineCov">         94 :         mem_size = sizeof(double) * m_size * (m_num_send_up + 1);</span>
-<span class="lineNum">     224 </span><span class="lineCov">         94 :         m_comm-&gt;alloc_mem(mem_size, (void **)(&amp;m_sample_mailbox));</span>
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         94 :         memset(m_sample_mailbox, 0, mem_size);</span></a>
-<span class="lineNum">     226 </span><span class="lineCov">         94 :         if (!m_rank) {</span>
-<span class="lineNum">     227 </span><span class="lineCov">         30 :             m_sample_window = m_comm-&gt;window_create(mem_size, (void *)(m_sample_mailbox));</span>
-<span class="lineNum">     228 </span>            :         }
-<a name="229"><span class="lineNum">     229 </span>            :         else {</a>
-<span class="lineNum">     230 </span><span class="lineCov">         64 :             m_sample_window = m_comm-&gt;window_create(0, NULL);</span>
-<span class="lineNum">     231 </span>            :         }
-<span class="lineNum">     232 </span><span class="lineCov">         94 :     }</span>
-<a name="233"><span class="lineNum">     233 </span>            : }</a>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;TreeCommLevel.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cmath&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;algorithm&gt;</a>
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : #include &quot;Comm.hpp&quot;
+<span class="lineNum">      40 </span>            : #include &quot;Exception.hpp&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      42 </span>            : 
+<a name="43"><span class="lineNum">      43 </span>            : namespace geopm</a>
+<span class="lineNum">      44 </span>            : {
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         39 :     TreeCommLevelImp::TreeCommLevelImp(std::shared_ptr&lt;Comm&gt; comm, int num_send_up, int num_send_down)</span></a>
+<span class="lineNum">      46 </span>            :         : m_comm(comm)
+<span class="lineNum">      47 </span><span class="lineCov">         39 :         , m_size(comm-&gt;num_rank())</span>
+<span class="lineNum">      48 </span><span class="lineCov">         39 :         , m_rank(comm-&gt;rank())</span>
+<a name="49"><span class="lineNum">      49 </span>            :         , m_sample_mailbox(nullptr)</a>
+<span class="lineNum">      50 </span>            :         , m_policy_mailbox(nullptr)
+<span class="lineNum">      51 </span>            :         , m_sample_window(0)
+<span class="lineNum">      52 </span>            :         , m_policy_window(0)
+<a name="53"><span class="lineNum">      53 </span>            :         , m_overhead_send(0)</a>
+<span class="lineNum">      54 </span>            :         , m_num_send_up(num_send_up)
+<span class="lineNum">      55 </span><span class="lineCov">        117 :         , m_num_send_down(num_send_down)</span>
+<span class="lineNum">      56 </span>            :     {
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         39 :         if (!m_rank) {</span></a>
+<span class="lineNum">      58 </span><span class="lineCov">         13 :             m_policy_last.resize(m_size, std::vector&lt;double&gt;(num_send_down, 0.0));</span>
+<span class="lineNum">      59 </span>            :         }
+<span class="lineNum">      60 </span><span class="lineCov">         39 :         create_window();</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">         39 :     }</span></a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">        102 :     TreeCommLevelImp::~TreeCommLevelImp()</span>
+<span class="lineNum">      64 </span>            :     {
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         39 :         m_comm-&gt;barrier();</span></a>
+<span class="lineNum">      66 </span>            :         // Destroy sample window
+<span class="lineNum">      67 </span><span class="lineCov">         39 :         m_comm-&gt;window_destroy(m_sample_window);</span>
+<span class="lineNum">      68 </span><span class="lineCov">         39 :         if (m_sample_mailbox) {</span>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         39 :             m_comm-&gt;free_mem(m_sample_mailbox);</span></a>
+<span class="lineNum">      70 </span>            :         }
+<span class="lineNum">      71 </span>            :         // Destroy policy window
+<span class="lineNum">      72 </span><span class="lineCov">         39 :         m_comm-&gt;window_destroy(m_policy_window);</span>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">         39 :         if (m_policy_mailbox) {</span></a>
+<span class="lineNum">      74 </span><span class="lineCov">         39 :             m_comm-&gt;free_mem(m_policy_mailbox);</span>
+<span class="lineNum">      75 </span>            :         }
+<a name="76"><span class="lineNum">      76 </span><span class="lineCov">         63 :     }</span></a>
+<a name="77"><span class="lineNum">      77 </span>            : </a>
+<span class="lineNum">      78 </span><span class="lineCov">          1 :     int TreeCommLevelImp::level_rank(void) const</span>
+<span class="lineNum">      79 </span>            :     {
+<span class="lineNum">      80 </span><span class="lineCov">          1 :         return m_rank;</span>
+<a name="81"><span class="lineNum">      81 </span>            :     }</a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineCov">     258733 :     void TreeCommLevelImp::send_up(const std::vector&lt;double&gt; &amp;sample)</span>
+<span class="lineNum">      84 </span>            :     {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">     258733 :         if (sample.size() != m_num_send_up) {</span></a>
+<span class="lineNum">      86 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_up(): sample vector is not sized correctly.&quot;,
+<span class="lineNum">      87 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">      88 </span>            :         }
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">     258732 :         size_t msg_size = m_num_send_up * sizeof(double);</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">     258732 :         double is_ready = 1.0;</span>
+<span class="lineNum">      91 </span><span class="lineCov">     258732 :         if (m_rank) {</span>
+<span class="lineNum">      92 </span><span class="lineCov">     158916 :             size_t base_off = m_rank * (msg_size + sizeof(double));</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">     158916 :             m_comm-&gt;window_lock(m_sample_window, true, 0, 0);</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">     158916 :             m_comm-&gt;window_put(&amp;is_ready, sizeof(double), 0, base_off, m_sample_window);</span>
+<span class="lineNum">      95 </span><span class="lineCov">     158916 :             m_comm-&gt;window_put(sample.data(), msg_size, 0, base_off + sizeof(double), m_sample_window);</span>
+<span class="lineNum">      96 </span><span class="lineCov">     158916 :             m_comm-&gt;window_unlock(m_sample_window, 0);</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">     158916 :             m_overhead_send += sizeof(double) + msg_size;</span></a>
+<span class="lineNum">      98 </span>            :         }
+<span class="lineNum">      99 </span>            :         else {
+<span class="lineNum">     100 </span><span class="lineCov">      99816 :             m_sample_mailbox[0] = 1.0;</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">      99816 :             memcpy(m_sample_mailbox + 1, sample.data(), msg_size);</span></a>
+<span class="lineNum">     102 </span>            :         }
+<a name="103"><span class="lineNum">     103 </span><span class="lineCov">     258732 :     }</span></a>
+<span class="lineNum">     104 </span>            : 
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">          9 :     void TreeCommLevelImp::send_down(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy)</span></a>
+<span class="lineNum">     106 </span>            :     {
+<span class="lineNum">     107 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     108 </span><span class="lineCov">          9 :         if (m_rank != 0) {</span>
+<a name="109"><span class="lineNum">     109 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_down() called from rank not at root of level&quot;,</a>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     111 </span>            :         }
+<span class="lineNum">     112 </span>            : #endif
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          9 :         size_t num_down = m_num_send_down;</span></a>
+<a name="114"><span class="lineNum">     114 </span><span class="lineCov">         17 :         if (m_size != (int)policy.size() ||</span></a>
+<span class="lineNum">     115 </span><span class="lineCov">          8 :             std::any_of(policy.begin(), policy.end(),</span>
+<span class="lineNum">     116 </span><span class="lineCov">         29 :                         [num_down](std::vector&lt;double&gt; it)</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         29 :                         {return it.size() != num_down;})) {</span></a>
+<span class="lineNum">     118 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_down(): policy vector is not sized correctly.&quot;,
+<span class="lineNum">     119 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     120 </span>            :         }
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">          7 :         size_t msg_size = sizeof(double) * m_num_send_down;</span></a>
+<span class="lineNum">     122 </span><span class="lineCov">          7 :         double is_ready = 1.0;</span>
+<span class="lineNum">     123 </span><span class="lineCov">          7 :         m_policy_mailbox[0] = is_ready;</span>
+<span class="lineNum">     124 </span>            :         // Copy message to self for rank zero
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">          7 :         memcpy(m_policy_mailbox + 1, policy[0].data(), msg_size);</span></a>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineCov">         28 :         for (int child_rank = 1; child_rank != m_size; ++child_rank) {</span>
+<span class="lineNum">     128 </span><span class="lineCov">         21 :             if (policy[child_rank] != m_policy_last[child_rank]) {</span>
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         21 :                 m_comm-&gt;window_lock(m_policy_window, true, child_rank, 0);</span></a>
+<span class="lineNum">     130 </span><span class="lineCov">         21 :                 m_comm-&gt;window_put(&amp;is_ready, sizeof(double), child_rank, 0, m_policy_window);</span>
+<span class="lineNum">     131 </span><span class="lineCov">         21 :                 m_comm-&gt;window_put(policy[child_rank].data(), msg_size, child_rank, sizeof(double), m_policy_window);</span>
+<span class="lineNum">     132 </span><span class="lineCov">         21 :                 m_comm-&gt;window_unlock(m_policy_window, child_rank);</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         21 :                 m_overhead_send += sizeof(double) + msg_size;</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">         21 :                 m_policy_last[child_rank] = policy[child_rank];</span>
+<span class="lineNum">     135 </span>            :             }
+<span class="lineNum">     136 </span>            :         }
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          7 :     }</span></a>
+<span class="lineNum">     138 </span>            : 
+<span class="lineNum">     139 </span><span class="lineCov">      99908 :     bool TreeCommLevelImp::receive_up(std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample)</span>
+<span class="lineNum">     140 </span>            :     {
+<a name="141"><span class="lineNum">     141 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">     142 </span><span class="lineCov">      99908 :         if (m_rank != 0) {</span>
+<span class="lineNum">     143 </span>            :             throw Exception(&quot;TreeCommunicatorLevel::receive_up(): Only zero rank of the level can call receive_up()&quot;,
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="145"><span class="lineNum">     145 </span>            :         }</a>
+<span class="lineNum">     146 </span>            : #endif
+<span class="lineNum">     147 </span><span class="lineCov">      99908 :         size_t num_up = m_num_send_up;</span>
+<a name="148"><span class="lineNum">     148 </span><span class="lineCov">     199816 :         if (m_size != (int)sample.size() ||</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">      99908 :             std::any_of(sample.begin(), sample.end(),</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">     399632 :                         [num_up](std::vector&lt;double&gt; it)</span>
+<span class="lineNum">     151 </span><span class="lineCov">     399632 :                         {return it.size() != num_up;})) {</span>
+<span class="lineNum">     152 </span>            :             throw Exception(&quot;TreeCommLevelImp::send_down(): policy vector is not sized correctly.&quot;,
+<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     154 </span>            :         }
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span><span class="lineCov">      99908 :         bool is_complete = true;</span>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">      99908 :         m_comm-&gt;window_lock(m_sample_window, false, 0, 0);</span></a>
+<span class="lineNum">     158 </span><span class="lineCov">     399457 :         for (int child_rank = 0; is_complete &amp;&amp; child_rank &lt; m_size; ++child_rank) {</span>
+<span class="lineNum">     159 </span><span class="lineCov">     299549 :             if (m_sample_mailbox[child_rank * (m_num_send_up + 1)] == 0.0) {</span>
+<span class="lineNum">     160 </span><span class="lineCov">      49998 :                 is_complete = false;</span>
+<a name="161"><span class="lineNum">     161 </span>            :             }</a>
+<span class="lineNum">     162 </span>            :         }
+<span class="lineNum">     163 </span><span class="lineCov">      99908 :         m_comm-&gt;window_unlock(m_sample_window, 0);</span>
+<span class="lineNum">     164 </span><span class="lineCov">      99908 :         if (is_complete) {</span>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">      49910 :             m_comm-&gt;window_lock(m_sample_window, true, 0, 0);</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">     249550 :             for (int child_rank = 0; child_rank != m_size; ++child_rank) {</span>
+<span class="lineNum">     167 </span><span class="lineCov">     798560 :                 memcpy(sample[child_rank].data(),</span>
+<span class="lineNum">     168 </span><span class="lineCov">     598920 :                        m_sample_mailbox + child_rank * (m_num_send_up + 1) + 1,</span>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">     199640 :                        sizeof(double) * m_num_send_up);</span></a>
+<span class="lineNum">     170 </span><span class="lineCov">     199640 :                 m_sample_mailbox[child_rank * (m_num_send_up + 1)] = 0.0;</span>
+<span class="lineNum">     171 </span>            :             }
+<span class="lineNum">     172 </span><span class="lineCov">      49910 :             m_comm-&gt;window_unlock(m_sample_window, 0);</span>
+<a name="173"><span class="lineNum">     173 </span>            :         }</a>
+<span class="lineNum">     174 </span>            : 
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">     149818 :         is_complete = is_complete &amp;&amp;</span></a>
+<span class="lineNum">     176 </span><span class="lineCov">     149818 :                       std::none_of(sample.begin(), sample.end(),</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">     199640 :                                    [](const std::vector&lt;double&gt; &amp;vec)</span></a>
+<a name="178"><span class="lineNum">     178 </span>            :                                    {</a>
+<span class="lineNum">     179 </span><span class="lineCov">     399280 :                                        return std::any_of(vec.begin(), vec.end(),</span>
+<span class="lineNum">     180 </span><span class="lineCov">     598920 :                                                           [](double val){return std::isnan(val);});</span>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">     399280 :                                    });</span></a>
+<span class="lineNum">     182 </span><span class="lineCov">      99908 :         return is_complete;</span>
+<a name="183"><span class="lineNum">     183 </span>            :     }</a>
+<span class="lineNum">     184 </span>            : 
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     259098 :     bool TreeCommLevelImp::receive_down(std::vector&lt;double&gt; &amp;policy)</span></a>
+<span class="lineNum">     186 </span>            :     {
+<span class="lineNum">     187 </span><span class="lineCov">     259098 :         bool is_complete = false;</span>
+<span class="lineNum">     188 </span><span class="lineCov">     259098 :         if (m_rank) {</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">     159190 :             m_comm-&gt;window_lock(m_policy_window, false, m_rank, 0);</span></a>
+<span class="lineNum">     190 </span>            :         }
+<span class="lineNum">     191 </span><span class="lineCov">     259098 :         if (m_policy_mailbox[0] == 1.0) {</span>
+<span class="lineNum">     192 </span><span class="lineCov">     259041 :             is_complete = true;</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">     259041 :             policy.resize(m_num_send_down);</span></a>
+<span class="lineNum">     194 </span><span class="lineCov">     259041 :             memcpy(policy.data(), m_policy_mailbox + 1, sizeof(double) * m_num_send_down);</span>
+<span class="lineNum">     195 </span>            :         }
+<span class="lineNum">     196 </span><span class="lineCov">     259098 :         if (m_rank) {</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">     159190 :             m_comm-&gt;window_unlock(m_policy_window, m_rank);</span></a>
+<span class="lineNum">     198 </span>            :         }
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">     518139 :         is_complete = is_complete &amp;&amp;</span></a>
+<span class="lineNum">     200 </span><span class="lineCov">     518139 :                       std::none_of(policy.begin(), policy.end(),</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">     259043 :                                    [](double val){return std::isnan(val);});</span></a>
+<span class="lineNum">     202 </span><span class="lineCov">     259098 :         return is_complete;</span>
+<a name="203"><span class="lineNum">     203 </span>            :     }</a>
+<span class="lineNum">     204 </span>            : 
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         30 :     size_t TreeCommLevelImp::overhead_send(void) const</span></a>
+<span class="lineNum">     206 </span>            :     {
+<span class="lineNum">     207 </span><span class="lineCov">         30 :         return m_overhead_send;</span>
+<a name="208"><span class="lineNum">     208 </span>            :     }</a>
+<a name="209"><span class="lineNum">     209 </span>            : </a>
+<span class="lineNum">     210 </span><span class="lineCov">         39 :     void TreeCommLevelImp::create_window()</span>
+<span class="lineNum">     211 </span>            :     {
+<span class="lineNum">     212 </span>            :         // Create policy window
+<a name="213"><span class="lineNum">     213 </span>            :         // Note mem_size includes extra is_complete element</a>
+<span class="lineNum">     214 </span><span class="lineCov">         39 :         size_t mem_size = sizeof(double) * (m_num_send_down + 1);</span>
+<span class="lineNum">     215 </span><span class="lineCov">         39 :         m_comm-&gt;alloc_mem(mem_size, (void **)(&amp;m_policy_mailbox));</span>
+<span class="lineNum">     216 </span><span class="lineCov">         39 :         memset(m_policy_mailbox, 0, mem_size);</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         39 :         if (m_rank) {</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">         26 :             m_policy_window = m_comm-&gt;window_create(mem_size, (void *)(m_policy_mailbox));</span>
+<span class="lineNum">     219 </span>            :         }
+<span class="lineNum">     220 </span>            :         else {
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         13 :             m_policy_window = m_comm-&gt;window_create(0, NULL);</span></a>
+<span class="lineNum">     222 </span>            :         }
+<span class="lineNum">     223 </span>            :         // Create sample window
+<span class="lineNum">     224 </span><span class="lineCov">         39 :         mem_size = sizeof(double) * m_size * (m_num_send_up + 1);</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">         39 :         m_comm-&gt;alloc_mem(mem_size, (void **)(&amp;m_sample_mailbox));</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">         39 :         memset(m_sample_mailbox, 0, mem_size);</span>
+<span class="lineNum">     227 </span><span class="lineCov">         39 :         if (!m_rank) {</span>
+<span class="lineNum">     228 </span><span class="lineCov">         13 :             m_sample_window = m_comm-&gt;window_create(mem_size, (void *)(m_sample_mailbox));</span>
+<a name="229"><span class="lineNum">     229 </span>            :         }</a>
+<span class="lineNum">     230 </span>            :         else {
+<span class="lineNum">     231 </span><span class="lineCov">         26 :             m_sample_window = m_comm-&gt;window_create(0, NULL);</span>
+<span class="lineNum">     232 </span>            :         }
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">         39 :     }</span></a>
+<span class="lineNum">     234 </span>            : }
 </pre>
       </td>
     </tr>

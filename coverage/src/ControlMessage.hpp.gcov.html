@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/ControlMessage.hpp</title>
+  <title>LCOV - v1.1.0 - src/ControlMessage.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">3</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -103,7 +103,7 @@
 <a name="33"><span class="lineNum">      33 </span>            : #ifndef CONTROLMESSAGE_HPP_INCLUDE</a>
 <span class="lineNum">      34 </span>            : #define CONTROLMESSAGE_HPP_INCLUDE
 <span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span>            : #include &lt;stdint.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cstdint&gt;
 <a name="37"><span class="lineNum">      37 </span>            : </a>
 <span class="lineNum">      38 </span>            : enum geopm_ctl_message_e {
 <span class="lineNum">      39 </span>            :     GEOPM_MAX_NUM_CPU = 768
@@ -131,8 +131,8 @@
 <a name="61"><span class="lineNum">      61 </span>            :     class ControlMessage</a>
 <a name="62"><span class="lineNum">      62 </span>            :     {</a>
 <a name="63"><span class="lineNum">      63 </span>            :         public:</a>
-<span class="lineNum">      64 </span><span class="lineCov">        458 :             ControlMessage() = default;</span>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        458 :             virtual ~ControlMessage() = default;</span></a>
+<span class="lineNum">      64 </span><span class="lineCov">        202 :             ControlMessage() = default;</span>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        202 :             virtual ~ControlMessage() = default;</span></a>
 <span class="lineNum">      66 </span>            :             /// @brief Signal an advance to next phase in runtime.
 <span class="lineNum">      67 </span>            :             virtual void step(void) = 0;
 <span class="lineNum">      68 </span>            :             /// @brief Wait for message that other side has advanced
@@ -203,46 +203,47 @@
 <a name="133"><span class="lineNum">     133 </span>            :             /// the caller is the controller or the lowest application</a>
 <span class="lineNum">     134 </span>            :             /// rank on the node and false if the caller is any other
 <span class="lineNum">     135 </span>            :             /// application rank.
-<a name="136"><span class="lineNum">     136 </span>            :             ControlMessageImp(struct geopm_ctl_message_s &amp;ctl_msg, bool is_ctl, bool is_writer);</a>
-<a name="137"><span class="lineNum">     137 </span>            :             /// @brief ControlMessageImp virtual destructor</a>
-<span class="lineNum">     138 </span><span class="lineCov">        848 :             virtual ~ControlMessageImp() = default;</span>
-<span class="lineNum">     139 </span>            :             void step() override;
-<span class="lineNum">     140 </span>            :             void wait() override;
-<a name="141"><span class="lineNum">     141 </span>            :             void abort(void) override;</a>
-<span class="lineNum">     142 </span>            :             void cpu_rank(int cpu_idx, int rank) override;
-<span class="lineNum">     143 </span>            :             int cpu_rank(int cpu_idx) const override;
-<span class="lineNum">     144 </span>            :             bool is_sample_begin(void) const override;
-<a name="145"><span class="lineNum">     145 </span>            :             bool is_sample_end(void) const override;</a>
-<span class="lineNum">     146 </span>            :             bool is_name_begin(void) const override;
-<span class="lineNum">     147 </span>            :             bool is_shutdown(void) const override;
-<span class="lineNum">     148 </span>            :             void loop_begin(void) override;
-<a name="149"><span class="lineNum">     149 </span>            :             /// @brief Enum encompassing application and</a>
-<span class="lineNum">     150 </span>            :             /// GEOPM runtime state.
-<span class="lineNum">     151 </span>            :             enum m_status_e {
-<span class="lineNum">     152 </span>            :                 M_STATUS_UNDEFINED,
-<a name="153"><span class="lineNum">     153 </span>            :                 M_STATUS_MAP_BEGIN,</a>
-<span class="lineNum">     154 </span>            :                 M_STATUS_MAP_END,
-<span class="lineNum">     155 </span>            :                 M_STATUS_SAMPLE_BEGIN,
-<span class="lineNum">     156 </span>            :                 M_STATUS_SAMPLE_END,
-<a name="157"><span class="lineNum">     157 </span>            :                 M_STATUS_NAME_BEGIN,</a>
-<span class="lineNum">     158 </span>            :                 M_STATUS_NAME_LOOP_BEGIN,
-<span class="lineNum">     159 </span>            :                 M_STATUS_NAME_LOOP_END,
-<span class="lineNum">     160 </span>            :                 M_STATUS_NAME_END,
-<a name="161"><span class="lineNum">     161 </span>            :                 M_STATUS_SHUTDOWN,</a>
-<span class="lineNum">     162 </span>            :                 M_STATUS_ABORT = 9999,
-<span class="lineNum">     163 </span>            :             };
-<span class="lineNum">     164 </span>            :         private:
-<a name="165"><span class="lineNum">     165 </span>            :             int this_status() const;</a>
-<span class="lineNum">     166 </span>            :             const double M_WAIT_SEC;
-<span class="lineNum">     167 </span>            :             struct geopm_ctl_message_s &amp;m_ctl_msg;
-<span class="lineNum">     168 </span>            :             bool m_is_ctl;
-<a name="169"><span class="lineNum">     169 </span>            :             bool m_is_writer;</a>
-<span class="lineNum">     170 </span>            :             int m_last_status;
-<span class="lineNum">     171 </span>            : 
-<span class="lineNum">     172 </span>            :     };
-<a name="173"><span class="lineNum">     173 </span>            : </a>
-<span class="lineNum">     174 </span>            : }
-<span class="lineNum">     175 </span>            : #endif
+<span class="lineNum">     136 </span>            :             /// @param [in] wait_sec Double value specifying shmem timeout.
+<a name="137"><span class="lineNum">     137 </span>            :             ControlMessageImp(struct geopm_ctl_message_s &amp;ctl_msg, bool is_ctl, bool is_writer, double wait_sec);</a>
+<span class="lineNum">     138 </span>            :             /// @brief ControlMessageImp virtual destructor
+<span class="lineNum">     139 </span><span class="lineCov">        366 :             virtual ~ControlMessageImp() = default;</span>
+<span class="lineNum">     140 </span>            :             void step() override;
+<a name="141"><span class="lineNum">     141 </span>            :             void wait() override;</a>
+<span class="lineNum">     142 </span>            :             void abort(void) override;
+<span class="lineNum">     143 </span>            :             void cpu_rank(int cpu_idx, int rank) override;
+<span class="lineNum">     144 </span>            :             int cpu_rank(int cpu_idx) const override;
+<a name="145"><span class="lineNum">     145 </span>            :             bool is_sample_begin(void) const override;</a>
+<span class="lineNum">     146 </span>            :             bool is_sample_end(void) const override;
+<span class="lineNum">     147 </span>            :             bool is_name_begin(void) const override;
+<span class="lineNum">     148 </span>            :             bool is_shutdown(void) const override;
+<a name="149"><span class="lineNum">     149 </span>            :             void loop_begin(void) override;</a>
+<span class="lineNum">     150 </span>            :             /// @brief Enum encompassing application and
+<span class="lineNum">     151 </span>            :             /// GEOPM runtime state.
+<span class="lineNum">     152 </span>            :             enum m_status_e {
+<a name="153"><span class="lineNum">     153 </span>            :                 M_STATUS_UNDEFINED,</a>
+<span class="lineNum">     154 </span>            :                 M_STATUS_MAP_BEGIN,
+<span class="lineNum">     155 </span>            :                 M_STATUS_MAP_END,
+<span class="lineNum">     156 </span>            :                 M_STATUS_SAMPLE_BEGIN,
+<a name="157"><span class="lineNum">     157 </span>            :                 M_STATUS_SAMPLE_END,</a>
+<span class="lineNum">     158 </span>            :                 M_STATUS_NAME_BEGIN,
+<span class="lineNum">     159 </span>            :                 M_STATUS_NAME_LOOP_BEGIN,
+<span class="lineNum">     160 </span>            :                 M_STATUS_NAME_LOOP_END,
+<a name="161"><span class="lineNum">     161 </span>            :                 M_STATUS_NAME_END,</a>
+<span class="lineNum">     162 </span>            :                 M_STATUS_SHUTDOWN,
+<span class="lineNum">     163 </span>            :                 M_STATUS_ABORT = 9999,
+<span class="lineNum">     164 </span>            :             };
+<a name="165"><span class="lineNum">     165 </span>            :         private:</a>
+<span class="lineNum">     166 </span>            :             int this_status() const;
+<span class="lineNum">     167 </span>            :             const double M_WAIT_SEC;
+<span class="lineNum">     168 </span>            :             struct geopm_ctl_message_s &amp;m_ctl_msg;
+<a name="169"><span class="lineNum">     169 </span>            :             bool m_is_ctl;</a>
+<span class="lineNum">     170 </span>            :             bool m_is_writer;
+<span class="lineNum">     171 </span>            :             int m_last_status;
+<span class="lineNum">     172 </span>            : 
+<a name="173"><span class="lineNum">     173 </span>            :     };</a>
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            : }
+<span class="lineNum">     176 </span>            : #endif
 </pre>
       </td>
     </tr>

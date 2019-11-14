@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/ProfileTable.cpp</title>
+  <title>LCOV - v1.1.0 - src/ProfileTable.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">101</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">7</td>
@@ -101,229 +101,230 @@
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
 <a name="33"><span class="lineNum">      33 </span>            : </a>
-<span class="lineNum">      34 </span>            : #include &lt;limits.h&gt;
-<span class="lineNum">      35 </span>            : #include &lt;pthread.h&gt;
-<span class="lineNum">      36 </span>            : #include &lt;stdint.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;string.h&gt;</a>
-<span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span>            : #include &lt;algorithm&gt;
-<span class="lineNum">      40 </span>            : #include &lt;string&gt;
-<a name="41"><span class="lineNum">      41 </span>            : </a>
-<span class="lineNum">      42 </span>            : #include &quot;geopm_internal.h&quot;
-<span class="lineNum">      43 </span>            : #include &quot;geopm_hash.h&quot;
-<span class="lineNum">      44 </span>            : #include &quot;Exception.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;ProfileTable.hpp&quot;</a>
-<span class="lineNum">      46 </span>            : 
-<span class="lineNum">      47 </span>            : #include &quot;config.h&quot;
-<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      34 </span>            : #include &quot;ProfileTable.hpp&quot;
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : #include &lt;limits.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;pthread.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;cstdint&gt;
+<span class="lineNum">      39 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      40 </span>            : 
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;algorithm&gt;</a>
+<span class="lineNum">      42 </span>            : #include &lt;string&gt;
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            : #include &quot;geopm_internal.h&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;geopm_hash.h&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : #include &quot;config.h&quot;
 <a name="49"><span class="lineNum">      49 </span>            : </a>
-<a name="50"><span class="lineNum">      50 </span>            : namespace geopm</a>
-<span class="lineNum">      51 </span>            : {
-<span class="lineNum">      52 </span><span class="lineCov">        618 :     ProfileTableImp::ProfileTableImp(size_t size, void *buffer)</span>
-<a name="53"><span class="lineNum">      53 </span>            :         : m_buffer_size(size)</a>
-<span class="lineNum">      54 </span>            :         , m_table((struct table_s *)buffer)
-<span class="lineNum">      55 </span>            :         , m_key_map_lock(PTHREAD_MUTEX_INITIALIZER)
-<span class="lineNum">      56 </span>            :         , m_is_pshared(true)
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">        624 :         , m_key_map_last(m_key_map.end())</span></a>
-<span class="lineNum">      58 </span>            :     {
-<span class="lineNum">      59 </span><span class="lineCov">        618 :         if (buffer == NULL) {</span>
-<span class="lineNum">      60 </span><span class="lineCov">          2 :             throw Exception(&quot;ProfileTableImp: Buffer pointer is NULL&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="61"><span class="lineNum">      61 </span>            :         }</a>
-<span class="lineNum">      62 </span><span class="lineCov">        616 :         if (size &lt; (sizeof(struct table_s) + 4 * sizeof(struct geopm_prof_message_s))) {</span>
-<span class="lineNum">      63 </span>            :             throw Exception(&quot;ProfileTableImp: table size too small&quot;,
-<span class="lineNum">      64 </span><span class="lineCov">          4 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="65"><span class="lineNum">      65 </span>            :         }</a>
-<span class="lineNum">      66 </span>            : 
-<span class="lineNum">      67 </span>            :         // set up prof message array
-<span class="lineNum">      68 </span><span class="lineCov">        612 :         memset(buffer, 0, size);</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">        612 :         m_table-&gt;max_size = (m_buffer_size - sizeof(struct table_s)) / sizeof(struct geopm_prof_message_s);</span></a>
-<span class="lineNum">      70 </span><span class="lineCov">        612 :         m_table-&gt;curr_size = 0;</span>
-<span class="lineNum">      71 </span>            : 
-<span class="lineNum">      72 </span>            :         // set up lock
-<a name="73"><span class="lineNum">      73 </span>            :         pthread_mutexattr_t lock_attr;</a>
-<span class="lineNum">      74 </span><span class="lineCov">        612 :         int err = pthread_mutexattr_init(&amp;lock_attr);</span>
-<span class="lineNum">      75 </span><span class="lineCov">        612 :         if (err) {</span>
-<span class="lineNum">      76 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="77"><span class="lineNum">      77 </span>            :         }</a>
-<span class="lineNum">      78 </span><span class="lineCov">        612 :         if (m_is_pshared) {</span>
-<span class="lineNum">      79 </span><span class="lineCov">        612 :             err = pthread_mutexattr_setpshared(&amp;lock_attr, PTHREAD_PROCESS_SHARED);</span>
-<span class="lineNum">      80 </span><span class="lineCov">        612 :             if (err) {</span>
-<a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">      82 </span>            :             }
-<span class="lineNum">      83 </span>            :         }
-<span class="lineNum">      84 </span><span class="lineCov">        612 :         err = pthread_mutex_init(&amp;(m_table-&gt;lock), &amp;lock_attr);</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        612 :         if (err) {</span></a>
-<span class="lineNum">      86 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">      87 </span>            :         }
-<span class="lineNum">      88 </span>            : 
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">        612 :         m_table_value = (struct geopm_prof_message_s *)((char *)buffer + sizeof(struct table_s));</span></a>
-<a name="90"><span class="lineNum">      90 </span><span class="lineCov">        612 :     }</span></a>
-<span class="lineNum">      91 </span>            : 
-<span class="lineNum">      92 </span><span class="lineCov">      10454 :     void ProfileTableImp::insert(const struct geopm_prof_message_s &amp;value)</span>
-<a name="93"><span class="lineNum">      93 </span>            :     {</a>
-<span class="lineNum">      94 </span><span class="lineCov">      10454 :         int err = pthread_mutex_lock(&amp;(m_table-&gt;lock));</span>
-<span class="lineNum">      95 </span><span class="lineCov">      10454 :         if (err) {</span>
-<span class="lineNum">      96 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::insert(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
-<a name="97"><span class="lineNum">      97 </span>            :         }</a>
-<span class="lineNum">      98 </span>            :         // update the progress for the same region if not an entry or exit
-<span class="lineNum">      99 </span><span class="lineCov">      10454 :         bool is_inserted = false;</span>
-<span class="lineNum">     100 </span><span class="lineCov">      10454 :         if (m_table-&gt;curr_size &gt; 0) {</span>
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       5906 :             size_t curr_idx = m_table-&gt;curr_size - 1;</span></a>
-<span class="lineNum">     102 </span><span class="lineCov">       8347 :             if (value.region_id == m_table_value[curr_idx].region_id &amp;&amp;</span>
-<span class="lineNum">     103 </span><span class="lineCov">       3336 :                 m_table_value[curr_idx].progress != 0.0 &amp;&amp;</span>
-<span class="lineNum">     104 </span><span class="lineCov">        895 :                 m_table_value[curr_idx].progress != 1.0) {</span>
-<a name="105"><span class="lineNum">     105 </span>            : </a>
-<span class="lineNum">     106 </span><span class="lineCov">          6 :                 m_table_value[curr_idx] = value;</span>
-<span class="lineNum">     107 </span><span class="lineCov">          6 :                 is_inserted = true;</span>
-<span class="lineNum">     108 </span>            :             }
-<a name="109"><span class="lineNum">     109 </span>            :         }</a>
-<span class="lineNum">     110 </span><span class="lineCov">      10454 :         if (!is_inserted) {</span>
-<span class="lineNum">     111 </span>            :             // check for overflow
-<span class="lineNum">     112 </span><span class="lineCov">      10448 :             if (m_table-&gt;curr_size &gt;= m_table-&gt;max_size) {</span>
-<a name="113"><span class="lineNum">     113 </span>            :                 throw Exception(&quot;ProfileTableImp::insert(): table overflowed.&quot;,</a>
-<span class="lineNum">     114 </span><span class="lineCov">          2 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     115 </span>            :             }
-<span class="lineNum">     116 </span>            : 
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">      10446 :             m_table_value[m_table-&gt;curr_size] = value;</span></a>
-<span class="lineNum">     118 </span><span class="lineCov">      10446 :             ++m_table-&gt;curr_size;</span>
-<span class="lineNum">     119 </span>            :         }
-<span class="lineNum">     120 </span><span class="lineCov">      10452 :         err = pthread_mutex_unlock(&amp;(m_table-&gt;lock));</span>
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">      10452 :         if (err) {</span></a>
-<span class="lineNum">     122 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::insert(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">     123 </span>            :         }
-<a name="124"><span class="lineNum">     124 </span><span class="lineCov">      10452 :     }</span></a>
-<a name="125"><span class="lineNum">     125 </span>            : </a>
-<span class="lineNum">     126 </span><span class="lineCov">       2510 :     uint64_t ProfileTableImp::key(const std::string &amp;name)</span>
-<span class="lineNum">     127 </span>            :     {
-<span class="lineNum">     128 </span><span class="lineCov">       2510 :         uint64_t result = 0;</span>
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">       2510 :         int err = pthread_mutex_lock(&amp;(m_key_map_lock));</span></a>
-<span class="lineNum">     130 </span><span class="lineCov">       2510 :         if (err) {</span>
-<span class="lineNum">     131 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">     132 </span>            :         }
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">       2510 :         auto key_map_it = m_key_map.find(name);</span></a>
-<span class="lineNum">     134 </span><span class="lineCov">       2510 :         err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span>
-<span class="lineNum">     135 </span><span class="lineCov">       2510 :         if (err) {</span>
-<span class="lineNum">     136 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
-<a name="137"><span class="lineNum">     137 </span>            :         }</a>
-<span class="lineNum">     138 </span>            : 
-<span class="lineNum">     139 </span><span class="lineCov">       2510 :         if (key_map_it != m_key_map.end()) {</span>
-<span class="lineNum">     140 </span><span class="lineCov">          2 :             result = key_map_it-&gt;second;</span>
-<a name="141"><span class="lineNum">     141 </span>            :         }</a>
-<span class="lineNum">     142 </span>            :         else {
-<span class="lineNum">     143 </span><span class="lineCov">       2508 :             result = geopm_crc32_str((char *)(&amp;name.front()));</span>
-<span class="lineNum">     144 </span><span class="lineCov">       2508 :             if (GEOPM_REGION_HASH_INVALID == result) {</span>
-<a name="145"><span class="lineNum">     145 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): CRC 32 hashed to zero!&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     146 </span>            :             }
-<span class="lineNum">     147 </span><span class="lineCov">       2508 :             err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
-<span class="lineNum">     148 </span><span class="lineCov">       2508 :             if (err) {</span>
-<a name="149"><span class="lineNum">     149 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     150 </span>            :             }
-<span class="lineNum">     151 </span><span class="lineCov">       2508 :             if (m_key_set.find(result) != m_key_set.end()) {</span>
-<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): String hash collision&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<a name="153"><span class="lineNum">     153 </span>            :             }</a>
-<span class="lineNum">     154 </span><span class="lineCov">       2508 :             m_key_set.insert(result);</span>
-<span class="lineNum">     155 </span><span class="lineCov">       2508 :             m_key_map.insert(std::pair&lt;const std::string, uint64_t&gt;(name, result));</span>
-<span class="lineNum">     156 </span><span class="lineCov">       2508 :             m_key_map_last = m_key_map.begin();</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">       2508 :             err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span></a>
-<span class="lineNum">     158 </span><span class="lineCov">       2508 :             if (err) {</span>
-<span class="lineNum">     159 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">     160 </span>            :             }
-<a name="161"><span class="lineNum">     161 </span>            :         }</a>
-<span class="lineNum">     162 </span><span class="lineCov">       2510 :         return result;</span>
-<a name="163"><span class="lineNum">     163 </span>            :     }</a>
-<span class="lineNum">     164 </span>            : 
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        304 :     size_t ProfileTableImp::capacity(void) const</span></a>
-<span class="lineNum">     166 </span>            :     {
-<span class="lineNum">     167 </span><span class="lineCov">        304 :         return m_table-&gt;max_size;</span>
-<a name="168"><span class="lineNum">     168 </span>            :     }</a>
-<a name="169"><span class="lineNum">     169 </span>            : </a>
-<span class="lineNum">     170 </span><span class="lineNoCov">          0 :     size_t ProfileTableImp::size(void) const</span>
-<span class="lineNum">     171 </span>            :     {
-<span class="lineNum">     172 </span><span class="lineNoCov">          0 :         size_t result = 0;</span>
-<a name="173"><span class="lineNum">     173 </span><span class="lineNoCov">          0 :         int err = pthread_mutex_lock(&amp;(m_table-&gt;lock));</span></a>
-<span class="lineNum">     174 </span><span class="lineNoCov">          0 :         if (err) {</span>
-<span class="lineNum">     175 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::size(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">     176 </span>            :         }
-<a name="177"><span class="lineNum">     177 </span>            : </a>
-<span class="lineNum">     178 </span><span class="lineNoCov">          0 :         result = m_table-&gt;curr_size;</span>
-<span class="lineNum">     179 </span>            : 
-<span class="lineNum">     180 </span><span class="lineNoCov">          0 :         err = pthread_mutex_unlock(&amp;(m_table-&gt;lock));</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineNoCov">          0 :         if (err) {</span></a>
-<span class="lineNum">     182 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::size(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
-<span class="lineNum">     183 </span>            :         }
-<span class="lineNum">     184 </span><span class="lineNoCov">          0 :         return result;</span>
-<a name="185"><span class="lineNum">     185 </span>            :     }</a>
-<span class="lineNum">     186 </span>            : 
-<span class="lineNum">     187 </span><span class="lineCov">    2469210 :     void ProfileTableImp::dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length)</span>
-<span class="lineNum">     188 </span>            :     {
-<a name="189"><span class="lineNum">     189 </span>            :         int err;</a>
-<span class="lineNum">     190 </span><span class="lineCov">    2469210 :         err = pthread_mutex_lock(&amp;(m_table-&gt;lock));</span>
-<span class="lineNum">     191 </span><span class="lineCov">    2469210 :         if (err) {</span>
-<span class="lineNum">     192 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::dump(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
-<a name="193"><span class="lineNum">     193 </span>            :         }</a>
-<span class="lineNum">     194 </span><span class="lineCov">    2479648 :         for (size_t depth = 0; depth != m_table-&gt;curr_size; ++depth) {</span>
-<span class="lineNum">     195 </span><span class="lineCov">      10438 :             content-&gt;first = m_table_value[depth].region_id;</span>
-<span class="lineNum">     196 </span><span class="lineCov">      10438 :             content-&gt;second = m_table_value[depth];</span>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">      10438 :             ++content;</span></a>
-<span class="lineNum">     198 </span>            :         }
-<span class="lineNum">     199 </span><span class="lineCov">    2469210 :         length = m_table-&gt;curr_size;</span>
-<span class="lineNum">     200 </span><span class="lineCov">    2469210 :         m_table-&gt;curr_size = 0;</span>
-<a name="201"><span class="lineNum">     201 </span>            : </a>
-<span class="lineNum">     202 </span><span class="lineCov">    2469210 :         err = pthread_mutex_unlock(&amp;(m_table-&gt;lock));</span>
-<span class="lineNum">     203 </span><span class="lineCov">    2469210 :         if (err) {</span>
-<span class="lineNum">     204 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::dump(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
-<a name="205"><span class="lineNum">     205 </span>            :         }</a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">    2469210 :     }</span></a>
-<span class="lineNum">     207 </span>            : 
-<span class="lineNum">     208 </span><span class="lineCov">        308 :     bool ProfileTableImp::name_fill(size_t header_offset)</span>
-<a name="209"><span class="lineNum">     209 </span>            :     {</a>
-<span class="lineNum">     210 </span><span class="lineCov">        308 :         bool result = false;</span>
-<span class="lineNum">     211 </span><span class="lineCov">        308 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span>
-<span class="lineNum">     212 </span><span class="lineCov">        308 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">       7822 :         while (m_key_map_last != m_key_map.end() &amp;&amp;</span></a>
-<span class="lineNum">     214 </span><span class="lineCov">       2506 :                buffer_remain &gt; m_key_map_last-&gt;first.length()) {</span>
-<span class="lineNum">     215 </span><span class="lineCov">       2504 :             strncpy(buffer_ptr, m_key_map_last-&gt;first.c_str(), buffer_remain);</span>
-<span class="lineNum">     216 </span><span class="lineCov">       2504 :             buffer_remain -= m_key_map_last-&gt;first.length() + 1;</span>
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       2504 :             buffer_ptr += m_key_map_last-&gt;first.length() + 1;</span></a>
-<span class="lineNum">     218 </span><span class="lineCov">       2504 :             ++m_key_map_last;</span>
-<span class="lineNum">     219 </span>            :         }
-<span class="lineNum">     220 </span><span class="lineCov">        308 :         memset(buffer_ptr, 0, buffer_remain);</span>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">        308 :         if (m_key_map_last == m_key_map.end() &amp;&amp; buffer_remain) {</span></a>
-<span class="lineNum">     222 </span>            :             // We are done, set last character to '\1'
-<span class="lineNum">     223 </span><span class="lineCov">        306 :             buffer_ptr[buffer_remain] = '\1';</span>
-<span class="lineNum">     224 </span><span class="lineCov">        306 :             m_key_map_last = m_key_map.begin();</span>
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">        306 :             result = true;</span></a>
-<span class="lineNum">     226 </span>            :         }
-<span class="lineNum">     227 </span>            :         else {
-<span class="lineNum">     228 </span><span class="lineCov">          2 :             buffer_ptr[buffer_remain] = '\0';</span>
-<a name="229"><span class="lineNum">     229 </span>            :         }</a>
-<span class="lineNum">     230 </span><span class="lineCov">        308 :         return result;</span>
-<a name="231"><span class="lineNum">     231 </span>            :     }</a>
-<span class="lineNum">     232 </span>            : 
-<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        300 :     bool ProfileTableImp::name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name)</span></a>
-<span class="lineNum">     234 </span>            :     {
-<span class="lineNum">     235 </span>            :         // Check if last character is '\1' to see more names remain to be passed
-<span class="lineNum">     236 </span><span class="lineCov">        300 :         bool result = (((char *)m_table)[m_buffer_size - 1] == '\1');</span>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">        300 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span></a>
-<span class="lineNum">     238 </span><span class="lineCov">        300 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
-<span class="lineNum">     239 </span>            : 
-<span class="lineNum">     240 </span><span class="lineCov">       6780 :         while (buffer_remain) {</span>
-<a name="241"><span class="lineNum">     241 </span><span class="lineCov">       3240 :             size_t name_len = strnlen(buffer_ptr, buffer_remain);</span></a>
-<span class="lineNum">     242 </span><span class="lineCov">       3240 :             if (name_len == buffer_remain) {</span>
-<span class="lineNum">     243 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::name_set(): buffer missing null termination&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">     244 </span>            :             }
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">       3240 :             if (name_len) {</span></a>
-<span class="lineNum">     246 </span><span class="lineCov">       2940 :                 name.insert(std::string(buffer_ptr));</span>
-<span class="lineNum">     247 </span><span class="lineCov">       2940 :                 buffer_remain -= name_len + 1;</span>
-<span class="lineNum">     248 </span><span class="lineCov">       2940 :                 buffer_ptr += name_len + 1;</span>
-<a name="249"><span class="lineNum">     249 </span>            :             }</a>
-<span class="lineNum">     250 </span>            :             else {
-<span class="lineNum">     251 </span><span class="lineCov">        300 :                 buffer_remain = 0;</span>
-<span class="lineNum">     252 </span>            :             }
-<a name="253"><span class="lineNum">     253 </span>            :         }</a>
-<span class="lineNum">     254 </span><span class="lineCov">        300 :         return result;</span>
-<span class="lineNum">     255 </span>            :     }
-<span class="lineNum">     256 </span>            : }
+<span class="lineNum">      50 </span>            : 
+<a name="51"><span class="lineNum">      51 </span>            : namespace geopm</a>
+<span class="lineNum">      52 </span>            : {
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        263 :     ProfileTableImp::ProfileTableImp(size_t size, void *buffer)</span></a>
+<span class="lineNum">      54 </span>            :         : m_buffer_size(size)
+<span class="lineNum">      55 </span>            :         , m_table((struct table_s *)buffer)
+<span class="lineNum">      56 </span>            :         , m_key_map_lock(PTHREAD_MUTEX_INITIALIZER)
+<a name="57"><span class="lineNum">      57 </span>            :         , m_is_pshared(true)</a>
+<span class="lineNum">      58 </span><span class="lineCov">        266 :         , m_key_map_last(m_key_map.end())</span>
+<span class="lineNum">      59 </span>            :     {
+<span class="lineNum">      60 </span><span class="lineCov">        263 :         if (buffer == NULL) {</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">          1 :             throw Exception(&quot;ProfileTableImp: Buffer pointer is NULL&quot;, GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      62 </span>            :         }
+<span class="lineNum">      63 </span><span class="lineCov">        262 :         if (size &lt; (sizeof(struct table_s) + 4 * sizeof(struct geopm_prof_message_s))) {</span>
+<span class="lineNum">      64 </span>            :             throw Exception(&quot;ProfileTableImp: table size too small&quot;,
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">          2 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      66 </span>            :         }
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            :         // set up prof message array
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">        260 :         memset(buffer, 0, size);</span></a>
+<span class="lineNum">      70 </span><span class="lineCov">        260 :         m_table-&gt;max_size = (m_buffer_size - sizeof(struct table_s)) / sizeof(struct geopm_prof_message_s);</span>
+<span class="lineNum">      71 </span><span class="lineCov">        260 :         m_table-&gt;curr_size = 0;</span>
+<span class="lineNum">      72 </span>            : 
+<a name="73"><span class="lineNum">      73 </span>            :         // set up lock</a>
+<span class="lineNum">      74 </span>            :         pthread_mutexattr_t lock_attr;
+<span class="lineNum">      75 </span><span class="lineCov">        260 :         int err = pthread_mutexattr_init(&amp;lock_attr);</span>
+<span class="lineNum">      76 </span><span class="lineCov">        260 :         if (err) {</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      78 </span>            :         }
+<span class="lineNum">      79 </span><span class="lineCov">        260 :         if (m_is_pshared) {</span>
+<span class="lineNum">      80 </span><span class="lineCov">        260 :             err = pthread_mutexattr_setpshared(&amp;lock_attr, PTHREAD_PROCESS_SHARED);</span>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">        260 :             if (err) {</span></a>
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">      83 </span>            :             }
+<span class="lineNum">      84 </span>            :         }
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        260 :         err = pthread_mutex_init(&amp;(m_table-&gt;lock), &amp;lock_attr);</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">        260 :         if (err) {</span>
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp: pthread mutex initialization&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">      88 </span>            :         }
+<a name="89"><span class="lineNum">      89 </span>            : </a>
+<span class="lineNum">      90 </span><span class="lineCov">        260 :         m_table_value = (struct geopm_prof_message_s *)((char *)buffer + sizeof(struct table_s));</span>
+<a name="91"><span class="lineNum">      91 </span><span class="lineCov">        260 :     }</span></a>
+<span class="lineNum">      92 </span>            : 
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">       8385 :     void ProfileTableImp::insert(const struct geopm_prof_message_s &amp;value)</span></a>
+<span class="lineNum">      94 </span>            :     {
+<span class="lineNum">      95 </span><span class="lineCov">       8385 :         int err = pthread_mutex_lock(&amp;(m_table-&gt;lock));</span>
+<span class="lineNum">      96 </span><span class="lineCov">       8385 :         if (err) {</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::insert(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      98 </span>            :         }
+<span class="lineNum">      99 </span>            :         // update the progress for the same region if not an entry or exit
+<span class="lineNum">     100 </span><span class="lineCov">       8385 :         bool is_inserted = false;</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       8385 :         if (m_table-&gt;curr_size &gt; 0) {</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">       5079 :             size_t curr_idx = m_table-&gt;curr_size - 1;</span>
+<span class="lineNum">     103 </span><span class="lineCov">       7872 :             if (value.region_id == m_table_value[curr_idx].region_id &amp;&amp;</span>
+<span class="lineNum">     104 </span><span class="lineCov">       4484 :                 m_table_value[curr_idx].progress != 0.0 &amp;&amp;</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">       1691 :                 m_table_value[curr_idx].progress != 1.0) {</span></a>
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span><span class="lineCov">          1 :                 m_table_value[curr_idx] = value;</span>
+<span class="lineNum">     108 </span><span class="lineCov">          1 :                 is_inserted = true;</span>
+<a name="109"><span class="lineNum">     109 </span>            :             }</a>
+<span class="lineNum">     110 </span>            :         }
+<span class="lineNum">     111 </span><span class="lineCov">       8385 :         if (!is_inserted) {</span>
+<span class="lineNum">     112 </span>            :             // check for overflow
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">       8384 :             if (m_table-&gt;curr_size &gt;= m_table-&gt;max_size) {</span></a>
+<span class="lineNum">     114 </span>            :                 throw Exception(&quot;ProfileTableImp::insert(): table overflowed.&quot;,
+<span class="lineNum">     115 </span><span class="lineCov">          1 :                                 GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     116 </span>            :             }
+<a name="117"><span class="lineNum">     117 </span>            : </a>
+<span class="lineNum">     118 </span><span class="lineCov">       8383 :             m_table_value[m_table-&gt;curr_size] = value;</span>
+<span class="lineNum">     119 </span><span class="lineCov">       8383 :             ++m_table-&gt;curr_size;</span>
+<span class="lineNum">     120 </span>            :         }
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">       8384 :         err = pthread_mutex_unlock(&amp;(m_table-&gt;lock));</span></a>
+<span class="lineNum">     122 </span><span class="lineCov">       8384 :         if (err) {</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::insert(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
+<span class="lineNum">     124 </span>            :         }
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">       8384 :     }</span></a>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineCov">       1239 :     uint64_t ProfileTableImp::key(const std::string &amp;name)</span>
+<span class="lineNum">     128 </span>            :     {
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">       1239 :         uint64_t result = 0;</span></a>
+<span class="lineNum">     130 </span><span class="lineCov">       1239 :         int err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
+<span class="lineNum">     131 </span><span class="lineCov">       1239 :         if (err) {</span>
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
+<a name="133"><span class="lineNum">     133 </span>            :         }</a>
+<span class="lineNum">     134 </span><span class="lineCov">       1239 :         auto key_map_it = m_key_map.find(name);</span>
+<span class="lineNum">     135 </span><span class="lineCov">       1239 :         err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span>
+<span class="lineNum">     136 </span><span class="lineCov">       1239 :         if (err) {</span>
+<a name="137"><span class="lineNum">     137 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     138 </span>            :         }
+<span class="lineNum">     139 </span>            : 
+<span class="lineNum">     140 </span><span class="lineCov">       1239 :         if (key_map_it != m_key_map.end()) {</span>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">          1 :             result = key_map_it-&gt;second;</span></a>
+<span class="lineNum">     142 </span>            :         }
+<span class="lineNum">     143 </span>            :         else {
+<span class="lineNum">     144 </span><span class="lineCov">       1238 :             result = geopm_crc32_str((char *)(&amp;name.front()));</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">       1238 :             if (GEOPM_REGION_HASH_INVALID == result) {</span></a>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): CRC 32 hashed to zero!&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<span class="lineNum">     147 </span>            :             }
+<span class="lineNum">     148 </span><span class="lineCov">       1238 :             err = pthread_mutex_lock(&amp;(m_key_map_lock));</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">       1238 :             if (err) {</span></a>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
+<span class="lineNum">     151 </span>            :             }
+<span class="lineNum">     152 </span><span class="lineCov">       1238 :             if (m_key_set.find(result) != m_key_set.end()) {</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): String hash collision&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     154 </span>            :             }
+<span class="lineNum">     155 </span><span class="lineCov">       1238 :             m_key_set.insert(result);</span>
+<span class="lineNum">     156 </span><span class="lineCov">       1238 :             m_key_map.insert(std::pair&lt;const std::string, uint64_t&gt;(name, result));</span>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">       1238 :             m_key_map_last = m_key_map.begin();</span></a>
+<span class="lineNum">     158 </span><span class="lineCov">       1238 :             err = pthread_mutex_unlock(&amp;(m_key_map_lock));</span>
+<span class="lineNum">     159 </span><span class="lineCov">       1238 :             if (err) {</span>
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::key(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
+<a name="161"><span class="lineNum">     161 </span>            :             }</a>
+<span class="lineNum">     162 </span>            :         }
+<span class="lineNum">     163 </span><span class="lineCov">       1239 :         return result;</span>
+<a name="164"><span class="lineNum">     164 </span>            :     }</a>
+<a name="165"><span class="lineNum">     165 </span>            : </a>
+<span class="lineNum">     166 </span><span class="lineCov">        129 :     size_t ProfileTableImp::capacity(void) const</span>
+<span class="lineNum">     167 </span>            :     {
+<span class="lineNum">     168 </span><span class="lineCov">        129 :         return m_table-&gt;max_size;</span>
+<a name="169"><span class="lineNum">     169 </span>            :     }</a>
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :     size_t ProfileTableImp::size(void) const</span>
+<span class="lineNum">     172 </span>            :     {
+<a name="173"><span class="lineNum">     173 </span><span class="lineNoCov">          0 :         size_t result = 0;</span></a>
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 :         int err = pthread_mutex_lock(&amp;(m_table-&gt;lock));</span>
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :         if (err) {</span>
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::size(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span>
+<a name="177"><span class="lineNum">     177 </span>            :         }</a>
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :         result = m_table-&gt;curr_size;</span>
+<span class="lineNum">     180 </span>            : 
+<a name="181"><span class="lineNum">     181 </span><span class="lineNoCov">          0 :         err = pthread_mutex_unlock(&amp;(m_table-&gt;lock));</span></a>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :         if (err) {</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::size(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span>
+<span class="lineNum">     184 </span>            :         }
+<a name="185"><span class="lineNum">     185 </span><span class="lineNoCov">          0 :         return result;</span></a>
+<a name="186"><span class="lineNum">     186 </span>            :     }</a>
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span><span class="lineCov">    1080389 :     void ProfileTableImp::dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length)</span>
+<a name="189"><span class="lineNum">     189 </span>            :     {</a>
+<span class="lineNum">     190 </span>            :         int err;
+<span class="lineNum">     191 </span><span class="lineCov">    1080389 :         err = pthread_mutex_lock(&amp;(m_table-&gt;lock));</span>
+<span class="lineNum">     192 </span><span class="lineCov">    1080389 :         if (err) {</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::dump(): pthread_mutex_lock()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     194 </span>            :         }
+<span class="lineNum">     195 </span><span class="lineCov">    1088768 :         for (size_t depth = 0; depth != m_table-&gt;curr_size; ++depth) {</span>
+<span class="lineNum">     196 </span><span class="lineCov">       8379 :             content-&gt;first = m_table_value[depth].region_id;</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">       8379 :             content-&gt;second = m_table_value[depth];</span></a>
+<span class="lineNum">     198 </span><span class="lineCov">       8379 :             ++content;</span>
+<span class="lineNum">     199 </span>            :         }
+<span class="lineNum">     200 </span><span class="lineCov">    1080389 :         length = m_table-&gt;curr_size;</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">    1080389 :         m_table-&gt;curr_size = 0;</span></a>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span><span class="lineCov">    1080389 :         err = pthread_mutex_unlock(&amp;(m_table-&gt;lock));</span>
+<span class="lineNum">     204 </span><span class="lineCov">    1080389 :         if (err) {</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ProfileTableImp::dump(): pthread_mutex_unlock()&quot;, err, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     206 </span>            :         }
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">    1080389 :     }</span></a>
+<span class="lineNum">     208 </span>            : 
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">        131 :     bool ProfileTableImp::name_fill(size_t header_offset)</span></a>
+<span class="lineNum">     210 </span>            :     {
+<span class="lineNum">     211 </span><span class="lineCov">        131 :         bool result = false;</span>
+<span class="lineNum">     212 </span><span class="lineCov">        131 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">        131 :         char *buffer_ptr = (char *)m_table + header_offset;</span></a>
+<span class="lineNum">     214 </span><span class="lineCov">       3840 :         while (m_key_map_last != m_key_map.end() &amp;&amp;</span>
+<span class="lineNum">     215 </span><span class="lineCov">       1237 :                buffer_remain &gt; m_key_map_last-&gt;first.length()) {</span>
+<span class="lineNum">     216 </span><span class="lineCov">       1236 :             strncpy(buffer_ptr, m_key_map_last-&gt;first.c_str(), buffer_remain);</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       1236 :             buffer_remain -= m_key_map_last-&gt;first.length() + 1;</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">       1236 :             buffer_ptr += m_key_map_last-&gt;first.length() + 1;</span>
+<span class="lineNum">     219 </span><span class="lineCov">       1236 :             ++m_key_map_last;</span>
+<span class="lineNum">     220 </span>            :         }
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">        131 :         memset(buffer_ptr, 0, buffer_remain);</span></a>
+<span class="lineNum">     222 </span><span class="lineCov">        131 :         if (m_key_map_last == m_key_map.end() &amp;&amp; buffer_remain) {</span>
+<span class="lineNum">     223 </span>            :             // We are done, set last character to '\1'
+<span class="lineNum">     224 </span><span class="lineCov">        130 :             buffer_ptr[buffer_remain] = '\1';</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">        130 :             m_key_map_last = m_key_map.begin();</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">        130 :             result = true;</span>
+<span class="lineNum">     227 </span>            :         }
+<span class="lineNum">     228 </span>            :         else {
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          1 :             buffer_ptr[buffer_remain] = '\0';</span></a>
+<span class="lineNum">     230 </span>            :         }
+<span class="lineNum">     231 </span><span class="lineCov">        131 :         return result;</span>
+<a name="232"><span class="lineNum">     232 </span>            :     }</a>
+<a name="233"><span class="lineNum">     233 </span>            : </a>
+<span class="lineNum">     234 </span><span class="lineCov">        127 :     bool ProfileTableImp::name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name)</span>
+<span class="lineNum">     235 </span>            :     {
+<span class="lineNum">     236 </span>            :         // Check if last character is '\1' to see more names remain to be passed
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">        127 :         bool result = (((char *)m_table)[m_buffer_size - 1] == '\1');</span></a>
+<span class="lineNum">     238 </span><span class="lineCov">        127 :         size_t buffer_remain = m_buffer_size - header_offset - 1;</span>
+<span class="lineNum">     239 </span><span class="lineCov">        127 :         char *buffer_ptr = (char *)m_table + header_offset;</span>
+<span class="lineNum">     240 </span>            : 
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">       3221 :         while (buffer_remain) {</span></a>
+<span class="lineNum">     242 </span><span class="lineCov">       1547 :             size_t name_len = strnlen(buffer_ptr, buffer_remain);</span>
+<span class="lineNum">     243 </span><span class="lineCov">       1547 :             if (name_len == buffer_remain) {</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;ProfileTableImp::name_set(): buffer missing null termination&quot;, GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
+<a name="245"><span class="lineNum">     245 </span>            :             }</a>
+<span class="lineNum">     246 </span><span class="lineCov">       1547 :             if (name_len) {</span>
+<span class="lineNum">     247 </span><span class="lineCov">       1420 :                 name.insert(std::string(buffer_ptr));</span>
+<span class="lineNum">     248 </span><span class="lineCov">       1420 :                 buffer_remain -= name_len + 1;</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">       1420 :                 buffer_ptr += name_len + 1;</span></a>
+<span class="lineNum">     250 </span>            :             }
+<span class="lineNum">     251 </span>            :             else {
+<span class="lineNum">     252 </span><span class="lineCov">        127 :                 buffer_remain = 0;</span>
+<a name="253"><span class="lineNum">     253 </span>            :             }</a>
+<span class="lineNum">     254 </span>            :         }
+<span class="lineNum">     255 </span><span class="lineCov">        127 :         return result;</span>
+<span class="lineNum">     256 </span>            :     }
+<a name="257"><span class="lineNum">     257 </span>            : }</a>
 </pre>
       </td>
     </tr>

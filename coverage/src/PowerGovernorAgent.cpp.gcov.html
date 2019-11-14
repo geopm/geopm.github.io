@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/PowerGovernorAgent.cpp</title>
+  <title>LCOV - v1.1.0 - src/PowerGovernorAgent.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,20 +28,20 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">125</td>
-            <td class="headerCovTableEntry">147</td>
-            <td class="headerCovTableEntryMed">85.0 %</td>
+            <td class="headerCovTableEntry">131</td>
+            <td class="headerCovTableEntry">155</td>
+            <td class="headerCovTableEntryMed">84.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">23</td>
-            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntry">25</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
@@ -100,323 +100,338 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;cfloat&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;cmath&gt;
-<span class="lineNum">      35 </span>            : #include &lt;algorithm&gt;
-<span class="lineNum">      36 </span>            : 
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;PowerGovernor.hpp&quot;</a>
-<span class="lineNum">      38 </span>            : #include &quot;PowerGovernorAgent.hpp&quot;
-<span class="lineNum">      39 </span>            : #include &quot;PlatformIO.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;PlatformTopo.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Exception.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;CircularBuffer.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;Agg.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;Helper.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      46 </span>            : 
-<a name="47"><span class="lineNum">      47 </span>            : namespace geopm</a>
-<span class="lineNum">      48 </span>            : {
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">         92 :     PowerGovernorAgent::PowerGovernorAgent()</span></a>
-<span class="lineNum">      50 </span><span class="lineCov">         92 :         : PowerGovernorAgent(platform_io(), platform_topo(), nullptr)</span>
-<span class="lineNum">      51 </span>            :     {
-<span class="lineNum">      52 </span>            : 
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         92 :     }</span></a>
-<span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span><span class="lineCov">        102 :     PowerGovernorAgent::PowerGovernorAgent(PlatformIO &amp;platform_io, PlatformTopo &amp;platform_topo, std::unique_ptr&lt;PowerGovernor&gt; power_gov)</span>
-<span class="lineNum">      56 </span>            :         : m_platform_io(platform_io)
-<a name="57"><span class="lineNum">      57 </span>            :         , m_platform_topo(platform_topo)</a>
-<span class="lineNum">      58 </span>            :         , m_level(-1)
-<span class="lineNum">      59 </span>            :         , m_is_converged(false)
-<span class="lineNum">      60 </span>            :         , m_is_sample_stable(false)
-<a name="61"><span class="lineNum">      61 </span>            :         , m_do_send_sample(false)</a>
-<span class="lineNum">      62 </span><span class="lineCov">        204 :         , m_min_power_setting(m_platform_io.read_signal(&quot;POWER_PACKAGE_MIN&quot;, GEOPM_DOMAIN_PACKAGE, 0))</span>
-<span class="lineNum">      63 </span><span class="lineCov">        204 :         , m_max_power_setting(m_platform_io.read_signal(&quot;POWER_PACKAGE_MAX&quot;, GEOPM_DOMAIN_PACKAGE, 0))</span>
-<span class="lineNum">      64 </span><span class="lineCov">        204 :         , m_tdp_power_setting(m_platform_io.read_signal(&quot;POWER_PACKAGE_TDP&quot;, GEOPM_DOMAIN_PACKAGE, 0))</span>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        102 :         , m_power_gov(std::move(power_gov))</span></a>
-<span class="lineNum">      66 </span>            :         , m_pio_idx(M_PLAT_NUM_SIGNAL)
-<span class="lineNum">      67 </span>            :         , m_agg_func(M_NUM_SAMPLE)
-<span class="lineNum">      68 </span>            :         , m_num_children(0)
-<a name="69"><span class="lineNum">      69 </span>            :         , m_last_power_budget(NAN)</a>
-<span class="lineNum">      70 </span>            :         , m_power_budget_changed(false)
-<span class="lineNum">      71 </span>            :         , m_epoch_power_buf(geopm::make_unique&lt;CircularBuffer&lt;double&gt; &gt;(16)) // Magic number...
-<span class="lineNum">      72 </span>            :         , m_sample(M_PLAT_NUM_SIGNAL)
-<a name="73"><span class="lineNum">      73 </span>            :         , m_ascend_count(0)</a>
-<span class="lineNum">      74 </span>            :         , m_ascend_period(10)
-<span class="lineNum">      75 </span>            :         , m_min_num_converged(15)
-<span class="lineNum">      76 </span><span class="lineCov">        204 :         , m_num_pkg(m_platform_topo.num_domain(m_platform_io.control_domain_type(&quot;POWER_PACKAGE_LIMIT&quot;)))</span>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;PowerGovernorAgent.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;cfloat&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cmath&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;algorithm&gt;</a>
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : #include &quot;PowerGovernor.hpp&quot;
+<span class="lineNum">      40 </span>            : #include &quot;PlatformIO.hpp&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;PlatformTopo.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;CircularBuffer.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;Agg.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;Helper.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      47 </span>            : 
+<a name="48"><span class="lineNum">      48 </span>            : namespace geopm</a>
+<a name="49"><span class="lineNum">      49 </span>            : {</a>
+<span class="lineNum">      50 </span><span class="lineCov">         37 :     PowerGovernorAgent::PowerGovernorAgent()</span>
+<span class="lineNum">      51 </span><span class="lineCov">         37 :         : PowerGovernorAgent(platform_io(), platform_topo(), nullptr)</span>
+<span class="lineNum">      52 </span>            :     {
+<a name="53"><span class="lineNum">      53 </span>            : </a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">         37 :     }</span></a>
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span><span class="lineCov">         44 :     PowerGovernorAgent::PowerGovernorAgent(PlatformIO &amp;platform_io, const PlatformTopo &amp;platform_topo, std::unique_ptr&lt;PowerGovernor&gt; power_gov)</span>
+<a name="57"><span class="lineNum">      57 </span>            :         : m_platform_io(platform_io)</a>
+<span class="lineNum">      58 </span>            :         , m_platform_topo(platform_topo)
+<span class="lineNum">      59 </span>            :         , m_level(-1)
+<span class="lineNum">      60 </span>            :         , m_is_converged(false)
+<a name="61"><span class="lineNum">      61 </span>            :         , m_is_sample_stable(false)</a>
+<span class="lineNum">      62 </span>            :         , m_do_send_sample(false)
+<span class="lineNum">      63 </span><span class="lineCov">         88 :         , m_min_power_setting(m_platform_io.read_signal(&quot;POWER_PACKAGE_MIN&quot;, GEOPM_DOMAIN_BOARD, 0))</span>
+<span class="lineNum">      64 </span><span class="lineCov">         88 :         , m_max_power_setting(m_platform_io.read_signal(&quot;POWER_PACKAGE_MAX&quot;, GEOPM_DOMAIN_BOARD, 0))</span>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         88 :         , m_tdp_power_setting(m_platform_io.read_signal(&quot;POWER_PACKAGE_TDP&quot;, GEOPM_DOMAIN_BOARD, 0))</span></a>
+<span class="lineNum">      66 </span><span class="lineCov">         44 :         , m_power_gov(std::move(power_gov))</span>
+<span class="lineNum">      67 </span>            :         , m_pio_idx(M_PLAT_NUM_SIGNAL)
+<span class="lineNum">      68 </span>            :         , m_agg_func(M_NUM_SAMPLE)
+<a name="69"><span class="lineNum">      69 </span>            :         , m_num_children(0)</a>
+<span class="lineNum">      70 </span>            :         , m_last_power_budget(NAN)
+<span class="lineNum">      71 </span>            :         , m_power_budget_changed(false)
+<span class="lineNum">      72 </span>            :         , m_epoch_power_buf(geopm::make_unique&lt;CircularBuffer&lt;double&gt; &gt;(16)) // Magic number...
+<a name="73"><span class="lineNum">      73 </span>            :         , m_sample(M_PLAT_NUM_SIGNAL)</a>
+<span class="lineNum">      74 </span>            :         , m_ascend_count(0)
+<span class="lineNum">      75 </span>            :         , m_ascend_period(10)
+<span class="lineNum">      76 </span>            :         , m_min_num_converged(15)
 <a name="77"><span class="lineNum">      77 </span>            :         , m_adjusted_power(0.0)</a>
 <span class="lineNum">      78 </span>            :         , m_last_wait(GEOPM_TIME_REF)
-<span class="lineNum">      79 </span><span class="lineCov">        760 :         , M_WAIT_SEC(0.005)</span>
+<span class="lineNum">      79 </span><span class="lineCov">        264 :         , M_WAIT_SEC(0.005)</span>
 <span class="lineNum">      80 </span>            :     {
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">        102 :         geopm_time(&amp;m_last_wait);</span></a>
-<span class="lineNum">      82 </span><span class="lineCov">        102 :     }</span>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         44 :         geopm_time(&amp;m_last_wait);</span></a>
+<span class="lineNum">      82 </span><span class="lineCov">         44 :     }</span>
 <span class="lineNum">      83 </span>            : 
 <a name="84"><span class="lineNum">      84 </span>            :     PowerGovernorAgent::~PowerGovernorAgent() = default;</a>
 <a name="85"><span class="lineNum">      85 </span>            : </a>
-<span class="lineNum">      86 </span><span class="lineCov">        102 :     void PowerGovernorAgent::init(int level, const std::vector&lt;int&gt; &amp;fan_in, bool is_root)</span>
+<span class="lineNum">      86 </span><span class="lineCov">         42 :     void PowerGovernorAgent::init(int level, const std::vector&lt;int&gt; &amp;fan_in, bool is_root)</span>
 <span class="lineNum">      87 </span>            :     {
-<span class="lineNum">      88 </span><span class="lineCov">        102 :         if (level &lt; 0 || level &gt; (int)fan_in.size()) {</span>
+<span class="lineNum">      88 </span><span class="lineCov">         42 :         if (level &lt; 0 || level &gt; (int)fan_in.size()) {</span>
 <a name="89"><span class="lineNum">      89 </span>            :             throw Exception(&quot;PowerGovernorAgent::init(): invalid level for given fan_in.&quot;,</a>
 <span class="lineNum">      90 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
 <span class="lineNum">      91 </span>            :         }
-<span class="lineNum">      92 </span><span class="lineCov">        102 :         m_level = level;</span>
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        102 :         if (m_level == 0) {</span></a>
-<span class="lineNum">      94 </span><span class="lineCov">         80 :             if (nullptr == m_power_gov) {</span>
-<span class="lineNum">      95 </span><span class="lineCov">         76 :                 m_power_gov = PowerGovernor::make_unique();</span>
+<span class="lineNum">      92 </span><span class="lineCov">         42 :         m_level = level;</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         42 :         if (m_level == 0) {</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">         33 :             if (nullptr == m_power_gov) {</span>
+<span class="lineNum">      95 </span><span class="lineCov">         31 :                 m_power_gov = PowerGovernor::make_unique();</span>
 <span class="lineNum">      96 </span>            :             }
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         80 :             init_platform_io(); // Only do this at the leaf level.</span></a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         33 :             init_platform_io(); // Only do this at the leaf level.</span></a>
 <span class="lineNum">      98 </span>            :         }
 <span class="lineNum">      99 </span>            : 
-<span class="lineNum">     100 </span><span class="lineCov">        102 :         if (level == 0) {</span>
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         80 :             m_num_children = 0;</span></a>
+<span class="lineNum">     100 </span><span class="lineCov">         42 :         if (level == 0) {</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         33 :             m_num_children = 0;</span></a>
 <span class="lineNum">     102 </span>            :         }
 <span class="lineNum">     103 </span>            :         else {
-<span class="lineNum">     104 </span><span class="lineCov">         22 :             m_num_children = fan_in[level - 1];</span>
+<span class="lineNum">     104 </span><span class="lineCov">          9 :             m_num_children = fan_in[level - 1];</span>
 <a name="105"><span class="lineNum">     105 </span>            :         }</a>
 <span class="lineNum">     106 </span>            : 
 <span class="lineNum">     107 </span>            :         // Setup sample aggregation for data going up the tree
-<span class="lineNum">     108 </span><span class="lineCov">        102 :         m_agg_func[M_SAMPLE_POWER] = Agg::average;</span>
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        102 :         m_agg_func[M_SAMPLE_IS_CONVERGED] = Agg::logical_and;</span></a>
-<span class="lineNum">     110 </span><span class="lineCov">        102 :         m_agg_func[M_SAMPLE_POWER_ENFORCED] = Agg::average;</span>
-<a name="111"><span class="lineNum">     111 </span><span class="lineCov">        102 :     }</span></a>
+<span class="lineNum">     108 </span><span class="lineCov">         42 :         m_agg_func[M_SAMPLE_POWER] = Agg::average;</span>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         42 :         m_agg_func[M_SAMPLE_IS_CONVERGED] = Agg::logical_and;</span></a>
+<span class="lineNum">     110 </span><span class="lineCov">         42 :         m_agg_func[M_SAMPLE_POWER_ENFORCED] = Agg::average;</span>
+<a name="111"><span class="lineNum">     111 </span><span class="lineCov">         42 :     }</span></a>
 <span class="lineNum">     112 </span>            : 
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         80 :     void PowerGovernorAgent::init_platform_io(void)</span></a>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         33 :     void PowerGovernorAgent::init_platform_io(void)</span></a>
 <span class="lineNum">     114 </span>            :     {
-<span class="lineNum">     115 </span><span class="lineCov">         80 :         m_power_gov-&gt;init_platform_io();</span>
+<span class="lineNum">     115 </span><span class="lineCov">         33 :         m_power_gov-&gt;init_platform_io();</span>
 <span class="lineNum">     116 </span>            :         // Setup signals
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         80 :         m_pio_idx[M_PLAT_SIGNAL_PKG_POWER] = m_platform_io.push_signal(&quot;POWER_PACKAGE&quot;, GEOPM_DOMAIN_BOARD, 0);</span></a>
-<span class="lineNum">     118 </span><span class="lineCov">         80 :         m_pio_idx[M_PLAT_SIGNAL_DRAM_POWER] = m_platform_io.push_signal(&quot;POWER_DRAM&quot;, GEOPM_DOMAIN_BOARD, 0);</span>
-<span class="lineNum">     119 </span>            : 
-<span class="lineNum">     120 </span>            :         // Setup controls
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">         80 :         int pkg_pwr_domain_type = m_platform_io.control_domain_type(&quot;POWER_PACKAGE_LIMIT&quot;);</span></a>
-<span class="lineNum">     122 </span><span class="lineCov">         80 :         if (pkg_pwr_domain_type == GEOPM_DOMAIN_INVALID) {</span>
-<span class="lineNum">     123 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): Platform does not support package power control&quot;,</span>
-<span class="lineNum">     124 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_AGENT_UNSUPPORTED, __FILE__, __LINE__);</span>
-<a name="125"><span class="lineNum">     125 </span>            :         }</a>
-<a name="126"><span class="lineNum">     126 </span><span class="lineCov">         80 :     }</span></a>
-<span class="lineNum">     127 </span>            : 
-<span class="lineNum">     128 </span><span class="lineCov">     856488 :     void PowerGovernorAgent::validate_policy(std::vector&lt;double&gt; &amp;policy) const</span>
-<a name="129"><span class="lineNum">     129 </span>            :     {</a>
-<span class="lineNum">     130 </span>            : 
-<a name="131"><span class="lineNum">     131 </span><span class="lineCov">     856488 :     }</span></a>
-<span class="lineNum">     132 </span>            : 
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">     231208 :     void PowerGovernorAgent::split_policy(const std::vector&lt;double&gt; &amp;in_policy,</span></a>
-<span class="lineNum">     134 </span>            :                                           std::vector&lt;std::vector&lt;double&gt; &gt; &amp;out_policy)
-<span class="lineNum">     135 </span>            :     {
-<span class="lineNum">     136 </span>            : #ifdef GEOPM_DEBUG
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">     231208 :         if (in_policy.size() != M_NUM_POLICY) {</span></a>
-<span class="lineNum">     138 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): number of policies was different from expected.&quot;,</span>
-<span class="lineNum">     139 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     140 </span>            :         }
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">     231208 :         if (m_level == 0) {</span></a>
-<span class="lineNum">     142 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): level 0 agent not expected to call descend.&quot;,</span>
-<span class="lineNum">     143 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     144 </span>            :         }
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">     231208 :         if (out_policy.size() != (size_t)m_num_children) {</span></a>
-<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): policy_out vector not correctly sized.&quot;,</span>
-<span class="lineNum">     147 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     148 </span>            :         }
-<a name="149"><span class="lineNum">     149 </span>            : #endif</a>
-<span class="lineNum">     150 </span><span class="lineCov">     231208 :         double power_budget_in = in_policy[M_POLICY_POWER];</span>
-<span class="lineNum">     151 </span>            :         // If NAN, use default
-<span class="lineNum">     152 </span><span class="lineCov">     231208 :         if (std::isnan(power_budget_in)) {</span>
-<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :             power_budget_in = m_tdp_power_setting;</span></a>
-<span class="lineNum">     154 </span>            :         }
-<span class="lineNum">     155 </span>            : 
-<span class="lineNum">     156 </span><span class="lineCov">     231208 :         double per_package_budget_in = power_budget_in / m_num_pkg;</span>
-<a name="157"><span class="lineNum">     157 </span>            : </a>
-<span class="lineNum">     158 </span><span class="lineCov">     462416 :         if (per_package_budget_in &gt; m_max_power_setting ||</span>
-<span class="lineNum">     159 </span><span class="lineCov">     231208 :             per_package_budget_in &lt; m_min_power_setting) {</span>
-<span class="lineNum">     160 </span>            :             throw Exception(&quot;PowerGovernorAgent::descend(): &quot;
-<a name="161"><span class="lineNum">     161 </span>            :                             &quot;invalid power budget.&quot;,</a>
-<span class="lineNum">     162 </span><span class="lineCov">          2 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     163 </span>            :         }
-<span class="lineNum">     164 </span>            : 
-<a name="165"><span class="lineNum">     165 </span>            :         // Send down if this is the first budget, or if the budget changed</a>
-<span class="lineNum">     166 </span><span class="lineCov">     462394 :         if ((std::isnan(m_last_power_budget) &amp;&amp; !std::isnan(power_budget_in)) ||</span>
-<span class="lineNum">     167 </span><span class="lineCov">     231188 :             m_last_power_budget != power_budget_in) {</span>
-<span class="lineNum">     168 </span>            : 
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">         20 :             m_last_power_budget = power_budget_in;</span></a>
-<span class="lineNum">     170 </span>            :             // Convert power budget vector into a vector of policy vectors
-<span class="lineNum">     171 </span><span class="lineCov">         92 :             for (int child_idx = 0; child_idx != m_num_children; ++child_idx) {</span>
-<span class="lineNum">     172 </span><span class="lineCov">         72 :                 out_policy[child_idx][M_POLICY_POWER] = power_budget_in;</span>
-<a name="173"><span class="lineNum">     173 </span>            :             }</a>
-<span class="lineNum">     174 </span><span class="lineCov">         20 :             m_epoch_power_buf-&gt;clear();</span>
-<span class="lineNum">     175 </span><span class="lineCov">         20 :             m_is_converged = false;</span>
-<span class="lineNum">     176 </span><span class="lineCov">         20 :             m_power_budget_changed = true;</span>
-<a name="177"><span class="lineNum">     177 </span>            :         }</a>
-<span class="lineNum">     178 </span>            :         else {
-<span class="lineNum">     179 </span><span class="lineCov">     231186 :             m_power_budget_changed = false;</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         33 :         m_pio_idx[M_PLAT_SIGNAL_PKG_POWER] = m_platform_io.push_signal(&quot;POWER_PACKAGE&quot;, GEOPM_DOMAIN_BOARD, 0);</span></a>
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span>            :         // Setup controls
+<span class="lineNum">     120 </span><span class="lineCov">         33 :         int pkg_pwr_domain_type = m_platform_io.control_domain_type(&quot;POWER_PACKAGE_LIMIT&quot;);</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">         33 :         if (pkg_pwr_domain_type == GEOPM_DOMAIN_INVALID) {</span></a>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): Platform does not support package power control&quot;,</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_AGENT_UNSUPPORTED, __FILE__, __LINE__);</span>
+<span class="lineNum">     124 </span>            :         }
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">         33 :     }</span></a>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineCov">     370431 :     void PowerGovernorAgent::validate_policy(std::vector&lt;double&gt; &amp;policy) const</span>
+<span class="lineNum">     128 </span>            :     {
+<a name="129"><span class="lineNum">     129 </span>            :         // If NAN, use default</a>
+<span class="lineNum">     130 </span><span class="lineCov">     370431 :         if (std::isnan(policy[M_POLICY_POWER])) {</span>
+<span class="lineNum">     131 </span><span class="lineNoCov">          0 :             policy[M_POLICY_POWER] = m_tdp_power_setting;</span>
+<span class="lineNum">     132 </span>            :         }
+<a name="133"><span class="lineNum">     133 </span>            :         // Clamp at min and max</a>
+<span class="lineNum">     134 </span><span class="lineCov">     370431 :         if (policy[M_POLICY_POWER] &lt; m_min_power_setting) {</span>
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :             policy[M_POLICY_POWER] = m_min_power_setting;</span>
+<span class="lineNum">     136 </span>            :         }
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">     370431 :         else if (policy[M_POLICY_POWER] &gt; m_max_power_setting) {</span></a>
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :             policy[M_POLICY_POWER] = m_max_power_setting;</span>
+<span class="lineNum">     139 </span>            :         }
+<a name="140"><span class="lineNum">     140 </span><span class="lineCov">     370431 :     }</span></a>
+<a name="141"><span class="lineNum">     141 </span>            : </a>
+<span class="lineNum">     142 </span><span class="lineCov">      99959 :     void PowerGovernorAgent::split_policy(const std::vector&lt;double&gt; &amp;in_policy,</span>
+<span class="lineNum">     143 </span>            :                                           std::vector&lt;std::vector&lt;double&gt; &gt; &amp;out_policy)
+<span class="lineNum">     144 </span>            :     {
+<a name="145"><span class="lineNum">     145 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">     146 </span><span class="lineCov">      99959 :         if (in_policy.size() != M_NUM_POLICY) {</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): number of policies was different from expected.&quot;,</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="149"><span class="lineNum">     149 </span>            :         }</a>
+<span class="lineNum">     150 </span><span class="lineCov">      99959 :         if (m_level == 0) {</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): level 0 agent not expected to call descend.&quot;,</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="153"><span class="lineNum">     153 </span>            :         }</a>
+<span class="lineNum">     154 </span><span class="lineCov">      99959 :         if (out_policy.size() != (size_t)m_num_children) {</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): policy_out vector not correctly sized.&quot;,</span>
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="157"><span class="lineNum">     157 </span>            :         }</a>
+<span class="lineNum">     158 </span>            : #endif
+<span class="lineNum">     159 </span><span class="lineCov">      99959 :         double power_budget_in = in_policy[M_POLICY_POWER];</span>
+<span class="lineNum">     160 </span>            : 
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">     199918 :         if (power_budget_in &gt; m_max_power_setting ||</span></a>
+<span class="lineNum">     162 </span><span class="lineCov">      99959 :             power_budget_in &lt; m_min_power_setting) {</span>
+<span class="lineNum">     163 </span>            :             throw Exception(&quot;PowerGovernorAgent::split_policy(): &quot;
+<span class="lineNum">     164 </span>            :                             &quot;invalid power budget.&quot;,
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     166 </span>            :         }
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span>            :         // Send down if this is the first budget, or if the budget changed
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">     199909 :         if ((std::isnan(m_last_power_budget) &amp;&amp; !std::isnan(power_budget_in)) ||</span></a>
+<span class="lineNum">     170 </span><span class="lineCov">      99951 :             m_last_power_budget != power_budget_in) {</span>
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span><span class="lineCov">          8 :             m_last_power_budget = power_budget_in;</span>
+<a name="173"><span class="lineNum">     173 </span>            :             // Convert power budget vector into a vector of policy vectors</a>
+<span class="lineNum">     174 </span><span class="lineCov">         36 :             for (int child_idx = 0; child_idx != m_num_children; ++child_idx) {</span>
+<span class="lineNum">     175 </span><span class="lineCov">         28 :                 out_policy[child_idx][M_POLICY_POWER] = power_budget_in;</span>
+<span class="lineNum">     176 </span>            :             }
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          8 :             m_epoch_power_buf-&gt;clear();</span></a>
+<span class="lineNum">     178 </span><span class="lineCov">          8 :             m_is_converged = false;</span>
+<span class="lineNum">     179 </span><span class="lineCov">          8 :             m_power_budget_changed = true;</span>
 <span class="lineNum">     180 </span>            :         }
-<a name="181"><span class="lineNum">     181 </span><span class="lineCov">     231206 :     }</span></a>
-<span class="lineNum">     182 </span>            : 
-<span class="lineNum">     183 </span><span class="lineCov">     231206 :     bool PowerGovernorAgent::do_send_policy(void) const</span>
-<span class="lineNum">     184 </span>            :     {
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     231206 :         return m_power_budget_changed;</span></a>
-<a name="186"><span class="lineNum">     186 </span>            :     }</a>
-<span class="lineNum">     187 </span>            : 
-<span class="lineNum">     188 </span><span class="lineCov">     115498 :     void PowerGovernorAgent::aggregate_sample(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
-<a name="189"><span class="lineNum">     189 </span>            :                                               std::vector&lt;double&gt; &amp;out_sample)</a>
-<span class="lineNum">     190 </span>            :     {
-<span class="lineNum">     191 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     192 </span><span class="lineCov">     115498 :         if (out_sample.size() != M_NUM_SAMPLE) {</span>
-<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): out_sample vector not correctly sized.&quot;,</span></a>
-<span class="lineNum">     194 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     195 </span>            :         }
-<span class="lineNum">     196 </span><span class="lineCov">     115498 :         if (m_level == 0) {</span>
-<a name="197"><span class="lineNum">     197 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): level 0 agent not expected to call ascend.&quot;,</span></a>
-<span class="lineNum">     198 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     199 </span>            :         }
-<span class="lineNum">     200 </span><span class="lineCov">     115498 :         if (in_sample.size() != (size_t)m_num_children) {</span>
-<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): in_sample vector not correctly sized.&quot;,</span></a>
-<span class="lineNum">     202 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     203 </span>            :         }
-<a name="204"><span class="lineNum">     204 </span>            : #endif</a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">     183272 :         m_is_sample_stable = std::all_of(in_sample.begin(), in_sample.end(),</span></a>
-<span class="lineNum">     206 </span><span class="lineCov">     318749 :             [](const std::vector&lt;double&gt; &amp;val)</span>
-<span class="lineNum">     207 </span>            :             {
-<span class="lineNum">     208 </span><span class="lineCov">     318749 :                 return val[M_SAMPLE_IS_CONVERGED];</span>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">     386523 :             });</span></a>
-<span class="lineNum">     210 </span>            : 
-<span class="lineNum">     211 </span>            :         // If all children report that they are converged for the last
-<span class="lineNum">     212 </span>            :         // ascend period times, then aggregate the samples and send
-<a name="213"><span class="lineNum">     213 </span>            :         // them up the tree.</a>
-<span class="lineNum">     214 </span><span class="lineCov">     115498 :         if (m_is_sample_stable &amp;&amp; m_ascend_count == 0) {</span>
-<span class="lineNum">     215 </span><span class="lineCov">       6781 :             m_do_send_sample = true;</span>
-<span class="lineNum">     216 </span><span class="lineCov">       6781 :             Agent::aggregate_sample(in_sample, m_agg_func, out_sample);</span>
-<a name="217"><span class="lineNum">     217 </span>            :         }</a>
-<span class="lineNum">     218 </span>            :         else {
-<span class="lineNum">     219 </span><span class="lineCov">     108717 :             m_do_send_sample = false;</span>
+<a name="181"><span class="lineNum">     181 </span>            :         else {</a>
+<span class="lineNum">     182 </span><span class="lineCov">      99950 :             m_power_budget_changed = false;</span>
+<span class="lineNum">     183 </span>            :         }
+<a name="184"><span class="lineNum">     184 </span><span class="lineCov">      99958 :     }</span></a>
+<a name="185"><span class="lineNum">     185 </span>            : </a>
+<span class="lineNum">     186 </span><span class="lineCov">      99958 :     bool PowerGovernorAgent::do_send_policy(void) const</span>
+<span class="lineNum">     187 </span>            :     {
+<span class="lineNum">     188 </span><span class="lineCov">      99958 :         return m_power_budget_changed;</span>
+<a name="189"><span class="lineNum">     189 </span>            :     }</a>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span><span class="lineCov">      49940 :     void PowerGovernorAgent::aggregate_sample(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
+<span class="lineNum">     192 </span>            :                                               std::vector&lt;double&gt; &amp;out_sample)
+<a name="193"><span class="lineNum">     193 </span>            :     {</a>
+<span class="lineNum">     194 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     195 </span><span class="lineCov">      49940 :         if (out_sample.size() != M_NUM_SAMPLE) {</span>
+<span class="lineNum">     196 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): out_sample vector not correctly sized.&quot;,</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     198 </span>            :         }
+<span class="lineNum">     199 </span><span class="lineCov">      49940 :         if (m_level == 0) {</span>
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): level 0 agent not expected to call ascend.&quot;,</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     202 </span>            :         }
+<span class="lineNum">     203 </span><span class="lineCov">      49940 :         if (in_sample.size() != (size_t)m_num_children) {</span>
+<span class="lineNum">     204 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): in_sample vector not correctly sized.&quot;,</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     206 </span>            :         }
+<a name="207"><span class="lineNum">     207 </span>            : #endif</a>
+<span class="lineNum">     208 </span><span class="lineCov">      49940 :         m_is_sample_stable = std::all_of(in_sample.begin(), in_sample.end(),</span>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">     146177 :             [](const std::vector&lt;double&gt; &amp;val)</span></a>
+<span class="lineNum">     210 </span>            :             {
+<span class="lineNum">     211 </span><span class="lineCov">     146177 :                 return val[M_SAMPLE_IS_CONVERGED];</span>
+<span class="lineNum">     212 </span><span class="lineCov">     146177 :             });</span>
+<a name="213"><span class="lineNum">     213 </span>            : </a>
+<span class="lineNum">     214 </span>            :         // If all children report that they are converged for the last
+<span class="lineNum">     215 </span>            :         // ascend period times, then aggregate the samples and send
+<span class="lineNum">     216 </span>            :         // them up the tree.
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">      49940 :         if (m_is_sample_stable &amp;&amp; m_ascend_count == 0) {</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">       2544 :             m_do_send_sample = true;</span>
+<span class="lineNum">     219 </span><span class="lineCov">       2544 :             Agent::aggregate_sample(in_sample, m_agg_func, out_sample);</span>
 <span class="lineNum">     220 </span>            :         }
-<a name="221"><span class="lineNum">     221 </span>            : </a>
-<span class="lineNum">     222 </span>            :         // Increment the ascend counter if the children are stable.
-<span class="lineNum">     223 </span><span class="lineCov">     115498 :         if (m_is_sample_stable) {</span>
-<span class="lineNum">     224 </span><span class="lineCov">      67765 :             ++m_ascend_count;</span>
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">      67765 :             if (m_ascend_count == m_ascend_period) {</span></a>
-<span class="lineNum">     226 </span><span class="lineCov">       6772 :                m_ascend_count = 0;</span>
-<span class="lineNum">     227 </span>            :             }
-<span class="lineNum">     228 </span>            :         }
-<a name="229"><span class="lineNum">     229 </span>            : </a>
-<a name="230"><span class="lineNum">     230 </span><span class="lineCov">     115498 :     }</span></a>
-<span class="lineNum">     231 </span>            : 
-<span class="lineNum">     232 </span><span class="lineCov">     740884 :     bool PowerGovernorAgent::do_send_sample(void) const</span>
-<a name="233"><span class="lineNum">     233 </span>            :     {</a>
-<span class="lineNum">     234 </span><span class="lineCov">     740884 :         return m_do_send_sample;</span>
-<a name="235"><span class="lineNum">     235 </span>            :     }</a>
-<span class="lineNum">     236 </span>            : 
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">     625428 :     void PowerGovernorAgent::adjust_platform(const std::vector&lt;double&gt; &amp;in_policy)</span></a>
-<span class="lineNum">     238 </span>            :     {
-<span class="lineNum">     239 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     240 </span><span class="lineCov">     625428 :         if (in_policy.size() != M_NUM_POLICY) {</span>
-<a name="241"><span class="lineNum">     241 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): one control was expected.&quot;,</span></a>
-<span class="lineNum">     242 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     243 </span>            :         }
-<span class="lineNum">     244 </span>            : #endif
-<a name="245"><span class="lineNum">     245 </span>            :         // If NAN, use default</a>
-<span class="lineNum">     246 </span><span class="lineCov">     625428 :         double power_budget_in = in_policy[M_POLICY_POWER];</span>
-<span class="lineNum">     247 </span><span class="lineCov">     625428 :         if (std::isnan(power_budget_in)) {</span>
-<span class="lineNum">     248 </span><span class="lineCov">        524 :             power_budget_in = m_tdp_power_setting;</span>
-<a name="249"><span class="lineNum">     249 </span>            :         }</a>
-<span class="lineNum">     250 </span><span class="lineCov">     625428 :         m_power_gov-&gt;adjust_platform(power_budget_in, m_adjusted_power);</span>
-<span class="lineNum">     251 </span><span class="lineCov">     625428 :         m_last_power_budget = power_budget_in;</span>
-<a name="252"><span class="lineNum">     252 </span><span class="lineCov">     625428 :     }</span></a>
-<a name="253"><span class="lineNum">     253 </span>            : </a>
-<span class="lineNum">     254 </span><span class="lineCov">     625428 :     bool PowerGovernorAgent::do_write_batch(void) const</span>
-<span class="lineNum">     255 </span>            :     {
-<span class="lineNum">     256 </span><span class="lineCov">     625428 :         return m_power_gov-&gt;do_write_batch();</span>
-<a name="257"><span class="lineNum">     257 </span>            :     }</a>
-<span class="lineNum">     258 </span>            : 
-<span class="lineNum">     259 </span><span class="lineCov">     625420 :     void PowerGovernorAgent::sample_platform(std::vector&lt;double&gt; &amp;out_sample)</span>
-<span class="lineNum">     260 </span>            :     {
-<a name="261"><span class="lineNum">     261 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     262 </span><span class="lineCov">     625420 :         if (out_sample.size() != M_NUM_SAMPLE) {</span>
-<span class="lineNum">     263 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__)  + &quot;(): out_sample vector not correctly sized.&quot;,</span>
-<span class="lineNum">     264 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<a name="265"><span class="lineNum">     265 </span>            :         }</a>
-<span class="lineNum">     266 </span>            : #endif
-<span class="lineNum">     267 </span><span class="lineCov">     625420 :         m_power_gov-&gt;sample_platform();</span>
-<span class="lineNum">     268 </span>            :         // Populate sample vector by reading from PlatformIO
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">    1876260 :         for (int sample_idx = 0; sample_idx &lt; M_PLAT_NUM_SIGNAL; ++sample_idx) {</span></a>
-<span class="lineNum">     270 </span><span class="lineCov">    1250840 :             m_sample[sample_idx] = m_platform_io.sample(m_pio_idx[sample_idx]);</span>
-<span class="lineNum">     271 </span>            :         }
-<span class="lineNum">     272 </span>            : 
-<a name="273"><span class="lineNum">     273 </span>            :         /// @todo should use EPOCH_ENERGY signal which doesn't currently exist</a>
-<span class="lineNum">     274 </span><span class="lineCov">     625420 :         if (!std::isnan(m_sample[M_PLAT_SIGNAL_PKG_POWER]) &amp;&amp; !std::isnan(m_sample[M_PLAT_SIGNAL_DRAM_POWER])) {</span>
-<span class="lineNum">     275 </span><span class="lineCov">     625392 :             m_epoch_power_buf-&gt;insert(m_sample[M_PLAT_SIGNAL_PKG_POWER] + m_sample[M_PLAT_SIGNAL_DRAM_POWER]);</span>
-<span class="lineNum">     276 </span>            :         }
-<a name="277"><span class="lineNum">     277 </span>            :         // If we have observed more than m_min_num_converged epoch</a>
-<span class="lineNum">     278 </span>            :         // calls then send median filtered power values up the tree.
-<span class="lineNum">     279 </span><span class="lineCov">     625420 :         if (m_epoch_power_buf-&gt;size() &gt; m_min_num_converged) {</span>
-<span class="lineNum">     280 </span><span class="lineCov">     624227 :             double median = Agg::median(m_epoch_power_buf-&gt;make_vector());</span>
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">     624227 :             out_sample[M_SAMPLE_POWER] = median;</span></a>
-<span class="lineNum">     282 </span><span class="lineCov">     624227 :             out_sample[M_SAMPLE_IS_CONVERGED] = (median &lt;= m_last_power_budget); // todo might want fudge factor</span>
-<span class="lineNum">     283 </span><span class="lineCov">     624227 :             out_sample[M_SAMPLE_POWER_ENFORCED] = m_adjusted_power;</span>
-<span class="lineNum">     284 </span><span class="lineCov">     624227 :             m_do_send_sample = true;</span>
-<a name="285"><span class="lineNum">     285 </span>            :         }</a>
-<span class="lineNum">     286 </span>            :         else {
-<span class="lineNum">     287 </span><span class="lineCov">       1193 :             m_do_send_sample = false;</span>
-<span class="lineNum">     288 </span>            :         }
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">     625420 :     }</span></a>
-<span class="lineNum">     290 </span>            : 
-<span class="lineNum">     291 </span><span class="lineCov"> 1512035264 :     void PowerGovernorAgent::wait()</span>
-<span class="lineNum">     292 </span>            :     {
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov"> 1512035264 :         while(geopm_time_since(&amp;m_last_wait) &lt; M_WAIT_SEC) {</span></a>
-<span class="lineNum">     294 </span>            : 
-<span class="lineNum">     295 </span>            :         }
-<span class="lineNum">     296 </span><span class="lineCov">     625390 :         geopm_time(&amp;m_last_wait);</span>
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">     625390 :     }</span></a>
-<span class="lineNum">     298 </span>            : 
-<span class="lineNum">     299 </span><span class="lineCov">         28 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; PowerGovernorAgent::report_header(void) const</span>
-<span class="lineNum">     300 </span>            :     {
-<a name="301"><span class="lineNum">     301 </span><span class="lineCov">         28 :         return {};</span></a>
-<a name="302"><span class="lineNum">     302 </span>            :     }</a>
-<span class="lineNum">     303 </span>            : 
-<span class="lineNum">     304 </span><span class="lineCov">         76 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; PowerGovernorAgent::report_host(void) const</span>
-<a name="305"><span class="lineNum">     305 </span>            :     {</a>
-<span class="lineNum">     306 </span><span class="lineCov">         76 :         return {};</span>
-<a name="307"><span class="lineNum">     307 </span>            :     }</a>
-<span class="lineNum">     308 </span>            : 
-<a name="309"><span class="lineNum">     309 </span><span class="lineCov">         76 :     std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; PowerGovernorAgent::report_region(void) const</span></a>
-<span class="lineNum">     310 </span>            :     {
-<span class="lineNum">     311 </span><span class="lineCov">         76 :         return {};</span>
-<a name="312"><span class="lineNum">     312 </span>            :     }</a>
-<a name="313"><span class="lineNum">     313 </span>            : </a>
-<span class="lineNum">     314 </span><span class="lineCov">         76 :     std::vector&lt;std::string&gt; PowerGovernorAgent::trace_names(void) const</span>
-<span class="lineNum">     315 </span>            :     {
-<span class="lineNum">     316 </span><span class="lineCov">         76 :         return {&quot;power_budget&quot;};</span>
-<a name="317"><span class="lineNum">     317 </span>            :     }</a>
-<span class="lineNum">     318 </span>            : 
-<span class="lineNum">     319 </span><span class="lineCov">     625386 :     void PowerGovernorAgent::trace_values(std::vector&lt;double&gt; &amp;values)</span>
-<span class="lineNum">     320 </span>            :     {
-<a name="321"><span class="lineNum">     321 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     322 </span><span class="lineCov">     625386 :         if (values.size() != M_TRACE_NUM_SAMPLE) { // Everything sampled from the platform plus convergence (and the power budget soon...)</span>
-<span class="lineNum">     323 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): values vector not correctly sized.&quot;,</span>
-<span class="lineNum">     324 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<a name="325"><span class="lineNum">     325 </span>            :         }</a>
-<span class="lineNum">     326 </span>            : #endif
-<span class="lineNum">     327 </span><span class="lineCov">     625386 :         values[M_TRACE_SAMPLE_PWR_BUDGET] = m_last_power_budget;</span>
-<a name="328"><span class="lineNum">     328 </span><span class="lineCov">     625386 :     }</span></a>
-<a name="329"><span class="lineNum">     329 </span>            : </a>
-<span class="lineNum">     330 </span><span class="lineCov">        110 :     std::string PowerGovernorAgent::plugin_name(void)</span>
-<span class="lineNum">     331 </span>            :     {
-<span class="lineNum">     332 </span><span class="lineCov">        110 :         return &quot;power_governor&quot;;</span>
-<a name="333"><span class="lineNum">     333 </span>            :     }</a>
-<span class="lineNum">     334 </span>            : 
-<span class="lineNum">     335 </span><span class="lineCov">         92 :     std::unique_ptr&lt;Agent&gt; PowerGovernorAgent::make_plugin(void)</span>
-<span class="lineNum">     336 </span>            :     {
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         92 :         return geopm::make_unique&lt;PowerGovernorAgent&gt;();</span></a>
-<a name="338"><span class="lineNum">     338 </span>            :     }</a>
-<span class="lineNum">     339 </span>            : 
-<span class="lineNum">     340 </span><span class="lineCov">        110 :     std::vector&lt;std::string&gt; PowerGovernorAgent::policy_names(void)</span>
-<a name="341"><span class="lineNum">     341 </span>            :     {</a>
-<span class="lineNum">     342 </span><span class="lineCov">        110 :         return {&quot;POWER&quot;};</span>
-<a name="343"><span class="lineNum">     343 </span>            :     }</a>
+<a name="221"><span class="lineNum">     221 </span>            :         else {</a>
+<span class="lineNum">     222 </span><span class="lineCov">      47396 :             m_do_send_sample = false;</span>
+<span class="lineNum">     223 </span>            :         }
+<span class="lineNum">     224 </span>            : 
+<a name="225"><span class="lineNum">     225 </span>            :         // Increment the ascend counter if the children are stable.</a>
+<span class="lineNum">     226 </span><span class="lineCov">      49940 :         if (m_is_sample_stable) {</span>
+<span class="lineNum">     227 </span><span class="lineCov">      25400 :             ++m_ascend_count;</span>
+<span class="lineNum">     228 </span><span class="lineCov">      25400 :             if (m_ascend_count == m_ascend_period) {</span>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">       2537 :                m_ascend_count = 0;</span></a>
+<span class="lineNum">     230 </span>            :             }
+<span class="lineNum">     231 </span>            :         }
+<span class="lineNum">     232 </span>            : 
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">      49940 :     }</span></a>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineCov">     320465 :     bool PowerGovernorAgent::do_send_sample(void) const</span>
+<span class="lineNum">     236 </span>            :     {
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">     320465 :         return m_do_send_sample;</span></a>
+<a name="238"><span class="lineNum">     238 </span>            :     }</a>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">     270546 :     void PowerGovernorAgent::adjust_platform(const std::vector&lt;double&gt; &amp;in_policy)</span>
+<a name="241"><span class="lineNum">     241 </span>            :     {</a>
+<span class="lineNum">     242 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     243 </span><span class="lineCov">     270546 :         if (in_policy.size() != M_NUM_POLICY) {</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): one control was expected.&quot;,</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     246 </span>            :         }
+<span class="lineNum">     247 </span>            : #endif
+<span class="lineNum">     248 </span><span class="lineCov">     270546 :         double power_budget_in = in_policy[M_POLICY_POWER];</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">     270546 :         m_power_gov-&gt;adjust_platform(power_budget_in, m_adjusted_power);</span></a>
+<span class="lineNum">     250 </span><span class="lineCov">     270546 :         m_last_power_budget = power_budget_in;</span>
+<a name="251"><span class="lineNum">     251 </span><span class="lineCov">     270546 :     }</span></a>
+<span class="lineNum">     252 </span>            : 
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">     270546 :     bool PowerGovernorAgent::do_write_batch(void) const</span></a>
+<span class="lineNum">     254 </span>            :     {
+<span class="lineNum">     255 </span><span class="lineCov">     270546 :         return m_power_gov-&gt;do_write_batch();</span>
+<a name="256"><span class="lineNum">     256 </span>            :     }</a>
+<a name="257"><span class="lineNum">     257 </span>            : </a>
+<span class="lineNum">     258 </span><span class="lineCov">     270542 :     void PowerGovernorAgent::sample_platform(std::vector&lt;double&gt; &amp;out_sample)</span>
+<span class="lineNum">     259 </span>            :     {
+<span class="lineNum">     260 </span>            : #ifdef GEOPM_DEBUG
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">     270542 :         if (out_sample.size() != M_NUM_SAMPLE) {</span></a>
+<span class="lineNum">     262 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__)  + &quot;(): out_sample vector not correctly sized.&quot;,</span>
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     264 </span>            :         }
+<a name="265"><span class="lineNum">     265 </span>            : #endif</a>
+<span class="lineNum">     266 </span><span class="lineCov">     270542 :         m_power_gov-&gt;sample_platform();</span>
+<span class="lineNum">     267 </span>            :         // Populate sample vector by reading from PlatformIO
+<span class="lineNum">     268 </span><span class="lineCov">     541084 :         for (int sample_idx = 0; sample_idx &lt; M_PLAT_NUM_SIGNAL; ++sample_idx) {</span>
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">     270542 :             m_sample[sample_idx] = m_platform_io.sample(m_pio_idx[sample_idx]);</span></a>
+<span class="lineNum">     270 </span>            :         }
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :         /// @todo should use EPOCH_ENERGY signal which doesn't currently exist
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">     270542 :         if (!std::isnan(m_sample[M_PLAT_SIGNAL_PKG_POWER])) {</span></a>
+<span class="lineNum">     274 </span><span class="lineCov">     270533 :             m_epoch_power_buf-&gt;insert(m_sample[M_PLAT_SIGNAL_PKG_POWER]);</span>
+<span class="lineNum">     275 </span>            :         }
+<span class="lineNum">     276 </span>            :         // If we have observed more than m_min_num_converged epoch
+<a name="277"><span class="lineNum">     277 </span>            :         // calls then send median filtered power values up the tree.</a>
+<span class="lineNum">     278 </span><span class="lineCov">     270542 :         if (m_epoch_power_buf-&gt;size() &gt; m_min_num_converged) {</span>
+<span class="lineNum">     279 </span><span class="lineCov">     270052 :             double median = Agg::median(m_epoch_power_buf-&gt;make_vector());</span>
+<span class="lineNum">     280 </span><span class="lineCov">     270052 :             out_sample[M_SAMPLE_POWER] = median;</span>
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">     270052 :             out_sample[M_SAMPLE_IS_CONVERGED] = (median &lt;= m_last_power_budget); // todo might want fudge factor</span></a>
+<span class="lineNum">     282 </span><span class="lineCov">     270052 :             out_sample[M_SAMPLE_POWER_ENFORCED] = m_adjusted_power;</span>
+<span class="lineNum">     283 </span><span class="lineCov">     270052 :             m_do_send_sample = true;</span>
+<span class="lineNum">     284 </span>            :         }
+<a name="285"><span class="lineNum">     285 </span>            :         else {</a>
+<span class="lineNum">     286 </span><span class="lineCov">        490 :             m_do_send_sample = false;</span>
+<span class="lineNum">     287 </span>            :         }
+<a name="288"><span class="lineNum">     288 </span><span class="lineCov">     270542 :     }</span></a>
+<a name="289"><span class="lineNum">     289 </span>            : </a>
+<span class="lineNum">     290 </span><span class="lineCov">  392878819 :     void PowerGovernorAgent::wait()</span>
+<span class="lineNum">     291 </span>            :     {
+<span class="lineNum">     292 </span><span class="lineCov">  392878819 :         while(geopm_time_since(&amp;m_last_wait) &lt; M_WAIT_SEC) {</span>
+<a name="293"><span class="lineNum">     293 </span>            : </a>
+<span class="lineNum">     294 </span>            :         }
+<span class="lineNum">     295 </span><span class="lineCov">     270527 :         geopm_time(&amp;m_last_wait);</span>
+<a name="296"><span class="lineNum">     296 </span><span class="lineCov">     270527 :     }</span></a>
+<a name="297"><span class="lineNum">     297 </span>            : </a>
+<span class="lineNum">     298 </span><span class="lineCov">         13 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; PowerGovernorAgent::report_header(void) const</span>
+<span class="lineNum">     299 </span>            :     {
+<span class="lineNum">     300 </span><span class="lineCov">         13 :         return {};</span>
+<a name="301"><span class="lineNum">     301 </span>            :     }</a>
+<span class="lineNum">     302 </span>            : 
+<span class="lineNum">     303 </span><span class="lineCov">         31 :     std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; PowerGovernorAgent::report_host(void) const</span>
+<span class="lineNum">     304 </span>            :     {
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         31 :         return {};</span></a>
+<a name="306"><span class="lineNum">     306 </span>            :     }</a>
+<span class="lineNum">     307 </span>            : 
+<span class="lineNum">     308 </span><span class="lineCov">         31 :     std::map&lt;uint64_t, std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; &gt; PowerGovernorAgent::report_region(void) const</span>
+<a name="309"><span class="lineNum">     309 </span>            :     {</a>
+<span class="lineNum">     310 </span><span class="lineCov">         31 :         return {};</span>
+<a name="311"><span class="lineNum">     311 </span>            :     }</a>
+<span class="lineNum">     312 </span>            : 
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">         32 :     std::vector&lt;std::string&gt; PowerGovernorAgent::trace_names(void) const</span></a>
+<span class="lineNum">     314 </span>            :     {
+<span class="lineNum">     315 </span><span class="lineCov">         32 :         return {&quot;POWER_BUDGET&quot;};</span>
+<a name="316"><span class="lineNum">     316 </span>            :     }</a>
+<a name="317"><span class="lineNum">     317 </span>            : </a>
+<span class="lineNum">     318 </span><span class="lineCov">         32 :     std::vector&lt;std::function&lt;std::string(double)&gt; &gt; PowerGovernorAgent::trace_formats(void) const</span>
+<span class="lineNum">     319 </span>            :     {
+<span class="lineNum">     320 </span><span class="lineCov">         32 :         return {string_format_double};</span>
+<a name="321"><span class="lineNum">     321 </span>            :     }</a>
+<span class="lineNum">     322 </span>            : 
+<span class="lineNum">     323 </span><span class="lineCov">     270525 :     void PowerGovernorAgent::trace_values(std::vector&lt;double&gt; &amp;values)</span>
+<span class="lineNum">     324 </span>            :     {
+<a name="325"><span class="lineNum">     325 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">     326 </span><span class="lineCov">     270525 :         if (values.size() != M_TRACE_NUM_SAMPLE) { // Everything sampled from the platform plus convergence (and the power budget soon...)</span>
+<span class="lineNum">     327 </span><span class="lineNoCov">          0 :             throw Exception(&quot;PowerGovernorAgent::&quot; + std::string(__func__) + &quot;(): values vector not correctly sized.&quot;,</span>
+<span class="lineNum">     328 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="329"><span class="lineNum">     329 </span>            :         }</a>
+<span class="lineNum">     330 </span>            : #endif
+<span class="lineNum">     331 </span><span class="lineCov">     270525 :         values[M_TRACE_SAMPLE_PWR_BUDGET] = m_last_power_budget;</span>
+<a name="332"><span class="lineNum">     332 </span><span class="lineCov">     270525 :     }</span></a>
+<a name="333"><span class="lineNum">     333 </span>            : </a>
+<span class="lineNum">     334 </span><span class="lineCov">          2 :     void PowerGovernorAgent::enforce_policy(const std::vector&lt;double&gt; &amp;policy) const</span>
+<span class="lineNum">     335 </span>            :     {
+<span class="lineNum">     336 </span><span class="lineCov">          2 :         if (policy.size() != M_NUM_POLICY) {</span>
+<a name="337"><span class="lineNum">     337 </span>            :             throw Exception(&quot;PowerGovernorAgent::enforce_policy(): policy vector incorrectly sized.&quot;,</a>
+<span class="lineNum">     338 </span><span class="lineCov">          1 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     339 </span>            :         }
+<span class="lineNum">     340 </span><span class="lineCov">          1 :         int control_domain = m_platform_io.control_domain_type(&quot;POWER_PACKAGE_LIMIT&quot;);</span>
+<a name="341"><span class="lineNum">     341 </span><span class="lineCov">          1 :         double pkg_policy = policy[M_POLICY_POWER] / m_platform_topo.num_domain(control_domain);</span></a>
+<span class="lineNum">     342 </span><span class="lineCov">          1 :         m_platform_io.write_control(&quot;POWER_PACKAGE_LIMIT&quot;, GEOPM_DOMAIN_BOARD, 0, pkg_policy);</span>
+<a name="343"><span class="lineNum">     343 </span><span class="lineCov">          1 :     }</span></a>
 <span class="lineNum">     344 </span>            : 
-<a name="345"><span class="lineNum">     345 </span><span class="lineCov">        110 :     std::vector&lt;std::string&gt; PowerGovernorAgent::sample_names(void)</span></a>
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">         59 :     std::string PowerGovernorAgent::plugin_name(void)</span></a>
 <span class="lineNum">     346 </span>            :     {
-<span class="lineNum">     347 </span><span class="lineCov">        110 :         return {&quot;POWER&quot;, &quot;IS_CONVERGED&quot;, &quot;POWER_AVERAGE_ENFORCED&quot;};</span>
-<span class="lineNum">     348 </span>            :     }
-<a name="349"><span class="lineNum">     349 </span>            : }</a>
+<span class="lineNum">     347 </span><span class="lineCov">         59 :         return &quot;power_governor&quot;;</span>
+<a name="348"><span class="lineNum">     348 </span>            :     }</a>
+<a name="349"><span class="lineNum">     349 </span>            : </a>
+<span class="lineNum">     350 </span><span class="lineCov">         37 :     std::unique_ptr&lt;Agent&gt; PowerGovernorAgent::make_plugin(void)</span>
+<span class="lineNum">     351 </span>            :     {
+<span class="lineNum">     352 </span><span class="lineCov">         37 :         return geopm::make_unique&lt;PowerGovernorAgent&gt;();</span>
+<a name="353"><span class="lineNum">     353 </span>            :     }</a>
+<span class="lineNum">     354 </span>            : 
+<span class="lineNum">     355 </span><span class="lineCov">         59 :     std::vector&lt;std::string&gt; PowerGovernorAgent::policy_names(void)</span>
+<span class="lineNum">     356 </span>            :     {
+<a name="357"><span class="lineNum">     357 </span><span class="lineCov">         59 :         return {&quot;POWER_PACKAGE_LIMIT_TOTAL&quot;};</span></a>
+<a name="358"><span class="lineNum">     358 </span>            :     }</a>
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span><span class="lineCov">         59 :     std::vector&lt;std::string&gt; PowerGovernorAgent::sample_names(void)</span>
+<a name="361"><span class="lineNum">     361 </span>            :     {</a>
+<span class="lineNum">     362 </span><span class="lineCov">         59 :         return {&quot;POWER&quot;, &quot;IS_CONVERGED&quot;, &quot;POWER_AVERAGE_ENFORCED&quot;};</span>
+<span class="lineNum">     363 </span>            :     }
+<span class="lineNum">     364 </span>            : }
 </pre>
       </td>
     </tr>

@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/MSR.hpp</title>
+  <title>LCOV - v1.1.0 - src/MSR.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">2</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -103,7 +103,7 @@
 <a name="33"><span class="lineNum">      33 </span>            : #ifndef MSR_HPP_INCLUDE</a>
 <span class="lineNum">      34 </span>            : #define MSR_HPP_INCLUDE
 <span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span>            : #include &lt;stdint.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cstdint&gt;
 <a name="37"><span class="lineNum">      37 </span>            : #include &lt;string&gt;</a>
 <span class="lineNum">      38 </span>            : #include &lt;map&gt;
 <span class="lineNum">      39 </span>            : #include &lt;memory&gt;
@@ -143,8 +143,8 @@
 <a name="73"><span class="lineNum">      73 </span>            :                 M_UNITS_CELSIUS,</a>
 <a name="74"><span class="lineNum">      74 </span>            :             };</a>
 <a name="75"><span class="lineNum">      75 </span>            : </a>
-<span class="lineNum">      76 </span><span class="lineCov">      18216 :             MSR() = default;</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">      18216 :             virtual ~MSR() = default;</span></a>
+<span class="lineNum">      76 </span><span class="lineCov">      10357 :             MSR() = default;</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">      10357 :             virtual ~MSR() = default;</span></a>
 <span class="lineNum">      78 </span>            :             /// @brief Query the name of the MSR.
 <span class="lineNum">      79 </span>            :             /// @return The name of the MSR.
 <span class="lineNum">      80 </span>            :             virtual std::string name(void) const = 0;
@@ -220,27 +220,30 @@
 <span class="lineNum">     150 </span>            :             /// @brief The function used to decode the MSR value as defined
 <span class="lineNum">     151 </span>            :             ///        in the m_function_e enum.
 <span class="lineNum">     152 </span>            :             virtual int decode_function(int signal_idx) const = 0;
-<a name="153"><span class="lineNum">     153 </span>            : </a>
-<span class="lineNum">     154 </span>            :             /// @brief Convert a string to the corresponding m_function_e value
-<span class="lineNum">     155 </span>            :             static m_function_e string_to_function(const std::string &amp;str);
-<span class="lineNum">     156 </span>            :             /// @brief Convert a string to the corresponding m_function_e value
-<a name="157"><span class="lineNum">     157 </span>            :             /// @todo Consider leaving units field as a string.  enum is not being used.</a>
-<span class="lineNum">     158 </span>            :             static m_units_e string_to_units(const std::string &amp;str);
-<span class="lineNum">     159 </span>            :             static std::shared_ptr&lt;MSR&gt; make_shared(const std::string &amp;msr_name,
-<span class="lineNum">     160 </span>            :                                                     uint64_t offset,
-<a name="161"><span class="lineNum">     161 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,</a>
-<span class="lineNum">     162 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control);
-<span class="lineNum">     163 </span>            :             static std::unique_ptr&lt;MSR&gt; make_unique(const std::string &amp;msr_name,
-<span class="lineNum">     164 </span>            :                                                     uint64_t offset,
-<a name="165"><span class="lineNum">     165 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,</a>
-<span class="lineNum">     166 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control);
-<span class="lineNum">     167 </span>            :         private:
-<span class="lineNum">     168 </span>            :             static const std::map&lt;std::string, m_function_e&gt; M_FUNCTION_STRING;
-<a name="169"><span class="lineNum">     169 </span>            :             static const std::map&lt;std::string, m_units_e&gt; M_UNITS_STRING;</a>
-<span class="lineNum">     170 </span>            :     };
-<span class="lineNum">     171 </span>            : }
-<span class="lineNum">     172 </span>            : 
-<a name="173"><span class="lineNum">     173 </span>            : #endif</a>
+<a name="153"><span class="lineNum">     153 </span>            :             /// @brief The units for the indexed signal.</a>
+<span class="lineNum">     154 </span>            :             /// @param signal_idx The index of the signal within the MSR.
+<span class="lineNum">     155 </span>            :             /// @return One of the MSR::m_units_e enums representing
+<span class="lineNum">     156 </span>            :             ///         the units of the signal
+<a name="157"><span class="lineNum">     157 </span>            :             virtual int units(int signal_idx) const = 0;</a>
+<span class="lineNum">     158 </span>            :             /// @brief Convert a string to the corresponding m_function_e value
+<span class="lineNum">     159 </span>            :             static m_function_e string_to_function(const std::string &amp;str);
+<span class="lineNum">     160 </span>            :             /// @brief Convert a string to the corresponding m_units_e value
+<a name="161"><span class="lineNum">     161 </span>            :             static m_units_e string_to_units(const std::string &amp;str);</a>
+<span class="lineNum">     162 </span>            :             static std::shared_ptr&lt;MSR&gt; make_shared(const std::string &amp;msr_name,
+<span class="lineNum">     163 </span>            :                                                     uint64_t offset,
+<span class="lineNum">     164 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,
+<a name="165"><span class="lineNum">     165 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control);</a>
+<span class="lineNum">     166 </span>            :             static std::unique_ptr&lt;MSR&gt; make_unique(const std::string &amp;msr_name,
+<span class="lineNum">     167 </span>            :                                                     uint64_t offset,
+<span class="lineNum">     168 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;signal,
+<a name="169"><span class="lineNum">     169 </span>            :                                                     const std::vector&lt;std::pair&lt;std::string, struct MSR::m_encode_s&gt; &gt; &amp;control);</a>
+<span class="lineNum">     170 </span>            :         private:
+<span class="lineNum">     171 </span>            :             static const std::map&lt;std::string, m_function_e&gt; M_FUNCTION_STRING;
+<span class="lineNum">     172 </span>            :             static const std::map&lt;std::string, m_units_e&gt; M_UNITS_STRING;
+<a name="173"><span class="lineNum">     173 </span>            :     };</a>
+<span class="lineNum">     174 </span>            : }
+<span class="lineNum">     175 </span>            : 
+<span class="lineNum">     176 </span>            : #endif
 </pre>
       </td>
     </tr>

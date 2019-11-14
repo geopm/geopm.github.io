@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/Agent.cpp</title>
+  <title>LCOV - v1.1.0 - src/Agent.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">143</td>
-            <td class="headerCovTableEntry">191</td>
-            <td class="headerCovTableEntryLo">74.9 %</td>
+            <td class="headerCovTableEntry">151</td>
+            <td class="headerCovTableEntry">205</td>
+            <td class="headerCovTableEntryLo">73.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">18</td>
             <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntryHi">94.7 %</td>
+            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntryHi">90.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -100,366 +100,400 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;cmath&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;sstream&gt;
-<span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span>            : #include &quot;geopm_agent.h&quot;
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;string.h&quot;</a>
-<span class="lineNum">      38 </span>            : #include &quot;Agent.hpp&quot;
-<span class="lineNum">      39 </span>            : #include &quot;MonitorAgent.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;PowerBalancerAgent.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;PowerGovernorAgent.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;EnergyEfficientAgent.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;FrequencyMapAgent.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;config.h&quot;
-<a name="45"><span class="lineNum">      45 </span>            : </a>
-<span class="lineNum">      46 </span>            : namespace geopm
-<span class="lineNum">      47 </span>            : {
-<a name="48"><span class="lineNum">      48 </span>            :     static PluginFactory&lt;Agent&gt; *g_plugin_factory;</a>
-<a name="49"><span class="lineNum">      49 </span>            :     static pthread_once_t g_register_built_in_once = PTHREAD_ONCE_INIT;</a>
-<span class="lineNum">      50 </span><span class="lineCov">        110 :     static void register_built_in_once(void)</span>
-<span class="lineNum">      51 </span>            :     {
-<span class="lineNum">      52 </span><span class="lineCov">        220 :         g_plugin_factory-&gt;register_plugin(MonitorAgent::plugin_name(),</span>
-<a name="53"><span class="lineNum">      53 </span>            :                                           MonitorAgent::make_plugin,</a>
-<span class="lineNum">      54 </span><span class="lineCov">        220 :                                           Agent::make_dictionary(MonitorAgent::policy_names(),</span>
-<span class="lineNum">      55 </span><span class="lineCov">        279 :                                                                  MonitorAgent::sample_names()));</span>
-<span class="lineNum">      56 </span><span class="lineCov">        220 :         g_plugin_factory-&gt;register_plugin(PowerBalancerAgent::plugin_name(),</span>
-<a name="57"><span class="lineNum">      57 </span>            :                                           PowerBalancerAgent::make_plugin,</a>
-<span class="lineNum">      58 </span><span class="lineCov">        220 :                                           Agent::make_dictionary(PowerBalancerAgent::policy_names(),</span>
-<span class="lineNum">      59 </span><span class="lineCov">        279 :                                                                  PowerBalancerAgent::sample_names()));</span>
-<span class="lineNum">      60 </span><span class="lineCov">        220 :         g_plugin_factory-&gt;register_plugin(PowerGovernorAgent::plugin_name(),</span>
-<a name="61"><span class="lineNum">      61 </span>            :                                           PowerGovernorAgent::make_plugin,</a>
-<span class="lineNum">      62 </span><span class="lineCov">        220 :                                           Agent::make_dictionary(PowerGovernorAgent::policy_names(),</span>
-<span class="lineNum">      63 </span><span class="lineCov">        279 :                                                                  PowerGovernorAgent::sample_names()));</span>
-<span class="lineNum">      64 </span><span class="lineCov">        220 :         g_plugin_factory-&gt;register_plugin(EnergyEfficientAgent::plugin_name(),</span>
-<a name="65"><span class="lineNum">      65 </span>            :                                           EnergyEfficientAgent::make_plugin,</a>
-<span class="lineNum">      66 </span><span class="lineCov">        220 :                                           Agent::make_dictionary(EnergyEfficientAgent::policy_names(),</span>
-<span class="lineNum">      67 </span><span class="lineCov">        279 :                                                                  EnergyEfficientAgent::sample_names()));</span>
-<span class="lineNum">      68 </span><span class="lineCov">        220 :         g_plugin_factory-&gt;register_plugin(FrequencyMapAgent::plugin_name(),</span>
-<a name="69"><span class="lineNum">      69 </span>            :                                           FrequencyMapAgent::make_plugin,</a>
-<span class="lineNum">      70 </span><span class="lineCov">        220 :                                           Agent::make_dictionary(FrequencyMapAgent::policy_names(),</span>
-<span class="lineNum">      71 </span><span class="lineCov">        279 :                                                                  FrequencyMapAgent::sample_names()));</span>
-<a name="72"><span class="lineNum">      72 </span><span class="lineCov">        110 :     }</span></a>
-<a name="73"><span class="lineNum">      73 </span>            : </a>
-<span class="lineNum">      74 </span><span class="lineCov">        638 :     PluginFactory&lt;Agent&gt; &amp;agent_factory(void)</span>
-<span class="lineNum">      75 </span>            :     {
-<span class="lineNum">      76 </span><span class="lineCov">        638 :         static PluginFactory&lt;Agent&gt; instance;</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">        638 :         g_plugin_factory = &amp;instance;</span></a>
-<span class="lineNum">      78 </span><span class="lineCov">        638 :         pthread_once(&amp;g_register_built_in_once, register_built_in_once);</span>
-<span class="lineNum">      79 </span><span class="lineCov">        638 :         return instance;</span>
-<a name="80"><span class="lineNum">      80 </span>            :     }</a>
-<a name="81"><span class="lineNum">      81 </span>            : </a>
-<span class="lineNum">      82 </span><span class="lineCov">       1567 :     const std::string Agent::m_num_sample_string = &quot;NUM_SAMPLE&quot;;</span>
-<span class="lineNum">      83 </span><span class="lineCov">       1567 :     const std::string Agent::m_num_policy_string = &quot;NUM_POLICY&quot;;</span>
-<span class="lineNum">      84 </span><span class="lineCov">       1567 :     const std::string Agent::m_sample_prefix = &quot;SAMPLE_&quot;;</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">       1567 :     const std::string Agent::m_policy_prefix = &quot;POLICY_&quot;;</span></a>
-<span class="lineNum">      86 </span>            : 
-<span class="lineNum">      87 </span><span class="lineCov">        196 :     int Agent::num_sample(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span>
-<span class="lineNum">      88 </span>            :     {
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">        196 :         auto it = dictionary.find(m_num_sample_string);</span></a>
-<span class="lineNum">      90 </span><span class="lineCov">        196 :         if (it == dictionary.end()) {</span>
-<span class="lineNum">      91 </span>            :             throw Exception(&quot;Agent::num_sample(): &quot;
-<span class="lineNum">      92 </span>            :                             &quot;Agent was not registered with plugin factory with the correct dictionary.&quot;,
-<a name="93"><span class="lineNum">      93 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
-<span class="lineNum">      94 </span>            :         }
-<a name="95"><span class="lineNum">      95 </span><span class="lineCov">        196 :         return atoi(it-&gt;second.c_str());</span></a>
-<span class="lineNum">      96 </span>            :     }
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        342 :     int Agent::num_policy(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span></a>
-<span class="lineNum">      98 </span>            :     {
-<span class="lineNum">      99 </span><span class="lineCov">        342 :         auto it = dictionary.find(m_num_policy_string);</span>
-<span class="lineNum">     100 </span><span class="lineCov">        342 :         if (it == dictionary.end()) {</span>
-<a name="101"><span class="lineNum">     101 </span>            :             throw Exception(&quot;Agent::num_policy(): &quot;</a>
-<span class="lineNum">     102 </span>            :                             &quot;Agent was not registered with plugin factory with the correct dictionary.&quot;,
-<span class="lineNum">     103 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     104 </span>            :         }
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">        342 :         return atoi(it-&gt;second.c_str());</span></a>
-<a name="106"><span class="lineNum">     106 </span>            :     }</a>
-<span class="lineNum">     107 </span>            : 
-<span class="lineNum">     108 </span><span class="lineCov">         18 :     std::vector&lt;std::string&gt; Agent::sample_names(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span>
-<a name="109"><span class="lineNum">     109 </span>            :     {</a>
-<span class="lineNum">     110 </span><span class="lineCov">         18 :         size_t num_names = num_sample(dictionary);</span>
-<span class="lineNum">     111 </span><span class="lineCov">         18 :         std::vector&lt;std::string&gt; result(num_names);</span>
-<span class="lineNum">     112 </span><span class="lineCov">         76 :         for (size_t name_idx = 0; name_idx != num_names; ++name_idx) {</span>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">        116 :             std::string key = m_sample_prefix + std::to_string(name_idx);</span></a>
-<span class="lineNum">     114 </span><span class="lineCov">         58 :             auto it = dictionary.find(key);</span>
-<span class="lineNum">     115 </span><span class="lineCov">         58 :             if (it == dictionary.end()) {</span>
-<span class="lineNum">     116 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Agent::send_up_names(): Poorly formatted dictionary, could not find key: &quot; + key,</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     118 </span>            :             }
-<span class="lineNum">     119 </span><span class="lineCov">         58 :             result[name_idx] = it-&gt;second;</span>
-<span class="lineNum">     120 </span>            :         }
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">         18 :         return result;</span></a>
-<a name="122"><span class="lineNum">     122 </span>            :     }</a>
-<span class="lineNum">     123 </span>            : 
-<span class="lineNum">     124 </span><span class="lineCov">        112 :     std::vector&lt;std::string&gt; Agent::policy_names(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span>
-<a name="125"><span class="lineNum">     125 </span>            :     {</a>
-<span class="lineNum">     126 </span><span class="lineCov">        112 :         size_t num_names = num_policy(dictionary);</span>
-<span class="lineNum">     127 </span><span class="lineCov">        112 :         std::vector&lt;std::string&gt; result(num_names);</span>
-<span class="lineNum">     128 </span><span class="lineCov">        268 :         for (size_t name_idx = 0; name_idx != num_names; ++name_idx) {</span>
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">        312 :             std::string key = m_policy_prefix + std::to_string(name_idx);</span></a>
-<span class="lineNum">     130 </span><span class="lineCov">        156 :             auto it = dictionary.find(key);</span>
-<span class="lineNum">     131 </span><span class="lineCov">        156 :             if (it == dictionary.end()) {</span>
-<span class="lineNum">     132 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Agent::send_down_names(): Poorly formatted dictionary, could not find key: &quot; + key,</span>
-<a name="133"><span class="lineNum">     133 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     134 </span>            :             }
-<span class="lineNum">     135 </span><span class="lineCov">        156 :             result[name_idx] = it-&gt;second;</span>
-<span class="lineNum">     136 </span>            :         }
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">        112 :         return result;</span></a>
-<a name="138"><span class="lineNum">     138 </span>            :     }</a>
-<span class="lineNum">     139 </span>            : 
-<span class="lineNum">     140 </span><span class="lineCov">        550 :     std::map&lt;std::string, std::string&gt; Agent::make_dictionary(const std::vector&lt;std::string&gt; &amp;policy_names,</span>
-<a name="141"><span class="lineNum">     141 </span>            :                                                                const std::vector&lt;std::string&gt; &amp;sample_names)</a>
-<span class="lineNum">     142 </span>            :     {
-<span class="lineNum">     143 </span><span class="lineCov">        550 :         std::map&lt;std::string, std::string&gt; result;</span>
-<span class="lineNum">     144 </span><span class="lineCov">       1320 :         for (size_t sample_idx = 0; sample_idx != sample_names.size(); ++sample_idx) {</span>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">       1540 :             std::string key = m_sample_prefix + std::to_string(sample_idx);</span></a>
-<span class="lineNum">     146 </span><span class="lineCov">        770 :             result[key] = sample_names[sample_idx];</span>
-<span class="lineNum">     147 </span>            :         }
-<span class="lineNum">     148 </span><span class="lineCov">        550 :         result[m_num_sample_string] = std::to_string(sample_names.size());</span>
-<a name="149"><span class="lineNum">     149 </span>            : </a>
-<span class="lineNum">     150 </span><span class="lineCov">       1540 :         for (size_t policy_idx = 0; policy_idx != policy_names.size(); ++policy_idx) {</span>
-<span class="lineNum">     151 </span><span class="lineCov">       1980 :             std::string key = m_policy_prefix + std::to_string(policy_idx);</span>
-<span class="lineNum">     152 </span><span class="lineCov">        990 :             result[key] = policy_names[policy_idx];</span>
-<a name="153"><span class="lineNum">     153 </span>            :         }</a>
-<span class="lineNum">     154 </span><span class="lineCov">        550 :         result[m_num_policy_string] = std::to_string(policy_names.size());</span>
-<span class="lineNum">     155 </span><span class="lineCov">        550 :         return result;</span>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;Agent.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;cmath&gt;
+<span class="lineNum">      36 </span>            : #include &lt;sstream&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;iostream&gt;</a>
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : #include &quot;geopm_agent.h&quot;
+<span class="lineNum">      40 </span>            : #include &quot;string.h&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;MonitorAgent.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;PowerBalancerAgent.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;PowerGovernorAgent.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;EnergyEfficientAgent.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;FrequencyMapAgent.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;Environment.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;Endpoint.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;SharedMemoryUser.hpp&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;Helper.hpp&quot;</a>
+<span class="lineNum">      50 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span>            : namespace geopm
+<a name="53"><span class="lineNum">      53 </span>            : {</a>
+<a name="54"><span class="lineNum">      54 </span>            :     static PluginFactory&lt;Agent&gt; *g_plugin_factory;</a>
+<span class="lineNum">      55 </span>            :     static pthread_once_t g_register_built_in_once = PTHREAD_ONCE_INIT;
+<span class="lineNum">      56 </span><span class="lineCov">         59 :     static void register_built_in_once(void)</span>
+<a name="57"><span class="lineNum">      57 </span>            :     {</a>
+<span class="lineNum">      58 </span><span class="lineCov">        118 :         g_plugin_factory-&gt;register_plugin(MonitorAgent::plugin_name(),</span>
+<span class="lineNum">      59 </span>            :                                           MonitorAgent::make_plugin,
+<span class="lineNum">      60 </span><span class="lineCov">        118 :                                           Agent::make_dictionary(MonitorAgent::policy_names(),</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">        118 :                                                                  MonitorAgent::sample_names()));</span></a>
+<span class="lineNum">      62 </span><span class="lineCov">        118 :         g_plugin_factory-&gt;register_plugin(PowerBalancerAgent::plugin_name(),</span>
+<span class="lineNum">      63 </span>            :                                           PowerBalancerAgent::make_plugin,
+<span class="lineNum">      64 </span><span class="lineCov">        118 :                                           Agent::make_dictionary(PowerBalancerAgent::policy_names(),</span>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        118 :                                                                  PowerBalancerAgent::sample_names()));</span></a>
+<span class="lineNum">      66 </span><span class="lineCov">        118 :         g_plugin_factory-&gt;register_plugin(PowerGovernorAgent::plugin_name(),</span>
+<span class="lineNum">      67 </span>            :                                           PowerGovernorAgent::make_plugin,
+<span class="lineNum">      68 </span><span class="lineCov">        118 :                                           Agent::make_dictionary(PowerGovernorAgent::policy_names(),</span>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">        118 :                                                                  PowerGovernorAgent::sample_names()));</span></a>
+<span class="lineNum">      70 </span><span class="lineCov">        118 :         g_plugin_factory-&gt;register_plugin(EnergyEfficientAgent::plugin_name(),</span>
+<span class="lineNum">      71 </span>            :                                           EnergyEfficientAgent::make_plugin,
+<span class="lineNum">      72 </span><span class="lineCov">        118 :                                           Agent::make_dictionary(EnergyEfficientAgent::policy_names(),</span>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">        118 :                                                                  EnergyEfficientAgent::sample_names()));</span></a>
+<span class="lineNum">      74 </span><span class="lineCov">        118 :         g_plugin_factory-&gt;register_plugin(FrequencyMapAgent::plugin_name(),</span>
+<span class="lineNum">      75 </span>            :                                           FrequencyMapAgent::make_plugin,
+<span class="lineNum">      76 </span><span class="lineCov">        118 :                                           Agent::make_dictionary(FrequencyMapAgent::policy_names(),</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">        118 :                                                                  FrequencyMapAgent::sample_names()));</span></a>
+<a name="78"><span class="lineNum">      78 </span><span class="lineCov">         59 :     }</span></a>
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span><span class="lineCov">       1622 :     PluginFactory&lt;Agent&gt; &amp;agent_factory(void)</span>
+<a name="81"><span class="lineNum">      81 </span>            :     {</a>
+<span class="lineNum">      82 </span><span class="lineCov">       1622 :         static PluginFactory&lt;Agent&gt; instance;</span>
+<span class="lineNum">      83 </span><span class="lineCov">       1622 :         g_plugin_factory = &amp;instance;</span>
+<span class="lineNum">      84 </span><span class="lineCov">       1622 :         pthread_once(&amp;g_register_built_in_once, register_built_in_once);</span>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">       1622 :         return instance;</span></a>
+<span class="lineNum">      86 </span>            :     }
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineCov">        862 :     const std::string Agent::m_num_sample_string = &quot;NUM_SAMPLE&quot;;</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">        862 :     const std::string Agent::m_num_policy_string = &quot;NUM_POLICY&quot;;</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">        862 :     const std::string Agent::m_sample_prefix = &quot;SAMPLE_&quot;;</span>
+<a name="91"><span class="lineNum">      91 </span><span class="lineCov">        862 :     const std::string Agent::m_policy_prefix = &quot;POLICY_&quot;;</span></a>
+<span class="lineNum">      92 </span>            : 
+<a name="93"><span class="lineNum">      93 </span><span class="lineNoCov">          0 :     std::vector&lt;std::function&lt;std::string(double)&gt; &gt; Agent::trace_formats(void) const</span></a>
+<span class="lineNum">      94 </span>            :     {
+<span class="lineNum">      95 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">      96 </span>            :         static bool is_once = true;
+<a name="97"><span class="lineNum">      97 </span><span class="lineNoCov">          0 :         if (is_once) {</span></a>
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :             is_once = false;</span>
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :             std::cerr &lt;&lt; &quot;Warning: &lt;geopm&gt; Use of geopm::Agent::trace_formats() is deprecated, each Agent will be required implement this method in the future.\n&quot;;</span>
+<span class="lineNum">     100 </span>            :         }
+<a name="101"><span class="lineNum">     101 </span>            : #endif</a>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :         return {};</span>
+<a name="103"><span class="lineNum">     103 </span>            :     }</a>
+<span class="lineNum">     104 </span>            : 
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">        108 :     int Agent::num_sample(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span></a>
+<span class="lineNum">     106 </span>            :     {
+<span class="lineNum">     107 </span><span class="lineCov">        108 :         auto it = dictionary.find(m_num_sample_string);</span>
+<span class="lineNum">     108 </span><span class="lineCov">        108 :         if (it == dictionary.end()) {</span>
+<a name="109"><span class="lineNum">     109 </span>            :             throw Exception(&quot;Agent::num_sample(): &quot;</a>
+<span class="lineNum">     110 </span>            :                             &quot;Agent was not registered with plugin factory with the correct dictionary.&quot;,
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     112 </span>            :         }
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">        108 :         return atoi(it-&gt;second.c_str());</span></a>
+<span class="lineNum">     114 </span>            :     }
+<span class="lineNum">     115 </span><span class="lineCov">       1447 :     int Agent::num_policy(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span>
+<span class="lineNum">     116 </span>            :     {
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">       1447 :         auto it = dictionary.find(m_num_policy_string);</span></a>
+<span class="lineNum">     118 </span><span class="lineCov">       1447 :         if (it == dictionary.end()) {</span>
+<span class="lineNum">     119 </span>            :             throw Exception(&quot;Agent::num_policy(): &quot;
+<span class="lineNum">     120 </span>            :                             &quot;Agent was not registered with plugin factory with the correct dictionary.&quot;,
+<a name="121"><span class="lineNum">     121 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     122 </span>            :         }
+<span class="lineNum">     123 </span><span class="lineCov">       1447 :         return atoi(it-&gt;second.c_str());</span>
+<a name="124"><span class="lineNum">     124 </span>            :     }</a>
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span><span class="lineCov">         16 :     std::vector&lt;std::string&gt; Agent::sample_names(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span>
+<span class="lineNum">     127 </span>            :     {
+<span class="lineNum">     128 </span><span class="lineCov">         16 :         size_t num_names = num_sample(dictionary);</span>
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         16 :         std::vector&lt;std::string&gt; result(num_names);</span></a>
+<span class="lineNum">     130 </span><span class="lineCov">         70 :         for (size_t name_idx = 0; name_idx != num_names; ++name_idx) {</span>
+<span class="lineNum">     131 </span><span class="lineCov">        108 :             std::string key = m_sample_prefix + std::to_string(name_idx);</span>
+<span class="lineNum">     132 </span><span class="lineCov">         54 :             auto it = dictionary.find(key);</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         54 :             if (it == dictionary.end()) {</span></a>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Agent::send_up_names(): Poorly formatted dictionary, could not find key: &quot; + key,</span>
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     136 </span>            :             }
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         54 :             result[name_idx] = it-&gt;second;</span></a>
+<span class="lineNum">     138 </span>            :         }
+<span class="lineNum">     139 </span><span class="lineCov">         16 :         return result;</span>
+<a name="140"><span class="lineNum">     140 </span>            :     }</a>
+<a name="141"><span class="lineNum">     141 </span>            : </a>
+<span class="lineNum">     142 </span><span class="lineCov">        650 :     std::vector&lt;std::string&gt; Agent::policy_names(const std::map&lt;std::string, std::string&gt; &amp;dictionary)</span>
+<span class="lineNum">     143 </span>            :     {
+<span class="lineNum">     144 </span><span class="lineCov">        650 :         size_t num_names = num_policy(dictionary);</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">        650 :         std::vector&lt;std::string&gt; result(num_names);</span></a>
+<span class="lineNum">     146 </span><span class="lineCov">      34104 :         for (size_t name_idx = 0; name_idx != num_names; ++name_idx) {</span>
+<span class="lineNum">     147 </span><span class="lineCov">      66908 :             std::string key = m_policy_prefix + std::to_string(name_idx);</span>
+<span class="lineNum">     148 </span><span class="lineCov">      33454 :             auto it = dictionary.find(key);</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">      33454 :             if (it == dictionary.end()) {</span></a>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Agent::send_down_names(): Poorly formatted dictionary, could not find key: &quot; + key,</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     152 </span>            :             }
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">      33454 :             result[name_idx] = it-&gt;second;</span></a>
+<span class="lineNum">     154 </span>            :         }
+<span class="lineNum">     155 </span><span class="lineCov">        650 :         return result;</span>
 <a name="156"><span class="lineNum">     156 </span>            :     }</a>
 <a name="157"><span class="lineNum">     157 </span>            : </a>
-<span class="lineNum">     158 </span><span class="lineCov">       6793 :     void Agent::aggregate_sample(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
-<span class="lineNum">     159 </span>            :                                  const std::vector&lt;std::function&lt;double(const std::vector&lt;double&gt;&amp;)&gt; &gt; &amp;agg_func,
-<span class="lineNum">     160 </span>            :                                  std::vector&lt;double&gt; &amp;out_sample)
-<a name="161"><span class="lineNum">     161 </span>            :     {</a>
-<span class="lineNum">     162 </span><span class="lineCov">       6793 :         size_t num_children = in_sample.size();</span>
-<span class="lineNum">     163 </span><span class="lineCov">      13586 :         std::vector&lt;double&gt; child_sample(num_children);</span>
-<span class="lineNum">     164 </span><span class="lineCov">      27184 :         for (size_t sig_idx = 0; sig_idx &lt; out_sample.size(); ++sig_idx) {</span>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">     101835 :             for (size_t child_idx = 0; child_idx &lt; num_children; ++child_idx) {</span></a>
-<span class="lineNum">     166 </span><span class="lineCov">      81444 :                 child_sample[child_idx] = in_sample[child_idx][sig_idx];</span>
-<span class="lineNum">     167 </span>            :             }
-<span class="lineNum">     168 </span><span class="lineCov">      20391 :             out_sample[sig_idx] = agg_func[sig_idx](child_sample);</span>
-<a name="169"><span class="lineNum">     169 </span>            :         }</a>
-<span class="lineNum">     170 </span><span class="lineCov">       6793 :     }</span>
-<span class="lineNum">     171 </span>            : 
-<a name="172"><span class="lineNum">     172 </span>            : }</a>
-<a name="173"><span class="lineNum">     173 </span>            : </a>
-<span class="lineNum">     174 </span><span class="lineCov">          8 : int geopm_agent_supported(const char *agent_name)</span>
-<span class="lineNum">     175 </span>            : {
-<span class="lineNum">     176 </span><span class="lineCov">          8 :     int err = 0;</span>
-<a name="177"><span class="lineNum">     177 </span>            :     try {</a>
-<span class="lineNum">     178 </span><span class="lineCov">          8 :         auto tmp = geopm::agent_factory().dictionary(agent_name);</span>
-<span class="lineNum">     179 </span>            :     }
-<span class="lineNum">     180 </span><span class="lineNoCov">          0 :     catch (const geopm::Exception &amp;ex) {</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineNoCov">          0 :         if (ex.err_value() == GEOPM_ERROR_INVALID) {</span></a>
-<span class="lineNum">     182 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_NO_AGENT;</span>
-<span class="lineNum">     183 </span>            :         }
-<span class="lineNum">     184 </span>            :         else {
-<a name="185"><span class="lineNum">     185 </span><span class="lineNoCov">          0 :             err = ex.err_value();</span></a>
-<span class="lineNum">     186 </span>            :         }
-<span class="lineNum">     187 </span>            :     }
-<span class="lineNum">     188 </span><span class="lineNoCov">          0 :     catch (...) {</span>
-<a name="189"><span class="lineNum">     189 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span></a>
-<span class="lineNum">     190 </span>            :     }
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          8 :     return err;</span></a>
-<span class="lineNum">     192 </span>            : }
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">         74 : int geopm_agent_num_policy(const char *agent_name,</span></a>
-<span class="lineNum">     194 </span>            :                            int *num_policy)
-<span class="lineNum">     195 </span>            : {
-<span class="lineNum">     196 </span><span class="lineCov">         74 :     int err = 0;</span>
-<a name="197"><span class="lineNum">     197 </span>            :     try {</a>
-<span class="lineNum">     198 </span><span class="lineCov">         74 :         *num_policy = geopm::Agent::num_policy(</span>
-<span class="lineNum">     199 </span><span class="lineCov">        111 :             geopm::agent_factory().dictionary(agent_name));</span>
-<span class="lineNum">     200 </span>            :     }
-<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :     catch (const geopm::Exception &amp;ex) {</span></a>
-<span class="lineNum">     202 </span><span class="lineNoCov">          0 :         if (ex.err_value() == GEOPM_ERROR_INVALID) {</span>
-<span class="lineNum">     203 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_NO_AGENT;</span>
-<span class="lineNum">     204 </span>            :         }
-<a name="205"><span class="lineNum">     205 </span>            :         else {</a>
-<span class="lineNum">     206 </span><span class="lineNoCov">          0 :             err = ex.err_value();</span>
-<span class="lineNum">     207 </span>            :         }
-<span class="lineNum">     208 </span>            :     }
-<a name="209"><span class="lineNum">     209 </span><span class="lineNoCov">          0 :     catch (...) {</span></a>
-<span class="lineNum">     210 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
-<span class="lineNum">     211 </span>            :     }
-<span class="lineNum">     212 </span><span class="lineCov">         74 :     return err;</span>
-<a name="213"><span class="lineNum">     213 </span>            : }</a>
-<span class="lineNum">     214 </span>            : 
-<span class="lineNum">     215 </span><span class="lineCov">         22 : int geopm_agent_num_sample(const char *agent_name,</span>
-<span class="lineNum">     216 </span>            :                            int *num_sample)
-<a name="217"><span class="lineNum">     217 </span>            : {</a>
-<span class="lineNum">     218 </span><span class="lineCov">         22 :     int err = 0;</span>
-<span class="lineNum">     219 </span>            :     try {
-<span class="lineNum">     220 </span><span class="lineCov">         22 :         *num_sample = geopm::Agent::num_sample(</span>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">         33 :             geopm::agent_factory().dictionary(agent_name));</span></a>
-<span class="lineNum">     222 </span>            :     }
-<span class="lineNum">     223 </span><span class="lineNoCov">          0 :     catch (const geopm::Exception &amp;ex) {</span>
-<span class="lineNum">     224 </span><span class="lineNoCov">          0 :         if (ex.err_value() == GEOPM_ERROR_INVALID) {</span>
-<a name="225"><span class="lineNum">     225 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_NO_AGENT;</span></a>
-<span class="lineNum">     226 </span>            :         }
-<span class="lineNum">     227 </span>            :         else {
-<span class="lineNum">     228 </span><span class="lineNoCov">          0 :             err = ex.err_value();</span>
-<a name="229"><span class="lineNum">     229 </span>            :         }</a>
-<span class="lineNum">     230 </span>            :     }
-<span class="lineNum">     231 </span><span class="lineNoCov">          0 :     catch (...) {</span>
-<span class="lineNum">     232 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
-<a name="233"><span class="lineNum">     233 </span>            :     }</a>
-<span class="lineNum">     234 </span><span class="lineCov">         22 :     return err;</span>
-<a name="235"><span class="lineNum">     235 </span>            : }</a>
-<span class="lineNum">     236 </span>            : 
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         32 : int geopm_agent_policy_name(const char *agent_name,</span></a>
-<span class="lineNum">     238 </span>            :                             int policy_idx,
-<span class="lineNum">     239 </span>            :                             size_t policy_name_max,
-<span class="lineNum">     240 </span>            :                             char *policy_name)
-<a name="241"><span class="lineNum">     241 </span>            : {</a>
-<span class="lineNum">     242 </span>            :     int num_policy;
-<span class="lineNum">     243 </span><span class="lineCov">         32 :     int err = geopm_agent_num_policy(agent_name, &amp;num_policy);</span>
-<span class="lineNum">     244 </span><span class="lineCov">         32 :     if (!err &amp;&amp; (policy_idx &lt; 0 || policy_idx &gt;= num_policy)) {</span>
-<a name="245"><span class="lineNum">     245 </span><span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span></a>
-<span class="lineNum">     246 </span>            :     }
-<span class="lineNum">     247 </span><span class="lineCov">         32 :     if (!err) {</span>
-<span class="lineNum">     248 </span>            :         try {
-<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         64 :             std::string policy_name_cxx = geopm::Agent::policy_names(</span></a>
-<span class="lineNum">     250 </span><span class="lineCov">        112 :                 geopm::agent_factory().dictionary(agent_name))[policy_idx];</span>
-<span class="lineNum">     251 </span><span class="lineCov">         32 :             if (policy_name_cxx.size() &gt;= policy_name_max) {</span>
-<span class="lineNum">     252 </span><span class="lineNoCov">          0 :                 err = E2BIG;</span>
-<a name="253"><span class="lineNum">     253 </span>            :             }</a>
-<span class="lineNum">     254 </span><span class="lineCov">         32 :             if (!err) {</span>
-<span class="lineNum">     255 </span><span class="lineCov">         32 :                 strncpy(policy_name, policy_name_cxx.c_str(), policy_name_max);</span>
-<span class="lineNum">     256 </span><span class="lineCov">         32 :                 policy_name[policy_name_max - 1] = '\0';</span>
-<a name="257"><span class="lineNum">     257 </span>            :             }</a>
-<span class="lineNum">     258 </span>            :         }
-<span class="lineNum">     259 </span><span class="lineNoCov">          0 :         catch (const geopm::Exception &amp;ex) {</span>
-<span class="lineNum">     260 </span><span class="lineNoCov">          0 :             if (ex.err_value() == GEOPM_ERROR_INVALID) {</span>
-<a name="261"><span class="lineNum">     261 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_NO_AGENT;</span></a>
-<span class="lineNum">     262 </span>            :             }
-<span class="lineNum">     263 </span>            :             else {
-<span class="lineNum">     264 </span><span class="lineNoCov">          0 :                 err = ex.err_value();</span>
-<a name="265"><span class="lineNum">     265 </span>            :             }</a>
-<span class="lineNum">     266 </span>            :         }
-<span class="lineNum">     267 </span><span class="lineNoCov">          0 :         catch (...) {</span>
-<span class="lineNum">     268 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span>
-<a name="269"><span class="lineNum">     269 </span>            :         }</a>
-<span class="lineNum">     270 </span>            :     }
-<span class="lineNum">     271 </span><span class="lineCov">         32 :     return err;</span>
-<a name="272"><span class="lineNum">     272 </span>            : }</a>
-<a name="273"><span class="lineNum">     273 </span>            : </a>
-<span class="lineNum">     274 </span><span class="lineCov">         14 : int geopm_agent_sample_name(const char *agent_name,</span>
-<span class="lineNum">     275 </span>            :                             int sample_idx,
-<span class="lineNum">     276 </span>            :                             size_t sample_name_max,
-<a name="277"><span class="lineNum">     277 </span>            :                             char *sample_name)</a>
-<span class="lineNum">     278 </span>            : {
-<span class="lineNum">     279 </span>            :     int num_sample;
-<span class="lineNum">     280 </span><span class="lineCov">         14 :     int err = geopm_agent_num_sample(agent_name, &amp;num_sample);</span>
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">         14 :     if (!err &amp;&amp; (sample_idx &lt; 0 || sample_idx &gt;= num_sample)) {</span></a>
-<span class="lineNum">     282 </span><span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span>
-<span class="lineNum">     283 </span>            :     }
-<span class="lineNum">     284 </span><span class="lineCov">         14 :     if (!err) {</span>
-<a name="285"><span class="lineNum">     285 </span>            :         try {</a>
-<span class="lineNum">     286 </span><span class="lineCov">         28 :             std::string sample_name_cxx = geopm::Agent::sample_names(</span>
-<span class="lineNum">     287 </span><span class="lineCov">         49 :                 geopm::agent_factory().dictionary(agent_name))[sample_idx];</span>
-<span class="lineNum">     288 </span><span class="lineCov">         14 :             if (sample_name_cxx.size() &gt;= sample_name_max) {</span>
-<a name="289"><span class="lineNum">     289 </span><span class="lineNoCov">          0 :                 err = E2BIG;</span></a>
-<span class="lineNum">     290 </span>            :             }
-<span class="lineNum">     291 </span><span class="lineCov">         14 :             if (!err) {</span>
-<span class="lineNum">     292 </span><span class="lineCov">         14 :                 strncpy(sample_name, sample_name_cxx.c_str(), sample_name_max);</span>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         14 :                 sample_name[sample_name_max - 1] = '\0';</span></a>
-<span class="lineNum">     294 </span>            :             }
-<span class="lineNum">     295 </span>            :         }
-<span class="lineNum">     296 </span><span class="lineNoCov">          0 :         catch (const geopm::Exception &amp;ex) {</span>
-<a name="297"><span class="lineNum">     297 </span><span class="lineNoCov">          0 :             if (ex.err_value() == GEOPM_ERROR_INVALID) {</span></a>
-<span class="lineNum">     298 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_NO_AGENT;</span>
-<span class="lineNum">     299 </span>            :             }
-<span class="lineNum">     300 </span>            :             else {
-<a name="301"><span class="lineNum">     301 </span><span class="lineNoCov">          0 :                 err = ex.err_value();</span></a>
-<span class="lineNum">     302 </span>            :             }
-<span class="lineNum">     303 </span>            :         }
-<span class="lineNum">     304 </span><span class="lineNoCov">          0 :         catch (...) {</span>
-<a name="305"><span class="lineNum">     305 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span></a>
-<span class="lineNum">     306 </span>            :         }
-<span class="lineNum">     307 </span>            :     }
-<span class="lineNum">     308 </span><span class="lineCov">         14 :     return err;</span>
-<a name="309"><span class="lineNum">     309 </span>            : </a>
-<a name="310"><span class="lineNum">     310 </span>            : }</a>
-<span class="lineNum">     311 </span>            : 
-<span class="lineNum">     312 </span><span class="lineCov">         14 : int geopm_agent_policy_json(const char *agent_name,</span>
-<a name="313"><span class="lineNum">     313 </span>            :                             const double *policy_array,</a>
-<span class="lineNum">     314 </span>            :                             size_t json_string_max,
-<span class="lineNum">     315 </span>            :                             char *json_string)
-<span class="lineNum">     316 </span>            : {
-<a name="317"><span class="lineNum">     317 </span>            :     int num_policy;</a>
-<span class="lineNum">     318 </span><span class="lineCov">         14 :     int err = geopm_agent_num_policy(agent_name, &amp;num_policy);</span>
-<span class="lineNum">     319 </span>            : 
-<span class="lineNum">     320 </span><span class="lineCov">         28 :     std::stringstream output_str;</span>
-<a name="321"><span class="lineNum">     321 </span><span class="lineCov">         14 :     char policy_name[json_string_max];</span></a>
-<span class="lineNum">     322 </span><span class="lineCov">         28 :     std::string policy_value;</span>
-<span class="lineNum">     323 </span>            :     try {
-<span class="lineNum">     324 </span><span class="lineCov">         14 :         if (!err) {</span>
-<a name="325"><span class="lineNum">     325 </span><span class="lineCov">         14 :             output_str &lt;&lt; &quot;{&quot;;</span></a>
-<span class="lineNum">     326 </span><span class="lineCov">         32 :             for (int i = 0; !err &amp;&amp; i &lt; num_policy; ++i) {</span>
-<span class="lineNum">     327 </span><span class="lineCov">         18 :                 if (i &gt; 0) {</span>
-<span class="lineNum">     328 </span><span class="lineCov">          6 :                     output_str &lt;&lt; &quot;, &quot;;</span>
-<a name="329"><span class="lineNum">     329 </span>            :                 }</a>
-<span class="lineNum">     330 </span><span class="lineCov">         18 :                 err = geopm_agent_policy_name(agent_name, i, json_string_max, policy_name);</span>
-<span class="lineNum">     331 </span><span class="lineCov">         18 :                 if (std::isnan(policy_array[i])) {</span>
-<span class="lineNum">     332 </span><span class="lineCov">         12 :                     policy_value = &quot;\&quot;NAN\&quot;&quot;;</span>
-<a name="333"><span class="lineNum">     333 </span>            :                 }</a>
-<span class="lineNum">     334 </span>            :                 else {
-<span class="lineNum">     335 </span><span class="lineCov">          6 :                     policy_value = std::to_string(policy_array[i]);</span>
-<span class="lineNum">     336 </span>            :                 }
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         18 :                 output_str &lt;&lt; &quot;\&quot;&quot; &lt;&lt; policy_name &lt;&lt; &quot;\&quot;: &quot; &lt;&lt; policy_value;</span></a>
-<span class="lineNum">     338 </span>            :             }
-<span class="lineNum">     339 </span><span class="lineCov">         14 :             output_str &lt;&lt; &quot;}&quot;;</span>
-<span class="lineNum">     340 </span>            :         }
-<a name="341"><span class="lineNum">     341 </span>            :     }</a>
-<span class="lineNum">     342 </span><span class="lineNoCov">          0 :     catch (...) {</span>
-<span class="lineNum">     343 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
-<span class="lineNum">     344 </span>            :     }
-<a name="345"><span class="lineNum">     345 </span>            : </a>
-<span class="lineNum">     346 </span><span class="lineCov">         14 :     if (!err) {</span>
-<span class="lineNum">     347 </span><span class="lineCov">         14 :         if (output_str.str().size() &gt;= json_string_max) {</span>
-<span class="lineNum">     348 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_INVALID;</span>
-<a name="349"><span class="lineNum">     349 </span>            :         }</a>
-<span class="lineNum">     350 </span><span class="lineCov">         14 :         if (!err) {</span>
-<span class="lineNum">     351 </span><span class="lineCov">         14 :             strncpy(json_string, output_str.str().c_str(), json_string_max);</span>
-<span class="lineNum">     352 </span><span class="lineCov">         14 :             json_string[json_string_max - 1] = '\0';</span>
-<a name="353"><span class="lineNum">     353 </span>            :         }</a>
-<span class="lineNum">     354 </span>            :     }
-<span class="lineNum">     355 </span><span class="lineCov">         42 :     return err;</span>
-<a name="356"><span class="lineNum">     356 </span>            : }</a>
-<a name="357"><span class="lineNum">     357 </span>            : </a>
-<span class="lineNum">     358 </span><span class="lineCov">         10 : int geopm_agent_name(int agent_idx,</span>
-<span class="lineNum">     359 </span>            :                      size_t agent_name_max,
-<span class="lineNum">     360 </span>            :                      char *agent_name)
-<a name="361"><span class="lineNum">     361 </span>            : {</a>
-<span class="lineNum">     362 </span><span class="lineCov">         10 :     int err = 0;</span>
-<span class="lineNum">     363 </span>            :     try {
-<span class="lineNum">     364 </span><span class="lineCov">         20 :         std::vector&lt;std::string&gt; agent_names = geopm::agent_factory().plugin_names();</span>
-<a name="365"><span class="lineNum">     365 </span><span class="lineCov">         10 :         if (agent_names.at(agent_idx).size() &gt;= agent_name_max) {</span></a>
-<span class="lineNum">     366 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_INVALID;</span>
-<span class="lineNum">     367 </span>            :         }
-<span class="lineNum">     368 </span><span class="lineCov">         10 :         if (!err) {</span>
-<a name="369"><span class="lineNum">     369 </span><span class="lineCov">         10 :             strncpy(agent_name, agent_names.at(agent_idx).c_str(), agent_name_max);</span></a>
-<span class="lineNum">     370 </span><span class="lineCov">         10 :             agent_name[agent_name_max - 1] = '\0';</span>
-<span class="lineNum">     371 </span>            :         }
-<span class="lineNum">     372 </span>            :     }
-<a name="373"><span class="lineNum">     373 </span><span class="lineNoCov">          0 :     catch (...) {</span></a>
-<span class="lineNum">     374 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
+<span class="lineNum">     158 </span><span class="lineCov">        295 :     std::map&lt;std::string, std::string&gt; Agent::make_dictionary(const std::vector&lt;std::string&gt; &amp;policy_names,</span>
+<span class="lineNum">     159 </span>            :                                                               const std::vector&lt;std::string&gt; &amp;sample_names)
+<span class="lineNum">     160 </span>            :     {
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        295 :         std::map&lt;std::string, std::string&gt; result;</span></a>
+<span class="lineNum">     162 </span><span class="lineCov">        708 :         for (size_t sample_idx = 0; sample_idx != sample_names.size(); ++sample_idx) {</span>
+<span class="lineNum">     163 </span><span class="lineCov">        826 :             std::string key = m_sample_prefix + std::to_string(sample_idx);</span>
+<span class="lineNum">     164 </span><span class="lineCov">        413 :             result[key] = sample_names[sample_idx];</span>
+<a name="165"><span class="lineNum">     165 </span>            :         }</a>
+<span class="lineNum">     166 </span><span class="lineCov">        295 :         result[m_num_sample_string] = std::to_string(sample_names.size());</span>
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span><span class="lineCov">       4602 :         for (size_t policy_idx = 0; policy_idx != policy_names.size(); ++policy_idx) {</span>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">       8614 :             std::string key = m_policy_prefix + std::to_string(policy_idx);</span></a>
+<span class="lineNum">     170 </span><span class="lineCov">       4307 :             result[key] = policy_names[policy_idx];</span>
+<span class="lineNum">     171 </span>            :         }
+<span class="lineNum">     172 </span><span class="lineCov">        295 :         result[m_num_policy_string] = std::to_string(policy_names.size());</span>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">        295 :         return result;</span></a>
+<a name="174"><span class="lineNum">     174 </span>            :     }</a>
+<span class="lineNum">     175 </span>            : 
+<span class="lineNum">     176 </span><span class="lineCov">       2550 :     void Agent::aggregate_sample(const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;in_sample,</span>
+<a name="177"><span class="lineNum">     177 </span>            :                                  const std::vector&lt;std::function&lt;double(const std::vector&lt;double&gt;&amp;)&gt; &gt; &amp;agg_func,</a>
+<span class="lineNum">     178 </span>            :                                  std::vector&lt;double&gt; &amp;out_sample)
+<span class="lineNum">     179 </span>            :     {
+<span class="lineNum">     180 </span><span class="lineCov">       2550 :         size_t num_children = in_sample.size();</span>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">       5100 :         std::vector&lt;double&gt; child_sample(num_children);</span></a>
+<span class="lineNum">     182 </span><span class="lineCov">      10206 :         for (size_t sig_idx = 0; sig_idx &lt; out_sample.size(); ++sig_idx) {</span>
+<span class="lineNum">     183 </span><span class="lineCov">      38220 :             for (size_t child_idx = 0; child_idx &lt; num_children; ++child_idx) {</span>
+<span class="lineNum">     184 </span><span class="lineCov">      30564 :                 child_sample[child_idx] = in_sample[child_idx][sig_idx];</span>
+<a name="185"><span class="lineNum">     185 </span>            :             }</a>
+<span class="lineNum">     186 </span><span class="lineCov">       7656 :             out_sample[sig_idx] = agg_func[sig_idx](child_sample);</span>
+<span class="lineNum">     187 </span>            :         }
+<span class="lineNum">     188 </span><span class="lineCov">       2550 :     }</span>
+<a name="189"><span class="lineNum">     189 </span>            : }</a>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span><span class="lineCov">          5 : int geopm_agent_supported(const char *agent_name)</span>
+<span class="lineNum">     192 </span>            : {
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          5 :     int err = 0;</span></a>
+<span class="lineNum">     194 </span>            :     try {
+<span class="lineNum">     195 </span><span class="lineCov">          5 :         auto tmp = geopm::agent_factory().dictionary(agent_name);</span>
+<span class="lineNum">     196 </span>            :     }
+<a name="197"><span class="lineNum">     197 </span><span class="lineNoCov">          0 :     catch (const geopm::Exception &amp;ex) {</span></a>
+<span class="lineNum">     198 </span><span class="lineNoCov">          0 :         if (ex.err_value() == GEOPM_ERROR_INVALID) {</span>
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_NO_AGENT;</span>
+<span class="lineNum">     200 </span>            :         }
+<a name="201"><span class="lineNum">     201 </span>            :         else {</a>
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 :             err = ex.err_value();</span>
+<span class="lineNum">     203 </span>            :         }
+<span class="lineNum">     204 </span>            :     }
+<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :     catch (...) {</span></a>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
+<span class="lineNum">     207 </span>            :     }
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          5 :     return err;</span></a>
+<a name="209"><span class="lineNum">     209 </span>            : }</a>
+<span class="lineNum">     210 </span><span class="lineCov">        729 : int geopm_agent_num_policy(const char *agent_name,</span>
+<span class="lineNum">     211 </span>            :                            int *num_policy)
+<span class="lineNum">     212 </span>            : {
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">        729 :     int err = 0;</span></a>
+<span class="lineNum">     214 </span>            :     try {
+<span class="lineNum">     215 </span><span class="lineCov">        729 :         *num_policy = geopm::Agent::num_policy(</span>
+<span class="lineNum">     216 </span><span class="lineCov">        729 :             geopm::agent_factory().dictionary(agent_name));</span>
+<a name="217"><span class="lineNum">     217 </span>            :     }</a>
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :     catch (const geopm::Exception &amp;ex) {</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :         if (ex.err_value() == GEOPM_ERROR_INVALID) {</span>
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_NO_AGENT;</span>
+<a name="221"><span class="lineNum">     221 </span>            :         }</a>
+<span class="lineNum">     222 </span>            :         else {
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :             err = ex.err_value();</span>
+<span class="lineNum">     224 </span>            :         }
+<a name="225"><span class="lineNum">     225 </span>            :     }</a>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :     catch (...) {</span>
+<span class="lineNum">     227 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
+<span class="lineNum">     228 </span>            :     }
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">        729 :     return err;</span></a>
+<a name="230"><span class="lineNum">     230 </span>            : }</a>
+<span class="lineNum">     231 </span>            : 
+<span class="lineNum">     232 </span><span class="lineCov">         24 : int geopm_agent_num_sample(const char *agent_name,</span>
+<a name="233"><span class="lineNum">     233 </span>            :                            int *num_sample)</a>
+<span class="lineNum">     234 </span>            : {
+<span class="lineNum">     235 </span><span class="lineCov">         24 :     int err = 0;</span>
+<span class="lineNum">     236 </span>            :     try {
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         24 :         *num_sample = geopm::Agent::num_sample(</span></a>
+<span class="lineNum">     238 </span><span class="lineCov">         24 :             geopm::agent_factory().dictionary(agent_name));</span>
+<span class="lineNum">     239 </span>            :     }
+<span class="lineNum">     240 </span><span class="lineNoCov">          0 :     catch (const geopm::Exception &amp;ex) {</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineNoCov">          0 :         if (ex.err_value() == GEOPM_ERROR_INVALID) {</span></a>
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_NO_AGENT;</span>
+<span class="lineNum">     243 </span>            :         }
+<span class="lineNum">     244 </span>            :         else {
+<a name="245"><span class="lineNum">     245 </span><span class="lineNoCov">          0 :             err = ex.err_value();</span></a>
+<span class="lineNum">     246 </span>            :         }
+<span class="lineNum">     247 </span>            :     }
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :     catch (...) {</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span></a>
+<span class="lineNum">     250 </span>            :     }
+<span class="lineNum">     251 </span><span class="lineCov">         24 :     return err;</span>
+<a name="252"><span class="lineNum">     252 </span>            : }</a>
+<a name="253"><span class="lineNum">     253 </span>            : </a>
+<span class="lineNum">     254 </span><span class="lineCov">        616 : int geopm_agent_policy_name(const char *agent_name,</span>
+<span class="lineNum">     255 </span>            :                             int policy_idx,
+<span class="lineNum">     256 </span>            :                             size_t policy_name_max,
+<a name="257"><span class="lineNum">     257 </span>            :                             char *policy_name)</a>
+<span class="lineNum">     258 </span>            : {
+<span class="lineNum">     259 </span>            :     int num_policy;
+<span class="lineNum">     260 </span><span class="lineCov">        616 :     int err = geopm_agent_num_policy(agent_name, &amp;num_policy);</span>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">        616 :     if (!err &amp;&amp; (policy_idx &lt; 0 || policy_idx &gt;= num_policy)) {</span></a>
+<span class="lineNum">     262 </span><span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">     263 </span>            :     }
+<span class="lineNum">     264 </span><span class="lineCov">        616 :     if (!err) {</span>
+<a name="265"><span class="lineNum">     265 </span>            :         try {</a>
+<span class="lineNum">     266 </span><span class="lineCov">       1232 :             std::string policy_name_cxx = geopm::Agent::policy_names(</span>
+<span class="lineNum">     267 </span><span class="lineCov">       1848 :                 geopm::agent_factory().dictionary(agent_name))[policy_idx];</span>
+<span class="lineNum">     268 </span><span class="lineCov">        616 :             if (policy_name_cxx.size() &gt;= policy_name_max) {</span>
+<a name="269"><span class="lineNum">     269 </span><span class="lineNoCov">          0 :                 err = E2BIG;</span></a>
+<span class="lineNum">     270 </span>            :             }
+<span class="lineNum">     271 </span><span class="lineCov">        616 :             if (!err) {</span>
+<span class="lineNum">     272 </span><span class="lineCov">        616 :                 strncpy(policy_name, policy_name_cxx.c_str(), policy_name_max);</span>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">        616 :                 policy_name[policy_name_max - 1] = '\0';</span></a>
+<span class="lineNum">     274 </span>            :             }
+<span class="lineNum">     275 </span>            :         }
+<span class="lineNum">     276 </span><span class="lineNoCov">          0 :         catch (const geopm::Exception &amp;ex) {</span>
+<a name="277"><span class="lineNum">     277 </span><span class="lineNoCov">          0 :             if (ex.err_value() == GEOPM_ERROR_INVALID) {</span></a>
+<span class="lineNum">     278 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_NO_AGENT;</span>
+<span class="lineNum">     279 </span>            :             }
+<span class="lineNum">     280 </span>            :             else {
+<a name="281"><span class="lineNum">     281 </span><span class="lineNoCov">          0 :                 err = ex.err_value();</span></a>
+<span class="lineNum">     282 </span>            :             }
+<span class="lineNum">     283 </span>            :         }
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<a name="285"><span class="lineNum">     285 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span></a>
+<span class="lineNum">     286 </span>            :         }
+<span class="lineNum">     287 </span>            :     }
+<span class="lineNum">     288 </span><span class="lineCov">        616 :     return err;</span>
+<a name="289"><span class="lineNum">     289 </span>            : }</a>
+<span class="lineNum">     290 </span>            : 
+<span class="lineNum">     291 </span><span class="lineCov">         14 : int geopm_agent_sample_name(const char *agent_name,</span>
+<span class="lineNum">     292 </span>            :                             int sample_idx,
+<a name="293"><span class="lineNum">     293 </span>            :                             size_t sample_name_max,</a>
+<span class="lineNum">     294 </span>            :                             char *sample_name)
+<span class="lineNum">     295 </span>            : {
+<span class="lineNum">     296 </span>            :     int num_sample;
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         14 :     int err = geopm_agent_num_sample(agent_name, &amp;num_sample);</span></a>
+<span class="lineNum">     298 </span><span class="lineCov">         14 :     if (!err &amp;&amp; (sample_idx &lt; 0 || sample_idx &gt;= num_sample)) {</span>
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">     300 </span>            :     }
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">         14 :     if (!err) {</span></a>
+<span class="lineNum">     302 </span>            :         try {
+<span class="lineNum">     303 </span><span class="lineCov">         28 :             std::string sample_name_cxx = geopm::Agent::sample_names(</span>
+<span class="lineNum">     304 </span><span class="lineCov">         42 :                 geopm::agent_factory().dictionary(agent_name))[sample_idx];</span>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         14 :             if (sample_name_cxx.size() &gt;= sample_name_max) {</span></a>
+<span class="lineNum">     306 </span><span class="lineNoCov">          0 :                 err = E2BIG;</span>
+<span class="lineNum">     307 </span>            :             }
+<span class="lineNum">     308 </span><span class="lineCov">         14 :             if (!err) {</span>
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">         14 :                 strncpy(sample_name, sample_name_cxx.c_str(), sample_name_max);</span></a>
+<span class="lineNum">     310 </span><span class="lineCov">         14 :                 sample_name[sample_name_max - 1] = '\0';</span>
+<span class="lineNum">     311 </span>            :             }
+<span class="lineNum">     312 </span>            :         }
+<a name="313"><span class="lineNum">     313 </span><span class="lineNoCov">          0 :         catch (const geopm::Exception &amp;ex) {</span></a>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 :             if (ex.err_value() == GEOPM_ERROR_INVALID) {</span>
+<span class="lineNum">     315 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_NO_AGENT;</span>
+<span class="lineNum">     316 </span>            :             }
+<a name="317"><span class="lineNum">     317 </span>            :             else {</a>
+<span class="lineNum">     318 </span><span class="lineNoCov">          0 :                 err = ex.err_value();</span>
+<span class="lineNum">     319 </span>            :             }
+<span class="lineNum">     320 </span>            :         }
+<a name="321"><span class="lineNum">     321 </span><span class="lineNoCov">          0 :         catch (...) {</span></a>
+<span class="lineNum">     322 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span>
+<span class="lineNum">     323 </span>            :         }
+<span class="lineNum">     324 </span>            :     }
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">         14 :     return err;</span></a>
+<span class="lineNum">     326 </span>            : 
+<a name="327"><span class="lineNum">     327 </span>            : }</a>
+<span class="lineNum">     328 </span>            : 
+<a name="329"><span class="lineNum">     329 </span><span class="lineCov">         27 : int geopm_agent_policy_json(const char *agent_name,</span></a>
+<span class="lineNum">     330 </span>            :                             const double *policy_array,
+<span class="lineNum">     331 </span>            :                             size_t json_string_max,
+<span class="lineNum">     332 </span>            :                             char *json_string)
+<a name="333"><span class="lineNum">     333 </span>            : {</a>
+<span class="lineNum">     334 </span><span class="lineCov">         27 :     int num_policy = 0;</span>
+<span class="lineNum">     335 </span><span class="lineCov">         27 :     int err = geopm_agent_num_policy(agent_name, &amp;num_policy);</span>
+<span class="lineNum">     336 </span><span class="lineCov">         27 :     if (!err) {</span>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         27 :         err = geopm_agent_policy_json_partial(agent_name, num_policy, policy_array,</span></a>
+<span class="lineNum">     338 </span>            :                                               json_string_max, json_string);
+<span class="lineNum">     339 </span>            :     }
+<span class="lineNum">     340 </span><span class="lineCov">         27 :     return err;</span>
+<a name="341"><span class="lineNum">     341 </span>            : }</a>
+<span class="lineNum">     342 </span>            : 
+<span class="lineNum">     343 </span><span class="lineCov">         38 : int geopm_agent_policy_json_partial(const char *agent_name,</span>
+<span class="lineNum">     344 </span>            :                                     size_t policy_array_size,
+<a name="345"><span class="lineNum">     345 </span>            :                                     const double *policy_array,</a>
+<span class="lineNum">     346 </span>            :                                     size_t json_string_max,
+<span class="lineNum">     347 </span>            :                                     char *json_string)
+<span class="lineNum">     348 </span>            : {
+<a name="349"><span class="lineNum">     349 </span><span class="lineCov">         76 :     std::stringstream output_str;</span></a>
+<span class="lineNum">     350 </span><span class="lineCov">         38 :     char policy_name[json_string_max];</span>
+<span class="lineNum">     351 </span><span class="lineCov">         76 :     std::string policy_value;</span>
+<span class="lineNum">     352 </span><span class="lineCov">         38 :     int num_policy = 0;</span>
+<a name="353"><span class="lineNum">     353 </span><span class="lineCov">         38 :     int err = geopm_agent_num_policy(agent_name, &amp;num_policy);</span></a>
+<span class="lineNum">     354 </span><span class="lineCov">         38 :     if (!err &amp;&amp; (num_policy &lt; 0 || policy_array_size &gt; (size_t)num_policy)) {</span>
+<span class="lineNum">     355 </span><span class="lineNoCov">          0 :         err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">     356 </span>            :     }
+<a name="357"><span class="lineNum">     357 </span>            :     try {</a>
+<span class="lineNum">     358 </span><span class="lineCov">         38 :         if (!err) {</span>
+<span class="lineNum">     359 </span><span class="lineCov">         38 :             output_str &lt;&lt; &quot;{&quot;;</span>
+<span class="lineNum">     360 </span><span class="lineCov">        281 :             for (size_t i = 0; !err &amp;&amp; i &lt; policy_array_size; ++i) {</span>
+<a name="361"><span class="lineNum">     361 </span><span class="lineCov">        243 :                 if (i &gt; 0) {</span></a>
+<span class="lineNum">     362 </span><span class="lineCov">        207 :                     output_str &lt;&lt; &quot;, &quot;;</span>
+<span class="lineNum">     363 </span>            :                 }
+<span class="lineNum">     364 </span><span class="lineCov">        243 :                 err = geopm_agent_policy_name(agent_name, i, json_string_max, policy_name);</span>
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">        243 :                 if (std::isnan(policy_array[i])) {</span></a>
+<span class="lineNum">     366 </span><span class="lineCov">        201 :                     policy_value = &quot;\&quot;NAN\&quot;&quot;;</span>
+<span class="lineNum">     367 </span>            :                 }
+<span class="lineNum">     368 </span>            :                 else {
+<a name="369"><span class="lineNum">     369 </span><span class="lineCov">         42 :                     policy_value = geopm::string_format_double(policy_array[i]);</span></a>
+<span class="lineNum">     370 </span>            :                 }
+<span class="lineNum">     371 </span><span class="lineCov">        243 :                 output_str &lt;&lt; &quot;\&quot;&quot; &lt;&lt; policy_name &lt;&lt; &quot;\&quot;: &quot; &lt;&lt; policy_value;</span>
+<span class="lineNum">     372 </span>            :             }
+<a name="373"><span class="lineNum">     373 </span><span class="lineCov">         38 :             output_str &lt;&lt; &quot;}&quot;;</span></a>
+<span class="lineNum">     374 </span>            :         }
 <span class="lineNum">     375 </span>            :     }
-<span class="lineNum">     376 </span>            : 
-<a name="377"><span class="lineNum">     377 </span><span class="lineCov">         10 :     return err;</span></a>
-<a name="378"><span class="lineNum">     378 </span>            : }</a>
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :     catch (...) {</span>
+<a name="377"><span class="lineNum">     377 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span></a>
+<span class="lineNum">     378 </span>            :     }
 <span class="lineNum">     379 </span>            : 
-<span class="lineNum">     380 </span><span class="lineCov">          2 : int geopm_agent_num_avail(int* num_agent)</span>
-<a name="381"><span class="lineNum">     381 </span>            : {</a>
-<span class="lineNum">     382 </span><span class="lineCov">          2 :     int err = 0;</span>
-<span class="lineNum">     383 </span>            :     try {
-<span class="lineNum">     384 </span><span class="lineCov">          4 :         std::vector&lt;std::string&gt; agent_names = geopm::agent_factory().plugin_names();</span>
-<a name="385"><span class="lineNum">     385 </span><span class="lineCov">          2 :         *num_agent = agent_names.size();</span></a>
-<span class="lineNum">     386 </span>            :     }
-<span class="lineNum">     387 </span><span class="lineNoCov">          0 :     catch (...) {</span>
-<span class="lineNum">     388 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
-<a name="389"><span class="lineNum">     389 </span>            :     }</a>
-<a name="390"><span class="lineNum">     390 </span>            : </a>
-<span class="lineNum">     391 </span><span class="lineCov">          2 :     return err;</span>
-<span class="lineNum">     392 </span><span class="lineCov">       4701 : }</span>
+<span class="lineNum">     380 </span><span class="lineCov">         38 :     if (!err) {</span>
+<a name="381"><span class="lineNum">     381 </span><span class="lineCov">         38 :         if (output_str.str().size() &gt;= json_string_max) {</span></a>
+<span class="lineNum">     382 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">     383 </span>            :         }
+<span class="lineNum">     384 </span><span class="lineCov">         38 :         if (!err) {</span>
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">         38 :             strncpy(json_string, output_str.str().c_str(), json_string_max);</span></a>
+<span class="lineNum">     386 </span><span class="lineCov">         38 :             json_string[json_string_max - 1] = '\0';</span>
+<span class="lineNum">     387 </span>            :         }
+<span class="lineNum">     388 </span>            :     }
+<a name="389"><span class="lineNum">     389 </span><span class="lineCov">        114 :     return err;</span></a>
+<a name="390"><span class="lineNum">     390 </span>            : }</a>
+<span class="lineNum">     391 </span>            : 
+<span class="lineNum">     392 </span><span class="lineCov">         25 : int geopm_agent_name(int agent_idx,</span>
+<a name="393"><span class="lineNum">     393 </span>            :                      size_t agent_name_max,</a>
+<span class="lineNum">     394 </span>            :                      char *agent_name)
+<span class="lineNum">     395 </span>            : {
+<span class="lineNum">     396 </span><span class="lineCov">         25 :     int err = 0;</span>
+<a name="397"><span class="lineNum">     397 </span>            :     try {</a>
+<span class="lineNum">     398 </span><span class="lineCov">         50 :         std::vector&lt;std::string&gt; agent_names = geopm::agent_factory().plugin_names();</span>
+<span class="lineNum">     399 </span><span class="lineCov">         25 :         if (agent_names.at(agent_idx).size() &gt;= agent_name_max) {</span>
+<span class="lineNum">     400 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_INVALID;</span>
+<a name="401"><span class="lineNum">     401 </span>            :         }</a>
+<span class="lineNum">     402 </span><span class="lineCov">         25 :         if (!err) {</span>
+<span class="lineNum">     403 </span><span class="lineCov">         25 :             strncpy(agent_name, agent_names.at(agent_idx).c_str(), agent_name_max);</span>
+<span class="lineNum">     404 </span><span class="lineCov">         25 :             agent_name[agent_name_max - 1] = '\0';</span>
+<a name="405"><span class="lineNum">     405 </span>            :         }</a>
+<span class="lineNum">     406 </span>            :     }
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :     catch (...) {</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span>
+<a name="409"><span class="lineNum">     409 </span>            :     }</a>
+<span class="lineNum">     410 </span><span class="lineCov">         25 :     return err;</span>
+<a name="411"><span class="lineNum">     411 </span>            : }</a>
+<span class="lineNum">     412 </span>            : 
+<a name="413"><span class="lineNum">     413 </span><span class="lineCov">          5 : int geopm_agent_num_avail(int* num_agent)</span></a>
+<span class="lineNum">     414 </span>            : {
+<span class="lineNum">     415 </span><span class="lineCov">          5 :     int err = 0;</span>
+<span class="lineNum">     416 </span>            :     try {
+<a name="417"><span class="lineNum">     417 </span><span class="lineCov">         10 :         std::vector&lt;std::string&gt; agent_names = geopm::agent_factory().plugin_names();</span></a>
+<span class="lineNum">     418 </span><span class="lineCov">          5 :         *num_agent = agent_names.size();</span>
+<span class="lineNum">     419 </span>            :     }
+<span class="lineNum">     420 </span><span class="lineNoCov">          0 :     catch (...) {</span>
+<a name="421"><span class="lineNum">     421 </span><span class="lineNoCov">          0 :         err = geopm::exception_handler(std::current_exception(), false);</span></a>
+<a name="422"><span class="lineNum">     422 </span>            :     }</a>
+<span class="lineNum">     423 </span><span class="lineCov">          5 :     return err;</span>
+<span class="lineNum">     424 </span><span class="lineCov">       2586 : }</span>
+<a name="425"><span class="lineNum">     425 </span>            : </a>
+<span class="lineNum">     426 </span>            : // geopm_agent_enforce_policy is defined in Controller.cpp
 </pre>
       </td>
     </tr>

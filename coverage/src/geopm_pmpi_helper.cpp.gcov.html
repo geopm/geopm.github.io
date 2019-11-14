@@ -1,0 +1,461 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - v1.1.0 - src/geopm_pmpi_helper.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html" target="_parent">top level</a> - <a href="index.html" target="_parent">src</a> - geopm_pmpi_helper.cpp<span style="font-size: 80%;"> (source / <a href="geopm_pmpi_helper.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">v1.1.0</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">109</td>
+            <td class="headerCovTableEntry">165</td>
+            <td class="headerCovTableEntryLo">66.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntryHi">90.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Redistribution and use in source and binary forms, with or without
+<a name="5"><span class="lineNum">       5 </span>            :  * modification, are permitted provided that the following conditions</a>
+<span class="lineNum">       6 </span>            :  * are met:
+<span class="lineNum">       7 </span>            :  *
+<span class="lineNum">       8 </span>            :  *     * Redistributions of source code must retain the above copyright
+<a name="9"><span class="lineNum">       9 </span>            :  *       notice, this list of conditions and the following disclaimer.</a>
+<span class="lineNum">      10 </span>            :  *
+<span class="lineNum">      11 </span>            :  *     * Redistributions in binary form must reproduce the above copyright
+<span class="lineNum">      12 </span>            :  *       notice, this list of conditions and the following disclaimer in
+<a name="13"><span class="lineNum">      13 </span>            :  *       the documentation and/or other materials provided with the</a>
+<span class="lineNum">      14 </span>            :  *       distribution.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  *     * Neither the name of Intel Corporation nor the names of its
+<a name="17"><span class="lineNum">      17 </span>            :  *       contributors may be used to endorse or promote products derived</a>
+<span class="lineNum">      18 </span>            :  *       from this software without specific prior written permission.
+<span class="lineNum">      19 </span>            :  *
+<span class="lineNum">      20 </span>            :  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a name="21"><span class="lineNum">      21 </span>            :  * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</a>
+<span class="lineNum">      22 </span>            :  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+<span class="lineNum">      23 </span>            :  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+<span class="lineNum">      24 </span>            :  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+<a name="25"><span class="lineNum">      25 </span>            :  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</a>
+<span class="lineNum">      26 </span>            :  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+<span class="lineNum">      27 </span>            :  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+<span class="lineNum">      28 </span>            :  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<a name="29"><span class="lineNum">      29 </span>            :  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY LOG OF THE USE</a>
+<span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            :  */
+<span class="lineNum">      32 </span>            : #ifndef _GNU_SOURCE
+<a name="33"><span class="lineNum">      33 </span>            : #define _GNU_SOURCE</a>
+<span class="lineNum">      34 </span>            : #endif
+<span class="lineNum">      35 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;string.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;unistd.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;errno.h&gt;
+<span class="lineNum">      40 </span>            : #include &lt;limits.h&gt;
+<a name="41"><span class="lineNum">      41 </span>            : </a>
+<span class="lineNum">      42 </span>            : #include &quot;Environment.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      44 </span>            : #ifndef GEOPM_TEST
+<a name="45"><span class="lineNum">      45 </span>            : #include &lt;mpi.h&gt;</a>
+<span class="lineNum">      46 </span>            : #endif
+<span class="lineNum">      47 </span>            : extern &quot;C&quot; {
+<span class="lineNum">      48 </span>            : #ifndef GEOPM_TEST
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;geopm_ctl.h&quot;</a>
+<span class="lineNum">      50 </span>            : #endif
+<span class="lineNum">      51 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      52 </span>            : #include &quot;geopm_error.h&quot;
+<a name="53"><span class="lineNum">      53 </span>            : #include &quot;geopm_internal.h&quot;</a>
+<span class="lineNum">      54 </span>            : #include &quot;geopm_pmpi.h&quot;
+<span class="lineNum">      55 </span>            : #include &quot;geopm_sched.h&quot;
+<span class="lineNum">      56 </span>            : #include &quot;geopm_mpi_comm_split.h&quot;
+<a name="57"><span class="lineNum">      57 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      58 </span>            : }
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span>            : 
+<a name="61"><span class="lineNum">      61 </span>            : static int g_is_geopm_pmpi_ctl_enabled = 0;</a>
+<span class="lineNum">      62 </span>            : static MPI_Comm g_geopm_comm_world_swap = MPI_COMM_WORLD;
+<span class="lineNum">      63 </span>            : static MPI_Fint g_geopm_comm_world_swap_f = 0;
+<span class="lineNum">      64 </span>            : static MPI_Fint g_geopm_comm_world_f = 0;
+<a name="65"><span class="lineNum">      65 </span>            : static MPI_Comm g_ppn1_comm = MPI_COMM_NULL;</a>
+<span class="lineNum">      66 </span>            : static struct geopm_ctl_c *g_ctl = NULL;
+<span class="lineNum">      67 </span>            : #ifndef GEOPM_TEST
+<span class="lineNum">      68 </span>            : static pthread_t g_ctl_thread;
+<a name="69"><span class="lineNum">      69 </span>            : #endif</a>
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            : extern &quot;C&quot; {
+<a name="72"><span class="lineNum">      72 </span>            :     int geopm_is_pmpi_prof_enabled(void);</a>
+<a name="73"><span class="lineNum">      73 </span>            : </a>
+<span class="lineNum">      74 </span><span class="lineCov">        456 :     static int geopm_env_pmpi_ctl(int *pmpi_ctl)</span>
+<span class="lineNum">      75 </span>            :     {
+<span class="lineNum">      76 </span><span class="lineCov">        456 :         int err = 0;</span>
+<a name="77"><span class="lineNum">      77 </span>            :         try {</a>
+<span class="lineNum">      78 </span><span class="lineCov">        456 :             if (!pmpi_ctl) {</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">      80 </span>            :             }
+<a name="81"><span class="lineNum">      81 </span>            :             else {</a>
+<span class="lineNum">      82 </span><span class="lineCov">        456 :                 *pmpi_ctl = geopm::environment().pmpi_ctl();</span>
+<span class="lineNum">      83 </span>            :             }
+<span class="lineNum">      84 </span>            :         }
+<a name="85"><span class="lineNum">      85 </span><span class="lineNoCov">          0 :         catch (...) {</span></a>
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span>
+<span class="lineNum">      87 </span>            :         }
+<span class="lineNum">      88 </span><span class="lineCov">        456 :         return err;</span>
+<a name="89"><span class="lineNum">      89 </span>            :     }</a>
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span><span class="lineCov">        276 :     static int geopm_env_do_profile(int *do_profile)</span>
+<span class="lineNum">      92 </span>            :     {
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        276 :         int err = 0;</span></a>
+<span class="lineNum">      94 </span>            :         try {
+<span class="lineNum">      95 </span><span class="lineCov">        276 :             if (!do_profile) {</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_INVALID;</span>
+<a name="97"><span class="lineNum">      97 </span>            :             }</a>
+<span class="lineNum">      98 </span>            :             else {
+<span class="lineNum">      99 </span><span class="lineCov">        276 :                 *do_profile = geopm::environment().do_profile();</span>
+<span class="lineNum">     100 </span>            :             }
+<a name="101"><span class="lineNum">     101 </span>            :         }</a>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span>
+<span class="lineNum">     104 </span>            :         }
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">        276 :         return err;</span></a>
+<span class="lineNum">     106 </span>            :     }
+<a name="107"><span class="lineNum">     107 </span>            : </a>
+<span class="lineNum">     108 </span>            : #ifdef GEOPM_DEBUG
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        152 :     static int geopm_env_debug_attach(int *debug_attach)</span></a>
+<span class="lineNum">     110 </span>            :     {
+<span class="lineNum">     111 </span><span class="lineCov">        152 :         int err = 0;</span>
+<span class="lineNum">     112 </span>            :         try {
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">        152 :             if (!debug_attach) {</span></a>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_INVALID;</span>
+<span class="lineNum">     115 </span>            :             }
+<span class="lineNum">     116 </span>            :             else {
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">        152 :                 *debug_attach = geopm::environment().debug_attach();</span></a>
+<span class="lineNum">     118 </span>            :             }
+<span class="lineNum">     119 </span>            :         }
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :         catch (...) {</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineNoCov">          0 :             err = geopm::exception_handler(std::current_exception(), false);</span></a>
+<span class="lineNum">     122 </span>            :         }
+<span class="lineNum">     123 </span><span class="lineCov">        152 :         return err;</span>
+<span class="lineNum">     124 </span>            :     }
+<a name="125"><span class="lineNum">     125 </span>            : #endif</a>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineCov">       2708 :     void geopm_mpi_region_enter(uint64_t func_rid)</span>
+<span class="lineNum">     128 </span>            :     {
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">       2708 :         if (geopm_is_pmpi_prof_enabled()) {</span></a>
+<span class="lineNum">     130 </span><span class="lineCov">       1792 :             if (func_rid) {</span>
+<span class="lineNum">     131 </span><span class="lineCov">       1792 :                 geopm_prof_enter(func_rid);</span>
+<span class="lineNum">     132 </span>            :             }
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">       1792 :             geopm_prof_enter(GEOPM_REGION_ID_MPI);</span></a>
+<span class="lineNum">     134 </span>            :         }
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">       2708 :     }</span></a>
+<span class="lineNum">     136 </span>            : 
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">       2708 :     void geopm_mpi_region_exit(uint64_t func_rid)</span></a>
+<span class="lineNum">     138 </span>            :     {
+<span class="lineNum">     139 </span><span class="lineCov">       2708 :         if (geopm_is_pmpi_prof_enabled()) {</span>
+<span class="lineNum">     140 </span><span class="lineCov">       1792 :             geopm_prof_exit(GEOPM_REGION_ID_MPI);</span>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">       1792 :             if (func_rid) {</span></a>
+<span class="lineNum">     142 </span><span class="lineCov">       1792 :                 geopm_prof_exit(func_rid);</span>
+<span class="lineNum">     143 </span>            :             }
+<span class="lineNum">     144 </span>            :         }
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">       2708 :     }</span></a>
+<span class="lineNum">     146 </span>            : 
+<span class="lineNum">     147 </span><span class="lineCov">       1062 :     uint64_t geopm_mpi_func_rid(const char *func_name)</span>
+<span class="lineNum">     148 </span>            :     {
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">       1062 :         uint64_t result = 0;</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">       1062 :         if (geopm_is_pmpi_prof_enabled()) {</span>
+<span class="lineNum">     151 </span><span class="lineCov">        146 :             int err = geopm_prof_region(func_name, GEOPM_REGION_HINT_NETWORK, &amp;result);</span>
+<span class="lineNum">     152 </span><span class="lineCov">        146 :             if (err) {</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :                 result = 0;</span></a>
+<span class="lineNum">     154 </span>            :             }
+<span class="lineNum">     155 </span>            :         }
+<span class="lineNum">     156 </span><span class="lineCov">       1062 :         return result;</span>
+<a name="157"><span class="lineNum">     157 </span>            :     }</a>
+<span class="lineNum">     158 </span>            : }
+<a name="159"><span class="lineNum">     159 </span>            : </a>
+<span class="lineNum">     160 </span>            : #ifndef GEOPM_TEST
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        152 : static int geopm_pmpi_init(const char *exec_name)</span></a>
+<span class="lineNum">     162 </span>            : {
+<span class="lineNum">     163 </span>            :     int rank;
+<span class="lineNum">     164 </span><span class="lineCov">        152 :     int err = 0;</span>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        152 :     int pmpi_ctl = 0;</span></a>
+<span class="lineNum">     166 </span><span class="lineCov">        152 :     int do_profile = 0;</span>
+<span class="lineNum">     167 </span><span class="lineCov">        152 :     g_geopm_comm_world_swap_f = PMPI_Comm_c2f(MPI_COMM_WORLD);</span>
+<span class="lineNum">     168 </span><span class="lineCov">        152 :     g_geopm_comm_world_f = PMPI_Comm_c2f(MPI_COMM_WORLD);</span>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        152 :     PMPI_Comm_rank(MPI_COMM_WORLD, &amp;rank);</span></a>
+<span class="lineNum">     170 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     171 </span><span class="lineCov">        152 :     int debug_attach = -1;</span>
+<span class="lineNum">     172 </span><span class="lineCov">        152 :     err = geopm_env_debug_attach(&amp;debug_attach);</span>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">        304 :     if (!err &amp;&amp;</span></a>
+<span class="lineNum">     174 </span><span class="lineCov">        152 :         debug_attach == rank) {</span>
+<span class="lineNum">     175 </span>            :         char hostname[NAME_MAX];
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :         gethostname(hostname, sizeof(hostname));</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineNoCov">          0 :         printf(&quot;PID %d on %s ready for attach\n&quot;, getpid(), hostname);</span></a>
+<span class="lineNum">     178 </span><span class="lineNoCov">          0 :         fflush(stdout);</span>
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :         volatile int cont = 0;</span>
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 :         while (!cont) {}</span>
+<a name="181"><span class="lineNum">     181 </span>            :     }</a>
+<span class="lineNum">     182 </span>            : #endif
+<span class="lineNum">     183 </span><span class="lineCov">        152 :     if (!err) {</span>
+<span class="lineNum">     184 </span><span class="lineCov">        152 :         err = geopm_env_pmpi_ctl(&amp;pmpi_ctl);</span>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">        304 :         if (!err &amp;&amp;</span></a>
+<span class="lineNum">     186 </span><span class="lineCov">        152 :             pmpi_ctl == GEOPM_CTL_PROCESS) {</span>
+<span class="lineNum">     187 </span><span class="lineCov">        136 :             g_is_geopm_pmpi_ctl_enabled = 1;</span>
+<span class="lineNum">     188 </span>            :             int is_ctl;
+<a name="189"><span class="lineNum">     189 </span>            :             MPI_Comm tmp_comm;</a>
+<span class="lineNum">     190 </span><span class="lineCov">        136 :             err = geopm_comm_split(MPI_COMM_WORLD, &quot;pmpi&quot;, &amp;tmp_comm, &amp;is_ctl);</span>
+<span class="lineNum">     191 </span><span class="lineCov">        136 :             if (err) {</span>
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :                 MPI_Abort(MPI_COMM_WORLD, err);</span>
+<a name="193"><span class="lineNum">     193 </span>            :             }</a>
+<span class="lineNum">     194 </span>            :             else {
+<span class="lineNum">     195 </span><span class="lineCov">        136 :                 g_geopm_comm_world_swap = tmp_comm;</span>
+<span class="lineNum">     196 </span><span class="lineCov">        136 :                 g_geopm_comm_world_swap_f = PMPI_Comm_c2f(g_geopm_comm_world_swap);</span>
+<a name="197"><span class="lineNum">     197 </span>            :             }</a>
+<span class="lineNum">     198 </span><span class="lineCov">        136 :             if (!err &amp;&amp; is_ctl) {</span>
+<span class="lineNum">     199 </span><span class="lineCov">         28 :                 err = geopm_ctl_create(g_geopm_comm_world_swap, &amp;g_ctl);</span>
+<span class="lineNum">     200 </span><span class="lineCov">         28 :                 if (!err) {</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         28 :                     err = geopm_ctl_run(g_ctl);</span></a>
+<span class="lineNum">     202 </span>            :                 }
+<span class="lineNum">     203 </span><span class="lineCov">         28 :                 int err_final = MPI_Finalize();</span>
+<span class="lineNum">     204 </span><span class="lineCov">         28 :                 err = err ? err : err_final;</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         28 :                 exit(err);</span></a>
+<span class="lineNum">     206 </span><span class="lineCov">        108 :             }</span>
+<span class="lineNum">     207 </span>            :         }
+<span class="lineNum">     208 </span><span class="lineCov">         32 :         else if (!err &amp;&amp;</span>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         16 :                  pmpi_ctl == GEOPM_CTL_PTHREAD) {</span></a>
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :             g_is_geopm_pmpi_ctl_enabled = 1;</span>
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span><span class="lineNoCov">          0 :             int mpi_thread_level = 0;</span>
+<a name="213"><span class="lineNum">     213 </span>            :             pthread_attr_t thread_attr;</a>
+<span class="lineNum">     214 </span><span class="lineNoCov">          0 :             int num_cpu = geopm_sched_num_cpu();</span>
+<span class="lineNum">     215 </span><span class="lineNoCov">          0 :             cpu_set_t *cpu_set = CPU_ALLOC(num_cpu);</span>
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :             if (NULL == cpu_set) {</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineNoCov">          0 :                 err = ENOMEM;</span></a>
+<span class="lineNum">     218 </span>            :             }
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :             if (!err) {</span>
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :                 err = PMPI_Query_thread(&amp;mpi_thread_level);</span>
+<a name="221"><span class="lineNum">     221 </span>            :             }</a>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :             if (!err &amp;&amp; mpi_thread_level &lt; MPI_THREAD_MULTIPLE) {</span>
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :                 err = GEOPM_ERROR_LOGIC;</span>
+<span class="lineNum">     224 </span>            :             }
+<a name="225"><span class="lineNum">     225 </span><span class="lineNoCov">          0 :             if (!err) {</span></a>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :                 err = geopm_comm_split_ppn1(MPI_COMM_WORLD, &quot;pmpi&quot;, &amp;g_ppn1_comm);</span>
+<span class="lineNum">     227 </span>            :             }
+<span class="lineNum">     228 </span><span class="lineNoCov">          0 :             if (!err &amp;&amp; g_ppn1_comm != MPI_COMM_NULL) {</span>
+<a name="229"><span class="lineNum">     229 </span>            :                 int ppn1_rank;</a>
+<span class="lineNum">     230 </span><span class="lineNoCov">          0 :                 err = MPI_Comm_rank(g_ppn1_comm, &amp;ppn1_rank);</span>
+<span class="lineNum">     231 </span><span class="lineNoCov">          0 :                 if (!err) {</span>
+<span class="lineNum">     232 </span><span class="lineNoCov">          0 :                     err = geopm_ctl_create(g_ppn1_comm, &amp;g_ctl);</span>
+<a name="233"><span class="lineNum">     233 </span>            :                 }</a>
+<span class="lineNum">     234 </span><span class="lineNoCov">          0 :                 if (!err) {</span>
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :                     err = pthread_attr_init(&amp;thread_attr);</span>
+<span class="lineNum">     236 </span>            :                 }
+<a name="237"><span class="lineNum">     237 </span><span class="lineNoCov">          0 :                 if (!err) {</span></a>
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 :                     err = geopm_sched_woomp(num_cpu, cpu_set);</span>
+<span class="lineNum">     239 </span>            :                 }
+<span class="lineNum">     240 </span><span class="lineNoCov">          0 :                 if (!err) {</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineNoCov">          0 :                     err = pthread_attr_setaffinity_np(&amp;thread_attr, CPU_ALLOC_SIZE(num_cpu), cpu_set);</span></a>
+<span class="lineNum">     242 </span>            :                 }
+<span class="lineNum">     243 </span><span class="lineNoCov">          0 :                 if (!err) {</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :                     err = geopm_ctl_pthread(g_ctl, &amp;thread_attr, &amp;g_ctl_thread);</span>
+<a name="245"><span class="lineNum">     245 </span>            :                 }</a>
+<span class="lineNum">     246 </span><span class="lineNoCov">          0 :                 if (!err) {</span>
+<span class="lineNum">     247 </span><span class="lineNoCov">          0 :                     err = pthread_attr_destroy(&amp;thread_attr);</span>
+<span class="lineNum">     248 </span>            :                 }
+<a name="249"><span class="lineNum">     249 </span>            :             }</a>
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 :             CPU_FREE(cpu_set);</span>
+<span class="lineNum">     251 </span>            :         }
+<span class="lineNum">     252 </span><span class="lineCov">        124 :         if (!err) {</span>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">        124 :             err = geopm_env_do_profile(&amp;do_profile);</span></a>
+<span class="lineNum">     254 </span>            :         }
+<span class="lineNum">     255 </span><span class="lineCov">        248 :         if (!err &amp;&amp;</span>
+<span class="lineNum">     256 </span><span class="lineCov">        124 :             do_profile) {</span>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">        124 :             geopm_prof_init();</span></a>
+<span class="lineNum">     258 </span>            :         }
+<span class="lineNum">     259 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     260 </span><span class="lineCov">        124 :         if (err) {</span>
+<a name="261"><span class="lineNum">     261 </span>            :             char err_msg[NAME_MAX];</a>
+<span class="lineNum">     262 </span><span class="lineNoCov">          0 :             geopm_error_message(err, err_msg, NAME_MAX);</span>
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :             fprintf(stderr, &quot;%s&quot;, err_msg);</span>
+<span class="lineNum">     264 </span>            :         }
+<a name="265"><span class="lineNum">     265 </span>            : #endif</a>
+<span class="lineNum">     266 </span>            :     }
+<span class="lineNum">     267 </span><span class="lineCov">        124 :     return err;</span>
+<span class="lineNum">     268 </span>            : }
+<a name="269"><span class="lineNum">     269 </span>            : </a>
+<span class="lineNum">     270 </span>            : extern &quot;C&quot; {
+<span class="lineNum">     271 </span>            : #ifndef GEOPM_PORTABLE_MPI_COMM_COMPARE_ENABLE
+<span class="lineNum">     272 </span>            :     /*
+<a name="273"><span class="lineNum">     273 </span>            :      * Since MPI_COMM_WORLD should not be accessed or modified in this use</a>
+<span class="lineNum">     274 </span>            :      * case, a simple == comparison will do and will be much more
+<a name="275"><span class="lineNum">     275 </span>            :      * performant than MPI_Comm_compare().</a>
+<span class="lineNum">     276 </span>            :      */
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">       4227 :     MPI_Comm geopm_swap_comm_world(MPI_Comm comm)</span></a>
+<span class="lineNum">     278 </span>            :     {
+<span class="lineNum">     279 </span><span class="lineCov">       4227 :         return comm != MPI_COMM_WORLD ?</span>
+<span class="lineNum">     280 </span><span class="lineCov">       4227 :                comm : g_geopm_comm_world_swap;</span>
+<a name="281"><span class="lineNum">     281 </span>            :     }</a>
+<span class="lineNum">     282 </span>            : #else
+<span class="lineNum">     283 </span>            :     /*
+<span class="lineNum">     284 </span>            :      * The code below is more portable, but slower.  Define
+<a name="285"><span class="lineNum">     285 </span>            :      * GEOPM_ENABLE_PORTABLE_MPI_COMM_COMPARE if there are issues with the</a>
+<span class="lineNum">     286 </span>            :      * direct comparison code above.
+<span class="lineNum">     287 </span>            :      */
+<span class="lineNum">     288 </span>            :     MPI_Comm geopm_swap_comm_world(MPI_Comm comm)
+<a name="289"><span class="lineNum">     289 </span>            :     {</a>
+<span class="lineNum">     290 </span>            :         int is_comm_world = 0;
+<span class="lineNum">     291 </span>            :         (void)PMPI_Comm_compare(MPI_COMM_WORLD, comm, &amp;is_comm_world);
+<span class="lineNum">     292 </span>            :         if (is_comm_world != MPI_UNEQUAL) {
+<a name="293"><span class="lineNum">     293 </span>            :             comm = g_geopm_comm_world_swap;</a>
+<span class="lineNum">     294 </span>            :         }
+<span class="lineNum">     295 </span>            :         return comm;
+<span class="lineNum">     296 </span>            :     }
+<a name="297"><span class="lineNum">     297 </span>            : #endif</a>
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 :     MPI_Fint geopm_swap_comm_world_f(MPI_Fint comm)</span>
+<span class="lineNum">     300 </span>            :     {
+<a name="301"><span class="lineNum">     301 </span><span class="lineNoCov">          0 :         return comm != g_geopm_comm_world_f ?</span></a>
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 :                comm : g_geopm_comm_world_swap_f;</span>
+<a name="303"><span class="lineNum">     303 </span>            :     }</a>
+<span class="lineNum">     304 </span>            : 
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">        152 :     int geopm_pmpi_init_thread(int *argc, char **argv[], int required, int *provided)</span></a>
+<span class="lineNum">     306 </span>            :     {
+<span class="lineNum">     307 </span><span class="lineCov">        152 :         int err = 0;</span>
+<span class="lineNum">     308 </span><span class="lineCov">        152 :         int pmpi_ctl = 0;</span>
+<a name="309"><span class="lineNum">     309 </span>            : </a>
+<span class="lineNum">     310 </span><span class="lineCov">        152 :         err = geopm_env_pmpi_ctl(&amp;pmpi_ctl);</span>
+<span class="lineNum">     311 </span><span class="lineCov">        304 :         if (!err &amp;&amp;</span>
+<span class="lineNum">     312 </span><span class="lineCov">        152 :             pmpi_ctl == GEOPM_CTL_PTHREAD &amp;&amp;</span>
+<a name="313"><span class="lineNum">     313 </span>            :             required &lt; MPI_THREAD_MULTIPLE) {</a>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 :             required = MPI_THREAD_MULTIPLE;</span>
+<span class="lineNum">     315 </span>            :         }
+<span class="lineNum">     316 </span><span class="lineCov">        152 :         err = PMPI_Init_thread(argc, argv, required, provided);</span>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">        304 :         if (!err &amp;&amp;</span></a>
+<span class="lineNum">     318 </span><span class="lineCov">        152 :             pmpi_ctl == GEOPM_CTL_PTHREAD &amp;&amp;</span>
+<span class="lineNum">     319 </span><span class="lineNoCov">          0 :             *provided &lt; MPI_THREAD_MULTIPLE) {</span>
+<span class="lineNum">     320 </span><span class="lineNoCov">          0 :             err = GEOPM_ERROR_RUNTIME;</span>
+<a name="321"><span class="lineNum">     321 </span>            :         }</a>
+<span class="lineNum">     322 </span><span class="lineCov">        152 :         if (!err) {</span>
+<span class="lineNum">     323 </span><span class="lineCov">        152 :             err = PMPI_Barrier(MPI_COMM_WORLD);</span>
+<span class="lineNum">     324 </span>            :         }
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">        152 :         if (!err) {</span></a>
+<span class="lineNum">     326 </span><span class="lineCov">        152 :             if (argv &amp;&amp; *argv &amp;&amp; **argv &amp;&amp; strlen(**argv)) {</span>
+<span class="lineNum">     327 </span><span class="lineCov">        152 :                 err = geopm_pmpi_init(**argv);</span>
+<span class="lineNum">     328 </span>            :             }
+<a name="329"><span class="lineNum">     329 </span>            :             else {</a>
+<span class="lineNum">     330 </span><span class="lineNoCov">          0 :                 err = geopm_pmpi_init(&quot;Fortran&quot;);</span>
+<span class="lineNum">     331 </span>            :             }
+<span class="lineNum">     332 </span>            :         }
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">        124 :         return err;</span></a>
+<a name="334"><span class="lineNum">     334 </span>            :     }</a>
+<span class="lineNum">     335 </span>            : 
+<span class="lineNum">     336 </span><span class="lineCov">        152 :     int geopm_pmpi_finalize(void)</span>
+<a name="337"><span class="lineNum">     337 </span>            :     {</a>
+<span class="lineNum">     338 </span><span class="lineCov">        152 :         int err = 0;</span>
+<span class="lineNum">     339 </span><span class="lineCov">        152 :         int tmp_err = 0;</span>
+<span class="lineNum">     340 </span><span class="lineCov">        152 :         int pmpi_ctl = 0;</span>
+<a name="341"><span class="lineNum">     341 </span><span class="lineCov">        152 :         int do_profile = 0;</span></a>
+<span class="lineNum">     342 </span>            : 
+<span class="lineNum">     343 </span><span class="lineCov">        152 :         err = geopm_env_pmpi_ctl(&amp;pmpi_ctl);</span>
+<span class="lineNum">     344 </span><span class="lineCov">        152 :         if (!err) {</span>
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">        152 :             err = geopm_env_do_profile(&amp;do_profile);</span></a>
+<span class="lineNum">     346 </span>            :         }
+<span class="lineNum">     347 </span><span class="lineCov">        304 :         if (!err &amp;&amp; do_profile &amp;&amp;</span>
+<span class="lineNum">     348 </span><span class="lineCov">        180 :             (!g_ctl || pmpi_ctl == GEOPM_CTL_PTHREAD))</span>
+<a name="349"><span class="lineNum">     349 </span>            :         {</a>
+<span class="lineNum">     350 </span><span class="lineCov">        124 :             PMPI_Barrier(g_geopm_comm_world_swap);</span>
+<span class="lineNum">     351 </span><span class="lineCov">        124 :             err = geopm_prof_shutdown();</span>
+<span class="lineNum">     352 </span>            :         }
+<a name="353"><span class="lineNum">     353 </span>            : </a>
+<span class="lineNum">     354 </span><span class="lineCov">        152 :         if (!err &amp;&amp; g_ctl &amp;&amp; pmpi_ctl == GEOPM_CTL_PTHREAD) {</span>
+<span class="lineNum">     355 </span>            :             void *return_val;
+<span class="lineNum">     356 </span><span class="lineNoCov">          0 :             err = pthread_join(g_ctl_thread, &amp;return_val);</span>
+<a name="357"><span class="lineNum">     357 </span><span class="lineNoCov">          0 :             err = err ? err : ((long)return_val);</span></a>
+<span class="lineNum">     358 </span>            :         }
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span><span class="lineCov">        152 :         if (!err &amp;&amp; g_ctl) {</span>
+<a name="361"><span class="lineNum">     361 </span><span class="lineCov">         28 :             err = geopm_ctl_destroy(g_ctl);</span></a>
+<span class="lineNum">     362 </span>            :         }
+<span class="lineNum">     363 </span>            : 
+<span class="lineNum">     364 </span><span class="lineCov">        152 :         PMPI_Barrier(MPI_COMM_WORLD);</span>
+<a name="365"><span class="lineNum">     365 </span>            : </a>
+<span class="lineNum">     366 </span><span class="lineCov">        152 :         if (g_geopm_comm_world_swap != MPI_COMM_WORLD) {</span>
+<span class="lineNum">     367 </span><span class="lineCov">        136 :             tmp_err = PMPI_Comm_free(&amp;g_geopm_comm_world_swap);</span>
+<span class="lineNum">     368 </span><span class="lineCov">        136 :             err = err ? err : tmp_err;</span>
+<a name="369"><span class="lineNum">     369 </span>            :         }</a>
+<span class="lineNum">     370 </span><span class="lineCov">        152 :         if (g_ppn1_comm != MPI_COMM_NULL) {</span>
+<span class="lineNum">     371 </span><span class="lineNoCov">          0 :             tmp_err = PMPI_Comm_free(&amp;g_ppn1_comm);</span>
+<span class="lineNum">     372 </span><span class="lineNoCov">          0 :             err = err ? err : tmp_err;</span>
+<a name="373"><span class="lineNum">     373 </span>            :         }</a>
+<span class="lineNum">     374 </span><span class="lineCov">        152 :         return err;</span>
+<span class="lineNum">     375 </span>            :     }
+<span class="lineNum">     376 </span>            : }
+<a name="377"><span class="lineNum">     377 </span>            : #endif</a>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

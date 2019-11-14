@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/EnergyEfficientRegion.hpp</title>
+  <title>LCOV - v1.1.0 - src/EnergyEfficientRegion.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">6</td>
-            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">3</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">3</td>
             <td class="headerCovTableEntry">5</td>
-            <td class="headerCovTableEntryMed">80.0 %</td>
+            <td class="headerCovTableEntryLo">60.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -103,53 +103,56 @@
 <a name="33"><span class="lineNum">      33 </span>            : #ifndef ENERGYEFFICIENTREGION_HPP_INCLUDE</a>
 <span class="lineNum">      34 </span>            : #define ENERGYEFFICIENTREGION_HPP_INCLUDE
 <span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span>            : #include &lt;set&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;vector&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;memory&gt;
-<span class="lineNum">      39 </span>            : 
-<span class="lineNum">      40 </span>            : #include &quot;CircularBuffer.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : </a>
-<span class="lineNum">      42 </span>            : namespace geopm
-<span class="lineNum">      43 </span>            : {
-<span class="lineNum">      44 </span>            :     /// @brief Holds the performance history of a Region.
-<a name="45"><span class="lineNum">      45 </span>            :     class EnergyEfficientRegion</a>
-<span class="lineNum">      46 </span>            :     {
-<a name="47"><span class="lineNum">      47 </span>            :         public:</a>
-<span class="lineNum">      48 </span>            :             EnergyEfficientRegion(double freq_min, double freq_max, double freq_step);
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">         12 :             virtual ~EnergyEfficientRegion() = default;</span></a>
-<span class="lineNum">      50 </span>            :             double freq(void) const;
-<span class="lineNum">      51 </span>            :             void update_freq_range(double freq_min, double freq_max, double freq_step);
-<span class="lineNum">      52 </span>            :             void update_exit(double curr_perf_metric);
-<a name="53"><span class="lineNum">      53 </span>            :         private:</a>
-<span class="lineNum">      54 </span>            :             struct FreqContext {
-<span class="lineNum">      55 </span><span class="lineCov">         60 :                 FreqContext()</span>
-<span class="lineNum">      56 </span><span class="lineCov">         30 :                     : num_increase(0)</span>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         60 :                     , perf(NAN)</span></a>
-<span class="lineNum">      58 </span>            :                 {
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">         60 :                 };</span></a>
-<span class="lineNum">      60 </span>            : 
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">        120 :                 virtual ~FreqContext() = default;</span></a>
-<span class="lineNum">      62 </span>            :                 size_t num_increase;
-<span class="lineNum">      63 </span>            :                 double perf;
-<span class="lineNum">      64 </span>            :             };
-<a name="65"><span class="lineNum">      65 </span>            : </a>
-<span class="lineNum">      66 </span>            :             const double M_PERF_MARGIN;
-<span class="lineNum">      67 </span>            :             const size_t M_MAX_INCREASE;
-<span class="lineNum">      68 </span>            : 
-<a name="69"><span class="lineNum">      69 </span>            :             bool m_is_learning;</a>
-<span class="lineNum">      70 </span>            :             uint64_t m_max_step;
-<span class="lineNum">      71 </span>            :             double m_freq_step;
-<span class="lineNum">      72 </span>            :             int m_curr_step;
-<a name="73"><span class="lineNum">      73 </span>            :             double m_freq_min;</a>
-<span class="lineNum">      74 </span>            :             double m_last_perf;
-<span class="lineNum">      75 </span>            :             double m_target;
-<span class="lineNum">      76 </span>            : 
-<a name="77"><span class="lineNum">      77 </span>            :             std::vector&lt;std::unique_ptr&lt;FreqContext&gt; &gt; m_freq_ctx;</a>
-<span class="lineNum">      78 </span>            :     };
-<span class="lineNum">      79 </span>            : 
-<span class="lineNum">      80 </span>            : } // namespace geopm
-<a name="81"><span class="lineNum">      81 </span>            : </a>
-<span class="lineNum">      82 </span>            : #endif
+<span class="lineNum">      36 </span>            : #include &lt;cmath&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;set&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      39 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      40 </span>            : 
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;CircularBuffer.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : namespace geopm
+<a name="44"><span class="lineNum">      44 </span>            : {</a>
+<a name="45"><span class="lineNum">      45 </span>            :     /// @brief Holds the performance history of a Region.</a>
+<span class="lineNum">      46 </span><span class="lineCov">         79 :     class EnergyEfficientRegion</span>
+<a name="47"><span class="lineNum">      47 </span>            :     {</a>
+<span class="lineNum">      48 </span>            :         public:
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">         79 :             virtual ~EnergyEfficientRegion() = default;</span></a>
+<span class="lineNum">      50 </span>            :             virtual double freq(void) const = 0;
+<span class="lineNum">      51 </span>            :             virtual void update_freq_range(double freq_min, double freq_max, double freq_step) = 0;
+<span class="lineNum">      52 </span>            :             virtual void update_exit(double curr_perf_metric) = 0;
+<a name="53"><span class="lineNum">      53 </span>            :             virtual void disable(void) = 0;</a>
+<span class="lineNum">      54 </span>            :             virtual bool is_learning(void) const = 0;
+<span class="lineNum">      55 </span>            :             static std::unique_ptr&lt;EnergyEfficientRegion&gt; make_unique(double freq_min, double freq_max,
+<span class="lineNum">      56 </span>            :                                                                       double freq_step, double perf_margin);
+<a name="57"><span class="lineNum">      57 </span>            :     };</a>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :     class EnergyEfficientRegionImp : public EnergyEfficientRegion
+<span class="lineNum">      60 </span>            :     {
+<a name="61"><span class="lineNum">      61 </span>            :         public:</a>
+<a name="62"><span class="lineNum">      62 </span>            :             EnergyEfficientRegionImp(double freq_min, double freq_max,</a>
+<span class="lineNum">      63 </span>            :                                      double freq_step, double perf_margin);
+<span class="lineNum">      64 </span><span class="lineCov">         47 :             virtual ~EnergyEfficientRegionImp() = default;</span>
+<a name="65"><span class="lineNum">      65 </span>            :             double freq(void) const override;</a>
+<span class="lineNum">      66 </span>            :             void update_freq_range(double freq_min, double freq_max, double freq_step) override;
+<span class="lineNum">      67 </span>            :             void update_exit(double curr_perf_metric) override;
+<span class="lineNum">      68 </span>            :             void disable(void) override;
+<a name="69"><span class="lineNum">      69 </span>            :             bool is_learning(void) const override;</a>
+<span class="lineNum">      70 </span>            :         private:
+<span class="lineNum">      71 </span>            :             const int M_MIN_PERF_SAMPLE;
+<span class="lineNum">      72 </span>            :             bool m_is_learning;
+<a name="73"><span class="lineNum">      73 </span>            :             uint64_t m_max_step;</a>
+<span class="lineNum">      74 </span>            :             double m_freq_step;
+<span class="lineNum">      75 </span>            :             int m_curr_step;
+<span class="lineNum">      76 </span>            :             double m_freq_min;
+<a name="77"><span class="lineNum">      77 </span>            :             double m_target;</a>
+<span class="lineNum">      78 </span>            :             std::vector&lt;std::unique_ptr&lt;CircularBuffer&lt;double&gt; &gt; &gt; m_freq_perf;
+<span class="lineNum">      79 </span>            :             bool m_is_disabled;
+<span class="lineNum">      80 </span>            :             double m_perf_margin;
+<a name="81"><span class="lineNum">      81 </span>            :     };</a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            : } // namespace geopm
+<span class="lineNum">      84 </span>            : 
+<a name="85"><span class="lineNum">      85 </span>            : #endif</a>
 </pre>
       </td>
     </tr>

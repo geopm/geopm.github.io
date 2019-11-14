@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/Tracer.cpp</title>
+  <title>LCOV - v1.1.0 - src/Tracer.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">126</td>
-            <td class="headerCovTableEntry">138</td>
-            <td class="headerCovTableEntryHi">91.3 %</td>
+            <td class="headerCovTableEntry">119</td>
+            <td class="headerCovTableEntry">124</td>
+            <td class="headerCovTableEntryHi">96.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">12</td>
-            <td class="headerCovTableEntry">13</td>
-            <td class="headerCovTableEntryHi">92.3 %</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntryHi">90.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -100,276 +100,252 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;unistd.h&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;limits.h&gt;
-<span class="lineNum">      35 </span>            : #include &lt;string.h&gt;
-<span class="lineNum">      36 </span>            : #include &lt;cctype&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;iomanip&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;sstream&gt;
-<span class="lineNum">      39 </span>            : #include &lt;iostream&gt;
-<span class="lineNum">      40 </span>            : #include &lt;algorithm&gt;
-<a name="41"><span class="lineNum">      41 </span>            : #include &lt;time.h&gt;</a>
-<span class="lineNum">      42 </span>            : 
-<span class="lineNum">      43 </span>            : #include &quot;Tracer.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;PlatformIO.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;PlatformTopo.hpp&quot;</a>
-<span class="lineNum">      46 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      47 </span>            : #include &quot;Helper.hpp&quot;
-<span class="lineNum">      48 </span>            : #include &quot;geopm_env.h&quot;
-<a name="49"><span class="lineNum">      49 </span>            : #include &quot;geopm_hash.h&quot;</a>
-<span class="lineNum">      50 </span>            : #include &quot;geopm_version.h&quot;
-<span class="lineNum">      51 </span>            : #include &quot;geopm.h&quot;
-<span class="lineNum">      52 </span>            : #include &quot;geopm_internal.h&quot;
-<a name="53"><span class="lineNum">      53 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      54 </span>            : 
-<a name="55"><span class="lineNum">      55 </span>            : namespace geopm</a>
-<span class="lineNum">      56 </span>            : {
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         76 :     TracerImp::TracerImp(const std::string &amp;start_time)</span></a>
-<span class="lineNum">      58 </span><span class="lineCov">        152 :         : TracerImp(start_time, geopm_env_trace(), hostname(), geopm_env_agent(),</span>
-<span class="lineNum">      59 </span><span class="lineCov">         76 :                     geopm_env_profile(), geopm_env_do_trace(), platform_io(), platform_topo(),</span>
-<span class="lineNum">      60 </span><span class="lineCov">        304 :                     geopm_env_trace_signals(), 16)</span>
-<a name="61"><span class="lineNum">      61 </span>            :     {</a>
-<span class="lineNum">      62 </span>            : 
-<a name="63"><span class="lineNum">      63 </span><span class="lineCov">         76 :     }</span></a>
-<span class="lineNum">      64 </span>            : 
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         82 :     TracerImp::TracerImp(const std::string &amp;start_time,</span></a>
-<span class="lineNum">      66 </span>            :                          const std::string &amp;file_path,
-<span class="lineNum">      67 </span>            :                          const std::string &amp;hostname,
-<span class="lineNum">      68 </span>            :                          const std::string &amp;agent,
-<a name="69"><span class="lineNum">      69 </span>            :                          const std::string &amp;profile_name,</a>
-<span class="lineNum">      70 </span>            :                          bool do_trace,
-<span class="lineNum">      71 </span>            :                          PlatformIO &amp;platform_io,
-<span class="lineNum">      72 </span>            :                          PlatformTopo &amp;platform_topo,
-<a name="73"><span class="lineNum">      73 </span>            :                          const std::string &amp;env_column,</a>
-<span class="lineNum">      74 </span><span class="lineCov">         37 :                          int precision)</span>
-<span class="lineNum">      75 </span>            :         : m_file_path(file_path)
-<span class="lineNum">      76 </span>            :         , m_hostname(hostname)
-<a name="77"><span class="lineNum">      77 </span>            :         , m_is_trace_enabled(do_trace)</a>
-<span class="lineNum">      78 </span>            :         , m_buffer_limit(134217728) // 128 MiB
-<span class="lineNum">      79 </span>            :         , m_platform_io(platform_io)
-<span class="lineNum">      80 </span>            :         , m_platform_topo(platform_topo)
-<a name="81"><span class="lineNum">      81 </span>            :         , m_env_column(env_column)</a>
-<span class="lineNum">      82 </span><span class="lineCov">         82 :         , m_precision(precision)</span>
-<span class="lineNum">      83 </span>            :     {
-<span class="lineNum">      84 </span><span class="lineCov">         82 :         if (m_is_trace_enabled) {</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        108 :             std::ostringstream output_path;</span></a>
-<span class="lineNum">      86 </span><span class="lineCov">         54 :             output_path &lt;&lt; m_file_path &lt;&lt; &quot;-&quot; &lt;&lt; m_hostname;</span>
-<span class="lineNum">      87 </span><span class="lineCov">         54 :             m_stream.open(output_path.str());</span>
-<span class="lineNum">      88 </span><span class="lineCov">         54 :             if (!m_stream.good()) {</span>
-<a name="89"><span class="lineNum">      89 </span><span class="lineNoCov">          0 :                 std::cerr &lt;&lt; &quot;Warning: unable to open trace file '&quot; &lt;&lt; output_path.str()</span></a>
-<span class="lineNum">      90 </span><span class="lineNoCov">          0 :                           &lt;&lt; &quot;': &quot; &lt;&lt; strerror(errno) &lt;&lt; std::endl;</span>
-<span class="lineNum">      91 </span><span class="lineNoCov">          0 :                 m_is_trace_enabled = false;</span>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;Tracer.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;unistd.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;limits.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;string.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;cctype&gt;
+<span class="lineNum">      39 </span>            : #include &lt;iomanip&gt;
+<span class="lineNum">      40 </span>            : #include &lt;sstream&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;iostream&gt;</a>
+<span class="lineNum">      42 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      43 </span>            : #include &lt;time.h&gt;
+<span class="lineNum">      44 </span>            : 
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;PlatformIO.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<span class="lineNum">      47 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      48 </span>            : #include &quot;Helper.hpp&quot;
+<a name="49"><span class="lineNum">      49 </span>            : #include &quot;Environment.hpp&quot;</a>
+<span class="lineNum">      50 </span>            : #include &quot;geopm_hash.h&quot;
+<span class="lineNum">      51 </span>            : #include &quot;geopm_version.h&quot;
+<span class="lineNum">      52 </span>            : #include &quot;geopm.h&quot;
+<a name="53"><span class="lineNum">      53 </span>            : #include &quot;geopm_internal.h&quot;</a>
+<span class="lineNum">      54 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      55 </span>            : 
+<a name="56"><span class="lineNum">      56 </span>            : namespace geopm</a>
+<a name="57"><span class="lineNum">      57 </span>            : {</a>
+<span class="lineNum">      58 </span><span class="lineCov">         32 :     TracerImp::TracerImp(const std::string &amp;start_time)</span>
+<span class="lineNum">      59 </span><span class="lineCov">         64 :         : TracerImp(start_time, environment().trace(), hostname(),</span>
+<span class="lineNum">      60 </span><span class="lineCov">         32 :                     environment().do_trace(), platform_io(), platform_topo(),</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">        128 :                     environment().trace_signals())</span></a>
+<span class="lineNum">      62 </span>            :     {
+<span class="lineNum">      63 </span>            : 
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">         32 :     }</span></a>
+<a name="65"><span class="lineNum">      65 </span>            : </a>
+<span class="lineNum">      66 </span><span class="lineCov">         35 :     TracerImp::TracerImp(const std::string &amp;start_time,</span>
+<span class="lineNum">      67 </span>            :                          const std::string &amp;file_path,
+<span class="lineNum">      68 </span>            :                          const std::string &amp;hostname,
+<a name="69"><span class="lineNum">      69 </span>            :                          bool do_trace,</a>
+<span class="lineNum">      70 </span>            :                          PlatformIO &amp;platform_io,
+<span class="lineNum">      71 </span>            :                          const PlatformTopo &amp;platform_topo,
+<span class="lineNum">      72 </span><span class="lineCov">         35 :                          const std::string &amp;env_column)</span>
+<a name="73"><span class="lineNum">      73 </span>            :         : m_is_trace_enabled(do_trace)</a>
+<span class="lineNum">      74 </span>            :         , m_platform_io(platform_io)
+<span class="lineNum">      75 </span>            :         , m_platform_topo(platform_topo)
+<span class="lineNum">      76 </span>            :         , m_env_column(env_column)
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         35 :         , M_BUFFER_SIZE(134217728) // 128 MiB</span></a>
+<span class="lineNum">      78 </span>            :     {
+<span class="lineNum">      79 </span><span class="lineCov">         35 :         if (m_is_trace_enabled) {</span>
+<span class="lineNum">      80 </span><span class="lineCov">         26 :             m_csv = make_unique&lt;CSVImp&gt;(file_path, hostname, start_time, M_BUFFER_SIZE);</span>
+<a name="81"><span class="lineNum">      81 </span>            :         }</a>
+<a name="82"><span class="lineNum">      82 </span><span class="lineCov">         35 :     }</span></a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineCov">         35 :     void TracerImp::columns(const std::vector&lt;std::string&gt; &amp;agent_cols,</span>
+<a name="85"><span class="lineNum">      85 </span>            :                             const std::vector&lt;std::function&lt;std::string(double)&gt; &gt; &amp;col_formats)</a>
+<span class="lineNum">      86 </span>            :     {
+<span class="lineNum">      87 </span><span class="lineCov">         35 :         if (m_is_trace_enabled) {</span>
+<span class="lineNum">      88 </span><span class="lineCov">         49 :             if (col_formats.size() != 0 &amp;&amp;</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         23 :                 col_formats.size() != agent_cols.size()) {</span></a>
+<span class="lineNum">      90 </span>            :                 throw Exception(&quot;TracerImp::columns(): input vectors not of equal size&quot;,
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
 <span class="lineNum">      92 </span>            :             }
-<a name="93"><span class="lineNum">      93 </span>            : </a>
-<span class="lineNum">      94 </span>            :             // Header
-<span class="lineNum">      95 </span><span class="lineCov">         29 :             m_buffer &lt;&lt; &quot;# \&quot;geopm_version\&quot; : \&quot;&quot; &lt;&lt; geopm_version() &lt;&lt; &quot;\&quot;,\n&quot;</span>
-<span class="lineNum">      96 </span><span class="lineCov">         29 :                      &lt;&lt; &quot;# \&quot;start_time\&quot; : \&quot;&quot; &lt;&lt; start_time &lt;&lt; &quot;\&quot;,\n&quot;</span>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         29 :                      &lt;&lt; &quot;# \&quot;profile_name\&quot; : \&quot;&quot; &lt;&lt; profile_name &lt;&lt; &quot;\&quot;,\n&quot;</span></a>
-<span class="lineNum">      98 </span><span class="lineCov">         58 :                      &lt;&lt; &quot;# \&quot;node_name\&quot; : \&quot;&quot; &lt;&lt; m_hostname &lt;&lt; &quot;\&quot;,\n&quot;</span>
-<span class="lineNum">      99 </span><span class="lineCov">         54 :                      &lt;&lt; &quot;# \&quot;agent\&quot; : \&quot;&quot; &lt;&lt; agent &lt;&lt; &quot;\&quot;\n&quot;;</span>
-<span class="lineNum">     100 </span>            :         }
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         82 :     }</span></a>
-<span class="lineNum">     102 </span>            : 
-<span class="lineNum">     103 </span><span class="lineCov">        240 :     TracerImp::~TracerImp()</span>
-<span class="lineNum">     104 </span>            :     {
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         82 :         if (m_stream.good() &amp;&amp; m_is_trace_enabled) {</span></a>
-<span class="lineNum">     106 </span><span class="lineNoCov">          0 :             m_stream &lt;&lt; m_buffer.str();</span>
-<span class="lineNum">     107 </span><span class="lineNoCov">          0 :             m_stream.close();</span>
-<span class="lineNum">     108 </span>            :         }
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        158 :     }</span></a>
-<span class="lineNum">     110 </span>            : 
-<span class="lineNum">     111 </span><span class="lineCov">         82 :     void TracerImp::columns(const std::vector&lt;std::string&gt; &amp;agent_cols)</span>
-<span class="lineNum">     112 </span>            :     {
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         82 :         if (m_is_trace_enabled) {</span></a>
-<span class="lineNum">     114 </span><span class="lineCov">         54 :             bool first = true;</span>
-<span class="lineNum">     115 </span>            : 
-<span class="lineNum">     116 </span>            :             // default columns
-<a name="117"><span class="lineNum">     117 </span>            :             std::vector&lt;PlatformIO::m_request_s&gt; base_columns({</a>
-<span class="lineNum">     118 </span>            :                     {&quot;TIME&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     119 </span>            :                     {&quot;EPOCH_COUNT&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     120 </span>            :                     {&quot;REGION_HASH&quot;, GEOPM_DOMAIN_BOARD, 0},
-<a name="121"><span class="lineNum">     121 </span>            :                     {&quot;REGION_HINT&quot;, GEOPM_DOMAIN_BOARD, 0},</a>
-<span class="lineNum">     122 </span>            :                     {&quot;REGION_PROGRESS&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     123 </span>            :                     {&quot;REGION_RUNTIME&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     124 </span>            :                     {&quot;ENERGY_PACKAGE&quot;, GEOPM_DOMAIN_BOARD, 0},
-<a name="125"><span class="lineNum">     125 </span>            :                     {&quot;ENERGY_DRAM&quot;, GEOPM_DOMAIN_BOARD, 0},</a>
-<span class="lineNum">     126 </span>            :                     {&quot;POWER_PACKAGE&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     127 </span>            :                     {&quot;POWER_DRAM&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     128 </span>            :                     {&quot;FREQUENCY&quot;, GEOPM_DOMAIN_BOARD, 0},
-<a name="129"><span class="lineNum">     129 </span>            :                     {&quot;CYCLES_THREAD&quot;, GEOPM_DOMAIN_BOARD, 0},</a>
-<span class="lineNum">     130 </span>            :                     {&quot;CYCLES_REFERENCE&quot;, GEOPM_DOMAIN_BOARD, 0},
-<span class="lineNum">     131 </span><span class="lineCov">        108 :                     {&quot;TEMPERATURE_CORE&quot;, GEOPM_DOMAIN_BOARD, 0}});</span>
-<span class="lineNum">     132 </span>            :             // for region entry/exit, make sure region index is known
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         54 :             m_region_hash_idx = 2;</span></a>
-<span class="lineNum">     134 </span><span class="lineCov">         54 :             m_region_hint_idx = 3;</span>
-<span class="lineNum">     135 </span><span class="lineCov">         54 :             m_region_progress_idx = 4;</span>
-<span class="lineNum">     136 </span><span class="lineCov">         54 :             m_region_runtime_idx = 5;</span>
-<a name="137"><span class="lineNum">     137 </span>            : </a>
-<span class="lineNum">     138 </span>            :             // extra columns from environment
-<span class="lineNum">     139 </span><span class="lineCov">         66 :             for (const auto &amp;extra_signal : string_split(m_env_column, &quot;,&quot;)) {</span>
-<span class="lineNum">     140 </span><span class="lineCov">         24 :                 std::vector&lt;std::string&gt; signal_domain = string_split(extra_signal, &quot;@&quot;);</span>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">         12 :                 if (signal_domain.size() == 2) {</span></a>
-<span class="lineNum">     142 </span><span class="lineCov">          6 :                     int domain_type = m_platform_topo.domain_name_to_type(signal_domain[1]);</span>
-<span class="lineNum">     143 </span><span class="lineCov">          6 :                     int num_domain = m_platform_topo.num_domain(domain_type);</span>
-<span class="lineNum">     144 </span><span class="lineCov">         18 :                     for (int domain_idx = 0; domain_idx != num_domain; ++domain_idx) {</span>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         12 :                         base_columns.push_back({signal_domain[0], domain_type, domain_idx});</span></a>
-<span class="lineNum">     146 </span>            :                     }
+<a name="93"><span class="lineNum">      93 </span>            :             // default columns</a>
+<span class="lineNum">      94 </span>            :             std::vector&lt;struct m_request_s&gt; base_columns({
+<span class="lineNum">      95 </span>            :                     {&quot;TIME&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">      96 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;TIME&quot;)},</span>
+<a name="97"><span class="lineNum">      97 </span>            :                     {&quot;EPOCH_COUNT&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">      98 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;EPOCH_COUNT&quot;)},</span>
+<span class="lineNum">      99 </span>            :                     {&quot;REGION_HASH&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     100 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;REGION_HASH&quot;)},</span>
+<a name="101"><span class="lineNum">     101 </span>            :                     {&quot;REGION_HINT&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">     102 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;REGION_HINT&quot;)},</span>
+<span class="lineNum">     103 </span>            :                     {&quot;REGION_PROGRESS&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     104 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;REGION_PROGRESS&quot;)},</span>
+<a name="105"><span class="lineNum">     105 </span>            :                     {&quot;REGION_COUNT&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">     106 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;REGION_COUNT&quot;)},</span>
+<span class="lineNum">     107 </span>            :                     {&quot;REGION_RUNTIME&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     108 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;REGION_RUNTIME&quot;)},</span>
+<a name="109"><span class="lineNum">     109 </span>            :                     {&quot;ENERGY_PACKAGE&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">     110 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;ENERGY_PACKAGE&quot;)},</span>
+<span class="lineNum">     111 </span>            :                     {&quot;ENERGY_DRAM&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     112 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;ENERGY_DRAM&quot;)},</span>
+<a name="113"><span class="lineNum">     113 </span>            :                     {&quot;POWER_PACKAGE&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">     114 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;POWER_PACKAGE&quot;)},</span>
+<span class="lineNum">     115 </span>            :                     {&quot;POWER_DRAM&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     116 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;POWER_DRAM&quot;)},</span>
+<a name="117"><span class="lineNum">     117 </span>            :                     {&quot;FREQUENCY&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">     118 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;FREQUENCY&quot;)},</span>
+<span class="lineNum">     119 </span>            :                     {&quot;CYCLES_THREAD&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     120 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;CYCLES_THREAD&quot;)},</span>
+<a name="121"><span class="lineNum">     121 </span>            :                     {&quot;CYCLES_REFERENCE&quot;, GEOPM_DOMAIN_BOARD, 0,</a>
+<span class="lineNum">     122 </span><span class="lineCov">         26 :                      m_platform_io.format_function(&quot;CYCLES_REFERENCE&quot;)},</span>
+<span class="lineNum">     123 </span>            :                     {&quot;TEMPERATURE_CORE&quot;, GEOPM_DOMAIN_BOARD, 0,
+<span class="lineNum">     124 </span><span class="lineCov">        416 :                      m_platform_io.format_function(&quot;TEMPERATURE_CORE&quot;)}});</span>
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span><span class="lineCov">         26 :             m_region_hash_idx = 2;</span>
+<span class="lineNum">     127 </span><span class="lineCov">         26 :             m_region_hint_idx = 3;</span>
+<span class="lineNum">     128 </span><span class="lineCov">         26 :             m_region_progress_idx = 4;</span>
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         26 :             m_region_runtime_idx = 6;</span></a>
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            :             // extra columns from environment
+<span class="lineNum">     132 </span><span class="lineCov">         52 :             std::vector&lt;std::string&gt; env_sig = env_signals();</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         52 :             std::vector&lt;int&gt; env_dom = env_domains();</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">         52 :             std::vector&lt;std::function&lt;std::string(double)&gt; &gt; env_form = env_formats();</span>
+<span class="lineNum">     135 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     136 </span><span class="lineCov">         52 :             if (env_sig.size() != env_dom.size() ||</span>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         26 :                 env_sig.size() != env_form.size()) {</span></a>
+<span class="lineNum">     138 </span>            :                 throw Exception(&quot;Tracer::columns(): private functions returned different size vectors&quot;,
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     140 </span>            :             }
+<a name="141"><span class="lineNum">     141 </span>            : #endif</a>
+<span class="lineNum">     142 </span><span class="lineCov">         26 :             size_t num_sig = env_sig.size();</span>
+<span class="lineNum">     143 </span><span class="lineCov">         32 :             for (size_t sig_idx = 0; sig_idx != num_sig; ++sig_idx) {</span>
+<span class="lineNum">     144 </span><span class="lineCov">          6 :                 int num_dom = m_platform_topo.num_domain(env_dom.at(sig_idx));</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         15 :                 for (int dom_idx = 0; dom_idx != num_dom; ++dom_idx) {</span></a>
+<span class="lineNum">     146 </span><span class="lineCov">          9 :                     base_columns.push_back({env_sig.at(sig_idx), env_dom.at(sig_idx), dom_idx, env_form.at(sig_idx)});</span>
 <span class="lineNum">     147 </span>            :                 }
-<span class="lineNum">     148 </span><span class="lineCov">          6 :                 else if (signal_domain.size() == 1) {</span>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          6 :                     base_columns.push_back({extra_signal, GEOPM_DOMAIN_BOARD, 0});</span></a>
-<span class="lineNum">     150 </span>            :                 }
-<span class="lineNum">     151 </span>            :                 else {
-<span class="lineNum">     152 </span>            :                     throw Exception(&quot;TracerImp::columns(): Environment trace extension contains signals with multiple \&quot;@\&quot; characters.&quot;,
-<a name="153"><span class="lineNum">     153 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     154 </span>            :                 }
-<span class="lineNum">     155 </span>            :             }
-<span class="lineNum">     156 </span>            : 
-<a name="157"><span class="lineNum">     157 </span>            :             // set up columns to be sampled by TracerImp</a>
-<span class="lineNum">     158 </span><span class="lineCov">        828 :             for (const auto &amp;col : base_columns) {</span>
-<span class="lineNum">     159 </span><span class="lineCov">       1963 :                 m_column_idx.push_back(m_platform_io.push_signal(col.name,</span>
-<span class="lineNum">     160 </span><span class="lineCov">        774 :                                                                  col.domain_type,</span>
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">       1189 :                                                                  col.domain_idx));</span></a>
-<span class="lineNum">     162 </span><span class="lineCov">       2322 :                 if (col.name.find(&quot;#&quot;) != std::string::npos ||</span>
-<span class="lineNum">     163 </span><span class="lineCov">       1494 :                     col.name == &quot;REGION_HASH&quot; || col.name == &quot;REGION_HINT&quot;) {</span>
-<span class="lineNum">     164 </span><span class="lineCov">        108 :                     m_hex_column.insert(m_column_idx.back());</span>
-<a name="165"><span class="lineNum">     165 </span>            :                 }</a>
-<span class="lineNum">     166 </span><span class="lineCov">        774 :                 if (first) {</span>
-<span class="lineNum">     167 </span><span class="lineCov">         54 :                     m_buffer &lt;&lt; pretty_name(col);</span>
-<span class="lineNum">     168 </span><span class="lineCov">         54 :                     first = false;</span>
-<a name="169"><span class="lineNum">     169 </span>            :                 }</a>
-<span class="lineNum">     170 </span>            :                 else {
-<span class="lineNum">     171 </span><span class="lineCov">        720 :                     m_buffer &lt;&lt; &quot;|&quot; &lt;&lt; pretty_name(col);</span>
-<span class="lineNum">     172 </span>            :                 }
-<a name="173"><span class="lineNum">     173 </span>            :             }</a>
-<span class="lineNum">     174 </span>            : 
-<span class="lineNum">     175 </span>            :             // columns from agent; will be sampled by agent
-<span class="lineNum">     176 </span><span class="lineCov">        114 :             for (const auto &amp;name : agent_cols) {</span>
-<a name="177"><span class="lineNum">     177 </span><span class="lineCov">         60 :                 m_buffer &lt;&lt; &quot;|&quot; &lt;&lt; name;</span></a>
-<span class="lineNum">     178 </span>            :             }
-<span class="lineNum">     179 </span><span class="lineCov">         54 :             m_buffer &lt;&lt; &quot;\n&quot;;</span>
-<span class="lineNum">     180 </span>            : 
-<a name="181"><span class="lineNum">     181 </span><span class="lineCov">         54 :             m_last_telemetry.resize(base_columns.size() + agent_cols.size());</span></a>
-<span class="lineNum">     182 </span>            :         }
-<a name="183"><span class="lineNum">     183 </span><span class="lineCov">         82 :     }</span></a>
-<span class="lineNum">     184 </span>            : 
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     440431 :     void TracerImp::write_line(void)</span></a>
-<span class="lineNum">     186 </span>            :     {
-<span class="lineNum">     187 </span><span class="lineCov">     440431 :         m_buffer &lt;&lt; std::setprecision(m_precision) &lt;&lt; std::scientific;</span>
-<span class="lineNum">     188 </span><span class="lineCov">    7046952 :         for (size_t idx = 0; idx &lt; m_last_telemetry.size(); ++idx) {</span>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">    6606521 :             if (idx != 0) {</span></a>
-<span class="lineNum">     190 </span><span class="lineCov">    6166090 :                 m_buffer &lt;&lt; &quot;|&quot;;</span>
-<span class="lineNum">     191 </span>            :             }
-<span class="lineNum">     192 </span><span class="lineCov">    6606521 :             if (m_hex_column.find(m_column_idx[idx]) != m_hex_column.end()) {</span>
-<a name="193"><span class="lineNum">     193 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     194 </span><span class="lineCov">    2202155 :                 if (((uint64_t) m_region_hash_idx == idx ||</span>
-<span class="lineNum">     195 </span><span class="lineCov">    1761724 :                      (uint64_t) m_region_hint_idx == idx) &amp;&amp;</span>
-<span class="lineNum">     196 </span><span class="lineCov">     880862 :                     (uint64_t) m_last_telemetry[idx] == GEOPM_REGION_HASH_INVALID) {</span>
-<a name="197"><span class="lineNum">     197 </span>            :                     throw Exception(&quot;TracerImp::write_line(): Invalid hash or hint value detected.&quot;,</a>
-<span class="lineNum">     198 </span><span class="lineNoCov">          0 :                                     GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     199 </span>            :                 }
-<span class="lineNum">     200 </span>            : #endif
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">     880862 :                 m_buffer &lt;&lt; &quot;0x&quot; &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(16) &lt;&lt; std::fixed;</span></a>
-<span class="lineNum">     202 </span><span class="lineCov">     880862 :                 m_buffer &lt;&lt; (uint64_t) m_last_telemetry[idx];</span>
-<span class="lineNum">     203 </span><span class="lineCov">     880862 :                 m_buffer &lt;&lt; std::setfill('\0') &lt;&lt; std::setw(0) &lt;&lt; std::scientific;</span>
-<span class="lineNum">     204 </span>            :             }
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">    5725659 :             else if ((int)idx == m_region_progress_idx) {</span></a>
-<span class="lineNum">     206 </span><span class="lineCov">     440431 :                 m_buffer &lt;&lt; std::setprecision(1) &lt;&lt; std::fixed</span>
-<span class="lineNum">     207 </span><span class="lineCov">     690162 :                          &lt;&lt; m_last_telemetry[idx]</span>
-<span class="lineNum">     208 </span><span class="lineCov">     690162 :                          &lt;&lt; std::setprecision(m_precision) &lt;&lt; std::scientific;</span>
-<a name="209"><span class="lineNum">     209 </span>            :             }</a>
-<span class="lineNum">     210 </span>            :             else {
-<span class="lineNum">     211 </span><span class="lineCov">    5285228 :                 m_buffer &lt;&lt; m_last_telemetry[idx];</span>
-<span class="lineNum">     212 </span>            :             }
-<a name="213"><span class="lineNum">     213 </span>            :         }</a>
-<span class="lineNum">     214 </span><span class="lineCov">     440431 :         m_buffer &lt;&lt; &quot;\n&quot;;</span>
-<a name="215"><span class="lineNum">     215 </span><span class="lineCov">     440431 :     }</span></a>
-<span class="lineNum">     216 </span>            : 
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">     625546 :     void TracerImp::update(const std::vector&lt;double&gt; &amp;agent_values,</span></a>
-<span class="lineNum">     218 </span>            :                            std::list&lt;geopm_region_info_s&gt; region_entry_exit)
-<span class="lineNum">     219 </span>            :     {
-<span class="lineNum">     220 </span><span class="lineCov">     625546 :         if (m_is_trace_enabled) {</span>
-<a name="221"><span class="lineNum">     221 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     222 </span><span class="lineCov">     436585 :             if (m_column_idx.size() == 0) {</span>
-<span class="lineNum">     223 </span>            :                 throw Exception(&quot;TracerImp::update(): No columns added to trace.&quot;,
-<span class="lineNum">     224 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<a name="225"><span class="lineNum">     225 </span>            :             }</a>
-<span class="lineNum">     226 </span><span class="lineCov">     436585 :             if (m_column_idx.size() + agent_values.size() != m_last_telemetry.size()) {</span>
-<span class="lineNum">     227 </span>            :                 throw Exception(&quot;TracerImp::update(): Last telemetry buffer not sized correctly.&quot;,
-<span class="lineNum">     228 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<a name="229"><span class="lineNum">     229 </span>            :             }</a>
-<span class="lineNum">     230 </span>            : #endif
-<span class="lineNum">     231 </span>            :             // save values to be reused for region entry/exit
-<span class="lineNum">     232 </span><span class="lineCov">     436585 :             size_t col_idx = 0;</span>
-<a name="233"><span class="lineNum">     233 </span><span class="lineCov">   12660989 :             for (; col_idx &lt; m_column_idx.size(); ++col_idx) {</span></a>
-<span class="lineNum">     234 </span><span class="lineCov">    6112202 :                 m_last_telemetry[col_idx] = m_platform_io.sample(m_column_idx[col_idx]);</span>
-<span class="lineNum">     235 </span>            :             }
-<span class="lineNum">     236 </span><span class="lineCov">     873174 :             for (const auto &amp;val : agent_values) {</span>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">     436589 :                 m_last_telemetry[col_idx] = val;</span></a>
-<span class="lineNum">     238 </span><span class="lineCov">     436589 :                 ++col_idx;</span>
-<span class="lineNum">     239 </span>            :             }
-<span class="lineNum">     240 </span>            :             // save region id and progress, which will get written over by entry/exit
-<a name="241"><span class="lineNum">     241 </span><span class="lineCov">     436585 :             double region_hash = m_last_telemetry[m_region_hash_idx];</span></a>
-<span class="lineNum">     242 </span><span class="lineCov">     436585 :             double region_hint = m_last_telemetry[m_region_hint_idx];</span>
-<span class="lineNum">     243 </span><span class="lineCov">     436585 :             double region_progress = m_last_telemetry[m_region_progress_idx];</span>
-<span class="lineNum">     244 </span><span class="lineCov">     436585 :             double region_runtime = m_last_telemetry[m_region_runtime_idx];</span>
-<a name="245"><span class="lineNum">     245 </span>            : </a>
-<span class="lineNum">     246 </span>            :             // insert samples for region entry/exit
-<span class="lineNum">     247 </span><span class="lineCov">     436585 :             size_t idx = 0;</span>
-<span class="lineNum">     248 </span><span class="lineCov">     440693 :             for (const auto &amp;reg : region_entry_exit) {</span>
-<a name="249"><span class="lineNum">     249 </span>            :                 // skip the last region entry if it matches the</a>
-<span class="lineNum">     250 </span>            :                 // sampled telemetry region hash, hint, and progress
-<span class="lineNum">     251 </span><span class="lineCov">       6757 :                 if (!((idx == region_entry_exit.size() - 1) &amp;&amp;</span>
-<span class="lineNum">     252 </span><span class="lineCov">        850 :                       region_progress == reg.progress &amp;&amp;</span>
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">        318 :                       region_progress == 0.0 &amp;&amp;</span></a>
-<span class="lineNum">     254 </span><span class="lineCov">        318 :                       region_hash == reg.hash &amp;&amp;</span>
-<span class="lineNum">     255 </span><span class="lineCov">       2277 :                       region_hint == reg.hint )) {</span>
-<span class="lineNum">     256 </span><span class="lineCov">       3846 :                     m_last_telemetry[m_region_hash_idx] = reg.hash;</span>
-<a name="257"><span class="lineNum">     257 </span><span class="lineCov">       3846 :                     m_last_telemetry[m_region_hint_idx] = reg.hint;</span></a>
-<span class="lineNum">     258 </span><span class="lineCov">       3846 :                     m_last_telemetry[m_region_progress_idx] = reg.progress;</span>
-<span class="lineNum">     259 </span><span class="lineCov">       3846 :                     m_last_telemetry[m_region_runtime_idx] = reg.runtime;</span>
-<span class="lineNum">     260 </span><span class="lineCov">       3846 :                     write_line();</span>
-<a name="261"><span class="lineNum">     261 </span>            :                 }</a>
-<span class="lineNum">     262 </span><span class="lineCov">       4108 :                 ++idx;</span>
-<span class="lineNum">     263 </span>            :             }
-<span class="lineNum">     264 </span>            :             // print sampled data last
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">     436585 :             m_last_telemetry[m_region_hash_idx] = region_hash;</span></a>
-<span class="lineNum">     266 </span><span class="lineCov">     436585 :             m_last_telemetry[m_region_hint_idx] = region_hint;</span>
-<span class="lineNum">     267 </span><span class="lineCov">     436585 :             m_last_telemetry[m_region_progress_idx] = region_progress;</span>
-<span class="lineNum">     268 </span><span class="lineCov">     436585 :             m_last_telemetry[m_region_runtime_idx] = region_runtime;</span>
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">     436585 :             write_line();</span></a>
-<span class="lineNum">     270 </span>            :         }
-<span class="lineNum">     271 </span>            : 
-<span class="lineNum">     272 </span>            :         // if buffer is full, flush to file
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">     625546 :         if (m_buffer.tellp() &gt; m_buffer_limit) {</span></a>
-<span class="lineNum">     274 </span><span class="lineNoCov">          0 :             m_stream &lt;&lt; m_buffer.str();</span>
-<span class="lineNum">     275 </span><span class="lineNoCov">          0 :             m_buffer.str(&quot;&quot;);</span>
-<span class="lineNum">     276 </span>            :         }
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">     625546 :     }</span></a>
-<span class="lineNum">     278 </span>            : 
-<span class="lineNum">     279 </span><span class="lineCov">         82 :     void TracerImp::flush(void)</span>
-<span class="lineNum">     280 </span>            :     {
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">         82 :         m_stream &lt;&lt; m_buffer.str();</span></a>
-<span class="lineNum">     282 </span><span class="lineCov">         82 :         m_buffer.str(&quot;&quot;);</span>
-<span class="lineNum">     283 </span><span class="lineCov">         82 :         m_stream.close();</span>
-<span class="lineNum">     284 </span><span class="lineCov">         82 :         m_is_trace_enabled = false;</span>
-<a name="285"><span class="lineNum">     285 </span><span class="lineCov">         82 :     }</span></a>
-<span class="lineNum">     286 </span>            : 
-<span class="lineNum">     287 </span><span class="lineCov">        774 :     std::string Tracer::pretty_name(const PlatformIO::m_request_s &amp;col) {</span>
-<span class="lineNum">     288 </span><span class="lineCov">       1548 :         std::ostringstream result;</span>
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">       1548 :         std::string name = col.name;</span></a>
-<span class="lineNum">     290 </span><span class="lineCov">        774 :         if (name.find(&quot;#&quot;) == name.length() - 1) {</span>
-<span class="lineNum">     291 </span><span class="lineNoCov">          0 :             name = name.substr(0, name.length() - 1);</span>
-<a name="292"><span class="lineNum">     292 </span>            :         }</a>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">        359 :         std::transform(name.begin(), name.end(), name.begin(),</span></a>
-<span class="lineNum">     294 </span><span class="lineCov">      10391 :                        [](unsigned char c){ return std::tolower(c); });</span>
-<span class="lineNum">     295 </span><span class="lineCov">        774 :         result &lt;&lt; name;</span>
-<span class="lineNum">     296 </span><span class="lineCov">        774 :         if (col.domain_type != GEOPM_DOMAIN_BOARD) {</span>
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         24 :             result &lt;&lt; &quot;-&quot; &lt;&lt; PlatformTopo::domain_type_to_name(col.domain_type)</span></a>
-<span class="lineNum">     298 </span><span class="lineCov">         24 :                    &lt;&lt; &quot;-&quot; &lt;&lt; col.domain_idx;</span>
-<span class="lineNum">     299 </span>            :         }
-<a name="300"><span class="lineNum">     300 </span><span class="lineCov">       1548 :         return result.str();</span></a>
-<a name="301"><span class="lineNum">     301 </span>            :     }</a>
-<span class="lineNum">     302 </span><span class="lineCov">       4701 : }</span>
+<span class="lineNum">     148 </span>            :             }
+<a name="149"><span class="lineNum">     149 </span>            :             // set up columns to be sampled by TracerImp</a>
+<span class="lineNum">     150 </span><span class="lineCov">        425 :             for (const auto &amp;col : base_columns) {</span>
+<span class="lineNum">     151 </span><span class="lineCov">        798 :                 m_column_idx.push_back(m_platform_io.push_signal(col.name,</span>
+<span class="lineNum">     152 </span><span class="lineCov">        399 :                                                                  col.domain_type,</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        399 :                                                                  col.domain_idx));</span></a>
+<span class="lineNum">     154 </span><span class="lineCov">        798 :                 std::string column_name = col.name;</span>
+<span class="lineNum">     155 </span><span class="lineCov">        399 :                 if (col.domain_type != GEOPM_DOMAIN_BOARD) {</span>
+<span class="lineNum">     156 </span><span class="lineCov">          6 :                     column_name += &quot;-&quot; + PlatformTopo::domain_type_to_name(col.domain_type);</span>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">          6 :                     column_name += &quot;-&quot; + std::to_string(col.domain_idx);</span></a>
+<span class="lineNum">     158 </span>            :                 }
+<span class="lineNum">     159 </span><span class="lineCov">        399 :                 m_csv-&gt;add_column(column_name, col.format);</span>
+<span class="lineNum">     160 </span>            :             }
+<a name="161"><span class="lineNum">     161 </span>            :             // columns from agent; will be sampled by agent</a>
+<span class="lineNum">     162 </span><span class="lineCov">         26 :             size_t num_col = agent_cols.size();</span>
+<span class="lineNum">     163 </span><span class="lineCov">         54 :             for (size_t col_idx = 0; col_idx != num_col; ++col_idx) {</span>
+<span class="lineNum">     164 </span><span class="lineCov">         56 :                 std::function&lt;std::string(double)&gt; format = col_formats.size() ? col_formats.at(col_idx) : string_format_double;</span>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">         28 :                 m_csv-&gt;add_column(agent_cols.at(col_idx), format);</span></a>
+<span class="lineNum">     166 </span>            :             }
+<span class="lineNum">     167 </span><span class="lineCov">         26 :             m_csv-&gt;activate();</span>
+<span class="lineNum">     168 </span><span class="lineCov">         26 :             m_last_telemetry.resize(base_columns.size() + num_col);</span>
+<a name="169"><span class="lineNum">     169 </span>            :         }</a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         35 :     }</span></a>
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span><span class="lineCov">     271795 :     void TracerImp::update(const std::vector&lt;double&gt; &amp;agent_values,</span>
+<a name="173"><span class="lineNum">     173 </span>            :                            std::list&lt;geopm_region_info_s&gt; region_entry_exit)</a>
+<span class="lineNum">     174 </span>            :     {
+<span class="lineNum">     175 </span><span class="lineCov">     271795 :         if (m_is_trace_enabled) {</span>
+<span class="lineNum">     176 </span>            : #ifdef GEOPM_DEBUG
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">     265967 :             if (m_column_idx.size() == 0) {</span></a>
+<span class="lineNum">     178 </span>            :                 throw Exception(&quot;TracerImp::update(): No columns added to trace.&quot;,
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     180 </span>            :             }
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">     265967 :             if (m_column_idx.size() + agent_values.size() != m_last_telemetry.size()) {</span></a>
+<span class="lineNum">     182 </span>            :                 throw Exception(&quot;TracerImp::update(): Last telemetry buffer not sized correctly.&quot;,
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     184 </span>            :             }
+<a name="185"><span class="lineNum">     185 </span>            : #endif</a>
+<span class="lineNum">     186 </span>            :             // save values to be reused for region entry/exit
+<span class="lineNum">     187 </span><span class="lineCov">     265967 :             size_t col_idx = 0;</span>
+<span class="lineNum">     188 </span><span class="lineCov">    8244989 :             for (; col_idx &lt; m_column_idx.size(); ++col_idx) {</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">    3989511 :                 m_last_telemetry[col_idx] = m_platform_io.sample(m_column_idx[col_idx]);</span></a>
+<span class="lineNum">     190 </span>            :             }
+<span class="lineNum">     191 </span><span class="lineCov">     530730 :             for (const auto &amp;val : agent_values) {</span>
+<span class="lineNum">     192 </span><span class="lineCov">     264763 :                 m_last_telemetry[col_idx] = val;</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">     264763 :                 ++col_idx;</span></a>
+<span class="lineNum">     194 </span>            :             }
+<span class="lineNum">     195 </span>            : #ifdef GEOPM_TRACE_BLOAT
+<span class="lineNum">     196 </span>            :             // save region id and progress, which will get written over by entry/exit
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">     265967 :             double region_hash = m_last_telemetry[m_region_hash_idx];</span></a>
+<span class="lineNum">     198 </span><span class="lineCov">     265967 :             double region_hint = m_last_telemetry[m_region_hint_idx];</span>
+<span class="lineNum">     199 </span><span class="lineCov">     265967 :             double region_progress = m_last_telemetry[m_region_progress_idx];</span>
+<span class="lineNum">     200 </span><span class="lineCov">     265967 :             double region_runtime = m_last_telemetry[m_region_runtime_idx];</span>
+<a name="201"><span class="lineNum">     201 </span>            : </a>
+<span class="lineNum">     202 </span>            :             // insert samples for region entry/exit
+<span class="lineNum">     203 </span><span class="lineCov">     265967 :             size_t idx = 0;</span>
+<span class="lineNum">     204 </span><span class="lineCov">     269715 :             for (const auto &amp;reg : region_entry_exit) {</span>
+<a name="205"><span class="lineNum">     205 </span>            :                 // skip the last region entry if it matches the</a>
+<span class="lineNum">     206 </span>            :                 // sampled telemetry region hash, hint, and progress
+<span class="lineNum">     207 </span><span class="lineCov">       4557 :                 if (!((idx == region_entry_exit.size() - 1) &amp;&amp;</span>
+<span class="lineNum">     208 </span><span class="lineCov">        831 :                       region_progress == reg.progress &amp;&amp;</span>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">        364 :                       region_progress == 0.0 &amp;&amp;</span></a>
+<span class="lineNum">     210 </span><span class="lineCov">        364 :                       region_hash == reg.hash &amp;&amp;</span>
+<span class="lineNum">     211 </span><span class="lineCov">        364 :                       region_hint == reg.hint)) {</span>
+<span class="lineNum">     212 </span><span class="lineCov">       3421 :                     m_last_telemetry[m_region_hash_idx] = reg.hash;</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">       3421 :                     m_last_telemetry[m_region_hint_idx] = reg.hint;</span></a>
+<span class="lineNum">     214 </span><span class="lineCov">       3421 :                     m_last_telemetry[m_region_progress_idx] = reg.progress;</span>
+<span class="lineNum">     215 </span><span class="lineCov">       3421 :                     m_last_telemetry[m_region_runtime_idx] = reg.runtime;</span>
+<span class="lineNum">     216 </span>            :                     /// @todo There are no updates to the region count field.
+<a name="217"><span class="lineNum">     217 </span>            :                     ///       Rather than fix this issue, will just remove</a>
+<span class="lineNum">     218 </span>            :                     ///       these inserted rows in future commit.
+<span class="lineNum">     219 </span><span class="lineCov">       3421 :                     m_csv-&gt;update(m_last_telemetry);</span>
+<span class="lineNum">     220 </span>            :                 }
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">       3748 :                 ++idx;</span></a>
+<span class="lineNum">     222 </span>            :             }
+<span class="lineNum">     223 </span>            :             // print sampled data last
+<span class="lineNum">     224 </span><span class="lineCov">     265967 :             m_last_telemetry[m_region_hash_idx] = region_hash;</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">     265967 :             m_last_telemetry[m_region_hint_idx] = region_hint;</span></a>
+<span class="lineNum">     226 </span><span class="lineCov">     265967 :             m_last_telemetry[m_region_progress_idx] = region_progress;</span>
+<span class="lineNum">     227 </span><span class="lineCov">     265967 :             m_last_telemetry[m_region_runtime_idx] = region_runtime;</span>
+<span class="lineNum">     228 </span>            : #endif // GEOPM_TRACE_BLOAT
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">     265967 :             m_csv-&gt;update(m_last_telemetry);</span></a>
+<span class="lineNum">     230 </span>            :         }
+<a name="231"><span class="lineNum">     231 </span><span class="lineCov">     271795 :     }</span></a>
+<span class="lineNum">     232 </span>            : 
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">         35 :     void TracerImp::flush(void)</span></a>
+<span class="lineNum">     234 </span>            :     {
+<span class="lineNum">     235 </span><span class="lineCov">         35 :         if (m_is_trace_enabled) {</span>
+<span class="lineNum">     236 </span><span class="lineCov">         26 :             m_csv-&gt;flush();</span>
+<a name="237"><span class="lineNum">     237 </span>            :         }</a>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">         35 :     }</span></a>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">         78 :     std::vector&lt;std::string&gt; TracerImp::env_signals(void)</span>
+<a name="241"><span class="lineNum">     241 </span>            :     {</a>
+<span class="lineNum">     242 </span><span class="lineCov">         78 :         std::vector&lt;std::string&gt; result;</span>
+<span class="lineNum">     243 </span><span class="lineCov">         96 :         for (const auto &amp;extra_signal : string_split(m_env_column, &quot;,&quot;)) {</span>
+<span class="lineNum">     244 </span><span class="lineCov">         36 :             std::vector&lt;std::string&gt; signal_domain = string_split(extra_signal, &quot;@&quot;);</span>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         18 :             result.push_back(signal_domain[0]);</span></a>
+<span class="lineNum">     246 </span>            :         }
+<span class="lineNum">     247 </span><span class="lineCov">         78 :         return result;</span>
+<a name="248"><span class="lineNum">     248 </span>            :     }</a>
+<a name="249"><span class="lineNum">     249 </span>            : </a>
+<span class="lineNum">     250 </span><span class="lineCov">         26 :     std::vector&lt;int&gt; TracerImp::env_domains(void)</span>
+<span class="lineNum">     251 </span>            :     {
+<span class="lineNum">     252 </span><span class="lineCov">         26 :         std::vector&lt;int&gt; result;</span>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         32 :         for (const auto &amp;extra_signal : string_split(m_env_column, &quot;,&quot;)) {</span></a>
+<span class="lineNum">     254 </span><span class="lineCov">         12 :             std::vector&lt;std::string&gt; signal_domain = string_split(extra_signal, &quot;@&quot;);</span>
+<span class="lineNum">     255 </span><span class="lineCov">          6 :             if (signal_domain.size() == 2) {</span>
+<span class="lineNum">     256 </span><span class="lineCov">          3 :                 result.push_back(PlatformTopo::domain_name_to_type(signal_domain[1]));</span>
+<a name="257"><span class="lineNum">     257 </span>            :             }</a>
+<span class="lineNum">     258 </span><span class="lineCov">          3 :             else if (signal_domain.size() == 1) {</span>
+<span class="lineNum">     259 </span><span class="lineCov">          3 :                 result.push_back(GEOPM_DOMAIN_BOARD);</span>
+<span class="lineNum">     260 </span>            :             }
+<a name="261"><span class="lineNum">     261 </span>            :             else {</a>
+<span class="lineNum">     262 </span>            :                 throw Exception(&quot;TracerImp::columns(): Environment trace extension contains signals with multiple \&quot;@\&quot; characters.&quot;,
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     264 </span>            :             }
+<a name="265"><span class="lineNum">     265 </span>            :         }</a>
+<span class="lineNum">     266 </span><span class="lineCov">         26 :         return result;</span>
+<a name="267"><span class="lineNum">     267 </span>            :     }</a>
+<span class="lineNum">     268 </span>            : 
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         26 :     std::vector&lt;std::function&lt;std::string(double)&gt; &gt; TracerImp::env_formats(void)</span></a>
+<span class="lineNum">     270 </span>            :     {
+<span class="lineNum">     271 </span><span class="lineCov">         26 :         std::vector&lt;std::function&lt;std::string(double)&gt; &gt; result;</span>
+<span class="lineNum">     272 </span><span class="lineCov">         52 :         std::vector&lt;std::string&gt; signals = env_signals();</span>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         32 :         for (const auto &amp;it : env_signals()) {</span></a>
+<span class="lineNum">     274 </span><span class="lineCov">          6 :             result.push_back(m_platform_io.format_function(it));</span>
+<span class="lineNum">     275 </span>            :         }
+<a name="276"><span class="lineNum">     276 </span><span class="lineCov">         52 :         return result;</span></a>
+<a name="277"><span class="lineNum">     277 </span>            :     }</a>
+<span class="lineNum">     278 </span><span class="lineCov">       2586 : }</span>
 </pre>
       </td>
     </tr>

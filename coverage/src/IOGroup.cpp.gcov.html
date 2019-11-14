@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/IOGroup.cpp</title>
+  <title>LCOV - v1.1.0 - src/IOGroup.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">14</td>
-            <td class="headerCovTableEntry">14</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryLo">57.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntry">5</td>
-            <td class="headerCovTableEntryMed">80.0 %</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -100,34 +100,65 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &quot;IOGroup.hpp&quot;</a>
-<span class="lineNum">      34 </span>            : #include &quot;MSRIOGroup.hpp&quot;
-<span class="lineNum">      35 </span>            : #include &quot;CpuinfoIOGroup.hpp&quot;
-<span class="lineNum">      36 </span>            : #include &quot;TimeIOGroup.hpp&quot;
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span>            : namespace geopm
-<span class="lineNum">      40 </span>            : {
-<a name="41"><span class="lineNum">      41 </span>            :     static PluginFactory&lt;IOGroup&gt; *g_plugin_factory;</a>
-<span class="lineNum">      42 </span>            :     static pthread_once_t g_register_built_in_once = PTHREAD_ONCE_INIT;
-<span class="lineNum">      43 </span><span class="lineCov">        661 :     static void register_built_in_once(void)</span>
-<span class="lineNum">      44 </span>            :     {
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">        986 :         g_plugin_factory-&gt;register_plugin(MSRIOGroup::plugin_name(),</span></a>
-<span class="lineNum">      46 </span><span class="lineCov">        325 :                                           MSRIOGroup::make_plugin);</span>
-<span class="lineNum">      47 </span><span class="lineCov">        986 :         g_plugin_factory-&gt;register_plugin(TimeIOGroup::plugin_name(),</span>
-<span class="lineNum">      48 </span><span class="lineCov">        325 :                                           TimeIOGroup::make_plugin);</span>
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">        986 :         g_plugin_factory-&gt;register_plugin(CpuinfoIOGroup::plugin_name(),</span></a>
-<span class="lineNum">      50 </span><span class="lineCov">        325 :                                           CpuinfoIOGroup::make_plugin);</span>
-<a name="51"><span class="lineNum">      51 </span><span class="lineCov">        661 :     }</span></a>
-<span class="lineNum">      52 </span>            : 
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">       2614 :     PluginFactory&lt;IOGroup&gt; &amp;iogroup_factory(void)</span></a>
-<span class="lineNum">      54 </span>            :     {
-<span class="lineNum">      55 </span><span class="lineCov">       2614 :         static PluginFactory&lt;IOGroup&gt; instance;</span>
-<span class="lineNum">      56 </span><span class="lineCov">       2614 :         g_plugin_factory = &amp;instance;</span>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">       2614 :         pthread_once(&amp;g_register_built_in_once, register_built_in_once);</span></a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">       2614 :         return instance;</span></a>
-<span class="lineNum">      59 </span>            :     }
-<span class="lineNum">      60 </span><span class="lineCov">       4701 : }</span>
+<a name="33"><span class="lineNum">      33 </span>            : #include &lt;functional&gt;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &quot;IOGroup.hpp&quot;
+<span class="lineNum">      36 </span>            : 
+<a name="37"><span class="lineNum">      37 </span>            : #include &quot;MSRIOGroup.hpp&quot;</a>
+<span class="lineNum">      38 </span>            : #include &quot;CpuinfoIOGroup.hpp&quot;
+<span class="lineNum">      39 </span>            : #include &quot;TimeIOGroup.hpp&quot;
+<span class="lineNum">      40 </span>            : #include &quot;Helper.hpp&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      42 </span>            : #ifdef GEOPM_CNL_IOGROUP
+<span class="lineNum">      43 </span>            : #include &quot;CNLIOGroup.hpp&quot;
+<span class="lineNum">      44 </span>            : #endif
+<a name="45"><span class="lineNum">      45 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">      46 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      47 </span>            : #endif
+<span class="lineNum">      48 </span>            : 
+<a name="49"><span class="lineNum">      49 </span>            : </a>
+<span class="lineNum">      50 </span>            : namespace geopm
+<span class="lineNum">      51 </span>            : {
+<a name="52"><span class="lineNum">      52 </span>            :     static PluginFactory&lt;IOGroup&gt; *g_plugin_factory;</a>
+<a name="53"><span class="lineNum">      53 </span>            :     static pthread_once_t g_register_built_in_once = PTHREAD_ONCE_INIT;</a>
+<span class="lineNum">      54 </span><span class="lineCov">        357 :     static void register_built_in_once(void)</span>
+<span class="lineNum">      55 </span>            :     {
+<span class="lineNum">      56 </span><span class="lineCov">        357 :         g_plugin_factory-&gt;register_plugin(MSRIOGroup::plugin_name(),</span>
+<a name="57"><span class="lineNum">      57 </span>            :                                           MSRIOGroup::make_plugin);</a>
+<span class="lineNum">      58 </span><span class="lineCov">        357 :         g_plugin_factory-&gt;register_plugin(TimeIOGroup::plugin_name(),</span>
+<span class="lineNum">      59 </span>            :                                           TimeIOGroup::make_plugin);
+<span class="lineNum">      60 </span><span class="lineCov">        357 :         g_plugin_factory-&gt;register_plugin(CpuinfoIOGroup::plugin_name(),</span>
+<a name="61"><span class="lineNum">      61 </span>            :                                           CpuinfoIOGroup::make_plugin);</a>
+<span class="lineNum">      62 </span>            : #ifdef GEOPM_CNL_IOGROUP
+<span class="lineNum">      63 </span>            :         g_plugin_factory-&gt;register_plugin(CNLIOGroup::plugin_name(),
+<span class="lineNum">      64 </span>            :                                           CNLIOGroup::make_plugin);
+<a name="65"><span class="lineNum">      65 </span>            : #endif</a>
+<a name="66"><span class="lineNum">      66 </span><span class="lineCov">        357 :     }</span></a>
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :     std::function&lt;std::string(double)&gt; IOGroup::format_function(const std::string &amp;signal_name) const</span>
+<a name="69"><span class="lineNum">      69 </span>            :     {</a>
+<span class="lineNum">      70 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">      71 </span>            :         static bool is_once = true;
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :         if (is_once) {</span>
+<a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 :             is_once = false;</span></a>
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :             std::cerr &lt;&lt; &quot;Warning: &lt;geopm&gt; Use of geopm::IOGroup::format_function() is deprecated, each IOGroup will be required implement this method in the future.\n&quot;;</span>
+<span class="lineNum">      75 </span>            :         }
+<span class="lineNum">      76 </span>            : #endif
+<a name="77"><span class="lineNum">      77 </span><span class="lineNoCov">          0 :         std::function&lt;std::string(double)&gt; result = string_format_double;</span></a>
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :         if (string_ends_with(signal_name, &quot;#&quot;)) {</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :             result = string_format_raw64;</span>
+<span class="lineNum">      80 </span>            :         }
+<a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 :         return result;</span></a>
+<a name="82"><span class="lineNum">      82 </span>            :     }</a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineCov">       1410 :     PluginFactory&lt;IOGroup&gt; &amp;iogroup_factory(void)</span>
+<a name="85"><span class="lineNum">      85 </span>            :     {</a>
+<span class="lineNum">      86 </span><span class="lineCov">       1410 :         static PluginFactory&lt;IOGroup&gt; instance;</span>
+<span class="lineNum">      87 </span><span class="lineCov">       1410 :         g_plugin_factory = &amp;instance;</span>
+<span class="lineNum">      88 </span><span class="lineCov">       1410 :         pthread_once(&amp;g_register_built_in_once, register_built_in_once);</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">       1410 :         return instance;</span></a>
+<span class="lineNum">      90 </span>            :     }
+<span class="lineNum">      91 </span><span class="lineCov">       2586 : }</span>
 </pre>
       </td>
     </tr>

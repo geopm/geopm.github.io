@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/ApplicationIO.cpp</title>
+  <title>LCOV - v1.1.0 - src/ApplicationIO.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">115</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">27</td>
@@ -100,382 +100,383 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;utility&gt;</a>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;ApplicationIO.hpp&quot;</a>
 <span class="lineNum">      34 </span>            : 
-<span class="lineNum">      35 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      36 </span>            : #include &quot;ApplicationIO.hpp&quot;
-<a name="37"><span class="lineNum">      37 </span>            : #include &quot;EpochRuntimeRegulator.hpp&quot;</a>
-<span class="lineNum">      38 </span>            : #include &quot;PlatformIO.hpp&quot;
-<span class="lineNum">      39 </span>            : #include &quot;PlatformTopo.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;ProfileSampler.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;ProfileThread.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;ProfileIOSample.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;ProfileIOGroup.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;Helper.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      46 </span>            : 
-<span class="lineNum">      47 </span>            : #ifdef GEOPM_HAS_XMMINTRIN
-<span class="lineNum">      48 </span>            : #include &lt;xmmintrin.h&gt;
-<a name="49"><span class="lineNum">      49 </span>            : #endif</a>
-<span class="lineNum">      50 </span>            : 
-<span class="lineNum">      51 </span>            : namespace geopm
-<span class="lineNum">      52 </span>            : {
-<a name="53"><span class="lineNum">      53 </span>            :     constexpr size_t ApplicationIOImp::M_SHMEM_REGION_SIZE;</a>
-<span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span><span class="lineCov">         76 :     ApplicationIOImp::ApplicationIOImp(const std::string &amp;shm_key)</span>
-<span class="lineNum">      56 </span>            :         : ApplicationIOImp(shm_key,
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">        152 :                            geopm::make_unique&lt;ProfileSamplerImp&gt;(M_SHMEM_REGION_SIZE),</span></a>
-<span class="lineNum">      58 </span>            :                            nullptr, nullptr,
-<span class="lineNum">      59 </span><span class="lineCov">        228 :                            platform_io(), platform_topo())</span>
-<span class="lineNum">      60 </span>            :     {
-<a name="61"><span class="lineNum">      61 </span>            : </a>
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">         76 :     }</span></a>
-<span class="lineNum">      63 </span>            : 
-<span class="lineNum">      64 </span><span class="lineCov">         78 :     ApplicationIOImp::ApplicationIOImp(const std::string &amp;shm_key,</span>
-<a name="65"><span class="lineNum">      65 </span>            :                                  std::unique_ptr&lt;ProfileSampler&gt; sampler,</a>
-<span class="lineNum">      66 </span>            :                                  std::shared_ptr&lt;ProfileIOSample&gt; pio_sample,
-<span class="lineNum">      67 </span>            :                                  std::unique_ptr&lt;EpochRuntimeRegulator&gt; epoch_regulator,
-<span class="lineNum">      68 </span>            :                                  PlatformIO &amp;platform_io,
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         35 :                                  PlatformTopo &amp;platform_topo)</span></a>
-<span class="lineNum">      70 </span><span class="lineCov">         78 :         : m_sampler(std::move(sampler))</span>
-<span class="lineNum">      71 </span>            :         , m_profile_io_sample(pio_sample)
-<span class="lineNum">      72 </span>            :         , m_platform_io(platform_io)
-<a name="73"><span class="lineNum">      73 </span>            :         , m_platform_topo(platform_topo)</a>
-<span class="lineNum">      74 </span><span class="lineCov">         78 :         , m_thread_progress(m_platform_topo.num_domain(GEOPM_DOMAIN_CPU))</span>
-<span class="lineNum">      75 </span>            :         , m_is_connected(false)
-<span class="lineNum">      76 </span>            :         , m_rank_per_node(-1)
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         78 :         , m_epoch_regulator(std::move(epoch_regulator))</span></a>
-<span class="lineNum">      78 </span>            :         , m_start_energy_pkg(NAN)
-<span class="lineNum">      79 </span><span class="lineCov">        312 :         , m_start_energy_dram(NAN)</span>
-<span class="lineNum">      80 </span>            :     {
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         78 :     }</span></a>
-<span class="lineNum">      82 </span>            : 
-<span class="lineNum">      83 </span><span class="lineCov">        156 :     ApplicationIOImp::~ApplicationIOImp()</span>
-<span class="lineNum">      84 </span>            :     {
-<a name="85"><span class="lineNum">      85 </span>            : </a>
-<a name="86"><span class="lineNum">      86 </span><span class="lineCov">        156 :     }</span></a>
-<span class="lineNum">      87 </span>            : 
-<span class="lineNum">      88 </span><span class="lineCov">         78 :     void ApplicationIOImp::connect(void)</span>
-<a name="89"><span class="lineNum">      89 </span>            :     {</a>
-<span class="lineNum">      90 </span><span class="lineCov">         78 :         if (!m_is_connected) {</span>
-<span class="lineNum">      91 </span><span class="lineCov">         78 :             m_sampler-&gt;initialize();</span>
-<span class="lineNum">      92 </span><span class="lineCov">         78 :             m_rank_per_node = m_sampler-&gt;rank_per_node();</span>
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         78 :             m_prof_sample.resize(m_sampler-&gt;capacity());</span></a>
-<span class="lineNum">      94 </span><span class="lineCov">        156 :             std::vector&lt;int&gt; cpu_rank = m_sampler-&gt;cpu_rank();</span>
-<span class="lineNum">      95 </span><span class="lineCov">         78 :             if (m_profile_io_sample == nullptr) {</span>
-<span class="lineNum">      96 </span><span class="lineCov">         76 :                 m_epoch_regulator = geopm::make_unique&lt;EpochRuntimeRegulatorImp&gt;(m_rank_per_node, m_platform_io, m_platform_topo);</span>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         76 :                 m_epoch_regulator-&gt;init_unmarked_region();</span></a>
-<span class="lineNum">      98 </span><span class="lineCov">         76 :                 m_profile_io_sample = std::make_shared&lt;ProfileIOSampleImp&gt;(cpu_rank, *m_epoch_regulator);</span>
-<span class="lineNum">      99 </span><span class="lineCov">         76 :                 platform_io().register_iogroup(geopm::make_unique&lt;ProfileIOGroup&gt;(m_profile_io_sample, *m_epoch_regulator));</span>
-<span class="lineNum">     100 </span>            :             }
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         78 :             m_is_connected = true;</span></a>
-<span class="lineNum">     102 </span>            : 
-<span class="lineNum">     103 </span><span class="lineCov">         78 :             m_start_energy_pkg = current_energy_pkg();</span>
-<span class="lineNum">     104 </span><span class="lineCov">         78 :             m_start_energy_dram = current_energy_dram();</span>
-<a name="105"><span class="lineNum">     105 </span>            :         }</a>
-<a name="106"><span class="lineNum">     106 </span><span class="lineCov">         78 :     }</span></a>
-<span class="lineNum">     107 </span>            : 
-<span class="lineNum">     108 </span><span class="lineCov">         76 :     void ApplicationIOImp::controller_ready(void)</span>
-<a name="109"><span class="lineNum">     109 </span>            :     {</a>
-<span class="lineNum">     110 </span><span class="lineCov">         76 :         m_sampler-&gt;controller_ready();</span>
-<a name="111"><span class="lineNum">     111 </span><span class="lineCov">         76 :     }</span></a>
-<span class="lineNum">     112 </span>            : 
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">     625464 :     bool ApplicationIOImp::do_shutdown(void) const</span></a>
-<span class="lineNum">     114 </span>            :     {
-<span class="lineNum">     115 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     116 </span><span class="lineCov">     625464 :         if (!m_is_connected) {</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     118 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     119 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     120 </span>            :         }
-<a name="121"><span class="lineNum">     121 </span>            : #endif</a>
-<span class="lineNum">     122 </span><span class="lineCov">     625464 :         bool result = m_sampler-&gt;do_shutdown();</span>
-<span class="lineNum">     123 </span><span class="lineCov">     625464 :         if (result) {</span>
-<span class="lineNum">     124 </span><span class="lineCov">         76 :             m_profile_io_sample-&gt;finalize_unmarked_region();</span>
-<a name="125"><span class="lineNum">     125 </span>            :         }</a>
-<span class="lineNum">     126 </span><span class="lineCov">     625464 :         return result;</span>
-<a name="127"><span class="lineNum">     127 </span>            :     }</a>
-<span class="lineNum">     128 </span>            : 
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">         78 :     std::string ApplicationIOImp::report_name(void) const</span></a>
-<span class="lineNum">     130 </span>            :     {
-<span class="lineNum">     131 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     132 </span><span class="lineCov">         78 :         if (!m_is_connected) {</span>
-<a name="133"><span class="lineNum">     133 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     134 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     135 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     136 </span>            :         }
-<a name="137"><span class="lineNum">     137 </span>            : #endif</a>
-<span class="lineNum">     138 </span><span class="lineCov">         78 :         return m_sampler-&gt;report_name();</span>
-<a name="139"><span class="lineNum">     139 </span>            :     }</a>
-<span class="lineNum">     140 </span>            : 
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">         30 :     std::string ApplicationIOImp::profile_name(void) const</span></a>
-<span class="lineNum">     142 </span>            :     {
-<span class="lineNum">     143 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     144 </span><span class="lineCov">         30 :         if (!m_is_connected) {</span>
-<a name="145"><span class="lineNum">     145 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     146 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     147 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     148 </span>            :         }
-<a name="149"><span class="lineNum">     149 </span>            : #endif</a>
-<span class="lineNum">     150 </span><span class="lineCov">         30 :         return m_sampler-&gt;profile_name();</span>
-<a name="151"><span class="lineNum">     151 </span>            :     }</a>
-<span class="lineNum">     152 </span>            : 
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         78 :     std::set&lt;std::string&gt; ApplicationIOImp::region_name_set(void) const</span></a>
-<span class="lineNum">     154 </span>            :     {
-<span class="lineNum">     155 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     156 </span><span class="lineCov">         78 :         if (!m_is_connected) {</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     158 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     159 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     160 </span>            :         }
-<a name="161"><span class="lineNum">     161 </span>            : #endif</a>
-<span class="lineNum">     162 </span><span class="lineCov">         78 :         return m_sampler-&gt;name_set();</span>
-<a name="163"><span class="lineNum">     163 </span>            :     }</a>
-<span class="lineNum">     164 </span>            : 
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        290 :     double ApplicationIOImp::total_region_runtime(uint64_t region_id) const</span></a>
-<span class="lineNum">     166 </span>            :     {
-<span class="lineNum">     167 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     168 </span><span class="lineCov">        290 :         if (!m_is_connected) {</span>
-<a name="169"><span class="lineNum">     169 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     170 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     171 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     172 </span>            :         }
-<a name="173"><span class="lineNum">     173 </span>            : #endif</a>
-<span class="lineNum">     174 </span><span class="lineCov">        290 :         double result = 0.0;</span>
-<span class="lineNum">     175 </span>            :         try {
-<span class="lineNum">     176 </span><span class="lineCov">        290 :             result = m_epoch_regulator-&gt;total_region_runtime(region_id);</span>
-<a name="177"><span class="lineNum">     177 </span>            :         }</a>
-<span class="lineNum">     178 </span><span class="lineNoCov">          0 :         catch (const Exception &amp;ex) {</span>
-<span class="lineNum">     179 </span>            :         }
-<span class="lineNum">     180 </span><span class="lineCov">        290 :         return result;</span>
-<a name="181"><span class="lineNum">     181 </span>            :     }</a>
-<span class="lineNum">     182 </span>            : 
-<span class="lineNum">     183 </span><span class="lineCov">        290 :     double ApplicationIOImp::total_region_runtime_mpi(uint64_t region_id) const</span>
-<span class="lineNum">     184 </span>            :     {
-<a name="185"><span class="lineNum">     185 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     186 </span><span class="lineCov">        290 :         if (!m_is_connected) {</span>
-<span class="lineNum">     187 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
-<span class="lineNum">     188 </span>            :                             &quot; called before connect().&quot;,
-<a name="189"><span class="lineNum">     189 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     190 </span>            :         }
-<span class="lineNum">     191 </span>            : #endif
-<span class="lineNum">     192 </span><span class="lineCov">        290 :         double result = 0.0;</span>
-<a name="193"><span class="lineNum">     193 </span>            :         try {</a>
-<span class="lineNum">     194 </span><span class="lineCov">        290 :             result = m_epoch_regulator-&gt;total_region_runtime_mpi(region_id);</span>
-<span class="lineNum">     195 </span>            :         }
-<span class="lineNum">     196 </span><span class="lineNoCov">          0 :         catch (const Exception &amp;ex) {</span>
-<a name="197"><span class="lineNum">     197 </span>            :         }</a>
-<span class="lineNum">     198 </span><span class="lineCov">        290 :         return result;</span>
-<a name="199"><span class="lineNum">     199 </span>            :     }</a>
-<span class="lineNum">     200 </span>            : 
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         78 :     double ApplicationIOImp::total_epoch_runtime(void) const</span></a>
-<span class="lineNum">     202 </span>            :     {
-<span class="lineNum">     203 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     204 </span><span class="lineCov">         78 :         if (!m_is_connected) {</span>
-<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     206 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     207 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     208 </span>            :         }
-<a name="209"><span class="lineNum">     209 </span>            : #endif</a>
-<span class="lineNum">     210 </span><span class="lineCov">         78 :         return m_epoch_regulator-&gt;total_epoch_runtime();</span>
-<a name="211"><span class="lineNum">     211 </span>            :     }</a>
-<span class="lineNum">     212 </span>            : 
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         76 :     double ApplicationIOImp::total_epoch_runtime_mpi(void) const</span></a>
-<span class="lineNum">     214 </span>            :     {
-<span class="lineNum">     215 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     216 </span><span class="lineCov">         76 :         if (!m_is_connected) {</span>
-<a name="217"><span class="lineNum">     217 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     218 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     219 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     220 </span>            :         }
-<a name="221"><span class="lineNum">     221 </span>            : #endif</a>
-<span class="lineNum">     222 </span><span class="lineCov">         76 :         return m_epoch_regulator-&gt;total_epoch_runtime_mpi();</span>
-<a name="223"><span class="lineNum">     223 </span>            :     }</a>
-<span class="lineNum">     224 </span>            : 
-<a name="225"><span class="lineNum">     225 </span><span class="lineNoCov">          0 :     double ApplicationIOImp::total_epoch_energy_pkg(void) const</span></a>
-<span class="lineNum">     226 </span>            :     {
-<span class="lineNum">     227 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     228 </span><span class="lineNoCov">          0 :         if (!m_is_connected) {</span>
-<a name="229"><span class="lineNum">     229 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     230 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     231 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     232 </span>            :         }
-<a name="233"><span class="lineNum">     233 </span>            : #endif</a>
-<span class="lineNum">     234 </span><span class="lineNoCov">          0 :         return m_epoch_regulator-&gt;total_epoch_energy_pkg();</span>
-<a name="235"><span class="lineNum">     235 </span>            :     }</a>
-<span class="lineNum">     236 </span>            : 
-<a name="237"><span class="lineNum">     237 </span><span class="lineNoCov">          0 :     double ApplicationIOImp::total_epoch_energy_dram(void) const</span></a>
-<span class="lineNum">     238 </span>            :     {
-<span class="lineNum">     239 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     240 </span><span class="lineNoCov">          0 :         if (!m_is_connected) {</span>
-<a name="241"><span class="lineNum">     241 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     242 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     243 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     244 </span>            :         }
-<a name="245"><span class="lineNum">     245 </span>            : #endif</a>
-<span class="lineNum">     246 </span><span class="lineNoCov">          0 :         return m_epoch_regulator-&gt;total_epoch_energy_dram();</span>
-<a name="247"><span class="lineNum">     247 </span>            :     }</a>
-<span class="lineNum">     248 </span>            : 
-<a name="249"><span class="lineNum">     249 </span><span class="lineCov">         78 :     double ApplicationIOImp::total_app_runtime(void) const</span></a>
-<span class="lineNum">     250 </span>            :     {
-<span class="lineNum">     251 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     252 </span><span class="lineCov">         78 :         if (!m_is_connected) {</span>
-<a name="253"><span class="lineNum">     253 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     254 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     255 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     256 </span>            :         }
-<a name="257"><span class="lineNum">     257 </span>            : #endif</a>
-<span class="lineNum">     258 </span><span class="lineCov">         78 :         return m_profile_io_sample-&gt;total_app_runtime();</span>
-<a name="259"><span class="lineNum">     259 </span>            :     }</a>
-<span class="lineNum">     260 </span>            : 
-<a name="261"><span class="lineNum">     261 </span><span class="lineCov">        154 :     double ApplicationIOImp::current_energy_pkg(void) const</span></a>
-<span class="lineNum">     262 </span>            :     {
-<span class="lineNum">     263 </span><span class="lineCov">        154 :         double energy = 0.0;</span>
-<span class="lineNum">     264 </span><span class="lineCov">        154 :         int num_package = m_platform_topo.num_domain(GEOPM_DOMAIN_PACKAGE);</span>
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">        376 :         for (int pkg = 0; pkg &lt; num_package; ++pkg) {</span></a>
-<span class="lineNum">     266 </span><span class="lineCov">        222 :             energy += m_platform_io.read_signal(&quot;ENERGY_PACKAGE&quot;, GEOPM_DOMAIN_PACKAGE, pkg);</span>
-<span class="lineNum">     267 </span>            :         }
-<span class="lineNum">     268 </span><span class="lineCov">        154 :         return energy;</span>
-<a name="269"><span class="lineNum">     269 </span>            :    }</a>
-<span class="lineNum">     270 </span>            : 
-<span class="lineNum">     271 </span><span class="lineCov">        154 :     double ApplicationIOImp::current_energy_dram(void) const</span>
-<span class="lineNum">     272 </span>            :     {
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">        154 :         double energy = 0.0;</span></a>
-<span class="lineNum">     274 </span><span class="lineCov">        154 :         int num_dram = m_platform_topo.num_domain(GEOPM_DOMAIN_BOARD_MEMORY);</span>
-<span class="lineNum">     275 </span><span class="lineCov">        376 :         for (int dram = 0; dram &lt; num_dram; ++dram) {</span>
-<span class="lineNum">     276 </span><span class="lineCov">        222 :             energy += m_platform_io.read_signal(&quot;ENERGY_DRAM&quot;, GEOPM_DOMAIN_BOARD_MEMORY, dram);</span>
-<a name="277"><span class="lineNum">     277 </span>            :         }</a>
-<span class="lineNum">     278 </span><span class="lineCov">        154 :         return energy;</span>
-<a name="279"><span class="lineNum">     279 </span>            :     }</a>
-<span class="lineNum">     280 </span>            : 
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">         76 :     double ApplicationIOImp::total_app_energy_pkg(void) const</span></a>
-<span class="lineNum">     282 </span>            :     {
-<span class="lineNum">     283 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     284 </span><span class="lineCov">         76 :         if (!m_is_connected) {</span>
-<a name="285"><span class="lineNum">     285 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     286 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     287 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     288 </span>            :         }
-<a name="289"><span class="lineNum">     289 </span>            : #endif</a>
-<span class="lineNum">     290 </span><span class="lineCov">         76 :         return current_energy_pkg() - m_start_energy_pkg;</span>
-<a name="291"><span class="lineNum">     291 </span>            :     }</a>
-<span class="lineNum">     292 </span>            : 
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         76 :     double ApplicationIOImp::total_app_energy_dram(void) const</span></a>
-<span class="lineNum">     294 </span>            :     {
-<span class="lineNum">     295 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     296 </span><span class="lineCov">         76 :         if (!m_is_connected) {</span>
-<a name="297"><span class="lineNum">     297 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     298 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     299 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     300 </span>            :         }
-<a name="301"><span class="lineNum">     301 </span>            : #endif</a>
-<span class="lineNum">     302 </span><span class="lineCov">         76 :         return current_energy_dram() - m_start_energy_dram;</span>
-<a name="303"><span class="lineNum">     303 </span>            :     }</a>
-<span class="lineNum">     304 </span>            : 
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         78 :     double ApplicationIOImp::total_app_runtime_mpi(void) const</span></a>
-<span class="lineNum">     306 </span>            :     {
-<span class="lineNum">     307 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     308 </span><span class="lineCov">         78 :         if (!m_is_connected) {</span>
-<a name="309"><span class="lineNum">     309 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     310 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     311 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     312 </span>            :         }
-<a name="313"><span class="lineNum">     313 </span>            : #endif</a>
-<span class="lineNum">     314 </span><span class="lineCov">         78 :         return m_epoch_regulator-&gt;total_app_runtime_mpi();</span>
-<a name="315"><span class="lineNum">     315 </span>            :     }</a>
-<span class="lineNum">     316 </span>            : 
-<a name="317"><span class="lineNum">     317 </span><span class="lineCov">         76 :     double ApplicationIOImp::total_app_runtime_ignore(void) const</span></a>
-<span class="lineNum">     318 </span>            :     {
-<span class="lineNum">     319 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     320 </span><span class="lineCov">         76 :         if (!m_is_connected) {</span>
-<a name="321"><span class="lineNum">     321 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     322 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     323 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     324 </span>            :         }
-<a name="325"><span class="lineNum">     325 </span>            : #endif</a>
-<span class="lineNum">     326 </span><span class="lineCov">         76 :         return m_epoch_regulator-&gt;total_app_runtime_ignore();</span>
-<a name="327"><span class="lineNum">     327 </span>            :     }</a>
-<span class="lineNum">     328 </span>            : 
-<a name="329"><span class="lineNum">     329 </span><span class="lineCov">         76 :     int ApplicationIOImp::total_epoch_count(void) const</span></a>
-<span class="lineNum">     330 </span>            :     {
-<span class="lineNum">     331 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     332 </span><span class="lineCov">         76 :         if (!m_is_connected) {</span>
-<a name="333"><span class="lineNum">     333 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     334 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     335 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     336 </span>            :         }
-<a name="337"><span class="lineNum">     337 </span>            : #endif</a>
-<span class="lineNum">     338 </span><span class="lineCov">         76 :         return m_epoch_regulator-&gt;total_epoch_count();</span>
-<a name="339"><span class="lineNum">     339 </span>            :     }</a>
-<span class="lineNum">     340 </span>            : 
-<a name="341"><span class="lineNum">     341 </span><span class="lineCov">         76 :     double ApplicationIOImp::total_epoch_runtime_ignore(void) const</span></a>
-<span class="lineNum">     342 </span>            :     {
-<span class="lineNum">     343 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     344 </span><span class="lineCov">         76 :         if (!m_is_connected) {</span>
-<a name="345"><span class="lineNum">     345 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     346 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     347 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     348 </span>            :         }
-<a name="349"><span class="lineNum">     349 </span>            : #endif</a>
-<span class="lineNum">     350 </span><span class="lineCov">         76 :         return m_epoch_regulator-&gt;total_epoch_runtime_ignore();</span>
-<a name="351"><span class="lineNum">     351 </span>            :     }</a>
-<span class="lineNum">     352 </span>            : 
-<a name="353"><span class="lineNum">     353 </span><span class="lineCov">        268 :     int ApplicationIOImp::total_count(uint64_t region_id) const</span></a>
-<span class="lineNum">     354 </span>            :     {
-<span class="lineNum">     355 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">     356 </span><span class="lineCov">        268 :         if (!m_is_connected) {</span>
-<a name="357"><span class="lineNum">     357 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span></a>
-<span class="lineNum">     358 </span>            :                             &quot; called before connect().&quot;,
-<span class="lineNum">     359 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
-<span class="lineNum">     360 </span>            :         }
-<a name="361"><span class="lineNum">     361 </span>            : #endif</a>
-<span class="lineNum">     362 </span><span class="lineCov">        268 :         double result = 0.0;</span>
-<span class="lineNum">     363 </span>            :         try {
-<span class="lineNum">     364 </span><span class="lineCov">        268 :             result = m_epoch_regulator-&gt;total_count(region_id);</span>
-<a name="365"><span class="lineNum">     365 </span>            :         }</a>
-<span class="lineNum">     366 </span><span class="lineCov">         54 :         catch (const Exception &amp;ex) {</span>
-<span class="lineNum">     367 </span>            :         }
-<span class="lineNum">     368 </span><span class="lineCov">        268 :         return result;</span>
-<a name="369"><span class="lineNum">     369 </span>            :     }</a>
-<span class="lineNum">     370 </span>            : 
-<span class="lineNum">     371 </span><span class="lineCov">     625538 :     void ApplicationIOImp::update(std::shared_ptr&lt;Comm&gt; comm)</span>
-<span class="lineNum">     372 </span>            :     {
-<a name="373"><span class="lineNum">     373 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     374 </span><span class="lineCov">     625538 :         if (!m_is_connected) {</span>
-<span class="lineNum">     375 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
-<span class="lineNum">     376 </span>            :                             &quot; called before connect().&quot;,
-<a name="377"><span class="lineNum">     377 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     378 </span>            :         }
-<span class="lineNum">     379 </span>            : #endif
-<span class="lineNum">     380 </span><span class="lineCov">     625538 :         size_t length = 0;</span>
-<a name="381"><span class="lineNum">     381 </span><span class="lineCov">     625538 :         m_sampler-&gt;sample(m_prof_sample, length, comm);</span></a>
-<span class="lineNum">     382 </span><span class="lineCov">     625538 :         m_profile_io_sample-&gt;update(m_prof_sample.cbegin(), m_prof_sample.cbegin() + length);</span>
-<span class="lineNum">     383 </span><span class="lineCov">     625538 :         m_sampler-&gt;tprof_table()-&gt;dump(m_thread_progress);</span>
-<span class="lineNum">     384 </span><span class="lineCov">     625538 :         m_profile_io_sample-&gt;update_thread(m_thread_progress);</span>
-<a name="385"><span class="lineNum">     385 </span><span class="lineCov">     625538 :     }</span></a>
-<span class="lineNum">     386 </span>            : 
-<span class="lineNum">     387 </span><span class="lineCov">     625540 :     std::list&lt;geopm_region_info_s&gt; ApplicationIOImp::region_info(void) const</span>
-<span class="lineNum">     388 </span>            :     {
-<a name="389"><span class="lineNum">     389 </span>            : #ifdef GEOPM_DEBUG</a>
-<span class="lineNum">     390 </span><span class="lineCov">     625540 :         if (!m_is_connected) {</span>
-<span class="lineNum">     391 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
-<span class="lineNum">     392 </span>            :                             &quot; called before connect().&quot;,
-<a name="393"><span class="lineNum">     393 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     394 </span>            :         }
-<span class="lineNum">     395 </span>            : #endif
-<span class="lineNum">     396 </span><span class="lineCov">     625540 :         return m_epoch_regulator-&gt;region_info();</span>
-<a name="397"><span class="lineNum">     397 </span>            :     }</a>
-<span class="lineNum">     398 </span>            : 
-<span class="lineNum">     399 </span><span class="lineCov">     625540 :     void ApplicationIOImp::clear_region_info(void)</span>
-<span class="lineNum">     400 </span>            :     {
-<a name="401"><span class="lineNum">     401 </span><span class="lineCov">     625540 :         m_epoch_regulator-&gt;clear_region_info();</span></a>
-<a name="402"><span class="lineNum">     402 </span><span class="lineCov">     625540 :     }</span></a>
-<span class="lineNum">     403 </span>            : 
-<span class="lineNum">     404 </span><span class="lineNoCov">          0 :     void ApplicationIOImp::abort(void)</span>
-<a name="405"><span class="lineNum">     405 </span>            :     {</a>
-<span class="lineNum">     406 </span><span class="lineNoCov">          0 :         m_sampler-&gt;abort();</span>
-<span class="lineNum">     407 </span><span class="lineNoCov">          0 :     }</span>
-<span class="lineNum">     408 </span>            : }
+<span class="lineNum">      35 </span>            : #include &lt;utility&gt;
+<span class="lineNum">      36 </span>            : 
+<a name="37"><span class="lineNum">      37 </span>            : #include &quot;Exception.hpp&quot;</a>
+<span class="lineNum">      38 </span>            : #include &quot;EpochRuntimeRegulator.hpp&quot;
+<span class="lineNum">      39 </span>            : #include &quot;PlatformIO.hpp&quot;
+<span class="lineNum">      40 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;ProfileSampler.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;ProfileThread.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;ProfileIOSample.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;ProfileIOGroup.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;Helper.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : #ifdef GEOPM_HAS_XMMINTRIN
+<a name="49"><span class="lineNum">      49 </span>            : #include &lt;xmmintrin.h&gt;</a>
+<span class="lineNum">      50 </span>            : #endif
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span>            : namespace geopm
+<a name="53"><span class="lineNum">      53 </span>            : {</a>
+<a name="54"><span class="lineNum">      54 </span>            :     constexpr size_t ApplicationIOImp::M_SHMEM_REGION_SIZE;</a>
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span><span class="lineCov">         32 :     ApplicationIOImp::ApplicationIOImp(const std::string &amp;shm_key)</span>
+<a name="57"><span class="lineNum">      57 </span>            :         : ApplicationIOImp(shm_key,</a>
+<span class="lineNum">      58 </span><span class="lineCov">         64 :                            geopm::make_unique&lt;ProfileSamplerImp&gt;(M_SHMEM_REGION_SIZE),</span>
+<span class="lineNum">      59 </span>            :                            nullptr, nullptr,
+<span class="lineNum">      60 </span><span class="lineCov">         96 :                            platform_io(), platform_topo())</span>
+<a name="61"><span class="lineNum">      61 </span>            :     {</a>
+<span class="lineNum">      62 </span>            : 
+<a name="63"><span class="lineNum">      63 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">      64 </span>            : 
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         33 :     ApplicationIOImp::ApplicationIOImp(const std::string &amp;shm_key,</span></a>
+<span class="lineNum">      66 </span>            :                                  std::unique_ptr&lt;ProfileSampler&gt; sampler,
+<span class="lineNum">      67 </span>            :                                  std::shared_ptr&lt;ProfileIOSample&gt; pio_sample,
+<span class="lineNum">      68 </span>            :                                  std::unique_ptr&lt;EpochRuntimeRegulator&gt; epoch_regulator,
+<a name="69"><span class="lineNum">      69 </span>            :                                  PlatformIO &amp;platform_io,</a>
+<span class="lineNum">      70 </span><span class="lineCov">         33 :                                  const PlatformTopo &amp;platform_topo)</span>
+<span class="lineNum">      71 </span><span class="lineCov">         33 :         : m_sampler(std::move(sampler))</span>
+<span class="lineNum">      72 </span>            :         , m_profile_io_sample(pio_sample)
+<a name="73"><span class="lineNum">      73 </span>            :         , m_platform_io(platform_io)</a>
+<span class="lineNum">      74 </span>            :         , m_platform_topo(platform_topo)
+<span class="lineNum">      75 </span><span class="lineCov">         33 :         , m_thread_progress(m_platform_topo.num_domain(GEOPM_DOMAIN_CPU))</span>
+<span class="lineNum">      76 </span>            :         , m_is_connected(false)
+<a name="77"><span class="lineNum">      77 </span>            :         , m_rank_per_node(-1)</a>
+<span class="lineNum">      78 </span><span class="lineCov">         33 :         , m_epoch_regulator(std::move(epoch_regulator))</span>
+<span class="lineNum">      79 </span>            :         , m_start_energy_pkg(NAN)
+<span class="lineNum">      80 </span><span class="lineCov">        132 :         , m_start_energy_dram(NAN)</span>
+<a name="81"><span class="lineNum">      81 </span>            :     {</a>
+<a name="82"><span class="lineNum">      82 </span><span class="lineCov">         33 :     }</span></a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineCov">         66 :     ApplicationIOImp::~ApplicationIOImp()</span>
+<a name="85"><span class="lineNum">      85 </span>            :     {</a>
+<span class="lineNum">      86 </span>            : 
+<a name="87"><span class="lineNum">      87 </span><span class="lineCov">         66 :     }</span></a>
+<span class="lineNum">      88 </span>            : 
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         33 :     void ApplicationIOImp::connect(void)</span></a>
+<span class="lineNum">      90 </span>            :     {
+<span class="lineNum">      91 </span><span class="lineCov">         33 :         if (!m_is_connected) {</span>
+<span class="lineNum">      92 </span><span class="lineCov">         33 :             m_sampler-&gt;initialize();</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         33 :             m_rank_per_node = m_sampler-&gt;rank_per_node();</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">         33 :             m_prof_sample.resize(m_sampler-&gt;capacity());</span>
+<span class="lineNum">      95 </span><span class="lineCov">         66 :             std::vector&lt;int&gt; cpu_rank = m_sampler-&gt;cpu_rank();</span>
+<span class="lineNum">      96 </span><span class="lineCov">         33 :             if (m_profile_io_sample == nullptr) {</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         32 :                 m_epoch_regulator = geopm::make_unique&lt;EpochRuntimeRegulatorImp&gt;(m_rank_per_node, m_platform_io, m_platform_topo);</span></a>
+<span class="lineNum">      98 </span><span class="lineCov">         32 :                 m_epoch_regulator-&gt;init_unmarked_region();</span>
+<span class="lineNum">      99 </span><span class="lineCov">         32 :                 m_profile_io_sample = std::make_shared&lt;ProfileIOSampleImp&gt;(cpu_rank, *m_epoch_regulator);</span>
+<span class="lineNum">     100 </span><span class="lineCov">         32 :                 platform_io().register_iogroup(geopm::make_unique&lt;ProfileIOGroup&gt;(m_profile_io_sample, *m_epoch_regulator));</span>
+<a name="101"><span class="lineNum">     101 </span>            :             }</a>
+<span class="lineNum">     102 </span><span class="lineCov">         33 :             m_is_connected = true;</span>
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span><span class="lineCov">         33 :             m_start_energy_pkg = current_energy_pkg();</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         33 :             m_start_energy_dram = current_energy_dram();</span></a>
+<span class="lineNum">     106 </span>            :         }
+<a name="107"><span class="lineNum">     107 </span><span class="lineCov">         33 :     }</span></a>
+<span class="lineNum">     108 </span>            : 
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         32 :     void ApplicationIOImp::controller_ready(void)</span></a>
+<span class="lineNum">     110 </span>            :     {
+<span class="lineNum">     111 </span><span class="lineCov">         32 :         m_sampler-&gt;controller_ready();</span>
+<a name="112"><span class="lineNum">     112 </span><span class="lineCov">         32 :     }</span></a>
+<a name="113"><span class="lineNum">     113 </span>            : </a>
+<span class="lineNum">     114 </span><span class="lineCov">     271762 :     bool ApplicationIOImp::do_shutdown(void) const</span>
+<span class="lineNum">     115 </span>            :     {
+<span class="lineNum">     116 </span>            : #ifdef GEOPM_DEBUG
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">     271762 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     119 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="121"><span class="lineNum">     121 </span>            :         }</a>
+<span class="lineNum">     122 </span>            : #endif
+<span class="lineNum">     123 </span><span class="lineCov">     271762 :         bool result = m_sampler-&gt;do_shutdown();</span>
+<span class="lineNum">     124 </span><span class="lineCov">     271762 :         if (result) {</span>
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">         32 :             m_profile_io_sample-&gt;finalize_unmarked_region();</span></a>
+<span class="lineNum">     126 </span>            :         }
+<span class="lineNum">     127 </span><span class="lineCov">     271762 :         return result;</span>
+<a name="128"><span class="lineNum">     128 </span>            :     }</a>
+<a name="129"><span class="lineNum">     129 </span>            : </a>
+<span class="lineNum">     130 </span><span class="lineCov">         33 :     std::string ApplicationIOImp::report_name(void) const</span>
+<span class="lineNum">     131 </span>            :     {
+<span class="lineNum">     132 </span>            : #ifdef GEOPM_DEBUG
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         33 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     135 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="137"><span class="lineNum">     137 </span>            :         }</a>
+<span class="lineNum">     138 </span>            : #endif
+<span class="lineNum">     139 </span><span class="lineCov">         33 :         return m_sampler-&gt;report_name();</span>
+<a name="140"><span class="lineNum">     140 </span>            :     }</a>
+<a name="141"><span class="lineNum">     141 </span>            : </a>
+<span class="lineNum">     142 </span><span class="lineCov">         15 :     std::string ApplicationIOImp::profile_name(void) const</span>
+<span class="lineNum">     143 </span>            :     {
+<span class="lineNum">     144 </span>            : #ifdef GEOPM_DEBUG
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         15 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     147 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="149"><span class="lineNum">     149 </span>            :         }</a>
+<span class="lineNum">     150 </span>            : #endif
+<span class="lineNum">     151 </span><span class="lineCov">         15 :         return m_sampler-&gt;profile_name();</span>
+<a name="152"><span class="lineNum">     152 </span>            :     }</a>
+<a name="153"><span class="lineNum">     153 </span>            : </a>
+<span class="lineNum">     154 </span><span class="lineCov">         33 :     std::set&lt;std::string&gt; ApplicationIOImp::region_name_set(void) const</span>
+<span class="lineNum">     155 </span>            :     {
+<span class="lineNum">     156 </span>            : #ifdef GEOPM_DEBUG
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">         33 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     158 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     159 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="161"><span class="lineNum">     161 </span>            :         }</a>
+<span class="lineNum">     162 </span>            : #endif
+<span class="lineNum">     163 </span><span class="lineCov">         33 :         return m_sampler-&gt;name_set();</span>
+<a name="164"><span class="lineNum">     164 </span>            :     }</a>
+<a name="165"><span class="lineNum">     165 </span>            : </a>
+<span class="lineNum">     166 </span><span class="lineCov">        133 :     double ApplicationIOImp::total_region_runtime(uint64_t region_id) const</span>
+<span class="lineNum">     167 </span>            :     {
+<span class="lineNum">     168 </span>            : #ifdef GEOPM_DEBUG
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        133 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     171 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     172 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="173"><span class="lineNum">     173 </span>            :         }</a>
+<span class="lineNum">     174 </span>            : #endif
+<span class="lineNum">     175 </span><span class="lineCov">        133 :         double result = 0.0;</span>
+<span class="lineNum">     176 </span>            :         try {
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">        133 :             result = m_epoch_regulator-&gt;total_region_runtime(region_id);</span></a>
+<span class="lineNum">     178 </span>            :         }
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :         catch (const Exception &amp;ex) {</span>
+<span class="lineNum">     180 </span>            :         }
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">        133 :         return result;</span></a>
+<a name="182"><span class="lineNum">     182 </span>            :     }</a>
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span><span class="lineCov">        133 :     double ApplicationIOImp::total_region_runtime_mpi(uint64_t region_id) const</span>
+<a name="185"><span class="lineNum">     185 </span>            :     {</a>
+<span class="lineNum">     186 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     187 </span><span class="lineCov">        133 :         if (!m_is_connected) {</span>
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<a name="189"><span class="lineNum">     189 </span>            :                             &quot; called before connect().&quot;,</a>
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     191 </span>            :         }
+<span class="lineNum">     192 </span>            : #endif
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">        133 :         double result = 0.0;</span></a>
+<span class="lineNum">     194 </span>            :         try {
+<span class="lineNum">     195 </span><span class="lineCov">        133 :             result = m_epoch_regulator-&gt;total_region_runtime_mpi(region_id);</span>
+<span class="lineNum">     196 </span>            :         }
+<a name="197"><span class="lineNum">     197 </span><span class="lineNoCov">          0 :         catch (const Exception &amp;ex) {</span></a>
+<span class="lineNum">     198 </span>            :         }
+<span class="lineNum">     199 </span><span class="lineCov">        133 :         return result;</span>
+<a name="200"><span class="lineNum">     200 </span>            :     }</a>
+<a name="201"><span class="lineNum">     201 </span>            : </a>
+<span class="lineNum">     202 </span><span class="lineCov">         33 :     double ApplicationIOImp::total_epoch_runtime(void) const</span>
+<span class="lineNum">     203 </span>            :     {
+<span class="lineNum">     204 </span>            : #ifdef GEOPM_DEBUG
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         33 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     207 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="209"><span class="lineNum">     209 </span>            :         }</a>
+<span class="lineNum">     210 </span>            : #endif
+<span class="lineNum">     211 </span><span class="lineCov">         33 :         return m_epoch_regulator-&gt;total_epoch_runtime();</span>
+<a name="212"><span class="lineNum">     212 </span>            :     }</a>
+<a name="213"><span class="lineNum">     213 </span>            : </a>
+<span class="lineNum">     214 </span><span class="lineCov">         32 :     double ApplicationIOImp::total_epoch_runtime_network(void) const</span>
+<span class="lineNum">     215 </span>            :     {
+<span class="lineNum">     216 </span>            : #ifdef GEOPM_DEBUG
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">         32 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     219 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="221"><span class="lineNum">     221 </span>            :         }</a>
+<span class="lineNum">     222 </span>            : #endif
+<span class="lineNum">     223 </span><span class="lineCov">         32 :         return m_epoch_regulator-&gt;total_epoch_runtime_network();</span>
+<a name="224"><span class="lineNum">     224 </span>            :     }</a>
+<a name="225"><span class="lineNum">     225 </span>            : </a>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :     double ApplicationIOImp::total_epoch_energy_pkg(void) const</span>
+<span class="lineNum">     227 </span>            :     {
+<span class="lineNum">     228 </span>            : #ifdef GEOPM_DEBUG
+<a name="229"><span class="lineNum">     229 </span><span class="lineNoCov">          0 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     230 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     231 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     232 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="233"><span class="lineNum">     233 </span>            :         }</a>
+<span class="lineNum">     234 </span>            : #endif
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :         return m_epoch_regulator-&gt;total_epoch_energy_pkg();</span>
+<a name="236"><span class="lineNum">     236 </span>            :     }</a>
+<a name="237"><span class="lineNum">     237 </span>            : </a>
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 :     double ApplicationIOImp::total_epoch_energy_dram(void) const</span>
+<span class="lineNum">     239 </span>            :     {
+<span class="lineNum">     240 </span>            : #ifdef GEOPM_DEBUG
+<a name="241"><span class="lineNum">     241 </span><span class="lineNoCov">          0 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     243 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="245"><span class="lineNum">     245 </span>            :         }</a>
+<span class="lineNum">     246 </span>            : #endif
+<span class="lineNum">     247 </span><span class="lineNoCov">          0 :         return m_epoch_regulator-&gt;total_epoch_energy_dram();</span>
+<a name="248"><span class="lineNum">     248 </span>            :     }</a>
+<a name="249"><span class="lineNum">     249 </span>            : </a>
+<span class="lineNum">     250 </span><span class="lineCov">         33 :     double ApplicationIOImp::total_app_runtime(void) const</span>
+<span class="lineNum">     251 </span>            :     {
+<span class="lineNum">     252 </span>            : #ifdef GEOPM_DEBUG
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">         33 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     254 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     255 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     256 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="257"><span class="lineNum">     257 </span>            :         }</a>
+<span class="lineNum">     258 </span>            : #endif
+<span class="lineNum">     259 </span><span class="lineCov">         33 :         return m_profile_io_sample-&gt;total_app_runtime();</span>
+<a name="260"><span class="lineNum">     260 </span>            :     }</a>
+<a name="261"><span class="lineNum">     261 </span>            : </a>
+<span class="lineNum">     262 </span><span class="lineCov">         65 :     double ApplicationIOImp::current_energy_pkg(void) const</span>
+<span class="lineNum">     263 </span>            :     {
+<span class="lineNum">     264 </span><span class="lineCov">         65 :         double energy = 0.0;</span>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">         65 :         int num_package = m_platform_topo.num_domain(GEOPM_DOMAIN_PACKAGE);</span></a>
+<span class="lineNum">     266 </span><span class="lineCov">        194 :         for (int pkg = 0; pkg &lt; num_package; ++pkg) {</span>
+<span class="lineNum">     267 </span><span class="lineCov">        129 :             energy += m_platform_io.read_signal(&quot;ENERGY_PACKAGE&quot;, GEOPM_DOMAIN_PACKAGE, pkg);</span>
+<span class="lineNum">     268 </span>            :         }
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         65 :         return energy;</span></a>
+<a name="270"><span class="lineNum">     270 </span>            :    }</a>
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span><span class="lineCov">         65 :     double ApplicationIOImp::current_energy_dram(void) const</span>
+<a name="273"><span class="lineNum">     273 </span>            :     {</a>
+<span class="lineNum">     274 </span><span class="lineCov">         65 :         double energy = 0.0;</span>
+<span class="lineNum">     275 </span><span class="lineCov">         65 :         int num_dram = m_platform_topo.num_domain(GEOPM_DOMAIN_BOARD_MEMORY);</span>
+<span class="lineNum">     276 </span><span class="lineCov">        194 :         for (int dram = 0; dram &lt; num_dram; ++dram) {</span>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">        129 :             energy += m_platform_io.read_signal(&quot;ENERGY_DRAM&quot;, GEOPM_DOMAIN_BOARD_MEMORY, dram);</span></a>
+<span class="lineNum">     278 </span>            :         }
+<span class="lineNum">     279 </span><span class="lineCov">         65 :         return energy;</span>
+<a name="280"><span class="lineNum">     280 </span>            :     }</a>
+<a name="281"><span class="lineNum">     281 </span>            : </a>
+<span class="lineNum">     282 </span><span class="lineCov">         32 :     double ApplicationIOImp::total_app_energy_pkg(void) const</span>
+<span class="lineNum">     283 </span>            :     {
+<span class="lineNum">     284 </span>            : #ifdef GEOPM_DEBUG
+<a name="285"><span class="lineNum">     285 </span><span class="lineCov">         32 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     287 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     288 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="289"><span class="lineNum">     289 </span>            :         }</a>
+<span class="lineNum">     290 </span>            : #endif
+<span class="lineNum">     291 </span><span class="lineCov">         32 :         return current_energy_pkg() - m_start_energy_pkg;</span>
+<a name="292"><span class="lineNum">     292 </span>            :     }</a>
+<a name="293"><span class="lineNum">     293 </span>            : </a>
+<span class="lineNum">     294 </span><span class="lineCov">         32 :     double ApplicationIOImp::total_app_energy_dram(void) const</span>
+<span class="lineNum">     295 </span>            :     {
+<span class="lineNum">     296 </span>            : #ifdef GEOPM_DEBUG
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         32 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     298 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     299 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     300 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="301"><span class="lineNum">     301 </span>            :         }</a>
+<span class="lineNum">     302 </span>            : #endif
+<span class="lineNum">     303 </span><span class="lineCov">         32 :         return current_energy_dram() - m_start_energy_dram;</span>
+<a name="304"><span class="lineNum">     304 </span>            :     }</a>
+<a name="305"><span class="lineNum">     305 </span>            : </a>
+<span class="lineNum">     306 </span><span class="lineCov">         33 :     double ApplicationIOImp::total_app_runtime_mpi(void) const</span>
+<span class="lineNum">     307 </span>            :     {
+<span class="lineNum">     308 </span>            : #ifdef GEOPM_DEBUG
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">         33 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     310 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     311 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="313"><span class="lineNum">     313 </span>            :         }</a>
+<span class="lineNum">     314 </span>            : #endif
+<span class="lineNum">     315 </span><span class="lineCov">         33 :         return m_epoch_regulator-&gt;total_app_runtime_mpi();</span>
+<a name="316"><span class="lineNum">     316 </span>            :     }</a>
+<a name="317"><span class="lineNum">     317 </span>            : </a>
+<span class="lineNum">     318 </span><span class="lineCov">         32 :     double ApplicationIOImp::total_app_runtime_ignore(void) const</span>
+<span class="lineNum">     319 </span>            :     {
+<span class="lineNum">     320 </span>            : #ifdef GEOPM_DEBUG
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">         32 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     322 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     323 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     324 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="325"><span class="lineNum">     325 </span>            :         }</a>
+<span class="lineNum">     326 </span>            : #endif
+<span class="lineNum">     327 </span><span class="lineCov">         32 :         return m_epoch_regulator-&gt;total_app_runtime_ignore();</span>
+<a name="328"><span class="lineNum">     328 </span>            :     }</a>
+<a name="329"><span class="lineNum">     329 </span>            : </a>
+<span class="lineNum">     330 </span><span class="lineCov">         32 :     int ApplicationIOImp::total_epoch_count(void) const</span>
+<span class="lineNum">     331 </span>            :     {
+<span class="lineNum">     332 </span>            : #ifdef GEOPM_DEBUG
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">         32 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     334 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     335 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     336 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="337"><span class="lineNum">     337 </span>            :         }</a>
+<span class="lineNum">     338 </span>            : #endif
+<span class="lineNum">     339 </span><span class="lineCov">         32 :         return m_epoch_regulator-&gt;total_epoch_count();</span>
+<a name="340"><span class="lineNum">     340 </span>            :     }</a>
+<a name="341"><span class="lineNum">     341 </span>            : </a>
+<span class="lineNum">     342 </span><span class="lineCov">         32 :     double ApplicationIOImp::total_epoch_runtime_ignore(void) const</span>
+<span class="lineNum">     343 </span>            :     {
+<span class="lineNum">     344 </span>            : #ifdef GEOPM_DEBUG
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">         32 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     346 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     347 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     348 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="349"><span class="lineNum">     349 </span>            :         }</a>
+<span class="lineNum">     350 </span>            : #endif
+<span class="lineNum">     351 </span><span class="lineCov">         32 :         return m_epoch_regulator-&gt;total_epoch_runtime_ignore();</span>
+<a name="352"><span class="lineNum">     352 </span>            :     }</a>
+<a name="353"><span class="lineNum">     353 </span>            : </a>
+<span class="lineNum">     354 </span><span class="lineCov">        188 :     int ApplicationIOImp::total_count(uint64_t region_id) const</span>
+<span class="lineNum">     355 </span>            :     {
+<span class="lineNum">     356 </span>            : #ifdef GEOPM_DEBUG
+<a name="357"><span class="lineNum">     357 </span><span class="lineCov">        188 :         if (!m_is_connected) {</span></a>
+<span class="lineNum">     358 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<span class="lineNum">     359 </span>            :                             &quot; called before connect().&quot;,
+<span class="lineNum">     360 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<a name="361"><span class="lineNum">     361 </span>            :         }</a>
+<span class="lineNum">     362 </span>            : #endif
+<span class="lineNum">     363 </span><span class="lineCov">        188 :         double result = 0.0;</span>
+<span class="lineNum">     364 </span>            :         try {
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">        188 :             result = m_epoch_regulator-&gt;total_count(region_id);</span></a>
+<span class="lineNum">     366 </span>            :         }
+<span class="lineNum">     367 </span><span class="lineCov">         87 :         catch (const Exception &amp;ex) {</span>
+<span class="lineNum">     368 </span>            :         }
+<a name="369"><span class="lineNum">     369 </span><span class="lineCov">        188 :         return result;</span></a>
+<a name="370"><span class="lineNum">     370 </span>            :     }</a>
+<span class="lineNum">     371 </span>            : 
+<span class="lineNum">     372 </span><span class="lineCov">     271793 :     void ApplicationIOImp::update(std::shared_ptr&lt;Comm&gt; comm)</span>
+<a name="373"><span class="lineNum">     373 </span>            :     {</a>
+<span class="lineNum">     374 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     375 </span><span class="lineCov">     271793 :         if (!m_is_connected) {</span>
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<a name="377"><span class="lineNum">     377 </span>            :                             &quot; called before connect().&quot;,</a>
+<span class="lineNum">     378 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     379 </span>            :         }
+<span class="lineNum">     380 </span>            : #endif
+<a name="381"><span class="lineNum">     381 </span><span class="lineCov">     271793 :         size_t length = 0;</span></a>
+<span class="lineNum">     382 </span><span class="lineCov">     271793 :         m_sampler-&gt;sample(m_prof_sample, length, comm);</span>
+<span class="lineNum">     383 </span><span class="lineCov">     271793 :         m_profile_io_sample-&gt;update(m_prof_sample.cbegin(), m_prof_sample.cbegin() + length);</span>
+<span class="lineNum">     384 </span><span class="lineCov">     271793 :         m_sampler-&gt;tprof_table()-&gt;dump(m_thread_progress);</span>
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">     271793 :         m_profile_io_sample-&gt;update_thread(m_thread_progress);</span></a>
+<a name="386"><span class="lineNum">     386 </span><span class="lineCov">     271793 :     }</span></a>
+<span class="lineNum">     387 </span>            : 
+<span class="lineNum">     388 </span><span class="lineCov">     271794 :     std::list&lt;geopm_region_info_s&gt; ApplicationIOImp::region_info(void) const</span>
+<a name="389"><span class="lineNum">     389 </span>            :     {</a>
+<span class="lineNum">     390 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">     391 </span><span class="lineCov">     271794 :         if (!m_is_connected) {</span>
+<span class="lineNum">     392 </span><span class="lineNoCov">          0 :             throw Exception(&quot;ApplicationIOImp::&quot; + std::string(__func__) +</span>
+<a name="393"><span class="lineNum">     393 </span>            :                             &quot; called before connect().&quot;,</a>
+<span class="lineNum">     394 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">     395 </span>            :         }
+<span class="lineNum">     396 </span>            : #endif
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">     271794 :         return m_epoch_regulator-&gt;region_info();</span></a>
+<a name="398"><span class="lineNum">     398 </span>            :     }</a>
+<span class="lineNum">     399 </span>            : 
+<span class="lineNum">     400 </span><span class="lineCov">     271794 :     void ApplicationIOImp::clear_region_info(void)</span>
+<a name="401"><span class="lineNum">     401 </span>            :     {</a>
+<span class="lineNum">     402 </span><span class="lineCov">     271794 :         m_epoch_regulator-&gt;clear_region_info();</span>
+<a name="403"><span class="lineNum">     403 </span><span class="lineCov">     271794 :     }</span></a>
+<span class="lineNum">     404 </span>            : 
+<a name="405"><span class="lineNum">     405 </span><span class="lineNoCov">          0 :     void ApplicationIOImp::abort(void)</span></a>
+<span class="lineNum">     406 </span>            :     {
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :         m_sampler-&gt;abort();</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :     }</span>
+<a name="409"><span class="lineNum">     409 </span>            : }</a>
 </pre>
       </td>
     </tr>

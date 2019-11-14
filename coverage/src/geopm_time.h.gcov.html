@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/geopm_time.h</title>
+  <title>LCOV - v1.1.0 - src/geopm_time.h</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,20 +28,20 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">24</td>
-            <td class="headerCovTableEntry">25</td>
-            <td class="headerCovTableEntryHi">96.0 %</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntryHi">96.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">5</td>
-            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
@@ -104,150 +104,104 @@
 <span class="lineNum">      34 </span>            : 
 <span class="lineNum">      35 </span>            : #include &lt;math.h&gt;
 <span class="lineNum">      36 </span>            : #include &lt;errno.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : </a>
-<span class="lineNum">      38 </span>            : #ifndef __cplusplus
-<span class="lineNum">      39 </span>            : #include &lt;stdbool.h&gt;
-<span class="lineNum">      40 </span>            : #else
-<a name="41"><span class="lineNum">      41 </span>            : extern &quot;C&quot;</a>
-<span class="lineNum">      42 </span>            : {
-<span class="lineNum">      43 </span>            : #endif
-<span class="lineNum">      44 </span>            : 
-<a name="45"><span class="lineNum">      45 </span>            : struct geopm_time_s;</a>
-<span class="lineNum">      46 </span>            : 
-<span class="lineNum">      47 </span>            : static inline int geopm_time_string(int buf_size, char *buf);
-<span class="lineNum">      48 </span>            : static inline int geopm_time(struct geopm_time_s *time);
-<a name="49"><span class="lineNum">      49 </span>            : static inline double geopm_time_diff(const struct geopm_time_s *begin, const struct geopm_time_s *end);</a>
-<span class="lineNum">      50 </span>            : static inline bool geopm_time_comp(const struct geopm_time_s *aa, const struct geopm_time_s *bb);
-<span class="lineNum">      51 </span>            : static inline void geopm_time_add(const struct geopm_time_s *begin, double elapsed, struct geopm_time_s *end);
-<span class="lineNum">      52 </span>            : static inline double geopm_time_since(const struct geopm_time_s *begin);
-<a name="53"><span class="lineNum">      53 </span>            : </a>
-<span class="lineNum">      54 </span>            : #ifdef __linux__
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;string.h&gt;</a>
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : #ifndef __cplusplus
+<span class="lineNum">      40 </span>            : #include &lt;stdbool.h&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #else</a>
+<span class="lineNum">      42 </span>            : extern &quot;C&quot;
+<span class="lineNum">      43 </span>            : {
+<span class="lineNum">      44 </span>            : #endif
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<span class="lineNum">      46 </span>            : struct geopm_time_s;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : static inline int geopm_time_string(int buf_size, char *buf);
+<a name="49"><span class="lineNum">      49 </span>            : static inline int geopm_time(struct geopm_time_s *time);</a>
+<span class="lineNum">      50 </span>            : static inline double geopm_time_diff(const struct geopm_time_s *begin, const struct geopm_time_s *end);
+<span class="lineNum">      51 </span>            : static inline bool geopm_time_comp(const struct geopm_time_s *aa, const struct geopm_time_s *bb);
+<span class="lineNum">      52 </span>            : static inline void geopm_time_add(const struct geopm_time_s *begin, double elapsed, struct geopm_time_s *end);
+<a name="53"><span class="lineNum">      53 </span>            : static inline double geopm_time_since(const struct geopm_time_s *begin);</a>
+<span class="lineNum">      54 </span>            : 
 <span class="lineNum">      55 </span>            : #include &lt;time.h&gt;
 <span class="lineNum">      56 </span>            : 
-<a name="57"><span class="lineNum">      57 </span>            : /// @brief structure to abstract the difference between a timespec on linux or a timeval on OSX.</a>
-<span class="lineNum">      58 </span>            : struct geopm_time_s {
-<span class="lineNum">      59 </span>            :     struct timespec t;
-<a name="60"><span class="lineNum">      60 </span>            : };</a>
-<a name="61"><span class="lineNum">      61 </span>            : </a>
-<span class="lineNum">      62 </span><span class="lineCov">         76 : static inline int geopm_time_string(int buf_size, char *buf)</span>
-<span class="lineNum">      63 </span>            : {
-<span class="lineNum">      64 </span>            :     struct tm tm;
-<a name="65"><span class="lineNum">      65 </span>            :     struct timespec time;</a>
-<span class="lineNum">      66 </span><span class="lineCov">         76 :     int ret = clock_gettime(CLOCK_REALTIME, &amp;time);</span>
-<span class="lineNum">      67 </span><span class="lineCov">         76 :     if (!ret) {</span>
-<span class="lineNum">      68 </span>            :         /// asctime_r takes a user allocated buffer and
-<a name="69"><span class="lineNum">      69 </span>            :         /// requires the size to be at least 26 bytes.</a>
-<span class="lineNum">      70 </span><span class="lineCov">         76 :         if (buf_size &gt;= 26) {</span>
-<span class="lineNum">      71 </span><span class="lineCov">         76 :             localtime_r(&amp;time.tv_sec, &amp;tm);</span>
-<span class="lineNum">      72 </span><span class="lineCov">         76 :             asctime_r(&amp;tm, buf);</span>
-<a name="73"><span class="lineNum">      73 </span>            :         } else {</a>
-<span class="lineNum">      74 </span><span class="lineNoCov">          0 :             ret = EINVAL;</span>
-<span class="lineNum">      75 </span>            :         }
-<span class="lineNum">      76 </span>            :     }
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         76 :     return ret;</span></a>
-<a name="78"><span class="lineNum">      78 </span>            : }</a>
-<span class="lineNum">      79 </span>            : 
-<span class="lineNum">      80 </span><span class="lineCov"> 2252666254 : static inline int geopm_time(struct geopm_time_s *time)</span>
-<a name="81"><span class="lineNum">      81 </span>            : {</a>
-<span class="lineNum">      82 </span><span class="lineCov"> 2252666254 :     return clock_gettime(CLOCK_MONOTONIC_RAW, &amp;(time-&gt;t));</span>
-<a name="83"><span class="lineNum">      83 </span>            : }</a>
-<span class="lineNum">      84 </span>            : 
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov"> 2251628817 : static inline double geopm_time_diff(const struct geopm_time_s *begin, const struct geopm_time_s *end)</span></a>
-<span class="lineNum">      86 </span>            : {
-<span class="lineNum">      87 </span><span class="lineCov"> 2251628817 :     return (end-&gt;t.tv_sec - begin-&gt;t.tv_sec) +</span>
-<span class="lineNum">      88 </span><span class="lineCov"> 2251628817 :            (end-&gt;t.tv_nsec - begin-&gt;t.tv_nsec) * 1E-9;</span>
-<a name="89"><span class="lineNum">      89 </span>            : }</a>
-<span class="lineNum">      90 </span>            : 
-<span class="lineNum">      91 </span>            : static inline bool geopm_time_comp(const struct geopm_time_s *aa, const struct geopm_time_s *bb)
-<span class="lineNum">      92 </span>            : {
-<a name="93"><span class="lineNum">      93 </span>            :     bool result = aa-&gt;t.tv_sec &lt; bb-&gt;t.tv_sec;</a>
-<span class="lineNum">      94 </span>            :     if (!result &amp;&amp; aa-&gt;t.tv_sec == bb-&gt;t.tv_sec) {
-<span class="lineNum">      95 </span>            :         result = aa-&gt;t.tv_nsec &lt; bb-&gt;t.tv_nsec;
-<span class="lineNum">      96 </span>            :     }
-<a name="97"><span class="lineNum">      97 </span>            :     return result;</a>
-<a name="98"><span class="lineNum">      98 </span>            : }</a>
-<span class="lineNum">      99 </span>            : 
-<span class="lineNum">     100 </span><span class="lineCov">         90 : static inline void geopm_time_add(const struct geopm_time_s *begin, double elapsed, struct geopm_time_s *end)</span>
-<a name="101"><span class="lineNum">     101 </span>            : {</a>
-<span class="lineNum">     102 </span><span class="lineCov">         90 :     *end = *begin;</span>
-<span class="lineNum">     103 </span><span class="lineCov">         90 :     end-&gt;t.tv_sec += elapsed;</span>
-<span class="lineNum">     104 </span><span class="lineCov">         90 :     elapsed -= floor(elapsed);</span>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         90 :     end-&gt;t.tv_nsec += 1E9 * elapsed;</span></a>
-<span class="lineNum">     106 </span><span class="lineCov">         90 :     if (end-&gt;t.tv_nsec &gt;= 1000000000) {</span>
-<span class="lineNum">     107 </span><span class="lineCov">         72 :         end-&gt;t.tv_nsec -= 1000000000;</span>
-<span class="lineNum">     108 </span><span class="lineCov">         72 :         ++(end-&gt;t.tv_sec);</span>
-<a name="109"><span class="lineNum">     109 </span>            :     }</a>
-<span class="lineNum">     110 </span><span class="lineCov">         90 : }</span>
+<a name="57"><span class="lineNum">      57 </span>            : /// @brief structure to abstract the timespec on linux from other</a>
+<span class="lineNum">      58 </span>            : ///        representations of time.
+<span class="lineNum">      59 </span>            : struct geopm_time_s {
+<span class="lineNum">      60 </span>            :     struct timespec t;
+<a name="61"><span class="lineNum">      61 </span>            : };</a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">  532986720 : static inline int geopm_time(struct geopm_time_s *time)</span>
+<span class="lineNum">      64 </span>            : {
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">  532986720 :     return clock_gettime(CLOCK_MONOTONIC_RAW, &amp;(time-&gt;t));</span></a>
+<a name="66"><span class="lineNum">      66 </span>            : }</a>
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span><span class="lineCov">  532489603 : static inline double geopm_time_diff(const struct geopm_time_s *begin, const struct geopm_time_s *end)</span>
+<a name="69"><span class="lineNum">      69 </span>            : {</a>
+<span class="lineNum">      70 </span><span class="lineCov">  532489603 :     return (end-&gt;t.tv_sec - begin-&gt;t.tv_sec) +</span>
+<span class="lineNum">      71 </span><span class="lineCov">  532489603 :            (end-&gt;t.tv_nsec - begin-&gt;t.tv_nsec) * 1E-9;</span>
+<span class="lineNum">      72 </span>            : }
+<a name="73"><span class="lineNum">      73 </span>            : </a>
+<span class="lineNum">      74 </span>            : static inline bool geopm_time_comp(const struct geopm_time_s *aa, const struct geopm_time_s *bb)
+<span class="lineNum">      75 </span>            : {
+<span class="lineNum">      76 </span>            :     bool result = aa-&gt;t.tv_sec &lt; bb-&gt;t.tv_sec;
+<a name="77"><span class="lineNum">      77 </span>            :     if (!result &amp;&amp; aa-&gt;t.tv_sec == bb-&gt;t.tv_sec) {</a>
+<span class="lineNum">      78 </span>            :         result = aa-&gt;t.tv_nsec &lt; bb-&gt;t.tv_nsec;
+<span class="lineNum">      79 </span>            :     }
+<span class="lineNum">      80 </span>            :     return result;
+<a name="81"><span class="lineNum">      81 </span>            : }</a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineCov">         61 : static inline void geopm_time_add(const struct geopm_time_s *begin, double elapsed, struct geopm_time_s *end)</span>
+<span class="lineNum">      84 </span>            : {
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         61 :     *end = *begin;</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">         61 :     end-&gt;t.tv_sec += elapsed;</span>
+<span class="lineNum">      87 </span><span class="lineCov">         61 :     elapsed -= floor(elapsed);</span>
+<span class="lineNum">      88 </span><span class="lineCov">         61 :     end-&gt;t.tv_nsec += 1E9 * elapsed;</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         61 :     if (end-&gt;t.tv_nsec &gt;= 1000000000) {</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">         30 :         end-&gt;t.tv_nsec -= 1000000000;</span>
+<span class="lineNum">      91 </span><span class="lineCov">         30 :         ++(end-&gt;t.tv_sec);</span>
+<span class="lineNum">      92 </span>            :     }
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         61 : }</span></a>
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span><span class="lineCov">         34 : static inline int geopm_time_to_string(const struct geopm_time_s *time, int buf_size, char *buf)</span>
+<span class="lineNum">      96 </span>            : {
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         34 :     int err = 0;</span></a>
+<span class="lineNum">      98 </span>            :     struct tm tm;
+<span class="lineNum">      99 </span>            :     struct geopm_time_s ref_time_real;
+<span class="lineNum">     100 </span>            :     struct geopm_time_s ref_time_mono;
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         34 :     clock_gettime(CLOCK_REALTIME, &amp;(ref_time_real.t));</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">         34 :     clock_gettime(CLOCK_MONOTONIC_RAW, &amp;(ref_time_mono.t));</span>
+<span class="lineNum">     103 </span><span class="lineCov">         34 :     time_t sec_since_1970 = geopm_time_diff(&amp;ref_time_mono, &amp;ref_time_real) + time-&gt;t.tv_sec;</span>
+<span class="lineNum">     104 </span><span class="lineCov">         34 :     localtime_r(&amp;sec_since_1970, &amp;tm);</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         34 :     size_t num_byte = strftime(buf, buf_size, &quot;%a %b %d %H:%M:%S %Y&quot;, &amp;tm);</span></a>
+<span class="lineNum">     106 </span><span class="lineCov">         34 :     if (!num_byte) {</span>
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :         err = EINVAL;</span>
+<span class="lineNum">     108 </span>            :     }
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         34 :     return err;</span></a>
+<a name="110"><span class="lineNum">     110 </span>            : }</a>
 <span class="lineNum">     111 </span>            : 
-<span class="lineNum">     112 </span>            : #else
-<a name="113"><span class="lineNum">     113 </span>            : #include &lt;sys/time.h&gt;</a>
-<span class="lineNum">     114 </span>            : 
-<span class="lineNum">     115 </span>            : /// @brief structure to abstract the difference between a timespec on linux or a timeval on OSX.
-<span class="lineNum">     116 </span>            : struct geopm_time_s {
-<a name="117"><span class="lineNum">     117 </span>            :     struct timeval t;</a>
-<span class="lineNum">     118 </span>            : };
-<span class="lineNum">     119 </span>            : 
-<span class="lineNum">     120 </span>            : static inline int geopm_time_string(int buf_size, char *buf)
-<a name="121"><span class="lineNum">     121 </span>            : {</a>
-<span class="lineNum">     122 </span>            :     struct tm tm;
-<span class="lineNum">     123 </span>            :     struct timeval time;
-<span class="lineNum">     124 </span>            :     int ret = gettimeofday(&amp;time, NULL);
-<a name="125"><span class="lineNum">     125 </span>            :     if (!ret) {</a>
-<span class="lineNum">     126 </span>            :         /// asctime_r takes a user allocated buffer and
-<span class="lineNum">     127 </span>            :         /// requires the size to be at least 26 bytes.
-<span class="lineNum">     128 </span>            :         if (buf_size &gt;= 26) {
-<a name="129"><span class="lineNum">     129 </span>            :             localtime_r(&amp;time.tv_sec, &amp;tm);</a>
-<span class="lineNum">     130 </span>            :             asctime_r(&amp;tm, buf);
-<span class="lineNum">     131 </span>            :         } else {
-<span class="lineNum">     132 </span>            :             ret = EINVAL;
-<a name="133"><span class="lineNum">     133 </span>            :         }</a>
-<span class="lineNum">     134 </span>            :     }
-<span class="lineNum">     135 </span>            :     return ret;
-<span class="lineNum">     136 </span>            : }
-<a name="137"><span class="lineNum">     137 </span>            : </a>
-<span class="lineNum">     138 </span>            : static inline int geopm_time(struct geopm_time_s *time)
-<span class="lineNum">     139 </span>            : {
-<span class="lineNum">     140 </span>            :     return gettimeofday((struct timeval *)time, NULL);
-<a name="141"><span class="lineNum">     141 </span>            : }</a>
-<span class="lineNum">     142 </span>            : 
-<span class="lineNum">     143 </span>            : static inline double geopm_time_diff(const struct geopm_time_s *begin, const struct geopm_time_s *end)
-<span class="lineNum">     144 </span>            : {
-<a name="145"><span class="lineNum">     145 </span>            :     return (end-&gt;t.tv_sec - begin-&gt;t.tv_sec) +</a>
-<span class="lineNum">     146 </span>            :            (end-&gt;t.tv_usec - begin-&gt;t.tv_usec) * 1E-6;
-<span class="lineNum">     147 </span>            : }
-<span class="lineNum">     148 </span>            : 
-<a name="149"><span class="lineNum">     149 </span>            : static inline bool geopm_time_comp(const struct geopm_time_s *aa, const struct geopm_time_s *bb)</a>
-<span class="lineNum">     150 </span>            : {
-<span class="lineNum">     151 </span>            :     bool result = aa-&gt;t.tv_sec &lt; bb-&gt;t.tv_sec;
-<span class="lineNum">     152 </span>            :     if (!result &amp;&amp; aa-&gt;t.tv_sec == bb-&gt;t.tv_sec) {
-<a name="153"><span class="lineNum">     153 </span>            :         result = aa-&gt;t.tv_usec &lt; bb-&gt;t.tv_usec;</a>
-<span class="lineNum">     154 </span>            :     }
-<span class="lineNum">     155 </span>            :     return result;
-<span class="lineNum">     156 </span>            : }
-<a name="157"><span class="lineNum">     157 </span>            : </a>
-<span class="lineNum">     158 </span>            : static inline void geopm_time_add(const struct geopm_time_s *begin, double elapsed, struct geopm_time_s *end)
-<span class="lineNum">     159 </span>            : {
-<span class="lineNum">     160 </span>            :     *end = *begin;
-<a name="161"><span class="lineNum">     161 </span>            :     end-&gt;t.tv_sec += elapsed;</a>
-<span class="lineNum">     162 </span>            :     elapsed -= floor(elapsed);
-<span class="lineNum">     163 </span>            :     end-&gt;t.tv_usec += 1E6 * elapsed;
-<span class="lineNum">     164 </span>            : }
-<a name="165"><span class="lineNum">     165 </span>            : </a>
-<span class="lineNum">     166 </span>            : #endif
-<span class="lineNum">     167 </span>            : 
-<a name="168"><span class="lineNum">     168 </span>            : const struct geopm_time_s GEOPM_TIME_REF = {{0, 0}};</a>
-<a name="169"><span class="lineNum">     169 </span>            : </a>
-<span class="lineNum">     170 </span><span class="lineCov"> 1945944440 : static inline double geopm_time_since(const struct geopm_time_s *begin)</span>
-<span class="lineNum">     171 </span>            : {
-<span class="lineNum">     172 </span>            :     struct geopm_time_s curr_time;
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov"> 1945944440 :     geopm_time(&amp;curr_time);</span></a>
-<span class="lineNum">     174 </span><span class="lineCov"> 1945944440 :     return geopm_time_diff(begin, &amp;curr_time);</span>
-<span class="lineNum">     175 </span>            : }
-<span class="lineNum">     176 </span>            : 
-<a name="177"><span class="lineNum">     177 </span>            : #ifdef __cplusplus</a>
-<span class="lineNum">     178 </span>            : }
-<span class="lineNum">     179 </span>            : #endif
-<span class="lineNum">     180 </span>            : #endif
+<span class="lineNum">     112 </span><span class="lineCov">         32 : static inline int geopm_time_string(int buf_size, char *buf)</span>
+<a name="113"><span class="lineNum">     113 </span>            : {</a>
+<span class="lineNum">     114 </span>            :     struct geopm_time_s time;
+<span class="lineNum">     115 </span><span class="lineCov">         32 :     int err = geopm_time(&amp;time);</span>
+<span class="lineNum">     116 </span><span class="lineCov">         32 :     if (!err) {</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         32 :         err = geopm_time_to_string(&amp;time, buf_size, buf);</span></a>
+<span class="lineNum">     118 </span>            :     }
+<span class="lineNum">     119 </span><span class="lineCov">         32 :     return err;</span>
+<span class="lineNum">     120 </span>            : }
+<a name="121"><span class="lineNum">     121 </span>            : </a>
+<a name="122"><span class="lineNum">     122 </span>            : const struct geopm_time_s GEOPM_TIME_REF = {{0, 0}};</a>
+<span class="lineNum">     123 </span>            : 
+<span class="lineNum">     124 </span><span class="lineCov">  422375583 : static inline double geopm_time_since(const struct geopm_time_s *begin)</span>
+<a name="125"><span class="lineNum">     125 </span>            : {</a>
+<span class="lineNum">     126 </span>            :     struct geopm_time_s curr_time;
+<span class="lineNum">     127 </span><span class="lineCov">  422375583 :     geopm_time(&amp;curr_time);</span>
+<span class="lineNum">     128 </span><span class="lineCov">  422375583 :     return geopm_time_diff(begin, &amp;curr_time);</span>
+<a name="129"><span class="lineNum">     129 </span>            : }</a>
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            : #ifdef __cplusplus
+<span class="lineNum">     132 </span>            : }
+<a name="133"><span class="lineNum">     133 </span>            : #endif</a>
+<span class="lineNum">     134 </span>            : #endif
 </pre>
       </td>
     </tr>

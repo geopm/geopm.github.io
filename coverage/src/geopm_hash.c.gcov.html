@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/geopm_hash.c</title>
+  <title>LCOV - v1.1.0 - src/geopm_hash.c</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">15</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -111,28 +111,28 @@
 <a name="41"><span class="lineNum">      41 </span>            : {</a>
 <a name="42"><span class="lineNum">      42 </span>            : #endif</a>
 <span class="lineNum">      43 </span>            : 
-<span class="lineNum">      44 </span><span class="lineCov">       4034 : uint64_t geopm_crc32_u64(uint64_t begin, uint64_t key)</span>
+<span class="lineNum">      44 </span><span class="lineCov">       2194 : uint64_t geopm_crc32_u64(uint64_t begin, uint64_t key)</span>
 <a name="45"><span class="lineNum">      45 </span>            : {</a>
-<span class="lineNum">      46 </span><span class="lineCov">       4034 :     return _mm_crc32_u64(begin, key);</span>
+<span class="lineNum">      46 </span><span class="lineCov">       2194 :     return _mm_crc32_u64(begin, key);</span>
 <a name="47"><span class="lineNum">      47 </span>            : }</a>
 <span class="lineNum">      48 </span>            : 
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">       2840 : uint64_t geopm_crc32_str(const char *key)</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">       1443 : uint64_t geopm_crc32_str(const char *key)</span></a>
 <span class="lineNum">      50 </span>            : {
-<span class="lineNum">      51 </span><span class="lineCov">       2840 :     uint64_t result = 0;</span>
-<span class="lineNum">      52 </span><span class="lineCov">       2840 :     const uint64_t *ptr = (const uint64_t *)key;</span>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">       2840 :     size_t num_word = strlen(key) / 8;</span></a>
-<span class="lineNum">      54 </span><span class="lineCov">       4196 :     for (size_t i = 0; i &lt; num_word; ++i) {</span>
-<span class="lineNum">      55 </span><span class="lineCov">       1356 :         result = geopm_crc32_u64(result, ptr[i]);</span>
+<span class="lineNum">      51 </span><span class="lineCov">       1443 :     uint64_t result = 0;</span>
+<span class="lineNum">      52 </span><span class="lineCov">       1443 :     const uint64_t *ptr = (const uint64_t *)key;</span>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">       1443 :     size_t num_word = strlen(key) / 8;</span></a>
+<span class="lineNum">      54 </span><span class="lineCov">       2279 :     for (size_t i = 0; i &lt; num_word; ++i) {</span>
+<span class="lineNum">      55 </span><span class="lineCov">        836 :         result = geopm_crc32_u64(result, ptr[i]);</span>
 <span class="lineNum">      56 </span>            :     }
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">       2840 :     size_t extra = strlen(key) - 8 * num_word;</span></a>
-<span class="lineNum">      58 </span><span class="lineCov">       2840 :     if (extra) {</span>
-<span class="lineNum">      59 </span><span class="lineCov">       2670 :         uint64_t last_word = 0;</span>
-<span class="lineNum">      60 </span><span class="lineCov">      13412 :         for (size_t i = 0; i &lt; extra; ++i) {</span>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">      10742 :             ((char *)(&amp;last_word))[i] = ((char *)(ptr + num_word))[i];</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">       1443 :     size_t extra = strlen(key) - 8 * num_word;</span></a>
+<span class="lineNum">      58 </span><span class="lineCov">       1443 :     if (extra) {</span>
+<span class="lineNum">      59 </span><span class="lineCov">       1354 :         uint64_t last_word = 0;</span>
+<span class="lineNum">      60 </span><span class="lineCov">       6767 :         for (size_t i = 0; i &lt; extra; ++i) {</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">       5413 :             ((char *)(&amp;last_word))[i] = ((char *)(ptr + num_word))[i];</span></a>
 <span class="lineNum">      62 </span>            :         }
-<span class="lineNum">      63 </span><span class="lineCov">       2670 :         result = geopm_crc32_u64(result, last_word);</span>
+<span class="lineNum">      63 </span><span class="lineCov">       1354 :         result = geopm_crc32_u64(result, last_word);</span>
 <span class="lineNum">      64 </span>            :     }
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">       2840 :     return result;</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">       1443 :     return result;</span></a>
 <span class="lineNum">      66 </span>            : }
 <span class="lineNum">      67 </span>            : 
 <span class="lineNum">      68 </span>            : #ifdef __cplusplus

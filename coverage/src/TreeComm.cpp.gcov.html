@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/TreeComm.cpp</title>
+  <title>LCOV - v1.1.0 - src/TreeComm.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">91</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">17</td>
@@ -100,204 +100,205 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;limits.h&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;string.h&gt;
-<span class="lineNum">      35 </span>            : #include &lt;algorithm&gt;
-<span class="lineNum">      36 </span>            : #include &lt;memory&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;cmath&gt;</a>
-<span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span>            : #include &quot;geopm_env.h&quot;
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;TreeComm.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;limits.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;string.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;algorithm&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      39 </span>            : #include &lt;cmath&gt;
 <span class="lineNum">      40 </span>            : 
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Exception.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;TreeComm.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;TreeCommLevel.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;Comm.hpp&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;config.h&quot;</a>
-<span class="lineNum">      46 </span>            : 
-<span class="lineNum">      47 </span>            : namespace geopm
-<a name="48"><span class="lineNum">      48 </span>            : {</a>
-<a name="49"><span class="lineNum">      49 </span>            : </a>
-<span class="lineNum">      50 </span><span class="lineCov">         76 :     TreeCommImp::TreeCommImp(std::shared_ptr&lt;Comm&gt; comm,</span>
-<span class="lineNum">      51 </span>            :                              int num_send_down,
-<span class="lineNum">      52 </span><span class="lineCov">         34 :                              int num_send_up)</span>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         76 :         : TreeCommImp(comm, fan_out(comm), 0, num_send_down, num_send_up, {})</span></a>
-<span class="lineNum">      54 </span>            :     {
-<span class="lineNum">      55 </span>            : 
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">         76 :     }</span></a>
-<a name="57"><span class="lineNum">      57 </span>            : </a>
-<span class="lineNum">      58 </span><span class="lineCov">         84 :     TreeCommImp::TreeCommImp(std::shared_ptr&lt;Comm&gt; comm,</span>
-<span class="lineNum">      59 </span>            :                              const std::vector&lt;int&gt; &amp;fan_out,
-<span class="lineNum">      60 </span>            :                              int num_level_ctl,
-<a name="61"><span class="lineNum">      61 </span>            :                              int num_send_down,</a>
-<span class="lineNum">      62 </span>            :                              int num_send_up,
-<span class="lineNum">      63 </span><span class="lineCov">         38 :                              std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; mock_level)</span>
-<span class="lineNum">      64 </span>            :         : m_comm(comm)
-<a name="65"><span class="lineNum">      65 </span>            :         , m_fan_out(fan_out)</a>
-<span class="lineNum">      66 </span><span class="lineCov">         84 :         , m_root_level(fan_out.size())</span>
-<span class="lineNum">      67 </span>            :         , m_num_level_ctl(num_level_ctl)
-<span class="lineNum">      68 </span><span class="lineCov">        121 :         , m_max_level(m_root_level == m_num_level_ctl ? m_num_level_ctl : m_num_level_ctl + 1)</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         84 :         , m_num_node(comm-&gt;num_rank()) // Assume that comm has one rank per node</span></a>
-<span class="lineNum">      70 </span>            :         , m_num_send_down(num_send_down)
-<span class="lineNum">      71 </span>            :         , m_num_send_up(num_send_up)
-<span class="lineNum">      72 </span><span class="lineCov">        373 :         , m_level_ctl(std::move(mock_level))</span>
-<a name="73"><span class="lineNum">      73 </span>            :     {</a>
-<span class="lineNum">      74 </span><span class="lineCov">         84 :         if (m_level_ctl.size() == 0) {</span>
-<span class="lineNum">      75 </span><span class="lineCov">        152 :             std::shared_ptr&lt;Comm&gt; comm_cart(comm-&gt;split_cart(m_fan_out));</span>
-<span class="lineNum">      76 </span><span class="lineCov">         76 :             m_level_ctl = init_level(comm_cart, m_root_level);</span>
-<a name="77"><span class="lineNum">      77 </span>            :         }</a>
-<span class="lineNum">      78 </span>            : #ifdef GEOPM_DEBUG
-<span class="lineNum">      79 </span><span class="lineCov">         84 :         if (m_num_level_ctl &gt; m_root_level) {</span>
-<span class="lineNum">      80 </span>            :             throw Exception(&quot;Number of controlled levels greater than tree depth.&quot;,
-<a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span></a>
-<span class="lineNum">      82 </span>            :         }
-<span class="lineNum">      83 </span>            : #endif
-<span class="lineNum">      84 </span><span class="lineCov">         84 :         std::reverse(m_fan_out.begin(), m_fan_out.end());</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         84 :         comm-&gt;barrier();</span></a>
-<a name="86"><span class="lineNum">      86 </span><span class="lineCov">         84 :     }</span></a>
-<span class="lineNum">      87 </span>            : 
-<span class="lineNum">      88 </span><span class="lineCov">         76 :     int TreeCommImp::num_level_controlled(std::vector&lt;int&gt; coords)</span>
-<a name="89"><span class="lineNum">      89 </span>            :     {</a>
-<span class="lineNum">      90 </span><span class="lineCov">         76 :         int result = 0;</span>
-<span class="lineNum">      91 </span><span class="lineCov">         92 :         for (auto it = coords.rbegin(); it != coords.rend() &amp;&amp; *it == 0; ++it) {</span>
-<span class="lineNum">      92 </span><span class="lineCov">         16 :             ++result;</span>
-<a name="93"><span class="lineNum">      93 </span>            :         }</a>
-<span class="lineNum">      94 </span><span class="lineCov">         76 :         return result;</span>
-<a name="95"><span class="lineNum">      95 </span>            :     }</a>
-<span class="lineNum">      96 </span>            : 
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">          4 :     int TreeCommImp::max_level() const</span></a>
-<span class="lineNum">      98 </span>            :     {
-<span class="lineNum">      99 </span><span class="lineCov">          4 :         return m_max_level;</span>
-<a name="100"><span class="lineNum">     100 </span>            :     }</a>
-<a name="101"><span class="lineNum">     101 </span>            : </a>
-<span class="lineNum">     102 </span><span class="lineCov">         76 :     std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; TreeCommImp::init_level(std::shared_ptr&lt;Comm&gt; comm_cart, int root_level)</span>
-<span class="lineNum">     103 </span>            :     {
-<span class="lineNum">     104 </span><span class="lineCov">         76 :         std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; result;</span>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         76 :         int rank_cart = comm_cart-&gt;rank();</span></a>
-<span class="lineNum">     106 </span><span class="lineCov">        152 :         std::vector&lt;int&gt; coords(comm_cart-&gt;coordinate(rank_cart));</span>
-<span class="lineNum">     107 </span><span class="lineCov">         76 :         m_num_level_ctl = num_level_controlled(coords);</span>
-<span class="lineNum">     108 </span><span class="lineCov">        152 :         std::vector&lt;int&gt; parent_coords(coords);</span>
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         76 :         int level = 0;</span></a>
-<span class="lineNum">     110 </span><span class="lineCov">         76 :         m_max_level = m_num_level_ctl;</span>
-<span class="lineNum">     111 </span><span class="lineCov">         76 :         if (m_num_level_ctl != root_level) {</span>
-<span class="lineNum">     112 </span><span class="lineCov">         48 :             ++m_max_level;</span>
-<a name="113"><span class="lineNum">     113 </span>            :         }</a>
-<span class="lineNum">     114 </span><span class="lineCov">        204 :         for (; level &lt; m_max_level; ++level) {</span>
-<span class="lineNum">     115 </span><span class="lineCov">         64 :             parent_coords[root_level - 1 - level] = 0;</span>
-<span class="lineNum">     116 </span><span class="lineCov">        136 :             result.emplace_back(</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">        220 :                 new TreeCommLevelImp(comm_cart-&gt;split(</span></a>
-<span class="lineNum">     118 </span><span class="lineCov">         64 :                                          comm_cart-&gt;cart_rank(parent_coords), rank_cart),</span>
-<span class="lineNum">     119 </span><span class="lineCov">        100 :                                      m_num_send_up, m_num_send_down));</span>
-<span class="lineNum">     120 </span>            :         }
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">         76 :         for (; level &lt; root_level; ++level) {</span></a>
-<span class="lineNum">     122 </span><span class="lineNoCov">          0 :             comm_cart-&gt;split(Comm::M_SPLIT_COLOR_UNDEFINED, 0);</span>
-<span class="lineNum">     123 </span>            :         }
-<span class="lineNum">     124 </span><span class="lineCov">        152 :         return result;</span>
-<a name="125"><span class="lineNum">     125 </span>            :     }</a>
-<span class="lineNum">     126 </span>            : 
-<span class="lineNum">     127 </span><span class="lineCov">        168 :     TreeCommImp::~TreeCommImp()</span>
-<span class="lineNum">     128 </span>            :     {
-<a name="129"><span class="lineNum">     129 </span>            : </a>
-<a name="130"><span class="lineNum">     130 </span><span class="lineCov">        168 :     }</span></a>
-<span class="lineNum">     131 </span>            : 
-<span class="lineNum">     132 </span><span class="lineCov">        172 :     int TreeCommImp::num_level_controlled(void) const</span>
-<a name="133"><span class="lineNum">     133 </span>            :     {</a>
-<span class="lineNum">     134 </span><span class="lineCov">        172 :         return m_num_level_ctl;</span>
-<a name="135"><span class="lineNum">     135 </span>            :     }</a>
-<span class="lineNum">     136 </span>            : 
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">        156 :     int TreeCommImp::root_level(void) const</span></a>
-<span class="lineNum">     138 </span>            :     {
-<span class="lineNum">     139 </span><span class="lineCov">        156 :         return m_root_level;</span>
-<a name="140"><span class="lineNum">     140 </span>            :     }</a>
-<a name="141"><span class="lineNum">     141 </span>            : </a>
-<span class="lineNum">     142 </span><span class="lineCov">         20 :     int TreeCommImp::level_rank(int level) const</span>
-<span class="lineNum">     143 </span>            :     {
-<span class="lineNum">     144 </span><span class="lineCov">         20 :         if (level &lt; 0 || level &gt;= m_max_level) {</span>
-<a name="145"><span class="lineNum">     145 </span>            :             throw Exception(&quot;TreeCommImp::level_rank()&quot;,</a>
-<span class="lineNum">     146 </span><span class="lineCov">          4 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
-<span class="lineNum">     147 </span>            :         }
-<span class="lineNum">     148 </span><span class="lineCov">         16 :         return m_level_ctl[level]-&gt;level_rank();</span>
-<a name="149"><span class="lineNum">     149 </span>            :     }</a>
-<span class="lineNum">     150 </span>            : 
-<span class="lineNum">     151 </span><span class="lineCov">        100 :     int TreeCommImp::level_size(int level) const</span>
-<span class="lineNum">     152 </span>            :     {
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        100 :         if (level &lt; 0 || level &gt;= (int)m_fan_out.size()) {</span></a>
-<span class="lineNum">     154 </span>            :             throw Exception(&quot;TreeCommImp::level_size()&quot;,
-<span class="lineNum">     155 </span><span class="lineCov">          4 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
-<span class="lineNum">     156 </span>            :         }
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">         96 :         return m_fan_out[level];</span></a>
-<a name="158"><span class="lineNum">     158 </span>            :     }</a>
-<span class="lineNum">     159 </span>            : 
-<span class="lineNum">     160 </span><span class="lineCov">     605830 :     void TreeCommImp::send_up(int level, const std::vector&lt;double&gt; &amp;sample)</span>
-<a name="161"><span class="lineNum">     161 </span>            :     {</a>
-<span class="lineNum">     162 </span><span class="lineCov">     605830 :         if (level &lt; 0 || (level != 0 &amp;&amp; level &gt;= m_max_level)) {</span>
-<span class="lineNum">     163 </span>            :             throw Exception(&quot;TreeCommImp::send_up()&quot;,
-<span class="lineNum">     164 </span><span class="lineCov">          4 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
-<a name="165"><span class="lineNum">     165 </span>            :         }</a>
-<span class="lineNum">     166 </span><span class="lineCov">     605826 :         m_level_ctl[level]-&gt;send_up(sample);</span>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">     605826 :     }</span></a>
-<span class="lineNum">     168 </span>            : 
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">         28 :     void TreeCommImp::send_down(int level, const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy)</span></a>
-<span class="lineNum">     170 </span>            :     {
-<span class="lineNum">     171 </span><span class="lineCov">         28 :         if (level &lt; 0 || level &gt;= m_num_level_ctl) {</span>
-<span class="lineNum">     172 </span>            :             throw Exception(&quot;TreeCommImp::send_down()&quot;,
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          4 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     174 </span>            :         }
-<span class="lineNum">     175 </span><span class="lineCov">         24 :         m_level_ctl[level]-&gt;send_down(policy);</span>
-<a name="176"><span class="lineNum">     176 </span><span class="lineCov">         24 :     }</span></a>
-<a name="177"><span class="lineNum">     177 </span>            : </a>
-<span class="lineNum">     178 </span><span class="lineCov">     231112 :     bool TreeCommImp::receive_up(int level, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample)</span>
-<span class="lineNum">     179 </span>            :     {
-<span class="lineNum">     180 </span><span class="lineCov">     231112 :         if (level &lt; 0 || level &gt;= m_num_level_ctl) {</span>
-<a name="181"><span class="lineNum">     181 </span>            :             throw Exception(&quot;TreeCommImp::receive_up()&quot;,</a>
-<span class="lineNum">     182 </span><span class="lineCov">          4 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
-<span class="lineNum">     183 </span>            :         }
-<span class="lineNum">     184 </span><span class="lineCov">     231108 :         return m_level_ctl[level]-&gt;receive_up(sample);</span>
-<a name="185"><span class="lineNum">     185 </span>            :     }</a>
-<span class="lineNum">     186 </span>            : 
-<span class="lineNum">     187 </span><span class="lineCov">     606810 :     bool TreeCommImp::receive_down(int level, std::vector&lt;double&gt; &amp;policy)</span>
-<span class="lineNum">     188 </span>            :     {
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">     606810 :         if (level &lt; 0 || (level != 0 &amp;&amp; level &gt;= m_max_level)) {</span></a>
-<span class="lineNum">     190 </span>            :             throw Exception(&quot;TreeCommImp::receive_down()&quot;,
-<span class="lineNum">     191 </span><span class="lineCov">          4 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
-<span class="lineNum">     192 </span>            :         }
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">     606806 :         return m_level_ctl[level]-&gt;receive_down(policy);</span></a>
-<a name="194"><span class="lineNum">     194 </span>            :     }</a>
-<span class="lineNum">     195 </span>            : 
-<span class="lineNum">     196 </span><span class="lineCov">         78 :     size_t TreeCommImp::overhead_send(void) const</span>
-<a name="197"><span class="lineNum">     197 </span>            :     {</a>
-<span class="lineNum">     198 </span><span class="lineCov">         78 :         size_t result = 0;</span>
-<span class="lineNum">     199 </span><span class="lineCov">        150 :         for (auto it = m_level_ctl.begin(); it != m_level_ctl.end(); ++it) {</span>
-<span class="lineNum">     200 </span><span class="lineCov">         72 :             result += (*it)-&gt;overhead_send();</span>
-<a name="201"><span class="lineNum">     201 </span>            :         }</a>
-<span class="lineNum">     202 </span><span class="lineCov">         78 :         return result;</span>
-<a name="203"><span class="lineNum">     203 </span>            :     }</a>
-<span class="lineNum">     204 </span>            : 
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         76 :     std::vector&lt;int&gt; TreeComm::fan_out(const std::shared_ptr&lt;Comm&gt; &amp;comm)</span></a>
-<span class="lineNum">     206 </span>            :     {
-<span class="lineNum">     207 </span><span class="lineCov">         76 :         std::vector&lt;int&gt; fan_out;</span>
-<span class="lineNum">     208 </span><span class="lineCov">         76 :         int num_nodes = comm-&gt;num_rank();</span>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         76 :         if (num_nodes &gt; 1) {</span></a>
-<span class="lineNum">     210 </span><span class="lineCov">         64 :             int num_fan_out = 1;</span>
-<span class="lineNum">     211 </span><span class="lineCov">         64 :             fan_out.resize(num_fan_out);</span>
-<span class="lineNum">     212 </span><span class="lineCov">         64 :             fan_out[0] = num_nodes;</span>
-<a name="213"><span class="lineNum">     213 </span>            : </a>
-<span class="lineNum">     214 </span><span class="lineCov">         64 :             const int max_fan_out = geopm_env_max_fan_out();</span>
-<span class="lineNum">     215 </span><span class="lineCov">         64 :             while (fan_out[0] &gt; max_fan_out &amp;&amp; fan_out[num_fan_out - 1] != 1) {</span>
-<span class="lineNum">     216 </span><span class="lineNoCov">          0 :                 ++num_fan_out;</span>
-<a name="217"><span class="lineNum">     217 </span><span class="lineNoCov">          0 :                 fan_out.resize(num_fan_out);</span></a>
-<span class="lineNum">     218 </span><span class="lineNoCov">          0 :                 std::fill(fan_out.begin(), fan_out.end(), 0);</span>
-<span class="lineNum">     219 </span><span class="lineNoCov">          0 :                 comm-&gt;dimension_create(num_nodes, fan_out);</span>
-<span class="lineNum">     220 </span>            :             }
-<a name="221"><span class="lineNum">     221 </span>            : </a>
-<span class="lineNum">     222 </span><span class="lineCov">         64 :             if (num_fan_out &gt; 1 &amp;&amp; fan_out[num_fan_out - 1] == 1) {</span>
-<span class="lineNum">     223 </span><span class="lineNoCov">          0 :                 --num_fan_out;</span>
-<span class="lineNum">     224 </span><span class="lineNoCov">          0 :                 fan_out.resize(num_fan_out);</span>
-<a name="225"><span class="lineNum">     225 </span>            :             }</a>
-<span class="lineNum">     226 </span><span class="lineCov">         64 :             std::reverse(fan_out.begin(), fan_out.end());</span>
-<span class="lineNum">     227 </span>            :         }
-<span class="lineNum">     228 </span><span class="lineCov">         76 :         return fan_out;</span>
-<a name="229"><span class="lineNum">     229 </span>            :     }</a>
-<span class="lineNum">     230 </span>            : }
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Environment.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;TreeCommLevel.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;Comm.hpp&quot;</a>
+<span class="lineNum">      46 </span>            : #include &quot;config.h&quot;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : namespace geopm
+<a name="49"><span class="lineNum">      49 </span>            : {</a>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span><span class="lineCov">         32 :     TreeCommImp::TreeCommImp(std::shared_ptr&lt;Comm&gt; comm,</span>
+<span class="lineNum">      52 </span>            :                              int num_send_down,
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         32 :                              int num_send_up)</span></a>
+<span class="lineNum">      54 </span><span class="lineCov">         32 :         : TreeCommImp(comm, fan_out(comm), 0, num_send_down, num_send_up, {})</span>
+<span class="lineNum">      55 </span>            :     {
+<span class="lineNum">      56 </span>            : 
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         32 :     }</span></a>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span><span class="lineCov">         36 :     TreeCommImp::TreeCommImp(std::shared_ptr&lt;Comm&gt; comm,</span>
+<span class="lineNum">      60 </span>            :                              const std::vector&lt;int&gt; &amp;fan_out,
+<a name="61"><span class="lineNum">      61 </span>            :                              int num_level_ctl,</a>
+<span class="lineNum">      62 </span>            :                              int num_send_down,
+<span class="lineNum">      63 </span>            :                              int num_send_up,
+<span class="lineNum">      64 </span><span class="lineCov">         36 :                              std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; mock_level)</span>
+<a name="65"><span class="lineNum">      65 </span>            :         : m_comm(comm)</a>
+<span class="lineNum">      66 </span>            :         , m_fan_out(fan_out)
+<span class="lineNum">      67 </span><span class="lineCov">         36 :         , m_root_level(fan_out.size())</span>
+<span class="lineNum">      68 </span>            :         , m_num_level_ctl(num_level_ctl)
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         36 :         , m_max_level(m_root_level == m_num_level_ctl ? m_num_level_ctl : m_num_level_ctl + 1)</span></a>
+<span class="lineNum">      70 </span><span class="lineCov">         36 :         , m_num_node(comm-&gt;num_rank()) // Assume that comm has one rank per node</span>
+<span class="lineNum">      71 </span>            :         , m_num_send_down(num_send_down)
+<span class="lineNum">      72 </span>            :         , m_num_send_up(num_send_up)
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">        144 :         , m_level_ctl(std::move(mock_level))</span></a>
+<span class="lineNum">      74 </span>            :     {
+<span class="lineNum">      75 </span><span class="lineCov">         36 :         if (m_level_ctl.size() == 0) {</span>
+<span class="lineNum">      76 </span><span class="lineCov">         64 :             std::shared_ptr&lt;Comm&gt; comm_cart(comm-&gt;split_cart(m_fan_out));</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         32 :             m_level_ctl = init_level(comm_cart, m_root_level);</span></a>
+<span class="lineNum">      78 </span>            :         }
+<span class="lineNum">      79 </span>            : #ifdef GEOPM_DEBUG
+<span class="lineNum">      80 </span><span class="lineCov">         36 :         if (m_num_level_ctl &gt; m_root_level) {</span>
+<a name="81"><span class="lineNum">      81 </span>            :             throw Exception(&quot;Number of controlled levels greater than tree depth.&quot;,</a>
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_LOGIC, __FILE__, __LINE__);</span>
+<span class="lineNum">      83 </span>            :         }
+<span class="lineNum">      84 </span>            : #endif
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         36 :         std::reverse(m_fan_out.begin(), m_fan_out.end());</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">         36 :         comm-&gt;barrier();</span>
+<a name="87"><span class="lineNum">      87 </span><span class="lineCov">         36 :     }</span></a>
+<span class="lineNum">      88 </span>            : 
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         32 :     int TreeCommImp::num_level_controlled(std::vector&lt;int&gt; coords)</span></a>
+<span class="lineNum">      90 </span>            :     {
+<span class="lineNum">      91 </span><span class="lineCov">         32 :         int result = 0;</span>
+<span class="lineNum">      92 </span><span class="lineCov">         38 :         for (auto it = coords.rbegin(); it != coords.rend() &amp;&amp; *it == 0; ++it) {</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">          6 :             ++result;</span></a>
+<span class="lineNum">      94 </span>            :         }
+<span class="lineNum">      95 </span><span class="lineCov">         32 :         return result;</span>
+<a name="96"><span class="lineNum">      96 </span>            :     }</a>
+<a name="97"><span class="lineNum">      97 </span>            : </a>
+<span class="lineNum">      98 </span><span class="lineCov">          2 :     int TreeCommImp::max_level() const</span>
+<span class="lineNum">      99 </span>            :     {
+<span class="lineNum">     100 </span><span class="lineCov">          2 :         return m_max_level;</span>
+<a name="101"><span class="lineNum">     101 </span>            :     }</a>
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span><span class="lineCov">         32 :     std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; TreeCommImp::init_level(std::shared_ptr&lt;Comm&gt; comm_cart, int root_level)</span>
+<span class="lineNum">     104 </span>            :     {
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         32 :         std::vector&lt;std::unique_ptr&lt;TreeCommLevel&gt; &gt; result;</span></a>
+<span class="lineNum">     106 </span><span class="lineCov">         32 :         int rank_cart = comm_cart-&gt;rank();</span>
+<span class="lineNum">     107 </span><span class="lineCov">         64 :         std::vector&lt;int&gt; coords(comm_cart-&gt;coordinate(rank_cart));</span>
+<span class="lineNum">     108 </span><span class="lineCov">         32 :         m_num_level_ctl = num_level_controlled(coords);</span>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         64 :         std::vector&lt;int&gt; parent_coords(coords);</span></a>
+<span class="lineNum">     110 </span><span class="lineCov">         32 :         int level = 0;</span>
+<span class="lineNum">     111 </span><span class="lineCov">         32 :         m_max_level = m_num_level_ctl;</span>
+<span class="lineNum">     112 </span><span class="lineCov">         32 :         if (m_num_level_ctl != root_level) {</span>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         18 :             ++m_max_level;</span></a>
+<span class="lineNum">     114 </span>            :         }
+<span class="lineNum">     115 </span><span class="lineCov">         80 :         for (; level &lt; m_max_level; ++level) {</span>
+<span class="lineNum">     116 </span><span class="lineCov">         24 :             parent_coords[root_level - 1 - level] = 0;</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">         24 :             result.emplace_back(</span></a>
+<span class="lineNum">     118 </span><span class="lineCov">         96 :                 new TreeCommLevelImp(comm_cart-&gt;split(</span>
+<span class="lineNum">     119 </span><span class="lineCov">         24 :                                          comm_cart-&gt;cart_rank(parent_coords), rank_cart),</span>
+<span class="lineNum">     120 </span><span class="lineCov">         24 :                                      m_num_send_up, m_num_send_down));</span>
+<a name="121"><span class="lineNum">     121 </span>            :         }</a>
+<span class="lineNum">     122 </span><span class="lineCov">         32 :         for (; level &lt; root_level; ++level) {</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :             comm_cart-&gt;split(Comm::M_SPLIT_COLOR_UNDEFINED, 0);</span>
+<span class="lineNum">     124 </span>            :         }
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">         64 :         return result;</span></a>
+<a name="126"><span class="lineNum">     126 </span>            :     }</a>
+<span class="lineNum">     127 </span>            : 
+<span class="lineNum">     128 </span><span class="lineCov">         72 :     TreeCommImp::~TreeCommImp()</span>
+<a name="129"><span class="lineNum">     129 </span>            :     {</a>
+<span class="lineNum">     130 </span>            : 
+<a name="131"><span class="lineNum">     131 </span><span class="lineCov">         72 :     }</span></a>
+<span class="lineNum">     132 </span>            : 
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         72 :     int TreeCommImp::num_level_controlled(void) const</span></a>
+<span class="lineNum">     134 </span>            :     {
+<span class="lineNum">     135 </span><span class="lineCov">         72 :         return m_num_level_ctl;</span>
+<a name="136"><span class="lineNum">     136 </span>            :     }</a>
+<a name="137"><span class="lineNum">     137 </span>            : </a>
+<span class="lineNum">     138 </span><span class="lineCov">         66 :     int TreeCommImp::root_level(void) const</span>
+<span class="lineNum">     139 </span>            :     {
+<span class="lineNum">     140 </span><span class="lineCov">         66 :         return m_root_level;</span>
+<a name="141"><span class="lineNum">     141 </span>            :     }</a>
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span><span class="lineCov">         10 :     int TreeCommImp::level_rank(int level) const</span>
+<span class="lineNum">     144 </span>            :     {
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         10 :         if (level &lt; 0 || level &gt;= m_max_level) {</span></a>
+<span class="lineNum">     146 </span>            :             throw Exception(&quot;TreeCommImp::level_rank()&quot;,
+<span class="lineNum">     147 </span><span class="lineCov">          2 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
+<span class="lineNum">     148 </span>            :         }
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          8 :         return m_level_ctl[level]-&gt;level_rank();</span></a>
+<a name="150"><span class="lineNum">     150 </span>            :     }</a>
+<span class="lineNum">     151 </span>            : 
+<span class="lineNum">     152 </span><span class="lineCov">         40 :     int TreeCommImp::level_size(int level) const</span>
+<a name="153"><span class="lineNum">     153 </span>            :     {</a>
+<span class="lineNum">     154 </span><span class="lineCov">         40 :         if (level &lt; 0 || level &gt;= (int)m_fan_out.size()) {</span>
+<span class="lineNum">     155 </span>            :             throw Exception(&quot;TreeCommImp::level_size()&quot;,
+<span class="lineNum">     156 </span><span class="lineCov">          2 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
+<a name="157"><span class="lineNum">     157 </span>            :         }</a>
+<span class="lineNum">     158 </span><span class="lineCov">         38 :         return m_fan_out[level];</span>
+<a name="159"><span class="lineNum">     159 </span>            :     }</a>
+<span class="lineNum">     160 </span>            : 
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">     258736 :     void TreeCommImp::send_up(int level, const std::vector&lt;double&gt; &amp;sample)</span></a>
+<span class="lineNum">     162 </span>            :     {
+<span class="lineNum">     163 </span><span class="lineCov">     258736 :         if (level &lt; 0 || (level != 0 &amp;&amp; level &gt;= m_max_level)) {</span>
+<span class="lineNum">     164 </span>            :             throw Exception(&quot;TreeCommImp::send_up()&quot;,
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          2 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     166 </span>            :         }
+<span class="lineNum">     167 </span><span class="lineCov">     258734 :         m_level_ctl[level]-&gt;send_up(sample);</span>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">     258734 :     }</span></a>
+<a name="169"><span class="lineNum">     169 </span>            : </a>
+<span class="lineNum">     170 </span><span class="lineCov">         12 :     void TreeCommImp::send_down(int level, const std::vector&lt;std::vector&lt;double&gt; &gt; &amp;policy)</span>
+<span class="lineNum">     171 </span>            :     {
+<span class="lineNum">     172 </span><span class="lineCov">         12 :         if (level &lt; 0 || level &gt;= m_num_level_ctl) {</span>
+<a name="173"><span class="lineNum">     173 </span>            :             throw Exception(&quot;TreeCommImp::send_down()&quot;,</a>
+<span class="lineNum">     174 </span><span class="lineCov">          2 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
+<span class="lineNum">     175 </span>            :         }
+<span class="lineNum">     176 </span><span class="lineCov">         10 :         m_level_ctl[level]-&gt;send_down(policy);</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">         10 :     }</span></a>
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineCov">      99911 :     bool TreeCommImp::receive_up(int level, std::vector&lt;std::vector&lt;double&gt; &gt; &amp;sample)</span>
+<span class="lineNum">     180 </span>            :     {
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">      99911 :         if (level &lt; 0 || level &gt;= m_num_level_ctl) {</span></a>
+<span class="lineNum">     182 </span>            :             throw Exception(&quot;TreeCommImp::receive_up()&quot;,
+<span class="lineNum">     183 </span><span class="lineCov">          2 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
+<span class="lineNum">     184 </span>            :         }
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">      99909 :         return m_level_ctl[level]-&gt;receive_up(sample);</span></a>
+<a name="186"><span class="lineNum">     186 </span>            :     }</a>
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span><span class="lineCov">     259100 :     bool TreeCommImp::receive_down(int level, std::vector&lt;double&gt; &amp;policy)</span>
+<a name="189"><span class="lineNum">     189 </span>            :     {</a>
+<span class="lineNum">     190 </span><span class="lineCov">     259100 :         if (level &lt; 0 || (level != 0 &amp;&amp; level &gt;= m_max_level)) {</span>
+<span class="lineNum">     191 </span>            :             throw Exception(&quot;TreeCommImp::receive_down()&quot;,
+<span class="lineNum">     192 </span><span class="lineCov">          2 :                             GEOPM_ERROR_LEVEL_RANGE, __FILE__, __LINE__);</span>
+<a name="193"><span class="lineNum">     193 </span>            :         }</a>
+<span class="lineNum">     194 </span><span class="lineCov">     259098 :         return m_level_ctl[level]-&gt;receive_down(policy);</span>
+<a name="195"><span class="lineNum">     195 </span>            :     }</a>
+<span class="lineNum">     196 </span>            : 
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">         33 :     size_t TreeCommImp::overhead_send(void) const</span></a>
+<span class="lineNum">     198 </span>            :     {
+<span class="lineNum">     199 </span><span class="lineCov">         33 :         size_t result = 0;</span>
+<span class="lineNum">     200 </span><span class="lineCov">         61 :         for (auto it = m_level_ctl.begin(); it != m_level_ctl.end(); ++it) {</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         28 :             result += (*it)-&gt;overhead_send();</span></a>
+<span class="lineNum">     202 </span>            :         }
+<span class="lineNum">     203 </span><span class="lineCov">         33 :         return result;</span>
+<a name="204"><span class="lineNum">     204 </span>            :     }</a>
+<a name="205"><span class="lineNum">     205 </span>            : </a>
+<span class="lineNum">     206 </span><span class="lineCov">         32 :     std::vector&lt;int&gt; TreeComm::fan_out(const std::shared_ptr&lt;Comm&gt; &amp;comm)</span>
+<span class="lineNum">     207 </span>            :     {
+<span class="lineNum">     208 </span><span class="lineCov">         32 :         std::vector&lt;int&gt; fan_out;</span>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         32 :         int num_nodes = comm-&gt;num_rank();</span></a>
+<span class="lineNum">     210 </span><span class="lineCov">         32 :         if (num_nodes &gt; 1) {</span>
+<span class="lineNum">     211 </span><span class="lineCov">         24 :             int num_fan_out = 1;</span>
+<span class="lineNum">     212 </span><span class="lineCov">         24 :             fan_out.resize(num_fan_out);</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         24 :             fan_out[0] = num_nodes;</span></a>
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span><span class="lineCov">         24 :             const int max_fan_out = environment().max_fan_out();</span>
+<span class="lineNum">     216 </span><span class="lineCov">         24 :             while (fan_out[0] &gt; max_fan_out &amp;&amp; fan_out[num_fan_out - 1] != 1) {</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineNoCov">          0 :                 ++num_fan_out;</span></a>
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :                 fan_out.resize(num_fan_out);</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :                 std::fill(fan_out.begin(), fan_out.end(), 0);</span>
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :                 comm-&gt;dimension_create(num_nodes, fan_out);</span>
+<a name="221"><span class="lineNum">     221 </span>            :             }</a>
+<span class="lineNum">     222 </span>            : 
+<span class="lineNum">     223 </span><span class="lineCov">         24 :             if (num_fan_out &gt; 1 &amp;&amp; fan_out[num_fan_out - 1] == 1) {</span>
+<span class="lineNum">     224 </span><span class="lineNoCov">          0 :                 --num_fan_out;</span>
+<a name="225"><span class="lineNum">     225 </span><span class="lineNoCov">          0 :                 fan_out.resize(num_fan_out);</span></a>
+<span class="lineNum">     226 </span>            :             }
+<span class="lineNum">     227 </span><span class="lineCov">         24 :             std::reverse(fan_out.begin(), fan_out.end());</span>
+<span class="lineNum">     228 </span>            :         }
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">         32 :         return fan_out;</span></a>
+<span class="lineNum">     230 </span>            :     }
+<span class="lineNum">     231 </span>            : }
 </pre>
       </td>
     </tr>

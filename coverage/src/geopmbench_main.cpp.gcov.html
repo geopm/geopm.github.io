@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/geopmbench_main.cpp</title>
+  <title>LCOV - v1.1.0 - src/geopmbench_main.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,20 +28,20 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">40</td>
-            <td class="headerCovTableEntry">50</td>
-            <td class="headerCovTableEntryMed">80.0 %</td>
+            <td class="headerCovTableEntry">48</td>
+            <td class="headerCovTableEntry">58</td>
+            <td class="headerCovTableEntryMed">82.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">3</td>
-            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
@@ -103,154 +103,171 @@
 <a name="33"><span class="lineNum">      33 </span>            : #include &lt;stdlib.h&gt;</a>
 <span class="lineNum">      34 </span>            : #include &lt;stdio.h&gt;
 <span class="lineNum">      35 </span>            : #include &lt;iostream&gt;
-<span class="lineNum">      36 </span>            : #include &lt;stdint.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cstdint&gt;
 <a name="37"><span class="lineNum">      37 </span>            : #include &lt;string.h&gt;</a>
 <span class="lineNum">      38 </span>            : #include &lt;mpi.h&gt;
 <span class="lineNum">      39 </span>            : #include &lt;limits.h&gt;
-<span class="lineNum">      40 </span>            : 
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;geopm.h&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;geopm_error.h&quot;
-<span class="lineNum">      43 </span>            : #include &quot;ModelApplication.hpp&quot;
-<a name="44"><span class="lineNum">      44 </span>            : #include &quot;ModelParse.hpp&quot;</a>
-<a name="45"><span class="lineNum">      45 </span>            : </a>
-<span class="lineNum">      46 </span><span class="lineCov">        354 : int main(int argc, char **argv)</span>
-<span class="lineNum">      47 </span>            : {
-<span class="lineNum">      48 </span><span class="lineCov">        354 :     int err = 0;</span>
-<a name="49"><span class="lineNum">      49 </span>            :     int rank;</a>
-<span class="lineNum">      50 </span><span class="lineCov">        354 :     int verbosity = 0;</span>
-<span class="lineNum">      51 </span>            :     uint64_t init_rid;
-<span class="lineNum">      52 </span><span class="lineCov">        354 :     char *config_path = NULL;</span>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        165 :     const char *usage = &quot;\n&quot;</span></a>
-<span class="lineNum">      54 </span>            : &quot;%s -h | --help\n&quot;
-<span class="lineNum">      55 </span>            : &quot;    Print this help message.\n&quot;
-<span class="lineNum">      56 </span>            : &quot;\n&quot;
-<a name="57"><span class="lineNum">      57 </span>            : &quot;%s [--verbose] [config_file]\n&quot;</a>
-<span class="lineNum">      58 </span>            : &quot;\n&quot;
-<span class="lineNum">      59 </span>            : &quot;    --verbose: Print output from rank zero as every region executes.\n&quot;
-<span class="lineNum">      60 </span>            : &quot;\n&quot;
-<a name="61"><span class="lineNum">      61 </span>            : &quot;    config_file: Path to json file containing loop count and sequence\n&quot;</a>
-<span class="lineNum">      62 </span>            : &quot;                 of regions in each loop.\n&quot;
+<span class="lineNum">      40 </span>            : #include &lt;algorithm&gt;
+<a name="41"><span class="lineNum">      41 </span>            : </a>
+<span class="lineNum">      42 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      43 </span>            : #include &quot;geopm_error.h&quot;
+<span class="lineNum">      44 </span>            : #include &quot;ModelApplication.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;ModelParse.hpp&quot;</a>
+<a name="46"><span class="lineNum">      46 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span><span class="lineCov">        152 : int main(int argc, char **argv)</span>
+<a name="49"><span class="lineNum">      49 </span>            : {</a>
+<span class="lineNum">      50 </span><span class="lineCov">        152 :     int err = 0;</span>
+<span class="lineNum">      51 </span>            :     int rank;
+<span class="lineNum">      52 </span><span class="lineCov">        152 :     int verbosity = 0;</span>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        152 :     int do_markup_init = 1;</span></a>
+<span class="lineNum">      54 </span>            :     uint64_t init_rid;
+<span class="lineNum">      55 </span><span class="lineCov">        152 :     char *config_path = NULL;</span>
+<span class="lineNum">      56 </span><span class="lineCov">        152 :     const char *usage = &quot;\n&quot;</span>
+<a name="57"><span class="lineNum">      57 </span>            : &quot;%s -h | --help\n&quot;</a>
+<span class="lineNum">      58 </span>            : &quot;    Print this help message.\n&quot;
+<span class="lineNum">      59 </span>            : &quot;\n&quot;
+<span class="lineNum">      60 </span>            : &quot;%s [--verbose] [config_file]\n&quot;
+<a name="61"><span class="lineNum">      61 </span>            : &quot;\n&quot;</a>
+<span class="lineNum">      62 </span>            : &quot;    --verbose: Print output from rank zero as every region executes.\n&quot;
 <span class="lineNum">      63 </span>            : &quot;\n&quot;
-<span class="lineNum">      64 </span>            : &quot;                 Example configuration json string:\n&quot;
-<a name="65"><span class="lineNum">      65 </span>            : &quot;\n&quot;</a>
-<span class="lineNum">      66 </span>            : &quot;                 {\&quot;loop-count\&quot;: 10,\n&quot;
-<span class="lineNum">      67 </span>            : &quot;                  \&quot;region\&quot;: [\&quot;sleep\&quot;, \&quot;stream\&quot;, \&quot;dgemm\&quot;, \&quot;stream\&quot;, \&quot;all2all\&quot;],\n&quot;
-<span class="lineNum">      68 </span>            : &quot;                  \&quot;big-o\&quot;: [1.0, 1.0, 1.0, 1.0, 1.0]}\n&quot;
-<a name="69"><span class="lineNum">      69 </span>            : &quot;\n&quot;</a>
-<span class="lineNum">      70 </span>            : &quot;                 The \&quot;loop-count\&quot; value is an integer that sets the\n&quot;
-<span class="lineNum">      71 </span>            : &quot;                 number of loops executed.  Each time through the loop\n&quot;
-<span class="lineNum">      72 </span>            : &quot;                 the regions listed in the \&quot;region\&quot; array are\n&quot;
-<a name="73"><span class="lineNum">      73 </span>            : &quot;                 executed.  The \&quot;big-o\&quot; array gives double precision\n&quot;</a>
-<span class="lineNum">      74 </span>            : &quot;                 values for each region.  Region names can be one of\n&quot;
-<span class="lineNum">      75 </span>            : &quot;                 the following options:\n&quot;
-<span class="lineNum">      76 </span>            : &quot;\n&quot;
-<a name="77"><span class="lineNum">      77 </span>            : &quot;                 sleep: Executes clock_nanosleep() for big-o seconds.\n&quot;</a>
-<span class="lineNum">      78 </span>            : &quot;\n&quot;
-<span class="lineNum">      79 </span>            : &quot;                 spin: Executes a spin loop for big-o seconds.\n&quot;
-<span class="lineNum">      80 </span>            : &quot;\n&quot;
-<a name="81"><span class="lineNum">      81 </span>            : &quot;                 stream: Executes stream \&quot;triadd\&quot; on a vector with\n&quot;</a>
-<span class="lineNum">      82 </span>            : &quot;                 length proportional to big-o.\n&quot;
+<span class="lineNum">      64 </span>            : &quot;    config_file: Path to json file containing loop count and sequence\n&quot;
+<a name="65"><span class="lineNum">      65 </span>            : &quot;                 of regions in each loop.\n&quot;</a>
+<span class="lineNum">      66 </span>            : &quot;\n&quot;
+<span class="lineNum">      67 </span>            : &quot;                 Example configuration json string:\n&quot;
+<span class="lineNum">      68 </span>            : &quot;\n&quot;
+<a name="69"><span class="lineNum">      69 </span>            : &quot;                 {\&quot;loop-count\&quot;: 10,\n&quot;</a>
+<span class="lineNum">      70 </span>            : &quot;                  \&quot;region\&quot;: [\&quot;sleep\&quot;, \&quot;stream\&quot;, \&quot;dgemm\&quot;, \&quot;stream\&quot;, \&quot;all2all\&quot;],\n&quot;
+<span class="lineNum">      71 </span>            : &quot;                  \&quot;big-o\&quot;: [1.0, 1.0, 1.0, 1.0, 1.0]}\n&quot;
+<span class="lineNum">      72 </span>            : &quot;\n&quot;
+<a name="73"><span class="lineNum">      73 </span>            : &quot;                 The \&quot;loop-count\&quot; value is an integer that sets the\n&quot;</a>
+<span class="lineNum">      74 </span>            : &quot;                 number of loops executed.  Each time through the loop\n&quot;
+<span class="lineNum">      75 </span>            : &quot;                 the regions listed in the \&quot;region\&quot; array are\n&quot;
+<span class="lineNum">      76 </span>            : &quot;                 executed.  The \&quot;big-o\&quot; array gives double precision\n&quot;
+<a name="77"><span class="lineNum">      77 </span>            : &quot;                 values for each region.  Region names can be one of\n&quot;</a>
+<span class="lineNum">      78 </span>            : &quot;                 the following options:\n&quot;
+<span class="lineNum">      79 </span>            : &quot;\n&quot;
+<span class="lineNum">      80 </span>            : &quot;                 sleep: Executes clock_nanosleep() for big-o seconds.\n&quot;
+<a name="81"><span class="lineNum">      81 </span>            : &quot;\n&quot;</a>
+<span class="lineNum">      82 </span>            : &quot;                 spin: Executes a spin loop for big-o seconds.\n&quot;
 <span class="lineNum">      83 </span>            : &quot;\n&quot;
-<span class="lineNum">      84 </span>            : &quot;                 dgemm: Dense matrix-matrix multiply with floating\n&quot;
-<a name="85"><span class="lineNum">      85 </span>            : &quot;                 point operations proportional to big-o.\n&quot;</a>
+<span class="lineNum">      84 </span>            : &quot;                 stream: Executes stream \&quot;triadd\&quot; on a vector with\n&quot;
+<a name="85"><span class="lineNum">      85 </span>            : &quot;                 length proportional to big-o.\n&quot;</a>
 <span class="lineNum">      86 </span>            : &quot;\n&quot;
-<span class="lineNum">      87 </span>            : &quot;                 all2all: All processes send buffers to all other\n&quot;
-<span class="lineNum">      88 </span>            : &quot;                 processes.  The time of this operation is\n&quot;
-<a name="89"><span class="lineNum">      89 </span>            : &quot;                 proportional to big-o.\n&quot;</a>
-<span class="lineNum">      90 </span>            : &quot;\n&quot;
-<span class="lineNum">      91 </span>            : &quot;                 Example configuration json string with imbalance and\n&quot;
-<span class="lineNum">      92 </span>            : &quot;                 progress:\n&quot;
+<span class="lineNum">      87 </span>            : &quot;                 dgemm: Dense matrix-matrix multiply with floating\n&quot;
+<span class="lineNum">      88 </span>            : &quot;                 point operations proportional to big-o.\n&quot;
+<a name="89"><span class="lineNum">      89 </span>            : &quot;\n&quot;</a>
+<span class="lineNum">      90 </span>            : &quot;                 all2all: All processes send buffers to all other\n&quot;
+<span class="lineNum">      91 </span>            : &quot;                 processes.  The time of this operation is\n&quot;
+<span class="lineNum">      92 </span>            : &quot;                 proportional to big-o.\n&quot;
 <a name="93"><span class="lineNum">      93 </span>            : &quot;\n&quot;</a>
-<span class="lineNum">      94 </span>            : &quot;                 {\&quot;loop-count\&quot;: 10,\n&quot;
-<span class="lineNum">      95 </span>            : &quot;                  \&quot;region\&quot;: [\&quot;sleep\&quot;, \&quot;stream-progress\&quot;, \&quot;dgemm-imbalance\&quot;, \&quot;stream\&quot;, \&quot;all2all\&quot;],\n&quot;
-<span class="lineNum">      96 </span>            : &quot;                  \&quot;big-o\&quot;: [1.0, 1.0, 1.0, 1.0, 1.0],\n&quot;
-<a name="97"><span class="lineNum">      97 </span>            : &quot;                  \&quot;hostname\&quot;: [\&quot;compute-node-3\&quot;, \&quot;compute-node-15\&quot;],\n&quot;</a>
-<span class="lineNum">      98 </span>            : &quot;                  \&quot;imbalance\&quot;: [0.05, 0.15]}\n&quot;
-<span class="lineNum">      99 </span>            : &quot;\n&quot;
-<span class="lineNum">     100 </span>            : &quot;                 If \&quot;-imbalance\&quot; is appended to any region name in\n&quot;
-<a name="101"><span class="lineNum">     101 </span>            : &quot;                 the configuration file and the \&quot;hostname\&quot; and\n&quot;</a>
-<span class="lineNum">     102 </span>            : &quot;                 \&quot;imbalance\&quot; fields are provided then those\n&quot;
-<span class="lineNum">     103 </span>            : &quot;                 regions will have an injected delay on the hosts\n&quot;
-<span class="lineNum">     104 </span>            : &quot;                 listed.  In the above example a 5%% delay on\n&quot;
-<a name="105"><span class="lineNum">     105 </span>            : &quot;                 \&quot;my-compute-node-3\&quot; and a 15%% delay on\n&quot;</a>
-<span class="lineNum">     106 </span>            : &quot;                 \&quot;my-compute-node-15\&quot; are injected when executing\n&quot;
-<span class="lineNum">     107 </span>            : &quot;                 the dgemm region.\n&quot;
-<span class="lineNum">     108 </span>            : &quot;\n&quot;
-<a name="109"><span class="lineNum">     109 </span>            : &quot;                 If \&quot;-progress\&quot; is appended to any region name in the\n&quot;</a>
-<span class="lineNum">     110 </span>            : &quot;                 configuration, then progress for the region will be\n&quot;
-<span class="lineNum">     111 </span>            : &quot;                 reported through the geopm_prof_progress API.\n&quot;
-<span class="lineNum">     112 </span>            : &quot;\n&quot;
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">        189 : &quot;\n&quot;;</span></a>
-<span class="lineNum">     114 </span>            : 
-<span class="lineNum">     115 </span><span class="lineCov">        354 :     const int ERROR_HELP = -4096;</span>
-<span class="lineNum">     116 </span><span class="lineCov">        354 :     err = MPI_Init(&amp;argc, &amp;argv);</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">        294 :     if (!err) {</span></a>
-<span class="lineNum">     118 </span><span class="lineCov">        294 :         err = MPI_Comm_rank(MPI_COMM_WORLD, &amp;rank);</span>
-<span class="lineNum">     119 </span>            :     }
-<span class="lineNum">     120 </span>            : 
-<a name="121"><span class="lineNum">     121 </span><span class="lineCov">        294 :     if (!err &amp;&amp; argc &gt; 1) {</span></a>
-<span class="lineNum">     122 </span><span class="lineCov">        588 :         if (strncmp(argv[1], &quot;--help&quot;, strlen(&quot;--help&quot;)) == 0 ||</span>
-<span class="lineNum">     123 </span><span class="lineCov">        294 :             strncmp(argv[1], &quot;-h&quot;, strlen(&quot;-h&quot;)) == 0) {</span>
-<span class="lineNum">     124 </span><span class="lineNoCov">          0 :             if (!rank) {</span>
-<a name="125"><span class="lineNum">     125 </span><span class="lineNoCov">          0 :                 printf(usage, argv[0], argv[0]);</span></a>
-<span class="lineNum">     126 </span>            :             }
-<span class="lineNum">     127 </span><span class="lineNoCov">          0 :             err = ERROR_HELP;</span>
-<span class="lineNum">     128 </span>            :         }
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">        294 :         int offset = 1;</span></a>
-<span class="lineNum">     130 </span><span class="lineCov">        294 :         if (strncmp(argv[1], &quot;--verbose&quot;, strlen(&quot;--verbose&quot;)) == 0) {</span>
-<span class="lineNum">     131 </span><span class="lineCov">        294 :             if (!rank) {</span>
-<span class="lineNum">     132 </span><span class="lineCov">         28 :                 verbosity = 1;</span>
-<a name="133"><span class="lineNum">     133 </span>            :             }</a>
-<span class="lineNum">     134 </span><span class="lineCov">        294 :             ++offset;</span>
-<span class="lineNum">     135 </span>            :         }
-<span class="lineNum">     136 </span><span class="lineCov">        294 :         if (argc &gt; offset) {</span>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">        294 :             config_path = argv[offset];</span></a>
+<span class="lineNum">      94 </span>            : &quot;                 Example configuration json string with imbalance and\n&quot;
+<span class="lineNum">      95 </span>            : &quot;                 progress:\n&quot;
+<span class="lineNum">      96 </span>            : &quot;\n&quot;
+<a name="97"><span class="lineNum">      97 </span>            : &quot;                 {\&quot;loop-count\&quot;: 10,\n&quot;</a>
+<span class="lineNum">      98 </span>            : &quot;                  \&quot;region\&quot;: [\&quot;sleep\&quot;, \&quot;stream-progress\&quot;, \&quot;dgemm-imbalance\&quot;, \&quot;stream\&quot;, \&quot;all2all\&quot;],\n&quot;
+<span class="lineNum">      99 </span>            : &quot;                  \&quot;big-o\&quot;: [1.0, 1.0, 1.0, 1.0, 1.0],\n&quot;
+<span class="lineNum">     100 </span>            : &quot;                  \&quot;hostname\&quot;: [\&quot;compute-node-3\&quot;, \&quot;compute-node-15\&quot;],\n&quot;
+<a name="101"><span class="lineNum">     101 </span>            : &quot;                  \&quot;imbalance\&quot;: [0.05, 0.15]}\n&quot;</a>
+<span class="lineNum">     102 </span>            : &quot;\n&quot;
+<span class="lineNum">     103 </span>            : &quot;                 If \&quot;-imbalance\&quot; is appended to any region name in\n&quot;
+<span class="lineNum">     104 </span>            : &quot;                 the configuration file and the \&quot;hostname\&quot; and\n&quot;
+<a name="105"><span class="lineNum">     105 </span>            : &quot;                 \&quot;imbalance\&quot; fields are provided then those\n&quot;</a>
+<span class="lineNum">     106 </span>            : &quot;                 regions will have an injected delay on the hosts\n&quot;
+<span class="lineNum">     107 </span>            : &quot;                 listed.  In the above example a 5%% delay on\n&quot;
+<span class="lineNum">     108 </span>            : &quot;                 \&quot;my-compute-node-3\&quot; and a 15%% delay on\n&quot;
+<a name="109"><span class="lineNum">     109 </span>            : &quot;                 \&quot;my-compute-node-15\&quot; are injected when executing\n&quot;</a>
+<span class="lineNum">     110 </span>            : &quot;                 the dgemm region.\n&quot;
+<span class="lineNum">     111 </span>            : &quot;\n&quot;
+<span class="lineNum">     112 </span>            : &quot;                 If \&quot;-progress\&quot; is appended to any region name in the\n&quot;
+<a name="113"><span class="lineNum">     113 </span>            : &quot;                 configuration, then progress for the region will be\n&quot;</a>
+<span class="lineNum">     114 </span>            : &quot;                 reported through the geopm_prof_progress API.\n&quot;
+<span class="lineNum">     115 </span>            : &quot;\n&quot;
+<span class="lineNum">     116 </span>            : &quot;\n&quot;;
+<a name="117"><span class="lineNum">     117 </span>            : </a>
+<span class="lineNum">     118 </span><span class="lineCov">        152 :     const int ERROR_HELP = -4096;</span>
+<span class="lineNum">     119 </span><span class="lineCov">        152 :     err = MPI_Init(&amp;argc, &amp;argv);</span>
+<span class="lineNum">     120 </span><span class="lineCov">        124 :     if (!err) {</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">        124 :         err = MPI_Comm_rank(MPI_COMM_WORLD, &amp;rank);</span></a>
+<span class="lineNum">     122 </span>            :     }
+<span class="lineNum">     123 </span>            : 
+<span class="lineNum">     124 </span><span class="lineCov">        124 :     if (!err &amp;&amp; argc &gt; 1) {</span>
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">        248 :         if (strncmp(argv[1], &quot;--help&quot;, strlen(&quot;--help&quot;)) == 0 ||</span></a>
+<span class="lineNum">     126 </span><span class="lineCov">        124 :             strncmp(argv[1], &quot;-h&quot;, strlen(&quot;-h&quot;)) == 0) {</span>
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :             if (!rank) {</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :                 printf(usage, argv[0], argv[0]);</span>
+<a name="129"><span class="lineNum">     129 </span>            :             }</a>
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :             err = ERROR_HELP;</span>
+<span class="lineNum">     131 </span>            :         }
+<span class="lineNum">     132 </span><span class="lineCov">        124 :         int offset = 1;</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">        124 :         if (strncmp(argv[1], &quot;--verbose&quot;, strlen(&quot;--verbose&quot;)) == 0) {</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">        124 :             if (!rank) {</span>
+<span class="lineNum">     135 </span><span class="lineCov">         14 :                 verbosity = 1;</span>
+<span class="lineNum">     136 </span>            :             }
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">        124 :             ++offset;</span></a>
 <span class="lineNum">     138 </span>            :         }
-<span class="lineNum">     139 </span>            :     }
-<span class="lineNum">     140 </span>            : 
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        294 :     if (!err) {</span></a>
-<span class="lineNum">     142 </span><span class="lineCov">        294 :         err = geopm_prof_region(&quot;model-init&quot;, GEOPM_REGION_HINT_UNKNOWN, &amp;init_rid);</span>
-<span class="lineNum">     143 </span>            :     }
-<span class="lineNum">     144 </span><span class="lineCov">        294 :     if (!err) {</span>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">        294 :         err = geopm_prof_enter(init_rid);</span></a>
-<span class="lineNum">     146 </span>            :     }
-<span class="lineNum">     147 </span><span class="lineCov">        294 :     if (!err) {</span>
-<span class="lineNum">     148 </span>            :         // Do application initialization
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        294 :         uint64_t loop_count = 0;</span></a>
-<span class="lineNum">     150 </span><span class="lineCov">        588 :         std::vector&lt;std::string&gt; region_sequence;</span>
-<span class="lineNum">     151 </span><span class="lineCov">        588 :         std::vector&lt;double&gt; big_o_sequence;</span>
-<span class="lineNum">     152 </span><span class="lineCov">        294 :         if (config_path) {</span>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        294 :             geopm::model_parse_config(config_path, loop_count, region_sequence, big_o_sequence);</span></a>
-<span class="lineNum">     154 </span>            :         }
-<span class="lineNum">     155 </span>            :         else {
-<span class="lineNum">     156 </span>            :             // Default values if no configuration is specified
-<a name="157"><span class="lineNum">     157 </span><span class="lineNoCov">          0 :             loop_count = 10;</span></a>
-<span class="lineNum">     158 </span><span class="lineNoCov">          0 :             region_sequence = {&quot;sleep&quot;, &quot;stream&quot;, &quot;dgemm&quot;, &quot;stream&quot;, &quot;all2all&quot;};</span>
-<span class="lineNum">     159 </span><span class="lineNoCov">          0 :             big_o_sequence = {1.0, 1.0, 1.0, 1.0, 1.0};</span>
-<span class="lineNum">     160 </span>            :         }
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        588 :         geopm::ModelApplication app(loop_count, region_sequence, big_o_sequence, verbosity, rank);</span></a>
-<span class="lineNum">     162 </span><span class="lineCov">        294 :         err = geopm_prof_exit(init_rid);</span>
-<span class="lineNum">     163 </span><span class="lineCov">        294 :         if (!err) {</span>
-<span class="lineNum">     164 </span>            :             // Run application
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        294 :             app.run();</span></a>
-<span class="lineNum">     166 </span>            :         }
-<span class="lineNum">     167 </span>            :     }
-<span class="lineNum">     168 </span>            : 
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        294 :     if (err == ERROR_HELP) {</span></a>
-<span class="lineNum">     170 </span><span class="lineNoCov">          0 :         err = 0;</span>
-<span class="lineNum">     171 </span>            :     }
-<span class="lineNum">     172 </span>            : 
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">        294 :     if (err) {</span></a>
-<span class="lineNum">     174 </span><span class="lineNoCov">          0 :         char err_msg[NAME_MAX] = {};</span>
-<span class="lineNum">     175 </span><span class="lineNoCov">          0 :         geopm_error_message(err, err_msg, NAME_MAX);</span>
-<span class="lineNum">     176 </span><span class="lineNoCov">          0 :         std::cerr &lt;&lt; &quot;ERROR: &quot; &lt;&lt; argv[0] &lt;&lt; &quot;: &quot; &lt;&lt; err_msg &lt;&lt; std::endl;</span>
-<a name="177"><span class="lineNum">     177 </span>            :     }</a>
-<span class="lineNum">     178 </span>            : 
-<span class="lineNum">     179 </span><span class="lineCov">        294 :     int err_fin = MPI_Finalize();</span>
-<span class="lineNum">     180 </span><span class="lineCov">        294 :     err = err ? err : err_fin;</span>
-<a name="181"><span class="lineNum">     181 </span>            : </a>
-<span class="lineNum">     182 </span><span class="lineCov">        294 :     return err;</span>
-<span class="lineNum">     183 </span><span class="lineCov">       1062 : }</span>
+<span class="lineNum">     139 </span><span class="lineCov">        124 :         if (argc &gt; offset) {</span>
+<span class="lineNum">     140 </span><span class="lineCov">        124 :             config_path = argv[offset];</span>
+<a name="141"><span class="lineNum">     141 </span>            :         }</a>
+<span class="lineNum">     142 </span>            :     }
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span><span class="lineCov">        124 :     uint64_t loop_count = 0;</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">        248 :     std::vector&lt;std::string&gt; region_sequence;</span></a>
+<span class="lineNum">     146 </span><span class="lineCov">        248 :     std::vector&lt;double&gt; big_o_sequence;</span>
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span><span class="lineCov">        124 :     if (!err) {</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        124 :         if (config_path) {</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">        124 :             geopm::model_parse_config(config_path, loop_count, region_sequence, big_o_sequence);</span>
+<span class="lineNum">     151 </span>            :         }
+<span class="lineNum">     152 </span>            :         else {
+<a name="153"><span class="lineNum">     153 </span>            :             // Default values if no configuration is specified</a>
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :             loop_count = 10;</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :             region_sequence = {&quot;sleep&quot;, &quot;stream&quot;, &quot;dgemm&quot;, &quot;stream&quot;, &quot;all2all&quot;};</span>
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :             big_o_sequence = {1.0, 1.0, 1.0, 1.0, 1.0};</span>
+<a name="157"><span class="lineNum">     157 </span>            :         }</a>
+<span class="lineNum">     158 </span>            : 
+<a name="159"><span class="lineNum">     159 </span><span class="lineCov">        372 :         if (region_sequence.size() &gt; 0 &amp;&amp;</span></a>
+<span class="lineNum">     160 </span><span class="lineCov">        248 :             std::all_of(region_sequence.cbegin(), region_sequence.cend(),</span>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        124 :                         [](const std::string &amp;region) {</span></a>
+<span class="lineNum">     162 </span><span class="lineCov">        124 :                             return (region.find(&quot;-unmarked&quot;) != std::string::npos);</span>
+<span class="lineNum">     163 </span><span class="lineCov">        124 :                         })) {</span>
+<span class="lineNum">     164 </span><span class="lineCov">          1 :             do_markup_init = 0;</span>
+<a name="165"><span class="lineNum">     165 </span>            :         }</a>
+<span class="lineNum">     166 </span>            :     }
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span><span class="lineCov">        124 :     if (!err &amp;&amp; do_markup_init == 1) {</span>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        123 :         err = geopm_prof_region(&quot;model-init&quot;, GEOPM_REGION_HINT_UNKNOWN, &amp;init_rid);</span></a>
+<span class="lineNum">     170 </span>            :     }
+<span class="lineNum">     171 </span><span class="lineCov">        124 :     if (!err &amp;&amp; do_markup_init == 1) {</span>
+<span class="lineNum">     172 </span><span class="lineCov">        123 :         err = geopm_prof_enter(init_rid);</span>
+<a name="173"><span class="lineNum">     173 </span>            :     }</a>
+<span class="lineNum">     174 </span><span class="lineCov">        124 :     if (!err) {</span>
+<span class="lineNum">     175 </span>            :         // Do application initialization
+<span class="lineNum">     176 </span><span class="lineCov">        248 :         geopm::ModelApplication app(loop_count, region_sequence, big_o_sequence, verbosity, rank);</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">        124 :         if (do_markup_init == 1) {</span></a>
+<span class="lineNum">     178 </span><span class="lineCov">        123 :             err = geopm_prof_exit(init_rid);</span>
+<span class="lineNum">     179 </span>            :         }
+<span class="lineNum">     180 </span><span class="lineCov">        124 :         if (!err) {</span>
+<a name="181"><span class="lineNum">     181 </span>            :             // Run application</a>
+<span class="lineNum">     182 </span><span class="lineCov">        124 :             app.run();</span>
+<span class="lineNum">     183 </span>            :         }
+<span class="lineNum">     184 </span>            :     }
+<a name="185"><span class="lineNum">     185 </span>            : </a>
+<span class="lineNum">     186 </span><span class="lineCov">        124 :     if (err == ERROR_HELP) {</span>
+<span class="lineNum">     187 </span><span class="lineNoCov">          0 :         err = 0;</span>
+<span class="lineNum">     188 </span>            :     }
+<a name="189"><span class="lineNum">     189 </span>            : </a>
+<span class="lineNum">     190 </span><span class="lineCov">        124 :     if (err) {</span>
+<span class="lineNum">     191 </span><span class="lineNoCov">          0 :         char err_msg[NAME_MAX] = {};</span>
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :         geopm_error_message(err, err_msg, NAME_MAX);</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 :         std::cerr &lt;&lt; &quot;ERROR: &quot; &lt;&lt; argv[0] &lt;&lt; &quot;: &quot; &lt;&lt; err_msg &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     194 </span>            :     }
+<span class="lineNum">     195 </span>            : 
+<span class="lineNum">     196 </span><span class="lineCov">        124 :     int err_fin = MPI_Finalize();</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">        124 :     err = err ? err : err_fin;</span></a>
+<a name="198"><span class="lineNum">     198 </span>            : </a>
+<span class="lineNum">     199 </span><span class="lineCov">        124 :     return err;</span>
+<span class="lineNum">     200 </span><span class="lineCov">        456 : }</span>
 </pre>
       </td>
     </tr>

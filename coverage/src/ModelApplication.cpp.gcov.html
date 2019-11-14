@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/ModelApplication.cpp</title>
+  <title>LCOV - v1.1.0 - src/ModelApplication.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">24</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">5</td>
@@ -100,61 +100,62 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;iostream&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;fstream&gt;
-<span class="lineNum">      35 </span>            : #include &lt;streambuf&gt;
-<span class="lineNum">      36 </span>            : #include &lt;string&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;unistd.h&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;limits.h&gt;
-<span class="lineNum">      39 </span>            : 
-<span class="lineNum">      40 </span>            : #include &quot;geopm.h&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;ModelRegion.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;ModelApplication.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;config.h&quot;
-<a name="45"><span class="lineNum">      45 </span>            : </a>
-<a name="46"><span class="lineNum">      46 </span>            : namespace geopm</a>
-<span class="lineNum">      47 </span>            : {
-<span class="lineNum">      48 </span><span class="lineCov">        294 :     ModelApplication::ModelApplication(uint64_t repeat, std::vector&lt;std::string&gt; region_name, std::vector&lt;double&gt; big_o, int verbosity, int rank)</span>
-<a name="49"><span class="lineNum">      49 </span>            :         : m_repeat(repeat)</a>
-<span class="lineNum">      50 </span><span class="lineCov">        294 :         , m_rank(rank)</span>
-<span class="lineNum">      51 </span>            :     {
-<span class="lineNum">      52 </span><span class="lineCov">        294 :         if (region_name.size() != big_o.size()) {</span>
-<a name="53"><span class="lineNum">      53 </span>            :             throw Exception(&quot;ModelApplication: Length of region names is different than the length of big_o&quot;,</a>
-<span class="lineNum">      54 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">      55 </span>            :         }
-<span class="lineNum">      56 </span><span class="lineCov">        294 :         auto name_it = region_name.begin();</span>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">        862 :         for (auto big_o_it = big_o.begin(); big_o_it != big_o.end(); ++big_o_it, ++name_it) {</span></a>
-<span class="lineNum">      58 </span><span class="lineCov">        568 :             m_region.push_back(model_region_factory(*name_it, *big_o_it, verbosity));</span>
-<span class="lineNum">      59 </span>            :         }
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">        294 :     }</span></a>
-<a name="61"><span class="lineNum">      61 </span>            : </a>
-<span class="lineNum">      62 </span><span class="lineCov">        588 :     ModelApplication::~ModelApplication()</span>
-<span class="lineNum">      63 </span>            :     {
-<span class="lineNum">      64 </span><span class="lineCov">        862 :         for (auto it = m_region.rbegin(); it != m_region.rend(); ++it) {</span>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        568 :             delete *it;</span></a>
-<span class="lineNum">      66 </span>            :         }
-<a name="67"><span class="lineNum">      67 </span><span class="lineCov">        294 :     }</span></a>
-<span class="lineNum">      68 </span>            : 
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">        294 :     void ModelApplication::run(void)</span></a>
-<span class="lineNum">      70 </span>            :     {
-<span class="lineNum">      71 </span><span class="lineCov">        294 :         if (!m_rank) {</span>
-<span class="lineNum">      72 </span><span class="lineCov">         28 :             std::cout &lt;&lt; &quot;Beginning loop of &quot; &lt;&lt; m_repeat &lt;&lt; &quot; iterations.&quot; &lt;&lt; std::endl &lt;&lt; std::flush;</span>
-<a name="73"><span class="lineNum">      73 </span>            :         }</a>
-<span class="lineNum">      74 </span><span class="lineCov">       1534 :         for (uint64_t i = 0; i &lt; m_repeat; ++i) {</span>
-<span class="lineNum">      75 </span><span class="lineCov">       1240 :             (void)geopm_prof_epoch();</span>
-<span class="lineNum">      76 </span><span class="lineCov">       2906 :             for (auto it = m_region.begin(); it != m_region.end(); ++it) {</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       1666 :                 (*it)-&gt;run();</span></a>
-<span class="lineNum">      78 </span>            :             }
-<span class="lineNum">      79 </span><span class="lineCov">       1240 :             if (!m_rank) {</span>
-<span class="lineNum">      80 </span><span class="lineCov">        266 :                 std::cout &lt;&lt; &quot;Iteration: &quot; &lt;&lt; i &lt;&lt; &quot;\r&quot; &lt;&lt; std::flush;</span>
-<a name="81"><span class="lineNum">      81 </span>            :             }</a>
-<span class="lineNum">      82 </span>            :         }
-<span class="lineNum">      83 </span><span class="lineCov">        294 :         if (!m_rank) {</span>
-<span class="lineNum">      84 </span><span class="lineCov">         28 :             std::cout &lt;&lt; &quot;Completed loop.                    &quot; &lt;&lt; std::endl &lt;&lt; std::flush;</span>
-<a name="85"><span class="lineNum">      85 </span>            :         }</a>
-<span class="lineNum">      86 </span><span class="lineCov">        294 :     }</span>
-<span class="lineNum">      87 </span><span class="lineCov">       1062 : }</span>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;ModelApplication.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      36 </span>            : #include &lt;fstream&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;streambuf&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;string&gt;
+<span class="lineNum">      39 </span>            : #include &lt;unistd.h&gt;
+<span class="lineNum">      40 </span>            : #include &lt;limits.h&gt;
+<a name="41"><span class="lineNum">      41 </span>            : </a>
+<span class="lineNum">      42 </span>            : #include &quot;geopm.h&quot;
+<span class="lineNum">      43 </span>            : #include &quot;ModelRegion.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;Exception.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      46 </span>            : 
+<a name="47"><span class="lineNum">      47 </span>            : namespace geopm</a>
+<span class="lineNum">      48 </span>            : {
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">        124 :     ModelApplication::ModelApplication(uint64_t repeat, std::vector&lt;std::string&gt; region_name, std::vector&lt;double&gt; big_o, int verbosity, int rank)</span></a>
+<span class="lineNum">      50 </span>            :         : m_repeat(repeat)
+<span class="lineNum">      51 </span><span class="lineCov">        124 :         , m_rank(rank)</span>
+<span class="lineNum">      52 </span>            :     {
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        124 :         if (region_name.size() != big_o.size()) {</span></a>
+<span class="lineNum">      54 </span>            :             throw Exception(&quot;ModelApplication: Length of region names is different than the length of big_o&quot;,
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">      56 </span>            :         }
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">        124 :         auto name_it = region_name.begin();</span></a>
+<span class="lineNum">      58 </span><span class="lineCov">        353 :         for (auto big_o_it = big_o.begin(); big_o_it != big_o.end(); ++big_o_it, ++name_it) {</span>
+<span class="lineNum">      59 </span><span class="lineCov">        229 :             m_region.push_back(model_region_factory(*name_it, *big_o_it, verbosity));</span>
+<span class="lineNum">      60 </span>            :         }
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">        124 :     }</span></a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">        248 :     ModelApplication::~ModelApplication()</span>
+<span class="lineNum">      64 </span>            :     {
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        353 :         for (auto it = m_region.rbegin(); it != m_region.rend(); ++it) {</span></a>
+<span class="lineNum">      66 </span><span class="lineCov">        229 :             delete *it;</span>
+<span class="lineNum">      67 </span>            :         }
+<a name="68"><span class="lineNum">      68 </span><span class="lineCov">        124 :     }</span></a>
+<a name="69"><span class="lineNum">      69 </span>            : </a>
+<span class="lineNum">      70 </span><span class="lineCov">        124 :     void ModelApplication::run(void)</span>
+<span class="lineNum">      71 </span>            :     {
+<span class="lineNum">      72 </span><span class="lineCov">        124 :         if (!m_rank) {</span>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">         14 :             std::cout &lt;&lt; &quot;Beginning loop of &quot; &lt;&lt; m_repeat &lt;&lt; &quot; iterations.&quot; &lt;&lt; std::endl &lt;&lt; std::flush;</span></a>
+<span class="lineNum">      74 </span>            :         }
+<span class="lineNum">      75 </span><span class="lineCov">       1126 :         for (uint64_t i = 0; i &lt; m_repeat; ++i) {</span>
+<span class="lineNum">      76 </span><span class="lineCov">       1002 :             (void)geopm_prof_epoch();</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       2185 :             for (auto it = m_region.begin(); it != m_region.end(); ++it) {</span></a>
+<span class="lineNum">      78 </span><span class="lineCov">       1183 :                 (*it)-&gt;run();</span>
+<span class="lineNum">      79 </span>            :             }
+<span class="lineNum">      80 </span><span class="lineCov">       1002 :             if (!m_rank) {</span>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">        241 :                 std::cout &lt;&lt; &quot;Iteration: &quot; &lt;&lt; i &lt;&lt; &quot;\r&quot; &lt;&lt; std::flush;</span></a>
+<span class="lineNum">      82 </span>            :             }
+<span class="lineNum">      83 </span>            :         }
+<span class="lineNum">      84 </span><span class="lineCov">        124 :         if (!m_rank) {</span>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         14 :             std::cout &lt;&lt; &quot;Completed loop.                    &quot; &lt;&lt; std::endl &lt;&lt; std::flush;</span></a>
+<a name="86"><span class="lineNum">      86 </span>            :         }</a>
+<span class="lineNum">      87 </span><span class="lineCov">        124 :     }</span>
+<span class="lineNum">      88 </span><span class="lineCov">        456 : }</span>
 </pre>
       </td>
     </tr>

@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/CpuinfoIOGroup.cpp</title>
+  <title>LCOV - v1.1.0 - src/CpuinfoIOGroup.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">112</td>
-            <td class="headerCovTableEntry">140</td>
-            <td class="headerCovTableEntryMed">80.0 %</td>
+            <td class="headerCovTableEntry">118</td>
+            <td class="headerCovTableEntry">148</td>
+            <td class="headerCovTableEntryMed">79.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">21</td>
-            <td class="headerCovTableEntry">26</td>
-            <td class="headerCovTableEntryMed">80.8 %</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntryMed">81.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -100,288 +100,309 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;cmath&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;cstring&gt;
-<span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span>            : #include &lt;fstream&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;algorithm&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;iterator&gt;
-<span class="lineNum">      39 </span>            : #include &quot;CpuinfoIOGroup.hpp&quot;
-<span class="lineNum">      40 </span>            : #include &quot;PlatformTopo.hpp&quot;
-<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Exception.hpp&quot;</a>
-<span class="lineNum">      42 </span>            : #include &quot;Agg.hpp&quot;
-<span class="lineNum">      43 </span>            : #include &quot;config.h&quot;
-<span class="lineNum">      44 </span>            : 
-<a name="45"><span class="lineNum">      45 </span>            : #define GEOPM_CPUINFO_IO_GROUP_PLUGIN_NAME &quot;CPUINFO&quot;</a>
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;CpuinfoIOGroup.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;cmath&gt;
+<span class="lineNum">      36 </span>            : #include &lt;cstring&gt;
+<a name="37"><span class="lineNum">      37 </span>            : </a>
+<span class="lineNum">      38 </span>            : #include &lt;fstream&gt;
+<span class="lineNum">      39 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      40 </span>            : #include &lt;iterator&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &quot;Helper.hpp&quot;</a>
+<span class="lineNum">      42 </span>            : #include &quot;PlatformTopo.hpp&quot;
+<span class="lineNum">      43 </span>            : #include &quot;Exception.hpp&quot;
+<span class="lineNum">      44 </span>            : #include &quot;Agg.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;config.h&quot;</a>
 <span class="lineNum">      46 </span>            : 
-<a name="47"><span class="lineNum">      47 </span>            : namespace geopm</a>
-<span class="lineNum">      48 </span>            : {
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">       1368 :     static double read_cpu_freq(const std::string &amp;read_str)</span></a>
-<span class="lineNum">      50 </span>            :     {
-<span class="lineNum">      51 </span><span class="lineCov">       1368 :         double result = NAN;</span>
-<span class="lineNum">      52 </span><span class="lineCov">       2736 :         std::ifstream ifs(read_str);</span>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">       1368 :         if (ifs.is_open()) {</span></a>
-<span class="lineNum">      54 </span><span class="lineCov">       2728 :             std::string line;</span>
-<span class="lineNum">      55 </span><span class="lineCov">       1364 :             getline(ifs, line);</span>
-<span class="lineNum">      56 </span><span class="lineCov">       1364 :             ifs.close();</span>
-<a name="57"><span class="lineNum">      57 </span>            :             try {</a>
-<span class="lineNum">      58 </span><span class="lineCov">       1364 :                 result = 1e3 * std::stod(line);</span>
-<span class="lineNum">      59 </span>            :             }
-<span class="lineNum">      60 </span><span class="lineNoCov">          0 :             catch (const std::invalid_argument &amp;ex) {</span>
-<a name="61"><span class="lineNum">      61 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Invalid frequency: &quot; + std::string(ex.what()),</span></a>
-<span class="lineNum">      62 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">      63 </span>            :             }
-<span class="lineNum">      64 </span>            :         }
-<a name="65"><span class="lineNum">      65 </span>            :         else {</a>
-<span class="lineNum">      66 </span><span class="lineCov">          8 :             throw Exception(&quot;Failed to open &quot; + read_str + &quot;: &quot; + strerror(errno),</span>
-<span class="lineNum">      67 </span><span class="lineCov">         12 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">      68 </span>            :         }
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">       2728 :         return result;</span></a>
-<a name="70"><span class="lineNum">      70 </span>            :     }</a>
-<span class="lineNum">      71 </span>            : 
-<span class="lineNum">      72 </span><span class="lineCov">        685 :     static double read_cpu_freq_sticker(const std::string &amp;read_str)</span>
-<a name="73"><span class="lineNum">      73 </span>            :     {</a>
-<span class="lineNum">      74 </span><span class="lineCov">        685 :         double result = NAN;</span>
-<span class="lineNum">      75 </span><span class="lineCov">       1370 :         const std::string key = &quot;model name&quot;;</span>
-<span class="lineNum">      76 </span><span class="lineCov">       1370 :         std::ifstream cpuinfo_file(read_str);</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">        685 :         if (!cpuinfo_file.good()) {</span></a>
-<span class="lineNum">      78 </span><span class="lineCov">          4 :             throw Exception(&quot;Failed to open &quot; + read_str + &quot;: &quot; + strerror(errno),</span>
-<span class="lineNum">      79 </span><span class="lineCov">          6 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span>
-<span class="lineNum">      80 </span>            :         }
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">       7521 :         while (std::isnan(result) &amp;&amp; cpuinfo_file.good()) {</span></a>
-<span class="lineNum">      82 </span><span class="lineCov">       6836 :             std::string line;</span>
-<span class="lineNum">      83 </span><span class="lineCov">       3421 :             std::getline(cpuinfo_file, line);</span>
-<span class="lineNum">      84 </span><span class="lineCov">       3421 :             if (line.find(key) == 0 &amp;&amp; line.find(':') != std::string::npos) {</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">        689 :                 size_t colon_pos = line.find(':');</span></a>
-<span class="lineNum">      86 </span><span class="lineCov">        689 :                 bool match = true;</span>
-<span class="lineNum">      87 </span><span class="lineCov">       1518 :                 for (size_t pos = key.size(); pos != colon_pos; ++pos) {</span>
-<span class="lineNum">      88 </span><span class="lineCov">        829 :                     if (!std::isspace(line[pos])) {</span>
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">          6 :                         match = false;</span></a>
-<span class="lineNum">      90 </span>            :                     }
-<span class="lineNum">      91 </span>            :                 }
-<span class="lineNum">      92 </span><span class="lineCov">        689 :                 if (!match) {</span>
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">          6 :                     continue;</span></a>
-<a name="94"><span class="lineNum">      94 </span>            :                 }</a>
-<span class="lineNum">      95 </span><span class="lineCov">        347 :                 std::transform(line.begin(), line.end(), line.begin(),</span>
-<span class="lineNum">      96 </span><span class="lineCov">      37645 :                                [](unsigned char c) {</span>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">      37645 :                                    return std::tolower(c);</span></a>
-<span class="lineNum">      98 </span><span class="lineCov">      38675 :                                });</span>
-<span class="lineNum">      99 </span><span class="lineCov">       1366 :                 std::string unit_str[3] = {&quot;ghz&quot;, &quot;mhz&quot;, &quot;khz&quot;};</span>
-<span class="lineNum">     100 </span><span class="lineCov">        683 :                 double unit_factor[3] = {1e9, 1e6, 1e3};</span>
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       2726 :                 for (int unit_idx = 0; unit_idx != 3; ++unit_idx) {</span></a>
-<span class="lineNum">     102 </span><span class="lineCov">       2045 :                     size_t unit_pos = line.find(unit_str[unit_idx]);</span>
-<span class="lineNum">     103 </span><span class="lineCov">       2045 :                     if (unit_pos != std::string::npos) {</span>
-<span class="lineNum">     104 </span><span class="lineCov">       1366 :                         std::string value_str = line.substr(0, unit_pos);</span>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">        691 :                         while (std::isspace(value_str.back())) {</span></a>
-<span class="lineNum">     106 </span><span class="lineCov">          4 :                             value_str.erase(value_str.size() - 1);</span>
-<span class="lineNum">     107 </span>            :                         }
-<span class="lineNum">     108 </span><span class="lineCov">        683 :                         size_t space_pos = value_str.rfind(' ');</span>
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        683 :                         if (space_pos != std::string::npos) {</span></a>
-<span class="lineNum">     110 </span><span class="lineCov">        683 :                             value_str = value_str.substr(space_pos);</span>
-<span class="lineNum">     111 </span>            :                         }
-<span class="lineNum">     112 </span>            :                         try {
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">        683 :                             result = unit_factor[unit_idx] * std::stod(value_str);</span></a>
-<span class="lineNum">     114 </span>            :                         }
-<span class="lineNum">     115 </span><span class="lineCov">          4 :                         catch (const std::invalid_argument &amp;ex) {</span>
-<span class="lineNum">     116 </span><span class="lineCov">          4 :                             throw Exception(&quot;Invalid frequency: &quot; + std::string(ex.what()),</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">          6 :                                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     118 </span>            :                         }
-<span class="lineNum">     119 </span>            :                     }
-<span class="lineNum">     120 </span>            :                 }
-<a name="121"><span class="lineNum">     121 </span>            :             }</a>
-<span class="lineNum">     122 </span>            :         }
-<span class="lineNum">     123 </span><span class="lineCov">        681 :         cpuinfo_file.close();</span>
-<span class="lineNum">     124 </span><span class="lineCov">       1362 :         return result;</span>
-<a name="125"><span class="lineNum">     125 </span>            :     }</a>
-<span class="lineNum">     126 </span>            : 
-<span class="lineNum">     127 </span><span class="lineCov">        661 :     CpuinfoIOGroup::CpuinfoIOGroup()</span>
-<span class="lineNum">     128 </span>            :         :CpuinfoIOGroup(&quot;/proc/cpuinfo&quot;,
-<a name="129"><span class="lineNum">     129 </span>            :                         &quot;/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq&quot;,</a>
-<span class="lineNum">     130 </span><span class="lineCov">        661 :                         &quot;/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq&quot;)</span>
-<span class="lineNum">     131 </span>            :     {
-<span class="lineNum">     132 </span>            : 
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">        661 :     }</span></a>
+<span class="lineNum">      47 </span>            : #define GEOPM_CPUINFO_IO_GROUP_PLUGIN_NAME &quot;CPUINFO&quot;
+<span class="lineNum">      48 </span>            : 
+<a name="49"><span class="lineNum">      49 </span>            : namespace geopm</a>
+<span class="lineNum">      50 </span>            : {
+<span class="lineNum">      51 </span><span class="lineCov">       1103 :     static double read_cpu_freq(const std::string &amp;read_str)</span>
+<span class="lineNum">      52 </span>            :     {
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">       1103 :         double result = NAN;</span></a>
+<span class="lineNum">      54 </span><span class="lineCov">       2206 :         std::ifstream ifs(read_str);</span>
+<span class="lineNum">      55 </span><span class="lineCov">       1103 :         if (ifs.is_open()) {</span>
+<span class="lineNum">      56 </span><span class="lineCov">       2202 :             std::string line;</span>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">       1101 :             getline(ifs, line);</span></a>
+<span class="lineNum">      58 </span><span class="lineCov">       1101 :             ifs.close();</span>
+<span class="lineNum">      59 </span>            :             try {
+<span class="lineNum">      60 </span><span class="lineCov">       1101 :                 result = 1e3 * std::stod(line);</span>
+<a name="61"><span class="lineNum">      61 </span>            :             }</a>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :             catch (const std::invalid_argument &amp;ex) {</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :                 throw Exception(&quot;Invalid frequency: &quot; + std::string(ex.what()),</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :                                 GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="65"><span class="lineNum">      65 </span>            :             }</a>
+<span class="lineNum">      66 </span>            :         }
+<span class="lineNum">      67 </span>            :         else {
+<span class="lineNum">      68 </span><span class="lineCov">          4 :             throw Exception(&quot;Failed to open &quot; + read_str + &quot;: &quot; + strerror(errno),</span>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">          6 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      70 </span>            :         }
+<span class="lineNum">      71 </span><span class="lineCov">       2202 :         return result;</span>
+<a name="72"><span class="lineNum">      72 </span>            :     }</a>
+<a name="73"><span class="lineNum">      73 </span>            : </a>
+<span class="lineNum">      74 </span><span class="lineCov">        735 :     static double read_cpu_freq_sticker(const std::string &amp;read_str)</span>
+<span class="lineNum">      75 </span>            :     {
+<span class="lineNum">      76 </span><span class="lineCov">        735 :         double result = NAN;</span>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       1470 :         const std::string key = &quot;model name&quot;;</span></a>
+<span class="lineNum">      78 </span><span class="lineCov">       1470 :         std::ifstream cpuinfo_file(read_str);</span>
+<span class="lineNum">      79 </span><span class="lineCov">        735 :         if (!cpuinfo_file.good()) {</span>
+<span class="lineNum">      80 </span><span class="lineCov">          2 :             throw Exception(&quot;Failed to open &quot; + read_str + &quot;: &quot; + strerror(errno),</span>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">          3 :                             GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);</span></a>
+<span class="lineNum">      82 </span>            :         }
+<span class="lineNum">      83 </span><span class="lineCov">       8084 :         while (std::isnan(result) &amp;&amp; cpuinfo_file.good()) {</span>
+<span class="lineNum">      84 </span><span class="lineCov">       7346 :             std::string line;</span>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">       3676 :             std::getline(cpuinfo_file, line);</span></a>
+<span class="lineNum">      86 </span><span class="lineCov">       3676 :             if (line.find(key) == 0 &amp;&amp; line.find(':') != std::string::npos) {</span>
+<span class="lineNum">      87 </span><span class="lineCov">        740 :                 size_t colon_pos = line.find(':');</span>
+<span class="lineNum">      88 </span><span class="lineCov">        740 :                 bool match = true;</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">       1610 :                 for (size_t pos = key.size(); pos != colon_pos; ++pos) {</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">        870 :                     if (!std::isspace(line[pos])) {</span>
+<span class="lineNum">      91 </span><span class="lineCov">          6 :                         match = false;</span>
+<span class="lineNum">      92 </span>            :                     }
+<a name="93"><span class="lineNum">      93 </span>            :                 }</a>
+<span class="lineNum">      94 </span><span class="lineCov">        740 :                 if (!match) {</span>
+<span class="lineNum">      95 </span><span class="lineCov">          6 :                     continue;</span>
+<a name="96"><span class="lineNum">      96 </span>            :                 }</a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        734 :                 std::transform(line.begin(), line.end(), line.begin(),</span></a>
+<span class="lineNum">      98 </span><span class="lineCov">      39043 :                                [](unsigned char c) {</span>
+<span class="lineNum">      99 </span><span class="lineCov">      39043 :                                    return std::tolower(c);</span>
+<span class="lineNum">     100 </span><span class="lineCov">      40511 :                                });</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       1468 :                 std::string unit_str[3] = {&quot;ghz&quot;, &quot;mhz&quot;, &quot;khz&quot;};</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">        734 :                 double unit_factor[3] = {1e9, 1e6, 1e3};</span>
+<span class="lineNum">     103 </span><span class="lineCov">       2933 :                 for (int unit_idx = 0; unit_idx != 3; ++unit_idx) {</span>
+<span class="lineNum">     104 </span><span class="lineCov">       2200 :                     size_t unit_pos = line.find(unit_str[unit_idx]);</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">       2200 :                     if (unit_pos != std::string::npos) {</span></a>
+<span class="lineNum">     106 </span><span class="lineCov">       1468 :                         std::string value_str = line.substr(0, unit_pos);</span>
+<span class="lineNum">     107 </span><span class="lineCov">        740 :                         while (std::isspace(value_str.back())) {</span>
+<span class="lineNum">     108 </span><span class="lineCov">          3 :                             value_str.erase(value_str.size() - 1);</span>
+<a name="109"><span class="lineNum">     109 </span>            :                         }</a>
+<span class="lineNum">     110 </span><span class="lineCov">        734 :                         size_t space_pos = value_str.rfind(' ');</span>
+<span class="lineNum">     111 </span><span class="lineCov">        734 :                         if (space_pos != std::string::npos) {</span>
+<span class="lineNum">     112 </span><span class="lineCov">        734 :                             value_str = value_str.substr(space_pos);</span>
+<a name="113"><span class="lineNum">     113 </span>            :                         }</a>
+<span class="lineNum">     114 </span>            :                         try {
+<span class="lineNum">     115 </span><span class="lineCov">        734 :                             result = unit_factor[unit_idx] * std::stod(value_str);</span>
+<span class="lineNum">     116 </span>            :                         }
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">          2 :                         catch (const std::invalid_argument &amp;ex) {</span></a>
+<span class="lineNum">     118 </span><span class="lineCov">          2 :                             throw Exception(&quot;Invalid frequency: &quot; + std::string(ex.what()),</span>
+<span class="lineNum">     119 </span><span class="lineCov">          3 :                                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     120 </span>            :                         }
+<a name="121"><span class="lineNum">     121 </span>            :                     }</a>
+<span class="lineNum">     122 </span>            :                 }
+<span class="lineNum">     123 </span>            :             }
+<span class="lineNum">     124 </span>            :         }
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">        733 :         cpuinfo_file.close();</span></a>
+<span class="lineNum">     126 </span><span class="lineCov">       1466 :         return result;</span>
+<a name="127"><span class="lineNum">     127 </span>            :     }</a>
+<span class="lineNum">     128 </span>            : 
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">        357 :     CpuinfoIOGroup::CpuinfoIOGroup()</span></a>
+<span class="lineNum">     130 </span>            :         :CpuinfoIOGroup(&quot;/proc/cpuinfo&quot;,
+<span class="lineNum">     131 </span>            :                         &quot;/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq&quot;,
+<span class="lineNum">     132 </span><span class="lineCov">        357 :                         &quot;/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq&quot;)</span>
+<a name="133"><span class="lineNum">     133 </span>            :     {</a>
 <span class="lineNum">     134 </span>            : 
-<span class="lineNum">     135 </span><span class="lineCov">        687 :     CpuinfoIOGroup::CpuinfoIOGroup(const std::string &amp;cpu_info_path,</span>
-<span class="lineNum">     136 </span>            :                                    const std::string &amp;cpu_freq_min_path,
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">        349 :                                    const std::string &amp;cpu_freq_max_path)</span></a>
-<span class="lineNum">     138 </span><span class="lineCov">       1035 :         : m_signal_value_map({{&quot;CPUINFO::FREQ_MIN&quot;, read_cpu_freq(cpu_freq_min_path)},</span>
-<span class="lineNum">     139 </span><span class="lineCov">       1031 :                               {&quot;CPUINFO::FREQ_STICKER&quot;, read_cpu_freq_sticker(cpu_info_path)},</span>
-<span class="lineNum">     140 </span><span class="lineCov">       1026 :                               {&quot;CPUINFO::FREQ_MAX&quot;, read_cpu_freq(cpu_freq_max_path)},</span>
-<a name="141"><span class="lineNum">     141 </span>            :                               {&quot;CPUINFO::FREQ_STEP&quot;, 100e6}})</a>
-<span class="lineNum">     142 </span>            :         , m_func_map({{&quot;CPUINFO::FREQ_MIN&quot;, Agg::expect_same},
-<span class="lineNum">     143 </span>            :                       {&quot;CPUINFO::FREQ_STICKER&quot;, Agg::expect_same},
-<span class="lineNum">     144 </span>            :                       {&quot;CPUINFO::FREQ_MAX&quot;, Agg::expect_same},
-<a name="145"><span class="lineNum">     145 </span>            :                       {&quot;CPUINFO::FREQ_STEP&quot;, Agg::expect_same}})</a>
-<span class="lineNum">     146 </span>            :         , m_desc_map({{&quot;CPUINFO::FREQ_MIN&quot;, &quot;Minimum processor frequency in hertz&quot;},
-<span class="lineNum">     147 </span>            :                       {&quot;CPUINFO::FREQ_STICKER&quot;, &quot;Processor base frequency in hertz&quot;},
-<span class="lineNum">     148 </span>            :                       {&quot;CPUINFO::FREQ_MAX&quot;, &quot;Maximum processor frequency in hertz&quot;},
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">       3081 :                       {&quot;CPUINFO::FREQ_STEP&quot;, &quot;Step size between process frequency settings in hertz&quot;}})</span></a>
-<span class="lineNum">     150 </span>            :     {
-<span class="lineNum">     151 </span>            : 
-<a name="152"><span class="lineNum">     152 </span><span class="lineCov">        679 :     }</span></a>
-<a name="153"><span class="lineNum">     153 </span>            : </a>
-<span class="lineNum">     154 </span><span class="lineCov">         18 :     std::set&lt;std::string&gt; CpuinfoIOGroup::signal_names(void) const</span>
-<span class="lineNum">     155 </span>            :     {
-<span class="lineNum">     156 </span><span class="lineCov">         18 :         std::set&lt;std::string&gt; result;</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">         90 :         for (const auto &amp;sv : m_signal_value_map) {</span></a>
-<span class="lineNum">     158 </span><span class="lineCov">         72 :             result.insert(sv.first);</span>
-<span class="lineNum">     159 </span>            :         }
-<span class="lineNum">     160 </span><span class="lineCov">         18 :         return result;</span>
-<a name="161"><span class="lineNum">     161 </span>            :     }</a>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">        357 :     }</span></a>
+<span class="lineNum">     136 </span>            : 
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">        370 :     CpuinfoIOGroup::CpuinfoIOGroup(const std::string &amp;cpu_info_path,</span></a>
+<span class="lineNum">     138 </span>            :                                    const std::string &amp;cpu_freq_min_path,
+<span class="lineNum">     139 </span><span class="lineCov">        370 :                                    const std::string &amp;cpu_freq_max_path)</span>
+<span class="lineNum">     140 </span><span class="lineCov">        739 :         : m_signal_value_map({{&quot;CPUINFO::FREQ_MIN&quot;, read_cpu_freq(cpu_freq_min_path)},</span>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        736 :                               {&quot;CPUINFO::FREQ_STICKER&quot;, read_cpu_freq_sticker(cpu_info_path)},</span></a>
+<span class="lineNum">     142 </span><span class="lineCov">        733 :                               {&quot;CPUINFO::FREQ_MAX&quot;, read_cpu_freq(cpu_freq_max_path)},</span>
+<span class="lineNum">     143 </span>            :                               {&quot;CPUINFO::FREQ_STEP&quot;, 100e6},
+<span class="lineNum">     144 </span><span class="lineCov">        732 :                               {&quot;FREQUENCY_MIN&quot;, read_cpu_freq(cpu_freq_min_path)},</span>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">        732 :                               {&quot;FREQUENCY_STICKER&quot;, read_cpu_freq_sticker(cpu_info_path)},</span></a>
+<span class="lineNum">     146 </span>            :                               {&quot;FREQUENCY_STEP&quot;, 100e6}})
+<span class="lineNum">     147 </span>            :         , m_func_map({{&quot;CPUINFO::FREQ_MIN&quot;, Agg::expect_same},
+<span class="lineNum">     148 </span>            :                       {&quot;CPUINFO::FREQ_STICKER&quot;, Agg::expect_same},
+<a name="149"><span class="lineNum">     149 </span>            :                       {&quot;CPUINFO::FREQ_MAX&quot;, Agg::expect_same},</a>
+<span class="lineNum">     150 </span>            :                       {&quot;CPUINFO::FREQ_STEP&quot;, Agg::expect_same},
+<span class="lineNum">     151 </span>            :                       {&quot;FREQUENCY_MIN&quot;, Agg::expect_same},
+<span class="lineNum">     152 </span>            :                       {&quot;FREQUENCY_STICKER&quot;, Agg::expect_same},
+<a name="153"><span class="lineNum">     153 </span>            :                       {&quot;FREQUENCY_STEP&quot;, Agg::expect_same}})</a>
+<span class="lineNum">     154 </span>            :         , m_desc_map({{&quot;CPUINFO::FREQ_MIN&quot;, &quot;Minimum processor frequency in hertz&quot;},
+<span class="lineNum">     155 </span>            :                       {&quot;CPUINFO::FREQ_STICKER&quot;, &quot;Processor base frequency in hertz&quot;},
+<span class="lineNum">     156 </span>            :                       {&quot;CPUINFO::FREQ_MAX&quot;, &quot;Maximum processor frequency in hertz&quot;},
+<a name="157"><span class="lineNum">     157 </span>            :                       {&quot;CPUINFO::FREQ_STEP&quot;, &quot;Step size between process frequency settings in hertz&quot;},</a>
+<span class="lineNum">     158 </span>            :                       {&quot;FREQUENCY_MIN&quot;, &quot;Minimum processor frequency in hertz&quot;},
+<span class="lineNum">     159 </span>            :                       {&quot;FREQUENCY_STICKER&quot;, &quot;Processor base frequency in hertz&quot;},
+<span class="lineNum">     160 </span><span class="lineCov">       2940 :                       {&quot;FREQUENCY_STEP&quot;, &quot;Step size between process frequency settings in hertz&quot;}})</span>
+<a name="161"><span class="lineNum">     161 </span>            :     {</a>
 <span class="lineNum">     162 </span>            : 
-<span class="lineNum">     163 </span><span class="lineCov">         10 :     std::set&lt;std::string&gt; CpuinfoIOGroup::control_names(void) const</span>
-<span class="lineNum">     164 </span>            :     {
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">         10 :         return {};</span></a>
-<a name="166"><span class="lineNum">     166 </span>            :     }</a>
-<span class="lineNum">     167 </span>            : 
-<span class="lineNum">     168 </span><span class="lineCov">      93298 :     bool CpuinfoIOGroup::is_valid_signal(const std::string &amp;signal_name) const</span>
-<a name="169"><span class="lineNum">     169 </span>            :     {</a>
-<span class="lineNum">     170 </span><span class="lineCov">      93298 :         return m_signal_value_map.find(signal_name) != m_signal_value_map.end();</span>
-<a name="171"><span class="lineNum">     171 </span>            :     }</a>
-<span class="lineNum">     172 </span>            : 
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">       1774 :     bool CpuinfoIOGroup::is_valid_control(const std::string &amp;control_name) const</span></a>
-<span class="lineNum">     174 </span>            :     {
-<span class="lineNum">     175 </span><span class="lineCov">       1774 :         return false;</span>
-<a name="176"><span class="lineNum">     176 </span>            :     }</a>
-<a name="177"><span class="lineNum">     177 </span>            : </a>
-<span class="lineNum">     178 </span><span class="lineCov">        400 :     int CpuinfoIOGroup::signal_domain_type(const std::string &amp;signal_name) const</span>
-<span class="lineNum">     179 </span>            :     {
-<span class="lineNum">     180 </span><span class="lineCov">        400 :         int result = GEOPM_DOMAIN_INVALID;</span>
-<a name="181"><span class="lineNum">     181 </span><span class="lineCov">        400 :         if (is_valid_signal(signal_name)) {</span></a>
-<span class="lineNum">     182 </span><span class="lineCov">        400 :             if (std::isnan(m_signal_value_map.find(signal_name)-&gt;second)) {</span>
-<span class="lineNum">     183 </span><span class="lineNoCov">          0 :                 result = GEOPM_DOMAIN_INVALID;</span>
-<span class="lineNum">     184 </span>            :             }
-<a name="185"><span class="lineNum">     185 </span>            :             else {</a>
-<span class="lineNum">     186 </span><span class="lineCov">        400 :                 result = GEOPM_DOMAIN_BOARD;</span>
-<span class="lineNum">     187 </span>            :             }
-<span class="lineNum">     188 </span>            :         }
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">        400 :         return result;</span></a>
-<a name="190"><span class="lineNum">     190 </span>            :     }</a>
-<span class="lineNum">     191 </span>            : 
-<span class="lineNum">     192 </span><span class="lineNoCov">          0 :     int CpuinfoIOGroup::control_domain_type(const std::string &amp;control_name) const</span>
-<a name="193"><span class="lineNum">     193 </span>            :     {</a>
-<span class="lineNum">     194 </span><span class="lineNoCov">          0 :         return GEOPM_DOMAIN_INVALID;</span>
-<a name="195"><span class="lineNum">     195 </span>            :     }</a>
-<span class="lineNum">     196 </span>            : 
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">         28 :     int CpuinfoIOGroup::push_signal(const std::string &amp;signal_name, int domain_type, int domain_idx)</span></a>
-<span class="lineNum">     198 </span>            :     {
-<span class="lineNum">     199 </span><span class="lineCov">         28 :         if (!is_valid_signal(signal_name)) {</span>
-<span class="lineNum">     200 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::push_signal(): &quot; + signal_name +</span>
-<a name="201"><span class="lineNum">     201 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,</a>
-<span class="lineNum">     202 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     203 </span>            :         }
-<span class="lineNum">     204 </span><span class="lineCov">         28 :         else if (domain_type != GEOPM_DOMAIN_BOARD) {</span>
-<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::push_signal(): domain_type &quot; + std::to_string(domain_type) +</span></a>
-<span class="lineNum">     206 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
-<span class="lineNum">     207 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     208 </span>            :         }
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         28 :         return std::distance(m_signal_value_map.begin(), m_signal_value_map.find(signal_name));</span></a>
-<a name="210"><span class="lineNum">     210 </span>            :     }</a>
-<span class="lineNum">     211 </span>            : 
-<span class="lineNum">     212 </span><span class="lineNoCov">          0 :     int CpuinfoIOGroup::push_control(const std::string &amp;control_name, int domain_type, int domain_idx)</span>
-<a name="213"><span class="lineNum">     213 </span>            :     {</a>
-<span class="lineNum">     214 </span>            :         throw Exception(&quot;CpuinfoIOGroup::push_control(): there are no controls supported by the CpuinfoIOGroup&quot;,
-<span class="lineNum">     215 </span><span class="lineNoCov">          0 :                         GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="216"><span class="lineNum">     216 </span>            :     }</a>
-<a name="217"><span class="lineNum">     217 </span>            : </a>
-<span class="lineNum">     218 </span><span class="lineCov">     632306 :     void CpuinfoIOGroup::read_batch(void)</span>
-<span class="lineNum">     219 </span>            :     {
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">     632306 :     }</span></a>
-<a name="221"><span class="lineNum">     221 </span>            : </a>
-<span class="lineNum">     222 </span><span class="lineCov">        216 :     void CpuinfoIOGroup::write_batch(void)</span>
-<span class="lineNum">     223 </span>            :     {
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">        216 :     }</span></a>
-<a name="225"><span class="lineNum">     225 </span>            : </a>
-<span class="lineNum">     226 </span><span class="lineCov">        476 :     double CpuinfoIOGroup::sample(int batch_idx)</span>
-<span class="lineNum">     227 </span>            :     {
-<span class="lineNum">     228 </span><span class="lineCov">        476 :         double result = NAN;</span>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">        476 :         auto res_it = m_signal_value_map.begin();</span></a>
-<span class="lineNum">     230 </span><span class="lineCov">        476 :         if (batch_idx &gt;= 0 &amp;&amp; batch_idx &lt; (int) m_signal_value_map.size()) {</span>
-<span class="lineNum">     231 </span><span class="lineCov">        476 :             std::advance(res_it, batch_idx);</span>
-<span class="lineNum">     232 </span><span class="lineCov">        476 :             result = res_it-&gt;second;</span>
-<a name="233"><span class="lineNum">     233 </span>            :         }</a>
-<span class="lineNum">     234 </span>            :         else {
-<span class="lineNum">     235 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::sample(): batch_idx &quot; + std::to_string(batch_idx) +</span>
-<span class="lineNum">     236 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
-<a name="237"><span class="lineNum">     237 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     238 </span>            :         }
-<span class="lineNum">     239 </span><span class="lineCov">        476 :         return result;</span>
-<a name="240"><span class="lineNum">     240 </span>            :     }</a>
-<a name="241"><span class="lineNum">     241 </span>            : </a>
-<span class="lineNum">     242 </span><span class="lineNoCov">          0 :     void CpuinfoIOGroup::adjust(int batch_idx, double setting)</span>
-<span class="lineNum">     243 </span>            :     {
-<span class="lineNum">     244 </span>            :         throw Exception(&quot;CpuinfoIOGroup::adjust(): there are no controls supported by the CpuinfoIOGroup&quot;,
-<a name="245"><span class="lineNum">     245 </span><span class="lineNoCov">          0 :                         GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<a name="246"><span class="lineNum">     246 </span>            :     }</a>
-<span class="lineNum">     247 </span>            : 
-<span class="lineNum">     248 </span><span class="lineCov">        380 :     double CpuinfoIOGroup::read_signal(const std::string &amp;signal_name, int domain_type, int domain_idx)</span>
-<a name="249"><span class="lineNum">     249 </span>            :     {</a>
-<span class="lineNum">     250 </span><span class="lineCov">        380 :         if (!is_valid_signal(signal_name)) {</span>
-<span class="lineNum">     251 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::read_signal(): &quot; + signal_name +</span>
-<span class="lineNum">     252 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
-<a name="253"><span class="lineNum">     253 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
-<span class="lineNum">     254 </span>            :         }
-<span class="lineNum">     255 </span><span class="lineCov">        380 :         else if (domain_type != GEOPM_DOMAIN_BOARD) {</span>
-<span class="lineNum">     256 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup:read_signal(): domain_type &quot; + std::to_string(domain_type) +</span>
-<a name="257"><span class="lineNum">     257 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,</a>
-<span class="lineNum">     258 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<span class="lineNum">     259 </span>            :         }
-<span class="lineNum">     260 </span><span class="lineCov">        380 :         return m_signal_value_map.find(signal_name)-&gt;second;</span>
-<a name="261"><span class="lineNum">     261 </span>            :     }</a>
-<span class="lineNum">     262 </span>            : 
-<span class="lineNum">     263 </span><span class="lineNoCov">          0 :     void CpuinfoIOGroup::write_control(const std::string &amp;control_name, int domain_type, int domain_idx, double setting)</span>
-<span class="lineNum">     264 </span>            :     {
-<a name="265"><span class="lineNum">     265 </span>            :         throw Exception(&quot;CpuinfoIOGroup::write_control(): there are no controls supported by the CpuinfoIOGroup&quot;,</a>
-<span class="lineNum">     266 </span><span class="lineNoCov">          0 :                         GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="267"><span class="lineNum">     267 </span>            :     }</a>
-<span class="lineNum">     268 </span>            : 
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         76 :     void CpuinfoIOGroup::save_control(void)</span></a>
-<span class="lineNum">     270 </span>            :     {
-<span class="lineNum">     271 </span>            : 
-<a name="272"><span class="lineNum">     272 </span><span class="lineCov">         76 :     }</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">        366 :     }</span></a>
+<span class="lineNum">     164 </span>            : 
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        175 :     std::set&lt;std::string&gt; CpuinfoIOGroup::signal_names(void) const</span></a>
+<span class="lineNum">     166 </span>            :     {
+<span class="lineNum">     167 </span><span class="lineCov">        175 :         std::set&lt;std::string&gt; result;</span>
+<span class="lineNum">     168 </span><span class="lineCov">       1400 :         for (const auto &amp;sv : m_signal_value_map) {</span>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">       1225 :             result.insert(sv.first);</span></a>
+<span class="lineNum">     170 </span>            :         }
+<span class="lineNum">     171 </span><span class="lineCov">        175 :         return result;</span>
+<a name="172"><span class="lineNum">     172 </span>            :     }</a>
+<a name="173"><span class="lineNum">     173 </span>            : </a>
+<span class="lineNum">     174 </span><span class="lineCov">         55 :     std::set&lt;std::string&gt; CpuinfoIOGroup::control_names(void) const</span>
+<span class="lineNum">     175 </span>            :     {
+<span class="lineNum">     176 </span><span class="lineCov">         55 :         return {};</span>
+<a name="177"><span class="lineNum">     177 </span>            :     }</a>
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineCov">      36648 :     bool CpuinfoIOGroup::is_valid_signal(const std::string &amp;signal_name) const</span>
+<span class="lineNum">     180 </span>            :     {
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">      36648 :         return m_signal_value_map.find(signal_name) != m_signal_value_map.end();</span></a>
+<a name="182"><span class="lineNum">     182 </span>            :     }</a>
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span><span class="lineCov">       1391 :     bool CpuinfoIOGroup::is_valid_control(const std::string &amp;control_name) const</span>
+<a name="185"><span class="lineNum">     185 </span>            :     {</a>
+<span class="lineNum">     186 </span><span class="lineCov">       1391 :         return false;</span>
+<a name="187"><span class="lineNum">     187 </span>            :     }</a>
+<span class="lineNum">     188 </span>            : 
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">        199 :     int CpuinfoIOGroup::signal_domain_type(const std::string &amp;signal_name) const</span></a>
+<span class="lineNum">     190 </span>            :     {
+<span class="lineNum">     191 </span><span class="lineCov">        199 :         int result = GEOPM_DOMAIN_INVALID;</span>
+<span class="lineNum">     192 </span><span class="lineCov">        199 :         if (is_valid_signal(signal_name)) {</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">        199 :             if (std::isnan(m_signal_value_map.find(signal_name)-&gt;second)) {</span></a>
+<span class="lineNum">     194 </span><span class="lineNoCov">          0 :                 result = GEOPM_DOMAIN_INVALID;</span>
+<span class="lineNum">     195 </span>            :             }
+<span class="lineNum">     196 </span>            :             else {
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">        199 :                 result = GEOPM_DOMAIN_BOARD;</span></a>
+<span class="lineNum">     198 </span>            :             }
+<span class="lineNum">     199 </span>            :         }
+<span class="lineNum">     200 </span><span class="lineCov">        199 :         return result;</span>
+<a name="201"><span class="lineNum">     201 </span>            :     }</a>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 :     int CpuinfoIOGroup::control_domain_type(const std::string &amp;control_name) const</span>
+<span class="lineNum">     204 </span>            :     {
+<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :         return GEOPM_DOMAIN_INVALID;</span></a>
+<a name="206"><span class="lineNum">     206 </span>            :     }</a>
+<span class="lineNum">     207 </span>            : 
+<span class="lineNum">     208 </span><span class="lineCov">         24 :     int CpuinfoIOGroup::push_signal(const std::string &amp;signal_name, int domain_type, int domain_idx)</span>
+<a name="209"><span class="lineNum">     209 </span>            :     {</a>
+<span class="lineNum">     210 </span><span class="lineCov">         24 :         if (!is_valid_signal(signal_name)) {</span>
+<span class="lineNum">     211 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::push_signal(): &quot; + signal_name +</span>
+<span class="lineNum">     212 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
+<a name="213"><span class="lineNum">     213 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     214 </span>            :         }
+<span class="lineNum">     215 </span><span class="lineCov">         24 :         else if (domain_type != GEOPM_DOMAIN_BOARD) {</span>
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::push_signal(): domain_type &quot; + std::to_string(domain_type) +</span>
+<a name="217"><span class="lineNum">     217 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,</a>
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<span class="lineNum">     219 </span>            :         }
+<span class="lineNum">     220 </span><span class="lineCov">         24 :         return std::distance(m_signal_value_map.begin(), m_signal_value_map.find(signal_name));</span>
+<a name="221"><span class="lineNum">     221 </span>            :     }</a>
+<span class="lineNum">     222 </span>            : 
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :     int CpuinfoIOGroup::push_control(const std::string &amp;control_name, int domain_type, int domain_idx)</span>
+<span class="lineNum">     224 </span>            :     {
+<a name="225"><span class="lineNum">     225 </span>            :         throw Exception(&quot;CpuinfoIOGroup::push_control(): there are no controls supported by the CpuinfoIOGroup&quot;,</a>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :                         GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="227"><span class="lineNum">     227 </span>            :     }</a>
+<span class="lineNum">     228 </span>            : 
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">     275585 :     void CpuinfoIOGroup::read_batch(void)</span></a>
+<span class="lineNum">     230 </span>            :     {
+<a name="231"><span class="lineNum">     231 </span><span class="lineCov">     275585 :     }</span></a>
+<span class="lineNum">     232 </span>            : 
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">         90 :     void CpuinfoIOGroup::write_batch(void)</span></a>
+<span class="lineNum">     234 </span>            :     {
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">         90 :     }</span></a>
+<span class="lineNum">     236 </span>            : 
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">        408 :     double CpuinfoIOGroup::sample(int batch_idx)</span></a>
+<span class="lineNum">     238 </span>            :     {
+<span class="lineNum">     239 </span><span class="lineCov">        408 :         double result = NAN;</span>
+<span class="lineNum">     240 </span><span class="lineCov">        408 :         auto res_it = m_signal_value_map.begin();</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">        408 :         if (batch_idx &gt;= 0 &amp;&amp; batch_idx &lt; (int) m_signal_value_map.size()) {</span></a>
+<span class="lineNum">     242 </span><span class="lineCov">        408 :             std::advance(res_it, batch_idx);</span>
+<span class="lineNum">     243 </span><span class="lineCov">        408 :             result = res_it-&gt;second;</span>
+<span class="lineNum">     244 </span>            :         }
+<a name="245"><span class="lineNum">     245 </span>            :         else {</a>
+<span class="lineNum">     246 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::sample(): batch_idx &quot; + std::to_string(batch_idx) +</span>
+<span class="lineNum">     247 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="249"><span class="lineNum">     249 </span>            :         }</a>
+<span class="lineNum">     250 </span><span class="lineCov">        408 :         return result;</span>
+<a name="251"><span class="lineNum">     251 </span>            :     }</a>
+<span class="lineNum">     252 </span>            : 
+<a name="253"><span class="lineNum">     253 </span><span class="lineNoCov">          0 :     void CpuinfoIOGroup::adjust(int batch_idx, double setting)</span></a>
+<span class="lineNum">     254 </span>            :     {
+<span class="lineNum">     255 </span>            :         throw Exception(&quot;CpuinfoIOGroup::adjust(): there are no controls supported by the CpuinfoIOGroup&quot;,
+<span class="lineNum">     256 </span><span class="lineNoCov">          0 :                         GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="257"><span class="lineNum">     257 </span>            :     }</a>
+<span class="lineNum">     258 </span>            : 
+<span class="lineNum">     259 </span><span class="lineCov">        174 :     double CpuinfoIOGroup::read_signal(const std::string &amp;signal_name, int domain_type, int domain_idx)</span>
+<span class="lineNum">     260 </span>            :     {
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">        174 :         if (!is_valid_signal(signal_name)) {</span></a>
+<span class="lineNum">     262 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::read_signal(): &quot; + signal_name +</span>
+<span class="lineNum">     263 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
+<span class="lineNum">     264 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="265"><span class="lineNum">     265 </span>            :         }</a>
+<span class="lineNum">     266 </span><span class="lineCov">        174 :         else if (domain_type != GEOPM_DOMAIN_BOARD) {</span>
+<span class="lineNum">     267 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup:read_signal(): domain_type &quot; + std::to_string(domain_type) +</span>
+<span class="lineNum">     268 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
+<a name="269"><span class="lineNum">     269 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     270 </span>            :         }
+<span class="lineNum">     271 </span><span class="lineCov">        174 :         return m_signal_value_map.find(signal_name)-&gt;second;</span>
+<a name="272"><span class="lineNum">     272 </span>            :     }</a>
 <a name="273"><span class="lineNum">     273 </span>            : </a>
-<span class="lineNum">     274 </span><span class="lineCov">        152 :     void CpuinfoIOGroup::restore_control(void)</span>
+<span class="lineNum">     274 </span><span class="lineNoCov">          0 :     void CpuinfoIOGroup::write_control(const std::string &amp;control_name, int domain_type, int domain_idx, double setting)</span>
 <span class="lineNum">     275 </span>            :     {
-<span class="lineNum">     276 </span>            : 
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">        152 :     }</span></a>
-<span class="lineNum">     278 </span>            : 
-<span class="lineNum">     279 </span><span class="lineCov">          8 :     std::function&lt;double(const std::vector&lt;double&gt; &amp;)&gt; CpuinfoIOGroup::agg_function(const std::string &amp;signal_name) const</span>
-<span class="lineNum">     280 </span>            :     {
-<a name="281"><span class="lineNum">     281 </span><span class="lineCov">          8 :         auto it = m_func_map.find(signal_name);</span></a>
-<span class="lineNum">     282 </span><span class="lineCov">          8 :         if (it == m_func_map.end()) {</span>
-<span class="lineNum">     283 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::agg_function(): unknown how to aggregate \&quot;&quot; + signal_name + &quot;\&quot;&quot;,</span>
-<span class="lineNum">     284 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
-<a name="285"><span class="lineNum">     285 </span>            :         }</a>
-<span class="lineNum">     286 </span><span class="lineCov">          8 :         return it-&gt;second;</span>
-<a name="287"><span class="lineNum">     287 </span>            :     }</a>
-<span class="lineNum">     288 </span>            : 
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">         16 :     std::string CpuinfoIOGroup::signal_description(const std::string &amp;signal_name) const</span></a>
-<span class="lineNum">     290 </span>            :     {
-<span class="lineNum">     291 </span><span class="lineCov">         16 :         auto it = m_desc_map.find(signal_name);</span>
-<span class="lineNum">     292 </span><span class="lineCov">         16 :         if (it == m_desc_map.end()) {</span>
-<a name="293"><span class="lineNum">     293 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::signal_description(): &quot; + signal_name +</span></a>
-<span class="lineNum">     294 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
+<span class="lineNum">     276 </span>            :         throw Exception(&quot;CpuinfoIOGroup::write_control(): there are no controls supported by the CpuinfoIOGroup&quot;,
+<a name="277"><span class="lineNum">     277 </span><span class="lineNoCov">          0 :                         GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<a name="278"><span class="lineNum">     278 </span>            :     }</a>
+<span class="lineNum">     279 </span>            : 
+<span class="lineNum">     280 </span><span class="lineCov">         37 :     void CpuinfoIOGroup::save_control(void)</span>
+<a name="281"><span class="lineNum">     281 </span>            :     {</a>
+<span class="lineNum">     282 </span>            : 
+<a name="283"><span class="lineNum">     283 </span><span class="lineCov">         37 :     }</span></a>
+<span class="lineNum">     284 </span>            : 
+<a name="285"><span class="lineNum">     285 </span><span class="lineCov">         69 :     void CpuinfoIOGroup::restore_control(void)</span></a>
+<span class="lineNum">     286 </span>            :     {
+<span class="lineNum">     287 </span>            : 
+<a name="288"><span class="lineNum">     288 </span><span class="lineCov">         69 :     }</span></a>
+<a name="289"><span class="lineNum">     289 </span>            : </a>
+<span class="lineNum">     290 </span><span class="lineCov">          7 :     std::function&lt;double(const std::vector&lt;double&gt; &amp;)&gt; CpuinfoIOGroup::agg_function(const std::string &amp;signal_name) const</span>
+<span class="lineNum">     291 </span>            :     {
+<span class="lineNum">     292 </span><span class="lineCov">          7 :         auto it = m_func_map.find(signal_name);</span>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">          7 :         if (it == m_func_map.end()) {</span></a>
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::agg_function(): unknown how to aggregate \&quot;&quot; + signal_name + &quot;\&quot;&quot;,</span>
 <span class="lineNum">     295 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
 <span class="lineNum">     296 </span>            :         }
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">         16 :         return it-&gt;second;</span></a>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          7 :         return it-&gt;second;</span></a>
 <a name="298"><span class="lineNum">     298 </span>            :     }</a>
 <span class="lineNum">     299 </span>            : 
-<span class="lineNum">     300 </span><span class="lineNoCov">          0 :     std::string CpuinfoIOGroup::control_description(const std::string &amp;control_name) const</span>
+<span class="lineNum">     300 </span><span class="lineCov">         31 :     std::function&lt;std::string(double)&gt; CpuinfoIOGroup::format_function(const std::string &amp;signal_name) const</span>
 <a name="301"><span class="lineNum">     301 </span>            :     {</a>
-<span class="lineNum">     302 </span><span class="lineNoCov">          0 :         return &quot;&quot;;</span>
-<a name="303"><span class="lineNum">     303 </span>            :     }</a>
-<span class="lineNum">     304 </span>            : 
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">        663 :     std::string CpuinfoIOGroup::plugin_name(void)</span></a>
-<span class="lineNum">     306 </span>            :     {
-<span class="lineNum">     307 </span><span class="lineCov">        663 :         return GEOPM_CPUINFO_IO_GROUP_PLUGIN_NAME;</span>
+<span class="lineNum">     302 </span><span class="lineCov">         31 :         auto it = m_func_map.find(signal_name);</span>
+<span class="lineNum">     303 </span><span class="lineCov">         31 :         if (it == m_func_map.end()) {</span>
+<span class="lineNum">     304 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::format_function(): unknown how to format \&quot;&quot; + signal_name + &quot;\&quot;&quot;,</span>
+<a name="305"><span class="lineNum">     305 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span></a>
+<span class="lineNum">     306 </span>            :         }
+<span class="lineNum">     307 </span><span class="lineCov">         31 :         return string_format_double;</span>
 <a name="308"><span class="lineNum">     308 </span>            :     }</a>
 <a name="309"><span class="lineNum">     309 </span>            : </a>
-<span class="lineNum">     310 </span><span class="lineCov">        661 :     std::unique_ptr&lt;IOGroup&gt; CpuinfoIOGroup::make_plugin(void)</span>
+<span class="lineNum">     310 </span><span class="lineCov">         14 :     std::string CpuinfoIOGroup::signal_description(const std::string &amp;signal_name) const</span>
 <span class="lineNum">     311 </span>            :     {
-<span class="lineNum">     312 </span><span class="lineCov">        661 :         return std::unique_ptr&lt;IOGroup&gt;(new CpuinfoIOGroup);</span>
-<a name="313"><span class="lineNum">     313 </span>            :     }</a>
-<span class="lineNum">     314 </span>            : }
+<span class="lineNum">     312 </span><span class="lineCov">         14 :         auto it = m_desc_map.find(signal_name);</span>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">         14 :         if (it == m_desc_map.end()) {</span></a>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 :             throw Exception(&quot;CpuinfoIOGroup::signal_description(): &quot; + signal_name +</span>
+<span class="lineNum">     315 </span>            :                             &quot;not valid for CpuinfoIOGroup&quot;,
+<span class="lineNum">     316 </span><span class="lineNoCov">          0 :                             GEOPM_ERROR_INVALID, __FILE__, __LINE__);</span>
+<a name="317"><span class="lineNum">     317 </span>            :         }</a>
+<span class="lineNum">     318 </span><span class="lineCov">         14 :         return it-&gt;second;</span>
+<a name="319"><span class="lineNum">     319 </span>            :     }</a>
+<span class="lineNum">     320 </span>            : 
+<a name="321"><span class="lineNum">     321 </span><span class="lineNoCov">          0 :     std::string CpuinfoIOGroup::control_description(const std::string &amp;control_name) const</span></a>
+<span class="lineNum">     322 </span>            :     {
+<span class="lineNum">     323 </span><span class="lineNoCov">          0 :         return &quot;&quot;;</span>
+<a name="324"><span class="lineNum">     324 </span>            :     }</a>
+<a name="325"><span class="lineNum">     325 </span>            : </a>
+<span class="lineNum">     326 </span><span class="lineCov">        358 :     std::string CpuinfoIOGroup::plugin_name(void)</span>
+<span class="lineNum">     327 </span>            :     {
+<span class="lineNum">     328 </span><span class="lineCov">        358 :         return GEOPM_CPUINFO_IO_GROUP_PLUGIN_NAME;</span>
+<a name="329"><span class="lineNum">     329 </span>            :     }</a>
+<span class="lineNum">     330 </span>            : 
+<span class="lineNum">     331 </span><span class="lineCov">        357 :     std::unique_ptr&lt;IOGroup&gt; CpuinfoIOGroup::make_plugin(void)</span>
+<span class="lineNum">     332 </span>            :     {
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">        357 :         return std::unique_ptr&lt;IOGroup&gt;(new CpuinfoIOGroup);</span></a>
+<span class="lineNum">     334 </span>            :     }
+<span class="lineNum">     335 </span>            : }
 </pre>
       </td>
     </tr>

@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/ProfileTable.hpp</title>
+  <title>LCOV - v1.1.0 - src/ProfileTable.hpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">3</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -107,179 +107,181 @@
 <a name="37"><span class="lineNum">      37 </span>            : #include &lt;map&gt;</a>
 <span class="lineNum">      38 </span>            : #include &lt;set&gt;
 <span class="lineNum">      39 </span>            : 
-<span class="lineNum">      40 </span>            : namespace geopm
-<a name="41"><span class="lineNum">      41 </span>            : {</a>
-<span class="lineNum">      42 </span>            :     /// @brief Container for multi-threaded or multi-process
-<span class="lineNum">      43 </span>            :     ///        producer consumer data exchange.
-<span class="lineNum">      44 </span>            :     ///
-<a name="45"><span class="lineNum">      45 </span>            :     /// The ProfileTable container uses a block of virtual address</a>
-<span class="lineNum">      46 </span>            :     /// space to support producer consumer data access.  The table is
-<span class="lineNum">      47 </span>            :     /// intended to support references which are registered once and
-<span class="lineNum">      48 </span>            :     /// used multiple times.  The registering of a reference requires a
-<a name="49"><span class="lineNum">      49 </span>            :     /// string name as input and provides a randomized hash of the</a>
-<span class="lineNum">      50 </span>            :     /// string to an unsigned 64 bit integer key.  The key is then
-<span class="lineNum">      51 </span>            :     /// used for subsequent references to the struct geopm_prof_message_s supported
-<span class="lineNum">      52 </span>            :     /// by the container.  The ProfileTable is optimized for many
-<a name="53"><span class="lineNum">      53 </span>            :     /// writers and one reader who scans the entire table by calling</a>
-<span class="lineNum">      54 </span>            :     /// ProfileTable::dump(), however it can support other use
-<span class="lineNum">      55 </span>            :     /// cases as well.  The buffer that is used to store the data is
-<span class="lineNum">      56 </span>            :     /// provided at creation time.  This buffer can have any number of
-<a name="57"><span class="lineNum">      57 </span>            :     /// operating system memory policies applied including</a>
-<span class="lineNum">      58 </span>            :     /// inter-process shared memory.  See the geopm::SharedMemory
-<span class="lineNum">      59 </span>            :     /// class for information on usage with POSIX inter-process shared
-<span class="lineNum">      60 </span>            :     /// memory.
-<a name="61"><span class="lineNum">      61 </span>            :     class ProfileTable</a>
-<a name="62"><span class="lineNum">      62 </span>            :     {</a>
-<a name="63"><span class="lineNum">      63 </span>            :         public:</a>
-<span class="lineNum">      64 </span><span class="lineCov">        634 :             ProfileTable() = default;</span>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">        634 :             virtual ~ProfileTable() = default;</span></a>
-<span class="lineNum">      66 </span>            :             /// @brief Hash the name string into a random 64 bit
-<span class="lineNum">      67 </span>            :             ///        integer.
-<span class="lineNum">      68 </span>            :             ///
-<a name="69"><span class="lineNum">      69 </span>            :             /// Uses the geopm_crc32_str() function to hash the name</a>
-<span class="lineNum">      70 </span>            :             /// which will modify the lower 32 bits.  The remaining 32
-<span class="lineNum">      71 </span>            :             /// bits may be used for other purposes in the future.
-<span class="lineNum">      72 </span>            :             /// Subsequent calls to hash the same string will use a
-<a name="73"><span class="lineNum">      73 </span>            :             /// string to integer std::map rather than re-hashing.</a>
-<span class="lineNum">      74 </span>            :             ///
-<span class="lineNum">      75 </span>            :             /// @param [in] name String which is to be mapped to the
-<span class="lineNum">      76 </span>            :             ///        key.
-<a name="77"><span class="lineNum">      77 </span>            :             virtual uint64_t key(const std::string &amp;name) = 0;</a>
-<span class="lineNum">      78 </span>            :             /// @brief Insert a value into the table.
-<span class="lineNum">      79 </span>            :             ///
-<span class="lineNum">      80 </span>            :             /// Once the name has been registered with a call to key()
-<a name="81"><span class="lineNum">      81 </span>            :             /// the data associated with the name can be inserted into</a>
-<span class="lineNum">      82 </span>            :             /// the table by the producer using this function.  If
-<span class="lineNum">      83 </span>            :             /// there is already a value associated with the key then
-<span class="lineNum">      84 </span>            :             /// the value will be overwritten.  There is a fixed
-<a name="85"><span class="lineNum">      85 </span>            :             /// number of collisions allowed, and if too many keys</a>
-<span class="lineNum">      86 </span>            :             /// hashed to the same entry in the table, the entry will
-<span class="lineNum">      87 </span>            :             /// be emptied of it's current data which will be lost.
-<span class="lineNum">      88 </span>            :             ///
-<a name="89"><span class="lineNum">      89 </span>            :             /// @param [in] value Entry that is to be inserted into</a>
-<span class="lineNum">      90 </span>            :             ///        the table.
-<span class="lineNum">      91 </span>            :             ///
-<span class="lineNum">      92 </span>            :             /// @return Returns the 64 bit hash used to reference the
-<a name="93"><span class="lineNum">      93 </span>            :             ///         name in other ProfileTable methods.</a>
-<span class="lineNum">      94 </span>            :             virtual void insert(const struct geopm_prof_message_s &amp;value) = 0;
-<span class="lineNum">      95 </span>            :             /// @brief Maximum number of entries the table can hold.
-<span class="lineNum">      96 </span>            :             ///
-<a name="97"><span class="lineNum">      97 </span>            :             /// Returns the upper bound on the number of values that</a>
-<span class="lineNum">      98 </span>            :             /// can be stored in the table.  This can be used to size
-<span class="lineNum">      99 </span>            :             /// the content vector passed to the dump() method.  In
-<span class="lineNum">     100 </span>            :             /// general there will be many fewer entries into the
-<a name="101"><span class="lineNum">     101 </span>            :             /// table than the number returned by capacity() before a</a>
-<span class="lineNum">     102 </span>            :             /// geopm::Exception with error_value() of
-<span class="lineNum">     103 </span>            :             /// GEOPM_TOO_MANY_COLLISIONS is thrown at time of
-<span class="lineNum">     104 </span>            :             /// insertion.
-<a name="105"><span class="lineNum">     105 </span>            :             ///</a>
-<span class="lineNum">     106 </span>            :             /// @return The maximum number of entries the table can
-<span class="lineNum">     107 </span>            :             ///         hold.
-<span class="lineNum">     108 </span>            :             virtual size_t capacity(void) const = 0;
-<a name="109"><span class="lineNum">     109 </span>            :             virtual size_t size(void) const = 0;</a>
-<span class="lineNum">     110 </span>            :             /// @brief Copy all table entries into a vector and delete
-<span class="lineNum">     111 </span>            :             ///        all entries.
-<span class="lineNum">     112 </span>            :             ///
-<a name="113"><span class="lineNum">     113 </span>            :             /// This method is used by the data consumer to empty the</a>
-<span class="lineNum">     114 </span>            :             /// table of all posted contents into a vector.  When the
-<span class="lineNum">     115 </span>            :             /// table is used in this way it serves as a temporary
-<span class="lineNum">     116 </span>            :             /// scratch-pad for relaying messages from the producer to
-<a name="117"><span class="lineNum">     117 </span>            :             /// the consumer.  Note that the content vector is not</a>
-<span class="lineNum">     118 </span>            :             /// re-sized and it should be sized according to the value
-<span class="lineNum">     119 </span>            :             /// returned by capacity().  Only the first &quot;length&quot;
-<span class="lineNum">     120 </span>            :             /// elements of the vector will be written to by dump().
-<a name="121"><span class="lineNum">     121 </span>            :             ///</a>
-<span class="lineNum">     122 </span>            :             /// @param [out] content The vector of key value pairs
-<span class="lineNum">     123 </span>            :             ///        copied out of the table.
-<span class="lineNum">     124 </span>            :             ///
-<a name="125"><span class="lineNum">     125 </span>            :             /// @param [out] length The number of entries copied into</a>
-<span class="lineNum">     126 </span>            :             ///        the content vector.
-<span class="lineNum">     127 </span>            :             virtual void dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length) = 0;
-<span class="lineNum">     128 </span>            :             /// @brief Called by the producer to pass names to the
-<a name="129"><span class="lineNum">     129 </span>            :             ///        consumer.</a>
-<span class="lineNum">     130 </span>            :             ///
-<span class="lineNum">     131 </span>            :             /// When this method is called the data producer will pass
-<span class="lineNum">     132 </span>            :             /// the names that have been thus far been passed to key()
-<a name="133"><span class="lineNum">     133 </span>            :             /// through the buffer to the consumer who will call</a>
-<span class="lineNum">     134 </span>            :             /// name_set() to receive the names.  There is an option
-<span class="lineNum">     135 </span>            :             /// to avoid writing to the beginning of the buffer so
-<span class="lineNum">     136 </span>            :             /// that it can be reserved for passing other information.
-<a name="137"><span class="lineNum">     137 </span>            :             /// If the header_offset is zero then the entire buffer is</a>
-<span class="lineNum">     138 </span>            :             /// used.  This call will block until the consumer calls
-<span class="lineNum">     139 </span>            :             /// name_set().
-<span class="lineNum">     140 </span>            :             ///
-<a name="141"><span class="lineNum">     141 </span>            :             /// NOTE: The ProfileTable cannot be used again after</a>
-<span class="lineNum">     142 </span>            :             ///       a call to name_fill().
-<span class="lineNum">     143 </span>            :             ///
-<span class="lineNum">     144 </span>            :             /// @param [in] header_offset Offset in bytes to where the
-<a name="145"><span class="lineNum">     145 </span>            :             ///        name values will start in the buffer.</a>
-<span class="lineNum">     146 </span>            :             virtual bool name_fill(size_t header_offset) = 0;
-<span class="lineNum">     147 </span>            :             /// @brief Called by the consumer to receive the names
-<span class="lineNum">     148 </span>            :             ///        that hash to the keys.
-<a name="149"><span class="lineNum">     149 </span>            :             ///</a>
-<span class="lineNum">     150 </span>            :             /// Through calling dump() the consumer will receive a set
-<span class="lineNum">     151 </span>            :             /// of integer keys.  This method enables the consumer to
-<span class="lineNum">     152 </span>            :             /// learn the names that can be hashed to the keys it has
-<a name="153"><span class="lineNum">     153 </span>            :             /// received.  There is an option to avoid writing to the</a>
-<span class="lineNum">     154 </span>            :             /// beginning of the buffer so that it can be reserved for
-<span class="lineNum">     155 </span>            :             /// passing other information.  If the header_offset is
-<span class="lineNum">     156 </span>            :             /// zero then the entire buffer is used.  This call will
-<a name="157"><span class="lineNum">     157 </span>            :             /// block until the producer calls name_fill().</a>
-<span class="lineNum">     158 </span>            :             ///
-<span class="lineNum">     159 </span>            :             /// NOTE: The ProfileTable cannot be used again after
-<span class="lineNum">     160 </span>            :             ///       a call to name_set().
-<a name="161"><span class="lineNum">     161 </span>            :             ///</a>
-<span class="lineNum">     162 </span>            :             /// @param [in] header_offset Offset in bytes to where the
-<span class="lineNum">     163 </span>            :             ///        name values will start in the buffer.
-<span class="lineNum">     164 </span>            :             ///
-<a name="165"><span class="lineNum">     165 </span>            :             /// @param [out] name Set of names read from output of the</a>
-<span class="lineNum">     166 </span>            :             ///        producer's call to name_fill().
-<span class="lineNum">     167 </span>            :             virtual bool name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name) = 0;
-<span class="lineNum">     168 </span>            :     };
-<a name="169"><span class="lineNum">     169 </span>            : </a>
-<span class="lineNum">     170 </span>            :     class ProfileTableImp : public ProfileTable
-<span class="lineNum">     171 </span>            :     {
-<span class="lineNum">     172 </span>            :         public:
-<a name="173"><span class="lineNum">     173 </span>            :             /// @brief Constructor for the ProfileTableImp.</a>
-<span class="lineNum">     174 </span>            :             ///
-<span class="lineNum">     175 </span>            :             /// The memory that is used by the container is provided
-<span class="lineNum">     176 </span>            :             /// at construction time.  There are other ancillary data
-<a name="177"><span class="lineNum">     177 </span>            :             /// associated with the structure which are dynamic, but</a>
-<span class="lineNum">     178 </span>            :             /// the data container is of fixed size.
-<span class="lineNum">     179 </span>            :             ///
-<span class="lineNum">     180 </span>            :             /// @param size [in] The length of the buffer in bytes.
+<span class="lineNum">      40 </span>            : #include &quot;geopm_internal.h&quot;
+<a name="41"><span class="lineNum">      41 </span>            : </a>
+<span class="lineNum">      42 </span>            : namespace geopm
+<span class="lineNum">      43 </span>            : {
+<span class="lineNum">      44 </span>            :     /// @brief Container for multi-threaded or multi-process
+<a name="45"><span class="lineNum">      45 </span>            :     ///        producer consumer data exchange.</a>
+<span class="lineNum">      46 </span>            :     ///
+<span class="lineNum">      47 </span>            :     /// The ProfileTable container uses a block of virtual address
+<span class="lineNum">      48 </span>            :     /// space to support producer consumer data access.  The table is
+<a name="49"><span class="lineNum">      49 </span>            :     /// intended to support references which are registered once and</a>
+<span class="lineNum">      50 </span>            :     /// used multiple times.  The registering of a reference requires a
+<span class="lineNum">      51 </span>            :     /// string name as input and provides a randomized hash of the
+<span class="lineNum">      52 </span>            :     /// string to an unsigned 64 bit integer key.  The key is then
+<a name="53"><span class="lineNum">      53 </span>            :     /// used for subsequent references to the struct geopm_prof_message_s supported</a>
+<span class="lineNum">      54 </span>            :     /// by the container.  The ProfileTable is optimized for many
+<span class="lineNum">      55 </span>            :     /// writers and one reader who scans the entire table by calling
+<span class="lineNum">      56 </span>            :     /// ProfileTable::dump(), however it can support other use
+<a name="57"><span class="lineNum">      57 </span>            :     /// cases as well.  The buffer that is used to store the data is</a>
+<span class="lineNum">      58 </span>            :     /// provided at creation time.  This buffer can have any number of
+<span class="lineNum">      59 </span>            :     /// operating system memory policies applied including
+<span class="lineNum">      60 </span>            :     /// inter-process shared memory.  See the geopm::SharedMemory
+<a name="61"><span class="lineNum">      61 </span>            :     /// class for information on usage with POSIX inter-process shared</a>
+<span class="lineNum">      62 </span>            :     /// memory.
+<span class="lineNum">      63 </span>            :     class ProfileTable
+<a name="64"><span class="lineNum">      64 </span>            :     {</a>
+<a name="65"><span class="lineNum">      65 </span>            :         public:</a>
+<span class="lineNum">      66 </span><span class="lineCov">        271 :             ProfileTable() = default;</span>
+<span class="lineNum">      67 </span><span class="lineCov">        271 :             virtual ~ProfileTable() = default;</span>
+<span class="lineNum">      68 </span>            :             /// @brief Hash the name string into a random 64 bit
+<a name="69"><span class="lineNum">      69 </span>            :             ///        integer.</a>
+<span class="lineNum">      70 </span>            :             ///
+<span class="lineNum">      71 </span>            :             /// Uses the geopm_crc32_str() function to hash the name
+<span class="lineNum">      72 </span>            :             /// which will modify the lower 32 bits.  The remaining 32
+<a name="73"><span class="lineNum">      73 </span>            :             /// bits may be used for other purposes in the future.</a>
+<span class="lineNum">      74 </span>            :             /// Subsequent calls to hash the same string will use a
+<span class="lineNum">      75 </span>            :             /// string to integer std::map rather than re-hashing.
+<span class="lineNum">      76 </span>            :             ///
+<a name="77"><span class="lineNum">      77 </span>            :             /// @param [in] name String which is to be mapped to the</a>
+<span class="lineNum">      78 </span>            :             ///        key.
+<span class="lineNum">      79 </span>            :             virtual uint64_t key(const std::string &amp;name) = 0;
+<span class="lineNum">      80 </span>            :             /// @brief Insert a value into the table.
+<a name="81"><span class="lineNum">      81 </span>            :             ///</a>
+<span class="lineNum">      82 </span>            :             /// Once the name has been registered with a call to key()
+<span class="lineNum">      83 </span>            :             /// the data associated with the name can be inserted into
+<span class="lineNum">      84 </span>            :             /// the table by the producer using this function.  If
+<a name="85"><span class="lineNum">      85 </span>            :             /// there is already a value associated with the key then</a>
+<span class="lineNum">      86 </span>            :             /// the value will be overwritten.  There is a fixed
+<span class="lineNum">      87 </span>            :             /// number of collisions allowed, and if too many keys
+<span class="lineNum">      88 </span>            :             /// hashed to the same entry in the table, the entry will
+<a name="89"><span class="lineNum">      89 </span>            :             /// be emptied of it's current data which will be lost.</a>
+<span class="lineNum">      90 </span>            :             ///
+<span class="lineNum">      91 </span>            :             /// @param [in] value Entry that is to be inserted into
+<span class="lineNum">      92 </span>            :             ///        the table.
+<a name="93"><span class="lineNum">      93 </span>            :             ///</a>
+<span class="lineNum">      94 </span>            :             /// @return Returns the 64 bit hash used to reference the
+<span class="lineNum">      95 </span>            :             ///         name in other ProfileTable methods.
+<span class="lineNum">      96 </span>            :             virtual void insert(const struct geopm_prof_message_s &amp;value) = 0;
+<a name="97"><span class="lineNum">      97 </span>            :             /// @brief Maximum number of entries the table can hold.</a>
+<span class="lineNum">      98 </span>            :             ///
+<span class="lineNum">      99 </span>            :             /// Returns the upper bound on the number of values that
+<span class="lineNum">     100 </span>            :             /// can be stored in the table.  This can be used to size
+<a name="101"><span class="lineNum">     101 </span>            :             /// the content vector passed to the dump() method.  In</a>
+<span class="lineNum">     102 </span>            :             /// general there will be many fewer entries into the
+<span class="lineNum">     103 </span>            :             /// table than the number returned by capacity() before a
+<span class="lineNum">     104 </span>            :             /// geopm::Exception with error_value() of
+<a name="105"><span class="lineNum">     105 </span>            :             /// GEOPM_TOO_MANY_COLLISIONS is thrown at time of</a>
+<span class="lineNum">     106 </span>            :             /// insertion.
+<span class="lineNum">     107 </span>            :             ///
+<span class="lineNum">     108 </span>            :             /// @return The maximum number of entries the table can
+<a name="109"><span class="lineNum">     109 </span>            :             ///         hold.</a>
+<span class="lineNum">     110 </span>            :             virtual size_t capacity(void) const = 0;
+<span class="lineNum">     111 </span>            :             virtual size_t size(void) const = 0;
+<span class="lineNum">     112 </span>            :             /// @brief Copy all table entries into a vector and delete
+<a name="113"><span class="lineNum">     113 </span>            :             ///        all entries.</a>
+<span class="lineNum">     114 </span>            :             ///
+<span class="lineNum">     115 </span>            :             /// This method is used by the data consumer to empty the
+<span class="lineNum">     116 </span>            :             /// table of all posted contents into a vector.  When the
+<a name="117"><span class="lineNum">     117 </span>            :             /// table is used in this way it serves as a temporary</a>
+<span class="lineNum">     118 </span>            :             /// scratch-pad for relaying messages from the producer to
+<span class="lineNum">     119 </span>            :             /// the consumer.  Note that the content vector is not
+<span class="lineNum">     120 </span>            :             /// re-sized and it should be sized according to the value
+<a name="121"><span class="lineNum">     121 </span>            :             /// returned by capacity().  Only the first &quot;length&quot;</a>
+<span class="lineNum">     122 </span>            :             /// elements of the vector will be written to by dump().
+<span class="lineNum">     123 </span>            :             ///
+<span class="lineNum">     124 </span>            :             /// @param [out] content The vector of key value pairs
+<a name="125"><span class="lineNum">     125 </span>            :             ///        copied out of the table.</a>
+<span class="lineNum">     126 </span>            :             ///
+<span class="lineNum">     127 </span>            :             /// @param [out] length The number of entries copied into
+<span class="lineNum">     128 </span>            :             ///        the content vector.
+<a name="129"><span class="lineNum">     129 </span>            :             virtual void dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length) = 0;</a>
+<span class="lineNum">     130 </span>            :             /// @brief Called by the producer to pass names to the
+<span class="lineNum">     131 </span>            :             ///        consumer.
+<span class="lineNum">     132 </span>            :             ///
+<a name="133"><span class="lineNum">     133 </span>            :             /// When this method is called the data producer will pass</a>
+<span class="lineNum">     134 </span>            :             /// the names that have been thus far been passed to key()
+<span class="lineNum">     135 </span>            :             /// through the buffer to the consumer who will call
+<span class="lineNum">     136 </span>            :             /// name_set() to receive the names.  There is an option
+<a name="137"><span class="lineNum">     137 </span>            :             /// to avoid writing to the beginning of the buffer so</a>
+<span class="lineNum">     138 </span>            :             /// that it can be reserved for passing other information.
+<span class="lineNum">     139 </span>            :             /// If the header_offset is zero then the entire buffer is
+<span class="lineNum">     140 </span>            :             /// used.  This call will block until the consumer calls
+<a name="141"><span class="lineNum">     141 </span>            :             /// name_set().</a>
+<span class="lineNum">     142 </span>            :             ///
+<span class="lineNum">     143 </span>            :             /// NOTE: The ProfileTable cannot be used again after
+<span class="lineNum">     144 </span>            :             ///       a call to name_fill().
+<a name="145"><span class="lineNum">     145 </span>            :             ///</a>
+<span class="lineNum">     146 </span>            :             /// @param [in] header_offset Offset in bytes to where the
+<span class="lineNum">     147 </span>            :             ///        name values will start in the buffer.
+<span class="lineNum">     148 </span>            :             virtual bool name_fill(size_t header_offset) = 0;
+<a name="149"><span class="lineNum">     149 </span>            :             /// @brief Called by the consumer to receive the names</a>
+<span class="lineNum">     150 </span>            :             ///        that hash to the keys.
+<span class="lineNum">     151 </span>            :             ///
+<span class="lineNum">     152 </span>            :             /// Through calling dump() the consumer will receive a set
+<a name="153"><span class="lineNum">     153 </span>            :             /// of integer keys.  This method enables the consumer to</a>
+<span class="lineNum">     154 </span>            :             /// learn the names that can be hashed to the keys it has
+<span class="lineNum">     155 </span>            :             /// received.  There is an option to avoid writing to the
+<span class="lineNum">     156 </span>            :             /// beginning of the buffer so that it can be reserved for
+<a name="157"><span class="lineNum">     157 </span>            :             /// passing other information.  If the header_offset is</a>
+<span class="lineNum">     158 </span>            :             /// zero then the entire buffer is used.  This call will
+<span class="lineNum">     159 </span>            :             /// block until the producer calls name_fill().
+<span class="lineNum">     160 </span>            :             ///
+<a name="161"><span class="lineNum">     161 </span>            :             /// NOTE: The ProfileTable cannot be used again after</a>
+<span class="lineNum">     162 </span>            :             ///       a call to name_set().
+<span class="lineNum">     163 </span>            :             ///
+<span class="lineNum">     164 </span>            :             /// @param [in] header_offset Offset in bytes to where the
+<a name="165"><span class="lineNum">     165 </span>            :             ///        name values will start in the buffer.</a>
+<span class="lineNum">     166 </span>            :             ///
+<span class="lineNum">     167 </span>            :             /// @param [out] name Set of names read from output of the
+<span class="lineNum">     168 </span>            :             ///        producer's call to name_fill().
+<a name="169"><span class="lineNum">     169 </span>            :             virtual bool name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name) = 0;</a>
+<span class="lineNum">     170 </span>            :     };
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span>            :     class ProfileTableImp : public ProfileTable
+<a name="173"><span class="lineNum">     173 </span>            :     {</a>
+<span class="lineNum">     174 </span>            :         public:
+<span class="lineNum">     175 </span>            :             /// @brief Constructor for the ProfileTableImp.
+<span class="lineNum">     176 </span>            :             ///
+<a name="177"><span class="lineNum">     177 </span>            :             /// The memory that is used by the container is provided</a>
+<span class="lineNum">     178 </span>            :             /// at construction time.  There are other ancillary data
+<span class="lineNum">     179 </span>            :             /// associated with the structure which are dynamic, but
+<span class="lineNum">     180 </span>            :             /// the data container is of fixed size.
 <a name="181"><span class="lineNum">     181 </span>            :             ///</a>
-<span class="lineNum">     182 </span>            :             /// @param buffer [in] Pointer to beginning of virtual
-<span class="lineNum">     183 </span>            :             ///        address range used for storing the data.
-<a name="184"><span class="lineNum">     184 </span>            :             ProfileTableImp(size_t size, void *buffer);</a>
-<a name="185"><span class="lineNum">     185 </span>            :             /// ProfileTableImp destructor, virtual.</a>
-<span class="lineNum">     186 </span><span class="lineCov">       1224 :             virtual ~ProfileTableImp() = default;</span>
-<span class="lineNum">     187 </span>            :             uint64_t key(const std::string &amp;name) override;
-<span class="lineNum">     188 </span>            :             void insert(const struct geopm_prof_message_s &amp;value) override;
-<a name="189"><span class="lineNum">     189 </span>            :             size_t capacity(void) const override;</a>
-<span class="lineNum">     190 </span>            :             size_t size(void) const override;
-<span class="lineNum">     191 </span>            :             void dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length) override;
-<span class="lineNum">     192 </span>            :             bool name_fill(size_t header_offset) override;
-<a name="193"><span class="lineNum">     193 </span>            :             bool name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name) override;</a>
-<span class="lineNum">     194 </span>            :         private:
-<span class="lineNum">     195 </span>            :              /// @brief structure to hold state for a single table entry.
-<span class="lineNum">     196 </span>            :             struct table_s {
-<a name="197"><span class="lineNum">     197 </span>            :                 pthread_mutex_t lock;</a>
-<span class="lineNum">     198 </span>            :                 size_t max_size;
-<span class="lineNum">     199 </span>            :                 size_t curr_size;
-<span class="lineNum">     200 </span>            :                 struct geopm_prof_message_s *value;
-<a name="201"><span class="lineNum">     201 </span>            :             };</a>
-<span class="lineNum">     202 </span>            :             struct geopm_prof_message_s *m_table_value;
-<span class="lineNum">     203 </span>            :             const size_t m_buffer_size;
-<span class="lineNum">     204 </span>            :             struct table_s *m_table;
-<a name="205"><span class="lineNum">     205 </span>            :             pthread_mutex_t m_key_map_lock;</a>
-<span class="lineNum">     206 </span>            :             std::map&lt;const std::string, uint64_t&gt; m_key_map;
-<span class="lineNum">     207 </span>            :             std::set&lt;uint64_t&gt; m_key_set;
-<span class="lineNum">     208 </span>            :             bool m_is_pshared;
-<a name="209"><span class="lineNum">     209 </span>            :             std::map&lt;const std::string, uint64_t&gt;::iterator m_key_map_last;</a>
-<span class="lineNum">     210 </span>            :     };
-<span class="lineNum">     211 </span>            : }
-<span class="lineNum">     212 </span>            : #endif
+<span class="lineNum">     182 </span>            :             /// @param size [in] The length of the buffer in bytes.
+<span class="lineNum">     183 </span>            :             ///
+<span class="lineNum">     184 </span>            :             /// @param buffer [in] Pointer to beginning of virtual
+<a name="185"><span class="lineNum">     185 </span>            :             ///        address range used for storing the data.</a>
+<a name="186"><span class="lineNum">     186 </span>            :             ProfileTableImp(size_t size, void *buffer);</a>
+<span class="lineNum">     187 </span>            :             /// ProfileTableImp destructor, virtual.
+<span class="lineNum">     188 </span><span class="lineCov">        520 :             virtual ~ProfileTableImp() = default;</span>
+<a name="189"><span class="lineNum">     189 </span>            :             uint64_t key(const std::string &amp;name) override;</a>
+<span class="lineNum">     190 </span>            :             void insert(const struct geopm_prof_message_s &amp;value) override;
+<span class="lineNum">     191 </span>            :             size_t capacity(void) const override;
+<span class="lineNum">     192 </span>            :             size_t size(void) const override;
+<a name="193"><span class="lineNum">     193 </span>            :             void dump(std::vector&lt;std::pair&lt;uint64_t, struct geopm_prof_message_s&gt; &gt;::iterator content, size_t &amp;length) override;</a>
+<span class="lineNum">     194 </span>            :             bool name_fill(size_t header_offset) override;
+<span class="lineNum">     195 </span>            :             bool name_set(size_t header_offset, std::set&lt;std::string&gt; &amp;name) override;
+<span class="lineNum">     196 </span>            :         private:
+<a name="197"><span class="lineNum">     197 </span>            :              /// @brief structure to hold state for a single table entry.</a>
+<span class="lineNum">     198 </span>            :             struct table_s {
+<span class="lineNum">     199 </span>            :                 pthread_mutex_t lock;
+<span class="lineNum">     200 </span>            :                 size_t max_size;
+<a name="201"><span class="lineNum">     201 </span>            :                 size_t curr_size;</a>
+<span class="lineNum">     202 </span>            :                 struct geopm_prof_message_s *value;
+<span class="lineNum">     203 </span>            :             };
+<span class="lineNum">     204 </span>            :             struct geopm_prof_message_s *m_table_value;
+<a name="205"><span class="lineNum">     205 </span>            :             const size_t m_buffer_size;</a>
+<span class="lineNum">     206 </span>            :             struct table_s *m_table;
+<span class="lineNum">     207 </span>            :             pthread_mutex_t m_key_map_lock;
+<span class="lineNum">     208 </span>            :             std::map&lt;const std::string, uint64_t&gt; m_key_map;
+<a name="209"><span class="lineNum">     209 </span>            :             std::set&lt;uint64_t&gt; m_key_set;</a>
+<span class="lineNum">     210 </span>            :             bool m_is_pshared;
+<span class="lineNum">     211 </span>            :             std::map&lt;const std::string, uint64_t&gt;::iterator m_key_map_last;
+<span class="lineNum">     212 </span>            :     };
+<a name="213"><span class="lineNum">     213 </span>            : }</a>
+<span class="lineNum">     214 </span>            : #endif
 </pre>
       </td>
     </tr>

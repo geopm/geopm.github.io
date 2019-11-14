@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/geopm_internal.h</title>
+  <title>LCOV - v1.1.0 - src/geopm_internal.h</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">30</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">10</td>
@@ -151,84 +151,83 @@
 <a name="81"><span class="lineNum">      81 </span>            : /*********************************/</a>
 <a name="82"><span class="lineNum">      82 </span>            : /* APPLICATION PROFILING INSIGHT */</a>
 <span class="lineNum">      83 </span>            : /*********************************/
-<span class="lineNum">      84 </span><span class="lineCov">  652897856 : static inline uint64_t geopm_region_id_hash(uint64_t region_id)</span>
+<span class="lineNum">      84 </span><span class="lineCov">  143151177 : static inline uint64_t geopm_region_id_hash(uint64_t region_id)</span>
 <a name="85"><span class="lineNum">      85 </span>            : {</a>
-<span class="lineNum">      86 </span><span class="lineCov">  652897856 :     uint64_t ret = ((region_id &lt;&lt; 32) &gt;&gt; 32);</span>
+<span class="lineNum">      86 </span><span class="lineCov">  143151177 :     uint64_t ret = ((region_id &lt;&lt; 32) &gt;&gt; 32);</span>
 <span class="lineNum">      87 </span>            : 
-<span class="lineNum">      88 </span><span class="lineCov">  652897856 :     if (GEOPM_REGION_HASH_UNMARKED == region_id ||</span>
-<a name="89"><span class="lineNum">      89 </span>            :         GEOPM_REGION_HASH_INVALID == ret) {</a>
-<span class="lineNum">      90 </span><span class="lineCov">  127617743 :         ret = GEOPM_REGION_HASH_UNMARKED;</span>
-<span class="lineNum">      91 </span>            :     }
-<span class="lineNum">      92 </span><span class="lineCov">  652897856 :     return ret;</span>
-<a name="93"><span class="lineNum">      93 </span>            : }</a>
-<span class="lineNum">      94 </span>            : 
-<span class="lineNum">      95 </span><span class="lineCov">      18772 : static inline int geopm_region_id_is_epoch(uint64_t region_id)</span>
-<span class="lineNum">      96 </span>            : {
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">      18772 :     return (region_id &amp; GEOPM_REGION_ID_EPOCH) ? 1 : 0;</span></a>
-<a name="98"><span class="lineNum">      98 </span>            : }</a>
-<span class="lineNum">      99 </span>            : 
-<span class="lineNum">     100 </span><span class="lineCov">   79740673 : static inline int geopm_region_id_is_mpi(uint64_t region_id)</span>
-<a name="101"><span class="lineNum">     101 </span>            : {</a>
-<span class="lineNum">     102 </span><span class="lineCov">   79740673 :     return (region_id &amp; GEOPM_REGION_ID_MPI) ? 1 : 0;</span>
-<a name="103"><span class="lineNum">     103 </span>            : }</a>
-<span class="lineNum">     104 </span>            : 
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">      16836 : static inline int geopm_region_id_is_nested(uint64_t region_id)</span></a>
-<span class="lineNum">     106 </span>            : {
-<span class="lineNum">     107 </span><span class="lineCov">      16836 :     return (geopm_region_id_is_mpi(region_id) &amp;&amp; geopm_region_id_hash(region_id));</span>
-<span class="lineNum">     108 </span>            : }
-<a name="109"><span class="lineNum">     109 </span>            : </a>
-<span class="lineNum">     110 </span>            : static inline uint64_t geopm_region_id_parent(uint64_t region_id)
-<span class="lineNum">     111 </span>            : {
-<span class="lineNum">     112 </span>            :     return (geopm_region_id_is_nested(region_id) ? geopm_region_id_hash(region_id) : GEOPM_REGION_HASH_INVALID);
-<a name="113"><span class="lineNum">     113 </span>            : }</a>
-<span class="lineNum">     114 </span>            : 
-<span class="lineNum">     115 </span><span class="lineCov">       2278 : static inline uint64_t geopm_region_id_set_mpi(uint64_t region_id)</span>
-<span class="lineNum">     116 </span>            : {
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">       2278 :     return (region_id | GEOPM_REGION_ID_MPI);</span></a>
-<a name="118"><span class="lineNum">     118 </span>            : }</a>
-<span class="lineNum">     119 </span>            : 
-<span class="lineNum">     120 </span><span class="lineCov">       3400 : static inline uint64_t geopm_region_id_unset_mpi(uint64_t region_id)</span>
-<a name="121"><span class="lineNum">     121 </span>            : {</a>
-<span class="lineNum">     122 </span><span class="lineCov">       3400 :     return (region_id &amp; (~GEOPM_REGION_ID_MPI));</span>
-<a name="123"><span class="lineNum">     123 </span>            : }</a>
-<span class="lineNum">     124 </span>            : 
-<a name="125"><span class="lineNum">     125 </span><span class="lineCov">       1042 : static inline uint64_t geopm_region_id_set_hint(uint64_t hint_type, uint64_t region_id)</span></a>
-<span class="lineNum">     126 </span>            : {
-<span class="lineNum">     127 </span><span class="lineCov">       1042 :     return (region_id | hint_type);</span>
-<a name="128"><span class="lineNum">     128 </span>            : }</a>
-<a name="129"><span class="lineNum">     129 </span>            : </a>
-<span class="lineNum">     130 </span><span class="lineCov">     476091 : static inline uint64_t geopm_region_id_unset_hint(uint64_t hint_type, uint64_t region_id)</span>
-<span class="lineNum">     131 </span>            : {
-<span class="lineNum">     132 </span><span class="lineCov">     476091 :     return (region_id &amp; (~hint_type));</span>
-<a name="133"><span class="lineNum">     133 </span>            : }</a>
-<span class="lineNum">     134 </span>            : 
-<span class="lineNum">     135 </span><span class="lineCov">      17754 : static inline int geopm_region_id_hint_is_equal(uint64_t hint_type, uint64_t region_id)</span>
-<span class="lineNum">     136 </span>            : {
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">      17754 :     return (region_id &amp; hint_type) ? 1 : 0;</span></a>
-<a name="138"><span class="lineNum">     138 </span>            : }</a>
-<span class="lineNum">     139 </span>            : 
-<span class="lineNum">     140 </span><span class="lineCov">   80066444 : static inline uint64_t geopm_region_id_hint(uint64_t region_id)</span>
-<a name="141"><span class="lineNum">     141 </span>            : {</a>
-<span class="lineNum">     142 </span>            :     uint64_t ret;
-<span class="lineNum">     143 </span><span class="lineCov">   80066444 :     if (GEOPM_REGION_HASH_UNMARKED == region_id) {</span>
-<span class="lineNum">     144 </span><span class="lineCov">     372561 :         ret = GEOPM_REGION_HINT_UNKNOWN;</span>
-<a name="145"><span class="lineNum">     145 </span>            :     }</a>
-<span class="lineNum">     146 </span><span class="lineCov">   79693883 :     else if (geopm_region_id_is_mpi(region_id)) {</span>
-<span class="lineNum">     147 </span><span class="lineCov">    9368365 :         ret = GEOPM_REGION_HINT_NETWORK;</span>
-<span class="lineNum">     148 </span>            :     }
-<a name="149"><span class="lineNum">     149 </span>            :     else {</a>
-<span class="lineNum">     150 </span><span class="lineCov">   70325518 :         ret = region_id &amp; GEOPM_MASK_REGION_HINT;</span>
-<span class="lineNum">     151 </span><span class="lineCov">   70325518 :         if (!ret) {</span>
-<span class="lineNum">     152 </span><span class="lineCov">       4980 :             ret = GEOPM_REGION_HINT_UNKNOWN;</span>
-<a name="153"><span class="lineNum">     153 </span>            :         }</a>
-<span class="lineNum">     154 </span>            :     }
-<span class="lineNum">     155 </span><span class="lineCov">   80066444 :     return ret;</span>
-<span class="lineNum">     156 </span>            : }
-<a name="157"><span class="lineNum">     157 </span>            : </a>
-<span class="lineNum">     158 </span>            : #ifdef __cplusplus
-<span class="lineNum">     159 </span>            : }
+<span class="lineNum">      88 </span><span class="lineCov">  143151177 :     if (GEOPM_REGION_HASH_INVALID == ret) {</span>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">       2049 :         ret = GEOPM_REGION_HASH_UNMARKED;</span></a>
+<span class="lineNum">      90 </span>            :     }
+<span class="lineNum">      91 </span><span class="lineCov">  143151177 :     return ret;</span>
+<a name="92"><span class="lineNum">      92 </span>            : }</a>
+<a name="93"><span class="lineNum">      93 </span>            : </a>
+<span class="lineNum">      94 </span><span class="lineCov">      15681 : static inline int geopm_region_id_is_epoch(uint64_t region_id)</span>
+<span class="lineNum">      95 </span>            : {
+<span class="lineNum">      96 </span><span class="lineCov">      15681 :     return (region_id &amp; GEOPM_REGION_ID_EPOCH) ? 1 : 0;</span>
+<a name="97"><span class="lineNum">      97 </span>            : }</a>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineCov">   23501840 : static inline int geopm_region_id_is_mpi(uint64_t region_id)</span>
+<span class="lineNum">     100 </span>            : {
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">   23501840 :     return (region_id &amp; GEOPM_REGION_ID_MPI) ? 1 : 0;</span></a>
+<a name="102"><span class="lineNum">     102 </span>            : }</a>
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span><span class="lineCov">      14665 : static inline int geopm_region_id_is_nested(uint64_t region_id)</span>
+<a name="105"><span class="lineNum">     105 </span>            : {</a>
+<span class="lineNum">     106 </span><span class="lineCov">      14665 :     return (geopm_region_id_is_mpi(region_id) &amp;&amp; geopm_region_id_hash(region_id));</span>
+<span class="lineNum">     107 </span>            : }
+<span class="lineNum">     108 </span>            : 
+<a name="109"><span class="lineNum">     109 </span>            : static inline uint64_t geopm_region_id_parent(uint64_t region_id)</a>
+<span class="lineNum">     110 </span>            : {
+<span class="lineNum">     111 </span>            :     return (geopm_region_id_is_nested(region_id) ? geopm_region_id_hash(region_id) : GEOPM_REGION_HASH_UNMARKED);
+<a name="112"><span class="lineNum">     112 </span>            : }</a>
+<a name="113"><span class="lineNum">     113 </span>            : </a>
+<span class="lineNum">     114 </span><span class="lineCov">       3611 : static inline uint64_t geopm_region_id_set_mpi(uint64_t region_id)</span>
+<span class="lineNum">     115 </span>            : {
+<span class="lineNum">     116 </span><span class="lineCov">       3611 :     return (region_id | GEOPM_REGION_ID_MPI);</span>
+<a name="117"><span class="lineNum">     117 </span>            : }</a>
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span><span class="lineCov">   23694096 : static inline uint64_t geopm_region_id_unset_mpi(uint64_t region_id)</span>
+<span class="lineNum">     120 </span>            : {
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">   23694096 :     return (region_id &amp; (~GEOPM_REGION_ID_MPI));</span></a>
+<a name="122"><span class="lineNum">     122 </span>            : }</a>
+<span class="lineNum">     123 </span>            : 
+<span class="lineNum">     124 </span><span class="lineCov">        505 : static inline uint64_t geopm_region_id_set_hint(uint64_t hint_type, uint64_t region_id)</span>
+<a name="125"><span class="lineNum">     125 </span>            : {</a>
+<span class="lineNum">     126 </span><span class="lineCov">        505 :     return (region_id | hint_type);</span>
+<a name="127"><span class="lineNum">     127 </span>            : }</a>
+<span class="lineNum">     128 </span>            : 
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">   23706130 : static inline uint64_t geopm_region_id_unset_hint(uint64_t hint_type, uint64_t region_id)</span></a>
+<span class="lineNum">     130 </span>            : {
+<span class="lineNum">     131 </span><span class="lineCov">   23706130 :     return (region_id &amp; (~hint_type));</span>
+<a name="132"><span class="lineNum">     132 </span>            : }</a>
+<a name="133"><span class="lineNum">     133 </span>            : </a>
+<span class="lineNum">     134 </span><span class="lineCov">      15671 : static inline int geopm_region_id_hint_is_equal(uint64_t hint_type, uint64_t region_id)</span>
+<span class="lineNum">     135 </span>            : {
+<span class="lineNum">     136 </span><span class="lineCov">      15671 :     return (region_id &amp; hint_type) ? 1 : 0;</span>
+<a name="137"><span class="lineNum">     137 </span>            : }</a>
+<span class="lineNum">     138 </span>            : 
+<span class="lineNum">     139 </span><span class="lineCov">   23518307 : static inline uint64_t geopm_region_id_hint(uint64_t region_id)</span>
+<span class="lineNum">     140 </span>            : {
+<a name="141"><span class="lineNum">     141 </span>            :     uint64_t ret;</a>
+<span class="lineNum">     142 </span><span class="lineCov">   23518307 :     if (GEOPM_REGION_HASH_UNMARKED == region_id) {</span>
+<span class="lineNum">     143 </span><span class="lineCov">      63162 :         ret = GEOPM_REGION_HINT_UNKNOWN;</span>
+<span class="lineNum">     144 </span>            :     }
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">   23455145 :     else if (geopm_region_id_is_mpi(region_id)) {</span></a>
+<span class="lineNum">     146 </span><span class="lineCov">     144852 :         ret = GEOPM_REGION_HINT_NETWORK;</span>
+<span class="lineNum">     147 </span>            :     }
+<span class="lineNum">     148 </span>            :     else {
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">   23310293 :         ret = region_id &amp; GEOPM_MASK_REGION_HINT;</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">   23310293 :         if (!ret) {</span>
+<span class="lineNum">     151 </span><span class="lineCov">       3883 :             ret = GEOPM_REGION_HINT_UNKNOWN;</span>
+<span class="lineNum">     152 </span>            :         }
+<a name="153"><span class="lineNum">     153 </span>            :     }</a>
+<span class="lineNum">     154 </span><span class="lineCov">   23518307 :     return ret;</span>
+<span class="lineNum">     155 </span>            : }
+<span class="lineNum">     156 </span>            : 
+<a name="157"><span class="lineNum">     157 </span>            : #ifdef __cplusplus</a>
+<span class="lineNum">     158 </span>            : }
+<span class="lineNum">     159 </span>            : #endif
 <span class="lineNum">     160 </span>            : #endif
-<a name="161"><span class="lineNum">     161 </span>            : #endif</a>
 </pre>
       </td>
     </tr>

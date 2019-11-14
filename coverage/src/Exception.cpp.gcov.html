@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - v1.0.0+rc3-4-g55882c1 - src/Exception.cpp</title>
+  <title>LCOV - v1.1.0 - src/Exception.cpp</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,21 +28,21 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">v1.0.0+rc3-4-g55882c1</td>
+            <td class="headerValue">v1.1.0</td>
             <td></td>
             <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">77</td>
             <td class="headerCovTableEntry">79</td>
-            <td class="headerCovTableEntry">141</td>
-            <td class="headerCovTableEntryLo">56.0 %</td>
+            <td class="headerCovTableEntryHi">97.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-04-09 15:28:17</td>
+            <td class="headerValue">2019-11-12 08:30:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">12</td>
-            <td class="headerCovTableEntry">20</td>
-            <td class="headerCovTableEntryLo">60.0 %</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryMed">89.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -100,254 +100,200 @@
 <span class="lineNum">      30 </span>            :  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <span class="lineNum">      31 </span>            :  */
 <span class="lineNum">      32 </span>            : 
-<a name="33"><span class="lineNum">      33 </span>            : #include &lt;string.h&gt;</a>
-<span class="lineNum">      34 </span>            : #include &lt;stdio.h&gt;
-<span class="lineNum">      35 </span>            : #include &lt;iostream&gt;
-<span class="lineNum">      36 </span>            : #include &lt;errno.h&gt;
-<a name="37"><span class="lineNum">      37 </span>            : #include &lt;sys/types.h&gt;</a>
-<span class="lineNum">      38 </span>            : #include &lt;dirent.h&gt;
-<span class="lineNum">      39 </span>            : #include &lt;sys/mman.h&gt;
-<span class="lineNum">      40 </span>            : #include &lt;signal.h&gt;
-<a name="41"><span class="lineNum">      41 </span>            : #include &lt;limits.h&gt;</a>
-<span class="lineNum">      42 </span>            : 
-<span class="lineNum">      43 </span>            : #include &quot;Exception.hpp&quot;
-<span class="lineNum">      44 </span>            : #include &quot;geopm_env.h&quot;
-<a name="45"><span class="lineNum">      45 </span>            : #include &quot;geopm_signal_handler.h&quot;</a>
-<span class="lineNum">      46 </span>            : #include &quot;config.h&quot;
-<span class="lineNum">      47 </span>            : 
-<a name="48"><span class="lineNum">      48 </span>            : extern &quot;C&quot;</a>
-<a name="49"><span class="lineNum">      49 </span>            : {</a>
-<span class="lineNum">      50 </span><span class="lineCov">     121442 :     void geopm_error_message(int err, char *msg, size_t size)</span>
-<span class="lineNum">      51 </span>            :     {
-<span class="lineNum">      52 </span><span class="lineCov">     121442 :         switch (err) {</span>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        180 :             case GEOPM_ERROR_RUNTIME:</span></a>
-<span class="lineNum">      54 </span><span class="lineCov">        384 :                 strncpy(msg, &quot;&lt;geopm&gt; Runtime error&quot;, size);</span>
-<span class="lineNum">      55 </span><span class="lineCov">        384 :                 break;</span>
-<span class="lineNum">      56 </span><span class="lineCov">         22 :             case GEOPM_ERROR_LOGIC:</span>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         44 :                 strncpy(msg, &quot;&lt;geopm&gt; Logic error&quot;, size);</span></a>
-<span class="lineNum">      58 </span><span class="lineCov">         44 :                 break;</span>
-<span class="lineNum">      59 </span><span class="lineCov">      67431 :             case GEOPM_ERROR_INVALID:</span>
-<span class="lineNum">      60 </span><span class="lineCov">     120444 :                 strncpy(msg, &quot;&lt;geopm&gt; Invalid argument&quot;, size);</span>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">     120444 :                 break;</span></a>
-<span class="lineNum">      62 </span><span class="lineCov">         14 :             case GEOPM_ERROR_FILE_PARSE:</span>
-<span class="lineNum">      63 </span><span class="lineCov">         28 :                 strncpy(msg, &quot;&lt;geopm&gt; Unable to parse input file&quot;, size);</span>
-<span class="lineNum">      64 </span><span class="lineCov">         28 :                 break;</span>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         12 :             case GEOPM_ERROR_LEVEL_RANGE:</span></a>
-<span class="lineNum">      66 </span><span class="lineCov">         24 :                 strncpy(msg, &quot;&lt;geopm&gt; Control hierarchy level is out of range&quot;, size);</span>
-<span class="lineNum">      67 </span><span class="lineCov">         24 :                 break;</span>
-<span class="lineNum">      68 </span><span class="lineCov">          7 :             case GEOPM_ERROR_NOT_IMPLEMENTED:</span>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         14 :                 strncpy(msg, &quot;&lt;geopm&gt; Feature not yet implemented&quot;, size);</span></a>
-<span class="lineNum">      70 </span><span class="lineCov">         14 :                 break;</span>
-<span class="lineNum">      71 </span><span class="lineNoCov">          0 :             case GEOPM_ERROR_PLATFORM_UNSUPPORTED:</span>
-<span class="lineNum">      72 </span><span class="lineNoCov">          0 :                 strncpy(msg, &quot;&lt;geopm&gt; Current platform not supported or unrecognized&quot;, size);</span>
-<a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 :                 break;</span></a>
-<span class="lineNum">      74 </span><span class="lineNoCov">          0 :             case GEOPM_ERROR_MSR_OPEN:</span>
-<span class="lineNum">      75 </span><span class="lineNoCov">          0 :                 strncpy(msg, &quot;&lt;geopm&gt; Could not open MSR device&quot;, size);</span>
-<span class="lineNum">      76 </span><span class="lineNoCov">          0 :                 break;</span>
-<a name="77"><span class="lineNum">      77 </span><span class="lineNoCov">          0 :             case GEOPM_ERROR_MSR_READ:</span></a>
-<span class="lineNum">      78 </span><span class="lineNoCov">          0 :                 strncpy(msg, &quot;&lt;geopm&gt; Could not read from MSR device&quot;, size);</span>
-<span class="lineNum">      79 </span><span class="lineNoCov">          0 :                 break;</span>
-<span class="lineNum">      80 </span><span class="lineNoCov">          0 :             case GEOPM_ERROR_MSR_WRITE:</span>
-<a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 :                 strncpy(msg, &quot;&lt;geopm&gt; Could not write to MSR device&quot;, size);</span></a>
-<span class="lineNum">      82 </span><span class="lineNoCov">          0 :                 break;</span>
-<span class="lineNum">      83 </span><span class="lineNoCov">          0 :             case GEOPM_ERROR_AGENT_UNSUPPORTED:</span>
-<span class="lineNum">      84 </span><span class="lineNoCov">          0 :                 strncpy(msg, &quot;&lt;geopm&gt; Specified Agent not supported or unrecognized&quot;, size);</span>
-<a name="85"><span class="lineNum">      85 </span><span class="lineNoCov">          0 :                 break;</span></a>
-<span class="lineNum">      86 </span><span class="lineCov">          2 :             case GEOPM_ERROR_AFFINITY:</span>
-<span class="lineNum">      87 </span><span class="lineCov">          4 :                 strncpy(msg, &quot;&lt;geopm&gt; MPI ranks are not affinitized to distinct CPUs&quot;, size);</span>
-<span class="lineNum">      88 </span><span class="lineCov">          4 :                 break;</span>
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">          1 :             case GEOPM_ERROR_NO_AGENT:</span></a>
-<span class="lineNum">      90 </span><span class="lineCov">          2 :                 strncpy(msg, &quot;&lt;geopm&gt; Requested agent is unavailable or invalid&quot;, size);</span>
-<span class="lineNum">      91 </span><span class="lineCov">          2 :                 break;</span>
-<span class="lineNum">      92 </span><span class="lineCov">        235 :             default:</span>
-<a name="93"><span class="lineNum">      93 </span>            : #ifndef _GNU_SOURCE</a>
-<span class="lineNum">      94 </span>            :                 int undef = strerror_r(err, msg, size);
-<span class="lineNum">      95 </span>            :                 if (undef &amp;&amp; undef != ERANGE) {
-<span class="lineNum">      96 </span>            :                     snprintf(msg, size, &quot;&lt;geopm&gt; Unknown error: %i&quot;, err);
-<a name="97"><span class="lineNum">      97 </span>            :                 }</a>
-<span class="lineNum">      98 </span>            : #else
-<span class="lineNum">      99 </span><span class="lineCov">        498 :                 strncpy(msg, strerror_r(err, msg, size), size);</span>
-<span class="lineNum">     100 </span>            : #endif
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">        498 :                 break;</span></a>
-<span class="lineNum">     102 </span>            :         }
-<span class="lineNum">     103 </span><span class="lineCov">     121442 :         if (size &gt; 0) {</span>
-<span class="lineNum">     104 </span><span class="lineCov">     121442 :             msg[size-1] = '\0';</span>
-<a name="105"><span class="lineNum">     105 </span>            :         }</a>
-<a name="106"><span class="lineNum">     106 </span><span class="lineCov">     121442 :     }</span></a>
-<span class="lineNum">     107 </span>            : 
-<span class="lineNum">     108 </span><span class="lineNoCov">          0 :     void geopm_error_destroy_shmem(void)</span>
-<a name="109"><span class="lineNum">     109 </span>            :     {</a>
-<span class="lineNum">     110 </span><span class="lineNoCov">          0 :         int err = 0;</span>
-<span class="lineNum">     111 </span>            :         char err_msg[2 * NAME_MAX];
-<span class="lineNum">     112 </span><span class="lineNoCov">          0 :         DIR *did = opendir(&quot;/dev/shm&quot;);</span>
-<a name="113"><span class="lineNum">     113 </span><span class="lineNoCov">          0 :         if (did &amp;&amp;</span></a>
-<span class="lineNum">     114 </span><span class="lineNoCov">          0 :             strlen(geopm_env_shmkey()) &amp;&amp;</span>
-<span class="lineNum">     115 </span><span class="lineNoCov">          0 :             *(geopm_env_shmkey()) == '/' &amp;&amp;</span>
-<span class="lineNum">     116 </span><span class="lineNoCov">          0 :             strchr(geopm_env_shmkey(), ' ') == NULL &amp;&amp;</span>
-<a name="117"><span class="lineNum">     117 </span><span class="lineNoCov">          0 :             strchr(geopm_env_shmkey() + 1, '/') == NULL) {</span></a>
-<span class="lineNum">     118 </span>            : 
-<span class="lineNum">     119 </span>            :             struct dirent *entry;
-<span class="lineNum">     120 </span>            :             char shm_key[NAME_MAX];
-<a name="121"><span class="lineNum">     121 </span><span class="lineNoCov">          0 :             shm_key[0] = '/';</span></a>
-<span class="lineNum">     122 </span><span class="lineNoCov">          0 :             shm_key[NAME_MAX - 1] = '\0';</span>
-<span class="lineNum">     123 </span><span class="lineNoCov">          0 :             while ((entry = readdir(did))) {</span>
-<span class="lineNum">     124 </span><span class="lineNoCov">          0 :                 if (strstr(entry-&gt;d_name, geopm_env_shmkey() + 1) == entry-&gt;d_name) {</span>
-<a name="125"><span class="lineNum">     125 </span><span class="lineNoCov">          0 :                     strncpy(shm_key + 1, entry-&gt;d_name, NAME_MAX - 2);</span></a>
-<span class="lineNum">     126 </span><span class="lineNoCov">          0 :                     err = shm_unlink(shm_key);</span>
-<span class="lineNum">     127 </span><span class="lineNoCov">          0 :                     if (err) {</span>
-<span class="lineNum">     128 </span><span class="lineNoCov">          0 :                         snprintf(err_msg, 2 * NAME_MAX, &quot;Warning: &lt;geopm&gt; unable to unlink \&quot;%s\&quot;&quot;, shm_key);</span>
-<a name="129"><span class="lineNum">     129 </span><span class="lineNoCov">          0 :                         perror(err_msg);</span></a>
-<span class="lineNum">     130 </span>            :                     }
-<span class="lineNum">     131 </span>            :                 }
-<span class="lineNum">     132 </span>            :             }
-<a name="133"><span class="lineNum">     133 </span>            :         }</a>
-<span class="lineNum">     134 </span><span class="lineNoCov">          0 :     }</span>
-<span class="lineNum">     135 </span>            : }
+<a name="33"><span class="lineNum">      33 </span>            : #include &quot;Exception.hpp&quot;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      36 </span>            : #include &lt;stdio.h&gt;
+<a name="37"><span class="lineNum">      37 </span>            : #include &lt;errno.h&gt;</a>
+<span class="lineNum">      38 </span>            : #include &lt;sys/types.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;limits.h&gt;
+<span class="lineNum">      40 </span>            : #include &lt;iostream&gt;
+<a name="41"><span class="lineNum">      41 </span>            : #include &lt;mutex&gt;</a>
+<span class="lineNum">      42 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            : #include &quot;Environment.hpp&quot;
+<a name="45"><span class="lineNum">      45 </span>            : #include &quot;config.h&quot;</a>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            : namespace geopm
+<span class="lineNum">      48 </span>            : {
+<a name="49"><span class="lineNum">      49 </span>            :     class ErrorMessage</a>
+<span class="lineNum">      50 </span>            :     {
+<span class="lineNum">      51 </span>            :         public:
+<span class="lineNum">      52 </span>            :             static ErrorMessage &amp;get(void);
+<a name="53"><span class="lineNum">      53 </span>            :             void update(int error_value, const std::string &amp;error_message);</a>
+<span class="lineNum">      54 </span>            :             std::string message_last(int error_value);
+<span class="lineNum">      55 </span>            :             std::string message_fixed(int error_value);
+<a name="56"><span class="lineNum">      56 </span>            :         private:</a>
+<a name="57"><span class="lineNum">      57 </span>            :             ErrorMessage();</a>
+<span class="lineNum">      58 </span><span class="lineCov">        862 :             virtual ~ErrorMessage() = default;</span>
+<span class="lineNum">      59 </span>            :             const std::map&lt;int, std::string&gt; M_VALUE_MESSAGE_MAP;
+<span class="lineNum">      60 </span>            :             int m_error_value;
+<a name="61"><span class="lineNum">      61 </span>            :             char m_error_message[NAME_MAX];</a>
+<span class="lineNum">      62 </span>            :             std::mutex m_lock;
+<span class="lineNum">      63 </span>            :         public:
+<span class="lineNum">      64 </span>            :             ErrorMessage(const ErrorMessage &amp;other) = delete;
+<a name="65"><span class="lineNum">      65 </span>            :             void operator=(const ErrorMessage &amp;other) = delete;</a>
+<span class="lineNum">      66 </span>            :     };
+<span class="lineNum">      67 </span>            : }
+<span class="lineNum">      68 </span>            : 
+<a name="69"><span class="lineNum">      69 </span>            : extern &quot;C&quot;</a>
+<span class="lineNum">      70 </span>            : {
+<span class="lineNum">      71 </span><span class="lineCov">         35 :     void geopm_error_message(int error_value, char *error_message, size_t message_size)</span>
+<span class="lineNum">      72 </span>            :     {
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">         70 :         std::string msg(geopm::ErrorMessage::get().message_last(error_value));</span></a>
+<span class="lineNum">      74 </span><span class="lineCov">         35 :         strncpy(error_message, msg.c_str(), message_size - 1);</span>
+<span class="lineNum">      75 </span><span class="lineCov">         35 :         if (msg.size() &gt;= message_size) {</span>
+<span class="lineNum">      76 </span><span class="lineCov">          1 :             error_message[message_size - 1] = '\0';</span>
+<a name="77"><span class="lineNum">      77 </span>            :         }</a>
+<span class="lineNum">      78 </span><span class="lineCov">         35 :     }</span>
+<span class="lineNum">      79 </span>            : }
+<span class="lineNum">      80 </span>            : 
+<a name="81"><span class="lineNum">      81 </span>            : namespace geopm</a>
+<a name="82"><span class="lineNum">      82 </span>            : {</a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineCov">         13 :     int exception_handler(std::exception_ptr eptr, bool do_print)</span>
+<a name="85"><span class="lineNum">      85 </span>            :     {</a>
+<span class="lineNum">      86 </span><span class="lineCov">         13 :         int err = errno ? errno : GEOPM_ERROR_RUNTIME;</span>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span>            :         try {
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         13 :             if (eptr) {</span></a>
+<span class="lineNum">      90 </span><span class="lineCov">         26 :                 std::rethrow_exception(eptr);</span>
+<span class="lineNum">      91 </span>            :             }
+<span class="lineNum">      92 </span>            :         }
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         26 :         catch (const std::exception &amp;ex) {</span></a>
+<span class="lineNum">      94 </span><span class="lineCov">         13 :             const geopm::Exception *ex_geopm = dynamic_cast&lt;const geopm::Exception *&gt;(&amp;ex);</span>
+<span class="lineNum">      95 </span><span class="lineCov">         13 :             const std::system_error *ex_sys = dynamic_cast&lt;const std::system_error *&gt;(&amp;ex);</span>
+<span class="lineNum">      96 </span>            : 
+<a name="97"><span class="lineNum">      97 </span>            : #ifdef GEOPM_DEBUG</a>
+<span class="lineNum">      98 </span><span class="lineCov">         13 :             do_print = true;</span>
+<span class="lineNum">      99 </span>            : #endif
+<span class="lineNum">     100 </span><span class="lineCov">         26 :             std::string message(ex.what());</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">         13 :             if (ex_geopm) {</span></a>
+<span class="lineNum">     102 </span><span class="lineCov">         13 :                 err = ex_geopm-&gt;err_value();</span>
+<span class="lineNum">     103 </span>            :             }
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :             else if (ex_sys) {</span>
+<a name="105"><span class="lineNum">     105 </span><span class="lineNoCov">          0 :                 err = ex_sys-&gt;code().value();</span></a>
+<span class="lineNum">     106 </span>            :             }
+<span class="lineNum">     107 </span><span class="lineCov">         13 :             ErrorMessage::get().update(err, message);</span>
+<span class="lineNum">     108 </span><span class="lineCov">         13 :             if (do_print) {</span>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         13 :                 std::cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; message &lt;&lt; std::endl;</span></a>
+<span class="lineNum">     110 </span>            :             }
+<span class="lineNum">     111 </span>            :         }
+<span class="lineNum">     112 </span>            : 
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         13 :         return err;</span></a>
+<a name="114"><span class="lineNum">     114 </span>            :     }</a>
+<span class="lineNum">     115 </span>            : 
+<span class="lineNum">     116 </span><span class="lineCov">      90322 :     Exception::Exception(const std::string &amp;what, int err, const char *file, int line)</span>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">     180644 :         : std::runtime_error(ErrorMessage::get().message_fixed(err) + (</span></a>
+<span class="lineNum">     118 </span><span class="lineCov">     361288 :                                  what.size() != 0 ? (std::string(&quot;: &quot;) + what) : std::string(&quot;&quot;)) + (</span>
+<span class="lineNum">     119 </span><span class="lineCov">     361280 :                                  file != NULL ? (std::string(&quot;: at geopm/&quot;) + std::string(file) +</span>
+<span class="lineNum">     120 </span><span class="lineCov">     270958 :                                  std::string(&quot;:&quot;) + std::to_string(line)) : std::string(&quot;&quot;)))</span>
+<a name="121"><span class="lineNum">     121 </span><span class="lineCov">     270966 :         , m_err(err ? err : GEOPM_ERROR_RUNTIME)</span></a>
+<span class="lineNum">     122 </span>            :     {
+<span class="lineNum">     123 </span>            : 
+<a name="124"><span class="lineNum">     124 </span><span class="lineCov">      90322 :     }</span></a>
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span><span class="lineCov">          1 :     Exception::Exception()</span>
+<span class="lineNum">     127 </span><span class="lineCov">          1 :         : Exception(&quot;&quot;, GEOPM_ERROR_RUNTIME, NULL, 0)</span>
+<span class="lineNum">     128 </span>            :     {
+<a name="129"><span class="lineNum">     129 </span>            : </a>
+<a name="130"><span class="lineNum">     130 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span><span class="lineCov">         33 :     Exception::Exception(const Exception &amp;other)</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">         33 :         : std::runtime_error(other.what())</span></a>
+<span class="lineNum">     134 </span><span class="lineCov">         66 :         , m_err(other.m_err)</span>
+<span class="lineNum">     135 </span>            :     {
 <span class="lineNum">     136 </span>            : 
-<a name="137"><span class="lineNum">     137 </span>            : namespace geopm</a>
-<span class="lineNum">     138 </span>            : {
-<span class="lineNum">     139 </span>            : 
-<a name="140"><span class="lineNum">     140 </span>            :     static std::string error_message(int err);</a>
-<a name="141"><span class="lineNum">     141 </span>            : </a>
-<span class="lineNum">     142 </span><span class="lineCov">         14 :     int exception_handler(std::exception_ptr eptr, bool do_print)</span>
-<span class="lineNum">     143 </span>            :     {
-<span class="lineNum">     144 </span><span class="lineCov">         14 :         int err = GEOPM_ERROR_RUNTIME;</span>
-<a name="145"><span class="lineNum">     145 </span>            :         try {</a>
-<span class="lineNum">     146 </span><span class="lineCov">         14 :             if (eptr) {</span>
-<span class="lineNum">     147 </span><span class="lineCov">         28 :                 std::rethrow_exception(eptr);</span>
-<span class="lineNum">     148 </span>            :             }
-<a name="149"><span class="lineNum">     149 </span>            :         }</a>
-<span class="lineNum">     150 </span><span class="lineCov">         28 :         catch (const std::exception &amp;ex) {</span>
-<span class="lineNum">     151 </span><span class="lineCov">         14 :             const geopm::SignalException *ex_geopm_signal = dynamic_cast&lt;const geopm::SignalException *&gt;(&amp;ex);</span>
-<span class="lineNum">     152 </span><span class="lineCov">         14 :             const geopm::Exception *ex_geopm = dynamic_cast&lt;const geopm::Exception *&gt;(&amp;ex);</span>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         14 :             const std::system_error *ex_sys = dynamic_cast&lt;const std::system_error *&gt;(&amp;ex);</span></a>
-<span class="lineNum">     154 </span><span class="lineCov">         14 :             const std::runtime_error *ex_rt = dynamic_cast&lt;const std::runtime_error *&gt;(&amp;ex);</span>
-<span class="lineNum">     155 </span>            : 
-<span class="lineNum">     156 </span>            : #ifdef GEOPM_DEBUG
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">         14 :             do_print = true;</span></a>
-<span class="lineNum">     158 </span>            : #endif
-<span class="lineNum">     159 </span><span class="lineCov">         14 :             if (ex_geopm_signal) {</span>
-<span class="lineNum">     160 </span><span class="lineNoCov">          0 :                 if (do_print) {</span>
-<a name="161"><span class="lineNum">     161 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; ex_geopm_signal-&gt;what() &lt;&lt; std::endl;</span></a>
-<span class="lineNum">     162 </span>            :                 }
-<span class="lineNum">     163 </span><span class="lineNoCov">          0 :                 err = ex_geopm-&gt;err_value();</span>
-<span class="lineNum">     164 </span><span class="lineNoCov">          0 :                 raise(ex_geopm_signal-&gt;sig_value());</span>
-<a name="165"><span class="lineNum">     165 </span>            :             }</a>
-<span class="lineNum">     166 </span><span class="lineCov">         14 :             else if (ex_geopm) {</span>
-<span class="lineNum">     167 </span><span class="lineCov">         14 :                 if (do_print) {</span>
-<span class="lineNum">     168 </span><span class="lineCov">         14 :                     std::cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; ex_geopm-&gt;what() &lt;&lt; std::endl;</span>
-<a name="169"><span class="lineNum">     169 </span>            :                 }</a>
-<span class="lineNum">     170 </span><span class="lineCov">         14 :                 err = ex_geopm-&gt;err_value();</span>
-<span class="lineNum">     171 </span>            :             }
-<span class="lineNum">     172 </span><span class="lineNoCov">          0 :             else if (ex_sys) {</span>
-<a name="173"><span class="lineNum">     173 </span><span class="lineNoCov">          0 :                 if (do_print) {</span></a>
-<span class="lineNum">     174 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; ex_sys-&gt;what() &lt;&lt; std::endl;</span>
-<span class="lineNum">     175 </span>            :                 }
-<span class="lineNum">     176 </span><span class="lineNoCov">          0 :                 err = ex_sys-&gt;code().value();</span>
-<a name="177"><span class="lineNum">     177 </span>            :             }</a>
-<span class="lineNum">     178 </span><span class="lineNoCov">          0 :             else if (ex_rt) {</span>
-<span class="lineNum">     179 </span><span class="lineNoCov">          0 :                 if (do_print) {</span>
-<span class="lineNum">     180 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; ex_rt-&gt;what() &lt;&lt; std::endl;</span>
-<a name="181"><span class="lineNum">     181 </span>            :                 }</a>
-<span class="lineNum">     182 </span><span class="lineNoCov">          0 :                 err = errno ? errno : GEOPM_ERROR_RUNTIME;</span>
-<span class="lineNum">     183 </span>            :             }
-<span class="lineNum">     184 </span>            :             else {
-<a name="185"><span class="lineNum">     185 </span><span class="lineNoCov">          0 :                 if (do_print) {</span></a>
-<span class="lineNum">     186 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; ex.what() &lt;&lt; std::endl;</span>
-<span class="lineNum">     187 </span>            :                 }
-<span class="lineNum">     188 </span><span class="lineNoCov">          0 :                 err = errno ? errno : GEOPM_ERROR_RUNTIME;</span>
-<a name="189"><span class="lineNum">     189 </span>            :             }</a>
-<span class="lineNum">     190 </span>            :         }
-<span class="lineNum">     191 </span>            : 
-<span class="lineNum">     192 </span><span class="lineCov">         14 :         return err;</span>
-<a name="193"><span class="lineNum">     193 </span>            :     }</a>
-<span class="lineNum">     194 </span>            : 
-<span class="lineNum">     195 </span><span class="lineCov">     121426 :     Exception::Exception(const std::string &amp;what, int err, const char *file, int line)</span>
-<span class="lineNum">     196 </span><span class="lineCov">     242852 :         : std::runtime_error(error_message(err) + (</span>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">     592756 :                                  what.size() != 0 ? (std::string(&quot;: &quot;) + what) : std::string(&quot;&quot;)) + (</span></a>
-<span class="lineNum">     198 </span><span class="lineCov">     378632 :                                  file != NULL ? (std::string(&quot;: at geopm/&quot;) + std::string(file) +</span>
-<span class="lineNum">     199 </span><span class="lineCov">     364262 :                                  std::string(&quot;:&quot;) + std::to_string(line)) : std::string(&quot;&quot;)))</span>
-<span class="lineNum">     200 </span><span class="lineCov">     310752 :         , m_err(err ? err : GEOPM_ERROR_RUNTIME)</span>
-<a name="201"><span class="lineNum">     201 </span>            :     {</a>
-<span class="lineNum">     202 </span>            : 
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">     121426 :     }</span></a>
-<span class="lineNum">     204 </span>            : 
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          2 :     Exception::Exception()</span></a>
-<span class="lineNum">     206 </span><span class="lineCov">          2 :         : Exception(&quot;&quot;, GEOPM_ERROR_RUNTIME, NULL, 0)</span>
-<span class="lineNum">     207 </span>            :     {
-<span class="lineNum">     208 </span>            : 
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          2 :     }</span></a>
-<span class="lineNum">     210 </span>            : 
-<span class="lineNum">     211 </span><span class="lineCov">         66 :     Exception::Exception(const Exception &amp;other)</span>
-<span class="lineNum">     212 </span><span class="lineCov">         66 :         : std::runtime_error(other.what())</span>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">        132 :         , m_err(other.m_err)</span></a>
-<span class="lineNum">     214 </span>            :     {
-<span class="lineNum">     215 </span>            : 
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">         66 :     }</span></a>
-<a name="217"><span class="lineNum">     217 </span>            : </a>
-<span class="lineNum">     218 </span><span class="lineCov">          4 :     Exception::Exception(int err)</span>
-<span class="lineNum">     219 </span><span class="lineCov">          4 :         : Exception(&quot;&quot;, err, NULL, 0)</span>
-<span class="lineNum">     220 </span>            :     {
-<a name="221"><span class="lineNum">     221 </span>            : </a>
-<a name="222"><span class="lineNum">     222 </span><span class="lineCov">          4 :     }</span></a>
-<span class="lineNum">     223 </span>            : 
-<span class="lineNum">     224 </span><span class="lineCov">          2 :     Exception::Exception(const std::string &amp;what, int err)</span>
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">          2 :         : Exception(what, err, NULL, 0)</span></a>
-<span class="lineNum">     226 </span>            :     {
-<span class="lineNum">     227 </span>            : 
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          2 :     }</span></a>
-<a name="229"><span class="lineNum">     229 </span>            : </a>
-<span class="lineNum">     230 </span><span class="lineCov">          2 :     Exception::Exception(int err, const char *file, int line)</span>
-<span class="lineNum">     231 </span><span class="lineCov">          2 :         : Exception(&quot;&quot;, err, file, line)</span>
-<span class="lineNum">     232 </span>            :     {
-<a name="233"><span class="lineNum">     233 </span>            : </a>
-<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          2 :     }</span></a>
-<span class="lineNum">     235 </span>            : 
-<span class="lineNum">     236 </span><span class="lineCov">       1066 :     int Exception::err_value(void) const</span>
-<a name="237"><span class="lineNum">     237 </span>            :     {</a>
-<span class="lineNum">     238 </span><span class="lineCov">       1066 :         return m_err;</span>
-<span class="lineNum">     239 </span>            :     }
-<a name="240"><span class="lineNum">     240 </span>            : </a>
-<a name="241"><span class="lineNum">     241 </span>            : </a>
-<span class="lineNum">     242 </span><span class="lineNoCov">          0 :     SignalException::SignalException()</span>
-<span class="lineNum">     243 </span><span class="lineNoCov">          0 :         : SignalException(0)</span>
-<span class="lineNum">     244 </span>            :     {
-<a name="245"><span class="lineNum">     245 </span>            : </a>
-<a name="246"><span class="lineNum">     246 </span><span class="lineNoCov">          0 :     }</span></a>
-<span class="lineNum">     247 </span>            : 
-<span class="lineNum">     248 </span><span class="lineNoCov">          0 :     SignalException::SignalException(const SignalException &amp;other)</span>
-<a name="249"><span class="lineNum">     249 </span>            :         : Exception(other)</a>
-<span class="lineNum">     250 </span><span class="lineNoCov">          0 :         , m_sig(other.m_sig)</span>
-<span class="lineNum">     251 </span>            :     {
-<span class="lineNum">     252 </span>            : 
-<a name="253"><span class="lineNum">     253 </span><span class="lineNoCov">          0 :     }</span></a>
-<span class="lineNum">     254 </span>            : 
-<span class="lineNum">     255 </span><span class="lineNoCov">          0 :     SignalException::SignalException(int signum)</span>
-<span class="lineNum">     256 </span><span class="lineNoCov">          0 :         : Exception(std::string(&quot;Signal &quot;) + std::to_string(signum) + std::string(&quot; raised&quot;), errno ? errno : GEOPM_ERROR_RUNTIME)</span>
-<a name="257"><span class="lineNum">     257 </span><span class="lineNoCov">          0 :         , m_sig(signum)</span></a>
-<span class="lineNum">     258 </span>            :     {
-<span class="lineNum">     259 </span>            : 
-<a name="260"><span class="lineNum">     260 </span><span class="lineNoCov">          0 :     }</span></a>
-<a name="261"><span class="lineNum">     261 </span>            : </a>
-<span class="lineNum">     262 </span><span class="lineNoCov">          0 :     SignalException::~SignalException()</span>
-<span class="lineNum">     263 </span>            :     {
-<span class="lineNum">     264 </span>            : 
-<a name="265"><span class="lineNum">     265 </span><span class="lineNoCov">          0 :     }</span></a>
-<span class="lineNum">     266 </span>            : 
-<span class="lineNum">     267 </span><span class="lineNoCov">          0 :     int SignalException::sig_value(void) const</span>
-<span class="lineNum">     268 </span>            :     {
-<a name="269"><span class="lineNum">     269 </span><span class="lineNoCov">          0 :         return m_sig;</span></a>
-<a name="270"><span class="lineNum">     270 </span>            :     }</a>
-<span class="lineNum">     271 </span>            : 
-<span class="lineNum">     272 </span><span class="lineCov">     121426 :     static std::string error_message(int err)</span>
-<a name="273"><span class="lineNum">     273 </span>            :     {</a>
-<span class="lineNum">     274 </span>            :         char tmp_msg[NAME_MAX];
-<span class="lineNum">     275 </span><span class="lineCov">     121426 :         err = err ? err : GEOPM_ERROR_RUNTIME;</span>
-<span class="lineNum">     276 </span><span class="lineCov">     121426 :         geopm_error_message(err, tmp_msg, sizeof(tmp_msg));</span>
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">     121426 :         tmp_msg[NAME_MAX-1] = '\0';</span></a>
-<a name="278"><span class="lineNum">     278 </span><span class="lineCov">     121426 :         return tmp_msg;</span></a>
-<span class="lineNum">     279 </span>            :     }
-<span class="lineNum">     280 </span><span class="lineCov">       4701 : }</span>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         33 :     }</span></a>
+<span class="lineNum">     138 </span>            : 
+<span class="lineNum">     139 </span><span class="lineCov">          2 :     Exception::Exception(int err)</span>
+<span class="lineNum">     140 </span><span class="lineCov">          2 :         : Exception(&quot;&quot;, err, NULL, 0)</span>
+<a name="141"><span class="lineNum">     141 </span>            :     {</a>
+<span class="lineNum">     142 </span>            : 
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">     144 </span>            : 
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">          1 :     Exception::Exception(const std::string &amp;what, int err)</span></a>
+<span class="lineNum">     146 </span><span class="lineCov">          1 :         : Exception(what, err, NULL, 0)</span>
+<span class="lineNum">     147 </span>            :     {
+<span class="lineNum">     148 </span>            : 
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span><span class="lineCov">          1 :     Exception::Exception(int err, const char *file, int line)</span>
+<span class="lineNum">     152 </span><span class="lineCov">          1 :         : Exception(&quot;&quot;, err, file, line)</span>
+<a name="153"><span class="lineNum">     153 </span>            :     {</a>
+<span class="lineNum">     154 </span>            : 
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">          1 :     }</span></a>
+<span class="lineNum">     156 </span>            : 
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">        521 :     int Exception::err_value(void) const</span></a>
+<span class="lineNum">     158 </span>            :     {
+<span class="lineNum">     159 </span><span class="lineCov">        521 :         return m_err;</span>
+<a name="160"><span class="lineNum">     160 </span>            :     }</a>
+<a name="161"><span class="lineNum">     161 </span>            : </a>
+<span class="lineNum">     162 </span><span class="lineCov">        862 :     ErrorMessage::ErrorMessage()</span>
+<span class="lineNum">     163 </span>            :         : M_VALUE_MESSAGE_MAP{
+<span class="lineNum">     164 </span>            :             {GEOPM_ERROR_RUNTIME, &quot;Runtime error&quot;},
+<a name="165"><span class="lineNum">     165 </span>            :             {GEOPM_ERROR_LOGIC, &quot;Logic error&quot;},</a>
+<span class="lineNum">     166 </span>            :             {GEOPM_ERROR_INVALID, &quot;Invalid argument&quot;},
+<span class="lineNum">     167 </span>            :             {GEOPM_ERROR_FILE_PARSE, &quot;Unable to parse input file&quot;},
+<span class="lineNum">     168 </span>            :             {GEOPM_ERROR_LEVEL_RANGE, &quot;Control hierarchy level is out of range&quot;},
+<a name="169"><span class="lineNum">     169 </span>            :             {GEOPM_ERROR_NOT_IMPLEMENTED, &quot;Feature not yet implemented&quot;},</a>
+<span class="lineNum">     170 </span>            :             {GEOPM_ERROR_PLATFORM_UNSUPPORTED, &quot;Current platform not supported or unrecognized&quot;},
+<span class="lineNum">     171 </span>            :             {GEOPM_ERROR_MSR_OPEN, &quot;Could not open MSR device&quot;},
+<span class="lineNum">     172 </span>            :             {GEOPM_ERROR_MSR_READ, &quot;Could not read from MSR device&quot;},
+<a name="173"><span class="lineNum">     173 </span>            :             {GEOPM_ERROR_MSR_WRITE, &quot;Could not write to MSR device&quot;},</a>
+<span class="lineNum">     174 </span>            :             {GEOPM_ERROR_AGENT_UNSUPPORTED, &quot;Specified Agent not supported or unrecognized&quot;},
+<span class="lineNum">     175 </span>            :             {GEOPM_ERROR_AFFINITY, &quot;MPI ranks are not affinitized to distinct CPUs&quot;},
+<span class="lineNum">     176 </span>            :             {GEOPM_ERROR_NO_AGENT, &quot;Requested agent is unavailable or invalid&quot;},
+<a name="177"><span class="lineNum">     177 </span>            :             {GEOPM_ERROR_DATA_STORE, &quot;Encountered a data store error&quot;}}</a>
+<span class="lineNum">     178 </span><span class="lineCov">        862 :         , m_error_value(0)</span>
+<span class="lineNum">     179 </span>            :     {
+<span class="lineNum">     180 </span><span class="lineCov">        862 :         std::fill(m_error_message, m_error_message + NAME_MAX, '\0');</span>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">        862 :     }</span></a>
+<span class="lineNum">     182 </span>            : 
+<span class="lineNum">     183 </span><span class="lineCov">      90370 :     ErrorMessage &amp;ErrorMessage::get(void)</span>
+<span class="lineNum">     184 </span>            :     {
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">      90370 :         static ErrorMessage instance;</span></a>
+<span class="lineNum">     186 </span><span class="lineCov">      90370 :         return instance;</span>
+<a name="187"><span class="lineNum">     187 </span>            :     }</a>
+<span class="lineNum">     188 </span>            : 
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">         13 :     void ErrorMessage::update(int error_value, const std::string &amp;error_message)</span></a>
+<span class="lineNum">     190 </span>            :     {
+<span class="lineNum">     191 </span><span class="lineCov">         13 :         size_t num_copy = error_message.size();</span>
+<span class="lineNum">     192 </span><span class="lineCov">         13 :         if (num_copy &gt; NAME_MAX - 1) {</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          1 :             num_copy = NAME_MAX - 1;</span></a>
+<span class="lineNum">     194 </span>            :         }
+<span class="lineNum">     195 </span><span class="lineCov">         26 :         std::lock_guard&lt;std::mutex&gt; guard(m_lock);</span>
+<span class="lineNum">     196 </span><span class="lineCov">         13 :         std::copy_n(error_message.data(), num_copy, m_error_message);</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">         13 :         m_error_message[num_copy] = '\0';</span></a>
+<span class="lineNum">     198 </span><span class="lineCov">         13 :         m_error_value = error_value;</span>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">         13 :     }</span></a>
+<span class="lineNum">     200 </span>            : 
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">         35 :     std::string ErrorMessage::message_last(int error_value)</span></a>
+<span class="lineNum">     202 </span>            :     {
+<span class="lineNum">     203 </span><span class="lineCov">         35 :         if (error_value == m_error_value) {</span>
+<span class="lineNum">     204 </span><span class="lineCov">         14 :             std::lock_guard&lt;std::mutex&gt; guard(m_lock);</span>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          7 :             return m_error_message;</span></a>
+<span class="lineNum">     206 </span>            :         }
+<span class="lineNum">     207 </span>            :         else {
+<span class="lineNum">     208 </span><span class="lineCov">         28 :             return message_fixed(error_value);</span>
+<a name="209"><span class="lineNum">     209 </span>            :         }</a>
+<a name="210"><span class="lineNum">     210 </span>            :     }</a>
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span><span class="lineCov">      90350 :     std::string ErrorMessage::message_fixed(int err)</span>
+<a name="213"><span class="lineNum">     213 </span>            :     {</a>
+<span class="lineNum">     214 </span>            :         char error_message[NAME_MAX];
+<span class="lineNum">     215 </span><span class="lineCov">      90350 :         err = err ? err : GEOPM_ERROR_RUNTIME;</span>
+<span class="lineNum">     216 </span><span class="lineCov">      90350 :         std::string result(&quot;&lt;geopm&gt; &quot;);</span>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">      90350 :         auto it = M_VALUE_MESSAGE_MAP.find(err);</span></a>
+<span class="lineNum">     218 </span><span class="lineCov">      90350 :         if (it != M_VALUE_MESSAGE_MAP.end()) {</span>
+<span class="lineNum">     219 </span><span class="lineCov">      88392 :             result += it-&gt;second;</span>
+<span class="lineNum">     220 </span>            :         }
+<a name="221"><span class="lineNum">     221 </span>            :         else {</a>
+<span class="lineNum">     222 </span><span class="lineCov">       1958 :             result += strerror_r(err, error_message, NAME_MAX);</span>
+<span class="lineNum">     223 </span>            :         }
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">      90350 :         return result;</span></a>
+<a name="225"><span class="lineNum">     225 </span>            :     }</a>
+<span class="lineNum">     226 </span><span class="lineCov">       2586 : }</span>
 </pre>
       </td>
     </tr>
