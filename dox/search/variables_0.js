@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['begin_5fbit',['begin_bit',['../structgeopm_1_1_m_s_r_1_1m__encode__s.html#a597cde9c4500f0a1b2aaac0096531fe1',1,'geopm::MSR::m_encode_s']]]
+  ['hash',['hash',['../structgeopm__region__info__s.html#a90c009e856bd20774b560ab279d35cce',1,'geopm_region_info_s']]],
+  ['hint',['hint',['../structgeopm__region__info__s.html#ab558192f5e29fc7c5a63054bd7fc8d91',1,'geopm_region_info_s']]]
 ];

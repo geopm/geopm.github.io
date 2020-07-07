@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['function',['function',['../structgeopm_1_1_m_s_r_1_1m__encode__s.html#a5e5b1b68cd91ac8594ce6e80b634f05d',1,'geopm::MSR::m_encode_s']]]
+  ['runtime',['runtime',['../structgeopm__region__info__s.html#a95539c3912abe1ae80bd19c7e04fccc7',1,'geopm_region_info_s']]]
 ];

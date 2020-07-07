@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['domain',['domain',['../structgeopm_1_1_m_s_r_1_1m__encode__s.html#a49d19e1297aa7a187aba57e9e5b7b4df',1,'geopm::MSR::m_encode_s']]]
+  ['m_5fplugin_5fprefix',['M_PLUGIN_PREFIX',['../classgeopm_1_1_agent.html#aa9eb2730eb7f3515f027555b2c4572de',1,'geopm::Agent::M_PLUGIN_PREFIX()'],['../classgeopm_1_1_i_o_group.html#adf85363d6f47208cdb1232d95570d6fb',1,'geopm::IOGroup::M_PLUGIN_PREFIX()']]]
 ];

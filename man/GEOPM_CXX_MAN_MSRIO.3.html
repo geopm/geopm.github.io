@@ -90,7 +90,11 @@
 <code>const std::vector&lt;int> &amp;</code><em>write_cpu_idx</em><code>,</code><br />
 <code>const std::vector&lt;uint64_t> &amp;</code><em>write_offset</em><code>,</code><br />
 <code>const std::vector&lt;uint64_t> &amp;</code><em>write_mask</em><code>);</code></p></dd>
+<dt><code>int add_read(</code></dt><dd><p><code>int</code><em>cpu_idx</em><code>,</code><br />
+<code>uint64_t</code><em>offset</em><code>);</code></p></dd>
 <dt><code>void read_batch(</code></dt><dd><p><code>std::vector&lt;uint64_t> &amp;</code><em>raw_value</em><code>);</code></p></dd>
+<dt><code>void read_batch(</code></dt><dd><p><code>void);</code></p></dd>
+<dt><code>uint64_t sample(</code></dt><dd><p><code>int</code><em>batch_idx</em>`);</p></dd>
 <dt><code>void write_batch(</code></dt><dd><p><code>const std::vector&lt;uint64_t> &amp;</code><em>raw_value</em><code>);</code></p></dd>
 <dt><code>void msr_path(</code></dt><dd><p><code>int</code><em>cpu_idx</em><code>,</code><br />
 <code>bool</code><em>is_fallback</em><code>,</code><br />
@@ -103,7 +107,7 @@
 <p>The MSRIO class handles reading and writing to Model-Specific Registers (MSRs).
 The implementation uses msr-safe, found at <a href="https://github.com/LLNL/msr-safe" data-bare-link="true">https://github.com/LLNL/msr-safe</a>
 to allow access to a controlled set of MSRs from user space.
-Refer to <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong> for more details.</p>
+Refer to <strong><span class="man-ref">geopm::MSR<span class="s">(3)</span></span></strong> for more details.</p>
 
 <h2 id="CLASS-METHODS">CLASS METHODS</h2>
 
@@ -125,9 +129,17 @@ and write masks are specified by the <em>write_cpu_idx</em>,
 <em>write_offset</em>, and <em>write_mask</em> vectors respectively.  These
 determine the locations that will be written when the write_batch()
 method is called.</p></dd>
+<dt><code>add_read</code>()</dt><dd><p>Add an offset to the list of MSRs to be read by the next call to
+read_batch().  This should only be used in combination with
+config_batch() if the read index and offset vectors passed to
+config_batch() are empty.</p></dd>
 <dt><code>read_batch</code>()</dt><dd><p>Batch read a set of MSRs configured by a previous call to the
 batch_config() method.  The resulting raw encoded MSR values are
-returned through the <em>raw_value</em> parameter.</p></dd>
+returned through the <em>raw_value</em> parameter or accessible through
+sample().</p></dd>
+<dt><code>sample</code>()</dt><dd><p>Read the full 64-bit value of the MSR that was previously added
+to the MSRIO batch with add_read().  read_batch() must be called
+prior to calling sample().</p></dd>
 <dt><code>write_batch</code>()</dt><dd><p>Batch write a set of MSRs configured by a previous call to the
 batch_config() method.  The values in the <em>raw_value</em> vector will
 be written to the corresponding configured locations.</p></dd>
@@ -140,18 +152,18 @@ resulting path is returned through the <em>path</em> parameter.</p></dd>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, 2020, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><strong><a class="man-ref" href="geopm.7.html">geopm<span class="s">(7)</span></a></strong>,
-<strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong>,
+<strong><span class="man-ref">geopm::MSR<span class="s">(3)</span></span></strong>,
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup<span class="s">(3)</span></a></strong></p>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>GEOPM 1.1.0</li>
-    <li class='tc'>November 2019</li>
+    <li class='tl'>GEOPM 1.1.0+dev346gc6d64b3</li>
+    <li class='tc'>June 2020</li>
     <li class='tr'>geopm::MSRIO(3)</li>
   </ol>
 

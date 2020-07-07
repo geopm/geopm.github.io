@@ -97,13 +97,20 @@ $(function() {
 <p>The GEOPM python tools are packaged in the RPMs described above, but they are also available from PyPI as the <code>geopmpy</code> package. For example, to install the geopmpy package into your home directory, run the following command: </p><pre class="fragment">pip install --user geopmpy
 </pre><p>Note this installs only the GEOPM python tools and does not install the full GEOPM runtime.</p>
 <h2>BUILD REQUIREMENTS </h2>
-<p>In order to build the GEOPM package from source, the below requirements must be met.</p>
+<p>In order to build the GEOPM package from source, the below requirements must be met. The user can opt out of the features enabled by any of these requirements by providing the appropriate disable flag to the configure command line.</p>
 <p>The GEOPM package requires a compiler that supports the MPI 2.2 and C++11 standards. These requirements can be met by using GCC version 4.7 or greater and installing the openmpi-devel package version 1.7 or greater on RHEL and SLES Linux, and libopenmpi-dev on Ubuntu. Documentation creation including man pages further requires the rubygems and ruby-devel package on RHEL and SLES, or ruby and ruby-dev on Ubuntu.</p>
 <p>RHEL: </p><pre class="fragment">yum install openmpi-devel elfutils-libelf-devel ruby-devel rubygems
 </pre><p>SUSE: </p><pre class="fragment">zypper install openmpi-devel elfutils-libelf-devel ruby-devel rubygems
 </pre><p>UBUNTU (as of 18.04.3 LTS): </p><pre class="fragment">apt install libtool automake libopenmpi-dev build-essential gfortran \
     libelf-dev ruby ruby-dev python libsqlite3-dev
-</pre><p>Alternatively these can be installed from source, and an alternate MPI implementation to OpenMPI can be selected (e.g. one provided by OpenMPI). See </p><pre class="fragment">./configure --help
+</pre><p>Requirements that can be avoided by removing features with configure option:</p>
+<ul>
+<li>MPI compiler: &ndash;disable-mpi</li>
+<li>Ruby, Ruby Gems and Ronn: &ndash;disable-ronn</li>
+<li>A Fortran compiler: &ndash;disable-fortran</li>
+<li>The elfutils library: &ndash;disable-ompt</li>
+</ul>
+<p>Alternatively these can be installed from source, and an alternate MPI implementation to OpenMPI can be selected (e.g. the Intel distribution of MPI). See </p><pre class="fragment">./configure --help
 </pre><p>for details on how to use non-standard install locations for build requirements through the </p><pre class="fragment">./configure --with-&lt;feature&gt;
 </pre><p>options.</p>
 <h2>BUILD INSTRUCTIONS </h2>
@@ -116,8 +123,10 @@ make install
 export CXX=icpc
 export FC=ifort
 export F77=ifort
-export MPICC=mpicc
-export MPICXX=mpicxx
+export MPICC=mpiicc
+export MPICXX=mpiicpc
+export MPIFC=mpiifort
+export MPIF77=mpiifort
 </pre><p>An RPM can be created on a RHEL or SUSE system with the </p><pre class="fragment">make rpm
 </pre><p>target. Note that the &ndash;with-mpi-bin option may be required to inform configure about the location of the MPI compiler wrappers. The following command may be sufficient to determine the location: </p><pre class="fragment">dirname $(find /usr -name mpicc)
 </pre><p>To build in an environment without support for OpenMP (i.e. clang on Mac OS X) use the </p><pre class="fragment">./configure --disable-openmp
@@ -128,6 +137,11 @@ export MPICXX=mpicxx
 <p>RHEL: </p><pre class="fragment">yum install openmpi
 </pre><p>SUSE: </p><pre class="fragment">zypper install openmpi
 </pre><p>Alternatively the MPI requirement can be met by using OpenHPC packages.</p>
+<h3>BIOS Configuration</h3>
+<p>If power governing or power balancing is the intended use case for GEOPM deployment then there is an additional dependency on the BIOS being configured to support RAPL control. To check for BIOS support, execute the following on a compute node: ./tutorial/admin/00_test_prereqs.sh</p>
+<p>If the script output contains: WARNING: The lock bit for the PKG_POWER_LIMIT MSR is set. The power_balancer and power_governor agents will not function properly until this is cleared.</p>
+<p>Please enable RAPL in your BIOS and if such an option doesn't exist please contact your BIOS vendor to obtain a RAPL supported BIOS.</p>
+<p>For additional information, please contact the GEOPM team.</p>
 <h3>USER ENVIRONMENT</h3>
 <p>The libraries, binaries and python tools will not be installed into the standard system paths if GEOPM is built from source and configured with the <code>--prefix</code> option. In this case, it is required that the user augment their environment to specify the installed location. If the configure option is specified as above: </p><pre class="fragment">GEOPM_PREFIX=$HOME/build/geopm
 ./configure --prefix=$GEOPM_PREFIX
@@ -176,10 +190,10 @@ python .
 <p>When configuring a cluster to use GEOPM as the site-wide power management solution, it is expected that one agent algorithm with one policy will be applied to all compute nodes within a queue partition. The system administrator selects the agent based on the site requirements. If the site requires that the average CPU power draw per compute node remains under a cap across the system, then they would choose the power_balancer agent (see geopm_agent_power_balancer(7)). If saving as much energy as possible with a limited impact on performance is the site requirement, then the energy_efficient agent would be selected (see geopm_agent_energy_efficient(7)). If the site would like to restrict applications to run below a particular CPU frequency unless they are executing a high priority optimized subroutine that has been granted permission by the site administration to run at an elevated CPU frequency, they would choose the frequency_map agent (see geopm_agent_frequency_map(7)). There is also the option for a site specific custom agent plugin to be deployed. In all of these use cases, calling <a class="el" href="geopm__agent_8h.html#a71319abb6603a777bb4fd5a7a2b2fc47" title="Enforce a static implementation of the agent&#39;s policy. The agent and the policy are chosen based on t...">geopm_agent_enforce_policy()</a> prior to releasing compute node resources to the end user will enforce static limits to power or CPU frequency, and these will impact all user applications. In order to leverage the dynamic runtime features of GEOPM, the user must opt-in by launching their MPI application with the geopmlaunch(1) command line tool.</p>
 <p>The following example shows how a system administrator would configure a system to use the power_balancer agent. This use case will enforce a static power limit for applications which do not use geopmlaunch(), and will optimize power limits to balance performance when geopmlaunch() is used. First, the system administrator creates the following JSON object in the boot image of the compute node in the path "/etc/geopm/environment-override.json": </p><pre class="fragment">{"GEOPM_AGENT": "power_balancer",
  "GEOPM_POLICY": "/shared_fs/config/geopm_power_balancer.json"}
-</pre><p>Note that the "POWER_CAP" value controlling the limit is specified in a secondary JSON file "geopm_power_balancer.json" that may be located on a shared file system and can be created with the geopmagent(1) command line tool. Locating the policy file on the shared file system enables the limit to be modified without changing the compute node boot image. Changing the policy value will impact all subsequently launched GEOPM processes, but it will not change the behavior of already running GEOPM control processes.</p>
+</pre><p>Note that the "POWER_PACKAGE_LIMIT_TOTAL" value controlling the limit is specified in a secondary JSON file "geopm_power_balancer.json" that may be located on a shared file system and can be created with the geopmagent(1) command line tool. Locating the policy file on the shared file system enables the limit to be modified without changing the compute node boot image. Changing the policy value will impact all subsequently launched GEOPM processes, but it will not change the behavior of already running GEOPM control processes.</p>
 <h2>STATUS </h2>
 <p>This software is production quality as of version 1.0. We will be enforcing <a href="https://semver.org/">semantic versioning</a> for all releases following version 1.0. We are very interested in feedback from the community. Refer to the ChangeLog a high level history of changes in each release. See <a href="https://github.com/geopm/geopm/issues">github issues page</a> for information about ongoing work and please provide feedback by opening issues. Test coverage by unit tests is lacking for some files and will continue to be improved. The line coverage results from gcov as reported by gcovr for the latest release can be found <a href="http://geopm.github.io/coverage/index.html">here</a></p>
-<p>Some new features of GEOPM are still under development, and their interfaces may change before they are included in official releases. To enable these features in the GEOPM install location, configure GEOPM with the <code>--enable-beta</code> configure flag. The features currently considered unfinalized are the endpoint interface, the <code>geopmendpoint</code> application, the <code>geopmanalysis</code> application, and the <code>geopmplotter</code> application.</p>
+<p>Some new features of GEOPM are still under development, and their interfaces may change before they are included in official releases. To enable these features in the GEOPM install location, configure GEOPM with the <code>--enable-beta</code> configure flag. The features currently considered unfinalized are the endpoint interface, the <code>geopmendpoint</code> application, and the <code>geopmplotter</code> application.</p>
 <h2>ACKNOWLEDGMENTS </h2>
 <p>Development of the GEOPM software package has been partially funded through contract B609815 with Argonne National Laboratory. </p>
 </div></div><!-- contents -->

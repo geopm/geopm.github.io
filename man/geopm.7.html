@@ -65,6 +65,7 @@
     <a href="#INTEGRATION-WITH-PMPI">INTEGRATION WITH PMPI</a>
     <a href="#INTEGRATION-WITH-OMPT">INTEGRATION WITH OMPT</a>
     <a href="#LAUNCHING-THE-RUNTIME">LAUNCHING THE RUNTIME</a>
+    <a href="#CHOOSING-AN-AGENT-AND-POLICY">CHOOSING AN AGENT AND POLICY</a>
     <a href="#INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</a>
     <a href="#INTERPRETING-THE-TRACE">INTERPRETING THE TRACE</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
@@ -148,6 +149,8 @@ multiple MPI jobs and multiple users by the system resource manager.</p>
 
 <p><strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong>: Query agent information and create static policies</p>
 
+<p><strong><span class="man-ref">geopmadmin<span class="s">(1)</span></span></strong>: Configure and check system wide GEOPM settings</p>
+
 <h2 id="MISC">MISC</h2>
 
 <p><strong><a class="man-ref" href="geopm_error.3.html">geopm_error<span class="s">(3)</span></a></strong>: Error code descriptions</p>
@@ -205,6 +208,10 @@ runtime configured to support OMPT if the default OpenMP runtime does
 not support the OMPT callbacks.  Note that your compiler must be
 compatible with the LLVM OpenMP ABI for extending it in this way.</p>
 
+<p>This feature can be disabled on a per-run basis by setting the
+<code>GEOPM_OMPT_DISABLE</code> environment variable, or by using the
+<code>--geopm-ompt-disable</code> option in <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong></p>
+
 <h2 id="LAUNCHING-THE-RUNTIME">LAUNCHING THE RUNTIME</h2>
 
 <p>The recommended method for launching the GEOPM runtime is the job
@@ -230,6 +237,41 @@ application should be launched in parallel.</p>
 These are documented in <strong><a class="man-ref" href="geopm_ctl_c.3.html">geopm_ctl_c<span class="s">(3)</span></a></strong>, but are deprecated as an
 application-facing interface because their use within an application
 is incompatible with the GEOPM launcher script.</p>
+
+<h2 id="CHOOSING-AN-AGENT-AND-POLICY">CHOOSING AN AGENT AND POLICY</h2>
+
+<p>The Agent determines the optimization algorithm performed by the
+runtime, and can be specified with the <code>--geopm-agent</code> option for the
+launcher.  If not specified, by default the <strong><a class="man-ref" href="geopm_agent_monitor.7.html">geopm_agent_monitor<span class="s">(7)</span></a></strong>
+is used to collect runtime statistics only, which will be summarized
+in the report.</p>
+
+<p>The constraints for the Agent algorithm are determined by the policy.
+The policy can be provided as a file, through the <code>--geopm-policy</code>
+option for the launcher.  Policy files can be generated with the
+<strong><a class="man-ref" href="geopmagent.1.html">geopmagent<span class="s">(1)</span></a></strong> tool.  The values of the policy will be printed
+in the header of the report.</p>
+
+<p>If GEOPM has been configured with <code>--enable-beta</code>, policies can also
+be set through the endpoint, which should be manipulated by a system
+administrator through an authority such as the resource manager.  Use
+of the endpoint is described in <strong><a class="man-ref" href="geopm_endpoint_c.3.html">geopm_endpoint_c<span class="s">(3)</span></a></strong>.  In this
+scenario, users launching GEOPM may not be required or allowed to
+specify the Agent or policy, if it has been set through the default
+environment as described in the <code>ENVIRONMENT</code> section below.  If not
+specified in the default environment, the location of the endpoint
+should be provided through <code>--geopm-endpoint</code>; this option supercedes
+the use of <code>--geopm-policy</code>.  When GEOPM receives the policy through
+the endpoint, the report will contain "DYNAMIC" for the value of the
+policy.  The specific values received over time can be viewed through
+use of the optional trace file enabled by
+<code>--geopm-trace-endpoint-policy</code>.</p>
+
+<p>Refer to <strong><a class="man-ref" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent<span class="s">(3)</span></a></strong> and the individual agent man pages for more
+details on the behavior of the agents and their policies.  See
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> for more details on the <code>--geopm-agent</code>,
+<code>--geopm-policy</code>, <code>--geopm-endpoint</code>, and
+<code>--geopm-trace-endpoint-policy</code> options.</p>
 
 <h2 id="INTERPRETING-THE-REPORT">INTERPRETING THE REPORT</h2>
 
@@ -292,20 +334,23 @@ below must be set to the same values in the contexts where
 <strong><a class="man-ref" href="geopmctl.1.html">geopmctl<span class="s">(1)</span></a></strong> and the compute application are executed.</p>
 
 <p>In addition to the environment, there are two node-local configuration
-files that will impact the way the GEOPM behaves.  These are located
-in the following paths:</p>
+files that will impact the way the GEOPM behaves.  The location of
+these files can be configured at compile time, but the default
+locations are:</p>
 
 <pre><code>/etc/geopm/environment-default.json
 /etc/geopm/environment-override.json
 </code></pre>
 
-<p>These files contain JSON objects that map GEOPM environment variables
-to default or override values.  The <code>environment-default.json</code> file
-will determine default values for the GEOPM runtime in the case where
-the values are not set in the calling environment.  The
-<code>environment-override.json</code> file will enforce that any GEOPM process
-running on the compute node will use the values specified regardless
-of the values set in the calling environment.</p>
+<p>The <strong><span class="man-ref">geopmadmin<span class="s">(1)</span></span></strong> tool can be used to display the location of
+these files for your installation of GEOPM or to check the validity of
+the system configuration.  These files contain JSON objects that map
+GEOPM environment variables to default or override values.  The
+<code>environment-default.json</code> file will determine default values for the
+GEOPM runtime in the case where the values are not set in the calling
+environment.  The <code>environment-override.json</code> file will enforce that
+any GEOPM process running on the compute node will use the values
+specified regardless of the values set in the calling environment.</p>
 
 <p><code>GEOPM ENVIRONMENT VARIABLES</code></p>
 
@@ -318,6 +363,10 @@ of the values set in the calling environment.</p>
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-trace</code>.</p></dd>
 <dt><code>GEOPM_TRACE_SIGNALS</code></dt><dd><p>See documentation for equivalent command line option to
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-trace-signals</code>.</p></dd>
+<dt><code>GEOPM_TRACE_PROFILE</code></dt><dd><p>See documentation for equivalent command line option to
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-trace-profile</code>.</p></dd>
+<dt><code>GEOPM_TRACE_ENDPOINT_POLICY</code></dt><dd><p>See documentation for equivalent command line option to
+<strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-trace-endpoint-policy</code>.</p></dd>
 <dt><code>GEOPM_PROFILE</code></dt><dd><p>See documentation for equivalent command line option to
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-profile</code>.</p></dd>
 <dt><code>GEOPM_CTL</code></dt><dd><p>See documentation for equivalent command line option to
@@ -340,13 +389,22 @@ of the values set in the calling environment.</p>
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-region-barrier</code>.</p></dd>
 <dt><code>GEOPM_DISABLE_HYPERTHREADS</code></dt><dd><p>See documentation for equivalent command line option to
 <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> called <code>--geopm-hyperthreads-disable</code>.</p></dd>
+<dt><code>GEOPM_OMPT_DISABLE</code></dt><dd><p>Disable OpenMP region detection as described in <a href="#INTEGRATION-WITH-OMPT" title="INTEGRATION WITH OMPT" data-bare-link="true">INTEGRATION WITH OMPT</a>.
+See documentation for equivalent command line option to <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>
+called <code>--geopm-ompt-disable</code>.</p></dd>
 </dl>
 
 
 <p><code>OTHER ENVIRONMENT VARIABLES</code></p>
 
 <dl>
-<dt><code>LD_DYNAMIC_WEAK</code></dt><dd>When dynamically linking an application to libgeopm for any
+<dt><code>LD_DYNAMIC_WEAK</code></dt><dd><p>The <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong> tool will preload libgeopm.so for all
+applications, so the use of LD_DYNAMIC_WEAK is not required when
+using <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>.  When not using <strong><a class="man-ref" href="geopmlaunch.1.html">geopmlaunch<span class="s">(1)</span></a></strong>
+setting LD_DYNAMIC_WEAK may be required, see next paragraph for
+details.</p>
+
+<p>When dynamically linking an application to libgeopm for any
 features supported by the PMPI profiling of the MPI runtime it may
 be required that the LD_DYNAMIC_WEAK environment variable be set
 at runtime as is documented in the <strong><a class="man-ref" href="http://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so<span class="s">(8)</span></a></strong> man page.  When
@@ -354,13 +412,13 @@ dynamically linking an application, if care is taken to link the
 libgeopm library before linking the library providing the weak MPI
 symbols, e.g. "-lgeopm -lmpi", linking order precedence will
 enforce the required override of the MPI interface symbols and the
-LD_DYNAMIC_WEAK environment variable is not required at runtime.</dd>
+LD_DYNAMIC_WEAK environment variable is not required at runtime.</p></dd>
 </dl>
 
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, Intel Corporation. All rights reserved.</p>
+<p>Copyright (c) 2015, 2016, 2017, 2018, 2019, 2020, Intel Corporation. All rights reserved.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -389,7 +447,7 @@ LD_DYNAMIC_WEAK environment variable is not required at runtime.</dd>
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_Helper.3.html">geopm::Helper<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup<span class="s">(3)</span></a></strong>,
-<strong><a class="man-ref" href="GEOPM_CXX_MAN_MSR.3.html">geopm::MSR<span class="s">(3)</span></a></strong>,
+<strong><span class="man-ref">geopm::MSR<span class="s">(3)</span></span></strong>,
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup<span class="s">(3)</span></a></strong>,
 <strong><a class="man-ref" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO<span class="s">(3)</span></a></strong>,
@@ -412,8 +470,8 @@ LD_DYNAMIC_WEAK environment variable is not required at runtime.</dd>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>GEOPM 1.1.0</li>
-    <li class='tc'>November 2019</li>
+    <li class='tl'>GEOPM 1.1.0+dev351g9a72d24</li>
+    <li class='tc'>June 2020</li>
     <li class='tr'>geopm(7)</li>
   </ol>
 

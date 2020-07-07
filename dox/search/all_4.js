@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['end_5fbit',['end_bit',['../structgeopm_1_1_m_s_r_1_1m__encode__s.html#ae4a5e0fb26ba6f9f6a6f0d8b66bac4d8',1,'geopm::MSR::m_encode_s']]],
   ['energyefficientregion',['EnergyEfficientRegion',['../classgeopm_1_1_energy_efficient_region.html',1,'geopm']]],
   ['energyefficientregion_2ehpp',['EnergyEfficientRegion.hpp',['../_energy_efficient_region_8hpp.html',1,'']]],
   ['energyefficientregionimp',['EnergyEfficientRegionImp',['../classgeopm_1_1_energy_efficient_region_imp.html',1,'geopm::EnergyEfficientRegionImp'],['../classgeopm_1_1_energy_efficient_region_imp.html#a8392eee99356f1c2d2a958a16bd87c6f',1,'geopm::EnergyEfficientRegionImp::EnergyEfficientRegionImp()']]],

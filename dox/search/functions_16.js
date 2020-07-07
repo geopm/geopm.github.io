@@ -1,6 +1,7 @@
 var searchData=
 [
   ['_7eagent',['~Agent',['../classgeopm_1_1_agent.html#ae25bcbffb10acf177ac9294f24a6e211',1,'geopm::Agent']]],
+  ['_7eagentfactory',['~AgentFactory',['../classgeopm_1_1_agent_factory.html#a87d0ceeddf6605d9e55c0ca181ac81c3',1,'geopm::AgentFactory']]],
   ['_7ecircularbuffer',['~CircularBuffer',['../classgeopm_1_1_circular_buffer.html#a0d96222c70a885e459200b46374a9811',1,'geopm::CircularBuffer']]],
   ['_7ecpuinfoiogroup',['~CpuinfoIOGroup',['../classgeopm_1_1_cpuinfo_i_o_group.html#a7a570fdbd1e33aa9ac33e8a11528a8c6',1,'geopm::CpuinfoIOGroup']]],
   ['_7eenergyefficientregion',['~EnergyEfficientRegion',['../classgeopm_1_1_energy_efficient_region.html#a0fc98c43f5f544da7b17befbfbb5b6a7',1,'geopm::EnergyEfficientRegion']]],
@@ -8,12 +9,10 @@ var searchData=
   ['_7eexception',['~Exception',['../classgeopm_1_1_exception.html#a48fe1badc6871ddf393c5cf5ee1ace19',1,'geopm::Exception']]],
   ['_7efrequencygovernor',['~FrequencyGovernor',['../classgeopm_1_1_frequency_governor.html#a13f17935c7c6b11db4f0014878e243f5',1,'geopm::FrequencyGovernor']]],
   ['_7eiogroup',['~IOGroup',['../classgeopm_1_1_i_o_group.html#ab20aa2da80d318f1eb54682f4b35d54e',1,'geopm::IOGroup']]],
+  ['_7eiogroupfactory',['~IOGroupFactory',['../classgeopm_1_1_i_o_group_factory.html#a09826a3eabcb096111e2ff7d36305448',1,'geopm::IOGroupFactory']]],
   ['_7ejsonvalue',['~JsonValue',['../classjson11_1_1_json_value.html#a8dcae9d9837723cd49182fa6682181c1',1,'json11::JsonValue']]],
-  ['_7emsr',['~MSR',['../classgeopm_1_1_m_s_r.html#a566984e58876364e8c6db7b9fc598285',1,'geopm::MSR']]],
-  ['_7emsrcontrol',['~MSRControl',['../classgeopm_1_1_m_s_r_control.html#a6b1c0074709575805537d2a11e7f04e0',1,'geopm::MSRControl']]],
   ['_7emsrio',['~MSRIO',['../classgeopm_1_1_m_s_r_i_o.html#a62a84777678fd0cd8569b0f62ded0b37',1,'geopm::MSRIO']]],
-  ['_7emsriogroup',['~MSRIOGroup',['../classgeopm_1_1_m_s_r_i_o_group.html#adb6c06ee090185e40cd76dac9cd1ed65',1,'geopm::MSRIOGroup']]],
-  ['_7emsrsignal',['~MSRSignal',['../classgeopm_1_1_m_s_r_signal.html#af249cd851239f051326bc5dd6daa538b',1,'geopm::MSRSignal']]],
+  ['_7emsriogroup',['~MSRIOGroup',['../classgeopm_1_1_m_s_r_i_o_group.html#ab17b57a1a34c5c7b8346edc5c6113717',1,'geopm::MSRIOGroup']]],
   ['_7eplatformio',['~PlatformIO',['../classgeopm_1_1_platform_i_o.html#aa6f8b281e58c04da1fe63b8425d24977',1,'geopm::PlatformIO']]],
   ['_7eplatformtopo',['~PlatformTopo',['../classgeopm_1_1_platform_topo.html#ae98cbda92e99b0c62155272340009567',1,'geopm::PlatformTopo']]],
   ['_7epluginfactory',['~PluginFactory',['../classgeopm_1_1_plugin_factory.html#a1c272c89a88a2f83ce505c2a39913b8e',1,'geopm::PluginFactory']]],

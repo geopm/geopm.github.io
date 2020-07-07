@@ -2,7 +2,6 @@ var searchData=
 [
   ['object',['OBJECT',['../classjson11_1_1_json.html#a51a2f5c0508c32c3336bcf42ae0233e5adf45d7553ce4a25b1e225017f9f7fb70',1,'json11::Json::OBJECT()'],['../classjson11_1_1_json.html#ac0ca9db68797b45adcd175359425590d',1,'json11::Json::object()']]],
   ['object_5fitems',['object_items',['../classjson11_1_1_json.html#ac3402a8e7655e8ad1ae2a63fa5b82240',1,'json11::Json::object_items()'],['../classjson11_1_1_json_value.html#af8969241adbf324509b9424dbb3c4b7f',1,'json11::JsonValue::object_items()']]],
-  ['offset',['offset',['../classgeopm_1_1_m_s_r.html#ad682c6f8635ef6317a816eb496d1ddcc',1,'geopm::MSR::offset()'],['../classgeopm_1_1_m_s_r_control.html#aa01dc79c51552c83695b858b67deee06',1,'geopm::MSRControl::offset()'],['../classgeopm_1_1_m_s_r_signal.html#a664c8e2f4703ffa1044afaa147989ce4',1,'geopm::MSRSignal::offset()']]],
   ['operator_21_3d',['operator!=',['../classjson11_1_1_json.html#ae616cea26e94189e92a8497cc0a0b344',1,'json11::Json']]],
   ['operator_3c',['operator&lt;',['../classjson11_1_1_json.html#a24c4567a90be32f09b4d50b1eb03f718',1,'json11::Json']]],
   ['operator_3c_3d',['operator&lt;=',['../classjson11_1_1_json.html#a919b9365d6a28290d7c1414224138350',1,'json11::Json']]],

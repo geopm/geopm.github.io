@@ -1,7 +1,7 @@
 var searchData=
 [
   ['parse',['parse',['../classjson11_1_1_json.html#a328337347162b928d9575bc57b3d20da',1,'json11::Json::parse(const std::string &amp;in, std::string &amp;err, JsonParse strategy=JsonParse::STANDARD)'],['../classjson11_1_1_json.html#a9bed3f84db6e24947ea4d17cb67292fc',1,'json11::Json::parse(const char *in, std::string &amp;err, JsonParse strategy=JsonParse::STANDARD)']]],
-  ['parse_5fjson_5fmsrs',['parse_json_msrs',['../classgeopm_1_1_m_s_r_i_o_group.html#a11c9b18e0947d32a740f3544cb85f420',1,'geopm::MSRIOGroup']]],
+  ['parse_5fjson_5fmsrs',['parse_json_msrs',['../classgeopm_1_1_m_s_r_i_o_group.html#a899b31250b44133c9adb6b4ebc930974',1,'geopm::MSRIOGroup']]],
   ['parse_5fmulti',['parse_multi',['../classjson11_1_1_json.html#a7325d8835866b416eafc8c502fb33302',1,'json11::Json::parse_multi(const std::string &amp;in, std::string::size_type &amp;parser_stop_pos, std::string &amp;err, JsonParse strategy=JsonParse::STANDARD)'],['../classjson11_1_1_json.html#a33413aabf941e4fa089e4af468a3819e',1,'json11::Json::parse_multi(const std::string &amp;in, std::string &amp;err, JsonParse strategy=JsonParse::STANDARD)']]],
   ['platform_5fio',['platform_io',['../namespacegeopm.html#a1bf5ae9d62d44fc88f5eba52de837f9f',1,'geopm']]],
   ['platform_5ftopo',['platform_topo',['../namespacegeopm.html#a75f00704caec21c4e360d393f89d5fc3',1,'geopm']]],
@@ -13,8 +13,10 @@ var searchData=
   ['plugin_5fnames',['plugin_names',['../classgeopm_1_1_plugin_factory.html#a6dc24786c2b5db2a660b001c03705b5c',1,'geopm::PluginFactory']]],
   ['pluginfactory',['PluginFactory',['../classgeopm_1_1_plugin_factory.html',1,'geopm::PluginFactory&lt; T &gt;'],['../classgeopm_1_1_plugin_factory.html#a4b89c57aff88771a588597804cfeae54',1,'geopm::PluginFactory::PluginFactory()=default'],['../classgeopm_1_1_plugin_factory.html#a64753864a1b9dada0eb77315a783f32f',1,'geopm::PluginFactory::PluginFactory(const PluginFactory &amp;other)=delete']]],
   ['pluginfactory_2ehpp',['PluginFactory.hpp',['../_plugin_factory_8hpp.html',1,'']]],
+  ['pluginfactory_3c_20agent_20_3e',['PluginFactory&lt; Agent &gt;',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
+  ['pluginfactory_3c_20iogroup_20_3e',['PluginFactory&lt; IOGroup &gt;',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
   ['pointer',['pointer',['../classgeopm_1_1_shared_memory.html#a2fb0b6facb3b9dc0468a6887017fbfcc',1,'geopm::SharedMemory::pointer()'],['../classgeopm_1_1_shared_memory_user.html#a4820512b793407da7ee1e000f622bdbe',1,'geopm::SharedMemoryUser::pointer()']]],
-  ['policy_5fnames',['policy_names',['../classgeopm_1_1_agent.html#aa8e819dff06b595d740c15092d8e190e',1,'geopm::Agent']]],
+  ['policy_5fnames',['policy_names',['../classgeopm_1_1_agent.html#aa8e819dff06b595d740c15092d8e190e',1,'geopm::Agent::policy_names(const std::map&lt; std::string, std::string &gt; &amp;dictionary)'],['../classgeopm_1_1_agent.html#a8aa2e5ccf138f7e037f1f506f20ca9cb',1,'geopm::Agent::policy_names(const std::string &amp;agent_name)']]],
   ['power_5fcap',['power_cap',['../classgeopm_1_1_power_balancer.html#a25b98f4cf13bf0bdd785790d30fd14ea',1,'geopm::PowerBalancer::power_cap(double cap)=0'],['../classgeopm_1_1_power_balancer.html#a58b198100093c8cd3563dc1114e149c1',1,'geopm::PowerBalancer::power_cap(void) const =0']]],
   ['power_5flimit',['power_limit',['../classgeopm_1_1_power_balancer.html#aaf84174bff51eddc5ab995ff6992b75d',1,'geopm::PowerBalancer']]],
   ['power_5flimit_5fadjusted',['power_limit_adjusted',['../classgeopm_1_1_power_balancer.html#ab1241a9b3105bc51cc9a50f897cdb9d1',1,'geopm::PowerBalancer']]],

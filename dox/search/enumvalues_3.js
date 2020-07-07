@@ -36,5 +36,7 @@ var searchData=
   ['geopm_5fregion_5fhint_5fnetwork',['GEOPM_REGION_HINT_NETWORK',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a6a1e4f6801755ce95a0d5d06dff5320d',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fparallel',['GEOPM_REGION_HINT_PARALLEL',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ad659bbfe8c84e04472edacbf75daa860',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fserial',['GEOPM_REGION_HINT_SERIAL',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a3f4a35ebe93b806ce69352d8246ce129',1,'geopm.h']]],
-  ['geopm_5fregion_5fhint_5funknown',['GEOPM_REGION_HINT_UNKNOWN',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a88af65373572c16193fb9c6b459af7eb',1,'geopm.h']]]
+  ['geopm_5fregion_5fhint_5funknown',['GEOPM_REGION_HINT_UNKNOWN',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a88af65373572c16193fb9c6b459af7eb',1,'geopm.h']]],
+  ['geopm_5fu64_5fsentinel_5fregion_5fhash',['GEOPM_U64_SENTINEL_REGION_HASH',['../geopm_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a2761aa3e36f4fdf081107682e0e75777',1,'geopm.h']]],
+  ['geopm_5fu64_5fsentinel_5fregion_5fhint',['GEOPM_U64_SENTINEL_REGION_HINT',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5af7d6548b570f5651e451c78d1ffdd73d',1,'geopm.h']]]
 ];

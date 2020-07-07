@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['geopm_5ftime_5fref',['GEOPM_TIME_REF',['../geopm__time_8h.html#ad3642f5ce01126b4dcfc661ff6779fb4',1,'geopm_time.h']]]
+  ['t',['t',['../structgeopm__time__s.html#acb1eaa1bbc844a3c6853b5849fb1c8a6',1,'geopm_time_s']]]
 ];
