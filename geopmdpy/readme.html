@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>GEOPM systemd Service and Daemon &mdash; GEOPM Service  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopmdpy" href="modules.html" />
+    <link rel="prev" title="Welcome to GEOPM Service’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GEOPM Service
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GEOPM systemd Service and Daemon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-diagram">Architecture Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#status">Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#signals-and-controls">Signals and Controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#access-management">Access Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#opening-a-session">Opening a Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-server">Batch Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">geopmdpy</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM Service</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>GEOPM systemd Service and Daemon</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="geopm-systemd-service-and-daemon">
+<h1>GEOPM systemd Service and Daemon<a class="headerlink" href="#geopm-systemd-service-and-daemon" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Fine grained access management system for hardware features: read
+hardware “signals” and write hardware “controls”.</p></li>
+<li><p>System administrator configures access permissions based on Unix
+group.</p></li>
+<li><p>Save / restore of hardware controls based on client process lifetime.</p></li>
+<li><p>A high performance interface enabling batch access to validated sets
+of signals/controls.</p></li>
+<li><p>Supports extensibility for heterogenous environments through C++
+plugin infrastructure (IOGroups).</p></li>
+<li><p>[Overview slides](<a class="reference external" href="https://geopm.github.io/pdf/geopm-service.pdf">https://geopm.github.io/pdf/geopm-service.pdf</a>)</p></li>
+</ul>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The GEOPM service enables a client to make measurements from the
+hardware platform and set hardware control parameters.  Fine grained
+permissions management for both measurements (signals) and controls is
+configurable by system administrators with the <cite>geopmaccess</cite> command
+line tool.  The service can support many simultaneous client sessions
+that make measurements, but only one client session is granted write
+permission to set hardware control values at any time.  When a client
+session is granted write access it will retain that permission until
+the session ends.  When the client session ends, all hardware settings
+that are managed by the GEOPM service are restored to the value they
+had prior to the client opening a write session.</p>
+<p>The <cite>geopmd</cite> daemon is started by the GEOPM systemd service and uses
+D-Bus for communication with client processes and for administrator
+configuration.  The GEOPM service is used to extend the
+<cite>geopm::PlatformIO</cite> features of libgeopm and libgeopmpolicy.  The
+PlatformIO interface of GEOPM is extensible through IOGroup plugins
+and the GEOPM service enables the ServiceIOGroup.  The ServiceIOGroup
+is implemented to provide the requirements of the IOGroup class by
+interfacing with <cite>geopmd</cite> over the D-Bus interface.  The
+ServiceIOGroup plugin is loaded first by PlatformIO in libgeopm and
+libgeopmpolicy, and is not loaded by the PlatformIO implementation in
+libgeopmd.  For a libgeopm or libgeopmpolicy user, any IOGroup other
+than the ServiceIOGroup that provides a requested signal or control
+will be used.  The ServiceIOGroup will only be used when a user
+requests a signal or control that cannot be provided by any of the
+native IOGroup plugins loaded by the unprivileged user process.  The
+geopmd process loads PlatformIO through libgeopmd as a root user which
+has permissions to load all signals and controls from all IOGroups but
+does not load the ProfileIOGroup that provides signals derived from
+the user application.  The PlatformIO loaded by geopmd provides the
+implementation for the GEOPM service D-Bus interfaces.</p>
+</div>
+<div class="section" id="architecture-diagram">
+<h2>Architecture Diagram<a class="headerlink" href="#architecture-diagram" title="Permalink to this headline">¶</a></h2>
+<p>[![](<a class="reference external" href="https://geopm.github.io/images/geopm-service-diagram.svg)](https://geopm.github.io/pdf/geopm-service-diagram.pdf">https://geopm.github.io/images/geopm-service-diagram.svg)](https://geopm.github.io/pdf/geopm-service-diagram.pdf</a>)</p>
+</div>
+<div class="section" id="status">
+<h2>Status<a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<p>The GEOPM systemd service is a new feature.  What exists currently is
+a proof of concept / prototype, and there are many outstanding issues
+that must be resolved before the GEOPM service is ready for release.
+These issues are tracked on github with the “geopm-service” tag:</p>
+<p><a class="reference external" href="https://github.com/geopm/geopm/issues?q=is%3Aissue+is%3Aopen+label%3Ageopm-service">https://github.com/geopm/geopm/issues?q=is%3Aissue+is%3Aopen+label%3Ageopm-service</a></p>
+</div>
+<div class="section" id="signals-and-controls">
+<h2>Signals and Controls<a class="headerlink" href="#signals-and-controls" title="Permalink to this headline">¶</a></h2>
+<p>Each GEOPM signal and control has an associated name and a hardware
+domain.  The name is a unique string identifier defined by the IOGroup
+that provides the signal or control.  The hardware domain that
+provides the interface is represented by one of the enumerations as
+defined by PlatformTopo.  A detailed description of the signals and
+controls available on a system can be discovered with the
+<cite>geopmaccess</cite> command line tool.  The description includes information
+useful for end-users, and it also provides information for system
+administrators that will help them understand what is enabled for an
+end-user when access is granted to a signal or control.</p>
+</div>
+<div class="section" id="access-management">
+<h2>Access Management<a class="headerlink" href="#access-management" title="Permalink to this headline">¶</a></h2>
+<p>Access to signals and controls through the GEOPM service is configured
+by the system administrator.  The administrator controls a default
+access list that applies to all users of the system.  This list can be
+augmented based on Unix group associations.  The default lists are
+stored in:</p>
+<blockquote>
+<div><p>/etc/geopm-service/0.DEFAULT_ACCESS/allowed_signals
+/etc/geopm-service/0.DEFAULT_ACCESS/allowed_controls</p>
+</div></blockquote>
+<p>Each Unix <cite>&lt;GROUP&gt;</cite> that has extended permissions can maintain one or
+both of the files</p>
+<blockquote>
+<div><p>/etc/geopm-service/&lt;GROUP&gt;/allowed_signals
+/etc/geopm-service/&lt;GROUP&gt;/allowed_controls</p>
+</div></blockquote>
+<p>Any missing files are inferred to be empty lists, including the
+default access files.  A signal or control will not be available to
+non-root users through the GEOPM service until a system administrator
+enables access through these allow lists.  It is recommended that all
+manipulation of these files should be done through the GEOPM service
+with the <cite>geopmaccess</cite> command line tool.</p>
+<p>Some filtering may be applied to the raw signals provided by the
+IOGroups before being exposed to the client session.  In particular,
+all monotonic signals (e.g. hardware counters) are reported with
+respect to the value they had when they were first read in the
+session, which is reported as zero.</p>
+</div>
+<div class="section" id="opening-a-session">
+<h2>Opening a Session<a class="headerlink" href="#opening-a-session" title="Permalink to this headline">¶</a></h2>
+<p>A client process opens a session with the GEOPM service each time a
+PlatformIO object is created with libgeopm or libgeopmpolicy while the
+GEOPM systemd service is active.  This session is initially opened in
+read-only mode.  Calls into the D-Bus APIs that modify control values:</p>
+<blockquote>
+<div><p>io.github.geopm.PlatformWriteControl
+io.github.geopm.PlatformPushControl</p>
+</div></blockquote>
+<p>convert the session into write mode.  Only one write mode session is
+allowed at any time.  The request will fail if a client attempts to
+begin a write session while another client has one open.</p>
+<p>When a session is converted to write mode, all controls that the
+service is configured to support are recorded to a save directory in:</p>
+<blockquote>
+<div><p>/var/run/geopm-service/SAVE_FILES</p>
+</div></blockquote>
+<p>When a write mode session ends, all of these saved controls are
+restored to the value they had when the session was converted,
+regardless of whether or not they were adjusted during the session
+through the service.</p>
+<p>The request to open a session is done in the ServiceIOGroup
+constructor, and the request to close the session is made by the
+ServiceIOGroup destructor.  Calls to the ServiceIOGroup’s
+<cite>write_control()</cite> or <cite>push_control()</cite> methods will trigger the
+conversion of the session to write mode.  Calls to these methods will
+only occur when the ServiceIOGroup is the only loaded IOGroup that
+provides the control requested by the user since all IOGroups are
+loaded by the PlatformIO factory after the ServiceIOGroup.</p>
+<p>Note that if any control adjustments are made during a session through
+the GEOPM service then every control supported by GEOPM will be
+reverted when the session ends.  One consequence of this is that when
+a control is exposed to a user only through the GEOPM service, then
+the geopmwrite command line tool will not be effective (the value will
+be written, but reverted when the geopmwrite process ends).  The
+geopmsession command line tool can be used to write any number of the
+GEOPM supported controls and keep a session open for a specified
+duration (or until the geopmsession process is killed).</p>
+<p>In addition to saving the state of controls, the GEOPM service will
+also lock access to controls for any other client until the
+controlling session ends.  When the controlling session ends the saved
+state is used to restore the values for all controls supported by the
+GEOPM service to the values they had prior to enabling the client to
+modify a control.  The controlling session may end by an explicit
+D-Bus call by the client, or when the process that initiated the
+client session ends.  The GEOPM service will use the <cite>pidfd_open(2)</cite>
+mechanism for notification of the end of the client process if this is
+supported by the Linux kernel, otherwise it will poll procfs for the
+process ID.  The GEOPM service provides an interface that enables a
+privileged user to end any currently running write mode session, and
+block any access to controls by other clients.  There is a
+corresponding unlock interface that will enable write mode sessions to
+begin again.</p>
+</div>
+<div class="section" id="batch-server">
+<h2>Batch Server<a class="headerlink" href="#batch-server" title="Permalink to this headline">¶</a></h2>
+<p>The GEOPM service provides the implementation for the ServiceIOGroup
+which accesses this implementation through the DBus interface.  When a
+user program calls <cite>read_signal()</cite> or <cite>write_control()</cite> on a
+PlatformIO object provided by libgeopm or libgeopmpolicy and the only
+IOGroup that provides the signal or control requested is the
+ServiceIOGroup, then each request goes through the slow D-Bus
+interface.  When a client process uses the ServiceIOGroup for batch
+operations a separate batch server process is created through the D-Bus
+interface.  The implementations for <cite>push_signal()</cite> and
+<cite>push_control()</cite> are used to configure the stack of signals and
+controls that will be enabled by the batch server.  This batch server
+interacts more directly with the client process to provide low latency
+support for the <cite>read_batch()</cite> and <cite>write_batch()</cite> interfaces of the
+ServiceIOGroup.</p>
+<p>The batch server is configured to allow access to exactly the signals
+and controls that were pushed onto the stack for the ServiceIOGroup
+prior to the first <cite>read_batch()</cite> or <cite>write_batch()</cite> call.  Through
+the D-Bus implementation, the GEOPM service verifies that the client
+user has appropriate permissions for the requested signals and
+controls.  When the first call to <cite>read_batch()</cite> or <cite>write_batch()</cite> is
+made to user’s PlatformIO object, the geopmd process forks the batch
+server process and no more updates can be made to the configured
+requests.  The batch server uses inter-process shared memory and POSIX
+signals to enable fast access to the configured stack of GEOPM signals
+and controls.  In this documentation we will call always refer to
+“POSIX signals” to differentiate from the GEOPM signal concept which
+is unrelated to the POSIX signal as defined in the signal(7) man page.</p>
+<p>To implement the <cite>read_batch()</cite> method, the ServiceIOGroup sends a
+POSIX signal to notify the batch server that it would like the
+configured GEOPM signals to be updated in shared memory.  The batch
+server reads all GEOPM signals that are being supported by the
+client’s ServiceIOGroup using the batch server’s instance of the
+PlatformIO object.  GEOPM signals are copied into the shared memory
+buffer and a SIGCONT POSIX signal is sent from the batch server to the
+client process when the buffer is ready.  To implement the
+<cite>write_batch()</cite> method, the client process’s ServiceIOGroup prepares
+the shared memory buffer with all control settings that it is
+supporting.  The client sends a SIGCONT POSIX signal to the batch
+server to notify it to write the settings.  The batch server then
+reads the clients settings from a shared memory buffer and writes the
+values through the server process’s PlatformIO instance.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="modules.html" class="btn btn-neutral float-right" title="geopmdpy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to GEOPM Service’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Intel (R) Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
