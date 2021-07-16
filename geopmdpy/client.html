@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Guide for Service Clients &mdash; GEOPM Service  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Guide for HPC Runtime Users" href="runtime.html" />
+    <link rel="prev" title="Guide for Service Administrators" href="admin.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GEOPM Service
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">GEOPM Systemd Service and Daemon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Building GEOPM Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Guide for Service Administrators</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide for Service Clients</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-creating-a-write-session">Example: Creating a write session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Guide for Application Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM Service</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Guide for Service Clients</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/client.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="guide-for-service-clients">
+<h1>Guide for Service Clients<a class="headerlink" href="#guide-for-service-clients" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> command line tool is one way to interface with
+the GEOPM DBus APIs.</p>
+<div class="section" id="example-creating-a-write-session">
+<h2>Example: Creating a write session<a class="headerlink" href="#example-creating-a-write-session" title="Permalink to this headline">¶</a></h2>
+<p>This test shows the GEOPM service being used to set the maximum
+CPU frequency of core zero to 2 GHz.  The test uses the
+geopmsession command line tool to read and write from/to the
+MSR_PERF_CTL register to control the maximum frequency of the
+core.  The test first reads the value of the register, then opens
+a write session to set it to 2 GHz and reads the register again.
+The test then kills the write session with signal 9 and reads the
+control register a third time.  The test asserts that the control
+value was changed by the write sesssion, and that this change was
+reverted to the value it started with after the session is
+killed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># PARAMETERS</span>
+<span class="nv">CONTROL</span><span class="o">=</span>MSR::PERF_CTL:FREQ
+<span class="nv">DOMAIN</span><span class="o">=</span>core
+<span class="nv">DOMAIN_IDX</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">SETTING</span><span class="o">=</span><span class="m">2000000000</span>.0
+<span class="nv">REQUEST</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">DOMAIN</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">DOMAIN_IDX</span><span class="si">}</span><span class="s2">&quot;</span>
+
+test_error<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Error: </span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+    <span class="nb">exit</span> -1
+<span class="o">}</span>
+
+<span class="c1"># READ START VALUE OF CONTROL REGISTER</span>
+<span class="nv">START_VALUE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">REQUEST</span><span class="si">}</span> <span class="p">|</span> geopmsession<span class="k">)</span> <span class="o">||</span>
+    test_error <span class="s2">&quot;Call to read </span><span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span><span class="s2"> through geopmsession failed&quot;</span>
+
+<span class="c1"># CHECK THAT IT IS DIFFERENT THAN THE TEST VALUE</span>
+<span class="nb">test</span> <span class="si">${</span><span class="nv">SETTING</span><span class="si">}</span> !<span class="o">=</span> <span class="si">${</span><span class="nv">START_VALUE</span><span class="si">}</span> <span class="o">||</span>
+    test_error <span class="s2">&quot;Start value for the control is the same as the test value&quot;</span>
+
+<span class="c1"># START A SESSION THAT WRITES THE CONTROL VALUE</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">REQUEST</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">SETTING</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">|</span> geopmsession -w -t <span class="m">10</span> <span class="p">&amp;</span>
+<span class="nv">SESSION_ID</span><span class="o">=</span><span class="nv">$!</span>
+sleep <span class="m">1</span>
+
+<span class="c1"># READ THE CONTROLLED REGISTER</span>
+<span class="nv">SESSION_VALUE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">REQUEST</span><span class="si">}</span> <span class="p">|</span> geopmsession<span class="k">)</span>
+
+<span class="c1"># END THE SESSION</span>
+<span class="nb">kill</span> -9 <span class="si">${</span><span class="nv">SESSION_ID</span><span class="si">}</span> <span class="o">||</span>
+    test_error <span class="s2">&quot;Failed to kill session&quot;</span>
+sleep <span class="m">1</span>
+
+<span class="c1"># READ THE RESTORED REGISTER</span>
+<span class="nv">END_VALUE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">REQUEST</span><span class="si">}</span> <span class="p">|</span> geopmsession<span class="k">)</span>
+
+<span class="c1"># CHECK THAT THE REGISTER WAS CHANGED DURING THE SESSION</span>
+<span class="nb">test</span> <span class="si">${</span><span class="nv">SETTING</span><span class="si">}</span> <span class="o">==</span> <span class="si">${</span><span class="nv">SESSION_VALUE</span><span class="si">}</span> <span class="o">||</span>
+    test_error <span class="s2">&quot;Control is not set during the session&quot;</span>
+
+<span class="c1"># CHECK THAT SAVE/RESTORE WORKED</span>
+<span class="nb">test</span> <span class="si">${</span><span class="nv">START_VALUE</span><span class="si">}</span> <span class="o">==</span> <span class="si">${</span><span class="nv">END_VALUE</span><span class="si">}</span> <span class="o">||</span>
+    test_error <span class="s2">&quot;Control is not restored after the session&quot;</span>
+
+<span class="nb">echo</span> <span class="s2">&quot;SUCCESS&quot;</span>
+<span class="nb">exit</span> <span class="m">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="runtime.html" class="btn btn-neutral float-right" title="Guide for HPC Runtime Users" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="admin.html" class="btn btn-neutral float-left" title="Guide for Service Administrators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Intel (R) Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

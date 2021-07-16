@@ -41,7 +41,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="geopmdpy" href="modules.html" />
+    <link rel="next" title="Guide for Service Administrators" href="admin.html" />
     <link rel="prev" title="GEOPM Systemd Service and Daemon" href="readme.html" /> 
 </head>
 
@@ -99,7 +99,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#removing-the-geopm-service">Removing the GEOPM Service</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">geopmdpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Guide for Service Administrators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Guide for Service Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Guide for Application Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
 </ul>
 
             
@@ -177,13 +181,13 @@ provides a clean mechanism for uninstall.</p>
 8, and SLES 15 SP2 Linux distributions.</p>
 <div class="section" id="upstream-rhel-and-centos-package-requirements">
 <h2>Upstream RHEL and CentOS Package Requirements<a class="headerlink" href="#upstream-rhel-and-centos-package-requirements" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">python3</span> <span class="n">python3</span><span class="o">-</span><span class="n">devel</span> <span class="n">python3</span><span class="o">-</span><span class="n">gobject</span><span class="o">-</span><span class="n">base</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yum install python3 python3-devel python3-gobject-base
 </pre></div>
 </div>
 </div>
 <div class="section" id="upstream-sles-and-opensuse-package-requirements">
 <h2>Upstream SLES and OpenSUSE Package Requirements<a class="headerlink" href="#upstream-sles-and-opensuse-package-requirements" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zypper</span> <span class="n">install</span> <span class="n">python3</span> <span class="n">python3</span><span class="o">-</span><span class="n">devel</span> <span class="n">python3</span><span class="o">-</span><span class="n">gobject</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zypper install python3 python3-devel python3-gobject
 </pre></div>
 </div>
 </div>
@@ -207,19 +211,19 @@ GEOPM service RPMs.</p>
 <h2>Building GEOPM Service RPMs<a class="headerlink" href="#building-geopm-service-rpms" title="Permalink to this headline">¶</a></h2>
 <p>Support for packaging for CentOS 8, RHEL 8, and SLES 15 SP2 is provided
 by the geopm service build system.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">geopm</span><span class="o">/</span><span class="n">geopm</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">geopm</span>
-<span class="n">git</span> <span class="n">checkout</span> <span class="n">geopm</span><span class="o">-</span><span class="n">service</span>
-<span class="n">cd</span> <span class="n">service</span>
-<span class="o">./</span><span class="n">autogen</span><span class="o">.</span><span class="n">sh</span>
-<span class="o">./</span><span class="n">configure</span>
-<span class="n">make</span> <span class="n">rpm</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:geopm/geopm.git
+<span class="nb">cd</span> geopm
+git checkout geopm-service
+<span class="nb">cd</span> service
+./autogen.sh
+./configure
+make rpm
 </pre></div>
 </div>
 <p>These commands create the GEOPM service RPM files in your rpmbuild
 directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$HOME/rpmbuild/RPMS/x86_64/geopm-service-&lt;VERSION&gt;-1.x86_64.rpm
-$HOME/rpmbuild/RPMS/x86_64/python3-geopmdpy-&lt;VERSION&gt;-1.x86_64.rpm
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/geopm-service-&lt;VERSION&gt;-1.x86_64.rpm
+<span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/python3-geopmdpy-&lt;VERSION&gt;-1.x86_64.rpm
 </pre></div>
 </div>
 </div>
@@ -228,8 +232,8 @@ $HOME/rpmbuild/RPMS/x86_64/python3-geopmdpy-&lt;VERSION&gt;-1.x86_64.rpm
 <p>After following the instructions above, install the RPM files by
 executing the <code class="docutils literal notranslate"><span class="pre">install_service.sh</span></code> script located in the
 <code class="docutils literal notranslate"><span class="pre">service/test</span></code> sub-directory of the GEOPM repository.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd geopm/service
-sudo ./test/install_service.sh $(cat VERSION) $USER
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> geopm/service
+sudo ./test/install_service.sh <span class="k">$(</span>cat VERSION<span class="k">)</span> <span class="nv">$USER</span>
 systemctl status geopm
 </pre></div>
 </div>
@@ -239,8 +243,8 @@ systemctl status geopm
 <p>To stop the GEOPM service and uninstall the RPMs from the system,
 simply pass the <code class="docutils literal notranslate"><span class="pre">--remove</span></code> option to the installer script used in
 the previous section:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">geopm</span><span class="o">/</span><span class="n">service</span>
-<span class="n">sudo</span> <span class="o">./</span><span class="n">test</span><span class="o">/</span><span class="n">install_service</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">remove</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> geopm/service
+sudo ./test/install_service.sh --remove
 </pre></div>
 </div>
 </div>
@@ -252,7 +256,7 @@ the previous section:</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="modules.html" class="btn btn-neutral float-right" title="geopmdpy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="admin.html" class="btn btn-neutral float-right" title="Guide for Service Administrators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="readme.html" class="btn btn-neutral float-left" title="GEOPM Systemd Service and Daemon" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
