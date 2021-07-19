@@ -13,8 +13,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,7 +29,6 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -60,6 +57,9 @@
           
 
           
+            
+            <img src="_static/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
@@ -87,12 +87,14 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">GEOPM Systemd Service and Daemon</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build.html">Building GEOPM Service</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Guide for Service Administrators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-reading-the-access-lists">Example: Reading the Access Lists</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-enabling-user-access">Example: Enabling User Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-enabling-group-access">Example: Enabling Group Access</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">Guide for Service Clients</a></li>
@@ -176,69 +178,88 @@ the service using the <code class="docutils literal notranslate"><span class="pr
 line interface allows the administrator to set access permissions for
 all users, and may extend these default privileges for specific Unix
 groups.</p>
+<div class="section" id="example-reading-the-access-lists">
+<h2>Example: Reading the Access Lists<a class="headerlink" href="#example-reading-the-access-lists" title="Permalink to this headline">¶</a></h2>
+<p>The signals and controls provided by the GEOPM Service depend on which
+Linux features are avaiable, i.e. which device drivers are loaded, how
+they are configured, and what hardware is installed.  The service may
+be extended with IOGroup plugins which may augment the signals and
+controls available through the service.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> commandline tool can be used to discover which
+signals and controls are provided by the GEOPM Service on your system.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LIST ALL SIGNALS PROVIDED</span>
+geopmaccess -a
+
+<span class="c1"># LIST ALL CONTROLS PROVIDED</span>
+geopmaccess -a -c
+
+<span class="c1"># LIST DEFAULT SIGNAL ACCESS LIST</span>
+geopmaccess
+
+<span class="c1"># LIST DEFAULT CONTROL ACCESS LIST</span>
+geopmaccess -c
+
+<span class="c1"># LIST SIGNAL ACCESS FOR A UNIX GROUP: &quot;power&quot;</span>
+geopmaccess -g power
+
+<span class="c1"># LIST CONTROL ACCESS FOR A UNIX GROUP: &quot;power&quot;</span>
+geopmaccess -c -g power
+</pre></div>
+</div>
+</div>
 <div class="section" id="example-enabling-user-access">
 <h2>Example: Enabling User Access<a class="headerlink" href="#example-enabling-user-access" title="Permalink to this headline">¶</a></h2>
-<p>This test configures the GEOPM service to enable and disable any
-user to read and write to bits 8-15 of the MSR_PERF_CTL register
-which controls the maximum frequency of the core.  The test saves
-the existing settings so they can be restored at the end of the
-test.  Access to the control is removed from the list, and it is
-shown that the test user cannot succesfully run the
-test_write_session.sh script.  Access to the control is granted
-and it is shown that the test user can succefully change the
-value.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># PARAMETERS</span>
+<p>This example configures the GEOPM Service to enable any user to read
+and write to bits 8-15 of the MSR_PERF_CTL register which controls the
+maximum frequency of the core.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME OF CONTROL</span>
 <span class="nv">CONTROL</span><span class="o">=</span>MSR::PERF_CTL:FREQ
-<span class="nv">TEST_DIR</span><span class="o">=</span><span class="k">$(</span>dirname <span class="k">$(</span>readlink -f <span class="nv">$0</span><span class="k">))</span>
-<span class="nv">TEST_USER</span><span class="o">=</span><span class="nb">test</span>
-<span class="nv">TEST_SCRIPT</span><span class="o">=</span><span class="si">${</span><span class="nv">TEST_DIR</span><span class="si">}</span>/test_write_session.sh
-<span class="nv">SAVE_SIGNALS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
-<span class="nv">SAVE_CONTROLS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
-<span class="nv">TEST_SIGNALS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
-<span class="nv">TEST_CONTROLS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
 
-test_error<span class="o">()</span> <span class="o">{</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Error: </span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-    <span class="nb">exit</span> -1
-<span class="o">}</span>
-
-<span class="c1"># MAKE SURE TEST IS RUN AS ROOT USER</span>
-<span class="nb">test</span> <span class="si">${</span><span class="nv">USER</span><span class="si">}</span> <span class="o">==</span> <span class="s2">&quot;root&quot;</span> <span class="o">||</span>
-    test_error <span class="s2">&quot;Must be run as the root user, this is an administrator test&quot;</span>
+<span class="c1"># CREATE TEMPORARY FILES</span>
+<span class="nv">ACCESS_SIGNALS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
+<span class="nv">ACCESS_CONTROLS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
 
 <span class="c1"># SAVE INITIAL ACCESS SETTINGS</span>
-geopmaccess &gt; <span class="si">${</span><span class="nv">SAVE_SIGNALS</span><span class="si">}</span>
-geopmaccess -c &gt; <span class="si">${</span><span class="nv">SAVE_CONTROLS</span><span class="si">}</span>
-
-<span class="c1"># REMOVE CONTROL FROM ACCESS LIST FOR READING AND WRITING</span>
-grep -v <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> <span class="si">${</span><span class="nv">SAVE_SIGNALS</span><span class="si">}</span> &gt; <span class="si">${</span><span class="nv">TEST_SIGNALS</span><span class="si">}</span>
-grep -v <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> <span class="si">${</span><span class="nv">SAVE_CONTROLS</span><span class="si">}</span> &gt; <span class="si">${</span><span class="nv">TEST_CONTROLS</span><span class="si">}</span>
-geopmaccess -w &lt; <span class="si">${</span><span class="nv">TEST_SIGNALS</span><span class="si">}</span>
-geopmaccess -w -c &lt; <span class="si">${</span><span class="nv">TEST_CONTROLS</span><span class="si">}</span>
-
-<span class="c1"># RUN WRITE SESSION TEST AND MAKE SURE IT FAILS</span>
-su <span class="si">${</span><span class="nv">TEST_USER</span><span class="si">}</span> <span class="si">${</span><span class="nv">TEST_SCRIPT</span><span class="si">}</span> <span class="o">&amp;&amp;</span>
-    test_error <span class="s2">&quot;Access to </span><span class="nv">$CONTROL</span><span class="s2"> was disabled, but write session passed&quot;</span>
+geopmaccess &gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+geopmaccess -c &gt; <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
 
 <span class="c1"># ADD THE CONTROL INTO ACCESS LIST FOR READING AND WRITING</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">TEST_SIGNALS</span><span class="si">}</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">TEST_CONTROLS</span><span class="si">}</span>
-geopmaccess -w &lt; <span class="si">${</span><span class="nv">TEST_SIGNALS</span><span class="si">}</span>
-geopmaccess -w -c &lt; <span class="si">${</span><span class="nv">TEST_CONTROLS</span><span class="si">}</span>
-
-<span class="c1"># RUN WRITE SESSION TEST AND MAKE SURE IT PASSES</span>
-su <span class="si">${</span><span class="nv">TEST_USER</span><span class="si">}</span> <span class="si">${</span><span class="nv">TEST_SCRIPT</span><span class="si">}</span> <span class="o">||</span>
-    test_error <span class="s2">&quot;Access to </span><span class="nv">$CONTROL</span><span class="s2"> was enabled, but write session failed&quot;</span>
-
-<span class="c1"># RESTORE INITIAL ACCESS SETTINGS</span>
-geopmaccess -w &lt; <span class="si">${</span><span class="nv">SAVE_SIGNALS</span><span class="si">}</span>
-geopmaccess -w -c &lt; <span class="si">${</span><span class="nv">SAVE_CONTROLS</span><span class="si">}</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
+geopmaccess -w &lt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+geopmaccess -w -c &lt; <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
 
 <span class="c1"># CLEAN UP TEMPORARY FILES</span>
-rm <span class="si">${</span><span class="nv">SAVE_SIGNALS</span><span class="si">}</span> <span class="si">${</span><span class="nv">SAVE_CONTROLS</span><span class="si">}</span> <span class="si">${</span><span class="nv">TEST_SIGNALS</span><span class="si">}</span> <span class="si">${</span><span class="nv">TEST_CONTROLS</span><span class="si">}</span>
+rm <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span> <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-enabling-group-access">
+<h2>Example: Enabling Group Access<a class="headerlink" href="#example-enabling-group-access" title="Permalink to this headline">¶</a></h2>
+<p>As an administrator you may want to enable access to a signal or
+control for a subset of your users.  This can be accomplished by
+creating a Unix user group containing the users that should be
+provided this privilege.  This mechanism may also be used to extend
+permissions for one particular user if the user-name-specific group is
+provided.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME OF SIGNAL</span>
+<span class="nv">SIGNAL</span><span class="o">=</span>INSTRUCTIONS_RETIRED
 
-<span class="nb">echo</span> <span class="s2">&quot;SUCCESS&quot;</span>
-<span class="nb">exit</span> <span class="m">0</span>
+<span class="c1"># NAME OF UNIX GROUP</span>
+<span class="nv">GROUP_NAME</span><span class="o">=</span>perf
+
+<span class="c1"># CREATE A TEMPORARY FILE</span>
+<span class="nv">ACCESS_SIGNALS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
+
+<span class="c1"># SAVE INITIAL ACCESS SETTINGS</span>
+geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> &gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+
+<span class="c1"># ADD THE SIGNAL INTO ACCESS LIST FOR READING</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">SIGNAL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> -w &lt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+
+<span class="c1"># CLEAN UP TEMPORARY FILE</span>
+rm <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
 </pre></div>
 </div>
 </div>
