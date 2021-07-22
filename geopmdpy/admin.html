@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -87,14 +90,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">GEOPM Systemd Service and Daemon</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build.html">Building GEOPM Service</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Guide for Service Administrators</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#example-reading-the-access-lists">Example: Reading the Access Lists</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example-enabling-user-access">Example: Enabling User Access</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example-enabling-group-access">Example: Enabling Group Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-the-access-lists">Reading the Access Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-user-access">Enabling User Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-group-access">Enabling Group Access</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">Guide for Service Clients</a></li>
@@ -178,8 +181,8 @@ the service using the <code class="docutils literal notranslate"><span class="pr
 line interface allows the administrator to set access permissions for
 all users, and may extend these default privileges for specific Unix
 groups.</p>
-<div class="section" id="example-reading-the-access-lists">
-<h2>Example: Reading the Access Lists<a class="headerlink" href="#example-reading-the-access-lists" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="reading-the-access-lists">
+<h2>Reading the Access Lists<a class="headerlink" href="#reading-the-access-lists" title="Permalink to this headline">¶</a></h2>
 <p>The signals and controls provided by the GEOPM Service depend on which
 Linux features are avaiable, i.e. which device drivers are loaded, how
 they are configured, and what hardware is installed.  The service may
@@ -207,8 +210,8 @@ geopmaccess -c -g power
 </pre></div>
 </div>
 </div>
-<div class="section" id="example-enabling-user-access">
-<h2>Example: Enabling User Access<a class="headerlink" href="#example-enabling-user-access" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enabling-user-access">
+<h2>Enabling User Access<a class="headerlink" href="#enabling-user-access" title="Permalink to this headline">¶</a></h2>
 <p>This example configures the GEOPM Service to enable any user to read
 and write to bits 8-15 of the MSR_PERF_CTL register which controls the
 maximum frequency of the core.</p>
@@ -234,8 +237,8 @@ rm <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="
 </pre></div>
 </div>
 </div>
-<div class="section" id="example-enabling-group-access">
-<h2>Example: Enabling Group Access<a class="headerlink" href="#example-enabling-group-access" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enabling-group-access">
+<h2>Enabling Group Access<a class="headerlink" href="#enabling-group-access" title="Permalink to this headline">¶</a></h2>
 <p>As an administrator you may want to enable access to a signal or
 control for a subset of your users.  This can be accomplished by
 creating a Unix user group containing the users that should be
@@ -260,6 +263,23 @@ geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span
 
 <span class="c1"># CLEAN UP TEMPORARY FILE</span>
 rm <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>Another example of using group permissions is to create a Unix group
+called “geopm” that is granted access to all signals and controls that
+are enabled on the system.  Users that should be granted full use of
+the service can then be added to the geopm Unix group.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME OF UNIX GROUP</span>
+<span class="nv">GROUP_NAME</span><span class="o">=</span>geopm
+
+<span class="c1"># CREATE &quot;geopm&quot; GROUP</span>
+groupadd <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span>
+
+<span class="c1"># ENABLE GROUP TO READ ALL AVAILABLE SIGNALS</span>
+geopmaccess -a <span class="p">|</span> geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> -w
+
+<span class="c1"># ENABLE GROUP TO WRITE ALL AVAILABLE CONTROLS</span>
+geopmaccess -a -c <span class="p">|</span> geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> -w -c
 </pre></div>
 </div>
 </div>
