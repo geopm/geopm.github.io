@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['init',['init',['../classgeopm_1_1_agent.html#a2c94fff3ed8f580526e51aeb25cf4758',1,'geopm::Agent::init()'],['../classgeopm_1_1_region_aggregator.html#af8aeae1a9187f2e51e43a52c377c824b',1,'geopm::RegionAggregator::init()']]],
+  ['init',['init',['../classgeopm_1_1_agent.html#a2c94fff3ed8f580526e51aeb25cf4758',1,'geopm::Agent']]],
   ['init_5fplatform_5fio',['init_platform_io',['../classgeopm_1_1_frequency_governor.html#a8d1c1b662c34bcd04a36e56c3069bb92',1,'geopm::FrequencyGovernor::init_platform_io()'],['../classgeopm_1_1_power_governor.html#a376b7255be76ec3222252bf0de3cb4df',1,'geopm::PowerGovernor::init_platform_io()']]],
   ['insert',['insert',['../classgeopm_1_1_circular_buffer.html#aef2d729e66d83f769c3ed96da67df374',1,'geopm::CircularBuffer']]],
   ['int_5fvalue',['int_value',['../classjson11_1_1_json.html#af7093e5034daa0e138be9013440292c9',1,'json11::Json::int_value()'],['../classjson11_1_1_json_value.html#a96917fd098e2dc5b79c365d56c17bbf5',1,'json11::JsonValue::int_value()']]],

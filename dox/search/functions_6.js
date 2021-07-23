@@ -41,7 +41,6 @@ var searchData=
   ['geopm_5fprof_5fenter',['geopm_prof_enter',['../geopm_8h.html#adef05bfa8aa842eaa9ff6740bc728431',1,'geopm.h']]],
   ['geopm_5fprof_5fepoch',['geopm_prof_epoch',['../geopm_8h.html#a8dafcb21c51063d72cd6c5e91765993c',1,'geopm.h']]],
   ['geopm_5fprof_5fexit',['geopm_prof_exit',['../geopm_8h.html#aacf50471bcf979c6e5c3011697fddf46',1,'geopm.h']]],
-  ['geopm_5fprof_5fprogress',['geopm_prof_progress',['../geopm_8h.html#ad910d39f6eaa1cfe30c19d92604419eb',1,'geopm.h']]],
   ['geopm_5fprof_5fregion',['geopm_prof_region',['../geopm_8h.html#a903cc19698551ac9fede6e6570af2d2b',1,'geopm.h']]],
   ['geopm_5fprof_5fshutdown',['geopm_prof_shutdown',['../geopm_8h.html#a53ecfd1b777e6ae44721601df510c4a3',1,'geopm.h']]],
   ['geopm_5fread_5fcpuid',['geopm_read_cpuid',['../_platform_topo_8hpp.html#ac1c5d681f94de6ed23597a23e2ec993a',1,'PlatformTopo.hpp']]],
@@ -59,12 +58,11 @@ var searchData=
   ['geopm_5ftopo_5fnum_5fdomain',['geopm_topo_num_domain',['../geopm__topo_8h.html#ab6f51b2e270728b5a6bc308b8a475b9b',1,'geopm_topo.h']]],
   ['geopm_5ftopo_5fnum_5fdomain_5fnested',['geopm_topo_num_domain_nested',['../geopm__topo_8h.html#aca35afef92a64082fe631b2f86c95635',1,'geopm_topo.h']]],
   ['geopm_5ftprof_5finit',['geopm_tprof_init',['../geopm_8h.html#a5dc59d2e9da9d7074e03a757c313869b',1,'geopm.h']]],
-  ['geopm_5ftprof_5finit_5floop',['geopm_tprof_init_loop',['../geopm_8h.html#a4d5f3446f05249d48aa7b8d7e4051f0d',1,'geopm.h']]],
   ['geopm_5ftprof_5fpost',['geopm_tprof_post',['../geopm_8h.html#a7b7a0586013fb54cf7e21ea307a1e310',1,'geopm.h']]],
   ['geopm_5fversion',['geopm_version',['../geopm__version_8h.html#a1fd07a399eff9167e71ba086fded1d2c',1,'geopm_version.h']]],
   ['get_5ffrequency_5fmax',['get_frequency_max',['../classgeopm_1_1_frequency_governor.html#aa93309adcbcfe677abca08c500b644c9',1,'geopm::FrequencyGovernor']]],
   ['get_5ffrequency_5fmin',['get_frequency_min',['../classgeopm_1_1_frequency_governor.html#acdf32b843df70b52098263d8d46003ff',1,'geopm::FrequencyGovernor']]],
   ['get_5ffrequency_5fstep',['get_frequency_step',['../classgeopm_1_1_frequency_governor.html#a28745e67d3d57966b4e9349ffb8d9592',1,'geopm::FrequencyGovernor']]],
-  ['get_5fprofileio',['get_profileio',['../classgeopm_1_1_platform_i_o.html#a0c94f07c386ba655b1fa39ba4af60ccb',1,'geopm::PlatformIO']]],
-  ['get_5fscoped_5flock',['get_scoped_lock',['../classgeopm_1_1_shared_memory.html#aeaa013c708ed70d12b2d5ff8bd55aeb0',1,'geopm::SharedMemory::get_scoped_lock()'],['../classgeopm_1_1_shared_memory_user.html#ad68af1b6d5c2b98563c4035b02500879',1,'geopm::SharedMemoryUser::get_scoped_lock()']]]
+  ['get_5fperiod',['get_period',['../classgeopm_1_1_sample_aggregator.html#a17e782672b7cf5aefa8e69a6961222c5',1,'geopm::SampleAggregator']]],
+  ['get_5fscoped_5flock',['get_scoped_lock',['../classgeopm_1_1_shared_memory.html#aeaa013c708ed70d12b2d5ff8bd55aeb0',1,'geopm::SharedMemory']]]
 ];

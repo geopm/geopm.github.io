@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['read_5fbatch',['read_batch',['../classgeopm_1_1_cpuinfo_i_o_group.html#abe0d2d42b61c2f584464fe898e2e95ad',1,'geopm::CpuinfoIOGroup::read_batch()'],['../classgeopm_1_1_i_o_group.html#a6b1c8a2e9332f24492fb574f28702a0b',1,'geopm::IOGroup::read_batch()'],['../classgeopm_1_1_m_s_r_i_o.html#ac2bdc31b6694e7b9135082a7fca47ffa',1,'geopm::MSRIO::read_batch()'],['../classgeopm_1_1_m_s_r_i_o_group.html#aec467f5c037ecddd5990b7cbc5e4f859',1,'geopm::MSRIOGroup::read_batch()'],['../classgeopm_1_1_platform_i_o.html#a6921fa96d4110070f089e89e386ef6bb',1,'geopm::PlatformIO::read_batch()'],['../classgeopm_1_1_region_aggregator.html#af49ec7cd508e462f11aebaf940e2e97b',1,'geopm::RegionAggregator::read_batch()'],['../classgeopm_1_1_time_i_o_group.html#a16238145b834a53ef30a0db2f9063847',1,'geopm::TimeIOGroup::read_batch()']]],
+  ['read_5fbatch',['read_batch',['../classgeopm_1_1_cpuinfo_i_o_group.html#abe0d2d42b61c2f584464fe898e2e95ad',1,'geopm::CpuinfoIOGroup::read_batch()'],['../classgeopm_1_1_i_o_group.html#a6b1c8a2e9332f24492fb574f28702a0b',1,'geopm::IOGroup::read_batch()'],['../classgeopm_1_1_m_s_r_i_o.html#ac2bdc31b6694e7b9135082a7fca47ffa',1,'geopm::MSRIO::read_batch()'],['../classgeopm_1_1_m_s_r_i_o_group.html#aec467f5c037ecddd5990b7cbc5e4f859',1,'geopm::MSRIOGroup::read_batch()'],['../classgeopm_1_1_platform_i_o.html#a6921fa96d4110070f089e89e386ef6bb',1,'geopm::PlatformIO::read_batch()'],['../classgeopm_1_1_time_i_o_group.html#a16238145b834a53ef30a0db2f9063847',1,'geopm::TimeIOGroup::read_batch()']]],
   ['read_5fdouble_5ffrom_5ffile',['read_double_from_file',['../namespacegeopm.html#ac6455f20236dcc78a239b257a2610a4a',1,'geopm']]],
   ['read_5ffile',['read_file',['../namespacegeopm.html#a57d05b339e2244e5df7e20ca4b7ea576',1,'geopm']]],
   ['read_5fmsr',['read_msr',['../classgeopm_1_1_m_s_r_i_o.html#a431bc2971b24f196180e6cae42a10086',1,'geopm::MSRIO']]],
@@ -8,11 +8,8 @@ var searchData=
   ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
   ['region_5fhash',['region_hash',['../classgeopm_1_1_agg.html#afabddd73bb16befb89baabd0a3d7376e',1,'geopm::Agg']]],
   ['region_5fhint',['region_hint',['../classgeopm_1_1_agg.html#a1dde06594522601e6333eec730b49fce',1,'geopm::Agg']]],
-  ['regionaggregator',['RegionAggregator',['../classgeopm_1_1_region_aggregator.html',1,'geopm::RegionAggregator'],['../classgeopm_1_1_region_aggregator.html#aedeb861cd1e58dc386c2a2b6984a8360',1,'geopm::RegionAggregator::RegionAggregator()']]],
-  ['regionaggregator_2ehpp',['RegionAggregator.hpp',['../_region_aggregator_8hpp.html',1,'']]],
   ['register_5fiogroup',['register_iogroup',['../classgeopm_1_1_platform_i_o.html#a1a54fa32bdc2554f6f0afff382fd8e46',1,'geopm::PlatformIO']]],
   ['register_5fplugin',['register_plugin',['../classgeopm_1_1_plugin_factory.html#af07da13cb24bd59cb141a358303853fe',1,'geopm::PluginFactory']]],
-  ['register_5fprofileio',['register_profileio',['../classgeopm_1_1_platform_i_o.html#a38c8c6e1b12383eb025f1ba4e025138f',1,'geopm::PlatformIO']]],
   ['report_5fheader',['report_header',['../classgeopm_1_1_agent.html#ab1a830e95ed99627519e4f800d4d45bc',1,'geopm::Agent']]],
   ['report_5fhost',['report_host',['../classgeopm_1_1_agent.html#a8d89f3b7147ead870b3397ea9512a436',1,'geopm::Agent']]],
   ['report_5fregion',['report_region',['../classgeopm_1_1_agent.html#a80cedd11bbf8fb256f25da5e83175d18',1,'geopm::Agent']]],

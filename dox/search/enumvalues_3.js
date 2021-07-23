@@ -31,12 +31,14 @@ var searchData=
   ['geopm_5fregion_5fhash_5funmarked',['GEOPM_REGION_HASH_UNMARKED',['../geopm_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a6df781dd65246f7f647bcb0b6f2e4dc0',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fcompute',['GEOPM_REGION_HINT_COMPUTE',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a6c266519f6af7560acf574c4f9a25a09',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fignore',['GEOPM_REGION_HINT_IGNORE',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a7d265da7c7a399f8bf037526ff3489ae',1,'geopm.h']]],
+  ['geopm_5fregion_5fhint_5finactive',['GEOPM_REGION_HINT_INACTIVE',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5aa5c7a8e1b33c50a803a3863f5a2d5d98',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fio',['GEOPM_REGION_HINT_IO',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5abf890765d56bcb80ae0c01d963722891',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fmemory',['GEOPM_REGION_HINT_MEMORY',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a34028c5d69147066a5b3652c2b4ad966',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fnetwork',['GEOPM_REGION_HINT_NETWORK',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a6a1e4f6801755ce95a0d5d06dff5320d',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fparallel',['GEOPM_REGION_HINT_PARALLEL',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ad659bbfe8c84e04472edacbf75daa860',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5fserial',['GEOPM_REGION_HINT_SERIAL',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a3f4a35ebe93b806ce69352d8246ce129',1,'geopm.h']]],
   ['geopm_5fregion_5fhint_5funknown',['GEOPM_REGION_HINT_UNKNOWN',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a88af65373572c16193fb9c6b459af7eb',1,'geopm.h']]],
+  ['geopm_5fregion_5fhint_5funset',['GEOPM_REGION_HINT_UNSET',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ad1619b1922df7b7503b5486a0d4abebc',1,'geopm.h']]],
   ['geopm_5fu64_5fsentinel_5fregion_5fhash',['GEOPM_U64_SENTINEL_REGION_HASH',['../geopm_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a2761aa3e36f4fdf081107682e0e75777',1,'geopm.h']]],
   ['geopm_5fu64_5fsentinel_5fregion_5fhint',['GEOPM_U64_SENTINEL_REGION_HINT',['../geopm_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5af7d6548b570f5651e451c78d1ffdd73d',1,'geopm.h']]]
 ];
