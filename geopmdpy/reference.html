@@ -99,6 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Guide for Application Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="info.html">Signals and Controls</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#geopmaccess">geopmaccess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#geopmsession">geopmsession</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.service">geopmdpy.service</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.dbus_xml">geopmdpy.dbus_xml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.pio">geopmdpy.pio</a></li>
@@ -178,6 +180,49 @@
             
   <div class="section" id="reference-manual">
 <h1>Reference Manual<a class="headerlink" href="#reference-manual" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="geopmaccess">
+<h2>geopmaccess<a class="headerlink" href="#geopmaccess" title="Permalink to this headline">¶</a></h2>
+<p>Access management for the geopm service.</p>
+<p>Command line tool for reading and writing the access management lists
+for the geopm service signals and controls.</p>
+</div>
+<div class="section" id="geopmsession">
+<h2>geopmsession<a class="headerlink" href="#geopmsession" title="Permalink to this headline">¶</a></h2>
+<p>Command line interface for the geopm service read/write features.</p>
+<p>This command can be used to read signals and write controls by opening
+a session with the geopm service.  The user specifies which signals to
+read or which controls to write with standard input. When no command
+line options are provided, a single read of the signals requested
+though standard input is made and the results are printed to the
+screen.</p>
+<p>The input to the command line tool has one request per line.  A
+request for reading is made of up three strings separated by white
+space.  The first string is the signal name, the second string is the
+domain name, and the third string is the domain index.  An example
+where the entire THERM_STATUS model specific register is read from
+core zero:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geopmsession
+MSR::THERM_STATUS# core <span class="m">0</span>
+
+0x0000000088430800
+</pre></div>
+</div>
+<p>A request for writing is made up of four strings separated by white
+space.  The first string is the control name, the second string is the
+domain name, and the third string is the domain index.  An example
+where the frequency limit of the PERF_CTL model specific register is
+set to 2.0 GHz for 10 seconds:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geopmsession -w -t <span class="m">10</span>
+MSR::PERF_CTL:FREQ core <span class="m">0</span> <span class="m">2</span>.0e9
+</pre></div>
+</div>
+<p>The time specified is the duration after the write has completed until
+the process of restoring all written values begins.  The total run
+time for the command will be longer than the time specified because of
+the overhead time spent reading and writing all controls for the
+save/restore feature of the service in addition to the time spent
+writing the requested controls.</p>
+</div>
 <div class="section" id="module-geopmdpy.service">
 <span id="geopmdpy-service"></span><h2>geopmdpy.service<a class="headerlink" href="#module-geopmdpy.service" title="Permalink to this headline">¶</a></h2>
 <p>Module containing the implementations of the DBus interfaces
@@ -372,8 +417,7 @@ stored in the GEOPM service configuration files.  The
 configuration files are read with each call to this method.
 If no files exist that match the query, empty lists are
 returned.  Empty lines and lines that begin with the ‘#’
-character are ignored.  If the group name is not valid on the
-system a RuntimeError is raised.</p>
+character are ignored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>group</strong> (<em>str</em>) – Unix group name to query. The default allowed
@@ -384,6 +428,9 @@ lists are returned if group is the empty string.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list(str), list(str)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – The group name is not valid on the system.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -770,16 +817,19 @@ signals and writing controls from system components.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.adjust">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">adjust</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setting</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.adjust" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the cached value of a single control that has been pushed
-via the push_control() function so next call to write_batch() will
+<dd><p>Updates the cached value of a single control.</p>
+<p>The particular control that is modified is determined by the
+control index provided.  The control index is the value that was
+returned when push_control() was called.  The value for this
+control is updated so that the next call to write_batch() will
 write the setting to the platform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>control_idx</strong> (<em>int</em>) – Index returned by a previous call to
-the push_control() function.</p></li>
-<li><p><strong>setting</strong> (<em>float</em>) – Value for control to be set on next call
-to write_batch().</p></li>
+<li><p><strong>control_idx</strong> (<em>int</em>) – Index returned by a previous call to the
+push_control() function.</p></li>
+<li><p><strong>setting</strong> (<em>float</em>) – Value for control to be set on next call to
+write_batch().</p></li>
 </ul>
 </dd>
 </dl>
@@ -788,9 +838,10 @@ to write_batch().</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.control_description">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">control_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.control_description" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a description of a control.  A description should include the
-units of the control along with other descriptive text.  An
-exception is raised if any error occurs.</p>
+<dd><p>Get a description of a control.</p>
+<p>A description should include the units of the control along with
+other descriptive text.  An exception is raised if any error
+occurs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>control_name</strong> (<em>str</em>) – Name of control.</p>
@@ -812,15 +863,15 @@ exception is raised if any error occurs.</p>
 domain, and such requests will result in a raised exception.  When
 a request is made to write a control at a courser domain than the
 native domain, the same control value will be set for all
-subdomains of the requested domain.</p>
+sub-domains of the requested domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>control_name</strong> (<em>str</em>) – name of control to query</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>One of the geopmpy.topo.DOMAIN_* integers corresponding</dt><dd><p>to a domain type.  This can be converted into a domain
-name with the geopmpy.topo.domain_name() function.</p>
+<dt>One of the geopmdpy.topo.DOMAIN_* integers corresponding</dt><dd><p>to a domain type.  This can be converted into a domain
+name with the geopmdpy.topo.domain_name() function.</p>
 </dd>
 </dl>
 </p>
@@ -843,7 +894,35 @@ control_name as input.</p>
 <dd class="field-odd"><p>All available control names.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of str</p>
+<dd class="field-even"><p>list(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geopmdpy.pio.format_signal">
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">format_signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.format_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a signal into a string representation</p>
+<p>All signals have a format enum that describes how to format a
+value that was read.  This format enum can be queried with the
+signal_info() function and passed as the format type parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>float</em>) – The value of a signal that was read.</p></li>
+<li><p><strong>format_type</strong> (<em>int</em>) – The geopm::string_format_e enum value
+defined in Helper.hpp that describes how to
+format the value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>String representation of the signal value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Unable to format the value.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -851,25 +930,24 @@ control_name as input.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.push_control">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">push_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.push_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Push a control onto the stack of batch access controls.  The return
-value is an index that can be passed to the adjust() function
-which will update the internal state used to store batch
+<dd><p>Push a control onto the stack of batch access controls.</p>
+<p>The return value is an index that can be passed to the adjust()
+function which will update the internal state used to store batch
 controls.  Subsequent calls to the write_batch() function access
-the control values in the internal state and write the values
-to the hardware.  A distinct control index will be returned
-for each unique combination of input parameters.  All controls
-must be pushed onto the stack prior to the first call to the
-adjust() or write_batch() functions.  Attempts to push a
-controls onto the stack after the first call to adjust() or
-write_batch() or attempts to push a control_name that is not a
-value provided by the control_names() function will result in a
-raised exception.</p>
+the control values in the internal state and write the values to
+the hardware.  A distinct control index will be returned for each
+unique combination of input parameters.  All controls must be
+pushed onto the stack prior to the first call to the adjust() or
+write_batch() functions.  Attempts to push a controls onto the
+stack after the first call to adjust() or write_batch() or
+attempts to push a control_name that is not a value provided by
+the control_names() function will result in a raised exception.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>control_name</strong> (<em>str</em>) – Name of the control to be written.</p></li>
 <li><p><strong>domain_type</strong> (<em>int</em><em> or </em><em>str</em>) – One of the domain types provided
-by the geopmpy.topo module or the name associated
+by the geopmdpy.topo module or the name associated
 with a domain type (e.g. ‘cpu’ or ‘board’).</p></li>
 <li><p><strong>domain_idx</strong> (<em>int</em>) – Index of domain to write to.</p></li>
 </ul>
@@ -887,24 +965,24 @@ function prior to a call to the write_batch() function.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.push_signal">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">push_signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.push_signal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Push a signal onto the stack of batch access signals.  Subsequent
-calls to the read_batch() function will read the signal and
-update the internal state used to store batch signals.  The
+<dd><p>Push a signal onto the stack of batch access signals.</p>
+<p>Subsequent calls to the read_batch() function will read the signal
+and update the internal state used to store batch signals.  The
 function returns an index that can be passed to the sample()
 function to access the signal value stored in the internal state
-from the last update.  A distinct signal index will be
-returned for each unique combination of input parameters.  All
-signals must be pushed onto the stack prior to the fist call
-to sample() or read_batch().  Attempts to push a signal onto
-the stack after the first call to sample() or read_batch() or
-attempts to push a signal_name that is not provided by
-signal_names() will result in a raised exception.</p>
+from the last update.  A distinct signal index will be returned
+for each unique combination of input parameters.  All signals must
+be pushed onto the stack prior to the fist call to sample() or
+read_batch().  Attempts to push a signal onto the stack after the
+first call to sample() or read_batch() or attempts to push a
+signal_name that is not provided by signal_names() will result in
+a raised exception.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal_name</strong> (<em>str</em>) – Name of the signal to be read.</p></li>
 <li><p><strong>domain_type</strong> (<em>int</em><em> or </em><em>str</em>) – One of the domain types provided
-by the geopmpy.topo module or the name associated
+by the geopmdpy.topo module or the name associated
 with a domain type (e.g. ‘cpu’ or ‘board’).</p></li>
 <li><p><strong>domain_idx</strong> (<em>int</em>) – Index of domain to read from.</p></li>
 </ul>
@@ -925,8 +1003,8 @@ with a domain type (e.g. ‘cpu’ or ‘board’).</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.read_batch">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">read_batch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.read_batch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read all pushed signals from the platform so that the next call to
-sample() will reflect the updated data.</p>
+<dd><p>Read all pushed signals from the platform.</p>
+<p>The next calls to sample() will reflect the updated data.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -942,7 +1020,7 @@ be any returned by the signal_names() function.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal_name</strong> (<em>str</em>) – Name of the signal to be read.</p></li>
 <li><p><strong>domain_type</strong> (<em>int</em><em> or </em><em>str</em>) – One of the domain types provided
-by the geopmpy.topo module or the name associated
+by the geopmdpy.topo module or the name associated
 with a domain type (e.g. ‘cpu’ or ‘board’).</p></li>
 <li><p><strong>domain_idx</strong> (<em>int</em>) – Index of domain to read from.</p></li>
 </ul>
@@ -959,24 +1037,31 @@ with a domain type (e.g. ‘cpu’ or ‘board’).</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.restore_control">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">restore_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.restore_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Restore the state recorded by the last call to save_control() so
-that all subsequent changes made through write_control() or
-write_batch() are reverted to their previous settings.  If an
-error occurs then an exception is raised.</p>
+<dd><p>Restore the state recorded by the last call to save_control().</p>
+<p>All previous changes made through write_control() or write_batch()
+are reverted to their previous settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – Failure to restore all control values.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.restore_control_dir">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">restore_control_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.restore_control_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Restore the state recorded to the save directory by the last call to
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">restore_control_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.restore_control_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the state recorded to the save directory</p>
+<p>The save directory will have been created by the last call to
 save_control_dir(save_dir) so that all subsequent changes made
 through write_control() or write_batch() are reverted to their
-previous settings.  If an error occurs then an exception is
-raised.</p>
+previous settings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>save_dir</strong> (<em>str</em>) – Output directory where each IOGroup has
 created a save file.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Failure to restore all control values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -984,8 +1069,11 @@ created a save file.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.sample">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Samples cached value of a single signal that has been pushed via
-the push_signal() function and returns the value read.</p>
+<dd><p>Samples cached value of a single signal.</p>
+<p>This function returns one of the values that was read in the last
+call to read_batch().  The particular signal returned is
+determined by the signal index provided.  This signal index is the
+value that was returned when push_signal() was called.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>signal_idx</strong> (<em>int</em>) – Index returned by a previous call to the
@@ -1007,26 +1095,32 @@ push_signal() function.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.save_control">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">save_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.save_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the state of all controls so that any subsequent changes made
-through write_control() or write_batch() may be reverted with a
-call to restore_control().  The control settings are stored in
-memory managed by GEOPM.  If an error occurs then an exception is
-raised.</p>
+<dd><p>Save the state of all controls.</p>
+<p>Any subsequent changes made through write_control() or
+write_batch() will be reverted with a call to restore_control().
+The control settings are stored in memory managed by GEOPM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – Failure to save all control values.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.save_control_dir">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">save_control_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.save_control_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the state of all controls to files in the save directory so
-that any subsequent changes made through write_control() or
-write_batch() may be reverted with a call to
+<dd><p>Save the state of all controls to files in the save directory.</p>
+<p>Any subsequent changes made through write_control() or
+write_batch() will be reverted with a call to
 restore_control_dir(save_dir).  The control settings are stored in
-files named after each IOGroup that is loaded.If an error occurs
-then an exception is raised.</p>
+files named after each IOGroup that is loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>save_dir</strong> (<em>str</em>) – Output directory where each IOGroup creates a
 save file.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Failure to save all control values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1034,9 +1128,10 @@ save file.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.signal_description">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">signal_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.signal_description" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a description of a signal.  A description should include the
-units of the signal and the aggregation function along with other
-descriptive text.  An exception is raised if any error occurs.</p>
+<dd><p>Get a description of a signal.</p>
+<p>A description should include the units of the signal and the
+aggregation function along with other descriptive text.  An
+exception is raised if any error occurs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>signal_name</strong> (<em>str</em>) – Name of signal.</p>
@@ -1057,8 +1152,8 @@ descriptive text.  An exception is raised if any error occurs.</p>
 <p>Signals cannot be sampled at a finer granularity than the native
 domain, and such requests will result in a raised exception.  When
 a request is made to read a signal at a courser domain than the
-native domain, the signal will be read at the native grainularity
-for all subdomains of the requested domain and the returned result
+native domain, the signal will be read at the native granularity
+for all sub-domains of the requested domain and the returned result
 will be aggregated from the values read.  The result can be
 converted into a domain name with the topo.domain_name() function.</p>
 <dl class="field-list simple">
@@ -1067,7 +1162,7 @@ converted into a domain name with the topo.domain_name() function.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>One of the geopmpy.topo.DOMAIN_* integers corresponding</dt><dd><p>to a domain type.</p>
+<dt>One of the geopmdpy.topo.DOMAIN_* integers corresponding</dt><dd><p>to a domain type.</p>
 </dd>
 </dl>
 </p>
@@ -1081,7 +1176,36 @@ converted into a domain name with the topo.domain_name() function.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.signal_info">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">signal_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.signal_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get information about a signal</p>
+<p>Query the integer enum values that give information about the
+named signal.  There are three integers returned which correspond
+to the the aggregation type, the format method, and the behavior
+of the signal.</p>
+<p>The aggregation type is one of the the geopm::Agg::m_type_e enum
+values defined in Agg.hpp.  The format method is one of the
+geopm::string_format_e enum values defined in Helper.hpp.  The
+behavior is one of the geopm::IOGroup::m_signal_behavior_e enum
+values defined in IOGroup.hpp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>signal_name</strong> (<em>str</em>) – Name of the signal to query.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>The aggregation type, format type, and</dt><dd><p>behavior type enum values associated
+with the signal.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(int, int, int)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Query of signal name failed.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.signal_names">
@@ -1095,7 +1219,7 @@ signal_name as input.</p>
 <dd class="field-odd"><p>All available signal names.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of str</p>
+<dd class="field-even"><p>list(str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1103,18 +1227,75 @@ signal_name as input.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.start_batch_server">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">start_batch_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.start_batch_server" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start a batch server to interface with a client thread</p>
+<p>Create a new process to interact with the client thread using the
+GEOPM batch server protocol.  The created server will be enabled
+to read the configured signals and write the configured controls
+based on requests made by the client thread after the server is
+running.  Each configuration is a list of tuples that specify the
+name of the signal or control, the domain type, and domain index.
+This call to start the batch server will block until the server is
+up and ready to respond to client requests through the GEOPM batch
+server protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_pid</strong> (<em>int</em>) – Linux PID of the thread that will interact
+with the batch server.</p></li>
+<li><p><strong>signal_config</strong> (<em>list</em><em>(</em><em>(</em><em>str</em><em>, </em><em>int</em><em>, </em><em>int</em><em>)</em><em>)</em>) – List of requested
+signals where each tuple represents (signal_name,
+domain_type, domain_idx).</p></li>
+<li><p><strong>control_config</strong> (<em>list</em><em>(</em><em>(</em><em>str</em><em>, </em><em>int</em><em>, </em><em>int</em><em>)</em><em>)</em>) – List of requested
+controlss where each tuple represents (control_name,
+domain_type, domain_idx).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>The server PID and the string key used by the</dt><dd><p>client thread to initiate the GEOPM batch
+server protocol.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(int, str)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This function has not yet been
+    implemented.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.stop_batch_server">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">stop_batch_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.stop_batch_server" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Stop a currently running batch server</p>
+<p>End a batch server process that was created with a call to
+start_batch_server().  This will end the server process, and the
+client will not be able to use the GEOPM batch server protocol
+unless it starts a new server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>server_pid</strong> (<em>int</em>) – Linux PID of the created batch server.  This
+is the value of the first element of the
+tuple returned by the start_batch_server()
+function.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This function has not yet been
+    implemented.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.pio.write_batch">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">write_batch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.write_batch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write all pushed controls so that values provided to adjust() are
-written to the platform.</p>
+<dd><p>Write all pushed controls to the platform.</p>
+<p>The values provided to previous calls to adjust() are written to
+the platform.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1130,7 +1311,7 @@ returned by the control_names() function.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>control_name</strong> (<em>str</em>) – Name of the control to be written.</p></li>
 <li><p><strong>domain_type</strong> (<em>int</em><em> or </em><em>str</em>) – One of the domain types provided
-by the geopmpy.topo module or the name associated
+by the geopmdpy.topo module or the name associated
 with a domain type (e.g. ‘cpu’ or ‘board’).</p></li>
 <li><p><strong>domain_idx</strong> (<em>int</em>) – Index of domain to write to.</p></li>
 <li><p><strong>setting</strong> (<em>float</em>) – Value of the control to be written.</p></li>
@@ -1285,58 +1466,627 @@ integer values or a domain name string.</p>
 </div>
 <div class="section" id="module-geopmdpy.session">
 <span id="geopmdpy-session"></span><h2>geopmdpy.session<a class="headerlink" href="#module-geopmdpy.session" title="Permalink to this headline">¶</a></h2>
+<p>Implementation for the geopmsession command line tool</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.session.ReadRequestQueue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">ReadRequestQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.ReadRequestQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geopmdpy.session.RequestQueue" title="geopmdpy.session.RequestQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">geopmdpy.session.RequestQueue</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.ReadRequestQueue.get_formats">
+<span class="sig-name descname"><span class="pre">get_formats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.ReadRequestQueue.get_formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get formatting enum values for the parsed read requests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>The geopm::string_format_e enum value for each</dt><dd><p>read request.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.ReadRequestQueue.parse_requests">
+<span class="sig-name descname"><span class="pre">parse_requests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.ReadRequestQueue.parse_requests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse input stream and return list of read requests</p>
+<p>Parse a user supplied stream into a list of tuples
+representing read requests.  The tuples are of the form
+(signal_name, domain_type, domain_idx) and are parsed one from
+each line of the stream.  Each of the values in the stream is
+separated by white space.</p>
+<p>Each signal_name should match one of the signal names provided
+by the service.  The domain_type is specified as the name
+string, i.e one of the following strings: “board”, “package”,
+“core”, “cpu”, “board_memory”, “package_memory”, “board_nic”,
+“package_nic”, “board_accelerator”, “package_accelerator”.
+The domain index is a positive integer indexing the specific
+domain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request_stream</strong> (<em>file</em>) – Input stream to parse for read
+requests</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of request tuples. Each</dt><dd><p>request comprises a signal name,
+domain type, and domain index.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list((str, int, int))</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Line from stream does not split into three
+    words and is also not a comment or empty
+    line.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.ReadRequestQueue.query_formats">
+<span class="sig-name descname"><span class="pre">query_formats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.ReadRequestQueue.query_formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the GEOPM D-Bus API to get the format type for each signal name</p>
+<p>Returns a list of geopm::string_format_e integers that determine
+how each signal value is formatted as a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal_names</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – List of signal names to query.</p></li>
+<li><p><strong>geopm_proxy</strong> (<em>dasbus.client.proxy.InterfaceProxy</em>) – The
+dasbus proxy for the GEOPM D-Bus interface.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of geopm::string_format_e integers, one</dt><dd><p>for each signal name in input list.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.session.RequestQueue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">RequestQueue</span></span><a class="headerlink" href="#geopmdpy.session.RequestQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object derived from user input that provides request information</p>
+<p>The geopmsession command line tool parses requests for reading or
+writing from standard input.  The RequestQueue object holds the
+logic for parsing the input stream upon construction.  The
+resulting object may be iterated upon to retrieve the requested
+signals/controls that the user would like to read/write.  The
+Request object also provides the enum used to format signal values
+into strings (for read mode sessions).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.RequestQueue.get_names">
+<span class="sig-name descname"><span class="pre">get_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.RequestQueue.get_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the signal or control names from each request</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>The name of the signal or control associated</dt><dd><p>with each user request.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list(string)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.RequestQueue.iterate_stream">
+<span class="sig-name descname"><span class="pre">iterate_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.RequestQueue.iterate_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over a stream of requests</p>
+<p>This is a generator function that will filter out comment
+lines and trailing white space from the input stream.  It can
+be used to iterate over a request stream from the user for
+either a read or write mode session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request_stream</strong> (<em>file</em>) – Stream containing requests from
+user.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Iterate over filtered lines of the</dt><dd><p>request_stream</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>generator</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.session.Session">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object responsible for creating a GEOPM service session</p>
+<p>This object’s run() method is the main entry point for
+geopmsession command line tool.  The inputs to run() are derived
+from the command line options provided by the user.</p>
+<p>The Session object depends on the RequestQueue object to parse the
+input request buffer from the user.  The Session object also
+depends on the TimedLoop object when executing a periodic read
+session.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.check_read_args">
+<span class="sig-name descname"><span class="pre">check_read_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.check_read_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the run time and period are valid for a read session</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_time</strong> (<em>float</em>) – Time duration of the session open in
+seconds.</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – The user specified period between samples
+in units of seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – The period is greater than the total time or
+    either is negative.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.check_write_args">
+<span class="sig-name descname"><span class="pre">check_write_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.check_write_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the run time and period are valid for a write session</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_time</strong> (<em>float</em>) – Time duration of the session in seconds.</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – The user specified period between samples
+in units of seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – The period is non-zero or total time is negative.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.format_signals">
+<span class="sig-name descname"><span class="pre">format_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.format_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a list of signal values for printing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signals</strong> (<em>list</em><em>(</em><em>float</em><em>)</em>) – Values to be printed</p></li>
+<li><p><strong>signal_format</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – The geopm::format_string_e enum
+value describing the formatting
+for each signal provided.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Ready-to-print line of formatted values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.read_signals">
+<span class="sig-name descname"><span class="pre">read_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requests</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.read_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read requested signals from GEOPM D-Bus interface</p>
+<p>All of the signals parsed from the input stream of requests
+are read and the values returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>requests</strong> (<a class="reference internal" href="#geopmdpy.session.ReadRequestQueue" title="geopmdpy.session.ReadRequestQueue"><em>ReadRequestQueue</em></a>) – Request object parsed from
+user input.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Read signal values: one for each element of</dt><dd><p>the list of parsed requests.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list(float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">is_write</span></em>, <em class="sig-param"><span class="pre">run_time</span></em>, <em class="sig-param"><span class="pre">period</span></em>, <em class="sig-param"><span class="pre">request_stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdin&gt;'</span> <span class="pre">mode='r'</span> <span class="pre">encoding='UTF-8'&gt;</span></em>, <em class="sig-param"><span class="pre">out_stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='UTF-8'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Create a GEOPM session with values parsed from the command line</p>
+<p>The implementation for the geopmsession command line tool.
+The inputs to this method are derived from the parsed command
+line provided by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_write</strong> (<em>bool</em>) – True for write mode session requests, and
+False for read mode session requests.</p></li>
+<li><p><strong>run_time</strong> (<em>float</em>) – Time duration of the session in seconds.</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – Time interval for each line of output for
+a read session.  Value must be zero for a
+write mode session.</p></li>
+<li><p><strong>request_stream</strong> (<em>file</em>) – Input from user describing the
+requests to read or write values.</p></li>
+<li><p><strong>out_stream</strong> (<em>file</em>) – Stream where output from a read mode
+session will be printed.  This
+parameter is not used for a write mode
+session.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.run_read">
+<span class="sig-name descname"><span class="pre">run_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.run_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a read mode session</p>
+<p>Use the GEOPM D-Bus interface to periodically read the
+requested signals. A line of text will be printed to the
+output stream for each period of time.  The line will contain
+a comma separated list of the read values, one for each
+request.</p>
+<p>Only one read of the requests is made if the period is zero.
+If the period is non-zero then the requested signals are read
+periodically.  The first read is immediate, and then a delay
+of period seconds is waited until the next sample is made.
+These periodic reads are executed and printed until the
+duration of time specified has been met or exceeded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>requests</strong> (<a class="reference internal" href="#geopmdpy.session.ReadRequestQueue" title="geopmdpy.session.ReadRequestQueue"><em>ReadRequestQueue</em></a>) – Request object parsed from
+user input.</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – The user specified minimum length of time
+for the samples to span in units of
+seconds.</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – The user specified period between samples
+in units of seconds.</p></li>
+<li><p><strong>out_stream</strong> (<em>file</em>) – Object with write() method where output
+will be printed (typically sys.stdout).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.Session.run_write">
+<span class="sig-name descname"><span class="pre">run_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.run_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a write mode session</p>
+<p>Use the GEOPM D-Bus interface to write the requested set of
+controls.  The control settings will be held for the specified
+duration of time and the call to this method blocks until the
+duration of time has elapsed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>requests</strong> (<a class="reference internal" href="#geopmdpy.session.WriteRequestQueue" title="geopmdpy.session.WriteRequestQueue"><em>WriteRequestQueue</em></a>) – Request object parsed from
+user input.</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – Length of time to hold the requested
+control settings in units of seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.session.TimedLoop">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">TimedLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.TimedLoop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object that can be iterated over to run a timed loop</p>
+<p>Use in a for loop to execute a fixed number of timed delays.  The
+overhead time for executing what is inside of the loop is
+accounted for.  Calls to time.sleep() are made to delay until the
+targeted end time for each iteration.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time_0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">TimedLoop</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time_0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">0: 0.0008680820465087891</span>
+<span class="go">1: 0.10126090049743652</span>
+<span class="go">2: 0.20174455642700195</span>
+<span class="go">3: 0.30123186111450195</span>
+<span class="go">4: 0.4010961055755615</span>
+<span class="go">5: 0.5020360946655273</span>
+<span class="go">6: 0.6011238098144531</span>
+<span class="go">7: 0.7011349201202393</span>
+<span class="go">8: 0.8020164966583252</span>
+<span class="go">9: 0.9015650749206543</span>
+<span class="go">10: 1.0021190643310547</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.session.WriteRequestQueue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">WriteRequestQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.WriteRequestQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geopmdpy.session.RequestQueue" title="geopmdpy.session.RequestQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">geopmdpy.session.RequestQueue</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.session.WriteRequestQueue.parse_requests">
+<span class="sig-name descname"><span class="pre">parse_requests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.WriteRequestQueue.parse_requests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse input stream and return list of write requests</p>
+<p>Parse a user supplied stream into a list of tuples
+representing write requests.  The tuples are of the form
+(control_name, domain_type, domain_idx, setting) and are parsed
+one from each line of the stream.  Each of the values in the
+stream is separated by white space.</p>
+<p>Each control_name should match one of the control names
+provided by the service.  The domain_type is specified as the
+name string, i.e one of the following strings: “board”,
+“package”, “core”, “cpu”, “board_memory”, “package_memory”,
+“board_nic”, “package_nic”, “board_accelerator”,
+“package_accelerator”.  The domain index is a positive integer
+indexing the specific domain.  The setting is the requested
+control value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request_stream</strong> (<em>file</em>) – Input stream to parse for write
+requests</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of request tuples. Each</dt><dd><p>request comprises a signal name, domain type, domain
+index, and setting value.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list((str, int, int, float))</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Line from stream does not split into three
+    words and is also not a comment or empty
+    line.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.session.main">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.session.read_session">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">read_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.read_session" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.session.write_session">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">write_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.write_session" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Command line interface for the geopm service read/write features.</p>
+<p>This command can be used to read signals and write controls by
+opening a session with the geopm service.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-geopmdpy.access">
 <span id="geopmdpy-access"></span><h2>geopmdpy.access<a class="headerlink" href="#module-geopmdpy.access" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.access.get_all_controls">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">get_all_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.get_all_controls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<p>Implementation for the geopmaccess command line tool.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.access.Access">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">Access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Extension to the GEOPM D-Bus proxy to support the geopmaccess
+command line interface.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.get_all_controls">
+<span class="sig-name descname"><span class="pre">get_all_controls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.get_all_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call GEOPM D-Bus API and return all supported control names</p>
+<p>Returns a human readable list of all controls available on the
+system.  The returned string has one control name on each
+line.  The PlatformGetAllAccess D-Bus API of the
+io.github.geopm interface is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All available controls, one on each line</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.access.get_all_signals">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">get_all_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.get_all_signals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.get_all_signals">
+<span class="sig-name descname"><span class="pre">get_all_signals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.get_all_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call GEOPM D-Bus API and return all supported signal names</p>
+<p>Returns a human readable list of all signals available on the
+platform.  The returned string has one signal name on each
+line.  The PlatformGetAllAccess D-Bus API of the
+io.github.geopm interface is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All available signals, one on each line</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.access.get_group_controls">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">get_group_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.get_group_controls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.get_group_controls">
+<span class="sig-name descname"><span class="pre">get_group_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.get_group_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call GEOPM D-Bus API and return the group’s control access list</p>
+<p>Returns a human readable list of the controls that are
+enabled.  The returned string has one control name on each
+line.</p>
+<p>The default control access list is returned if the group
+provided is the empty string.  If the group provided is not
+empty then the list of controls that are enabled for the
+specified Unix group is returned.</p>
+<p>A user process accessing the GEOPM D-Bus APIs is restricted to
+the combination of the default access list and the access list
+for all groups that the user belongs to.  The results from
+querying a specific Unix group with this method do not reflect
+the default access list that is enabled for all users.</p>
+<p>The PlatformGetGroupAccess D-Bus API of the io.github.geopm
+interface is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>str</em>) – Unix group name to get access list for.  Gets
+the default control access list if group
+provided is ‘’: the empty string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Access list of controls, one on each line</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.access.get_group_signals">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">get_group_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.get_group_signals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.get_group_signals">
+<span class="sig-name descname"><span class="pre">get_group_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.get_group_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call GEOPM D-Bus API and return the group’s signal access list</p>
+<p>Returns a human readable list of the signals that are enabled.
+The returned string has one signal name on each line.</p>
+<p>The default signal access list is returned if the group
+provided is the empty string.  If the group provided is not
+empty then the list of signals that are enabled for the
+specified Unix group is returned.</p>
+<p>A user process accessing the GEOPM D-Bus APIs is restricted to
+the combination of the default access list and the access list
+for all groups that the user belongs to.  The results from
+querying a specific Unix group with this method do not reflect
+the default access list that is enabled for all users.</p>
+<p>The Platforms D-Bus API of the io.github.geopm
+interface is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>str</em>) – Unix group name to get access list for.  Gets
+the default signal access list if group
+provided is ‘’: the empty string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Access list of signals, one on each line</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.read_stdin">
+<span class="sig-name descname"><span class="pre">read_stdin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.read_stdin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse list of signals or controls from standard input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_write</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute geopmaccess command line interface</p>
+<p>The inputs to this method are parsed from the command line
+interface of geopmaccess.  All of the features of the
+geopmaccess tool are implemented with this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_write</strong> (<em>bool</em>) – True if user requested to write to the
+access lists, False if it is a read
+operation.</p></li>
+<li><p><strong>is_all</strong> (<em>bool</em>) – True if the user requested that all
+available signals or controls be printed as
+opposed to one of the access lists.</p></li>
+<li><p><strong>is_control</strong> (<em>bool</em>) – True if the user requested to read or
+write the control access lists.</p></li>
+<li><p><strong>group</strong> (<em>str</em>) – If is_all is not specified, the group
+determines which access list will be read or
+written.  If the group is the empty string
+then the default access list is used,
+otherwise the parameter specifies the Unix
+group.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.set_group_controls">
+<span class="sig-name descname"><span class="pre">set_group_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.set_group_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call GEOPM D-Bus API to set control access</p>
+<p>Sets the control access list for a group while leaving the
+signal access list unchanged.  The user must be ‘root’ to
+perform this operation.  The PlatformGetGroupAccess D-Bus API
+of the io.github.geopm interface is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<em>str</em>) – Unix group name to set access list for.  The
+call sets the default control access list if
+group provided is ‘’.</p></li>
+<li><p><strong>controls</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – List of all control names that are
+allowed for the group or for the
+defaults.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – The user is not root, the group provided is
+    invalid, or any of the provided control names are
+    not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.access.Access.set_group_signals">
+<span class="sig-name descname"><span class="pre">set_group_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access.set_group_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call GEOPM D-Bus API to set signal access</p>
+<p>Sets the signal access list for a group while leaving the
+control access list unchanged.  The user must be ‘root’ to
+perform this operation.  The PlatformGetGroupAccess D-Bus API
+of the io.github.geopm interface is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<em>str</em>) – Unix group name to set access list for.  The
+call sets the default signal access list if
+group provided is ‘’.</p></li>
+<li><p><strong>signals</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – List of all signal names that are
+allowed for the group or for the
+defaults.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – The user is not root, the group provided is
+    invalid, or any of the provided signal names
+    are not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.access.main">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.access.set_group_controls">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">set_group_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.set_group_controls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="geopmdpy.access.set_group_signals">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">set_group_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.set_group_signals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Access management for the geopm service.  Command line tool for
+reading and writing the access management lists for the geopm
+service signals and controls.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-geopmdpy.error">
