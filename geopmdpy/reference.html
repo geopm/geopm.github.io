@@ -1631,8 +1631,8 @@ geopmsession command line tool.  The inputs to run() are derived
 from the command line options provided by the user.</p>
 <p>The Session object depends on the RequestQueue object to parse the
 input request buffer from the user.  The Session object also
-depends on the TimedLoop object when executing a periodic read
-session.</p>
+depends on the runtime.TimedLoop object when executing a periodic
+read session.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.session.Session.check_read_args">
 <span class="sig-name descname"><span class="pre">check_read_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.check_read_args" title="Permalink to this definition">¶</a></dt>
@@ -1756,7 +1756,7 @@ request.</p>
 <p>Only one read of the requests is made if the period is zero.
 If the period is non-zero then the requested signals are read
 periodically.  The first read is immediate, and then a delay
-of period seconds is waited until the next sample is made.
+of period seconds elapses until the next sample is made.
 These periodic reads are executed and printed until the
 duration of time specified has been met or exceeded.</p>
 <dl class="field-list simple">
@@ -1799,36 +1799,6 @@ control settings in units of seconds.</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="geopmdpy.session.TimedLoop">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">TimedLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.TimedLoop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Object that can be iterated over to run a timed loop</p>
-<p>Use in a for loop to execute a fixed number of timed delays.  The
-overhead time for executing what is inside of the loop is
-accounted for.  Calls to time.sleep() are made to delay until the
-targeted end time for each iteration.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">time_0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">TimedLoop</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time_0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">0: 0.0008680820465087891</span>
-<span class="go">1: 0.10126090049743652</span>
-<span class="go">2: 0.20174455642700195</span>
-<span class="go">3: 0.30123186111450195</span>
-<span class="go">4: 0.4010961055755615</span>
-<span class="go">5: 0.5020360946655273</span>
-<span class="go">6: 0.6011238098144531</span>
-<span class="go">7: 0.7011349201202393</span>
-<span class="go">8: 0.8020164966583252</span>
-<span class="go">9: 0.9015650749206543</span>
-<span class="go">10: 1.0021190643310547</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.session.WriteRequestQueue">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">WriteRequestQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.WriteRequestQueue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#geopmdpy.session.RequestQueue" title="geopmdpy.session.RequestQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">geopmdpy.session.RequestQueue</span></code></a></p>
@@ -1866,7 +1836,7 @@ index, and setting value.</p>
 <dd class="field-odd"><p>list((str, int, int, float))</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – Line from stream does not split into three
+<dd class="field-even"><p><strong>RuntimeError</strong> – Line from stream does not split into four
     words and is also not a comment or empty
     line.</p>
 </dd>
