@@ -40,13 +40,13 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">GEOPM Systemd Service and Daemon</a></li>
-<li class="toctree-l1"><a class="reference internal" href="requires.html">Build Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requires.html">External Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build.html">Building and Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="admin.html">Guide for Service Administrators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">Guide for Service Clients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Guide for Application Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="info.html">Signals and Controls</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference Manual</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#geopmaccess">geopmaccess</a></li>
@@ -57,6 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.topo">geopmdpy.topo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.session">geopmdpy.session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.access">geopmdpy.access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.runtime">geopmdpy.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.error">geopmdpy.error</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-geopmdpy.version">geopmdpy.version</a></li>
 </ul>
@@ -1966,6 +1967,236 @@ defaults.</p></li>
 <dd><p>Access management for the geopm service.  Command line tool for
 reading and writing the access management lists for the geopm
 service signals and controls.</p>
+</dd></dl>
+
+</section>
+<section id="module-geopmdpy.runtime">
+<span id="geopmdpy-runtime"></span><h2>geopmdpy.runtime<a class="headerlink" href="#module-geopmdpy.runtime" title="Permalink to this headline"></a></h2>
+<p>Tools to support runtime implementations that use the GEOPM service</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">Agent</span></span><a class="headerlink" href="#geopmdpy.runtime.Agent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class that documents the interfaces required by an agent</p>
+<p>Agent objects are used to initialize a Controller object and
+define the control algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.get_controls">
+<span class="sig-name descname"><span class="pre">get_controls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.get_controls" title="Permalink to this definition"></a></dt>
+<dd><p>Get list of control requests</p>
+<p>The returned controls will be set in the platform by the Controller
+based on the return value from Agent.update().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>List of request tuples. Each</dt><dd><p>request comprises a control name,
+domain type, and domain index.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list((str, int, int))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.get_period">
+<span class="sig-name descname"><span class="pre">get_period</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.get_period" title="Permalink to this definition"></a></dt>
+<dd><p>Get the target time interval for the control loop</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Time interval in seconds</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.get_report">
+<span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.get_report" title="Permalink to this definition"></a></dt>
+<dd><p>Summary of all data collected by calls to update()</p>
+<p>The report covers the interval of time between the last two calls to
+Agent.begin_run() / Agent.end_run().  Until the next call to
+Agent.begin_run(), the same report will be returned by this method.
+The Controller.run() method will return this report upon completion of
+the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Human readable report</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.get_signals">
+<span class="sig-name descname"><span class="pre">get_signals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.get_signals" title="Permalink to this definition"></a></dt>
+<dd><p>Get list of read requests</p>
+<p>The returned signals will be sampled from the platform by the
+Controller and passed into Agent.update().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>List of request tuples. Each</dt><dd><p>request comprises a signal name,
+domain type, and domain index.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list((str, int, int))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.policy_repr">
+<span class="sig-name descname"><span class="pre">policy_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.policy_repr" title="Permalink to this definition"></a></dt>
+<dd><p>Create a string representation of a policy suitable for printing</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.run_begin">
+<span class="sig-name descname"><span class="pre">run_begin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.run_begin" title="Permalink to this definition"></a></dt>
+<dd><p>Called by Controller at the start of each run</p>
+<p>The policy for the run is passed through to the agent from the
+Controller.run() input.  For some agents, the policy may always be
+None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>policy</strong> (<em>object</em>) – The Agent specific policy provided to the
+Controller.run() method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.run_end">
+<span class="sig-name descname"><span class="pre">run_end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.run_end" title="Permalink to this definition"></a></dt>
+<dd><p>Called by the Controller at the end of each run</p>
+<p>The result of calling the get_report() method after run_end() should
+reflect the same report until the next call to run_end().  This report
+will document the measurements made between the last calls to
+run_begin() and run_end().  Each call to run_end() will follow a
+previous call to run_begin().  The run_end() method will be called by
+the Controller even if the run resulted in an error that raises an
+exception.  In this way resources associated with a single run can be
+released when the run_end() method is called.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Agent.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Agent.update" title="Permalink to this definition"></a></dt>
+<dd><p>Called periodically by the Controller</p>
+<p>The signals that specified by get_signals() will be passed as inputs
+to the method by the Controller.  The update() method will be called
+periodically and the interval is set by the value returned by
+Agent.get_period().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>signals</strong> (<em>list</em><em>(</em><em>float</em><em>)</em>) – Recently read signal values</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Control values for next control interval</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list(float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Controller">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">Controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Controller" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that supports a runtime control algorithm</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Controller.read_all_signals">
+<span class="sig-name descname"><span class="pre">read_all_signals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Controller.read_all_signals" title="Permalink to this definition"></a></dt>
+<dd><p>Sample for all signals pushed with pio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Sampled values for each signal</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list(float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Controller.returncode">
+<span class="sig-name descname"><span class="pre">returncode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Controller.returncode" title="Permalink to this definition"></a></dt>
+<dd><p>Get the return code of the application process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Return code of app process</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geopmdpy.runtime.Controller.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Controller.run" title="Permalink to this definition"></a></dt>
+<dd><p>Execute control loop defined by agent</p>
+<p>Interfaces with PlatformIO directly through the geopmdpy.pio module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>argv</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – Arguments for application that is executed</p></li>
+<li><p><strong>policy</strong> (<em>object</em>) – Policy for Agent to use during the run</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Human readable report created by agent</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geopmdpy.runtime.TimedLoop">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">TimedLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.TimedLoop" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object that can be iterated over to run a timed loop</p>
+<p>Use in a for loop to execute a fixed number of timed delays.  The
+overhead time for executing what is inside of the loop is
+accounted for.  Calls to time.sleep() are made to delay until the
+targeted end time for each iteration.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time_0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">TimedLoop</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time_0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">0: 0.0008680820465087891</span>
+<span class="go">1: 0.10126090049743652</span>
+<span class="go">2: 0.20174455642700195</span>
+<span class="go">3: 0.30123186111450195</span>
+<span class="go">4: 0.4010961055755615</span>
+<span class="go">5: 0.5020360946655273</span>
+<span class="go">6: 0.6011238098144531</span>
+<span class="go">7: 0.7011349201202393</span>
+<span class="go">8: 0.8020164966583252</span>
+<span class="go">9: 0.9015650749206543</span>
+<span class="go">10: 1.0021190643310547</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
