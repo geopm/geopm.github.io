@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopm_prof_c(3) -- application profiling interfaces &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopm_sched.h(3) -- interface with Linux scheduler" href="geopm_sched.3.html" />
+    <link rel="prev" title="geopm_policystore_c(3) -- geopm resource policy store interface" href="geopm_policystore_c.3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> GEOPM
+            <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) -- global extensible open power manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) -- Access management for the geopm service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) -- tool for geopm system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) -- query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) -- synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) -- geopm runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) -- command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) -- application launch wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmplotter.1.html">geopmplotter(1) -- visualize reports and traces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) -- query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) -- Command line interface for the geopm service read/write features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) -- modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) -- global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) -- global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_c.3.html">geopm_agent_c(3) -- query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl_c.3.html">geopm_ctl_c(3) -- geopm runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon_c.3.html">geopm_daemon_c(3) -- helpers for geopm daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint_c.3.html">geopm_endpoint_c(3) -- dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) -- error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) -- geopm fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash.h(3) -- helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer.h(3) -- set artificial runtime imbalance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_c.3.html">geopm_pio_c(3) -- interfaces to query and modify platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore_c.3.html">geopm_policystore_c(3) -- geopm resource policy store interface</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopm_prof_c(3) -- application profiling interfaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">EXAMPLE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#errors">ERRORS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched.h(3) -- interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time.h(3) -- helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo_c.3.html">geopm_topo_c(3) -- query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) -- geopm library version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent(3) -- geopm agent plugin interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3) -- data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CNLIOGroup.3.html">geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CircularBuffer.3.html">geopm::CircularBuffer(3) -- generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm(3) -- communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) -- IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Daemon.3.html">geopm::Daemon(3) -- geopm daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Endpoint.3.html">geopm::Endpoint(3) -- geopm endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_EnergyEfficientAgent.3.html">geopm::EnergyEfficientAgent(3) -- agent for saving energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_EnergyEfficientRegion.3.html">geopm::EnergyEfficientRegion(3) -- region frequency tuning history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception(3) -- custom geopm exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Helper.3.html">geopm::Helper -- common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3) -- provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MPIComm.3.html">geopm::MPIComm(3) -- implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO(3) -- methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent -- agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO(3) -- geopm platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo(3) -- platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3) -- abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancer.3.html">geopm::PowerBalancer(3) -- balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) -- agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernor.3.html">geopm::PowerGovernor(3) -- enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) -- agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_ProfileIOGroup.3.html">geopm::ProfileIOGroup(3) -- IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SampleAggregator.3.html">geopm::RegionAggregator(3) -- per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory(3) -- abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- geopm summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient(7) -- agent for saving energy, also finds optimal region frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) -- agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#signals-and-controls">Signals and Controls</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="reference.html">Reference Manual</a> &raquo;</li>
+      <li>geopm_prof_c(3) -- application profiling interfaces</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geopm_prof_c.3.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopm-prof-c-3-application-profiling-interfaces">
+<h1>geopm_prof_c(3) -- application profiling interfaces<a class="headerlink" href="#geopm-prof-c-3-application-profiling-interfaces" title="Permalink to this headline"></a></h1>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/geopm.h">&lt;geopm.h&gt;</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">Link</span> <span class="pre">with</span> <span class="pre">-lgeopm</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">geopm_prof_region(</span></code>:
+<cite>const char *`_region*name*, :raw-html-m2r:`&lt;br&gt;</cite>
+<code class="docutils literal notranslate"><span class="pre">uint64_t</span></code> <em>hint</em>, <span class="raw-html-m2r"><br></span>
+<cite>uint64_t *`_region*id*`</cite>);``</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">geopm_prof_enter(</span></code>:
+<code class="docutils literal notranslate"><span class="pre">uint64_t</span></code> _region<em>id</em><code class="docutils literal notranslate"><span class="pre">);</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">geopm_prof_exit(</span></code>:
+<code class="docutils literal notranslate"><span class="pre">uint64_t</span></code> _region<em>id</em><code class="docutils literal notranslate"><span class="pre">);</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">geopm_prof_epoch(</span></code>:
+<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">geopm_tprof_init(</span></code>:
+<code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> _num_work<em>unit</em><code class="docutils literal notranslate"><span class="pre">);</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">geopm_tprof_post(</span></code>:
+<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
+</ul>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<p>The functions described here enable application feedback to the GEOPM
+control algorithm for identifying regions of code, progress within
+regions, and iterations through loops that contain inter-node
+synchronization points in the application.  Regions of code define
+periods in the application during which control parameters are tuned
+with the expectation that control parameters for a region can be
+optimized independently of other regions.  In this way a region is
+associated with a set of control parameters which can be optimized,
+and future time intervals associated with the same region will benefit
+from the application of control parameters which were determined from
+tuning within previous occurrences of the region.  There are two
+competing motivations for defining a region within the application.
+The first is to identify a section of code that has distinct compute,
+memory or network characteristics.  The second is to avoid defining
+these regions such that they are nested within each other, as nested
+regions are ignored, and only the outer most region is used for tuning
+when nesting occurs.  Identifying progress within a region can be used
+to alleviate load imbalance in the application under the assumption
+that the region is bulk synchronous.  Under the assumption that the
+application employs an iterative algorithm which synchronizes
+periodically the user can alleviate load imbalance on larger time
+scales than the regions provide.  This is done by marking iterations
+through an outer loop in the application, the &quot;epoch&quot;.</p>
+<p><code class="docutils literal notranslate"><span class="pre">WARNING:</span></code> All of the functions described herein require that MPI has
+been initialized (via MPI_Init() or MPI_Init_thread()) and is properly
+functioning before they are invoked.  These functions make use of various
+MPI calls in their implementations and will return errors if MPI is not
+initialized.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_prof_region</span></code>():
+registers an application region.  The _region<em>name</em> and <em>hint</em> are
+input parameters, and the _region<em>id</em> is output.  The _region<em>id</em>
+can be used with <code class="docutils literal notranslate"><span class="pre">geopm_prof_enter</span></code>() and <code class="docutils literal notranslate"><span class="pre">geopm_prof_exit</span></code>() to
+reference the region.  If the region name has been previously
+registered, a call to this function will set the _region<em>id</em> but
+the state associated with the region is unmodified.  The
+_region<em>name</em> is used to determine the output _region<em>id</em> and is
+also displayed in the profiling report to identify the region.
+The <em>hint</em> is one of the values given by the geopm_region_hint_e
+enum defined in <em>geopm.h</em> which determines the initial control
+settings.  The following hints are supported:</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_UNKNOWN</span></code>: <span class="raw-html-m2r"><br></span>
+Default value, provides no hint to the runtime.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_COMPUTE</span></code>: <span class="raw-html-m2r"><br></span>
+Compute limited region.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_MEMORY</span></code>: <span class="raw-html-m2r"><br></span>
+Memory bandwidth bound region.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_NETWORK</span></code>: <span class="raw-html-m2r"><br></span>
+Inter-node network dominated region, default for unnested MPI
+calls.  User defined regions that have this hint will have the MPI
+time spent within this region attributed to the region as whole
+for the periods of time when all ranks are within an MPI function.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_IO</span></code>: <span class="raw-html-m2r"><br></span>
+Disk input/output dominated region.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_SERIAL</span></code>: <span class="raw-html-m2r"><br></span>
+Calculation that is not executed by a multi-threaded process (may
+be multi-process).</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_PARALLEL</span></code>: <span class="raw-html-m2r"><br></span>
+Calculation that is executed by a multi-threaded process in a
+hybrid thread/process parallelism (e.g. MPI + OpenMP).</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_IGNORE</span></code>: <span class="raw-html-m2r"><br></span>
+Region that control algorithms should ignore, and/or apply default
+policies.  This hint should be applied to application start up,
+shutdown, and events that do not happen on every trip through the
+outer loop.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_prof_enter</span></code>():
+is called by the compute application to mark the beginning of the
+profiled compute region associated with the _region<em>id</em>. If this
+call is made after entering a different region, but before exiting
+that region, the call is ignored and an error code is returned
+(i.e. nested regions are ignored).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_prof_exit</span></code>():
+is called by the compute application to mark the end of a compute
+region.  If this region is nested then the call is ignored and an
+error code is returned.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch</span></code>():
+is called once for each pass through a computational loop
+containing inter-node synchronization events.  This call acts as a
+beacon signal emitted by each MPI rank as it begins a loop
+iteration.  The divergence in the elapsed time between calls by
+different MPI ranks is interpreted as an imbalance to be corrected
+by the runtime.  This function may be called at different places
+in an application, but it should not be used to mark a loop that
+is nested inside of another loop which is also marked.  All calls
+to <code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch</span></code>() made inside of a user defined region with
+the <code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_IGNORE</span></code> hint bit set will be ignored.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_tprof_init</span></code>():
+resets the thread progress and updates the total work for a
+threaded region.  Along with <code class="docutils literal notranslate"><span class="pre">geopm_tprof_post()</span></code>, it provides a
+way for threads to report progress within a region.  This should
+be called by all threads with _num_work<em>unit</em>, the total number of
+work units to be completed by all threads after entering a thread
+parallel region.  The total work units corresponds to the number
+of times that the <code class="docutils literal notranslate"><span class="pre">geopm_tprof_post</span></code>() interface will be called by
+any thread to report progress within the region.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_tprof_post</span></code>():
+is called after a thread has completed each work unit to report
+progress.  This method signals the completion of one work unit out
+of the total passed to <code class="docutils literal notranslate"><span class="pre">geopm_tprof_init()</span></code>.</p></li>
+</ul>
+</section>
+<section id="example">
+<h2>EXAMPLE<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;mpi.h&gt;
+#include &lt;omp.h&gt;
+
+#include &quot;geopm.h&quot;
+
+
+int main(int argc, char **argv)
+{
+    int chunk_size = 0;
+    int err = 0;
+    int index = 0;
+    int rank = 0;
+    int num_iter = 100000000;
+    double sum = 0.0;
+    int num_thread = 0;
+    int thread_idx = 0 ;
+    uint64_t region_id = 0;
+
+    err = MPI_Init(&amp;argc, &amp;argv);
+    if (!err) {
+#pragma omp parallel
+{
+        num_thread = omp_get_num_threads();
+}
+        chunk_size = num_iter / num_thread;
+        if (num_iter % num_thread) {
+            ++chunk_size;
+        }
+    }
+    if (!err) {
+        err = geopm_prof_region(&quot;loop_0&quot;, GEOPM_REGION_HINT_UNKNOWN, &amp;region_id);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (!err) {
+        err = geopm_prof_enter(region_id);
+    }
+    if (!err) {
+#pragma omp parallel default(shared) private(thread_idx, index)
+{
+        thread_idx = omp_get_thread_num();
+        geopm_tprof_init(chunk_size);
+#pragma omp for reduction(+:sum) schedule(static, chunk_size)
+        for (index = 0; index &lt; num_iter; ++index) {
+            sum += (double)index;
+            geopm_tprof_post();
+        }
+}
+        err = geopm_prof_exit(region_id);
+    }
+    if (!err) {
+        err = MPI_Comm_rank(MPI_COMM_WORLD, &amp;rank);
+    }
+    if (!err &amp;&amp; !rank) {
+        printf(&quot;sum = %e\n\n&quot;, sum);
+    }
+
+    int tmp_err = MPI_Finalize();
+
+    return err ? err : tmp_err;
+}
+</pre></div>
+</div>
+</section>
+<section id="errors">
+<h2>ERRORS<a class="headerlink" href="#errors" title="Permalink to this headline"></a></h2>
+<p>All functions described on this man page return an error code.  See
+<a class="reference external" href="geopm_error.3.html">geopm_error(3)</a> for a full description of the error numbers and how
+to convert them to strings.</p>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="geopm.7.html">geopm(7)</a>,
+<a class="reference external" href="geopm_error.3.html">geopm_error(3)</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geopm_policystore_c.3.html" class="btn btn-neutral float-left" title="geopm_policystore_c(3) -- geopm resource policy store interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geopm_sched.3.html" class="btn btn-neutral float-right" title="geopm_sched.h(3) -- interface with Linux scheduler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2021, Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

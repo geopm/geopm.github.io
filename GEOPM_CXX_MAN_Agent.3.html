@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopm::Agent(3) -- geopm agent plugin interface &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopm::Agg(3) -- data aggregation functions" href="GEOPM_CXX_MAN_Agg.3.html" />
+    <link rel="prev" title="geopm_version(3) -- geopm library version" href="geopm_version.3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> GEOPM
+            <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) -- global extensible open power manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) -- Access management for the geopm service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) -- tool for geopm system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) -- query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) -- synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) -- geopm runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) -- command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) -- application launch wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmplotter.1.html">geopmplotter(1) -- visualize reports and traces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) -- query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) -- Command line interface for the geopm service read/write features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) -- modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) -- global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) -- global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_c.3.html">geopm_agent_c(3) -- query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl_c.3.html">geopm_ctl_c(3) -- geopm runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon_c.3.html">geopm_daemon_c(3) -- helpers for geopm daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint_c.3.html">geopm_endpoint_c(3) -- dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) -- error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) -- geopm fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash.h(3) -- helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer.h(3) -- set artificial runtime imbalance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_c.3.html">geopm_pio_c(3) -- interfaces to query and modify platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore_c.3.html">geopm_policystore_c(3) -- geopm resource policy store interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_prof_c.3.html">geopm_prof_c(3) -- application profiling interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched.h(3) -- interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time.h(3) -- helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo_c.3.html">geopm_topo_c(3) -- query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) -- geopm library version</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopm::Agent(3) -- geopm agent plugin interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#namespaces">NAMESPACES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#factory-accessor">FACTORY ACCESSOR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#class-methods">CLASS METHODS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#errors">ERRORS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">EXAMPLE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3) -- data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CNLIOGroup.3.html">geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CircularBuffer.3.html">geopm::CircularBuffer(3) -- generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm(3) -- communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) -- IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Daemon.3.html">geopm::Daemon(3) -- geopm daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Endpoint.3.html">geopm::Endpoint(3) -- geopm endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_EnergyEfficientAgent.3.html">geopm::EnergyEfficientAgent(3) -- agent for saving energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_EnergyEfficientRegion.3.html">geopm::EnergyEfficientRegion(3) -- region frequency tuning history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception(3) -- custom geopm exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Helper.3.html">geopm::Helper -- common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3) -- provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MPIComm.3.html">geopm::MPIComm(3) -- implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO(3) -- methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent -- agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO(3) -- geopm platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo(3) -- platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3) -- abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancer.3.html">geopm::PowerBalancer(3) -- balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) -- agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernor.3.html">geopm::PowerGovernor(3) -- enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) -- agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_ProfileIOGroup.3.html">geopm::ProfileIOGroup(3) -- IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SampleAggregator.3.html">geopm::RegionAggregator(3) -- per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory(3) -- abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- geopm summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient(7) -- agent for saving energy, also finds optimal region frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) -- agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#signals-and-controls">Signals and Controls</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="reference.html">Reference Manual</a> &raquo;</li>
+      <li>geopm::Agent(3) -- geopm agent plugin interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GEOPM_CXX_MAN_Agent.3.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopm-agent-3-geopm-agent-plugin-interface">
+<h1>geopm::Agent(3) -- geopm agent plugin interface<a class="headerlink" href="#geopm-agent-3-geopm-agent-plugin-interface" title="Permalink to this headline"></a></h1>
+<section id="namespaces">
+<h2>NAMESPACES<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Agent</span></code> class and the <code class="docutils literal notranslate"><span class="pre">agent_factory()</span></code> function are members of
+the <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">geopm</span></code>, but the full names, <code class="docutils literal notranslate"><span class="pre">geopm::Agent</span></code> and
+<code class="docutils literal notranslate"><span class="pre">geopm::agent_factory()</span></code>, have been abbreviated in this manual.
+Similarly, the <code class="docutils literal notranslate"><span class="pre">std::</span></code> namespace specifier has been omitted from the
+interface definitions for the following standard types: <code class="docutils literal notranslate"><span class="pre">std::vector</span></code>,
+<code class="docutils literal notranslate"><span class="pre">std::pair</span></code>, <code class="docutils literal notranslate"><span class="pre">std::string</span></code>, <code class="docutils literal notranslate"><span class="pre">std::map</span></code>, and <code class="docutils literal notranslate"><span class="pre">std::function</span></code>, to enable
+better rendering of this manual.</p>
+</section>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/Agent.hpp">&lt;geopm/Agent.hpp&gt;</a></p>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">PluginFactory</span><span class="o">&lt;</span><span class="n">Agent</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agent_factory</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::init</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">level</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fan_in</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_level_root</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::validate_policy</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">policy</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::split_policy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_policy</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">out_policy</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Agent::do_send_policy</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::aggregate_sample</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_sample</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                     </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_sample</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Agent::do_send_sample</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::adjust_platform</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_policy</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Agent::do_write_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::sample_platform</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_sample</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::wait</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">report_header</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">report_host</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="n">map</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">report_region</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">trace_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">function</span><span class="o">&lt;</span><span class="n">string</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">trace_formats</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::trace_values</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::enforce_policy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">policy</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">Agent::num_policy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dictionary</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">Agent::num_policy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agent_name</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">Agent::num_sample</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dictionary</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">Agent::num_sample</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agent_name</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">policy_names</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dictionary</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">policy_names</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agent_name</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">sample_names</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dictionary</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">sample_names</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agent_name</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Agent</span><span class="o">::</span><span class="n">make_dictionary</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">policy_names</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                                  </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sample_names</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Agent::aggregate_sample</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_sample</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                    </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agg_func</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_sample</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Agent</span></code> class is an abstract pure virtual class that defines the
+fundamental procedures executed by the GEOPM runtime.  In general, the
+Agent is responsible for making decisions about how and what control the
+runtime should exert based on readings of system values.  By default
+the <a class="reference external" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7)</a> is used, but other agents can be
+selected with the <code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code> command line option to the
+<strong>geopm_launcher(1)</strong> or <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> environment variable.  Exactly
+one agent type is used during each execution of the GEOPM runtime.</p>
+<p>The <a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3)</a> man page gives a general overview of
+concepts related to extending GEOPM through plugins.  Please refer to
+that overview as an introduction before implementing an <code class="docutils literal notranslate"><span class="pre">Agent</span></code> plugin.</p>
+<p>A single process (or application thread) on each compute node utilized
+by an application running with GEOPM creates a <code class="docutils literal notranslate"><span class="pre">Controller</span></code> object and
+each of these objects creates one or more <code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects.  The
+<code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects are related to each other through a balanced tree of
+bi-directional communication.  The &quot;leaf&quot; <code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects are defined
+to have no children and one parent.  The &quot;tree&quot; <code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects defined
+to have many children and one Agent as the parent.  The &quot;root&quot; Agent
+objects are defined to have many children and a static policy as the parent.
+Note that in some cases (e.g. a single node job execution) a &quot;tree&quot; Agent
+may not be involved at all.  The <code class="docutils literal notranslate"><span class="pre">Agent::init()</span></code> method is called by the
+<code class="docutils literal notranslate"><span class="pre">Controller</span></code> prior to all other <code class="docutils literal notranslate"><span class="pre">Agent</span></code> methods.  The parameters passed
+by the <code class="docutils literal notranslate"><span class="pre">Controller</span></code> in this call define the geometry of the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> tree
+and where the particular <code class="docutils literal notranslate"><span class="pre">Agent</span></code> object falls in the tree.  See detailed
+description of <code class="docutils literal notranslate"><span class="pre">Agent::init()</span></code> below for more information about the tree
+structure.</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">Controller</span></code>s create an <code class="docutils literal notranslate"><span class="pre">Agent</span></code> object to execute <em>level</em> 0, or
+&quot;leaf&quot; responsibilities.  The leaf responsibilities include monitoring
+signals and deriving samples to send to their parent <code class="docutils literal notranslate"><span class="pre">Agent</span></code>s at
+<em>level</em> 1 in the tree.  Additionally a leaf <code class="docutils literal notranslate"><span class="pre">Agent</span></code> must interpret
+policies received from their parent agent at <em>level</em> 1 and set
+controls which reflect the policy.  Some of the <code class="docutils literal notranslate"><span class="pre">Controller</span></code> objects
+will create <code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects to execute non-zero <em>level</em>, or &quot;tree&quot;
+responsibilities.  These non-zero <em>level</em> <code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects are
+responsible for aggregating samples from child agents to send to
+parent agents and splitting policy values from parent agents to send
+to child agents.  Note that the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> running at the root of the
+tree uses the same policy/sample interface to interact with the
+resource manager.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Agent</span></code> class is designed to read signals and write controls for
+the hardware and application using the <a class="reference external" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO(3)</a>
+interface.  Please see the manual for details about how the
+<code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> abstraction enables access to hardware capabilities,
+extension of <code class="docutils literal notranslate"><span class="pre">Agent</span></code> algorithms to new hardware architectures, a
+mapping of application behavior to hardware domains, and code reuse of
+I/O implementations by different <code class="docutils literal notranslate"><span class="pre">Agent</span></code> classes.</p>
+</section>
+<section id="factory-accessor">
+<h2>FACTORY ACCESSOR<a class="headerlink" href="#factory-accessor" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">agent_factory()</span></code>:
+This method returns the singleton accessor for the Agent factory.
+Calling this method will create the factory if it does not already exist.
+If this method is creating the factory, loading of the built-in Agents
+will be attempted.  For more information see <a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3)</a>.</p></li>
+</ul>
+</section>
+<section id="class-methods">
+<h2>CLASS METHODS<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">init()</span></code>:
+The <code class="docutils literal notranslate"><span class="pre">init()</span></code> method is the first method that will be called and
+provides contextual information for the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> about the
+communication tree geometry and where in the tree the <code class="docutils literal notranslate"><span class="pre">Agent</span></code>
+resides.  The communication tree that connects the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> objects
+is a balanced tree.  The <em>level</em> is the minimum number of edges
+between <code class="docutils literal notranslate"><span class="pre">self</span></code> and any leaf <code class="docutils literal notranslate"><span class="pre">Agent</span></code>.  Only when <em>level</em> is zero
+will the <code class="docutils literal notranslate"><span class="pre">sample_platform()</span></code> and <code class="docutils literal notranslate"><span class="pre">adjust_platform()</span></code> methods be
+called.  If the <em>level</em> is zero then the <code class="docutils literal notranslate"><span class="pre">init()</span></code> method should
+push all signals and controls for <strong>PlatformIO(3)</strong>.  The <em>fan_in*</em>
+is a vector indexed by <em>level</em> that describes the number of
+siblings that an <code class="docutils literal notranslate"><span class="pre">Agent</span></code> at <em>level</em> has which share a parent.  The
+figure below represents a tree with <code class="docutils literal notranslate"><span class="pre">fan_in</span> <span class="pre">==</span> <span class="pre">{4,3,2}</span></code> where each
+<code class="docutils literal notranslate"><span class="pre">Agent</span></code> is signified by a digit that is equal to the <em>level</em>.  Note
+that this example supports 24 compute nodes.  The <em>is_level_root</em>
+parameter is true for one child of each parent and only if this
+parameter is true will the controller call the <code class="docutils literal notranslate"><span class="pre">ascend()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">descend()</span></code> methods of the object.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                     <span class="n">___________</span><span class="o">/</span> \<span class="n">____________</span>
+                    <span class="o">/</span>                          \
+               <span class="n">__</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>                         <span class="n">_</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="n">__</span>
+       <span class="n">_______</span><span class="o">/</span>  <span class="o">/</span>   \<span class="n">_____</span>             <span class="n">_____</span><span class="o">/</span>    <span class="o">|</span> \<span class="n">_______</span>
+      <span class="o">/</span>         <span class="o">|</span>          \           <span class="o">/</span>          <span class="o">|</span>         \
+    <span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="p">(</span><span class="mi">1</span><span class="p">)</span>         <span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+   <span class="o">--</span> <span class="o">--</span>      <span class="o">--</span> <span class="o">--</span>      <span class="o">--</span> <span class="o">--</span>       <span class="o">--</span> <span class="o">--</span>      <span class="o">--</span> <span class="o">--</span>      <span class="o">--</span> <span class="o">--</span>
+  <span class="o">/</span>  <span class="o">|</span>  \    <span class="o">/</span>  <span class="o">|</span>  \    <span class="o">/</span>  <span class="o">|</span>  \     <span class="o">/</span>  <span class="o">|</span>  \    <span class="o">/</span>  <span class="o">|</span>  \    <span class="o">/</span>  <span class="o">|</span>  \
+<span class="p">(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="o">|</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="o">|</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="o">|</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="o">|</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="o">|</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="o">|</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">validate_policy()</span></code>:
+Called by user of Agent class  to validate incoming policy values and
+replace NaNs with defaults.  If a value of <em>policy</em> is not NaN but the
+value is not supported by the Agent the method will throw a <code class="docutils literal notranslate"><span class="pre">geopm::Exception</span></code>
+with error code <code class="docutils literal notranslate"><span class="pre">GEOPM_ERROR_INVALID</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split_policy()</span></code>:
+Split policy for children at next level down the tree.  The
+<em>in_policy</em> is an input vector of policy values from the parent.
+The <em>out_policy</em> is an output vector of policies to be sent to
+each child.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">do_send_policy()</span></code>:
+Used to indicate to the Controller whether to send the output
+from <code class="docutils literal notranslate"><span class="pre">split_policy()</span></code> down the tree to the Agent's children.
+Returns true if the policy has been updated since the last call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aggregate_sample()</span></code>:
+Aggregate samples from children for the next level up the tree.
+The <em>in_sample</em> parameter is a vector of sample vectors, one
+sample vector from each child.  The samples from a given index
+in the input vectors are transformed to a single value at the
+same index in the output.  The <em>out_sample</em> is an output vector
+of aggregated sample values to be sent up to the parent.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">do_send_sample()</span></code>:
+Used to indicate to the Controller whether to send the output from
+<code class="docutils literal notranslate"><span class="pre">aggregate_sample()</span></code> up the tree to the Agent's parent.  Returns
+true if any samples have been updated since the last call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adjust_platform()</span></code>:
+Adjust the platform settings based on the policy from above.
+Settings for each control are in the <em>in_policy</em>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">do_write_batch()</span></code>:
+Used to indicate to the Controller whether to call
+<code class="docutils literal notranslate"><span class="pre">PlatformIO::write_batch()</span></code> to enact new control values on the
+platform.  Returns true if any control values have been updated
+since the last call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sample_platform()</span></code>:
+Read signals from the platform and interpret/aggregate these
+signals to create a sample which can be sent up the tree.  The
+<em>out_sample</em> parameter is an output vector of agent specific sample
+values to be sent up the tree. Returns true if the sample has been
+updated since the last call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wait()</span></code>:
+Called to wait for the sample period to elapse. This controls the
+cadence of the Controller main loop.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">report_header()</span></code>:
+Custom fields that will be added to the report header when this
+agent is used.  To be consistent with the rest of the header, the
+keys should be title case, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Agent</span> <span class="pre">Header</span> <span class="pre">Name&quot;</span></code>; they must not
+contain the colon character <code class="docutils literal notranslate"><span class="pre">':'</span></code>.  Care must be taken not to add
+keys that conflict with default header keys, like names that start
+with <code class="docutils literal notranslate"><span class="pre">&quot;Start</span> <span class="pre">Time&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Profile&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Agent&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Policy&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">report_host()</span></code>:
+Custom fields for the Host section of the report.  To be
+consistent with the rest of this section, the keys should have
+the first letter capitalized, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Final</span> <span class="pre">freq</span> <span class="pre">map&quot;</span></code>; they must
+not contain the colon character <code class="docutils literal notranslate"><span class="pre">':'</span></code>.  Care must be taken not to
+add keys that conflict with default host keys, like names that
+start with <code class="docutils literal notranslate"><span class="pre">&quot;Region&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Epoch</span> <span class="pre">Totals&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Application</span> <span class="pre">Totals&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">report_region()</span></code>:
+Custom fields for each region in the report.  To be consistent
+with the rest of the region report, the string keys that will
+appear at the start of each line should be all lower case with
+words separated by hyphens and followed by the units if
+applicable, e.g <code class="docutils literal notranslate"><span class="pre">&quot;package-energy</span> <span class="pre">(joules)&quot;</span></code>.  The field name must
+not contain the colon character <code class="docutils literal notranslate"><span class="pre">':'</span></code>.  Care must be taken not to
+add keys that conflict with the default region keys, like names
+that start with <code class="docutils literal notranslate"><span class="pre">&quot;runtime&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sync-runtime&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;package-energy&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;dram-energy&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;power&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;frequency&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;network-time&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;count&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trace_names()</span></code>:
+Column headers to be added to the trace.  These will be
+automatically converted to lower case.  The header names must
+not contain the pipe character <code class="docutils literal notranslate"><span class="pre">'|'</span></code> or whitespace.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trace_formats()</span></code>:
+Returns format string for each column added to the trace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trace_values()</span></code>:
+Called by Controller to get latest values to be added to the trace.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enforce_policy()</span></code>:
+Enforce the policy one time with
+<code class="docutils literal notranslate"><span class="pre">PlatformIO::write_control()</span></code>.  Called to enforce
+static policies in the absence of a Controller.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_policy()</span></code>:
+Used to look up the number of values in the policy vector sent
+down the tree for a specific type of <code class="docutils literal notranslate"><span class="pre">Agent</span></code>. This should be
+called with the <em>dictionary</em> returned by
+<code class="docutils literal notranslate"><span class="pre">agent_factory().dictionary(agent_name)</span></code> for the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> of
+interest.
+Also has an overloaded version which takes the <em>agent_name</em>.
+Note this is a static helper function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_sample()</span></code>:
+Used to look up the number of values in the sample vector sent up
+the tree for a specific type of <code class="docutils literal notranslate"><span class="pre">Agent</span></code>. This should be called
+with the dictionary returned by
+<code class="docutils literal notranslate"><span class="pre">agent_factory().dictionary(agent_name)</span></code> for the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> of
+interest.
+Also has an overloaded version which takes the <em>agent_name</em>.
+Note this is a static helper function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">policy_names()</span></code>:
+Used to look up the names of values in the policy vector sent down
+the tree for a specific type of <code class="docutils literal notranslate"><span class="pre">Agent</span></code>. This should be called
+with the dictionary returned by
+<code class="docutils literal notranslate"><span class="pre">agent_factory().dictionary(agent_name)</span></code> for the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> of
+interest.
+Also has an overloaded version which takes the <em>agent_name</em>.
+Note this is a static helper function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sample_names()</span></code>:
+Used to look up the names of values in the sample vector sent up
+the tree for a specific of <code class="docutils literal notranslate"><span class="pre">Agent</span></code>. This should be called with the
+dictionary returned by
+<code class="docutils literal notranslate"><span class="pre">agent_factory().dictionary(agent_name)</span></code> for the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> of
+interest.
+Also has an overloaded version which takes the <em>agent_name</em>.
+Note this is a static helper function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_dictionary()</span></code>:
+Used to create a correctly formatted dictionary for an <code class="docutils literal notranslate"><span class="pre">Agent</span></code> at
+the time the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> is registered with the factory. Concrete
+<code class="docutils literal notranslate"><span class="pre">Agent`</span></code> classes may provide <code class="docutils literal notranslate"><span class="pre">policy_names()</span></code> and <code class="docutils literal notranslate"><span class="pre">sample_names()</span></code>
+methods to provide the vectors to be passed to this method.  Note
+this is a static helper function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aggregate_sample()</span></code>:
+Generically aggregate a vector of samples given a vector of
+aggregation functions. This helper method applies a different
+aggregation function to each sample element while aggregating
+across child samples. The <em>in_sample</em> parameter is an input vector
+over children of the sample vector received from each child.  The
+<em>agg_func</em> is an input vector over agent samples of the
+aggregation function that is applied.  The <em>out_sample</em> is an
+output sample vector resulting from the applying the aggregation
+across child samples.  Note this is a static helper function.</p></li>
+</ul>
+</section>
+<section id="errors">
+<h2>ERRORS<a class="headerlink" href="#errors" title="Permalink to this headline"></a></h2>
+<p>All functions described on this man page throw <a class="reference external" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception(3)</a>
+on error.</p>
+</section>
+<section id="example">
+<h2>EXAMPLE<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
+<p>Please see the <a class="reference external" href="https://github.com/geopm/geopm/tree/dev/tutorial/agent">Agent tutorial</a> for more
+information.  This code is located in the GEOPM source under tutorial/agent.</p>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="geopm.7.html">geopm(7)</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geopm_version.3.html" class="btn btn-neutral float-left" title="geopm_version(3) -- geopm library version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GEOPM_CXX_MAN_Agg.3.html" class="btn btn-neutral float-right" title="geopm::Agg(3) -- data aggregation functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2021, Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

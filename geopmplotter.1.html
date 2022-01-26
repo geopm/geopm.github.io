@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopmplotter(1) -- visualize reports and traces &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopmread(1) -- query platform information" href="geopmread.1.html" />
+    <link rel="prev" title="geopmlaunch(1) -- application launch wrapper" href="geopmlaunch.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> GEOPM
+            <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) -- global extensible open power manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) -- Access management for the geopm service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) -- tool for geopm system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) -- query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) -- synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) -- geopm runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) -- command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) -- application launch wrapper</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopmplotter(1) -- visualize reports and traces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options">OPTIONS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environment">ENVIRONMENT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">EXAMPLES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) -- query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) -- Command line interface for the geopm service read/write features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) -- modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) -- global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) -- global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_c.3.html">geopm_agent_c(3) -- query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl_c.3.html">geopm_ctl_c(3) -- geopm runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon_c.3.html">geopm_daemon_c(3) -- helpers for geopm daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint_c.3.html">geopm_endpoint_c(3) -- dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) -- error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) -- geopm fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash.h(3) -- helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer.h(3) -- set artificial runtime imbalance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_c.3.html">geopm_pio_c(3) -- interfaces to query and modify platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore_c.3.html">geopm_policystore_c(3) -- geopm resource policy store interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_prof_c.3.html">geopm_prof_c(3) -- application profiling interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched.h(3) -- interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time.h(3) -- helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo_c.3.html">geopm_topo_c(3) -- query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) -- geopm library version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent(3) -- geopm agent plugin interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3) -- data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CNLIOGroup.3.html">geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CircularBuffer.3.html">geopm::CircularBuffer(3) -- generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm(3) -- communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) -- IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Daemon.3.html">geopm::Daemon(3) -- geopm daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Endpoint.3.html">geopm::Endpoint(3) -- geopm endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_EnergyEfficientAgent.3.html">geopm::EnergyEfficientAgent(3) -- agent for saving energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_EnergyEfficientRegion.3.html">geopm::EnergyEfficientRegion(3) -- region frequency tuning history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception(3) -- custom geopm exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Helper.3.html">geopm::Helper -- common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3) -- provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MPIComm.3.html">geopm::MPIComm(3) -- implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO(3) -- methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent -- agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO(3) -- geopm platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo(3) -- platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3) -- abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancer.3.html">geopm::PowerBalancer(3) -- balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) -- agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernor.3.html">geopm::PowerGovernor(3) -- enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) -- agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_ProfileIOGroup.3.html">geopm::ProfileIOGroup(3) -- IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SampleAggregator.3.html">geopm::RegionAggregator(3) -- per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory(3) -- abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- geopm summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_energy_efficient.7.html">geopm_agent_energy_efficient(7) -- agent for saving energy, also finds optimal region frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) -- agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#signals-and-controls">Signals and Controls</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="reference.html">Reference Manual</a> &raquo;</li>
+      <li>geopmplotter(1) -- visualize reports and traces</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geopmplotter.1.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopmplotter-1-visualize-reports-and-traces">
+<h1>geopmplotter(1) -- visualize reports and traces<a class="headerlink" href="#geopmplotter-1-visualize-reports-and-traces" title="Permalink to this headline"></a></h1>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">geopmplotter</span></code>  [<em>OPTIONS</em>] [<em>PATH</em>]</p>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<p>Used to produce plots and other analysis files from report and/or trace files.
+The <em>PATH</em> argument is the input path to be searched for report/trace files.
+If <em>PATH</em> is not provided, the current working directory is used.</p>
+</section>
+<section id="options">
+<h2>OPTIONS<a class="headerlink" href="#options" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code>, <code class="docutils literal notranslate"><span class="pre">--help</span></code>:
+show help message and exit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span></code>, <code class="docutils literal notranslate"><span class="pre">--report_base</span></code> _REPORT<em>BASE</em>:
+The base report string to be searched.  All files that are located in the <em>PATH</em> directory
+that begin with _REPORT<em>BASE</em> will be selected and interpreted as report files.  If this
+option is not specified then all files with the &quot;.report&quot; extension in <em>PATH</em> are selected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-t</span></code>, <code class="docutils literal notranslate"><span class="pre">--trace_base</span></code> _TRACE<em>BASE</em>:
+The base trace string to be searched. All files that are located in the <em>PATH</em> directory
+that begin with _TRACE<em>BASE</em> will be selected and interpreted as trace files.  If this option
+is not specified then all files with the &quot;.trace&quot; extension in <em>PATH</em> are selected.  If 'None'
+is specified as the trace base then no trace files will be parsed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p</span></code>, <code class="docutils literal notranslate"><span class="pre">--plot_type</span></code> <em>bar</em><a href="#id1"><span class="problematic" id="id2">|</span></a><em>box</em><a href="#id3"><span class="problematic" id="id4">|</span></a><em>power</em><a href="#id5"><span class="problematic" id="id6">|</span></a><em>epoch</em><a href="#id7"><span class="problematic" id="id8">|</span></a><em>freq</em><a href="#id9"><span class="problematic" id="id10">|</span></a><em>debug</em>:
+The type of plot to be generated (default: <em>bar</em>).  Multiple plots can
+be specified by providing a comma separated list (e.g. -p bar,box).  The debug plot can be
+used to explore parsed data from a Python command prompt.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span></code>, <code class="docutils literal notranslate"><span class="pre">--shell</span></code>:
+Drop to a python shell after plotting.  Useful for data analysis.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-c</span></code>, <code class="docutils literal notranslate"><span class="pre">--csv</span></code>:
+Generate CSV files for the plotted data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--normalize</span></code>:
+Normalize the data that is plotted.  For per-node plots this will also use uniform node
+names in the legend.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-o</span></code>, <code class="docutils literal notranslate"><span class="pre">--output_dir</span></code> _OUTPUT<em>DIR</em>:
+The output directory where files generated from the plotter will go. (default: <em>figures</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-O</span></code>, <code class="docutils literal notranslate"><span class="pre">--output_types</span></code> <em>svg</em><a href="#id11"><span class="problematic" id="id12">|</span></a><em>png</em><a href="#id13"><span class="problematic" id="id14">|</span></a><em>pdf</em><a href="#id15"><span class="problematic" id="id16">|</span></a><em>eps</em><a href="#id17"><span class="problematic" id="id18">|</span></a><em>ps</em>:
+The file type(s) for the plot file output. Multiple file types can
+be created simultaneously if a comma separated list of types is
+provided (e.g. -o svg,eps,png). (default: <em>svg</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-n</span></code>, <code class="docutils literal notranslate"><span class="pre">--profile_name</span></code> _PROFILE<em>NAME</em>:
+Name of the profile to be used in file names / plot titles.
+(default: <em>&quot;Test Data&quot;</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-m</span></code>, <code class="docutils literal notranslate"><span class="pre">--misc_text</span></code> _MISC<em>TEXT</em>:
+Text to be appended to the plot title.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>, <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>:
+Print debugging information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--speedup</span></code>:
+When a user requests barplots, plot the speedup instead of the raw data
+value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ref_version</span></code> <em>VERSION</em>:
+Use this version string as the reference dataset to compare the target against.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ref_profile_name</span></code> _PROFILE<em>NAME</em>:
+Use this profile name as the reference dataset to compare the target against.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ref_plugin</span></code> _PLUGIN<em>NAME</em>:
+Use this tree decider plugin as the reference dataset to compare the target
+against. (default: _power<em>governing</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--tgt_version</span></code> <em>VERSION</em>:
+Use this version string as the target dataset to compare the reference against.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--tgt_name</span></code> _PROFILE<em>NAME</em>:
+Use this profile name as the target dataset to compare the reference against.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--tgt_plugin</span></code> _PLUGIN<em>NAME</em>:
+Use this tree decider plugin as the target dataset to compare the reference
+against. (default: _power<em>balancing</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--datatype</span></code> <em>runtime</em><a href="#id19"><span class="problematic" id="id20">|</span></a><em>energy</em><a href="#id21"><span class="problematic" id="id22">|</span></a><em>frequency</em><a href="#id23"><span class="problematic" id="id24">|</span></a><em>count</em>:
+The datatype to be plotted. Only used for report file plots presently. (default: <em>runtime</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--smooth</span></code> _NUM<em>SAMPLES</em>:
+Perform a _NUM<em>SAMPLES</em> moving average on on the Y-axis data. Only used for
+trace file plots presently. (default: <em>1</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--analyze</span></code>:
+Perform a basic analysis of the data plotted and save the statistics to a file.
+This applies to all trace plots, and additionally does the following to these specific plots:</p>
+<p><em>power</em>: Plot the power cap and the aggregate power for all the nodes.<span class="raw-html-m2r"><br></span>
+<em>epoch</em>: Adjust the Y-axis bounds to drop outlier data.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--min_drop</span></code> _BUDGET<em>WATTS</em>:
+The minimum power budget for data to be included in the plot.  All data below this threshold
+will be dropped.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--max_drop</span></code> _BUDGET<em>WATTS</em>:
+The maximum power budget for data to be included in the plot.  All data above this threshold
+will be dropped.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--base_clock</span></code> _FREQ<em>GHZ</em>:
+The base clock frequency in GHz to be used when making calculations from the CLK counter data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--focus_node</span></code> _NODE<em>NAME</em>:
+The name of a node to focus on when generating per node plots.  This node's data will be highlighted
+in red and will be drawn on top the other nodes.  Analysis data will still be drawn on top of this
+line if enabled with <code class="docutils literal notranslate"><span class="pre">--analyze</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--show</span></code>:
+This will display an interactive plot using the default Matplotlib backend.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--cache</span></code> _FILE<em>NAME</em>:
+Use _FILE<em>NAME</em> as the prefix for data cache files to try to load.  If no files are found, data will
+be parsed and cache files will be written in the CWD.  Glob patterns for report and trace files will
+be ignored if the cache files do not exist.  In this case, all report files matching the &quot;<em>report&quot;
+pattern and all trace files matching the &quot;*trace-</em>&quot; pattern will be parsed.  When used properly this
+drastically speeds up the time taken to create plots.</p>
+<p>WARNING: If the data used to generate the cache files changes, you must manually delete the
+corresponding .p files.  That is, if _FILE<em>NAME</em> is &quot;data&quot;, remove data_report.p and data_trace.p from
+the CWD.</p>
+</li>
+</ul>
+</section>
+<section id="environment">
+<h2>ENVIRONMENT<a class="headerlink" href="#environment" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DISPLAY</span></code>:
+Because the geopmplotter relies on Matplotlib backends for creating plots,
+you may have to manually set this variable for proper functionality even if you
+are not displaying the interactive plot with <code class="docutils literal notranslate"><span class="pre">-s</span></code>.  E.g.:</p>
+<p>DISPLAY=:0 geopmplotter -v data</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MPLBACKEND</span></code>:
+As an alternative to the above, you can set your backend to &quot;Agg&quot; using either:</p>
+<p>MPLBACKEND=&quot;Agg&quot; geopmplotter -v data</p>
+<p>Or you may make the change permanently in your matplotlibrc file  as
+described here:<span class="raw-html-m2r"><br></span>
+_https://matplotlib.org/faq/usage_faq.html#what-<a href="#id25"><span class="problematic" id="id26">is-a-backend_</span></a>.</p>
+<p>The plotter will try to use the default backend (TkAgg), and fall back to Agg automatically
+if the default is not supported.  Additional backends can be used by setting MPLBACKEND
+in the environment.</p>
+</li>
+</ul>
+<p>Using either of these options will prevent <code class="docutils literal notranslate"><span class="pre">--show</span></code> from working properly.</p>
+</section>
+<section id="examples">
+<h2>EXAMPLES<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<blockquote>
+<div><p>Once the geopmpy modules are installed, you can invoke this utility directly from
+the command line.  You can either run the utility from inside a directory containing
+data, or from a remote directory.  Some examples follow:</p>
+<p>Running the utility from the CWD plot the bar and box plots for the current dataset.
+By default, this assumes you have data utilizing the &quot;static_policy&quot; and &quot;power_balancing&quot;
+plugins.  The verbose flag is added to show progress when parsing or plotting.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">geopmplotter</span> <span class="o">-</span><span class="n">vp</span> <span class="n">box</span><span class="p">,</span><span class="n">bar</span>
+
+
+<span class="n">Plot</span> <span class="n">the</span> <span class="n">epoch</span> <span class="n">loop</span> <span class="n">time</span> <span class="n">comparison</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="ow">and</span> <span class="n">power</span> <span class="n">plots</span><span class="o">.</span>  <span class="n">Note</span> <span class="n">that</span> <span class="n">this</span> <span class="n">will</span>
+<span class="n">parse</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">trace</span> <span class="n">files</span> <span class="n">present</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">CWD</span><span class="o">.</span>  <span class="n">This</span> <span class="n">could</span> <span class="n">take</span> <span class="n">a</span> <span class="n">considerable</span> <span class="n">amount</span>
+<span class="n">of</span> <span class="n">time</span> <span class="k">for</span> <span class="n">a</span> <span class="n">large</span> <span class="n">dataset</span><span class="o">.</span>  <span class="n">Similar</span> <span class="n">to</span> <span class="n">the</span> <span class="n">bar</span> <span class="n">plot</span><span class="p">,</span> <span class="n">the</span> <span class="n">epoch</span> <span class="n">plot</span> <span class="n">assumes</span> <span class="n">the</span>
+<span class="n">data</span> <span class="n">contains</span> <span class="n">output</span> <span class="kn">from</span> <span class="nn">both</span> <span class="n">the</span> <span class="s2">&quot;static_policy&quot;</span> <span class="ow">and</span> <span class="s2">&quot;power_balancing&quot;</span> <span class="n">plugins</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> geopmplotter -vp epoch,freq,power
+
+
+To plot a single plugin, use the ``--ref_plugin`` and ``--tgt_plugin`` options:
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> geopmplotter -vp epoch --ref_plugin static_policy --tgt_plugin static_policy
+
+
+Plot the trace based plots, though only parsing a subset of the trace files.  In this
+instance, the trace files are named based on the global power budget that was set
+at the beginning of the run (e.g. 160-...-trace-\ :raw-html-m2r:`&lt;NODENAME&gt;`\ ).  This can be significantly
+faster to parse for large datasets.
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> geopmplotter -vp epoch,freq,power -t &quot;160*trace&quot;
+
+
+The ``--cache`` flag can be used to save any parsed data into a Pickle file for expedited
+data loading on subsequent runs.  Since the plotter will only parse data based on the
+requested plots, to parse and cache all the report and trace data you must request a set
+of plots that require both types of files.  Presently the reports are needed for the bar
+and box plots while all other plots are based on the trace data.  The following requests
+the bar and frequency plots, and saves the parsed data in all_report.p and all_trace.p.
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">geopmplotter</span> <span class="o">-</span><span class="n">vp</span> <span class="n">bar</span><span class="p">,</span><span class="n">freq</span> <span class="o">--</span><span class="n">cache</span> <span class="nb">all</span>
+
+
+<span class="n">If</span> <span class="n">all_report</span><span class="o">.</span><span class="n">p</span> <span class="ow">or</span> <span class="n">all_trace</span><span class="o">.</span><span class="n">p</span> <span class="n">exist</span><span class="p">,</span> <span class="n">they</span> <span class="n">will</span> <span class="n">be</span> <span class="n">loaded</span> <span class="ow">and</span> <span class="n">used</span><span class="o">.</span>  <span class="n">Otherwise</span><span class="p">,</span> <span class="n">the</span> <span class="n">data</span>
+<span class="n">will</span> <span class="n">be</span> <span class="n">parsed</span> <span class="k">as</span> <span class="n">usual</span> <span class="ow">and</span> <span class="n">then</span> <span class="n">saved</span> <span class="ow">in</span> <span class="n">these</span> <span class="n">files</span><span class="o">.</span>  <span class="n">Utilizing</span> <span class="n">the</span> <span class="n">cache</span> <span class="n">will</span> <span class="n">dramatically</span>
+<span class="n">speed</span> <span class="n">up</span> <span class="n">the</span> <span class="n">time</span> <span class="n">needed</span> <span class="n">to</span> <span class="n">create</span> <span class="n">plots</span><span class="o">.</span>  <span class="n">If</span> <span class="n">you</span> <span class="n">need</span> <span class="n">to</span> <span class="n">re</span><span class="o">-</span><span class="n">parse</span> <span class="n">your</span> <span class="n">data</span><span class="p">,</span> <span class="n">remove</span> <span class="n">these</span>
+<span class="n">files</span><span class="o">.</span>
+
+<span class="n">Plot</span> <span class="n">everything</span> <span class="n">utilizing</span> <span class="n">the</span> <span class="n">cache</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">geopmplotter</span> <span class="o">-</span><span class="n">vp</span> <span class="n">box</span><span class="p">,</span><span class="n">bar</span><span class="p">,</span><span class="n">epoch</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">power</span> <span class="o">--</span><span class="n">cache</span> <span class="nb">all</span>
+
+
+<span class="n">Plot</span> <span class="n">the</span> <span class="n">speedup</span> <span class="n">bar</span> <span class="n">plot</span> <span class="kn">from</span> <span class="mi">190</span><span class="n">W</span> <span class="n">to</span> <span class="mi">210</span><span class="n">W</span> <span class="n">utilizing</span> <span class="n">the</span> <span class="n">cache</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> geopmplotter -vp bar --speedup --min_drop 190 --max_drop 210 --cache all
+
+
+Use ``--analyze`` with the power plot to include the aggregate power and the power cap
+line.
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmplotter</span> <span class="o">-</span><span class="n">vp</span> <span class="n">power</span> <span class="o">--</span><span class="n">cache</span> <span class="nb">all</span> <span class="o">--</span><span class="n">analyze</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="geopm.7.html">geopm(7)</a>,
+<a class="reference external" href="geopmpy.7.html">geopmpy(7)</a>,
+<strong>geopmanalysis(1)</strong>,
+<a class="reference external" href="geopmlaunch.1.html">geopmlaunch(1)</a>,</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geopmlaunch.1.html" class="btn btn-neutral float-left" title="geopmlaunch(1) -- application launch wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geopmread.1.html" class="btn btn-neutral float-right" title="geopmread(1) -- query platform information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2021, Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

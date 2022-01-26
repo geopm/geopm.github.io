@@ -57,7 +57,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="info.html">Signals and Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
 </ul>
 
@@ -90,7 +89,7 @@
 <p>The GEOPM HPC Runtime package provides many built-in features.  An
 advanced use case is dynamically coordinating hardware settings across
 all compute nodes used by an distributed HPC application in response
-to the application’s behavior and resource manager requests.  The
+to the application's behavior and resource manager requests.  The
 dynamic coordination is implemented as a hierarchical control system
 for scalable communication and decentralized control. The hierarchical
 control system can optimize for various objective functions including
@@ -114,7 +113,7 @@ included in the GEOPM installation.  See the GEOPM overview man page
 for further documentation and links:
 <a class="reference external" href="https://geopm.github.io/man/geopm.7.html">geopm(7)</a>.</p>
 <p>The GEOPM HPC Runtime provides some build in algorithms, each is
-called an “Agent” that implements the geopm::Agent(3) class interface.
+called an &quot;Agent&quot; that implements the geopm::Agent(3) class interface.
 A developer may extend these algorithm features by writing an Agent
 plugin.  A new implementation of this class can be dynamically loaded
 at runtime by the GEOPM Controller.  The Agent class defines which
@@ -128,7 +127,7 @@ repository.  The PlatformIO abstraction enables Agent implementations
 to be ported to different hardware platforms without modification.</p>
 <p>The libgeopm library can be called directly or indirectly within MPI
 applications to enable application feedback for informing the control
-decisions.  The indirect calls are facilitated by GEOPM’s integration
+decisions.  The indirect calls are facilitated by GEOPM's integration
 with MPI and OpenMP through their profiling decorators, and the direct
 calls are made through the geopm_prof_c(3) or geopm_fortran(3)
 interfaces.  Marking up a compute application with profiling
@@ -223,7 +222,7 @@ Runtime may ignore these requirements.</p>
 <h3>MPI Requirements<a class="headerlink" href="#mpi-requirements" title="Permalink to this headline"></a></h3>
 <p>Using the GEOPM HPC Runtime requires that the package was built
 against the same MPI implementation that is used at runtime to launch
-the user’s applicaiton.</p>
+the user's applicaiton.</p>
 </section>
 <section id="bios-configuration">
 <h3>BIOS Configuration<a class="headerlink" href="#bios-configuration" title="Permalink to this headline"></a></h3>
@@ -239,7 +238,7 @@ BIOS support, execute the following on a compute node:</p>
          <span class="ow">and</span> <span class="n">power_governor</span> <span class="n">agents</span> <span class="n">will</span> <span class="ow">not</span> <span class="n">function</span> <span class="n">properly</span> <span class="n">until</span> <span class="n">this</span> <span class="ow">is</span> <span class="n">cleared</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>Please enable RAPL in your BIOS and if such an option doesn’t exist please
+<p>Please enable RAPL in your BIOS and if such an option doesn't exist please
 contact your BIOS vendor to obtain a RAPL supported BIOS.</p>
 <p>For additional information, please contact the GEOPM team.</p>
 </section>
@@ -257,7 +256,7 @@ disabled.  The cpufreq driver has several modes controlled by the
 scaling_governor sysfs entry.  When the performance mode is selected,
 the driver will not interfere with GEOPM.  For SLURM based systems the
 <a class="reference external" href="#geopm-mpi-launch-wrapper">GEOPM launch wrappers</a> will attempt to set
-the scaling governor to “performance”.  This alleviates the need to
+the scaling governor to &quot;performance&quot;.  This alleviates the need to
 manually set the governor.  Older versions of SLURM require the
 desired governors to be explicitly listed in /etc/slurm.conf.  In
 particular, SLURM 15.x requires the following option:</p>
@@ -278,17 +277,17 @@ for more information.</p>
 </section>
 <section id="geopm-application-launch-wrapper">
 <h3>GEOPM Application Launch Wrapper<a class="headerlink" href="#geopm-application-launch-wrapper" title="Permalink to this headline"></a></h3>
-<p>The GEOPM HPC Runtime package installs the command, “geopmlaunch”.
-This is a wrapper for the MPI launch commands like “srun”, “aprun”,
-and “mpiexec” where the wrapper script enables the GEOPM runtime.  The
-“geopmlaunch” command supports exactly the same command line interface
+<p>The GEOPM HPC Runtime package installs the command, &quot;geopmlaunch&quot;.
+This is a wrapper for the MPI launch commands like &quot;srun&quot;, &quot;aprun&quot;,
+and &quot;mpiexec&quot; where the wrapper script enables the GEOPM runtime.  The
+&quot;geopmlaunch&quot; command supports exactly the same command line interface
 as the underlying launch command, but the wrapper extends the
-interface with GEOPM specific options.  The “geopmlaunch” application
+interface with GEOPM specific options.  The &quot;geopmlaunch&quot; application
 launches the primary compute application and the GEOPM control thread
 on each compute node and manages the CPU affinity requirements for all
 processes.  The wrapper is documented in the geopmlaunch(1) man page.</p>
 <p>There are several underlying MPI application launchers that
-“geopmlaunch” wrapper supports.  See the geopmlaunch(1) man page for
+&quot;geopmlaunch&quot; wrapper supports.  See the geopmlaunch(1) man page for
 information on available launchers and how to select them.  If the
 launch mechanism for your system is not supported, then affinity
 requirements must be enforced by the user and all options to the GEOPM
@@ -304,7 +303,7 @@ under control is affinitized to distinct CPUs.  This is a strict
 requirement for the runtime and must be enforced by the MPI launch
 command.  When using the geopmlaunch wrapper described in the previous
 section, these affinity requirements are handled by geopmlaunch unless
-the –geopm-affinity-disable command line option is provided (see
+the --geopm-affinity-disable command line option is provided (see
 geopmlaunch(1)).</p>
 <p>While the GEOPM control thread connects to the application it will
 automatically affinitize itself to the highest indexed core not used
@@ -373,10 +372,10 @@ override configuration file enforces values for GEOPM variables
 regardless of what is specified in the calling environment.  The list
 of all GEOPM environment variables can be found in the geopm(7) man
 page.  The two GEOPM environment variables used by
-geopm_agent_enforce_policy() are “GEOPM_AGENT” and “GEOPM_POLICY”.
+geopm_agent_enforce_policy() are &quot;GEOPM_AGENT&quot; and &quot;GEOPM_POLICY&quot;.
 Note that it is expected that /etc is mounted on a node-local file
 system, so the geopm configuration files are typically part of the
-compute node boot image.  Also note that the “GEOPM_POLICY” value
+compute node boot image.  Also note that the &quot;GEOPM_POLICY&quot; value
 specifies a path to another JSON file which may be located on a
 shared file system, and this second file controls the values enforced
 (e.g. power cap value in Watts, or CPU frequency value in Hz).</p>
@@ -409,13 +408,13 @@ a static power limit for applications which do not use geopmlaunch(),
 and will optimize power limits to balance performance when
 geopmlaunch() is used.  First, the system administrator creates the
 following JSON object in the boot image of the compute node in the
-path “/etc/geopm/environment-override.json”:</p>
+path &quot;/etc/geopm/environment-override.json&quot;:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;GEOPM_AGENT&quot;</span><span class="p">:</span> <span class="s2">&quot;power_balancer&quot;</span><span class="p">,</span>
  <span class="nt">&quot;GEOPM_POLICY&quot;</span><span class="p">:</span> <span class="s2">&quot;/shared_fs/config/geopm_power_balancer.json&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that the “POWER_PACKAGE_LIMIT_TOTAL” value controlling the limit
-is specified in a secondary JSON file “geopm_power_balancer.json” that
+<p>Note that the &quot;POWER_PACKAGE_LIMIT_TOTAL&quot; value controlling the limit
+is specified in a secondary JSON file &quot;geopm_power_balancer.json&quot; that
 may be located on a shared file system and can be created with the
 geopmagent(1) command line tool.  Locating the policy file on the
 shared file system enables the limit to be modified without changing
@@ -436,7 +435,7 @@ behavior of already running GEOPM control processes.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Intel (R) Corporation.</p>
+    <p>&#169; Copyright 2015 - 2021, Intel Corporation. All rights reserved..</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
