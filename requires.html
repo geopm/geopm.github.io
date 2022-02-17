@@ -48,6 +48,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#upstream-sles-and-opensuse-package-requirements">Upstream SLES and OpenSUSE Package Requirements</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dasbus-requirement">Dasbus Requirement</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#systemd-library-requirement">Systemd Library Requirement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sphinx-requirement">Sphinx Requirement</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#run-requirements">Run Requirements</a><ul>
@@ -107,17 +108,21 @@ about the external dependencies that the runtime requires.</p>
 <h2>Build Requirements<a class="headerlink" href="#build-requirements" title="Permalink to this headline"></a></h2>
 <p>There are several packages that are required to run the GEOPM service
 build.  These packages are available from standard Linux distributions.
-The following commands can be used to installe them using several RPM
+The following commands can be used to install them using several RPM
 based Linux distributions.</p>
 <section id="upstream-rhel-and-centos-package-requirements">
 <h3>Upstream RHEL and CentOS Package Requirements<a class="headerlink" href="#upstream-rhel-and-centos-package-requirements" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yum install python3 python3-devel python3-gobject-base systemd-devel
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yum install python3 python3-devel python3-gobject-base <span class="se">\</span>
+            python3-Sphinx python3-sphinx_rtd_theme <span class="se">\</span>
+            systemd-devel
 </pre></div>
 </div>
 </section>
 <section id="upstream-sles-and-opensuse-package-requirements">
 <h3>Upstream SLES and OpenSUSE Package Requirements<a class="headerlink" href="#upstream-sles-and-opensuse-package-requirements" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zypper install python3 python3-devel python3-gobject systemd-devel
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zypper install python3 python3-devel python3-gobject <span class="se">\</span>
+               python3-sphinx python3-sphinx_rtd_theme <span class="se">\</span>
+               systemd-devel
 </pre></div>
 </div>
 </section>
@@ -148,6 +153,22 @@ PlatformIO interface will not access signals or controls provided by
 the GEOPM Systemd Service.  Providing <code class="docutils literal notranslate"><span class="pre">--disable-systemd</span></code> configure
 option will have no impact on the end user of GEOPM unless the GEOPM
 Systemd Service is installed and active in the running Linux OS.</p>
+</section>
+<section id="sphinx-requirement">
+<h3>Sphinx Requirement<a class="headerlink" href="#sphinx-requirement" title="Permalink to this headline"></a></h3>
+<p>The sphinx python package is used to generate man pages and HTML
+documentation.  The generated man pages are required when running the build.
+The man pages are included in a distribution tarball created with the
+<cite>make dist</cite> target, so building from such an archive does not explicitly require
+sphinx.  This requirement may also be satisfied with PIP if installing the RPM
+packages for sphinx is an issue on your system:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m pip install --user sphinx sphinx_rtd_theme
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/.local/bin:<span class="nv">$PATH</span>
+</pre></div>
+</div>
+<p>These commands will install sphinx into your user's local python packages and
+add the the local python package bin directory to your path for access to the
+sphinx-build script.</p>
 </section>
 </section>
 <section id="run-requirements">
