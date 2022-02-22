@@ -176,217 +176,182 @@ hidden by the singleton accessor.</p>
 <h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/PlatformIO.hpp">&lt;geopm/PlatformIO.hpp&gt;</a></p>
 <p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopmd</span></code></p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">geopm_request_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="n">NAME_MAX</span><span class="p">];</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">geopm</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">PlatformIO</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">platform_io</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">PlatformIO</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">iogroup_list</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">PlatformTopo</span><span class="w"> </span><span class="o">&amp;</span><span class="n">topo</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">PlatformIO::register_iogroup</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">iogroup</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">find_signal_iogroup</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">signal_names</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">control_names</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::signal_domain_type</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::control_domain_type</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::push_signal</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::push_signal_convert_domain</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::push_combined_signal</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sub_signal_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::register_combined_signal</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">operands</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">CombinedSignal</span><span class="o">&gt;</span><span class="w"> </span><span class="n">signal</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::push_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::push_control_convert_domain</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::num_signal_pushed</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::num_control_pushed</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::sample</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::sample_combined</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::adjust</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">control_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::read_batch</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::write_batch</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::read_signal</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::read_signal_convert_domain</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::write_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::write_control_convert_domain</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::save_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::restore_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::save_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">PlatformIO::restore_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">agg_function</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::signal_description</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::control_description</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::signal_behavior</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::start_batch_server</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">client_pid</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geopm_request_s</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geopm_request_s</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="o">&amp;</span><span class="n">server_pid</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">server_key</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"></span>
+<span class="w">    </span><span class="nf">PlatformIO::stop_batch_server</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">server_pid</span><span class="p">);</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>struct geopm_request_s {</dt><dd><p>int domain;
-int domain_idx;
-char name[NAME_MAX];</p>
-</dd>
-</dl>
-<p>};</p>
-<p>namespace geopm
-{</p>
-<blockquote>
-<div><dl class="simple">
-<dt>PlatformIO &amp;platform_io(</dt><dd><p>void)</p>
-</dd>
-<dt>PlatformIO::PlatformIO(</dt><dd><p>std::list&lt;std::shared_ptr&lt;IOGroup&gt; &gt; iogroup_list,
-const PlatformTopo &amp;topo);</p>
-</dd>
-<dt>void PlatformIO::register_iogroup(</dt><dd><p>std::shared_ptr&lt;IOGroup&gt; iogroup);</p>
-</dd>
-</dl>
-<p>std::shared_ptr&lt;IOGroup&gt;
-PlatformIO::find_signal_iogroup(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name) const;</p>
-</div></blockquote>
-<p>std::set&lt;std::string&gt;
-PlatformIO::signal_names(</p>
-<blockquote>
-<div><p>void) const;</p>
-</div></blockquote>
-<p>std::set&lt;std::string&gt;
-PlatformIO::control_names(</p>
-<blockquote>
-<div><p>void) const;</p>
-</div></blockquote>
-<p>int
-PlatformIO::signal_domain_type(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name) const;</p>
-</div></blockquote>
-<p>int
-PlatformIO::control_domain_type(</p>
-<blockquote>
-<div><p>const std::string &amp;control_name) const;</p>
-</div></blockquote>
-<p>int
-PlatformIO::push_signal(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name,
-int domain_type,
-int domain_idx);</p>
-</div></blockquote>
-<p>int
-PlatformIO::push_signal_convert_domain(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name,
-int domain_type,
-int domain_idx);</p>
-</div></blockquote>
-<p>int
-PlatformIO::push_combined_signal(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name,
-int domain_type,
-int domain_idx,
-const std::vector&lt;int&gt; &amp;sub_signal_idx);</p>
-</div></blockquote>
-<p>void
-PlatformIO::register_combined_signal(</p>
-<blockquote>
-<div><p>int signal_idx,
-std::vector&lt;int&gt; operands,
-std::unique_ptr&lt;CombinedSignal&gt; signal);</p>
-</div></blockquote>
-<p>int
-PlatformIO::push_control(</p>
-<blockquote>
-<div><p>const std::string &amp;control_name,
-int domain_type,
-int domain_idx);</p>
-</div></blockquote>
-<p>int
-PlatformIO::push_control_convert_domain(</p>
-<blockquote>
-<div><p>const std::string &amp;control_name,
-int domain_type,
-int domain_idx);</p>
-</div></blockquote>
-<p>int
-PlatformIO::num_signal_pushed(</p>
-<blockquote>
-<div><p>void) const;</p>
-</div></blockquote>
-<p>int
-PlatformIO::num_control_pushed(</p>
-<blockquote>
-<div><p>void) const;</p>
-</div></blockquote>
-<p>double
-PlatformIO::sample(</p>
-<blockquote>
-<div><p>int signal_idx);</p>
-</div></blockquote>
-<p>double
-PlatformIO::sample_combined(</p>
-<blockquote>
-<div><p>int signal_idx);</p>
-</div></blockquote>
-<p>void
-PlatformIO::adjust(</p>
-<blockquote>
-<div><p>int control_idx,
-double setting);</p>
-</div></blockquote>
-<p>void
-PlatformIO::read_batch(</p>
-<blockquote>
-<div><p>void);</p>
-</div></blockquote>
-<p>void
-PlatformIO::write_batch(</p>
-<blockquote>
-<div><p>void);</p>
-</div></blockquote>
-<p>double
-PlatformIO::read_signal(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name,
-int domain_type,
-int domain_idx);</p>
-</div></blockquote>
-<p>double
-PlatformIO::read_signal_convert_domain(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name,
-int domain_type,
-int domain_idx);</p>
-</div></blockquote>
-<p>void
-PlatformIO::write_control(</p>
-<blockquote>
-<div><p>const std::string &amp;control_name,
-int domain_type,
-int domain_idx,
-double setting);</p>
-</div></blockquote>
-<p>void
-PlatformIO::write_control_convert_domain(</p>
-<blockquote>
-<div><p>const std::string &amp;control_name,
-int domain_type,
-int domain_idx,
-double setting);</p>
-</div></blockquote>
-<p>void
-PlatformIO::save_control(</p>
-<blockquote>
-<div><p>void);</p>
-</div></blockquote>
-<p>void
-PlatformIO::restore_control(</p>
-<blockquote>
-<div><p>void);</p>
-</div></blockquote>
-<p>void
-PlatformIO::save_control(</p>
-<blockquote>
-<div><p>const std::string &amp;save_dir);</p>
-</div></blockquote>
-<dl class="simple">
-<dt>void PlatformIO::restore_control(</dt><dd><p>const std::string &amp;save_dir);</p>
-</dd>
-</dl>
-<p>std::function&lt;double(const std::vector&lt;double&gt; &amp;)&gt;
-PlatformIO::agg_function(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name) const;</p>
-</div></blockquote>
-<p>std::string
-PlatformIO::signal_description(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name) const;</p>
-</div></blockquote>
-<p>std::string
-PlatformIO::control_description(</p>
-<blockquote>
-<div><p>const std::string &amp;control_name) const;</p>
-</div></blockquote>
-<p>int
-PlatformIO::signal_behavior(</p>
-<blockquote>
-<div><p>const std::string &amp;signal_name) const;</p>
-</div></blockquote>
-<p>void
-PlatformIO::start_batch_server(</p>
-<blockquote>
-<div><p>int client_pid,
-const std::vector&lt;geopm_request_s&gt; &amp;signal_config,
-const std::vector&lt;geopm_request_s&gt; &amp;control_config,
-int &amp;server_pid,
-std::string &amp;server_key);</p>
-</div></blockquote>
-<p>void
-PlatformIO::stop_batch_server(</p>
-<blockquote>
-<div><p>int server_pid);</p>
-</div></blockquote>
-</div></blockquote>
-<p>}</p>
 </section>
 <section id="description">
 <h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
