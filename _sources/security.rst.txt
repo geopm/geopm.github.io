@@ -148,15 +148,16 @@ Secure restart of the ``geopmd`` daemon process
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All state that is required to maintain the security guarantees of the
-GEOPM Service are stored to disk in a secure way. This information is
-read from disk when the ``geopmd`` daemon process begins. This enables
-the service to cleanly recover from any premature ending of the daemon
-process. The restart of the daemon process is enabled by the systemd
-Linux service though a configuration option that the GEOPM Service
-provides. These options enable the GEOPM Service to be restarted
-immediately, and to attempt to restart twice in rapid succession if
-necessary. The first attempt may be used to provide a clean
-environment for the second restart.
+GEOPM Service are stored to disk in a secure way (see
+:ref:`File Usage/Configuration`
+for more details).  This information is read from disk when the
+``geopmd`` daemon process begins. This enables the service to cleanly
+recover from any premature ending of the daemon process. The restart
+of the daemon process is enabled by the systemd Linux service though a
+configuration option that the GEOPM Service provides. These options
+enable the GEOPM Service to be restarted immediately, and to attempt
+to restart twice in rapid succession if necessary. The first attempt
+may be used to provide a clean environment for the second restart.
 
 
 Secure Interfaces
@@ -327,7 +328,9 @@ controlling access permissions are located in the
 ``/etc/geopm-service`` directory. The state required to support active
 user sessions is stored in ``/var/run/geopm-service``. Protecting
 these files is paramount to the integrity of the GEOPM Service
-security model.
+security model.  In general these files have root access permissions
+only, and are modified by calling into GEOPM Service interfaces, or by
+running GEOPM Service command line tools like ``geopmaccess``.
 
 
 Inter-process shared memory
@@ -376,7 +379,32 @@ interface in Python, while it uses the libsystemd.so to implement a C
 interface to the client side of the GEOPM DBus interface directly with
 the
 `sd-bus(3) <https://man7.org/linux/man-pages/man3/sd-bus.3.html>`__
-interface.
+interface.  The GEOPM Service relies on these standard Linux tools to
+provide a trusted interface and a secured attack surface.
+
+
+Logging
+^^^^^^^
+
+GEOPM's implementation ensures that GEOPM has sufficient logging to
+provide traceability to sysadmins about user interactions. This
+includes logging of security critical events (e.g.  user interactions
+that result in changing the system configuration), avoiding excessive
+logging, avoiding public logging of private information and ensuring
+logs are reliable.
+
+The GEOPM Service has the capability of writing to the logging service
+provided by ``dasbus``. Most commonly this is the logging capabilities
+provided by systemd, and are accessible via the journalctl command
+(e.g.  journalctl -u geopm) or through inspection of
+``/var/log/messages`` or similar ways of viewing the ``syslog`` which
+may depend on how the system is configured.
+
+The GEOPM Service will log any error conditions that arise from
+attempting to setup or use configuration files stored in a secure
+location.  See
+:ref:`System files`
+for more information about these secure files.
 
 
 Security Threats
@@ -394,11 +422,11 @@ Malicious input or private output
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Each GEOPM Service interface that may be accessed by an unprivileged
-user is a threat vector.  All input recieved from the user must be
+user is a threat vector.  All input recieved from the user is
 validated to ensure no malicious or malformed data is used in any way
 that my result in a compromised or misconfigured system. All output
-from these interfaces must be vetted to ensure that the service does
-not emit private, malicious or malformed data.
+from these interfaces is vetted to ensure that the service does not
+emit private, malicious or malformed data.
 
 The GEOPM Service provides two interfaces for end users.  One is the
 ``io.github.geopm`` DBus interface published through systemd.  The
@@ -406,33 +434,6 @@ other is the batch server interface which may be created with a
 request to through GEOPM DBus interface.  The batch server is accessed
 by the end user through inter-process shared memory, and FIFO special
 files in the temporary file system.
-
-
-Logging
-^^^^^^^
-
-GEOPM's implementation ensures that GEOPM has sufficient logging
-to provide traceability to sysadmins about user interactions. This
-includes logging of security critical events (e.g.  user interactions
-that result in changing the system configuration), avoiding excessive
-logging, and ensuring logs are reliable.
-
-The GEOPM Service has the capability of writing to the logging service
-provided by DBus. Most commonly this is the logging capabilities
-provided by systemd, and are accessible via the journalctl command
-(e.g.  journalctl -u geopm) or through inspection of
-``/var/log/messages`` or similar ways of viewing the ``syslog`` which
-may depend on how the system is configured.
-
-The GEOPM Service will log any error conditions that arise from
-attempting to setup or use configuration files stored in a secure
-location. The following locations are taken into consideration by
-default: ``/etc/geopm-service`` and ``/var/run/geopm-service``.
-
-The configuration files that determine which capabilities are exposed
-to the end user reside in the ``/etc`` location, while the current
-in-use capabilities along with the client PID and other information
-are stored in ``/var/run``.
 
 
 File Usage/Configuration
@@ -449,7 +450,7 @@ The GEOPM Service utilizes files on disk to support several behaviors
 including facilitating user/group access to privileged
 signals/controls, storing state information about in-progress client
 sessions, and saving the initial state of hardware controls so that
-any control changes can be reverted. GEOPM utilizes temporary files
+any control changes may be reverted. GEOPM utilizes temporary files
 and move semantics to ensure that files written to the secure
 locations previously described are complete and have valid data.
 

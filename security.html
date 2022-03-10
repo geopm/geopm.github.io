@@ -70,11 +70,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#inter-process-shared-memory">Inter-process shared memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fifo-special-files">FIFO special files</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#systemd-dbus-interface">Systemd DBus interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logging">Logging</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#security-threats">Security Threats</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#malicious-input-or-private-output">Malicious input or private output</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#logging">Logging</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#file-usage-configuration">File Usage/Configuration</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#external-dependencies">External Dependencies</a></li>
 </ul>
@@ -239,15 +239,16 @@ creates as a <a class="reference external" href="https://man7.org/linux/man-page
 <section id="secure-restart-of-the-geopmd-daemon-process">
 <h3>Secure restart of the <code class="docutils literal notranslate"><span class="pre">geopmd</span></code> daemon process<a class="headerlink" href="#secure-restart-of-the-geopmd-daemon-process" title="Permalink to this headline"></a></h3>
 <p>All state that is required to maintain the security guarantees of the
-GEOPM Service are stored to disk in a secure way. This information is
-read from disk when the <code class="docutils literal notranslate"><span class="pre">geopmd</span></code> daemon process begins. This enables
-the service to cleanly recover from any premature ending of the daemon
-process. The restart of the daemon process is enabled by the systemd
-Linux service though a configuration option that the GEOPM Service
-provides. These options enable the GEOPM Service to be restarted
-immediately, and to attempt to restart twice in rapid succession if
-necessary. The first attempt may be used to provide a clean
-environment for the second restart.</p>
+GEOPM Service are stored to disk in a secure way (see
+<a class="reference internal" href="#file-usage-configuration"><span class="std std-ref">File Usage/Configuration</span></a>
+for more details).  This information is read from disk when the
+<code class="docutils literal notranslate"><span class="pre">geopmd</span></code> daemon process begins. This enables the service to cleanly
+recover from any premature ending of the daemon process. The restart
+of the daemon process is enabled by the systemd Linux service though a
+configuration option that the GEOPM Service provides. These options
+enable the GEOPM Service to be restarted immediately, and to attempt
+to restart twice in rapid succession if necessary. The first attempt
+may be used to provide a clean environment for the second restart.</p>
 </section>
 </section>
 <section id="secure-interfaces">
@@ -393,7 +394,9 @@ controlling access permissions are located in the
 <code class="docutils literal notranslate"><span class="pre">/etc/geopm-service</span></code> directory. The state required to support active
 user sessions is stored in <code class="docutils literal notranslate"><span class="pre">/var/run/geopm-service</span></code>. Protecting
 these files is paramount to the integrity of the GEOPM Service
-security model.</p>
+security model.  In general these files have root access permissions
+only, and are modified by calling into GEOPM Service interfaces, or by
+running GEOPM Service command line tools like <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code>.</p>
 </section>
 <section id="inter-process-shared-memory">
 <h3>Inter-process shared memory<a class="headerlink" href="#inter-process-shared-memory" title="Permalink to this headline"></a></h3>
@@ -436,7 +439,28 @@ interface in Python, while it uses the libsystemd.so to implement a C
 interface to the client side of the GEOPM DBus interface directly with
 the
 <a class="reference external" href="https://man7.org/linux/man-pages/man3/sd-bus.3.html">sd-bus(3)</a>
-interface.</p>
+interface.  The GEOPM Service relies on these standard Linux tools to
+provide a trusted interface and a secured attack surface.</p>
+</section>
+<section id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline"></a></h3>
+<p>GEOPM's implementation ensures that GEOPM has sufficient logging to
+provide traceability to sysadmins about user interactions. This
+includes logging of security critical events (e.g.  user interactions
+that result in changing the system configuration), avoiding excessive
+logging, avoiding public logging of private information and ensuring
+logs are reliable.</p>
+<p>The GEOPM Service has the capability of writing to the logging service
+provided by <code class="docutils literal notranslate"><span class="pre">dasbus</span></code>. Most commonly this is the logging capabilities
+provided by systemd, and are accessible via the journalctl command
+(e.g.  journalctl -u geopm) or through inspection of
+<code class="docutils literal notranslate"><span class="pre">/var/log/messages</span></code> or similar ways of viewing the <code class="docutils literal notranslate"><span class="pre">syslog</span></code> which
+may depend on how the system is configured.</p>
+<p>The GEOPM Service will log any error conditions that arise from
+attempting to setup or use configuration files stored in a secure
+location.  See
+<a class="reference internal" href="#system-files"><span class="std std-ref">System files</span></a>
+for more information about these secure files.</p>
 </section>
 </section>
 <section id="security-threats">
@@ -450,39 +474,17 @@ how the surface is secured against this threat.</p>
 <section id="malicious-input-or-private-output">
 <h3>Malicious input or private output<a class="headerlink" href="#malicious-input-or-private-output" title="Permalink to this headline"></a></h3>
 <p>Each GEOPM Service interface that may be accessed by an unprivileged
-user is a threat vector.  All input recieved from the user must be
+user is a threat vector.  All input recieved from the user is
 validated to ensure no malicious or malformed data is used in any way
 that my result in a compromised or misconfigured system. All output
-from these interfaces must be vetted to ensure that the service does
-not emit private, malicious or malformed data.</p>
+from these interfaces is vetted to ensure that the service does not
+emit private, malicious or malformed data.</p>
 <p>The GEOPM Service provides two interfaces for end users.  One is the
 <code class="docutils literal notranslate"><span class="pre">io.github.geopm</span></code> DBus interface published through systemd.  The
 other is the batch server interface which may be created with a
 request to through GEOPM DBus interface.  The batch server is accessed
 by the end user through inter-process shared memory, and FIFO special
 files in the temporary file system.</p>
-</section>
-<section id="logging">
-<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline"></a></h3>
-<p>GEOPM's implementation ensures that GEOPM has sufficient logging
-to provide traceability to sysadmins about user interactions. This
-includes logging of security critical events (e.g.  user interactions
-that result in changing the system configuration), avoiding excessive
-logging, and ensuring logs are reliable.</p>
-<p>The GEOPM Service has the capability of writing to the logging service
-provided by DBus. Most commonly this is the logging capabilities
-provided by systemd, and are accessible via the journalctl command
-(e.g.  journalctl -u geopm) or through inspection of
-<code class="docutils literal notranslate"><span class="pre">/var/log/messages</span></code> or similar ways of viewing the <code class="docutils literal notranslate"><span class="pre">syslog</span></code> which
-may depend on how the system is configured.</p>
-<p>The GEOPM Service will log any error conditions that arise from
-attempting to setup or use configuration files stored in a secure
-location. The following locations are taken into consideration by
-default: <code class="docutils literal notranslate"><span class="pre">/etc/geopm-service</span></code> and <code class="docutils literal notranslate"><span class="pre">/var/run/geopm-service</span></code>.</p>
-<p>The configuration files that determine which capabilities are exposed
-to the end user reside in the <code class="docutils literal notranslate"><span class="pre">/etc</span></code> location, while the current
-in-use capabilities along with the client PID and other information
-are stored in <code class="docutils literal notranslate"><span class="pre">/var/run</span></code>.</p>
 </section>
 <section id="file-usage-configuration">
 <h3>File Usage/Configuration<a class="headerlink" href="#file-usage-configuration" title="Permalink to this headline"></a></h3>
@@ -496,7 +498,7 @@ to not have excessive permissions.</p>
 including facilitating user/group access to privileged
 signals/controls, storing state information about in-progress client
 sessions, and saving the initial state of hardware controls so that
-any control changes can be reverted. GEOPM utilizes temporary files
+any control changes may be reverted. GEOPM utilizes temporary files
 and move semantics to ensure that files written to the secure
 locations previously described are complete and have valid data.</p>
 <p>GEOPM mitigates threats in this space by performing several checks on
