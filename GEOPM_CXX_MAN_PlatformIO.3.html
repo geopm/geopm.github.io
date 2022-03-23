@@ -97,12 +97,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aliasing-signals-and-controls">ALIASING SIGNALS AND CONTROLS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structure-type">STRUCTURE TYPE</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#singleton-accessor">SINGLETON ACCESSOR</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#inspection-class-methods">INSPECTION CLASS METHODS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#serial-class-methods">SERIAL CLASS METHODS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#batch-class-methods">BATCH CLASS METHODS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plugin-class-methods">PLUGIN CLASS METHODS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#types">TYPES</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example">EXAMPLE</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#errors">ERRORS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
@@ -176,180 +176,121 @@ hidden by the singleton accessor.</p>
 <h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/PlatformIO.hpp">&lt;geopm/PlatformIO.hpp&gt;</a></p>
 <p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopmd</span></code></p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">geopm_request_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="n">NAME_MAX</span><span class="p">];</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">PlatformIO</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">platform_io</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">geopm</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">PlatformIO</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">platform_io</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="n">PlatformIO</span><span class="o">::</span><span class="n">PlatformIO</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">PlatformIO</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">iogroup_list</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">PlatformTopo</span><span class="w"> </span><span class="o">&amp;</span><span class="n">topo</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">PlatformIO::register_iogroup</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">iogroup</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">PlatformIO::register_iogroup</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">iogroup</span><span class="p">);</span><span class="w"></span>
+<span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">PlatformIO</span><span class="o">::</span><span class="n">signal_names</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"></span>
-<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">find_signal_iogroup</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">PlatformIO</span><span class="o">::</span><span class="n">control_names</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"></span>
-<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">signal_names</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"></span>
+<span class="nf">PlatformIO::signal_domain_type</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"></span>
-<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">control_names</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"></span>
+<span class="nf">PlatformIO::control_domain_type</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::signal_domain_type</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"></span>
+<span class="nf">PlatformIO::push_signal</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::control_domain_type</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"></span>
+<span class="nf">PlatformIO::push_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::push_signal</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">double</span><span class="w"></span>
+<span class="nf">PlatformIO::sample</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::push_signal_convert_domain</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">double</span><span class="w"></span>
+<span class="nf">PlatformIO::sample_combined</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::push_combined_signal</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sub_signal_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::adjust</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">control_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::register_combined_signal</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">operands</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">CombinedSignal</span><span class="o">&gt;</span><span class="w"> </span><span class="n">signal</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::read_batch</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::push_control</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::write_batch</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::push_control_convert_domain</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">double</span><span class="w"></span>
+<span class="nf">PlatformIO::read_signal</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::num_signal_pushed</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::write_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::num_control_pushed</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::save_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">double</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::sample</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::restore_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">double</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::sample_combined</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::save_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::adjust</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">control_idx</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">PlatformIO::restore_control</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::read_batch</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+<span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">PlatformIO</span><span class="o">::</span><span class="n">agg_function</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::write_batch</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+<span class="n">function</span><span class="o">&lt;</span><span class="n">string</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">PlatformIO</span><span class="o">::</span><span class="n">format_function</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">double</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::read_signal</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="n">string</span><span class="w"></span>
+<span class="nf">PlatformIO::signal_description</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">double</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::read_signal_convert_domain</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="n">string</span><span class="w"></span>
+<span class="nf">PlatformIO::control_description</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::write_control</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int</span><span class="w"></span>
+<span class="nf">PlatformIO::signal_behavior</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::write_control_convert_domain</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::start_batch_server</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">client_pid</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geopm_request_s</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geopm_request_s</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">&amp;</span><span class="n">server_pid</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">server_key</span><span class="p">);</span><span class="w"></span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::save_control</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::restore_control</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::save_control</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">PlatformIO::restore_control</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"></span>
-<span class="w">    </span><span class="n">PlatformIO</span><span class="o">::</span><span class="n">agg_function</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::signal_description</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::control_description</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">int</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::signal_behavior</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::start_batch_server</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">client_pid</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geopm_request_s</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_config</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geopm_request_s</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_config</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="o">&amp;</span><span class="n">server_pid</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">server_key</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">void</span><span class="w"></span>
-<span class="w">    </span><span class="nf">PlatformIO::stop_batch_server</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">server_pid</span><span class="p">);</span><span class="w"></span>
-
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"></span>
+<span class="nf">PlatformIO::stop_batch_server</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">server_pid</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -373,16 +314,16 @@ units that can be sampled or any unit-free integer that can be read.
 A control represents a request for a hardware domain to operate such
 that a related signal measured from the hardware domain will track the
 request.  For example, the user can set a <code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_LIMIT</span></code> in
-units of watts and the related signal, <code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE</span></code>, will remain
+units of <em>watts</em> and the related signal, <code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE</span></code>, will remain
 below the limit.  Similarly the user can set a <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_CONTROL</span></code> in
-hertz and the related signal, <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code> will show the CPU operating
+<em>hertz</em> and the related signal, <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code> will show the CPU operating
 at the value set.</p>
 </section>
 <section id="aliasing-signals-and-controls">
 <h2>ALIASING SIGNALS AND CONTROLS<a class="headerlink" href="#aliasing-signals-and-controls" title="Permalink to this headline"></a></h2>
 <p>There are two classes of signals and control names: &quot;low level&quot; and
 &quot;high level&quot;.  All <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>'s are expected to provide low level
-signals and controls with names that are prefixed with the IOGroup
+signals and controls with names that are prefixed with the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>
 name and two colons, e.g. the <code class="docutils literal notranslate"><span class="pre">MSRIOGroup</span></code> provides the
 <code class="docutils literal notranslate"><span class="pre">MSR::PKG_ENERGY_STATUS:ENERGY</span></code> signal.  If the signal or control may
 be supported on more than one platform, the implementation should be
@@ -395,77 +336,136 @@ the current package energy value.  Agents are encouraged to request
 high level signals and controls to make the implementation more
 portable.  The high level signals and controls supported by built-in
 <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> classes are listed below.  See <a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3)</a>
-section on <code class="docutils literal notranslate"><span class="pre">SEARCH</span> <span class="pre">AND</span> <span class="pre">LOAD</span> <span class="pre">ORDER</span></code> for information about how the
+section on <a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html#plugin-search-path-and-load-order">SEARCH AND LOAD ORDER</a> for information about how the
 <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment variable is used to select which
 <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> implementation is used in the case where more than one
 provides the same high level signal or control.</p>
-<p>Signal names that end in '#' (for example, raw MSR values) are 64-bit
+<p>Signal names that end in <code class="docutils literal notranslate"><span class="pre">#</span></code> (for example, raw MSR values) are 64-bit
 integers encoded to be stored as doubles.  When accessing these
-integer signals, the return value of <code class="docutils literal notranslate"><span class="pre">read_signal</span></code>() or <code class="docutils literal notranslate"><span class="pre">sample</span></code>()
+integer signals, the return value of <code class="docutils literal notranslate"><span class="pre">read_signal()</span></code> or <code class="docutils literal notranslate"><span class="pre">sample()</span></code>
 should not be used directly as a double precision number.  To
 decode the 64-bit integer from the double use
 <code class="docutils literal notranslate"><span class="pre">geopm_signal_to_field()</span></code> described in <a class="reference external" href="geopm_hash.3.html">geopm_hash(3)</a>.  The
 <a class="reference external" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup(3)</a> also provides raw MSR field signals that are
 encoded in this way.</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code>:
-Time elapsed since the beginning of execution.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">EPOCH_COUNT</span></code>:
-Number of completed executions of an epoch.  Prior to the first call
-by the application to <code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch()</span></code> the signal returns as -1.
-With each call to <code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch()</span></code> the count increases by one.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code>:
-The hash of the region of code (see <a class="reference external" href="geopm_prof_c.3.html">geopm_prof_c(3)</a>) currently being
-run by all ranks, otherwise GEOPM_REGION_HASH_UNMARKED.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">REGION_HINT</span></code>:
-The region hint (see <a class="reference external" href="geopm_prof_c.3.html">geopm_prof_c(3)</a>) associated with the currently
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code>:</p>
+<blockquote>
+<div><p>Time elapsed since the beginning of execution.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EPOCH_COUNT</span></code>:</p>
+<blockquote>
+<div><p>Number of completed executions of an epoch.  Prior to the first call
+by the application to <code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch()</span></code> the signal returns as <code class="docutils literal notranslate"><span class="pre">-1</span></code>.
+With each call to <code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch()</span></code> the count increases by one.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code>:</p>
+<blockquote>
+<div><p>The hash of the region of code (see <a class="reference external" href="geopm_prof_c.3.html">geopm_prof_c(3)</a>) currently being
+run by all ranks, otherwise <code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HASH_UNMARKED</span></code>.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REGION_HINT</span></code>:</p>
+<blockquote>
+<div><p>The region hint (see <a class="reference external" href="geopm_prof_c.3.html">geopm_prof_c(3)</a>) associated with the currently
 running region.  For any interval when all ranks are within an MPI
 function inside of a user defined region, the hint will change from the
-hint associated with the user defined region to GEOPM_REGION_HINT_NETWORK.
-If the user defined region was defined with GEOPM_REGION_HINT_NETWORK and
+hint associated with the user defined region to <code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_NETWORK</span></code>.
+If the user defined region was defined with <code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HINT_NETWORK</span></code> and
 there is an interval within the region when all ranks are within an MPI
 function, GEOPM will not attribute the time spent within the MPI function as
 MPI time in the report files.  It will be instead attributed to the time
-spent in the region as a whole.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">REGION_PROGRESS</span></code>:
-Minimum per-rank reported progress through the current region.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">REGION_RUNTIME</span></code>:
-Maximum per-rank of the last recorded runtime for the current
-region.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ENERGY_PACKAGE</span></code>:
-Total energy aggregated over the processor package.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE</span></code>:
-Total power aggregated over the processor package.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code>:
-Average CPU frequency over the specified domain.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ENERGY_DRAM</span></code>:
-Total energy aggregated over the DRAM DIMMs associated with a NUMA
-node.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">POWER_DRAM</span></code>:
-Total power aggregated over the DRAM DIMMs associated with a NUMA
-node.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_MIN</span></code>:
-Minimum setting for package power over the given domain.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_MAX</span></code>:
-Maximum setting for package power over the given domain.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_TDP</span></code>:
-Maximum sustainable setting for package power over the given domain.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CYCLES_THREAD</span></code>:
-Average over the domain of clock cycles executed by cores since
-the beginning of execution.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CYCLES_REFERENCE</span></code>:
-Average over the domain of clock reference cycles since the
-beginning of execution.</p></li>
+spent in the region as a whole.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REGION_PROGRESS</span></code>:</p>
+<blockquote>
+<div><p>Minimum per-rank reported progress through the current region.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REGION_RUNTIME</span></code>:</p>
+<blockquote>
+<div><p>Maximum per-rank of the last recorded runtime for the current
+region.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ENERGY_PACKAGE</span></code>:</p>
+<blockquote>
+<div><p>Total energy aggregated over the processor package.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE</span></code>:</p>
+<blockquote>
+<div><p>Total power aggregated over the processor package.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code>:</p>
+<blockquote>
+<div><p>Average CPU frequency over the specified domain.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ENERGY_DRAM</span></code>:</p>
+<blockquote>
+<div><p>Total energy aggregated over the DRAM DIMMs associated with a NUMA node.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POWER_DRAM</span></code>:</p>
+<blockquote>
+<div><p>Total power aggregated over the DRAM DIMMs associated with a NUMA node.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_MIN</span></code>:</p>
+<blockquote>
+<div><p>Minimum setting for package power over the given domain.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_MAX</span></code>:</p>
+<blockquote>
+<div><p>Maximum setting for package power over the given domain.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE_TDP</span></code>:</p>
+<blockquote>
+<div><p>Maximum sustainable setting for package power over the given domain.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CYCLES_THREAD</span></code>:</p>
+<blockquote>
+<div><p>Average over the domain of clock cycles executed by cores since
+the beginning of execution.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CYCLES_REFERENCE</span></code>:</p>
+<blockquote>
+<div><p>Average over the domain of clock reference cycles since the
+beginning of execution.</p>
+</div></blockquote>
+</li>
 </ul>
+</section>
+<section id="structure-type">
+<h2>STRUCTURE TYPE<a class="headerlink" href="#structure-type" title="Permalink to this headline"></a></h2>
+<p>This structure is part of the global C namespace. It contains information about a particular request,
+a signal or a control, and all the relevant information such as the name of the request, the domain type,
+and the domain index. This structure is used as a parameter to interface functions.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">geopm_request_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="n">NAME_MAX</span><span class="p">];</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
 <section id="singleton-accessor">
 <h2>SINGLETON ACCESSOR<a class="headerlink" href="#singleton-accessor" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">platform_io</span></code>():
+<li><p><code class="docutils literal notranslate"><span class="pre">platform_io()</span></code>:
 There is only one <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> object, and the only way to access
 this object is through this function.  The function returns a
 reference to the single <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> object that gives access to
-all of the CLASS METHODS described below.  See <code class="docutils literal notranslate"><span class="pre">EXAMPLE</span></code> section
+all of the <a class="reference internal" href="#inspection-class-methods">CLASS METHODS</a> described below.  See <a class="reference internal" href="#example">EXAMPLE</a> section
 below.</p></li>
 </ul>
 </section>
@@ -475,43 +475,47 @@ below.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">signal_names()</span></code>:
 Returns the names of all available signals that can be requested.
 This includes all signals and aliases provided through <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>
-extensions as well as signals provided by PlatformIO itself.  The
-set of strings that are returned can be passed as a _signal<em>name</em>
-to all <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> methods that accept a signal name input
+extensions as well as signals provided by <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> itself.  The
+set of strings that are returned can be passed as a <em>signal_name</em>
+to all <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> methods that accept a <em>signal_name</em> input
 parameter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">control_names()</span></code>:
 Returns the names of all available controls.  This includes all
-controls and aliases provided by IOGroups as well as controls
-provided by PlatformIO itself.  The set of strings that are returned
-can be passed as a _control<em>name</em> to all <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> methods that
-accept a control name input parameter.</p></li>
+controls and aliases provided by <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>s as well as controls
+provided by <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> itself.  The set of strings that are returned
+can be passed as a <em>control_name</em> to all <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> methods that
+accept a <em>control_name</em> input parameter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">signal_description()</span></code>:
-Returns the description of the signal as defined by the IOGroup that
+Returns the description of the signal as defined by the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> that
 provides this signal.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">control_description()</span></code>:
-Returns the description of the control as defined by the IOGroup that
+Returns the description of the control as defined by the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> that
 provides this control.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">signal_domain_type()</span></code>:
-Query the domain for the signal with name _signal<em>name</em>.  Returns
+Query the domain for the signal with name <em>signal_name</em>.  Returns
 one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values signifying the
 granularity at which the signal is measured.  Will return
 <code class="docutils literal notranslate"><span class="pre">GEOPM_DOMAIN_INVALID</span></code> if the signal name is not
 supported.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">control_domain_type()</span></code>:
-Query the domain for the control with the name _control<em>name</em>.
+Query the domain for the control with the name <em>control_name</em>.
 Returns one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values
 signifying the granularity at which the control can be adjusted.
 Will return <code class="docutils literal notranslate"><span class="pre">GEOPM_DOMAIN_INVALID</span></code> if the control
 name is not supported.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">agg_function</span></code>():
+<li><p><code class="docutils literal notranslate"><span class="pre">agg_function()</span></code>:
 Returns the function that should be used to aggregate
-_signal<em>name</em>.  If one was not previously specified by this class,
+<em>signal_name</em>.  If one was not previously specified by this class,
 the default function is select_first from <a class="reference external" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3)</a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_behavior</span></code>():
-Returns one of the IOGroup::signal_behavior_e values which
+<li><p><code class="docutils literal notranslate"><span class="pre">signal_behavior()</span></code>:
+Returns one of the <code class="docutils literal notranslate"><span class="pre">IOGroup::m_signal_behavior_e</span></code> values which
 describes about how a signal will change as a function of time.
 This can be used when generating reports to decide how to
 summarize a signal's value for the entire application run.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format_function()</span></code>:
+Returns a function that can be used to convert
+a signal of the given <em>signal_name</em> into a printable string.
+The returned function takes the <em>double</em> value of the signal and returns a formatted string.</p></li>
 </ul>
 </section>
 <section id="serial-class-methods">
@@ -520,17 +524,26 @@ summarize a signal's value for the entire application run.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">read_signal()</span></code>:
 Read from the platform and interpret into SI units a signal
 given its name and domain.  Does not modify values stored by
-calling <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.</p></li>
+calling <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>. The parameters correspond to the <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">geopm_request_s</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">domain_type</span></code> is from the <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">geopm_domain_e</span></code> described in <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm_topo.h">geopm_topo.h</a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">write_control()</span></code>:
 Interpret the setting and write it to the platform.  Does not
-modify the values stored by calling <code class="docutils literal notranslate"><span class="pre">adjust()</span></code>.</p></li>
+modify the values stored by calling <code class="docutils literal notranslate"><span class="pre">adjust()</span></code>.
+The first three parameters correspond to the <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">geopm_request_s</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">domain_type</span></code> is from the <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">geopm_domain_e</span></code> described in <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm_topo.h">geopm_topo.h</a>
+<code class="docutils literal notranslate"><span class="pre">setting</span></code> is new value in SI units of the setting for the control.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">save_control()</span></code>:
 Save the state of all controls so that any subsequent changes
-made through PlatformIO may be reverted with a call to
-<code class="docutils literal notranslate"><span class="pre">restore_control()</span></code>.</p></li>
+made through <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> may be reverted with a call to
+<code class="docutils literal notranslate"><span class="pre">restore_control()</span></code>. This function also has an overload which takes a <em>save_dir</em> parameter
+the directory to save the state of the control. Each <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> that supports controls
+will populate one file in the save directory
+that contains the saved state and name the file
+after the IOGroup name.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">restore_control()</span></code>:
 Restore all controls to values recorded in previous call to
-<code class="docutils literal notranslate"><span class="pre">save_control()</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">save_control()</span></code>. This function also has an overload which takes a <em>save_dir</em> parameter
+the directory which contains the result of the previous saved state.</p></li>
 </ul>
 </section>
 <section id="batch-class-methods">
@@ -538,11 +551,11 @@ Restore all controls to values recorded in previous call to
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">push_signal()</span></code>:
 Push a signal onto the stack of batch access signals.  The signal
-is defined by selecting a _signal<em>name</em> from the set returned by
-the <code class="docutils literal notranslate"><span class="pre">signal_names()</span></code> method, the _domain<em>type</em> from one of the
-<code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values, and the _domain<em>idx</em> between
+is defined by selecting a <em>signal_name</em> from the set returned by
+the <code class="docutils literal notranslate"><span class="pre">signal_names()</span></code> method, the <em>domain_type</em> from one of the
+<code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values, and the <em>domain_idx</em> between
 zero to the value returned by
-<code class="docutils literal notranslate"><span class="pre">PlatformTopo::num_domain(_domain_type_)</span></code>.  Subsequent calls to
+<code class="docutils literal notranslate"><span class="pre">PlatformTopo::num_domain(domain_type)</span></code>.  Subsequent calls to
 the <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code> method will read the signal and update the
 internal state used to store batch signals.  The return value of
 the method can be passed to the <code class="docutils literal notranslate"><span class="pre">sample()</span></code> method to access
@@ -551,43 +564,64 @@ returned signal index will be repeated for each unique tuple of
 push_signal input parameters.  All signals must be pushed onto the
 stack prior to the first call to <code class="docutils literal notranslate"><span class="pre">sample()</span></code> or <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.
 Attempts to push a signal onto the stack after the first call to
-<code class="docutils literal notranslate"><span class="pre">sample()</span></code> or <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code> or attempts to push a _signal<em>name</em>
+<code class="docutils literal notranslate"><span class="pre">sample()</span></code> or <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code> or attempts to push a <em>signal_name</em>
 that is not from the set returned by <code class="docutils literal notranslate"><span class="pre">signal_names()</span></code> will result
 in a thrown <code class="docutils literal notranslate"><span class="pre">geopm::Exception</span></code> with error number
 <code class="docutils literal notranslate"><span class="pre">GEOPM_ERROR_INVALID</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">push_control()</span></code>:
 Push a control onto the stack of batch access controls.  The
-control is defined by selecting a _control<em>name</em> from the set
-returned by the <code class="docutils literal notranslate"><span class="pre">control_names()</span></code> method, the _domain<em>type</em> from
-one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values, and the _domain<em>idx</em>
+control is defined by selecting a <em>control_name</em> from the set
+returned by the <code class="docutils literal notranslate"><span class="pre">control_names()</span></code> method, the <em>domain_type</em> from
+one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values, and the <em>domain_idx</em>
 between zero to the value returned by
-<code class="docutils literal notranslate"><span class="pre">PlatformTopo::num_domain(_domain_type_)</span></code>.  The return value of
+<code class="docutils literal notranslate"><span class="pre">PlatformTopo::num_domain(domain_type)</span></code>.  The return value of
 the method can be passed to the <code class="docutils literal notranslate"><span class="pre">adjust()</span></code> method which will
 update the internal state used to store batch controls.
 Subsequent calls to the <code class="docutils literal notranslate"><span class="pre">write_batch()</span></code> method access the control
 values in the internal state and write the values to the hardware.
 The returned control index will be repeated for each unique tuple
-of push_control input parameters.  All controls must be pushed
+of <code class="docutils literal notranslate"><span class="pre">push_control()</span></code> input parameters.  All controls must be pushed
 onto the stack prior to the first call to <code class="docutils literal notranslate"><span class="pre">adjust()</span></code> or
 <code class="docutils literal notranslate"><span class="pre">write_batch()</span></code>.  Attempts to push a controls onto the stack after
 the first call to <code class="docutils literal notranslate"><span class="pre">adjust()</span></code> or <code class="docutils literal notranslate"><span class="pre">write_batch()</span></code> or attempts to push
-a _control<em>name</em> that is not from the set returned by
+a <em>control_name</em> that is not from the set returned by
 <code class="docutils literal notranslate"><span class="pre">control_names()</span></code> will result in a thrown <code class="docutils literal notranslate"><span class="pre">geopm::Exception</span></code> with
 error number <code class="docutils literal notranslate"><span class="pre">GEOPM_ERROR_INVALID</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sample()</span></code>:
 Samples cached value of a single signal that has been pushed via
-<code class="docutils literal notranslate"><span class="pre">push_signal()</span></code> cached value is upated at the time of call to
-<code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">push_signal()</span></code>, which is identified by the <em>signal_idx</em>
+The cached value is updated at the time of call to
+<code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>, this function must be called after the update.
+The value of the signal is returned by the function.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">adjust()</span></code>:
-Updates cached value for single control that has been pushed via
-<code class="docutils literal notranslate"><span class="pre">push_control()</span></code> cached value will be written to the platform at
+Updates cached value for single control, which is the <em>setting</em>,
+that has been pushed via <code class="docutils literal notranslate"><span class="pre">push_control()</span></code>, which is identified by the <em>control_idx</em>.
+The cached value will be written to the platform at
 time of call to <code class="docutils literal notranslate"><span class="pre">write_batch()</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>:
-Read all push signals from the platform so that the next call to <code class="docutils literal notranslate"><span class="pre">sample()</span></code>
+Read all pushed signals from the platform so that the next call to <code class="docutils literal notranslate"><span class="pre">sample()</span></code>
 will reflect the updated data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">write_batch()</span></code>:
 Write all pushed controls so that values provided to <code class="docutils literal notranslate"><span class="pre">adjust()</span></code>
 are written to the platform.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_batch_server()</span></code>:
+Creates a batch server with the following signals and controls.
+The list of signals is represented by the vector <em>signal_config</em>.
+The list of controls is represented by the vector <em>control_config</em>.
+Both vectors are containing <code class="docutils literal notranslate"><span class="pre">geopm_request_s</span></code> objects.
+It would be an error to create a batch server with no signals and no controls.
+In order to create a batch server, we also need to specify the PID of the client process as the <em>client_pid</em>.
+If the batch server is created successfully, it will populate the <em>server_pid</em> with the PID of the created server process,
+and the <em>server_key</em> with a key used to identify the server connection:
+a substring in interprocess shared memory keys used for communication.
+An exception is thrown if any error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm_pio_stop_batch_server()</span></code>:
+This function is called directly by geopmd in order to
+end a batch session and kill the batch server process
+created by <code class="docutils literal notranslate"><span class="pre">start_batch_server()</span></code>, which is the <em>server_pid</em> parameter.
+If the PID of the server process is not found, then it is an error,
+and this function throws an exception.
+Call through to <code class="docutils literal notranslate"><span class="pre">BatchServer::stop_batch()</span></code>.</p></li>
 </ul>
 </section>
 <section id="plugin-class-methods">
@@ -602,41 +636,35 @@ provides the mechanism for extending the <code class="docutils literal notransla
 runtime.</p></li>
 </ul>
 </section>
-<section id="types">
-<h2>TYPES<a class="headerlink" href="#types" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">m_request_s</span></code>:</p></li>
-</ul>
-</section>
 <section id="example">
 <h2>EXAMPLE<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">Print</span> <span class="n">a</span> <span class="n">signal</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">CPUs</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span><span class="o">.</span> <span class="o">*/</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Print a signal for all CPUs on the system. */</span><span class="w"></span>
 
-<span class="c1">#include &lt;iostream&gt;</span>
-<span class="c1">#include &lt;string&gt;</span>
-<span class="c1">#include &lt;geopm/PlatformIO.hpp&gt;</span>
-<span class="c1">#include &lt;geopm/PlatformTopo.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm/PlatformIO.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm/PlatformTopo.hpp&gt;</span><span class="cp"></span>
 
-<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Usage: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot; SIGNAL_NAME&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">signal_name</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">geopm</span><span class="p">::</span><span class="n">PlatformIO</span> <span class="o">&amp;</span><span class="n">pio</span> <span class="o">=</span> <span class="n">geopm</span><span class="p">::</span><span class="n">platform_io</span><span class="p">();</span>
-    <span class="n">geopm</span><span class="p">::</span><span class="n">PlatformTopo</span> <span class="o">&amp;</span><span class="n">topo</span> <span class="o">=</span> <span class="n">geopm</span><span class="p">::</span><span class="n">platform_topo</span><span class="p">();</span>
-    <span class="n">const</span> <span class="nb">int</span> <span class="n">DOMAIN</span> <span class="o">=</span> <span class="n">pio</span><span class="o">.</span><span class="n">signal_domain_type</span><span class="p">(</span><span class="n">signal_name</span><span class="p">);</span>
-    <span class="n">const</span> <span class="nb">int</span> <span class="n">NUM_DOMAIN</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">num_domain</span><span class="p">(</span><span class="n">DOMAIN</span><span class="p">);</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;cpu_idx    &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">signal_name</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">domain_idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">domain_idx</span> <span class="o">!=</span> <span class="n">NUM_DOMAIN</span><span class="p">;</span> <span class="o">++</span><span class="n">domain_idx</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">double</span> <span class="n">signal</span> <span class="o">=</span> <span class="n">pio</span><span class="o">.</span><span class="n">read_signal</span><span class="p">(</span><span class="n">signal_name</span><span class="p">,</span> <span class="n">DOMAIN</span><span class="p">,</span> <span class="n">domain_idx</span><span class="p">);</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">auto</span> <span class="o">&amp;</span><span class="n">cpu_idx</span> <span class="p">:</span> <span class="n">topo</span><span class="o">.</span><span class="n">domain_cpus</span><span class="p">(</span><span class="n">DOMAIN</span><span class="p">,</span> <span class="n">domain_idx</span><span class="p">))</span> <span class="p">{</span>
-            <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">cpu_idx</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;    &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">signal</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Usage: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; SIGNAL_NAME&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">signal_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">geopm</span><span class="o">::</span><span class="n">PlatformIO</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm</span><span class="o">::</span><span class="n">platform_io</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">geopm</span><span class="o">::</span><span class="n">PlatformTopo</span><span class="w"> </span><span class="o">&amp;</span><span class="n">topo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm</span><span class="o">::</span><span class="n">platform_topo</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">DOMAIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pio</span><span class="p">.</span><span class="n">signal_domain_type</span><span class="p">(</span><span class="n">signal_name</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">NUM_DOMAIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">topo</span><span class="p">.</span><span class="n">num_domain</span><span class="p">(</span><span class="n">DOMAIN</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;cpu_idx    &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">signal_name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">domain_idx</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">NUM_DOMAIN</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">signal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pio</span><span class="p">.</span><span class="n">read_signal</span><span class="p">(</span><span class="n">signal_name</span><span class="p">,</span><span class="w"> </span><span class="n">DOMAIN</span><span class="p">,</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="nl">cpu_idx</span> <span class="p">:</span><span class="w"> </span><span class="n">topo</span><span class="p">.</span><span class="n">domain_cpus</span><span class="p">(</span><span class="n">DOMAIN</span><span class="p">,</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cpu_idx</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;    &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">signal</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </section>

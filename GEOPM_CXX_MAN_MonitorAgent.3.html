@@ -92,8 +92,10 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO(3) -- methods for reading and writing MSRs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">geopm::MonitorAgent -- agent that enforces no policies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#namespaces">NAMESPACES</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#class-methods">CLASS METHODS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
 </ul>
 </li>
@@ -148,17 +150,82 @@
              
   <section id="geopm-monitoragent-agent-that-enforces-no-policies">
 <h1>geopm::MonitorAgent -- agent that enforces no policies<a class="headerlink" href="#geopm-monitoragent-agent-that-enforces-no-policies" title="Permalink to this headline"></a></h1>
+<section id="namespaces">
+<h2>NAMESPACES<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">MonitorAgent</span></code> class and the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> class are members of the <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">geopm</span></code>, but
+the full names, <code class="docutils literal notranslate"><span class="pre">geopm::MonitorAgent</span></code> and <code class="docutils literal notranslate"><span class="pre">geopm::Agent</span></code>, have been abbreviated in this
+manual.  Similarly, the <code class="docutils literal notranslate"><span class="pre">std::</span></code> namespace specifier has been omitted from the
+interface definitions for the following standard types: <code class="docutils literal notranslate"><span class="pre">std::vector</span></code>,
+<code class="docutils literal notranslate"><span class="pre">std::string</span></code>, <code class="docutils literal notranslate"><span class="pre">std::unique_ptr</span></code>, and <code class="docutils literal notranslate"><span class="pre">std::function</span></code>, to enable better rendering of
+this manual.</p>
+</section>
 <section id="synopsis">
 <h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/MonitorAgent.hpp">&lt;geopm/MonitorAgent.hpp&gt;</a></p>
-<p><code class="docutils literal notranslate"><span class="pre">Link</span> <span class="pre">with</span> <span class="pre">-lgeopm</span> <span class="pre">(MPI)</span> <span class="pre">or</span> <span class="pre">-lgeopmpolicy</span> <span class="pre">(non-MPI)</span></code></p>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(MPI)</strong> or <code class="docutils literal notranslate"><span class="pre">-lgeopmpolicy</span></code> <strong>(non-MPI)</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::init</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">level</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fan_in</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_level_root</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::validate_policy</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">policy</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::split_policy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_policy</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_policy</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">MonitorAgent::do_send_policy</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::aggregate_sample</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_sample</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_sample</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">MonitorAgent::do_send_sample</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::adjust_platform</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_policy</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">MonitorAgent::do_write_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::sample_platform</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_sample</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::wait</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">MonitorAgent</span><span class="o">::</span><span class="n">report_header</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">MonitorAgent</span><span class="o">::</span><span class="n">report_host</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">map</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">MonitorAgent</span><span class="o">::</span><span class="n">report_region</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MonitorAgent</span><span class="o">::</span><span class="n">trace_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">function</span><span class="o">&lt;</span><span class="n">string</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">MonitorAgent</span><span class="o">::</span><span class="n">trace_formats</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::trace_values</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MonitorAgent::enforce_policy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">policy</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
 <section id="description">
 <h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">MonitorAgent</span></code> class is a derived implementation of <a class="reference external" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent(3)</a> that is used to do sampling only; no policy will be enforced.
+Consequently, it inherits and overrides many of the methods of the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> class.
+These overridden methods are described in the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> man page.
+Only the methods unique to the <code class="docutils literal notranslate"><span class="pre">MonitorAgent</span></code> class are described here.</p>
 <p>The behavior of this agent is described in more detail in the
 <a class="reference external" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7)</a> man page.</p>
 <p>For more details, see the doxygen
 page at <a class="reference external" href="https://geopm.github.io/dox/classgeopm_1_1_monitor_agent.html">https://geopm.github.io/dox/classgeopm_1_1_monitor_agent.html</a>.</p>
+</section>
+<section id="class-methods">
+<h2>CLASS METHODS<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plugin_name()</span></code>:
+Returns the name of the plugin; for <code class="docutils literal notranslate"><span class="pre">MonitorAgent</span></code> it appears to be <code class="docutils literal notranslate"><span class="pre">&quot;energy_efficient&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_plugin()</span></code>:
+Creates a new <code class="docutils literal notranslate"><span class="pre">unique_ptr&lt;MonitorAgent&gt;</span></code> and returns it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">policy_names()</span></code>:
+Returns a list of policy names.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sample_names()</span></code>:
+Returns a list of sample names.</p></li>
+</ul>
 </section>
 <section id="see-also">
 <h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>

@@ -100,8 +100,10 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernor.3.html">geopm::PowerGovernor(3) -- enforces a power limit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) -- agent that enforces a power cap</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">geopm::ProfileIOGroup(3) -- IOGroup providing application signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#namespaces">NAMESPACES</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#class-methods">CLASS METHODS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
 </ul>
 </li>
@@ -148,15 +150,103 @@
              
   <section id="geopm-profileiogroup-3-iogroup-providing-application-signals">
 <h1>geopm::ProfileIOGroup(3) -- IOGroup providing application signals<a class="headerlink" href="#geopm-profileiogroup-3-iogroup-providing-application-signals" title="Permalink to this headline"></a></h1>
+<section id="namespaces">
+<h2>NAMESPACES<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ProfileIOGroup</span></code> class and the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> class are members of the <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">geopm</span></code>, but
+the full names, <code class="docutils literal notranslate"><span class="pre">geopm::ProfileIOGroup</span></code> and <code class="docutils literal notranslate"><span class="pre">geopm::IOGroup</span></code>, have been abbreviated in this
+manual.  Similarly, the <code class="docutils literal notranslate"><span class="pre">std::</span></code> namespace specifier has been omitted from the
+interface definitions for the following standard types: <code class="docutils literal notranslate"><span class="pre">std::vector</span></code>,
+<code class="docutils literal notranslate"><span class="pre">std::string</span></code>, <code class="docutils literal notranslate"><span class="pre">std::set</span></code>, <code class="docutils literal notranslate"><span class="pre">std::unique_ptr</span></code>, and <code class="docutils literal notranslate"><span class="pre">std::function</span></code>, to enable better rendering of
+this manual.</p>
+</section>
 <section id="synopsis">
 <h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/ProfileIOGroup.hpp">&lt;geopm/ProfileIOGroup.hpp&gt;</a></p>
-<p><code class="docutils literal notranslate"><span class="pre">Link</span> <span class="pre">with</span> <span class="pre">-lgeopm</span> <span class="pre">(MPI)</span> <span class="pre">or</span> <span class="pre">-lgeopmpolicy</span> <span class="pre">(non-MPI)</span></code></p>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(MPI)</strong> or <code class="docutils literal notranslate"><span class="pre">-lgeopmpolicy</span></code> <strong>(non-MPI)</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ProfileIOGroup</span><span class="o">::</span><span class="n">signal_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ProfileIOGroup</span><span class="o">::</span><span class="n">control_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">ProfileIOGroup::is_valid_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">ProfileIOGroup::is_valid_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">ProfileIOGroup::signal_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">ProfileIOGroup::control_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">ProfileIOGroup::push_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">ProfileIOGroup::push_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::read_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::write_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">ProfileIOGroup::sample</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::adjust</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">control_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">ProfileIOGroup::read_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::write_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::save_control</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::restore_control</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ProfileIOGroup</span><span class="o">::</span><span class="n">agg_function</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function</span><span class="o">&lt;</span><span class="n">string</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ProfileIOGroup</span><span class="o">::</span><span class="n">format_function</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">ProfileIOGroup::signal_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">ProfileIOGroup::control_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">ProfileIOGroup::signal_behavior</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::save_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_path</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::restore_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_path</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="nf">ProfileIOGroup::plugin_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ProfileIOGroup</span><span class="o">::</span><span class="n">make_plugin</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ProfileIOGroup::connect</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
 <section id="description">
 <h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ProfileIOGroup</span></code> class is a derived implementation of <a class="reference external" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3)</a> that provides signals from the application.
+Consequently, it inherits and overrides many of the methods of the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> class.
+These overridden methods are described in the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> man page.
+Only the methods unique to the <code class="docutils literal notranslate"><span class="pre">ProfileIOGroup</span></code> class are described here.</p>
 <p>For more details, see the doxygen
 page at <a class="reference external" href="https://geopm.github.io/dox/classgeopm_1_1_profile_i_o_group.html">https://geopm.github.io/dox/classgeopm_1_1_profile_i_o_group.html</a>.</p>
+</section>
+<section id="class-methods">
+<h2>CLASS METHODS<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plugin_name()</span></code>:
+Returns the name of the plugin; for <code class="docutils literal notranslate"><span class="pre">ProfileIOGroup</span></code> it is <code class="docutils literal notranslate"><span class="pre">GEOPM_PROFILE_IO_GROUP_PLUGIN_NAME</span></code>,
+which expands to <code class="docutils literal notranslate"><span class="pre">&quot;PROFILE&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_plugin()</span></code>:
+Creates a new <code class="docutils literal notranslate"><span class="pre">unique_ptr&lt;ProfileIOGroup&gt;</span></code> and returns it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">connect()</span></code>:
+Connect to the application via shared memory.</p></li>
+</ul>
 </section>
 <section id="see-also">
 <h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>

@@ -103,6 +103,7 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SampleAggregator.3.html">geopm::RegionAggregator(3) -- per-region aggregated signal data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory(3) -- abstractions for shared memory</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#namespaces">NAMESPACES</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">DESCRIPTION</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#class-methods">CLASS METHODS</a></li>
@@ -149,137 +150,177 @@
              
   <section id="geopm-timeiogroup-3-iogroup-providing-time-signals">
 <h1>geopm::TimeIOGroup(3) -- IOGroup providing time signals<a class="headerlink" href="#geopm-timeiogroup-3-iogroup-providing-time-signals" title="Permalink to this headline"></a></h1>
+<section id="namespaces">
+<h2>NAMESPACES<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">TimeIOGroup</span></code> class and the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> class are members of the <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">geopm</span></code>, but
+the full names, <code class="docutils literal notranslate"><span class="pre">geopm::TimeIOGroup</span></code> and <code class="docutils literal notranslate"><span class="pre">geopm::IOGroup</span></code>, have been abbreviated in this
+manual.  Similarly, the <code class="docutils literal notranslate"><span class="pre">std::</span></code> namespace specifier has been omitted from the
+interface definitions for the following standard types: <code class="docutils literal notranslate"><span class="pre">std::vector</span></code>,
+<code class="docutils literal notranslate"><span class="pre">std::string</span></code>, <code class="docutils literal notranslate"><span class="pre">std::set</span></code>, <code class="docutils literal notranslate"><span class="pre">std::unique_ptr</span></code>, and <code class="docutils literal notranslate"><span class="pre">std::function</span></code>, to enable better rendering of
+this manual.</p>
+</section>
 <section id="synopsis">
 <h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/TimeIOGroup.hpp">&lt;geopm/TimeIOGroup.hpp&gt;</a></p>
-<p><code class="docutils literal notranslate"><span class="pre">Link</span> <span class="pre">with</span> <span class="pre">-lgeopm</span> <span class="pre">(MPI)</span> <span class="pre">or</span> <span class="pre">-lgeopmpolicy</span> <span class="pre">(non-MPI)</span></code></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">set&lt;string&gt;</span> <span class="pre">signal_names(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">set&lt;string&gt;</span> <span class="pre">control_names(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">bool</span> <span class="pre">is_valid_signal(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">bool</span> <span class="pre">is_valid_control(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">signal_domain_type(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">control_domain_type(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">push_signal(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">push_control(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">read_batch(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">write_batch(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">double</span> <span class="pre">sample(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _sample<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">adjust(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _control<em>idx</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">double</span></code> <em>setting</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">double</span> <span class="pre">read_signal(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">write_control(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">double</span></code> <em>setting</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">save_control(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">restore_control(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">function&lt;double(const</span> <span class="pre">vector&lt;double&gt;</span> <span class="pre">&amp;)&gt;</span> <span class="pre">agg_function(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">string</span> <span class="pre">signal_description(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">string</span> <span class="pre">control_description(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">std::string</span> <span class="pre">plugin_name(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">std::unique_ptr&lt;IOGroup&gt;</span> <span class="pre">make_plugin(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
-</ul>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopmd</span></code></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">TimeIOGroup</span><span class="o">::</span><span class="n">signal_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">TimeIOGroup</span><span class="o">::</span><span class="n">control_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">TimeIOGroup::is_valid_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">TimeIOGroup::is_valid_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">TimeIOGroup::signal_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">TimeIOGroup::control_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">TimeIOGroup::push_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                             </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                             </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">TimeIOGroup::push_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                              </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                              </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::read_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::write_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">TimeIOGroup::sample</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">batch_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::adjust</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">batch_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">TimeIOGroup::read_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::write_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::save_control</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::restore_control</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">TimeIOGroup</span><span class="o">::</span><span class="n">agg_function</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function</span><span class="o">&lt;</span><span class="n">string</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">TimeIOGroup</span><span class="o">::</span><span class="n">format_function</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">TimeIOGroup::signal_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">TimeIOGroup::control_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">TimeIOGroup::signal_behavior</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::save_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_path</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimeIOGroup::restore_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_path</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">TimeIOGroup::name</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="nf">TimeIOGroup::plugin_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">TimeIOGroup</span><span class="o">::</span><span class="n">make_plugin</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
 <section id="description">
 <h2>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
-<p>This IOGroup provides an implementation of the TIME signal for the
-time since GEOPM startup.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TimeIOGroup</span></code> class is a derived implementation of <a class="reference external" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3)</a>
+that provides an implementation of the <code class="docutils literal notranslate"><span class="pre">TIME</span></code> signal for the time since GEOPM startup.</p>
 </section>
 <section id="class-methods">
 <h2>CLASS METHODS<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_names</span></code>():
-Returns the time signal name, &quot;TIME::ELAPSED&quot;, and its alias, &quot;TIME&quot;.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">control_names</span></code>():
-Does nothing; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">is_valid_signal</span></code>():
-Returns true if the _signal_name is one from the list returned by
-signal_names().</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">is_valid_control</span></code>():
-Returns false; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_domain_type</span></code>():
-If the _signal<em>name</em> is valid for this IOGroup, returns
-M_DOMAIN_BOARD.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">control_domain_type</span></code>():
-Returns M_DOMAIN_INVALID; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">push_signal</span></code>():
-Since this IOGroup only provides one signal, returns 0 if the _signal<em>name</em>
-is valid.  The _domain<em>type</em> and _domain<em>idx</em> are ignored.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">push_control</span></code>():
-Should not be called; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">read_batch</span></code>():
+<li><p><code class="docutils literal notranslate"><span class="pre">signal_names()</span></code>:
+Returns the time signal name, <code class="docutils literal notranslate"><span class="pre">&quot;TIME::ELAPSED&quot;</span></code>, and its alias, <code class="docutils literal notranslate"><span class="pre">&quot;TIME&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">control_names()</span></code>:
+Does nothing; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_valid_signal()</span></code>:
+Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the <em>signal_name</em> is one from the list returned by
+<code class="docutils literal notranslate"><span class="pre">signal_names()</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_valid_control()</span></code>:
+Returns <code class="docutils literal notranslate"><span class="pre">false</span></code>; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">signal_domain_type()</span></code>:
+If the <em>signal_name</em> is valid for this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>, returns
+<code class="docutils literal notranslate"><span class="pre">GEOPM_DOMAIN_CPU</span></code>, returns <code class="docutils literal notranslate"><span class="pre">GEOPM_DOMAIN_INVALID</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">control_domain_type()</span></code>:
+Returns <code class="docutils literal notranslate"><span class="pre">GEOPM_DOMAIN_INVALID</span></code>; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">push_signal()</span></code>:
+Since this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> only provides one signal, returns <code class="docutils literal notranslate"><span class="pre">0</span></code> if the <em>signal_name</em>
+is valid. Throws a variety of exceptions if the parameters do not check out.
+The <em>domain_idx</em> parameter is ignored.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">push_control()</span></code>:
+Should not be called; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.
+Throws an exception always.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>:
 If a time signal has been pushed, updates the time since the
-TimeIOGroup was created.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">write_batch</span></code>():
-Does nothing; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code>():
-Returns the value of the signal specified by a _signal<em>idx</em>
-returned from push_signal().  The value will have been updated by
-the most recent call to read_batch().</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">adjust</span></code>():
-Should not be called; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">read_signal</span></code>():
-If _signal<em>name</em> is valid, immediately return the time since the
-TimeIOGroup was created.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">write_control</span></code>():
-Should not be called; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">save_control</span></code>():
-Does nothing; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">restore_control</span></code>():
-Does nothing; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">agg_function</span></code>():
-The TIME signal provided by this IOGroup is aggregated using the
-average() function from <a class="reference external" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3)</a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_description</span></code>():
-Returns a string description for _signal<em>name</em>, if defined.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">control_description</span></code>():
-Does nothing; this IOGroup does not provide any controls.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_behavior</span></code>():
-Returns one of the IOGroup::signal_behavior_e values which
+<code class="docutils literal notranslate"><span class="pre">TimeIOGroup</span></code> was created.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">write_batch()</span></code>:
+Does nothing; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sample()</span></code>:
+Returns the value of the signal specified by a <em>batch_idx</em>
+returned from <code class="docutils literal notranslate"><span class="pre">push_signal()</span></code>.  The value will have been updated by
+the most recent call to <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.
+Throws a variety of exceptions to distinguish between error conditions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adjust()</span></code>:
+Should not be called; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.
+Throws an exception always.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_signal()</span></code>:
+If <em>signal_name</em> is valid, immediately return the time since the
+<code class="docutils literal notranslate"><span class="pre">TimeIOGroup</span></code> was created.
+Throws a variety of exceptions if the parameters do not check out.
+The <em>domain_idx</em> parameter is ignored.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">write_control()</span></code>:
+Should not be called; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.
+Throws an exception always.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_control()</span></code>:
+This function also has an overload form that takes the <em>save_path</em> parameter.
+Does nothing in both of its forms; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">restore_control()</span></code>:
+This function also has an overload form that takes the <em>save_path</em> parameter.
+Does nothing in both of its forms; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agg_function()</span></code>:
+The <code class="docutils literal notranslate"><span class="pre">TIME</span></code> signal provided by this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> is aggregated using the
+<code class="docutils literal notranslate"><span class="pre">average()</span></code> function from <a class="reference external" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3)</a>.
+Throws an exception if the <em>signal_name</em> is invalid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format_function()</span></code>:
+Returns a function which formats a string to best represent a signal encoding a
+double precision floating point number. The function takes the <em>signal</em>,
+a real number that requires a few significant digits to accurately represent.
+The function returns a well formatted string representation of the signal.
+Throws an exception if the <em>signal_name</em> is invalid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">signal_description()</span></code>:
+Returns a string description for <em>signal_name</em>, if defined.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">control_description()</span></code>:
+Should not be called; this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> does not provide any controls.
+Throws an exception always.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">signal_behavior()</span></code>:
+Returns one of the <code class="docutils literal notranslate"><span class="pre">IOGroup::signal_behavior_e</span></code> values which
 describes about how a signal will change as a function of time.
 This can be used when generating reports to decide how to
-summarize a signal's value for the entire application run.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plugin_name</span></code>():
+summarize a signal's value for the entire application run.
+Throws an exception if the <em>signal_name</em> is invalid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name()</span></code>:
+Just calls <code class="docutils literal notranslate"><span class="pre">plugin_name()</span></code> under the hood.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plugin_name()</span></code>:
 Returns the name of the plugin to use when this plugin is
-registered with the IOGroup factory; see
+registered with the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> factory; see
 <a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3)</a> for more details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make_plugin</span></code>():
-Returns a pointer to a new TimeIOGroup object; see
+<li><p><code class="docutils literal notranslate"><span class="pre">make_plugin()</span></code>:
+Returns a pointer to a new <code class="docutils literal notranslate"><span class="pre">TimeIOGroup</span></code> object; see
 <a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3)</a> for more details.</p></li>
 </ul>
 </section>
 <section id="see-also">
 <h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <p><a class="reference external" href="geopm.7.html">geopm(7)</a>,
-<a class="reference external" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3)</a></p>
+<a class="reference external" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3)</a>,
+<a class="reference external" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3)</a>,
+<a class="reference external" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3)</a></p>
 </section>
 </section>
 
