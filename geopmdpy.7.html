@@ -378,6 +378,10 @@ service signals and controls.</p>
 </section>
 <section id="module-geopmdpy.dbus_xml">
 <span id="geopmdpy-dbus-xml"></span><h2>geopmdpy.dbus_xml<a class="headerlink" href="#module-geopmdpy.dbus_xml" title="Permalink to this headline"></a></h2>
+<p>The GEOPM DBus API enables a client to make measurements from the
+hardware platform and set hardware control parameters.  Fine grained
+permissions management for both measurements (signals) and controls is
+configurable by system administrators.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.dbus_xml.geopm_dbus_xml">
 <span class="sig-prename descclassname"><span class="pre">geopmdpy.dbus_xml.</span></span><span class="sig-name descname"><span class="pre">geopm_dbus_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TopoService</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PlatformService</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.dbus_xml.geopm_dbus_xml" title="Permalink to this definition"></a></dt>
@@ -2680,13 +2684,25 @@ GLib.timeout_add() method</p></li>
 
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="geopmdpy.system_files.GEOPM_SERVICE_CONFIG_PATH_PERM">
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">GEOPM_SERVICE_CONFIG_PATH_PERM</span></span><em class="property"> <span class="pre">=</span> <span class="pre">448</span></em><a class="headerlink" href="#geopmdpy.system_files.GEOPM_SERVICE_CONFIG_PATH_PERM" title="Permalink to this definition"></a></dt>
+<dd><p>Default permissions for the GEOPM service config path</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="geopmdpy.system_files.GEOPM_SERVICE_VAR_PATH_PERM">
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">GEOPM_SERVICE_VAR_PATH_PERM</span></span><em class="property"> <span class="pre">=</span> <span class="pre">457</span></em><a class="headerlink" href="#geopmdpy.system_files.GEOPM_SERVICE_VAR_PATH_PERM" title="Permalink to this definition"></a></dt>
+<dd><p>Default permissions for the GEOPM service var path</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.system_files.WriteLock">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">WriteLock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/var/run/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.WriteLock" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for interacting with control lock file</p>
 <p>This class provides the interface to query and set the PID that owns the
-GEOPM Service control write lock.  The state of this lock stored in the
+GEOPM Service control write lock.  The state of this lock is stored in the
 file path:</p>
 <blockquote>
 <div><p>/var/run/geopm-service/CONTROL_LOCK</p>
@@ -2793,10 +2809,10 @@ regular file and the file is renamed to a path of the form
 
 <dl class="py function">
 <dt class="sig sig-object py" id="geopmdpy.system_files.secure_make_dirs">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">secure_make_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.secure_make_dirs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">secure_make_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perm_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">448</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.secure_make_dirs" title="Permalink to this definition"></a></dt>
 <dd><p>Securely create a directory</p>
-<p>When the path does not exist a directory is created with
-permissions 0o700 along with all required parent directories.</p>
+<p>When the path does not exist a directory is created with permissions
+0o700 by default along with all required parent directories.</p>
 <p>The security of this path is verified if the path exists.  An
 existing path is considered to be secure only if all of the
 following conditions are met:</p>
@@ -2807,7 +2823,7 @@ following conditions are met:</p>
 <li><p>The path is accessible the the caller</p></li>
 <li><p>The path is a directory owned by the calling process uid</p></li>
 <li><p>The path is a directory owned by the calling process gid</p></li>
-<li><p>The permissions for the directory are 0o700</p></li>
+<li><p>The permissions for the directory are 0o700 by default</p></li>
 </ul>
 </div></blockquote>
 <p>If the existing path is determined to be insecure, a warning is
