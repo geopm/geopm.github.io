@@ -47,9 +47,9 @@
 <li class="toctree-l2"><a class="reference internal" href="build.html">Guide to Source Builds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html">Guide to Service Security</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Guide for Service Administrators</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#reading-the-access-lists">Reading the Access Lists</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-user-access">Enabling User Access</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-group-access">Enabling Group Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-integration">Linux Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geopm-service-files">GEOPM Service Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-access-lists">Configuring Access Lists</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="client.html">Guide for Service Clients</a></li>
@@ -88,115 +88,40 @@
              
   <section id="guide-for-service-administrators">
 <h1>Guide for Service Administrators<a class="headerlink" href="#guide-for-service-administrators" title="Permalink to this headline"></a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> command line tool is used by a system
-administrator to manage access to the features provided by the GEOPM
-Service.  The GEOPM Service does not allow read or write access for
-any non-root user until the system administrator explicitly configures
-the service using the <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> command line tool.  This command
-line interface allows the administrator to set access permissions for
-all users, and may extend these default privileges for specific Unix
-groups.</p>
-<section id="reading-the-access-lists">
-<h2>Reading the Access Lists<a class="headerlink" href="#reading-the-access-lists" title="Permalink to this headline"></a></h2>
-<p>The signals and controls provided by the GEOPM Service depend on which
-Linux features are avaiable, i.e. which device drivers are loaded, how
-they are configured, and what hardware is installed.  The service may
-be extended with IOGroup plugins which may augment the signals and
-controls available through the service.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> commandline tool can be used to discover which
-signals and controls are provided by the GEOPM Service on your system.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LIST ALL SIGNALS PROVIDED</span>
-geopmaccess -a
-
-<span class="c1"># LIST ALL CONTROLS PROVIDED</span>
-geopmaccess -a -c
-
-<span class="c1"># LIST DEFAULT SIGNAL ACCESS LIST</span>
-geopmaccess
-
-<span class="c1"># LIST DEFAULT CONTROL ACCESS LIST</span>
-geopmaccess -c
-
-<span class="c1"># LIST SIGNAL ACCESS FOR A UNIX GROUP: &quot;power&quot;</span>
-geopmaccess -g power
-
-<span class="c1"># LIST CONTROL ACCESS FOR A UNIX GROUP: &quot;power&quot;</span>
-geopmaccess -c -g power
-</pre></div>
-</div>
+<p>This documentation covers some of the aspects of the GEOPM Service
+that are important to system administrators.  These include how the
+GEOPM Service is integrated with the Linux OS, which directories are
+created and modified by the GEOPM Service, how the files in those
+directories are used, and a command line tool to configure the GEOPM
+Service.  Additional information is available on other pages:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="install.html">Install Guide</a></p></li>
+<li><p><a class="reference external" href="security.html">Security Guide</a></p></li>
+</ul>
+<section id="linux-integration">
+<h2>Linux Integration<a class="headerlink" href="#linux-integration" title="Permalink to this headline"></a></h2>
+<p>The GEOPM service integrates with the Linux OS through Systemd as a
+unit that is installed with the geopm-service RPM.  The <code class="docutils literal notranslate"><span class="pre">sytemctl</span></code>
+command can be used to interact with the <code class="docutils literal notranslate"><span class="pre">geopm</span></code> Systemd Unit.</p>
 </section>
-<section id="enabling-user-access">
-<h2>Enabling User Access<a class="headerlink" href="#enabling-user-access" title="Permalink to this headline"></a></h2>
-<p>This example configures the GEOPM Service to enable any user to read
-and write to bits 8-15 of the MSR_PERF_CTL register which controls the
-maximum frequency of the core.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME OF CONTROL</span>
-<span class="nv">CONTROL</span><span class="o">=</span>MSR::PERF_CTL:FREQ
-
-<span class="c1"># CREATE TEMPORARY FILES</span>
-<span class="nv">ACCESS_SIGNALS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
-<span class="nv">ACCESS_CONTROLS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
-
-<span class="c1"># SAVE INITIAL ACCESS SETTINGS</span>
-geopmaccess &gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-geopmaccess -c &gt; <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
-
-<span class="c1"># ADD THE CONTROL INTO ACCESS LIST FOR READING AND WRITING</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">CONTROL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
-geopmaccess -w &lt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-geopmaccess -w -c &lt; <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
-
-<span class="c1"># CLEAN UP TEMPORARY FILES</span>
-rm <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span> <span class="si">${</span><span class="nv">ACCESS_CONTROLS</span><span class="si">}</span>
-</pre></div>
-</div>
+<section id="geopm-service-files">
+<h2>GEOPM Service Files<a class="headerlink" href="#geopm-service-files" title="Permalink to this headline"></a></h2>
+<p>In addition to the files installed and maintained by the installation
+packages, the GEOPM service may create and modify files at runtime.
+These include files in <code class="docutils literal notranslate"><span class="pre">/etc/geopm-service</span></code> that control access
+settings and files in <code class="docutils literal notranslate"><span class="pre">/run/geopm-service</span></code> that track information
+about clients that are actively using the service.</p>
 </section>
-<section id="enabling-group-access">
-<h2>Enabling Group Access<a class="headerlink" href="#enabling-group-access" title="Permalink to this headline"></a></h2>
-<p>As an administrator you may want to enable access to a signal or
-control for a subset of your users.  This can be accomplished by
-creating a Unix user group containing the users that should be
-provided this privilege.  This mechanism may also be used to extend
-permissions for one particular user if the user-name-specific group is
-provided.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME OF SIGNAL</span>
-<span class="nv">SIGNAL</span><span class="o">=</span>INSTRUCTIONS_RETIRED
-
-<span class="c1"># NAME OF UNIX GROUP</span>
-<span class="nv">GROUP_NAME</span><span class="o">=</span>perf
-
-<span class="c1"># CREATE A TEMPORARY FILE</span>
-<span class="nv">ACCESS_SIGNALS</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="k">)</span>
-
-<span class="c1"># SAVE INITIAL ACCESS SETTINGS</span>
-geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> &gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-
-<span class="c1"># ADD THE SIGNAL INTO ACCESS LIST FOR READING</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">SIGNAL</span><span class="si">}</span> &gt;&gt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> -w &lt; <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-
-<span class="c1"># CLEAN UP TEMPORARY FILE</span>
-rm <span class="si">${</span><span class="nv">ACCESS_SIGNALS</span><span class="si">}</span>
-</pre></div>
-</div>
-<p>Another example of using group permissions is to create a Unix group
-called &quot;geopm&quot; that is granted access to all signals and controls that
-are enabled on the system.  Users that should be granted full use of
-the service can then be added to the geopm Unix group.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NAME OF UNIX GROUP</span>
-<span class="nv">GROUP_NAME</span><span class="o">=</span>geopm
-
-<span class="c1"># CREATE &quot;geopm&quot; GROUP</span>
-groupadd <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span>
-
-<span class="c1"># ENABLE GROUP TO READ ALL AVAILABLE SIGNALS</span>
-geopmaccess -a <span class="p">|</span> geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> -w
-
-<span class="c1"># ENABLE GROUP TO WRITE ALL AVAILABLE CONTROLS</span>
-geopmaccess -a -c <span class="p">|</span> geopmaccess -g <span class="si">${</span><span class="nv">GROUP_NAME</span><span class="si">}</span> -w -c
-</pre></div>
-</div>
+<section id="configuring-access-lists">
+<h2>Configuring Access Lists<a class="headerlink" href="#configuring-access-lists" title="Permalink to this headline"></a></h2>
+<p>The <a class="reference external" href="geopmaccess.1.html">geopmaccess(1)</a> command line tool is used
+by a system administrator to manage access to the features provided by
+the GEOPM Service.  The GEOPM Service does not allow read or write
+access for any non-root user until the system administrator explicitly
+configures the service using the <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> command line tool.
+This command line interface allows the administrator to set access
+permissions for all users, and may extend these default privileges for
+specific Unix groups.</p>
 </section>
 </section>
 

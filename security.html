@@ -200,7 +200,7 @@ configuration settings to disk prior to enabling a user session to
 write. When the user's write session terminates, all configuration
 settings are restored to their previous value. The storage location
 for the saved state is in the directory
-<code class="docutils literal notranslate"><span class="pre">/var/run/geopm-service/SAVE_FILES</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">/run/geopm-service/SAVE_FILES</span></code>.</p>
 <p>Note that all configuration settings are restored regardless of
 whether or not they were adjusted during the session through the
 service.</p>
@@ -262,9 +262,8 @@ this interface may enable the creation of a batch server. The access
 rights of this batch server are verified prior to its creation, and
 the user may then interact with this batch server through faster
 mechanisms than DBus provides. In particular, the user interfaces with
-the batch server over inter-process shared memory through the
-<code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code> device, and sends commands through FIFO special files in
-<code class="docutils literal notranslate"><span class="pre">/tmp</span></code>.</p>
+the batch server over inter-process shared memory and FIFO special files,
+both of which are created in <code class="docutils literal notranslate"><span class="pre">/run/geopm-service</span></code>.</p>
 <p>The DBus interface provides a layer of security that is leveraged
 throughout Linux services to verify the user identity of requests made
 to daemon processes. The GEOPM Service relies on the systemd DBus
@@ -359,7 +358,7 @@ achievable.</p>
 <section id="levelzero-sysman-library-interface">
 <h3>LevelZero sysman library interface<a class="headerlink" href="#levelzero-sysman-library-interface" title="Permalink to this headline"></a></h3>
 <p>The LevelZero sysman library interface enables users to monitor and
-control Intel accelerator devices. These signals and controls include
+control Intel GPU devices. These signals and controls include
 setting bounds on GPU operating frequency and reading performance
 counters from GPU devices. Access to the LevelZero sysman interface is
 restricted because it provides ability to modify the performance of
@@ -394,7 +393,7 @@ the security requirements of the GEOPM Service.</p>
 store control settings for reset is stored in system files. The files
 controlling access permissions are located in the
 <code class="docutils literal notranslate"><span class="pre">/etc/geopm-service</span></code> directory. The state required to support active
-user sessions is stored in <code class="docutils literal notranslate"><span class="pre">/var/run/geopm-service</span></code>. Protecting
+user sessions is stored in <code class="docutils literal notranslate"><span class="pre">/run/geopm-service</span></code>. Protecting
 these files is paramount to the integrity of the GEOPM Service
 security model.  In general these files have root access permissions
 only, and are modified by calling into GEOPM Service interfaces, or by
@@ -512,7 +511,7 @@ defined in the source code.</p>
 <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/geopmdpy/system_files.py">system_files.py</a>.
 The functions that match the pattern system_files.secure_*() are the
 only interfaces called by the GEOPM Service to access files located in
-<code class="docutils literal notranslate"><span class="pre">/etc</span></code> and <code class="docutils literal notranslate"><span class="pre">/var/run</span></code>. These secure functions are used to make
+<code class="docutils literal notranslate"><span class="pre">/etc</span></code> and <code class="docutils literal notranslate"><span class="pre">/run</span></code>. These secure functions are used to make
 directories and any input or output to these system files.</p>
 <p>When making directories, if the path already exists checks are
 performed to ensure: the path is a regular directory, the path is not
@@ -526,7 +525,7 @@ not already exist, a new directory is created with the proper
 permissions.</p>
 <p>By default, directories are created with 0o700 permissions (i.e. rwx
 only for the owner). Some directories, for example
-<code class="docutils literal notranslate"><span class="pre">/var/run/geopm-service</span></code>, also require execution permissions (i.e.
+<code class="docutils literal notranslate"><span class="pre">/run/geopm-service</span></code>, also require execution permissions (i.e.
 0o711). For more details on how directories are created and default
 permissions, please see the <a class="reference external" href="http://geopm.github.io/geopmdpy.7.html#module-geopmdpy.system_files">system_files.py</a>
 documentation</p>

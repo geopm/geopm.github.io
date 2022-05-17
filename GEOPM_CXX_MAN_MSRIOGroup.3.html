@@ -47,16 +47,15 @@
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) -- global extensible open power manager</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) -- Access management for the geopm service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) -- Access management for the GEOPM Service</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) -- tool for geopm system administrators</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) -- query agent information and create static policies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) -- synthetic benchmark application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) -- geopm runtime control application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) -- command line tool for dynamic policy control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) -- application launch wrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geopmplotter.1.html">geopmplotter(1) -- visualize reports and traces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) -- query platform information</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) -- Command line interface for the geopm service read/write features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) -- Command line interface for the geopm service batch read features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) -- modify platform state</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) -- global extensible open power manager python daemon package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) -- global extensible open power manager python package</a></li>
@@ -361,8 +360,82 @@ in hex to the Model in hex.</p></li>
 colon-separated list of paths, the paths will be checked for files
 starting with &quot;<a href="#id7"><span class="problematic" id="id8">msr_</span></a>&quot; and ending in &quot;.json&quot;.  The default plugin path
 will also be searched.  The MSRIOGroup will attempt to load additional
-MSR definitions from any JSON file it finds.  Refer to the
-documentation for <code class="docutils literal notranslate"><span class="pre">--geopm-plugin-path</span></code> in <a class="reference external" href="geopmlaunch.1.html">geopmlaunch(1)</a>.</p>
+MSR definitions from any JSON file it finds. The files must follow this
+schema:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;definitions&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;msrFields&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;end_bit&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="s2">&quot;log_half&quot;</span><span class="p">,</span> <span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span> <span class="s2">&quot;overflow&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;units&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">,</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span> <span class="s2">&quot;watts&quot;</span><span class="p">,</span> <span class="s2">&quot;joules&quot;</span><span class="p">,</span> <span class="s2">&quot;celsius&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;scalar&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;behavior&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;monotone&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;writeable&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;aggregation&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;logical_and&quot;</span><span class="p">,</span> <span class="s2">&quot;logical_or&quot;</span><span class="p">,</span> <span class="s2">&quot;region_hash&quot;</span><span class="p">,</span> <span class="s2">&quot;region_hint&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;stddev&quot;</span><span class="p">,</span> <span class="s2">&quot;select_first&quot;</span><span class="p">,</span> <span class="s2">&quot;expect_same&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span> <span class="s2">&quot;end_bit&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;scalar&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="s2">&quot;writeable&quot;</span><span class="p">,</span> <span class="s2">&quot;behavior&quot;</span><span class="p">],</span>
+        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;msrObject&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;offest&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;domain&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;core&quot;</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="s2">&quot;board_memory&quot;</span><span class="p">,</span> <span class="s2">&quot;package_memory&quot;</span><span class="p">,</span> <span class="s2">&quot;board_nic&quot;</span><span class="p">,</span> <span class="s2">&quot;package_nic&quot;</span><span class="p">,</span> <span class="s2">&quot;board_accelerator&quot;</span><span class="p">,</span> <span class="s2">&quot;package_accelerator&quot;</span><span class="p">,</span> <span class="s2">&quot;board_accelerator_chip&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/msrFields&quot;</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">],</span>
+        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+      <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;msrs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/msrObject&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Refer to the documentation for <code class="docutils literal notranslate"><span class="pre">--geopm-plugin-path</span></code> in
+<a class="reference external" href="geopmlaunch.1.html">geopmlaunch(1)</a>.</p>
 </section>
 <section id="see-also">
 <h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
