@@ -1,8 +1,5 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
 
-
-geopm::Agent(3) -- geopm agent plugin interface
+geopm::Agent(3) -- GEOPM agent plugin interface
 ===============================================
 
 
@@ -10,7 +7,7 @@ geopm::Agent(3) -- geopm agent plugin interface
 
 
 
-NAMESPACES
+Namespaces
 ----------
 
 The ``Agent`` class and the ``agent_factory()`` function are members of
@@ -21,10 +18,10 @@ interface definitions for the following standard types: ``std::vector``\ ,
 ``std::pair``\ , ``std::string``\ , ``std::map``\ , and ``std::function``\ , to enable
 better rendering of this manual.
 
-SYNOPSIS
+Synopsis
 --------
 
-#include `<geopm/Agent.hpp> <https://github.com/geopm/geopm/blob/dev/src/Agent.hpp>`_\ 
+#include `<geopm/Agent.hpp> <https://github.com/geopm/geopm/blob/dev/src/Agent.hpp>`_
 
 Link with ``-lgeopm``
 
@@ -92,19 +89,19 @@ Link with ``-lgeopm``
                                            const vector<function<double(const vector<double>&)> > &agg_func,
                                            vector<double> &out_sample);
 
-DESCRIPTION
+Description
 -----------
 
 The ``Agent`` class is an abstract pure virtual class that defines the
 fundamental procedures executed by the GEOPM runtime.  In general, the
 Agent is responsible for making decisions about how and what control the
 runtime should exert based on readings of system values.  By default
-the `geopm_agent_monitor(7) <geopm_agent_monitor.7.html>`_ is used, but other agents can be
+the :doc:`geopm_agent_monitor(7) <geopm_agent_monitor.7>` is used, but other agents can be
 selected with the ``--geopm-agent`` command line option to the
-`geopm_launcher(1) <geopm_launcher.1.html>`_ or ``GEOPM_AGENT`` environment variable.  Exactly
+:doc:`geopmlaunch(1) <geopmlaunch.1>` or ``GEOPM_AGENT`` environment variable.  Exactly
 one agent type is used during each execution of the GEOPM runtime.
 
-The `geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3.html>`_ man page gives a general overview of
+The :doc:`geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3>` man page gives a general overview of
 concepts related to extending GEOPM through plugins.  Please refer to
 that overview as an introduction before implementing an ``Agent`` plugin.
 
@@ -139,14 +136,14 @@ tree uses the same policy/sample interface to interact with the
 resource manager.
 
 The ``Agent`` class is designed to read signals and write controls for
-the hardware and application using the `geopm::PlatformIO(3) <GEOPM_CXX_MAN_PlatformIO.3.html>`_
+the hardware and application using the :doc:`geopm::PlatformIO(3) <GEOPM_CXX_MAN_PlatformIO.3>`
 interface.  Please see the manual for details about how the
 ``PlatformIO`` abstraction enables access to hardware capabilities,
 extension of ``Agent`` algorithms to new hardware architectures, a
 mapping of application behavior to hardware domains, and code reuse of
 I/O implementations by different ``Agent`` classes.
 
-FACTORY ACCESSOR
+Factory Accessor
 ----------------
 
 
@@ -154,9 +151,9 @@ FACTORY ACCESSOR
   This method returns the singleton accessor for the Agent factory.
   Calling this method will create the factory if it does not already exist.
   If this method is creating the factory, loading of the built-in Agents
-  will be attempted.  For more information see `geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3.html>`_.
+  will be attempted.  For more information see :doc:`geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3>`.
 
-CLASS METHODS
+Class Methods
 -------------
 
 
@@ -169,8 +166,8 @@ CLASS METHODS
   between ``self`` and any leaf ``Agent``.  Only when *level* is zero
   will the ``sample_platform()`` and ``adjust_platform()`` methods be
   called.  If the *level* is zero then the ``init()`` method should
-  push all signals and controls for `PlatformIO(3) <GEOPM_CXX_MAN_PlatformIO.3.html>`_.  The *fan_in**
-  is a vector indexed by *level* that describes the number of
+  push all signals and controls for :doc:`PlatformIO(3) <GEOPM_CXX_MAN_PlatformIO.3>`.
+  The *fan_in* is a vector indexed by *level* that describes the number of
   siblings that an ``Agent`` at *level* has which share a parent.  The
   figure below represents a tree with ``fan_in == {4,3,2}`` where each
   ``Agent`` is signified by a digit that is equal to the *level*.  Note
@@ -193,27 +190,27 @@ CLASS METHODS
        (0)(0|0)(0)(0)(0|0)(0)(0)(0|0)(0) (0)(0|0)(0)(0)(0|0)(0)(0)(0|0)(0)
 
 
-* 
+*
   ``validate_policy()``:
   Called by user of Agent class  to validate incoming policy values and
   replace NaNs with defaults.  If a value of *policy* is not NaN but the
   value is not supported by the Agent the method will throw a ``geopm::Exception``
   with error code ``GEOPM_ERROR_INVALID``.
 
-* 
+*
   ``split_policy()``:
   Split policy for children at next level down the tree.  The
   *in_policy* is an input vector of policy values from the parent.
   The *out_policy* is an output vector of policies to be sent to
   each child.
 
-* 
+*
   ``do_send_policy()``:
   Used to indicate to the Controller whether to send the output
   from ``split_policy()`` down the tree to the Agent's children.
   Returns true if the policy has been updated since the last call.
 
-* 
+*
   ``aggregate_sample()``:
   Aggregate samples from children for the next level up the tree.
   The *in_sample* parameter is a vector of sample vectors, one
@@ -222,25 +219,25 @@ CLASS METHODS
   same index in the output.  The *out_sample* is an output vector
   of aggregated sample values to be sent up to the parent.
 
-* 
+*
   ``do_send_sample()``:
   Used to indicate to the Controller whether to send the output from
   ``aggregate_sample()`` up the tree to the Agent's parent.  Returns
   true if any samples have been updated since the last call.
 
-* 
+*
   ``adjust_platform()``:
   Adjust the platform settings based on the policy from above.
   Settings for each control are in the *in_policy*.
 
-* 
+*
   ``do_write_batch()``:
   Used to indicate to the Controller whether to call
   ``PlatformIO::write_batch()`` to enact new control values on the
   platform.  Returns true if any control values have been updated
   since the last call.
 
-* 
+*
   ``sample_platform()``:
   Read signals from the platform and interpret/aggregate these
   signals to create a sample which can be sent up the tree.  The
@@ -248,12 +245,12 @@ CLASS METHODS
   values to be sent up the tree. Returns true if the sample has been
   updated since the last call.
 
-* 
+*
   ``wait()``:
   Called to wait for the sample period to elapse. This controls the
   cadence of the Controller main loop.
 
-* 
+*
   ``report_header()``:
   Custom fields that will be added to the report header when this
   agent is used.  To be consistent with the rest of the header, the
@@ -262,7 +259,7 @@ CLASS METHODS
   keys that conflict with default header keys, like names that start
   with ``"Start Time"``, ``"Profile"``, ``"Agent"`` or ``"Policy"``.
 
-* 
+*
   ``report_host()``:
   Custom fields for the Host section of the report.  To be
   consistent with the rest of this section, the keys should have
@@ -271,7 +268,7 @@ CLASS METHODS
   add keys that conflict with default host keys, like names that
   start with ``"Region"``, ``"Epoch Totals"`` or ``"Application Totals"``.
 
-* 
+*
   ``report_region()``:
   Custom fields for each region in the report.  To be consistent
   with the rest of the region report, the string keys that will
@@ -283,27 +280,27 @@ CLASS METHODS
   that start with ``"runtime"``, ``"sync-runtime"``, ``"package-energy"``,
   ``"dram-energy"``, ``"power"``, ``"frequency"``, ``"network-time"``, or ``"count"``.
 
-* 
+*
   ``trace_names()``:
   Column headers to be added to the trace.  These will be
   automatically converted to lower case.  The header names must
   not contain the pipe character ``'|'`` or whitespace.
 
-* 
+*
   ``trace_formats()``:
   Returns format string for each column added to the trace
 
-* 
+*
   ``trace_values()``:
   Called by Controller to get latest values to be added to the trace.
 
-* 
+*
   ``enforce_policy()``:
   Enforce the policy one time with
   ``PlatformIO::write_control()``.  Called to enforce
   static policies in the absence of a Controller.
 
-* 
+*
   ``num_policy()``:
   Used to look up the number of values in the policy vector sent
   down the tree for a specific type of ``Agent``. This should be
@@ -313,7 +310,7 @@ CLASS METHODS
   Also has an overloaded version which takes the *agent_name*.
   Note this is a static helper function.
 
-* 
+*
   ``num_sample()``:
   Used to look up the number of values in the sample vector sent up
   the tree for a specific type of ``Agent``. This should be called
@@ -323,7 +320,7 @@ CLASS METHODS
   Also has an overloaded version which takes the *agent_name*.
   Note this is a static helper function.
 
-* 
+*
   ``policy_names()``:
   Used to look up the names of values in the policy vector sent down
   the tree for a specific type of ``Agent``. This should be called
@@ -333,7 +330,7 @@ CLASS METHODS
   Also has an overloaded version which takes the *agent_name*.
   Note this is a static helper function.
 
-* 
+*
   ``sample_names()``:
   Used to look up the names of values in the sample vector sent up
   the tree for a specific of ``Agent``. This should be called with the
@@ -343,7 +340,7 @@ CLASS METHODS
   Also has an overloaded version which takes the *agent_name*.
   Note this is a static helper function.
 
-* 
+*
   ``make_dictionary()``:
   Used to create a correctly formatted dictionary for an ``Agent`` at
   the time the ``Agent`` is registered with the factory. Concrete
@@ -351,7 +348,7 @@ CLASS METHODS
   methods to provide the vectors to be passed to this method.  Note
   this is a static helper function.
 
-* 
+*
   ``aggregate_sample()``:
   Generically aggregate a vector of samples given a vector of
   aggregation functions. This helper method applies a different
@@ -363,19 +360,19 @@ CLASS METHODS
   output sample vector resulting from the applying the aggregation
   across child samples.  Note this is a static helper function.
 
-ERRORS
+Errors
 ------
 
-All functions described on this man page throw `geopm::Exception(3) <GEOPM_CXX_MAN_Exception.3.html>`_
+All functions described on this man page throw :doc:`geopm::Exception(3) <GEOPM_CXX_MAN_Exception.3>`
 on error.
 
-EXAMPLE
+Example
 -------
 
 Please see the `Agent tutorial <https://github.com/geopm/geopm/tree/dev/tutorial/agent>`_ for more
 information.  This code is located in the GEOPM source under tutorial/agent.
 
-SEE ALSO
+See Also
 --------
 
-`geopm(7) <geopm.7.html>`_
+:doc:`geopm(7) <geopm.7>`

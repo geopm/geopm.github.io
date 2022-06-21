@@ -1,16 +1,9 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
-
 
 geopm::PluginFactory(3) -- abstract factory for plugins
 =======================================================
 
 
-
-
-
-
-NAMESPACES
+Namespaces
 ----------
 
 The ``PluginFactory`` class template is a member of the ``namespace geopm``\ , but
@@ -20,10 +13,10 @@ interface definitions for the following standard types: ``std::vector``\ ,
 ``std::string``\ , ``std::set``\ , and ``std::function``\ , to enable better rendering of
 this manual.
 
-SYNOPSIS
+Synopsis
 --------
 
-#include `<geopm/PluginFactory.hpp> <https://github.com/geopm/geopm/blob/dev/src/PluginFactory.hpp>`_\ 
+#include `<geopm/PluginFactory.hpp> <https://github.com/geopm/geopm/blob/dev/service/src/geopm/PluginFactory.hpp>`_
 
 Link with ``-lgeopm`` **(MPI)** or ``-lgeopmpolicy`` **(non-MPI)**
 
@@ -40,12 +33,12 @@ Link with ``-lgeopm`` **(MPI)** or ``-lgeopmpolicy`` **(non-MPI)**
 
        const map<string, string>& PluginFactory<T>::dictionary(const string &plugin_name) const;
 
-DESCRIPTION
+Description
 -----------
 
 GEOPM can be extended though ``Agent``\ , ``IOGroup``\ , and ``Comm`` plugins.
 This man page describes the steps for adding a plugin.  Refer to
-`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3.html>`_\ , and `geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3.html>`_ for
+:doc:`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3>`\ , and :doc:`geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3>` for
 more details about these interfaces.  Any **C++** class that derives from
 one of these plugin base classes and is compiled into a shared object
 file can be loaded at application launch time through the GEOPM plugin
@@ -72,7 +65,7 @@ the `IOGroup tutorial <https://github.com/geopm/geopm/tree/dev/tutorial/iogroup>
 This code is located in the GEOPM source under ``tutorial/agent`` and
 ``tutorial/iogroup`` respectively.
 
-TERMS
+Terms
 -----
 
 Below are some definitions of terms that are used to describe
@@ -82,71 +75,71 @@ runtime.  These are arranged from from highest levels of abstraction
 down to the lowest levels of abstraction.
 
 
-* 
+*
   **launcher**\ :
   Wrapper of system application launch (e.g. ``srun`` or ``aprun``) that
   executes the GEOPM runtime with the application.
 
-* 
+*
   **report**\ :
   Text file containing summary of aggregated stats collected during
   application run.
 
-* 
+*
   **trace**\ :
   Time series of signals collected over application run in a pipe
   separated ASCII table.
 
-* 
+*
   **agent**\ :
   Implementation used by GEOPM to interpret sampled data and
   enforce the appropriate controls.
 
-* 
+*
   **policy**\ :
   Array of floating-point settings for ``Agent``\ -specific control
   parameters in SI units.
 
-* 
+*
   **sample**\ :
   Array of floating-point values providing ``Agent``\ -specific runtime
   statistics in SI units.
 
-* 
+*
   **endpoint**\ :
   Interface between resource manager and GEOPM runtime.  This feature
   is still under development and is only available when GEOPM is compiled
   with the ``--enable-beta`` flag.
 
-* 
+*
   **profile**\ :
   Interface for annotating compute application; provides ``PlatformIO``
   region signals.
 
-* 
+*
   **controller**\ :
   Thread on each compute node that loads plugins and runs GEOPM
   algorithm.
 
-* 
+*
   **level**\ :
   Attribute of an ``Agent`` describing the number of edges between it
   and the nearest leaf ``Agent`` in the communication tree (a leaf
   ``Agent`` is *level* zero).
 
-* 
+*
   **signal**\ :
   Named parameter in SI units that can be measured using ``PlatformIO``.
 
-* 
+*
   **control**\ :
   Named parameter in SI units that can be set using ``PlatformIO``.
 
-FACTORY CLASS METHODS
+Factory Class Methods
 ---------------------
 
 
-* 
+*
   ``register_plugin()``: Add a plugin to this factory.  The
   *plugin_name* parameter will be used to request plugins of the
   registered type.  The *make_plugin* parameter is a function that
@@ -154,27 +147,27 @@ FACTORY CLASS METHODS
   an optional string-to-string dictionary containing static
   information about the registered type.
 
-* 
+*
   ``make_plugin()``: Creates an object of the registered type.  If the type
   was not previously registered, an exception will be thrown.  The
   *plugin_name* parameter will be used to look up the constructor function
   used to create the object. Returns a ``unique_ptr`` to the created object.
   The caller owns the created object.
 
-* 
+*
   ``plugin_names()``: Returns a list of all valid plugin names that have been
   registered with this factory.
 
-* 
+*
   ``dictionary()``: Returns an optional dictionary of static metadata about
   a registered type.  If the type was not registered, an exception is thrown.
   The *plugin_name* parameter is used to look up the desired dictionary.
 
-BUILDING A PLUGIN SHARED OBJECT
+Building A Plugin Shared Object
 -------------------------------
 
 A GEOPM plugin is a shared object file that is loaded at runtime by
-the *controller* through the `dlopen(3) <http://man7.org/linux/man-pages/man3/dlopen.3.html>`_ interface.  Each file
+the *controller* through the `dlopen(3) <https://man7.org/linux/man-pages/man3/dlopen.3.html>`_ interface.  Each file
 provides a new implementation for one of the three extensible classes:
 ``IOGroup``\ , ``Agent``\ , and ``Comm``.  Each implementation is identified by
 a unique name string referred to as the *plugin_name*.  An exception
@@ -197,12 +190,12 @@ this will cause a circular link dependency.  Compile the shared object
 with flags appropriate for a dynamically loaded library, e.g. for
 ``g++`` and ``icpc`` you must provide the ``-fPIC`` and ``-shared`` options.
 
-PLUGIN SEARCH PATH AND LOAD ORDER
+Plugin Search Path And Load Order
 ---------------------------------
 
 The ``GEOPM_PLUGIN_PATH`` is a colon-separated list of directories
 that contain plugin shared object files to be loaded by the GEOPM
-runtime.  See `geopm(7) <geopm.7.html>`_ for details about ``GEOPM_PLUGIN_PATH``.
+runtime.  See :doc:`geopm(7) <geopm.7>` for details about ``GEOPM_PLUGIN_PATH``.
 Note that an Exception will be thrown by the ``register_plugin()``
 method if an attempt is made to register a plugin with the same name
 as a previously registered plugin.
@@ -229,17 +222,17 @@ detailed example of plugin load order can be found in
        export GEOPM_PLUGIN_PATH=$GEOPM_HOME/tutorial/iogroup
        export GEOPM_PLUGIN_PATH=$HOME/plugin/iogroup:$GEOPM_PLUGIN_PATH
 
-PLUGIN LOAD CONSTRUCTOR FUNCTION
+Plugin Load Constructor Function
 --------------------------------
 
 The shared object file must provide a function that is decorated with
 the ``constructor`` compiler directive.  The ``__attribute__((constructor))``
 enables the registration of plugins when the shared object is loaded
-by a call to `dlopen(3) <http://man7.org/linux/man-pages/man3/dlopen.3.html>`_.
+by a call to `dlopen(3) <https://man7.org/linux/man-pages/man3/dlopen.3.html>`_.
 Please see the ``gcc`` documentation for the
 `constructor attribute <https://gcc.gnu.org/onlinedocs/gcc-4.3.0/gcc/Function-Attributes.html>`_.
 
-PLUGIN CLASS STATIC METHODS
+Plugin Class Static Methods
 ---------------------------
 
 It is recommended that each class deriving from one of the GEOPM
@@ -338,10 +331,10 @@ information.  This code is located in the GEOPM source under ``tutorial/agent``.
            return "example";
        }
 
-SEE ALSO
+See Also
 --------
 
-`geopm(7) <geopm.7.html>`_\ ,
-`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3.html>`_\ ,
-`geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3.html>`_\ ,
-`dlopen(3) <http://man7.org/linux/man-pages/man3/dlopen.3.html>`_
+:doc:`geopm(7) <geopm.7>`\ ,
+:doc:`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3>`\ ,
+:doc:`geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3>`\ ,
+`dlopen(3) <https://man7.org/linux/man-pages/man3/dlopen.3.html>`_

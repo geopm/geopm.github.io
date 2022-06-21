@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopm_pio(3) -- interfaces to query and modify platform &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopm_policystore(3) -- GEOPM resource policy store interface" href="geopm_policystore.3.html" />
+    <link rel="prev" title="geopm_imbalancer(3) -- set artificial runtime imbalance" href="geopm_imbalancer.3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> GEOPM
+            <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) -- Global Extensible Open Power Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.7.html">geopm_pio(7) -- GEOPM PlatformIO interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cnl.7.html">geopm_pio_cnl(7) -- Signals and controls for Compute Node Linux Board-Level Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cpuinfo.7.html">geopm_pio_cpuinfo(7) -- Signals and controls for the CPUInfoIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_dcgm.7.html">geopm_pio_dcgm(7) -- IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_levelzero.7.html">geopm_pio_levelzero(7) -- IOGroup providing signals and controls for Intel GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_msr.7.html">geopm_pio_msr(7) -- Signals and controls for Model Specific Registers (MSRs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_nvml.7.html">geopm_pio_nvml(7) -- IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_profile.7.html">geopm_pio_profile(7) -- Signals and controls for the ProfileIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_service.7.html">geopm_pio_service(7) -- Signals and controls for the ServiceIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sst.7.html">geopm_pio_sst(7) -- Signals and controls for Intel Speed Select Technology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_time.7.html">geopm_pio_time(7) -- Signals and controls for Time IO Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) -- Access management for the GEOPM Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) -- tool for GEOPM system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) -- query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) -- synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) -- GEOPM runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) -- command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) -- application launch wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) -- query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) -- Command line interface for the GEOPM service batch read features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) -- modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) -- global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) -- global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent.3.html">geopm_agent(3) -- query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl.3.html">geopm_ctl(3) -- GEOPM runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon.3.html">geopm_daemon(3) -- helpers for GEOPM daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint.3.html">geopm_endpoint(3) -- dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) -- error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) -- GEOPM fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash(3) -- helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer(3) -- set artificial runtime imbalance</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopm_pio(3) -- interfaces to query and modify platform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inspection-functions">Inspection Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#serial-functions">Serial Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#batch-functions">Batch Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-value">Return Value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore.3.html">geopm_policystore(3) -- GEOPM resource policy store interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_prof.3.html">geopm_prof(3) -- application profiling interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched(3) -- interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time(3) -- helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo.3.html">geopm_topo(3) -- query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) -- GEOPM library version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent(3) -- GEOPM agent plugin interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3) -- data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CNLIOGroup.3.html">geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CircularBuffer.3.html">geopm::CircularBuffer(3) -- generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Comm.3.html">geopm::Comm(3) -- communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) -- IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Daemon.3.html">geopm::Daemon(3) -- GEOPM daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Endpoint.3.html">geopm::Endpoint(3) -- GEOPM endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html">geopm::Exception(3) -- custom GEOPM exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Helper.3.html">geopm::Helper -- common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html">geopm::IOGroup(3) -- provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MPIComm.3.html">geopm::MPIComm(3) -- implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html">geopm::MSRIO(3) -- methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MSRIOGroup.3.html">geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_MonitorAgent.3.html">geopm::MonitorAgent -- agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html">geopm::PlatformIO(3) -- GEOPM platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html">geopm::PlatformTopo(3) -- platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html">geopm::PluginFactory(3) -- abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancer.3.html">geopm::PowerBalancer(3) -- balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) -- agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernor.3.html">geopm::PowerGovernor(3) -- enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_PowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) -- agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_ProfileIOGroup.3.html">geopm::ProfileIOGroup(3) -- IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SampleAggregator.3.html">geopm::SampleAggregator(3) -- per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory(3) -- abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- GEOPM summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) -- agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#doxygen-pages">Doxygen Pages</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="reference.html">Reference Manual</a> &raquo;</li>
+      <li>geopm_pio(3) -- interfaces to query and modify platform</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geopm_pio.3.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopm-pio-3-interfaces-to-query-and-modify-platform">
+<h1>geopm_pio(3) -- interfaces to query and modify platform<a class="headerlink" href="#geopm-pio-3-interfaces-to-query-and-modify-platform" title="Permalink to this headline"></a></h1>
+<section id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm_pio.h">&lt;geopm_pio.h&gt;</a></p>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(MPI)</strong> or <code class="docutils literal notranslate"><span class="pre">-lgeopmpolicy</span></code> <strong>(non-MPI)</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_num_signal_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_signal_name</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">name_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">size_t</span><span class="w"> </span><span class="n">result_max</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_num_control_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_control_name</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">name_index</span><span class="p">,</span><span class="w"></span>
+<span class="w">                           </span><span class="kt">size_t</span><span class="w"> </span><span class="n">result_max</span><span class="p">,</span><span class="w"></span>
+<span class="w">                           </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_signal_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">size_t</span><span class="w"> </span><span class="n">description_max</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">description</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_control_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">description_max</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">description</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_signal_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">signal_name</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_control_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">control_name</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_read_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_write_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_save_control</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_restore_control</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_save_control_dir</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_restore_control_dir</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">save_dir</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_push_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_push_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                           </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                           </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_sample</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_adjust</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">control_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_read_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_write_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_signal_info</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">aggregation_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">format_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                          </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">behavior_type</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_start_batch_server</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">client_pid</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">num_signal</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_request_s</span><span class="w"> </span><span class="o">*</span><span class="n">signal_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">num_control</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_request_s</span><span class="w"> </span><span class="o">*</span><span class="n">control_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">server_pid</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">key_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">server_key</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_stop_batch_server</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">server_pid</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_format_signal</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">signal</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">int</span><span class="w"> </span><span class="n">format_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">size_t</span><span class="w"> </span><span class="n">result_max</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<p>The interfaces described in this man page are the <strong>C</strong> language bindings
+for the <a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a> <strong>C++</strong> class.  Please refer to the
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a> and <a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html"><span class="doc">geopm::PlatformTopo(3)</span></a> man pages for
+a general overview of the GEOPM platform interface layer.  The
+<a class="reference internal" href="geopm_topo.3.html"><span class="doc">geopm_topo(3)</span></a> man page describes the <strong>C</strong> wrappers for the
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html"><span class="doc">geopm::PlatformTopo(3)</span></a> <strong>C++</strong> class and documents the
+<code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> enum.  The caller selects from the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code>
+enum for the <em>domain_type</em> parameter to many functions in the
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_*()</span></code> interface.  The return value from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_domain_type()</span></code> and <code class="docutils literal notranslate"><span class="pre">geopm_pio_control_domain_type()</span></code>
+is also a value from the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> enum.</p>
+</section>
+<section id="inspection-functions">
+<h2>Inspection Functions<a class="headerlink" href="#inspection-functions" title="Permalink to this headline"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_num_signal_name()</span></code></dt><dd><p>Returns the number of signal names that can be indexed with the
+<em>name_idx</em> parameter to the <code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_name()</span></code> function.
+Any error in loading the platform will result in a negative error
+code describing the failure.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_name()</span></code></dt><dd><p>Sets the <em>result</em> string to the name of the signal indexed by
+<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the
+<em>result</em> string.  The value of <em>name_idx</em> must be greater than
+zero and less than the return value from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_num_signal_name()</span></code> or else an error will occur.
+Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be
+sufficient for storing any <em>result</em>.  If <em>result_max</em> is too small
+to contain the signal name an error will occur.  Zero is returned
+on success and a negative error code is returned if any error
+occurs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_num_control_name()</span></code></dt><dd><p>Returns the number of control names that can be indexed with the
+<em>name_idx</em> parameter to the <code class="docutils literal notranslate"><span class="pre">geopm_pio_control_name()</span></code> function.
+Any error in loading the platform will result in a negative error
+code describing the failure.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_control_name()</span></code></dt><dd><p>Sets the <em>result</em> string to the name of the control indexed by
+<em>name_idx</em>.  At most <em>result_max</em> bytes are written to the
+<em>result</em> string.  The value of <em>name_idx</em> must be greater than
+zero and less than the return value from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_num_control_name()</span></code> or else an error will occur.
+Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be
+sufficient for storing any <em>result</em>.  If <em>result_max</em> is too small
+to contain the control name an error will occur.  Zero is returned
+on success and a negative error code is returned if any error
+occurs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_description()</span></code></dt><dd><p>Sets the <em>description</em> string to the signal description associated with
+<em>signal_name</em>.  At most <em>description_max</em> bytes are written to the
+<em>description</em> string.  Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from
+<code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any description.  If
+<em>description_max</em> is too small to contain the description an error will
+occur.  Zero is returned on success and a negative error code is
+returned if any error occurs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_control_description()</span></code></dt><dd><p>Sets the <em>description</em> string to the control description associated with
+<em>control_name</em>.  At most <em>description_max</em> bytes are written to the
+<em>description</em> string.  Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from
+<code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any description.  If
+<em>description_max</em> is too small to contain the description an error will
+occur.  Zero is returned on success and a negative error code is
+returned if any error occurs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_domain_type()</span></code></dt><dd><p>Query the domain for the signal with name <em>signal_name</em>.  Returns
+one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values signifying the granularity at
+which the signal is measured.  Will return a negative error code
+if any error occurs, e.g. a request for a <em>signal_name</em> that
+is not supported by the platform.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_control_domain_type()</span></code></dt><dd><p>Query the domain for the control with the name <em>control_name</em>.
+Returns one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values signifying the
+granularity at which the control can be adjusted.  Will return a
+negative error code if any error occurs, e.g. a request for a
+<em>control_name</em> that is not supported by the platform.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_info()</span></code></dt><dd><p><strong>C</strong> interface to get enums associated with a signal name.
+This interface supports <strong>DBus</strong> <code class="docutils literal notranslate"><span class="pre">PlatformGetSignalInfo</span></code> method.  This <strong>C</strong>
+interface is implemented using several <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> methods unlike
+the other wrappers in this header.
+The parameters:
+<strong>in</strong> <em>signal_name</em>, name of signal to query.
+<strong>out</strong> <em>aggregation_type</em> One of the <code class="docutils literal notranslate"><span class="pre">Agg::m_type_e</span></code> enum values describing the way the signal is aggregated.
+<strong>out</strong> <em>format_type</em> One of the <code class="docutils literal notranslate"><span class="pre">geopm::string_format_e</span></code> enums defined in <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm/Helper.hpp">Helper.hpp</a> that defines how to format
+the signal as a string.
+<strong>out</strong> <em>behavior_type</em> One of the <code class="docutils literal notranslate"><span class="pre">IOGroup::m_signal_behavior_e</span></code> enum values that decribes
+the signals behavior over time.
+Returns zero on success, error value on failure.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_format_signal()</span></code></dt><dd><p>Format the <em>signal</em> according to the format type specified,
+and write the output into the <em>result</em> string.
+The parameters:
+<strong>in</strong> <em>signal</em> value to be formatted and written to the <em>result</em> string.
+<strong>in</strong> <em>format_type</em> One of the values in the <code class="docutils literal notranslate"><span class="pre">string_format_e</span></code> enum for specifying how to format the <em>signal</em> as a string.
+<strong>in</strong> <em>result_max</em> At most <em>result_max</em> bytes are written to the <em>result</em> string.
+If <em>result_max</em> is too small  to contain the written output string an error will occur.
+<strong>out</strong> <em>result</em> Sets the <em>result</em> string to the value of the signal formatted as specified by the <em>format_type</em>.
+Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any <em>result</em>.
+Returns zero on success, error value on failure.</p>
+</dd>
+</dl>
+</section>
+<section id="serial-functions">
+<h2>Serial Functions<a class="headerlink" href="#serial-functions" title="Permalink to this headline"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_read_signal()</span></code></dt><dd><p>Read from the platform and interpret into SI units a signal
+associated with <em>signal_name</em> and store the value in <em>result</em>.
+This value is read from the <code class="docutils literal notranslate"><span class="pre">geopm_topo_e</span></code> <em>domain_type</em> domain
+indexed by <em>domain_idx</em>.  If the signal is native to a domain
+contained within <em>domain_type</em>, the values from the contained
+domains are aggregated to form <em>result</em>.  Calling this function
+does not modify values stored by calling <code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code>.
+If an error occurs then negative error code is returned.  Zero is
+returned upon success.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_write_control()</span></code></dt><dd><p>Interpret the <em>setting</em> in SI units associated with <em>control_name</em>
+and write it to the platform.  This value is written to the
+<code class="docutils literal notranslate"><span class="pre">geopm_topo_e</span></code> <em>domain_type</em> domain indexed by <em>domain_idx</em>.  If
+the control is native to a domain contained within <em>domain_type</em>,
+then the <em>setting</em> is written to all contained domains.  Calling
+this function does not modify values stored by calling
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code>.  If an error occurs then negative error code
+is returned.  Zero is returned upon success.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_save_control()</span></code></dt><dd><p>Save the state of all controls so that any subsequent changes made
+through <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_control()</span></code> or <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>
+may be reverted with a call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_restore_control()</span></code>.  The
+control settings are stored in memory managed by GEOPM.  If an
+error occurs then negative error code is returned.  Zero is
+returned upon success.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_restore_control()</span></code></dt><dd><p>Restore the state recorded by the last call to
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_save_control()</span></code> so that all subsequent changes made
+through <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_control()</span></code> or <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>
+are reverted to their previous settings.  If an error occurs then
+negative error code is returned.  Zero is returned upon success.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_save_control_dir()</span></code></dt><dd><p>Save the state of all controls in the directory <em>save_dir</em> so that any subsequent changes made
+through <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_control()</span></code> or <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>
+may be reverted with a call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_restore_control()</span></code>.  The
+control settings are stored in memory managed by GEOPM.  If an
+error occurs then negative error code is returned.  Zero is
+returned upon success.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_restore_control_dir()</span></code></dt><dd><p>Restore the state recorded by the last call to
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_save_control()</span></code> in the directory <em>save_dir</em> so that all subsequent changes made
+through <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_control()</span></code> or <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>
+are reverted to their previous settings.  If an error occurs then
+negative error code is returned.  Zero is returned upon success.</p>
+</dd>
+</dl>
+<p>When controls are saved, the data is stored in JSON format with the following
+schema:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/saved_controls.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Saved IOGroup controls&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;domain_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;domain_idx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;setting&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain_type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain_idx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;setting&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="batch-functions">
+<h2>Batch Functions<a class="headerlink" href="#batch-functions" title="Permalink to this headline"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_push_signal()</span></code></dt><dd><p>Push a signal onto the stack of batch access signals.  The signal
+is defined by selecting a <em>signal_name</em> from one of the values
+returned by the <code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_name()</span></code> function, the
+<em>domain_type</em> from one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values, and the
+<em>domain_idx</em> between zero to the value returned by
+<code class="docutils literal notranslate"><span class="pre">geopm_topo_num_domain(domain_type)</span></code>.  Subsequent calls to the
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code> function will read the signal and update
+the internal state used to store batch signals.  The return value
+of <code class="docutils literal notranslate"><span class="pre">geopm_pio_push_signal()</span></code> is an index that can be passed as the
+<em>sample_idx</em> parameter to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> to access the
+signal value stored in the internal state from the last update.  A
+distinct signal index will be returned for each unique combination
+of input parameters.  All signals must be pushed onto the stack
+prior to the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code>.  Attempts to push a signal onto the
+stack after the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code> or attempts to push a <em>signal_name</em> that
+is not a value provided by <code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_name()</span></code> will result
+in a negative return value.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_push_control()</span></code></dt><dd><p>Push a control onto the stack of batch access controls.  The
+control is defined by selecting a <em>control_name</em> from one of the
+values returned by the <code class="docutils literal notranslate"><span class="pre">geopm_pio_control_name()</span></code> function, the
+<em>domain_type</em> from one of the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> values, and the
+<em>domain_idx</em> between zero to the value returned by
+<code class="docutils literal notranslate"><span class="pre">geopm_topo_num_domain(domain_type)</span></code>.  The return value of
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_push_control()</span></code> can be passed to the
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> function which will update the internal state
+used to store batch controls.  Subsequent calls to the
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code> function access the control values in
+the internal state and write the values to the hardware.  A
+distinct control index will be returned for each unique
+combination of input parameters.  All controls must be pushed onto
+the stack prior to the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>.  Attempts to push a controls onto the
+stack after the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code> or attempts to push a <em>control_name</em>
+that is not a value provided by <code class="docutils literal notranslate"><span class="pre">geopm_pio_control_name()</span></code> will
+result in a negative return value.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code></dt><dd><p>Samples cached value of a single signal that has been pushed via
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_push_signal()</span></code> and writes the value into <em>result</em>.  The
+<em>signal_idx</em> provided matches the return value from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_push_signal()</span></code> when the signal was pushed. The cached
+value is updated at the time of call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code></dt><dd><p>Updates cached value for single control that has been pushed via
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_push_control()</span></code> to the value <em>setting</em>.  The
+<em>control_idx</em> provided matches the return value from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_push_control()</span></code> when the control was pushed.  The
+cached value will be written to the platform at time of call to
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code></dt><dd><p>Read all push signals from the platform so that the next call to
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> will reflect the updated data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code></dt><dd><p>Write all pushed controls so that values provided to
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> are written to the platform.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_start_batch_server()</span></code></dt><dd><p>Creates a batch server with the following signals and controls.
+The list of signals is represented by the array <em>signal_config</em> of <em>num_signal</em> elements.
+The list of controls is represented by the array <em>control_config</em> of <em>num_control</em> elements.
+It would be an error to create a batch server without any signals or controls.
+In order to create a batch server, we also need to specify the PID of the client process as the <em>client_pid</em>.
+If the batch server is created successfully, it will populate the <em>server_pid</em> with the PID of the created server process,
+and the <em>server_key</em> with a key used to identify the server connection:
+a substring in interprocess shared memory keys used for communication.
+At most <em>key_size</em> bytes are written to the <em>server_key</em> string.
+Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any <em>server_key</em>.
+If <em>key_size</em> is too small to contain the <em>server_key</em> an error will
+occur.  Zero is returned on success and a negative error code is
+returned if any error occurs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_stop_batch_server()</span></code></dt><dd><p>This function is called directly by geopmd in order to
+end a batch session and kill the batch server process
+created by <code class="docutils literal notranslate"><span class="pre">start_batch_server()</span></code>, which is the <em>server_pid</em> parameter.
+If the PID of the server process is not found, then it is an error,
+and this function returns a negative error code.
+Call through to <code class="docutils literal notranslate"><span class="pre">BatchServer::stop_batch()</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="return-value">
+<h2>Return Value<a class="headerlink" href="#return-value" title="Permalink to this headline"></a></h2>
+<p>If an error occurs in any call to an interface documented here, the
+return value of the function will be a negative integer
+corresponding to one of the error codes documented in
+<a class="reference internal" href="geopm_error.3.html"><span class="doc">geopm_error(3)</span></a>.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
+<a class="reference internal" href="geopm_topo.3.html"><span class="doc">geopm_topo(3)</span></a>,
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformTopo.3.html"><span class="doc">geopm::PlatformTopo(3)</span></a>,
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geopm_imbalancer.3.html" class="btn btn-neutral float-left" title="geopm_imbalancer(3) -- set artificial runtime imbalance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geopm_policystore.3.html" class="btn btn-neutral float-right" title="geopm_policystore(3) -- GEOPM resource policy store interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2022, Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

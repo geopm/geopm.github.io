@@ -1,16 +1,8 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
 
-
-geopm::PlatformIO(3) -- geopm platform interface
+geopm::PlatformIO(3) -- GEOPM platform interface
 ================================================
 
-
-
-
-
-
-NAMESPACES
+Namespaces
 ----------
 
 The ``PlatformIO`` class, the ``IOGroup`` class, and the ``platform_io()``
@@ -26,10 +18,10 @@ Note that the ``PlatformIO`` class is an abstract base class that the
 user interacts with.  The concrete implementation, ``PlatformIOImp``\ , is
 hidden by the singleton accessor.
 
-SYNOPSIS
+Synopsis
 --------
 
-#include `<geopm/PlatformIO.hpp> <https://github.com/geopm/geopm/blob/dev/src/PlatformIO.hpp>`_\
+#include `<geopm/PlatformIO.hpp> <https://github.com/geopm/geopm/blob/dev/service/src/geopm/PlatformIO.hpp>`_\
 
 Link with ``-lgeopmd``
 
@@ -40,274 +32,80 @@ Link with ``-lgeopmd``
 
        PlatformIO::PlatformIO() = default;
 
-       void PlatformIO::register_iogroup(
-           shared_ptr<IOGroup> iogroup);
+       void PlatformIO::register_iogroup(shared_ptr<IOGroup> iogroup);
 
-       set<string>
-       PlatformIO::signal_names(
-           void) const;
+       set<string> PlatformIO::signal_names(void) const;
 
-       set<string>
-       PlatformIO::control_names(
-           void) const;
+       set<string> PlatformIO::control_names(void) const;
 
-       int
-       PlatformIO::signal_domain_type(
-           const string &signal_name) const;
+       int PlatformIO::signal_domain_type(const string &signal_name) const;
 
-       int
-       PlatformIO::control_domain_type(
-           const string &control_name) const;
+       int PlatformIO::control_domain_type(const string &control_name) const;
 
-       int
-       PlatformIO::push_signal(
-           const string &signal_name,
-           int domain_type,
-           int domain_idx);
+       int PlatformIO::push_signal(const string &signal_name,
+                                   int domain_type,
+                                   int domain_idx);
 
-       int
-       PlatformIO::push_control(
-           const string &control_name,
-           int domain_type,
-           int domain_idx);
+       int PlatformIO::push_control(const string &control_name,
+                                    int domain_type,
+                                    int domain_idx);
 
-       double
-       PlatformIO::sample(
-           int signal_idx);
+       double PlatformIO::sample(int signal_idx);
 
-       double
-       PlatformIO::sample_combined(
-           int signal_idx);
+       double PlatformIO::sample_combined(int signal_idx);
 
-       void
-       PlatformIO::adjust(
-           int control_idx,
-           double setting);
+       void PlatformIO::adjust(int control_idx,
+                               double setting);
 
-       void
-       PlatformIO::read_batch(
-           void);
+       void PlatformIO::read_batch(void);
 
-       void
-       PlatformIO::write_batch(
-           void);
+       void PlatformIO::write_batch(void);
 
-       double
-       PlatformIO::read_signal(
-           const string &signal_name,
-           int domain_type,
-           int domain_idx);
+       double PlatformIO::read_signal(const string &signal_name,
+                                      int domain_type,
+                                      int domain_idx);
 
-       void
-       PlatformIO::write_control(
-           const string &control_name,
-           int domain_type,
-           int domain_idx,
-           double setting);
+       void PlatformIO::write_control(const string &control_name,
+                                      int domain_type,
+                                      int domain_idx,
+                                      double setting);
 
-       void
-       PlatformIO::save_control(
-           void);
+       void PlatformIO::save_control(void);
 
-       void
-       PlatformIO::restore_control(
-           void);
+       void PlatformIO::restore_control(void);
 
-       void
-       PlatformIO::save_control(
-           const string &save_dir);
+       void PlatformIO::save_control(const string &save_dir);
 
-       void PlatformIO::restore_control(
-           const string &save_dir);
+       void PlatformIO::restore_control(const string &save_dir);
 
        function<double(const vector<double> &)>
-       PlatformIO::agg_function(
-           const string &signal_name) const;
+       PlatformIO::agg_function(const string &signal_name) const;
 
        function<string(double)>
-       PlatformIO::format_function(
-           const string &signal_name) const;
+       PlatformIO::format_function(const string &signal_name) const;
 
-       string
-       PlatformIO::signal_description(
-           const string &signal_name) const;
+       string PlatformIO::signal_description(const string &signal_name) const;
 
-       string
-       PlatformIO::control_description(
-           const string &control_name) const;
+       string PlatformIO::control_description(const string &control_name) const;
 
-       int
-       PlatformIO::signal_behavior(
-           const string &signal_name) const;
+       int PlatformIO::signal_behavior(const string &signal_name) const;
 
-       void
-       PlatformIO::start_batch_server(
-           int client_pid,
-           const vector<geopm_request_s> &signal_config,
-           const vector<geopm_request_s> &control_config,
-           int &server_pid,
-           string &server_key);
+       void PlatformIO::start_batch_server(int client_pid,
+                                           const vector<geopm_request_s> &signal_config,
+                                           const vector<geopm_request_s> &control_config,
+                                           int &server_pid,
+                                           string &server_key);
 
-       void
-       PlatformIO::stop_batch_server(
-           int server_pid);
+       void PlatformIO::stop_batch_server(int server_pid);
 
 
-DESCRIPTION
+Description
 -----------
 
-The ``PlatformIO`` class provides a high-level interface for signals
-(system monitors) and controls (system settings).  There are a large
-number of built-in signals and controls.  These built-in signals and
-controls include a wide range of hardware metrics, hardware settings,
-and signals derived from application behavior.  Application behavior
-is tracked by GEOPM's integration with MPI and OpenMP and also by
-application use of the `geopm_prof_c(3) <geopm_prof_c.3.html>`_ mark-up interface. In
-addition to the built-in features, ``PlatformIO`` can be extended
-through the `geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3.html>`_ plugin interface to provide
-arbitrary signals and controls.
-
-A domain is a discrete component within a compute node where a signal
-or control is applicable.  For more information about the
-``geopm_domain_e`` enum and the hierarchical platform description see
-`geopm::PlatformTopo(3) <GEOPM_CXX_MAN_PlatformTopo.3.html>`_.  A signal represents any measurement in SI
-units that can be sampled or any unit-free integer that can be read.
-A control represents a request for a hardware domain to operate such
-that a related signal measured from the hardware domain will track the
-request.  For example, the user can set a ``POWER_PACKAGE_LIMIT`` in
-units of *watts* and the related signal, ``POWER_PACKAGE``\ , will remain
-below the limit.  Similarly the user can set a ``CPU_FREQUENCY_CONTROL`` in
-*hertz* and the related signal, ``CPU_FREQUENCY_STATUS`` will show the CPU operating
-at the value set.
-
-ALIASING SIGNALS AND CONTROLS
------------------------------
-
-There are two classes of signals and control names: "low level" and
-"high level".  All ``IOGroup``\ 's are expected to provide low level
-signals and controls with names that are prefixed with the ``IOGroup``
-name and two colons, e.g. the ``MSRIOGroup`` provides the
-``MSR::PKG_ENERGY_STATUS:ENERGY`` signal.  If the signal or control may
-be supported on more than one platform, the implementation should be
-aliased to a high level name.  This high level name enables the signal
-or control to be supported by more than one ``IOGroup``\ , and different
-platforms will support the loading different sets of ``IOGroups``.  The
-``MSRIOGroup`` aliases the above signal to the high level
-``PACKAGE_ENERGY`` signal which can be used on any platform to measure
-the current package energy value.  Agents are encouraged to request
-high level signals and controls to make the implementation more
-portable.  The high level signals and controls supported by built-in
-``IOGroup`` classes are listed below.  See `geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3.html>`_
-section on `SEARCH AND LOAD ORDER <GEOPM_CXX_MAN_PluginFactory.3.html#plugin-search-path-and-load-order>`__ for information about how the
-``GEOPM_PLUGIN_PATH`` environment variable is used to select which
-``IOGroup`` implementation is used in the case where more than one
-provides the same high level signal or control.
-
-Signal names that end in ``#`` (for example, raw MSR values) are 64-bit
-integers encoded to be stored as doubles.  When accessing these
-integer signals, the return value of ``read_signal()`` or ``sample()``
-should not be used directly as a double precision number.  To
-decode the 64-bit integer from the double use
-``geopm_signal_to_field()`` described in `geopm_hash(3) <geopm_hash.3.html>`_.  The
-`geopm::MSRIOGroup(3) <GEOPM_CXX_MAN_MSRIOGroup.3.html>`_ also provides raw MSR field signals that are
-encoded in this way.
+The C++ bindings for the :doc:`geopm_pio(7) <geopm_pio.7>` interface.
 
 
-*
-  ``TIME``\ :
-
-      Time elapsed since the beginning of execution.
-
-*
-  ``EPOCH_COUNT``\ :
-
-      Number of completed executions of an epoch.  Prior to the first call
-      by the application to ``geopm_prof_epoch()`` the signal returns as ``-1``.
-      With each call to ``geopm_prof_epoch()`` the count increases by one.
-
-*
-  ``REGION_HASH``\ :
-
-      The hash of the region of code (see `geopm_prof_c(3) <geopm_prof_c.3.html>`_\ ) currently being
-      run by all ranks, otherwise ``GEOPM_REGION_HASH_UNMARKED``.
-
-*
-  ``REGION_HINT``\ :
-
-      The region hint (see `geopm_prof_c(3) <geopm_prof_c.3.html>`_\ ) associated with the currently
-      running region.  For any interval when all ranks are within an MPI
-      function inside of a user defined region, the hint will change from the
-      hint associated with the user defined region to ``GEOPM_REGION_HINT_NETWORK``.
-      If the user defined region was defined with ``GEOPM_REGION_HINT_NETWORK`` and
-      there is an interval within the region when all ranks are within an MPI
-      function, GEOPM will not attribute the time spent within the MPI function as
-      MPI time in the report files.  It will be instead attributed to the time
-      spent in the region as a whole.
-
-*
-  ``REGION_PROGRESS``\ :
-
-      Minimum per-rank reported progress through the current region.
-
-*
-  ``REGION_RUNTIME``\ :
-
-      Maximum per-rank of the last recorded runtime for the current
-      region.
-
-*
-  ``ENERGY_PACKAGE``\ :
-
-      Total energy aggregated over the processor package.
-
-*
-  ``POWER_PACKAGE``\ :
-
-      Total power aggregated over the processor package.
-
-*
-  ``CPU_FREQUENCY_STATUS``\ :
-
-      Average CPU frequency over the specified domain.
-
-*
-  ``ENERGY_DRAM``\ :
-
-      Total energy aggregated over the DRAM DIMMs associated with a NUMA node.
-
-*
-  ``POWER_DRAM``\ :
-
-      Total power aggregated over the DRAM DIMMs associated with a NUMA node.
-
-*
-  ``POWER_PACKAGE_MIN``\ :
-
-      Minimum setting for package power over the given domain.
-
-*
-  ``POWER_PACKAGE_MAX``\ :
-
-      Maximum setting for package power over the given domain.
-
-*
-  ``POWER_PACKAGE_TDP``\ :
-
-      Maximum sustainable setting for package power over the given domain.
-
-*
-  ``CYCLES_THREAD``\ :
-
-      Average over the domain of clock cycles executed by cores since
-      the beginning of execution.
-
-*
-  ``CYCLES_REFERENCE``\ :
-
-      Average over the domain of clock reference cycles since the
-      beginning of execution.
-
-STRUCTURE TYPE
+Structure Type
 --------------
 
 
@@ -323,23 +121,22 @@ and the domain index. This structure is used as a parameter to interface functio
            char name[NAME_MAX];
        };
 
-SINGLETON ACCESSOR
+Singleton Accessor
 ------------------
 
 
-* ``platform_io()``:
+``platform_io()``
   There is only one ``PlatformIO`` object, and the only way to access
   this object is through this function.  The function returns a
   reference to the single ``PlatformIO`` object that gives access to
   all of the `CLASS METHODS <INSPECTION CLASS METHODS_>`_ described below.  See `EXAMPLE <EXAMPLE_>`_ section
   below.
 
-INSPECTION CLASS METHODS
+Inspection Class Methods
 ------------------------
 
 
-*
-  ``signal_names()``\ :
+``signal_names()``
   Returns the names of all available signals that can be requested.
   This includes all signals and aliases provided through ``IOGroup``
   extensions as well as signals provided by ``PlatformIO`` itself.  The
@@ -347,80 +144,69 @@ INSPECTION CLASS METHODS
   to all ``PlatformIO`` methods that accept a *signal_name* input
   parameter.
 
-*
-  ``control_names()``\ :
+``control_names()``
   Returns the names of all available controls.  This includes all
   controls and aliases provided by ``IOGroup``\ s as well as controls
   provided by ``PlatformIO`` itself.  The set of strings that are returned
   can be passed as a *control_name* to all ``PlatformIO`` methods that
   accept a *control_name* input parameter.
 
-*
-  ``signal_description()``\ :
+``signal_description()``
   Returns the description of the signal as defined by the ``IOGroup`` that
   provides this signal.
 
-*
-  ``control_description()``\ :
+``control_description()``
   Returns the description of the control as defined by the ``IOGroup`` that
   provides this control.
 
-*
-  ``signal_domain_type()``\ :
+``signal_domain_type()``
   Query the domain for the signal with name *signal_name*.  Returns
   one of the ``geopm_domain_e`` values signifying the
   granularity at which the signal is measured.  Will return
   ``GEOPM_DOMAIN_INVALID`` if the signal name is not
   supported.
 
-*
-  ``control_domain_type()``\ :
+``control_domain_type()``
   Query the domain for the control with the name *control_name*.
   Returns one of the ``geopm_domain_e`` values
   signifying the granularity at which the control can be adjusted.
   Will return ``GEOPM_DOMAIN_INVALID`` if the control
   name is not supported.
 
-*
-  ``agg_function()``:
+``agg_function()``
   Returns the function that should be used to aggregate
   *signal_name*.  If one was not previously specified by this class,
-  the default function is select_first from `geopm::Agg(3) <GEOPM_CXX_MAN_Agg.3.html>`_.
+  the default function is select_first from :doc:`geopm::Agg(3) <GEOPM_CXX_MAN_Agg.3>`.
 
-*
-  ``signal_behavior()``:
+``signal_behavior()``
   Returns one of the ``IOGroup::m_signal_behavior_e`` values which
   describes about how a signal will change as a function of time.
   This can be used when generating reports to decide how to
   summarize a signal's value for the entire application run.
 
-*
-  ``format_function()``:
+``format_function()``
   Returns a function that can be used to convert
   a signal of the given *signal_name* into a printable string.
   The returned function takes the *double* value of the signal and returns a formatted string.
 
-SERIAL CLASS METHODS
+Serial Class Methods
 --------------------
 
 
-*
-  ``read_signal()``\ :
+``read_signal()``
   Read from the platform and interpret into SI units a signal
   given its name and domain.  Does not modify values stored by
   calling ``read_batch()``. The parameters correspond to the ``struct geopm_request_s``.
-  The ``domain_type`` is from the ``enum geopm_domain_e`` described in `geopm_topo.h <https://github.com/geopm/geopm/blob/dev/service/src/geopm_topo.h>`_\ 
+  The ``domain_type`` is from the ``enum geopm_domain_e`` described in `geopm_topo.h <https://github.com/geopm/geopm/blob/dev/service/src/geopm_topo.h>`_\
 
-*
-  ``write_control()``\ :
+``write_control()``
   Interpret the setting and write it to the platform.  Does not
   modify the values stored by calling ``adjust()``.
   The first three parameters correspond to the ``struct geopm_request_s``.
   The ``domain_type`` is from the ``enum geopm_domain_e`` described in `geopm_topo.h <https://github.com/geopm/geopm/blob/dev/service/src/geopm_topo.h>`_
   ``setting`` is new value in SI units of the setting for the control.
 
-*
-  ``save_control()``\ :
+``save_control()``
   Save the state of all controls so that any subsequent changes
   made through ``PlatformIO`` may be reverted with a call to
   ``restore_control()``. This function also has an overload which takes a *save_dir* parameter
@@ -429,8 +215,7 @@ SERIAL CLASS METHODS
   that contains the saved state and name the file
   after the IOGroup name.
 
-*
-  ``restore_control()``\ :
+``restore_control()``
   Restore all controls to values recorded in previous call to
   ``save_control()``. This function also has an overload which takes a *save_dir* parameter
   the directory which contains the result of the previous saved state.
@@ -441,12 +226,11 @@ schema:
 .. literalinclude:: ../../json_schemas/saved_controls.schema.json
     :language: json
 
-BATCH CLASS METHODS
+Batch Class Methods
 -------------------
 
 
-*
-  ``push_signal()``\ :
+``push_signal()``
   Push a signal onto the stack of batch access signals.  The signal
   is defined by selecting a *signal_name* from the set returned by
   the ``signal_names()`` method, the *domain_type* from one of the
@@ -466,8 +250,7 @@ BATCH CLASS METHODS
   in a thrown ``geopm::Exception`` with error number
   ``GEOPM_ERROR_INVALID``.
 
-*
-  ``push_control()``\ :
+``push_control()``
   Push a control onto the stack of batch access controls.  The
   control is defined by selecting a *control_name* from the set
   returned by the ``control_names()`` method, the *domain_type* from
@@ -487,33 +270,28 @@ BATCH CLASS METHODS
   ``control_names()`` will result in a thrown ``geopm::Exception`` with
   error number ``GEOPM_ERROR_INVALID``.
 
-*
-  ``sample()``\ :
+``sample()``
   Samples cached value of a single signal that has been pushed via
   ``push_signal()``, which is identified by the *signal_idx*
   The cached value is updated at the time of call to
   ``read_batch()``, this function must be called after the update.
   The value of the signal is returned by the function.
 
-*
-  ``adjust()``\ :
+``adjust()``
   Updates cached value for single control, which is the *setting*,
   that has been pushed via ``push_control()``, which is identified by the *control_idx*.
   The cached value will be written to the platform at
   time of call to ``write_batch()``.
 
-*
-  ``read_batch()``\ :
+``read_batch()``
   Read all pushed signals from the platform so that the next call to ``sample()``
   will reflect the updated data.
 
-*
-  ``write_batch()``\ :
+``write_batch()``
   Write all pushed controls so that values provided to ``adjust()``
   are written to the platform.
 
-*
-  ``start_batch_server()``\ :
+``start_batch_server()``
   Creates a batch server with the following signals and controls.
   The list of signals is represented by the vector *signal_config*.
   The list of controls is represented by the vector *control_config*.
@@ -525,8 +303,7 @@ BATCH CLASS METHODS
   a substring in interprocess shared memory keys used for communication.
   An exception is thrown if any error occurs.
 
-*
-  ``geopm_pio_stop_batch_server()``:
+``geopm_pio_stop_batch_server()``
   This function is called directly by geopmd in order to
   end a batch session and kill the batch server process
   created by ``start_batch_server()``, which is the *server_pid* parameter.
@@ -535,19 +312,17 @@ BATCH CLASS METHODS
   Call through to ``BatchServer::stop_batch()``.
 
 
-PLUGIN CLASS METHODS
+Plugin Class Methods
 --------------------
-
-
-* ``register_iogroup()``\ :
+``register_iogroup()``
   Registers an ``IOGroup`` with the ``PlatformIO`` so that the signals
   and controls provided by the object are available through the
   ``PlatformIO`` interface.  The *iogroup* is a shared pointer to a
-  class derived from the `geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3.html>`_.  This method
+  class derived from the :doc:`geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3>`.  This method
   provides the mechanism for extending the ``PlatformIO`` interface at
   runtime.
 
-EXAMPLE
+Example
 -------
 
 .. code-block:: c++
@@ -582,22 +357,22 @@ EXAMPLE
 
 
 
-ERRORS
+Errors
 ------
 
-All functions described on this man page throw `geopm::Exception(3) <GEOPM_CXX_MAN_Exception.3.html>`_
+All functions described on this man page throw :doc:`geopm::Exception(3) <GEOPM_CXX_MAN_Exception.3>`
 on error.
 
-SEE ALSO
+See Also
 --------
 
-`geopm(7) <geopm.7.html>`_\ ,
-`geopm_hash(3) <geopm_hash.3.html>`_\ ,
-`geopm_prof_c(3) <geopm_prof_c.3.html>`_\ ,
-`geopm_pio_c(3) <geopm_pio_c.3.html>`_\ ,
-`geopm_topo_c(3) <geopm_topo_c.3.html>`_\ ,
-`geopm::Exception(3) <GEOPM_CXX_MAN_Exception.3.html>`_\ ,
-`geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3.html>`_\ ,
-`geopm::MSRIOGroup(3) <GEOPM_CXX_MAN_MSRIOGroup.3.html>`_\ ,
-`geopm::PlatformTopo(3) <GEOPM_CXX_MAN_PlatformTopo.3.html>`_\ ,
-`geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3.html>`_
+:doc:`geopm(7) <geopm.7>`\ ,
+:doc:`geopm_hash(3) <geopm_hash.3>`\ ,
+:doc:`geopm_prof(3) <geopm_prof.3>`\ ,
+:doc:`geopm_pio(3) <geopm_pio.3>`\ ,
+:doc:`geopm_topo(3) <geopm_topo.3>`\ ,
+:doc:`geopm::Exception(3) <GEOPM_CXX_MAN_Exception.3>`\ ,
+:doc:`geopm::IOGroup(3) <GEOPM_CXX_MAN_IOGroup.3>`\ ,
+:doc:`geopm::MSRIOGroup(3) <GEOPM_CXX_MAN_MSRIOGroup.3>`\ ,
+:doc:`geopm::PlatformTopo(3) <GEOPM_CXX_MAN_PlatformTopo.3>`\ ,
+:doc:`geopm::PluginFactory(3) <GEOPM_CXX_MAN_PluginFactory.3>`

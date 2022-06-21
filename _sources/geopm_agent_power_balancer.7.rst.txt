@@ -1,6 +1,3 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
-
 
 geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap
 ==============================================================================
@@ -10,7 +7,7 @@ geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap
 
 
 
-DESCRIPTION
+Description
 -----------
 
 The PowerBalancerAgent is designed to enforce an application wide
@@ -41,7 +38,7 @@ The application performance is measured by the duration of application
 epoch.  The epoch run time is reported by each MPI rank once every
 trip around the outer loop of an iterative application, if the
 application has been annotated with a call to ``geopm_prof_epoch()``.  See
-the `geopm_prof_c(3) <geopm_prof_c.3.html>`_ man page for more information about geopm
+the :doc:`geopm_prof(3) <geopm_prof.3>` man page for more information about geopm
 profiling methods.  Note that the epoch runtime used by the
 PowerBalancerAgent excludes any time spent in MPI communication
 routines or regions marked with the ``GEOPM_REGION_HINT_IGNORE`` hint.  A
@@ -50,28 +47,28 @@ recorded by each rank, and then the maximum of these median filtered
 values across all MPI ranks running on each compute node is used as
 the measure of the inverse of compute node performance.
 
-AGENT BEHAVIOR HIGHLIGHTS
+Agent Behavior Highlights
 -------------------------
 
 Policies and samples are vectors of double precision values where each
-value has a meaning defined by the `geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3.html>`_ implementation.
+value has a meaning defined by the :doc:`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3>` implementation.
 The Agent interface also provides methods for the Agent to extend
 reports and traces with additional Agent-specific information.
 
 
-* 
+*
   **Agent Name**\ :
 
       Set the ``--geopm-agent`` launch option or ``GEOPM_AGENT`` environment
       variable to "power_balancer" and the Controller will select the
-      PowerBalancerAgent for its control handler.  See `geopmlaunch(1) <geopmlaunch.1.html>`_
-      and `geopm(7) <geopm.7.html>`_ for more information about launch options and
+      PowerBalancerAgent for its control handler.  See :doc:`geopmlaunch(1) <geopmlaunch.1>`
+      and :doc:`geopm(7) <geopm.7>` for more information about launch options and
       environment variables.
 
-* 
+*
   **Agent Policy Definitions**\ :
 
-  ``POWER_PACKAGE_LIMIT_TOTAL``\ :
+  ``CPU_POWER_LIMIT``\ :
       Sets the average power cap per compute
       node in units of watts.  The power cap applied to any
       one compute node may be higher or lower than this
@@ -86,9 +83,9 @@ reports and traces with additional Agent-specific information.
       Used as an inter-agent message passed from parent to
       child agents in the balancer's tree-hierarchical
       implementation.  This parameter is not used if the
-      ``POWER_PACKAGE_LIMIT_TOTAL`` policy is non-zero.  When
+      ``CPU_POWER_LIMIT`` policy is non-zero.  When
       creating a static policy file, the
-      ``POWER_PACKAGE_LIMIT_TOTAL`` should be non-zero, and
+      ``CPU_POWER_LIMIT`` should be non-zero, and
       this value can be set to zero.  If set to NAN, it will
       default to 0.
 
@@ -98,9 +95,9 @@ reports and traces with additional Agent-specific information.
       parent to child agents in the balancer's
       tree-hierarchical implementation.  This
       parameter is not used if the
-      ``POWER_PACKAGE_LIMIT_TOTAL`` policy is non-zero.
+      ``CPU_POWER_LIMIT`` policy is non-zero.
       When creating a static policy file, the
-      ``POWER_PACKAGE_LIMIT_TOTAL`` should be non-zero,
+      ``CPU_POWER_LIMIT`` should be non-zero,
       and this value can be set to zero.  If set to
       NAN, it will default to 0.
 
@@ -109,13 +106,13 @@ reports and traces with additional Agent-specific information.
       Used as an inter-agent message passed from parent to
       child agents in the balancer's tree-hierarchical
       implementation.  This parameter is not used if the
-      ``POWER_PACKAGE_LIMIT_TOTAL`` policy is non-zero.  When
+      ``CPU_POWER_LIMIT`` policy is non-zero.  When
       creating a static policy file, the
-      ``POWER_PACKAGE_LIMIT_TOTAL`` should be non-zero, and
+      ``CPU_POWER_LIMIT`` should be non-zero, and
       this value can be set to zero.  If set to NAN, it
       will default to 0.
 
-* 
+*
   **Agent Sample Definitions**\ :
 
    ``STEP_COUNT``\ :
@@ -144,7 +141,7 @@ reports and traces with additional Agent-specific information.
       reported by any node under the current
       distribution of power limits over compute nodes.
 
-* 
+*
   **Trace Column Extensions**\ :
 
    ``policy_power_cap``\ :
@@ -183,24 +180,24 @@ reports and traces with additional Agent-specific information.
        node.  It may be different from the requested
        limit due to hardware constraints.
 
-* 
+*
   **Report Extensions**\ :
   N/A
 
-* 
+*
   **Control Loop Gate**\ :
 
       The agent gates the Controller's control loop to a cadence of 5
       milliseconds.
 
-SEE ALSO
+See Also
 --------
 
-`geopm(7) <geopm.7.html>`_\ ,
-`geopm_agent_monitor(7) <geopm_agent_monitor.7.html>`_\ ,
-`geopm_agent_power_governor(7) <geopm_agent_power_governor.7.html>`_\ ,
-`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3.html>`_\ ,
-`geopm_agent_c(3) <geopm_agent_c.3.html>`_\ ,
-`geopm_prof_c(3) <geopm_prof_c.3.html>`_\ ,
-`geopmagent(1) <geopmagent.1.html>`_\ ,
-`geopmlaunch(1) <geopmlaunch.1.html>`_
+:doc:`geopm(7) <geopm.7>`\ ,
+:doc:`geopm_agent_monitor(7) <geopm_agent_monitor.7>`\ ,
+:doc:`geopm_agent_power_governor(7) <geopm_agent_power_governor.7>`\ ,
+:doc:`geopm::Agent(3) <GEOPM_CXX_MAN_Agent.3>`\ ,
+:doc:`geopm_agent(3) <geopm_agent.3>`\ ,
+:doc:`geopm_prof(3) <geopm_prof.3>`\ ,
+:doc:`geopmagent(1) <geopmagent.1>`\ ,
+:doc:`geopmlaunch(1) <geopmlaunch.1>`
