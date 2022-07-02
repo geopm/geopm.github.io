@@ -161,7 +161,9 @@
 <h1>geopmlaunch(1) -- application launch wrapper<a class="headerlink" href="#geopmlaunch-1-application-launch-wrapper" title="Permalink to this headline"></a></h1>
 <section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> <em>launcher</em> [<em>launcher_opt</em>] [<em>geopm_opt</em>] <code class="docutils literal notranslate"><span class="pre">--</span></code> <em>executable</em> [<em>executable_opt</em>]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmlaunch launcher <span class="o">[</span>launcher_opt<span class="o">]</span> <span class="o">[</span>geopm_opt<span class="o">]</span> -- executable <span class="o">[</span>executable_opt<span class="o">]</span>
+</pre></div>
+</div>
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
@@ -170,7 +172,7 @@ along with a distributed parallel compute application, <em>executable</em>,
 using the command line interface for the underlying application
 scheduler, <em>launcher</em>, deployed on the HPC system.  The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>
 command line interface is designed to support many application
-schedulers including SLURM <code class="docutils literal notranslate"><span class="pre">srun</span></code>, ALPS <code class="docutils literal notranslate"><span class="pre">aprun</span></code>, and Intel / MPICH
+schedulers including <strong>SLURM</strong> <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <strong>ALPS</strong> <code class="docutils literal notranslate"><span class="pre">aprun</span></code>, and <strong>Intel</strong> / <strong>MPICH</strong>
 <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>.  The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command line interface has been designed
 to wrap the underlying application scheduler while reinterpreting the
 command line options, <em>launcher_opt</em>, specified for it.  In this way,
@@ -212,7 +214,7 @@ listed below.</p>
 <ul class="simple">
 <li><p><em>srun</em>, <em>SrunLauncher</em>:
 Wrapper for the SLURM resource manager's <code class="docutils literal notranslate"><span class="pre">srun</span></code> job launcher.  The
-<code class="docutils literal notranslate"><span class="pre">--cpu_bind</span></code> and <code class="docutils literal notranslate"><span class="pre">--cpu-bind</span></code> options are reserved for use by GEOPM;
+<code class="docutils literal notranslate"><span class="pre">-cc</span></code> and <code class="docutils literal notranslate"><span class="pre">--cpu-bind</span></code> options are reserved for use by GEOPM;
 do not specify CPU-binding options when using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>.</p></li>
 <li><p><em>aprun</em>, <em>AlpsLauncher</em>:
 Wrapper for the Cray ALPS <code class="docutils literal notranslate"><span class="pre">aprun</span></code> job launcher.  The <code class="docutils literal notranslate"><span class="pre">-cc</span></code> and
@@ -232,8 +234,12 @@ do not specify when using <code class="docutils literal notranslate"><span class
 Wrapper for <code class="docutils literal notranslate"><span class="pre">srun</span></code> when used with the Trilab Operating System
 Software stack.  This special launcher was developed to support
 special affinity plugins for SLURM that were deployed at LLNL's
-computing center.  The <code class="docutils literal notranslate"><span class="pre">--cpu_bind</span></code> and <code class="docutils literal notranslate"><span class="pre">--cpu-bind</span></code> options are
+computing center.  The <code class="docutils literal notranslate"><span class="pre">-cc</span></code> and <code class="docutils literal notranslate"><span class="pre">--cpu-bind</span></code> options are
 reserved for use by GEOPM; do not specify when using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>.</p></li>
+<li><p><em>pals</em>, <em>PALSLauncher</em>:
+Wrapper for Cray-HPE PALS launcher, leveraging <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>.  The
+<code class="docutils literal notranslate"><span class="pre">--cpu-bind</span></code> option is reserved for use by GEOPM; do not specify
+CPU-binding options when using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>.</p></li>
 </ul>
 </section>
 <section id="geopm-options">
@@ -243,7 +249,7 @@ reserved for use by GEOPM; do not specify when using <code class="docutils liter
 <dd><p id="geopm-report-option">Specifies the path to the GEOPM report output file that
 is generated at the conclusion of the run if this option
 is provided.  If the option is not provided, a report
-named &quot;geopm.report&quot; will be created.  The GEOPM report
+named <code class="docutils literal notranslate"><span class="pre">geopm.report</span></code> will be created.  The GEOPM report
 contains a summary of the profiling information collected
 by GEOPM throughout the application execution.  Refer to
 <a class="reference internal" href="geopm_report.7.html"><span class="doc">geopm_report(7)</span></a> for a
@@ -268,7 +274,7 @@ are documented in the <a class="reference internal" href="geopm_pio.7.html"><spa
 <p>By default, the signals in the report are
 aggregated to the board domain.  A domain other
 than board can be specified by appending the
-signal name with an &quot;&#64;&quot; character and then
+signal name with an <code class="docutils literal notranslate"><span class="pre">'&#64;'</span></code> character and then
 specifying one of the domains.  For example,
 the following will extend the region and
 application totals sections of the report with
@@ -296,7 +302,7 @@ file name is given.  This feature is primarily
 a debugging tool, and may not scale to large
 node counts due to file system issues.  This
 option is used by the launcher to set the
-GEOPM_TRACE environment variable.  The command
+<code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE</span></code> environment variable.  The command
 line option will override any value currently
 set in the environment.  See the
 <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section of geopm(7)</span></a>.</p>
@@ -311,20 +317,20 @@ as a comma-separated list of valid signal
 names.  When not specified all custom signals
 added to the trace will be sampled and
 aggregated for the entire node unless the
-domain is specified by appending &quot;&#64;domain_type&quot;
+domain is specified by appending <code class="docutils literal notranslate"><span class="pre">&quot;&#64;domain_type&quot;</span></code>
 to the signal name.  For example, the following
 will add total DRAM energy and power as columns
 in the trace:</p>
 <p><code class="docutils literal notranslate"><span class="pre">--geopm-trace-signals=DRAM_ENERGY,DRAM_POWER</span></code></p>
 <p>The signals available and their descriptions
 are documented in the <a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">PlatformIO(3)</span></a> man page.
-&quot;TIME&quot;, &quot;REGION_HASH&quot;, &quot;REGION_HINT&quot;,
-&quot;REGION_PROGRESS&quot;, &quot;REGION_RUNTIME&quot;,
-&quot;CPU_ENERGY&quot;, &quot;CPU_POWER&quot;, and
-&quot;CPU_FREQUENCY_STATUS&quot; are included in the
+<code class="docutils literal notranslate"><span class="pre">TIME</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_HINT</span></code>,
+<code class="docutils literal notranslate"><span class="pre">REGION_PROGRESS</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_RUNTIME</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ENERGY_PACKAGE</span></code>, <code class="docutils literal notranslate"><span class="pre">POWER_PACKAGE</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code> are included in the
 trace by default.  A domain other than board
 can be specified by appending the signal name
-with an &quot;&#64;&quot; character and then specifying one
+with an <code class="docutils literal notranslate"><span class="pre">'&#64;'</span></code> character and then specifying one
 of the domains, e.g:</p>
 <p><code class="docutils literal notranslate"><span class="pre">--geopm-trace-signals=CPU_POWER&#64;package,CPU_ENERGY&#64;package</span></code></p>
 <p>will trace the package power and energy for
@@ -334,7 +340,7 @@ The signal names and domain names given for
 this parameter are specified as in the
 <a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a> command line
 interface.  This option is used by the launcher
-to set the GEOPM_TRACE_SIGNALS environment
+to set the <code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE_SIGNALS</span></code> environment
 variable.  The command line option will
 override any value currently set in the
 environment.  See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section
@@ -355,7 +361,7 @@ name is given.  This feature is primarily a
 debugging tool, and may not scale to large node
 counts due to file system issues.  This option
 is used by the launcher to set the
-GEOPM_TRACE_PROFILE environment variable.  The
+<code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE_PROFILE</span></code> environment variable.  The
 command line option will override any value
 currently set in the environment.  See the
 <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section of
@@ -371,11 +377,12 @@ If <code class="docutils literal notranslate"><span class="pre">--geopm-endpoint
 if the agent does not have any policy
 values, this file will not be created.
 This option is used by the launcher to set
-the GEOPM_TRACE_ENDPOINT_POLICY environment
+the <code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE_ENDPOINT_POLICY`</span></code> environment
 variable.  The command line option will
 override any value currently set in the
-environment.  See the ENVIRONMENT section
-of <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>.</p>
+environment.  See the
+<a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section of
+geopm(7)</span></a>.</p>
 </dd>
 <dt><kbd><span class="option">--geopm-profile <var>name</var></span></kbd></dt>
 <dd><p id="geopm-profile-option">The name of the profile which is printed in the
@@ -386,7 +393,7 @@ with multiple power caps, the profile could
 contain the power setting for one run.  The
 default profile name is the name of the compute
 application executable.  This option is used by
-the launcher to set the GEOPM_PROFILE
+the launcher to set the <code class="docutils literal notranslate"><span class="pre">GEOPM_PROFILE</span></code>
 environment variable.  The command line option
 will override any value currently set in the
 environment.  See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section
@@ -394,7 +401,7 @@ of geopm(7)</span></a>.</p>
 </dd>
 <dt><kbd><span class="option">--geopm-ctl <var>CONTROL_MODE</var></span></kbd></dt>
 <dd><p id="geopm-ctl-option">Use the GEOPM runtime and launch GEOPM with one of
-three <em>CONTROL_MODE</em>s: <em>process</em>, <em>pthread</em> or
+three <code class="docutils literal notranslate"><span class="pre">CONTROL_MODE</span></code>s: <em>process</em>, <em>pthread</em> or
 <em>application</em>.</p>
 <p>The <em>process</em> method allocates one extra MPI process
 per node for the GEOPM controller, and this is the
@@ -413,11 +420,11 @@ connects to the primary compute application. The
 sites.</p>
 <p>The <em>application</em> method of launch is not compatible
 with <code class="docutils literal notranslate"><span class="pre">aprun</span></code>; with <code class="docutils literal notranslate"><span class="pre">srun</span></code>, the call must be made
-inside an existing allocation made with salloc or
-sbatch and the command must request all the
+inside an existing allocation made with <code class="docutils literal notranslate"><span class="pre">salloc</span></code> or
+<code class="docutils literal notranslate"><span class="pre">sbatch</span></code> and the command must request all the
 compute nodes assigned to the allocation.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">--geopm-ctl</span></code> option is used by the launcher to
-set the GEOPM_CTL environment variable.  The command
+set the <code class="docutils literal notranslate"><span class="pre">GEOPM_CTL</span></code> environment variable.  The command
 line option will override any value currently set in
 the environment.  See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section
 of geopm(7)</span></a>.</p>
@@ -425,10 +432,10 @@ of geopm(7)</span></a>.</p>
 <dt><kbd><span class="option">--geopm-agent <var>agent</var></span></kbd></dt>
 <dd><p id="geopm-agent-option">Specify the Agent type.  The Agent defines the control
 algorithm used by the GEOPM runtime.  Available agents
-are: &quot;monitor&quot; (default, enables profiling features
-only), &quot;power_balancer&quot; (optimizes runtime under a power
-cap), &quot;power_governor&quot; (enforces a uniform power cap),
-and &quot;frequency_map&quot; (runs each region at a specified
+are: <code class="docutils literal notranslate"><span class="pre">&quot;monitor&quot;</span></code> (default, enables profiling features
+only), <code class="docutils literal notranslate"><span class="pre">&quot;power_balancer&quot;</span></code> (optimizes runtime under a power
+cap), <code class="docutils literal notranslate"><span class="pre">&quot;power_governor&quot;</span></code> (enforces a uniform power cap),
+and <code class="docutils literal notranslate"><span class="pre">&quot;frequency_map&quot;</span></code> (runs each region at a specified
 frequency).  See <a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>,
 <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">geopm_agent_power_balancer(7)</span></a>,
 <a class="reference internal" href="geopm_agent_power_governor.7.html"><span class="doc">geopm_agent_power_governor(7)</span></a>, and
@@ -496,12 +503,14 @@ generated by the GEOPM runtime for communication with the
 application.  This prefix is not used for the endpoint.
 This is useful for avoiding collisions with keys
 that were not properly cleaned up.  The default key prefix
-is &quot;geopm-shm&quot;.  A shared memory key must have no
-occurrences of the '/' character.  The base key is used as
+is <code class="docutils literal notranslate"><span class="pre">&quot;geopm-shm&quot;</span></code>.  A shared memory key must have no
+occurrences of the <code class="docutils literal notranslate"><span class="pre">'/'</span></code> character.  The base key is used as
 the prefix for each shared memory region used by the
 runtime.  If the keys are left behind, a simple command to
 clean up after an aborted job is:</p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">test</span> <span class="pre">-n</span> <span class="pre">&quot;$GEOPM_SHMKEY&quot;</span> <span class="pre">&amp;&amp;</span> <span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">/dev/shm${GEOPM_SHMKEY}*</span> <span class="pre">||</span> <span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">/dev/shm/geopm-shm*</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">test</span> -n <span class="s2">&quot;</span><span class="nv">$GEOPM_SHMKEY</span><span class="s2">&quot;</span> <span class="o">&amp;&amp;</span> rm -f /dev/shm<span class="si">${</span><span class="nv">GEOPM_SHMKEY</span><span class="si">}</span>* <span class="o">||</span> rm -f /dev/shm/geopm-shm*
+</pre></div>
+</div>
 <p>This option is used by the launcher to set the
 <code class="docutils literal notranslate"><span class="pre">GEOPM_SHMKEY</span></code> environment variable.  The command line
 option will override any value currently set in the
@@ -530,7 +539,7 @@ working directory; this can be specified by a leading
 or trailing colon, or two adjacent colons.  The
 default search location is always loaded first and is
 determined at library configuration time and by way
-of the 'pkglib' variable (typically
+of the <code class="docutils literal notranslate"><span class="pre">'pkglib'</span></code> variable (typically
 <code class="docutils literal notranslate"><span class="pre">/usr/lib64/geopm/</span></code>).  This option is used by the
 launcher to set the <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment
 variable.  The command line option will override any
@@ -541,21 +550,21 @@ geopm(7)</span></a>.</p>
 <dt><kbd><span class="option">--geopm-record-filter <var>filter</var></span></kbd></dt>
 <dd><p id="geopm-record-filter-option">Applies the user specified filter to the
 application record data feed.  The filters
-currently supported are &quot;proxy_epoch&quot; and
-&quot;edit_distance&quot;.  These filters can be used to
+currently supported are <code class="docutils literal notranslate"><span class="pre">&quot;proxy_epoch&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;edit_distance&quot;</span></code>.  These filters can be used to
 infer the application outer loop (epoch) without
 modifying the application by inserting calls to
 <code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch()</span></code> (see <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>).  Region entry and exit may
 be captured automatically through runtimes such
 as MPI and OpenMP.</p>
-<p>The &quot;proxy_epoch&quot; filter looks for entries into a
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;proxy_epoch&quot;</span></code> filter looks for entries into a
 specific region that serves as a proxy for epoch
 events.  The filter is specified as a
 comma-separated list.  The first value selects
-the filter by name: &quot;proxy_epoch&quot;. The second
+the filter by name: <code class="docutils literal notranslate"><span class="pre">&quot;proxy_epoch&quot;</span></code>. The second
 value in the comma-separated list specifies a
 region that will be used as a proxy for calls to
-geopm_prof_epoch().  If the value can be
+<code class="docutils literal notranslate"><span class="pre">geopm_prof_epoch()</span></code>.  If the value can be
 interpreted as an integer, it will be used as the
 numerical region hash of the region name,
 otherwise, the value is interpreted as the region
@@ -569,12 +578,12 @@ specified in the comma-separated list is the
 number of region entries into the proxy region
 that are expected prior to the outer loop
 beginning.  By default, this is assumed to be 0.
-In the following example, the MPI_Barrier region
+In the following example, the <code class="docutils literal notranslate"><span class="pre">MPI_Barrier</span></code> region
 entry is used as a proxy for the epoch event:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">record</span><span class="o">-</span><span class="nb">filter</span><span class="o">=</span><span class="n">proxy_epoch</span><span class="p">,</span><span class="n">MPI_Barrier</span>
 </pre></div>
 </div>
-<p>In the next example the MPI_Barrier region is
+<p>In the next example the <code class="docutils literal notranslate"><span class="pre">MPI_Barrier</span></code> region is
 specified as a hash and the calls per outer loop
 is given as 6:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">record</span><span class="o">-</span><span class="nb">filter</span><span class="o">=</span><span class="n">proxy_epoch</span><span class="p">,</span><span class="mh">0x7b561f45</span><span class="p">,</span><span class="mi">6</span>
@@ -584,13 +593,13 @@ is given as 6:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">record</span><span class="o">-</span><span class="nb">filter</span><span class="o">=</span><span class="n">proxy_epoch</span><span class="p">,</span><span class="n">MPI_Barrier</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span>
 </pre></div>
 </div>
-<p>Note: you must specify the calls per outer loop
+<p><strong>Note:</strong> you must specify the calls per outer loop
 in order to specify the calls prior to startup.</p>
-<p>The &quot;edit_distance&quot; filter will attempt to infer
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;edit_distance&quot;</span></code> filter will attempt to infer
 the epoch based on patterns in the region entry
 events using an edit distance algorithm.  The
 filter is specified as string beginning with the
-name &quot;edit_distance&quot;; if optional parameters are
+name <code class="docutils literal notranslate"><span class="pre">&quot;edit_distance&quot;</span></code>; if optional parameters are
 specified, they are provided as a comma-separated
 list following the name.  The first parameter is
 the buffer size; the default if not provided is
@@ -599,23 +608,23 @@ period length in number of records.  The third
 parameter is the stable period hysteresis factor.
 The fourth parameter is the unstable period
 hysteresis factor.  In the following example, the
-&quot;edit_distance&quot; filter will be used with all
+<code class="docutils literal notranslate"><span class="pre">&quot;edit_distance&quot;</span></code> filter will be used with all
 optional parameters provided:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">record</span><span class="o">-</span><span class="nb">filter</span><span class="o">=</span><span class="n">edit_distance</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">3.0</span>
 </pre></div>
 </div>
 </dd>
 <dt><kbd><span class="option">--geopm-debug-attach <var>rank</var></span></kbd></dt>
-<dd><p id="geopm-debug-attach-option">Enables a serial debugger such as gdb to attach to a
+<dd><p id="geopm-debug-attach-option">Enables a serial debugger such as <code class="docutils literal notranslate"><span class="pre">gdb</span></code> to attach to a
 job when the GEOPM PMPI wrappers are enabled.  If
 set to a numerical value, the associated rank will
-wait in MPI_Init() until a debugger is attached and
-the local variable &quot;cont&quot; is set to a non-zero
+wait in <code class="docutils literal notranslate"><span class="pre">MPI_Init()</span></code> until a debugger is attached and
+the local variable <code class="docutils literal notranslate"><span class="pre">&quot;cont&quot;</span></code> is set to a non-zero
 value.  If set, but not to a numerical value then
 all ranks will wait.  The runtime will print a
 message explaining the hostname and process ID that
 the debugger should attach to.  This option is used
-by the launcher to set the GEOPM_DEBUG_ATTACH
+by the launcher to set the <code class="docutils literal notranslate"><span class="pre">GEOPM_DEBUG_ATTACH</span></code>
 environment variable.  The command line option will
 override any value currently set in the environment.
 See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section of
@@ -638,28 +647,28 @@ option is specified, the GEOPM runtime will not be
 launched.</p>
 </dd>
 <dt><kbd><span class="option">--geopm-ompt-disable</span></kbd></dt>
-<dd><p id="geopm-ompt-disable-option">Disable OMPT detection of OpenMP regions.  See the
-INTEGRATION WITH OMPT section of <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>
+<dd><p id="geopm-ompt-disable-option">Disable OMPT detection of OpenMP regions.
+See the <a class="reference internal" href="geopm.7.html#integration-with-ompt"><span class="std std-ref">INTEGRATION WITH OMPT section of geopm(7)</span></a>
 for more information about OpenMP region detection.</p>
 </dd>
 </dl>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
-<p>Use geopmlaunch to queue a job using geopmbench on a SLURM managed system
+<p>Use <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> to queue a job using <code class="docutils literal notranslate"><span class="pre">geopmbench</span></code> on a SLURM managed system
 requesting two nodes using 32 application MPI process each with four threads:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmlaunch</span> <span class="n">srun</span> <span class="o">-</span><span class="n">N</span> <span class="mi">2</span> <span class="o">-</span><span class="n">n</span> <span class="mi">32</span> <span class="o">-</span><span class="n">c</span> <span class="mi">4</span> \
-                 <span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">ctl</span><span class="o">=</span><span class="n">process</span> \
-                 <span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">report</span><span class="o">=</span><span class="n">tutorial6</span><span class="o">.</span><span class="n">report</span> \
-                 <span class="o">--</span> <span class="o">./</span><span class="n">geopmbench</span> <span class="n">tutorial6_config</span><span class="o">.</span><span class="n">json</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmlaunch srun -N <span class="m">2</span> -n <span class="m">32</span> -c <span class="m">4</span> <span class="se">\</span>
+                 --geopm-ctl<span class="o">=</span>process <span class="se">\</span>
+                 --geopm-report<span class="o">=</span>tutorial6.report <span class="se">\</span>
+                 -- ./geopmbench tutorial6_config.json
 </pre></div>
 </div>
-<p>Use geopmlaunch to launch the miniFE executable with the same configuration,
+<p>Use <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> to launch the <code class="docutils literal notranslate"><span class="pre">miniFE</span></code> executable with the same configuration,
 but on an ALPS managed system:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmlaunch</span> <span class="n">aprun</span> <span class="o">-</span><span class="n">N</span> <span class="mi">2</span> <span class="o">-</span><span class="n">n</span> <span class="mi">64</span> <span class="o">--</span><span class="n">cpus</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">pe</span> <span class="mi">4</span> \
-                  <span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">ctl</span> <span class="n">process</span> \
-                  <span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">report</span> <span class="n">miniFE</span><span class="o">.</span><span class="n">report</span> \
-                  <span class="o">--</span> <span class="o">./</span><span class="n">miniFE</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span><span class="n">nx</span> <span class="mi">256</span> <span class="o">-</span><span class="n">ny</span> <span class="mi">256</span> <span class="o">-</span><span class="n">nz</span> <span class="mi">256</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmlaunch aprun -N <span class="m">2</span> -n <span class="m">64</span> --cpus-per-pe <span class="m">4</span> <span class="se">\</span>
+                  --geopm-ctl process <span class="se">\</span>
+                  --geopm-report miniFE.report <span class="se">\</span>
+                  -- ./miniFE.x -nx <span class="m">256</span> -ny <span class="m">256</span> -nz <span class="m">256</span>
 </pre></div>
 </div>
 </section>
@@ -699,7 +708,7 @@ precedence for each GEOPM variable is: override configuration file,
 <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command line option, environment setting, the default
 configuration file, and finally there are some preset default values
 that are coded into GEOPM which have the lowest precedence.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">KMP_WARNINGS</span></code> environment variable is set to 'FALSE', thus
+<p>The <code class="docutils literal notranslate"><span class="pre">KMP_WARNINGS</span></code> environment variable is set to <code class="docutils literal notranslate"><span class="pre">'FALSE'</span></code>, thus
 disabling the Intel OpenMP warnings.  This avoids warnings emitted
 because the launcher configures the <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment
 variable to support applications compiled with a non-Intel

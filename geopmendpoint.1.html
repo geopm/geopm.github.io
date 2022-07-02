@@ -159,21 +159,25 @@
 <h1>geopmendpoint(1) -- command line tool for dynamic policy control<a class="headerlink" href="#geopmendpoint-1-command-line-tool-for-dynamic-policy-control" title="Permalink to this headline"></a></h1>
 <section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">geopmendpoint</span></code> [<code class="docutils literal notranslate"><span class="pre">-c</span></code> | <code class="docutils literal notranslate"><span class="pre">-d</span></code> | <code class="docutils literal notranslate"><span class="pre">-a</span></code> | <code class="docutils literal notranslate"><span class="pre">-p</span></code> <em>POLICY0</em>,<em>POLICY1</em>,...] <em>ENDPOINT</em></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmendpoint <span class="o">[</span>-c <span class="p">|</span> -d <span class="p">|</span> -a <span class="p">|</span> -p POLICY0, POLICY1, ...<span class="o">]</span> ENDPOINT
+</pre></div>
+</div>
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
 <p>Command line interface to create, query, read, write, and destroy a
-GEOPM runtime endpoint.  A GEOPM endpoint is a shared memory attach
+GEOPM runtime endpoint.</p>
+<p>A GEOPM endpoint is a shared memory attach
 point to connect a managing process (e.g. a resource manager or job
 scheduler) to a GEOPM controller.  The endpoint supports writing of
-agent-specific policies and the reading of agent-specific signals.
+<em>agent-specific</em> policies and the reading of <em>agent-specific</em> signals.
 The agent signals and controls are described on the <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a>
-man page.  The <em>ENDPOINT</em> positional argument specifies the endpoint
+man page.  The <code class="docutils literal notranslate"><span class="pre">ENDPOINT</span></code> positional argument specifies the endpoint
 name and is typically the name associated with the job or the job
-identifier.  This string is arbitrary, but cannot contain the '/' or
-',' characters.  This name distinguishes all endpoints running on any
-given compute node (coherent shared memory).  If the <code class="docutils literal notranslate"><span class="pre">geopmendpoint</span></code>
+identifier.  This string is arbitrary, but cannot contain the <code class="docutils literal notranslate"><span class="pre">'/'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">','</span></code> characters.  This name distinguishes all endpoints running on any
+given compute node (coherent shared memory).</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">geopmendpoint</span></code>
 executable is run with no arguments then a list of all policy
 endpoints available on the system is printed to standard output.</p>
 </section>
@@ -196,7 +200,7 @@ agent has not yet attached to the endpoint.</p>
 <dd><p>Read a sample from the attached agent, if any.  The output has one
 line per signal.  On each line is written the signal name and signal
 value separated by a colon.  The last line of the output represents
-the SAMPLE_AGE signal which is the elapsed time since the last
+the <code class="docutils literal notranslate"><span class="pre">SAMPLE_AGE</span></code> signal which is the elapsed time since the last
 update to the endpoint by the GEOPM runtime.  The signal names
 provided by an agent can be determined with the <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> command line tool.  The return value will be
 non-zero if an agent has not yet attached to the endpoint.</p>
@@ -214,52 +218,52 @@ has not yet attached to the endpoint.</p>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
 <p>List all endpoints on a system when none are open:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint
 </pre></div>
 </div>
-<p>Create two endpoints called &quot;job-123&quot; and &quot;job-321&quot; for agents to
+<p>Create two endpoints called <code class="docutils literal notranslate"><span class="pre">&quot;job-123&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;job-321&quot;</span></code> for agents to
 attach:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint -c job-123
-$ geopmendpoint
-job-123
-$ geopmendpoint -c job-321
-$ geopmendpoint
-job-123
-job-321
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint -c job-123
+<span class="gp">$ </span>geopmendpoint
+<span class="go">job-123</span>
+<span class="gp">$ </span>geopmendpoint -c job-321
+<span class="gp">$ </span>geopmendpoint
+<span class="go">job-123</span>
+<span class="go">job-321</span>
 </pre></div>
 </div>
-<p>Check if agent has attached to endpoint &quot;job-123&quot;, but no agent has
+<p>Check if agent has attached to endpoint <code class="docutils literal notranslate"><span class="pre">&quot;job-123&quot;</span></code>, but no agent has
 yet attached:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint -a job-123
-Error: &lt;geopm&gt; No agent has attached to endpoint.
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint -a job-123
+<span class="go">Error: &lt;geopm&gt; No agent has attached to endpoint.</span>
 </pre></div>
 </div>
-<p>Check if agent has attached to endpoint &quot;job-321&quot; after a
-power_balancer agent has attached:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint -a job-321
-Agent: power_balancer
-Nodes: compute-node-4,compute-node-5,compute-node-7,compute-node-8
+<p>Check if agent has attached to endpoint <code class="docutils literal notranslate"><span class="pre">&quot;job-321&quot;</span></code> after a
+<code class="docutils literal notranslate"><span class="pre">power_balancer</span></code> agent has attached:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint -a job-321
+<span class="go">Agent: power_balancer</span>
+<span class="go">Nodes: compute-node-4,compute-node-5,compute-node-7,compute-node-8</span>
 </pre></div>
 </div>
-<p>Set policy at endpoint for power_balancer agent with 250 Watt per
+<p>Set policy at endpoint for <code class="docutils literal notranslate"><span class="pre">power_balancer</span></code> agent with 250 Watt per
 node power budget:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint -p 250 job-321
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint -p <span class="m">250</span> job-321
 </pre></div>
 </div>
-<p>Sample from balancing agent with endpoint &quot;job-321&quot;:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint -s job-321
-POWER: 247.2
-IS_CONVERGED: 1
-EPOCH_RUNTIME: 90.5
-SAMPLE_AGE: 1.234E-4
+<p>Sample from balancing agent with endpoint <code class="docutils literal notranslate"><span class="pre">&quot;job-321&quot;</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint -s job-321
+<span class="go">POWER: 247.2</span>
+<span class="go">IS_CONVERGED: 1</span>
+<span class="go">EPOCH_RUNTIME: 90.5</span>
+<span class="go">SAMPLE_AGE: 1.234E-4</span>
 </pre></div>
 </div>
-<p>Destroy endpoints &quot;job-123&quot; and &quot;job-321&quot;:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmendpoint -d job-321
-$ geopmendpoint
-job-123
-$ geopmendpoint -d job-123
-$ geopmendpoint
+<p>Destroy endpoints <code class="docutils literal notranslate"><span class="pre">&quot;job-123&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;job-321&quot;</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmendpoint -d job-321
+<span class="gp">$ </span>geopmendpoint
+<span class="go">job-123</span>
+<span class="gp">$ </span>geopmendpoint -d job-123
+<span class="gp">$ </span>geopmendpoint
 </pre></div>
 </div>
 </section>

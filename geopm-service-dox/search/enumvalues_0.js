@@ -26,8 +26,8 @@ var searchData=
   ['geopm_5ferror_5fnot_5fimplemented',['GEOPM_ERROR_NOT_IMPLEMENTED',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991ae93add06d9ec3998efb7f3ce83dc1229',1,'geopm_error.h']]],
   ['geopm_5ferror_5fplatform_5funsupported',['GEOPM_ERROR_PLATFORM_UNSUPPORTED',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a7c86f81c3a50158953e8e916ea466d10',1,'geopm_error.h']]],
   ['geopm_5ferror_5fruntime',['GEOPM_ERROR_RUNTIME',['../geopm__error_8h.html#afe64f877b42ac53b68d86c1372ec8991a60bcf83df7fd45305f70ee34946c1915',1,'geopm_error.h']]],
-  ['geopm_5fmask_5fregion_5fhint',['GEOPM_MASK_REGION_HINT',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ab8fdb47d404a5a6a42983677e1cefc76',1,'geopm_hint.h']]],
   ['geopm_5fnum_5fdomain',['GEOPM_NUM_DOMAIN',['../geopm__topo_8h.html#aa76c17d18cff1840930f342ac01f4fbca00aaff141f65f343463f511e26b3a426',1,'geopm_topo.h']]],
+  ['geopm_5fnum_5fregion_5fhint',['GEOPM_NUM_REGION_HINT',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ad3e3301301308573813984cc106b6e1b',1,'geopm_hint.h']]],
   ['geopm_5fregion_5fhash_5fapp',['GEOPM_REGION_HASH_APP',['../geopm__hash_8h.html#a3df87798b5dd1fbdc117c1a35f3a2bb9a557b4e587aad8cb4163cd19f6f81eb7e',1,'geopm_hash.h']]],
   ['geopm_5fregion_5fhash_5fepoch',['GEOPM_REGION_HASH_EPOCH',['../geopm__hash_8h.html#a3df87798b5dd1fbdc117c1a35f3a2bb9a0e3c862eded1abab9fd4a1366059b300',1,'geopm_hash.h']]],
   ['geopm_5fregion_5fhash_5finvalid',['GEOPM_REGION_HASH_INVALID',['../geopm__hash_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a21b80bc2eeb54715cdf4c63778b3002d',1,'geopm_hash.h']]],
@@ -40,8 +40,8 @@ var searchData=
   ['geopm_5fregion_5fhint_5fnetwork',['GEOPM_REGION_HINT_NETWORK',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a6a1e4f6801755ce95a0d5d06dff5320d',1,'geopm_hint.h']]],
   ['geopm_5fregion_5fhint_5fparallel',['GEOPM_REGION_HINT_PARALLEL',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ad659bbfe8c84e04472edacbf75daa860',1,'geopm_hint.h']]],
   ['geopm_5fregion_5fhint_5fserial',['GEOPM_REGION_HINT_SERIAL',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a3f4a35ebe93b806ce69352d8246ce129',1,'geopm_hint.h']]],
+  ['geopm_5fregion_5fhint_5fspin',['GEOPM_REGION_HINT_SPIN',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a580ec2f8f464435886a26962aae4db5a',1,'geopm_hint.h']]],
   ['geopm_5fregion_5fhint_5funknown',['GEOPM_REGION_HINT_UNKNOWN',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5a88af65373572c16193fb9c6b459af7eb',1,'geopm_hint.h']]],
   ['geopm_5fregion_5fhint_5funset',['GEOPM_REGION_HINT_UNSET',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5ad1619b1922df7b7503b5486a0d4abebc',1,'geopm_hint.h']]],
-  ['geopm_5fu64_5fsentinel_5fregion_5fhash',['GEOPM_U64_SENTINEL_REGION_HASH',['../geopm__hash_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a2761aa3e36f4fdf081107682e0e75777',1,'geopm_hash.h']]],
-  ['geopm_5fu64_5fsentinel_5fregion_5fhint',['GEOPM_U64_SENTINEL_REGION_HINT',['../geopm__hint_8h.html#a1f38ae5701cb6cd1d5657a5bcc3537f5af7d6548b570f5651e451c78d1ffdd73d',1,'geopm_hint.h']]]
+  ['geopm_5fu64_5fsentinel_5fregion_5fhash',['GEOPM_U64_SENTINEL_REGION_HASH',['../geopm__hash_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a2761aa3e36f4fdf081107682e0e75777',1,'geopm_hash.h']]]
 ];

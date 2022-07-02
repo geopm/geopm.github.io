@@ -178,7 +178,7 @@
 <p>Implementation for the geopmaccess command line tool.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.access.Access">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">Access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.access.</span></span><span class="sig-name descname"><span class="pre">Access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.access.Access" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Extension to the GEOPM D-Bus proxy to support the geopmaccess
 command line interface.</p>
@@ -602,10 +602,14 @@ the control values in the internal state and write the values to
 the hardware.  A distinct control index will be returned for each
 unique combination of input parameters.  All controls must be
 pushed onto the stack prior to the first call to the adjust() or
-write_batch() functions.  Attempts to push a controls onto the
-stack after the first call to adjust() or write_batch() or
-attempts to push a control_name that is not a value provided by
-the control_names() function will result in a raised exception.</p>
+write_batch() functions.  After calls to adjust() or
+write_batch() have been made, controls may be pushed again only
+after calling reset() and before calling adjust() or
+write_batch() again.  Attempts to push a control onto the stack
+after the first call to adjust() or write_batch() (and without
+calling reset()) or attempts to push a control_name that is not
+a value provided by the control_names() function will result in a
+raised exception.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -637,8 +641,11 @@ function to access the signal value stored in the internal state
 from the last update.  A distinct signal index will be returned
 for each unique combination of input parameters.  All signals must
 be pushed onto the stack prior to the fist call to sample() or
-read_batch().  Attempts to push a signal onto the stack after the
-first call to sample() or read_batch() or attempts to push a
+read_batch().  After calls to sample() or read_batch() have been
+made, signals may be pushed again only after calling reset() and
+before caling sample() or read_batch() again.  Attempts to push a
+signal onto the stack after the first call to sample() or
+read_batch() (and without calling reset()) or attempts to push a
 signal_name that is not provided by signal_names() will result in
 a raised exception.</p>
 <dl class="field-list simple">
@@ -696,6 +703,17 @@ with a domain type (e.g. 'cpu' or 'board').</p></li>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geopmdpy.pio.reset">
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.pio.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.pio.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the GEOPM platform interface.</p>
+<p>Resetting the GEOPM platform interface will cause the internal
+PlatformIO instance to be released/deleted and reconstructed.  As
+a result, any signals and controls that had been pushed will be
+cleared, any batch servers that had been started will be stopped,
+and all registered IOGroups will be reset.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -988,7 +1006,7 @@ with a domain type (e.g. 'cpu' or 'board').</p></li>
 <p>Tools to support runtime implementations that use the GEOPM service</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.runtime.Agent">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">Agent</span></span><a class="headerlink" href="#geopmdpy.runtime.Agent" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">Agent</span></span><a class="headerlink" href="#geopmdpy.runtime.Agent" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Base class that documents the interfaces required by an agent</p>
 <p>Agent objects are used to initialize a Controller object and
@@ -1131,7 +1149,7 @@ Agent.get_period().</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.runtime.Controller">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">Controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Controller" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">Controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.Controller" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class that supports a runtime control algorithm</p>
 <dl class="py method">
@@ -1192,7 +1210,7 @@ Agent.get_period().</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.runtime.TimedLoop">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">TimedLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.TimedLoop" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.runtime.</span></span><span class="sig-name descname"><span class="pre">TimedLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.runtime.TimedLoop" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Object that can be iterated over to run a timed loop</p>
 <p>Use in a for loop to execute a fixed number of timed delays.  The
@@ -1225,41 +1243,41 @@ targeted end time for each iteration.</p>
 <span id="geopmdpy-schemas"></span><h2>geopmdpy.schemas<a class="headerlink" href="#module-geopmdpy.schemas" title="Permalink to this headline"></a></h2>
 <p>Json schemas used by geopmdpy</p>
 <p>GEOPM_ACTIVE_SESSIONS_SCHEMA:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/active_sessions.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ActiveSession&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;client_pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;reference_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;minimum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;signals&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;controls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;watch_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;batch_server&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;client_pid&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;signals&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;controls&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;https://geopm.github.io/active_sessions.schema.json&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ActiveSession&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;client_pid&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;reference_count&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;signals&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;controls&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;watch_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;batch_server&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;client_pid&quot;</span><span class="p">,</span> <span class="s2">&quot;signals&quot;</span><span class="p">,</span> <span class="s2">&quot;controls&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
@@ -1269,7 +1287,7 @@ targeted end time for each iteration.</p>
 exposed by geopmd.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.service.GEOPMService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.service.</span></span><span class="sig-name descname"><span class="pre">GEOPMService</span></span><a class="headerlink" href="#geopmdpy.service.GEOPMService" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.service.</span></span><span class="sig-name descname"><span class="pre">GEOPMService</span></span><a class="headerlink" href="#geopmdpy.service.GEOPMService" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>The dasbus service object that is published.</p>
 <p>Object used by dasbus to map GEOPM service DBus APIs to their
@@ -1366,7 +1384,7 @@ explicit dasbus dependency which facilitates unit testing.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.service.</span></span><span class="sig-name descname"><span class="pre">PlatformService</span></span><a class="headerlink" href="#geopmdpy.service.PlatformService" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.service.</span></span><span class="sig-name descname"><span class="pre">PlatformService</span></span><a class="headerlink" href="#geopmdpy.service.PlatformService" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Provides the concrete implementation for all of the GEOPM DBus
 interfaces that use PlatformIO.  This class is used by the
@@ -1849,7 +1867,7 @@ write to.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.service.TopoService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.service.</span></span><span class="sig-name descname"><span class="pre">TopoService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topo=&lt;module</span> <span class="pre">'geopmdpy.topo'</span> <span class="pre">from</span> <span class="pre">'/home/cmcantal/Git/geopm/service/geopmdpy/topo.py'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.TopoService" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.service.</span></span><span class="sig-name descname"><span class="pre">TopoService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">topo=&lt;module</span> <span class="pre">'geopmdpy.topo'</span> <span class="pre">from</span> <span class="pre">'/home/cmcantal/Git/geopm/service/geopmdpy/topo.py'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.TopoService" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Provides the concrete implementation for all of the GEOPM DBus
 interfaces that use PlatformTopo.  This class is used by the
@@ -1885,7 +1903,7 @@ with CPUs.</p>
 <p>Implementation for the geopmsession command line tool</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.session.ReadRequestQueue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">ReadRequestQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.ReadRequestQueue" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">ReadRequestQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.ReadRequestQueue" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#geopmdpy.session.RequestQueue" title="geopmdpy.session.RequestQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">geopmdpy.session.RequestQueue</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.session.ReadRequestQueue.get_formats">
@@ -1973,7 +1991,7 @@ for each signal name in input list.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.session.RequestQueue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">RequestQueue</span></span><a class="headerlink" href="#geopmdpy.session.RequestQueue" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">RequestQueue</span></span><a class="headerlink" href="#geopmdpy.session.RequestQueue" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Object derived from user input that provides request information</p>
 <p>The geopmsession command line tool parses requests for reading
@@ -2032,7 +2050,7 @@ user.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.session.Session">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.session.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geopm_proxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Object responsible for creating a GEOPM service session</p>
 <p>This object's run() method is the main entry point for
@@ -2086,7 +2104,7 @@ for each signal provided.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.session.Session.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdin&gt;'</span> <span class="pre">mode='r'</span> <span class="pre">encoding='UTF-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='UTF-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.run" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">run_time</span></em>, <em class="sig-param"><span class="pre">period</span></em>, <em class="sig-param"><span class="pre">request_stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdin&gt;'</span> <span class="pre">mode='r'</span> <span class="pre">encoding='UTF-8'&gt;</span></em>, <em class="sig-param"><span class="pre">out_stream=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='UTF-8'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.session.Session.run" title="Permalink to this definition"></a></dt>
 <dd><p>&quot;Create a GEOPM session with values parsed from the command line</p>
 <p>The implementation for the geopmsession command line tool.
 The inputs to this method are derived from the parsed command
@@ -2166,7 +2184,7 @@ guarantees about the security of these system files, and an
 abstraction for updating the contents.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.system_files.AccessLists">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">AccessLists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/etc/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.AccessLists" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">AccessLists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/etc/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.AccessLists" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class that manages the access list files</p>
 <dl class="py method">
@@ -2277,7 +2295,7 @@ secure_make_file() interfaces.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.system_files.ActiveSessions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">ActiveSessions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/run/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.ActiveSessions" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">ActiveSessions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/run/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.ActiveSessions" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class that manages the session files for the service</p>
 <p>The state about active sessions opened with geopmd by a client
@@ -2633,19 +2651,19 @@ GLib.timeout_add() method</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="geopmdpy.system_files.GEOPM_SERVICE_CONFIG_PATH_PERM">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">GEOPM_SERVICE_CONFIG_PATH_PERM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">448</span></em><a class="headerlink" href="#geopmdpy.system_files.GEOPM_SERVICE_CONFIG_PATH_PERM" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">GEOPM_SERVICE_CONFIG_PATH_PERM</span></span><em class="property"> <span class="pre">=</span> <span class="pre">448</span></em><a class="headerlink" href="#geopmdpy.system_files.GEOPM_SERVICE_CONFIG_PATH_PERM" title="Permalink to this definition"></a></dt>
 <dd><p>Default permissions for the GEOPM service config path</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="geopmdpy.system_files.GEOPM_SERVICE_RUN_PATH_PERM">
-<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">GEOPM_SERVICE_RUN_PATH_PERM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">457</span></em><a class="headerlink" href="#geopmdpy.system_files.GEOPM_SERVICE_RUN_PATH_PERM" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">GEOPM_SERVICE_RUN_PATH_PERM</span></span><em class="property"> <span class="pre">=</span> <span class="pre">457</span></em><a class="headerlink" href="#geopmdpy.system_files.GEOPM_SERVICE_RUN_PATH_PERM" title="Permalink to this definition"></a></dt>
 <dd><p>Default permissions for the GEOPM service run path</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geopmdpy.system_files.WriteLock">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">WriteLock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/run/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.WriteLock" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">geopmdpy.system_files.</span></span><span class="sig-name descname"><span class="pre">WriteLock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/run/geopm-service'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.system_files.WriteLock" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class for interacting with control lock file</p>
 <p>This class provides the interface to query and set the PID that owns the

@@ -291,24 +291,24 @@ the json policy string, there is one thing to note about creating the
 json string without this tool.  Since json does not support hex
 literals, the json must include the hashes in their decimal form. For
 example, the above policy json is:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;FREQ_DEFAULT&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3e9</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;FREQ_UNCORE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2e9</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;HASH_0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3994218005</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;FREQ_0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5e9</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;HASH_1&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4248968673</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;FREQ_1&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.5e9</span><span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;FREQ_DEFAULT&quot;</span><span class="p">:</span> <span class="mf">3e9</span><span class="p">,</span>
+ <span class="nt">&quot;FREQ_UNCORE&quot;</span><span class="p">:</span> <span class="mf">2e9</span><span class="p">,</span>
+ <span class="nt">&quot;HASH_0&quot;</span><span class="p">:</span> <span class="mi">3994218005</span><span class="p">,</span>
+ <span class="nt">&quot;FREQ_0&quot;</span><span class="p">:</span> <span class="mf">1.5e9</span><span class="p">,</span>
+ <span class="nt">&quot;HASH_1&quot;</span><span class="p">:</span> <span class="mi">4248968673</span><span class="p">,</span>
+ <span class="nt">&quot;FREQ_1&quot;</span><span class="p">:</span> <span class="mf">2.5e9</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a> command line tool can be useful for learning the
 bounds of these system parameters.  The minimum, sticker, and
 maximum CPU frequencies are queried as below:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geopmread CPU_FREQUENCY_MIN board <span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geopmread CPU_FREQUENCY_MIN_AVAIL board <span class="m">0</span>
 <span class="m">1000000000</span>
 
 $ geopmread CPU_FREQUENCY_STICKER board <span class="m">0</span>
 <span class="m">2100000000</span>
 
-$ geopmread CPU_FREQUENCY_MAX board <span class="m">0</span>
+$ geopmread CPU_FREQUENCY_MAX_AVAIL board <span class="m">0</span>
 <span class="m">3700000000</span>
 </pre></div>
 </div>
@@ -324,7 +324,7 @@ $ geopmread MSR::UNCORE_RATIO_LIMIT:MAX_RATIO board <span class="m">0</span>
 to generate policies.  For example, to create a policy with the
 default CPU frequency set to two steps below maximum and the uncore
 frequency to the maximum the following commands can be used:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">freq_default</span><span class="o">=</span><span class="k">$(($(</span>geopmread CPU_FREQUENCY_MAX board <span class="m">0</span><span class="k">)</span> <span class="o">-</span> <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">freq_default</span><span class="o">=</span><span class="k">$(($(</span>geopmread CPU_FREQUENCY_MAX_AVAIL board <span class="m">0</span><span class="k">)</span> <span class="o">-</span> <span class="se">\</span>
                   <span class="m">2</span> <span class="o">*</span> <span class="k">$(</span>geopmread CPU_FREQUENCY_STEP board <span class="m">0</span><span class="k">)))</span>
 $ <span class="nv">freq_uncore</span><span class="o">=</span><span class="k">$(</span>geopmread MSR::UNCORE_RATIO_LIMIT:MAX_RATIO board <span class="m">0</span><span class="k">)</span>
 $ geopmagent -a frequency_map -p<span class="nv">$freq_default</span>,<span class="nv">$freq_uncore</span>

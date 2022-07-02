@@ -173,76 +173,76 @@ including MSRs for CPU performance, temperature and power.</p>
 <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment variable is set, the paths specified there
 will be checked for any JSON files prefixed with <code class="docutils literal notranslate"><span class="pre">msr_</span></code>. The default plugin
 path will also be searched. The files must follow this schema:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;definitions&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;msrFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;end_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log_half&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;overflow&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;seconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hertz&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;watts&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;joules&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;celsius&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;scalar&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;monotone&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;variable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;writeable&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;aggregation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;median&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_and&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_or&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hash&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hint&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;min&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;max&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;stddev&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;select_first&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;expect_same&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;end_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;scalar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;units&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;writeable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;behavior&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;msrObject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;offest&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;domain&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;board_memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;board_nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;board_accelerator&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_accelerator&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;board_accelerator_chip&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;fields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">              </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrFields&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;fields&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;msrs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrObject&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;definitions&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;msrFields&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;end_bit&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="s2">&quot;log_half&quot;</span><span class="p">,</span> <span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span> <span class="s2">&quot;overflow&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;units&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">,</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span> <span class="s2">&quot;watts&quot;</span><span class="p">,</span> <span class="s2">&quot;joules&quot;</span><span class="p">,</span> <span class="s2">&quot;celsius&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;scalar&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;behavior&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;monotone&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;writeable&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;aggregation&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;logical_and&quot;</span><span class="p">,</span> <span class="s2">&quot;logical_or&quot;</span><span class="p">,</span> <span class="s2">&quot;region_hash&quot;</span><span class="p">,</span> <span class="s2">&quot;region_hint&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;stddev&quot;</span><span class="p">,</span> <span class="s2">&quot;select_first&quot;</span><span class="p">,</span> <span class="s2">&quot;expect_same&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span> <span class="s2">&quot;end_bit&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;scalar&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="s2">&quot;writeable&quot;</span><span class="p">,</span> <span class="s2">&quot;behavior&quot;</span><span class="p">],</span>
+        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;msrObject&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;offest&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;domain&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;core&quot;</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="s2">&quot;board_memory&quot;</span><span class="p">,</span> <span class="s2">&quot;package_memory&quot;</span><span class="p">,</span> <span class="s2">&quot;board_nic&quot;</span><span class="p">,</span> <span class="s2">&quot;package_nic&quot;</span><span class="p">,</span> <span class="s2">&quot;board_accelerator&quot;</span><span class="p">,</span> <span class="s2">&quot;package_accelerator&quot;</span><span class="p">,</span> <span class="s2">&quot;board_accelerator_chip&quot;</span><span class="p">]</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/msrFields&quot;</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">],</span>
+        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+      <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;msrs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/msrObject&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>For an example of an MSR configuration file, please see:
@@ -3195,7 +3195,7 @@ available across Intel x86 microarchitectures.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::HWP_REQUEST:MAXIMUM_PERFORMANCE</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::TURBO_RATIO_LIMIT:MAX_RATIO_LIMIT_0</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX_AVAIL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::TURBO_RATIO_LIMIT:MAX_RATIO_LIMIT_0</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MIN_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::HWP_REQUEST:MINIMUM_PERFORMANCE</span></code></p>
 </dd>

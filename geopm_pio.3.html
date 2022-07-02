@@ -230,9 +230,9 @@
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_start_batch_server</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">client_pid</span><span class="p">,</span><span class="w"></span>
 <span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">num_signal</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_request_s</span><span class="w"> </span><span class="o">*</span><span class="n">signal_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span> <span class="nc">geopm_request_s</span><span class="w"> </span><span class="o">*</span><span class="n">signal_config</span><span class="p">,</span><span class="w"></span>
 <span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">num_control</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_request_s</span><span class="w"> </span><span class="o">*</span><span class="n">control_config</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span> <span class="nc">geopm_request_s</span><span class="w"> </span><span class="o">*</span><span class="n">control_config</span><span class="p">,</span><span class="w"></span>
 <span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">server_pid</span><span class="p">,</span><span class="w"></span>
 <span class="w">                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">key_size</span><span class="p">,</span><span class="w"></span>
 <span class="w">                                 </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">server_key</span><span class="p">);</span><span class="w"></span>
@@ -243,6 +243,8 @@
 <span class="w">                            </span><span class="kt">int</span><span class="w"> </span><span class="n">format_type</span><span class="p">,</span><span class="w"></span>
 <span class="w">                            </span><span class="kt">size_t</span><span class="w"> </span><span class="n">result_max</span><span class="p">,</span><span class="w"></span>
 <span class="w">                            </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_reset</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -348,6 +350,15 @@ Providing a string of <code class="docutils literal notranslate"><span class="pr
 Returns zero on success, error value on failure.</p>
 </dd>
 </dl>
+<p><code class="docutils literal notranslate"><span class="pre">geopm_pio_reset()</span></code>
+Reset the GEOPM platform interface causing resources to be freed.
+This will cause the internal PlatormIO instance to be
+released/deleted and reconstructed.  As a result, any signals and
+controls that had been pushed will be cleared, any batch servers
+that had been started will be stopped, and all registered IOGroups
+will be reset.  <strong>NOTE: the reset only applies to the Service
+PlatformIO instance and does not affect the PlatformIO instance
+managed by the GEOPM HPC runtime.</strong></p>
 </section>
 <section id="serial-functions">
 <h2>Serial Functions<a class="headerlink" href="#serial-functions" title="Permalink to this headline"></a></h2>
@@ -400,31 +411,31 @@ negative error code is returned.  Zero is returned upon success.</p>
 </dl>
 <p>When controls are saved, the data is stored in JSON format with the following
 schema:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/saved_controls.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Saved IOGroup controls&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;domain_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;domain_idx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;setting&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain_type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain_idx&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;setting&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;https://geopm.github.io/saved_controls.schema.json&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Saved IOGroup controls&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;domain_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;domain_idx&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;setting&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;domain_type&quot;</span><span class="p">,</span> <span class="s2">&quot;domain_idx&quot;</span><span class="p">,</span> <span class="s2">&quot;setting&quot;</span><span class="p">],</span>
+      <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
@@ -445,11 +456,15 @@ signal value stored in the internal state from the last update.  A
 distinct signal index will be returned for each unique combination
 of input parameters.  All signals must be pushed onto the stack
 prior to the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> or
-<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code>.  Attempts to push a signal onto the
-stack after the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> or
-<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code> or attempts to push a <em>signal_name</em> that
-is not a value provided by <code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_name()</span></code> will result
-in a negative return value.</p>
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code>.  After calls to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code> have been made, signals may be pushed
+again only after performing a reset by calling
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_reset()</span></code> and before calling <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code> again.  Attempts to push a signal onto
+the stack after the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_read_batch()</span></code> (and without performing a reset) or
+attempts to push a <em>signal_name</em> that is not a value provided by
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_name()</span></code> will result in a negative return value.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_push_control()</span></code></dt><dd><p>Push a control onto the stack of batch access controls.  The
 control is defined by selecting a <em>control_name</em> from one of the
@@ -465,11 +480,15 @@ the internal state and write the values to the hardware.  A
 distinct control index will be returned for each unique
 combination of input parameters.  All controls must be pushed onto
 the stack prior to the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> or
-<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>.  Attempts to push a controls onto the
-stack after the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> or
-<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code> or attempts to push a <em>control_name</em>
-that is not a value provided by <code class="docutils literal notranslate"><span class="pre">geopm_pio_control_name()</span></code> will
-result in a negative return value.</p>
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code>.  After calls to <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code> have been made, controls may be
+pushed again only after performing a reset by calling
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_reset()</span></code> and before calling <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code> again.  Attempts to push a controls
+onto the stack after the first call to <code class="docutils literal notranslate"><span class="pre">geopm_pio_adjust()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_write_batch()</span></code> (and without performing a reset) or
+attempts to push a <em>control_name</em> that is not a value provided by
+<code class="docutils literal notranslate"><span class="pre">geopm_pio_control_name()</span></code> will result in a negative return value.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_sample()</span></code></dt><dd><p>Samples cached value of a single signal that has been pushed via
 <code class="docutils literal notranslate"><span class="pre">geopm_pio_push_signal()</span></code> and writes the value into <em>result</em>.  The
