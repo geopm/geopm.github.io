@@ -6,7 +6,14 @@ var searchData=
   ['check_5freturn',['check_return',['../classgeopm_1_1_batch_status_imp.html#ac7765d353d821a25292200acc4f6fd28',1,'geopm::BatchStatusImp']]],
   ['child_5fregister_5fhandler',['child_register_handler',['../classgeopm_1_1_batch_server_imp.html#a18d9c14136c0ce4e6a52c7d3659a47e1',1,'geopm::BatchServerImp']]],
   ['chown',['chown',['../classgeopm_1_1_shared_memory_imp.html#a6c2487d392df232a3d7e631010ec9c1a',1,'geopm::SharedMemoryImp']]],
+  ['clear_5fovf_5ffixed_5fctr0',['CLEAR_OVF_FIXED_CTR0',['../msr__data__arch_8cpp.html#a8f3057645ec733ae6ed225e042819502',1,'msr_data_arch.cpp']]],
+  ['clear_5fovf_5ffixed_5fctr1',['CLEAR_OVF_FIXED_CTR1',['../msr__data__arch_8cpp.html#a959de2acf19d03cc0eb794da069b7c8e',1,'msr_data_arch.cpp']]],
+  ['clear_5fovf_5ffixed_5fctr2',['CLEAR_OVF_FIXED_CTR2',['../msr__data__arch_8cpp.html#a92a56955c8d0301a6702fadc65708ce4',1,'msr_data_arch.cpp']]],
+  ['clear_5fovf_5fpmc1',['CLEAR_OVF_PMC1',['../msr__data__arch_8cpp.html#a2afd47788170b56e05181e2bbe6dddf7',1,'msr_data_arch.cpp']]],
+  ['clear_5fovf_5fpmc2',['CLEAR_OVF_PMC2',['../msr__data__arch_8cpp.html#aabb9e9b8ea48a5a9c4296023fcb0dcb3',1,'msr_data_arch.cpp']]],
+  ['clear_5fovf_5fpmc3',['CLEAR_OVF_PMC3',['../msr__data__arch_8cpp.html#a1f1c7ae8d519b386303984385f39e37d',1,'msr_data_arch.cpp']]],
   ['close_5fcontainer',['close_container',['../classgeopm_1_1_s_d_bus_message.html#a4865c14e6519384d579e27cbe48b498b',1,'geopm::SDBusMessage::close_container()'],['../classgeopm_1_1_s_d_bus_message_imp.html#af439d07d8625f0f4d2343317281bd375',1,'geopm::SDBusMessageImp::close_container()']]],
+  ['cmask',['CMASK',['../namespacegeopm.html#a74931ba00100382d340d7a7bed88fe67',1,'geopm::CMASK()'],['../msr__data__arch_8cpp.html#a5339a0c8072536a0cb6b603df1021759',1,'CMASK():&#160;msr_data_arch.cpp']]],
   ['cnliogroup',['CNLIOGroup',['../classgeopm_1_1_c_n_l_i_o_group.html',1,'geopm::CNLIOGroup'],['../classgeopm_1_1_c_n_l_i_o_group.html#ad8c2b6522ad09c3f7d244657903b4352',1,'geopm::CNLIOGroup::CNLIOGroup()'],['../classgeopm_1_1_c_n_l_i_o_group.html#aa47c5fac230fe0ad4151e18d384f7382',1,'geopm::CNLIOGroup::CNLIOGroup(const std::string &amp;pm_counters_path)']]],
   ['cnliogroup_2ecpp',['CNLIOGroup.cpp',['../_c_n_l_i_o_group_8cpp.html',1,'']]],
   ['cnliogroup_2ehpp',['CNLIOGroup.hpp',['../_c_n_l_i_o_group_8hpp.html',1,'']]],
@@ -31,5 +38,6 @@ var searchData=
   ['cpuinfoiogroup_2ehpp',['CpuinfoIOGroup.hpp',['../_cpuinfo_i_o_group_8hpp.html',1,'']]],
   ['create_5fcache',['create_cache',['../classgeopm_1_1_platform_topo_imp.html#ad2e9406efe1cf5715f54bf27a56c2abd',1,'geopm::PlatformTopoImp::create_cache()'],['../classgeopm_1_1_platform_topo_imp.html#a5821602e5c275b029467a68a8e7348e8',1,'geopm::PlatformTopoImp::create_cache(const std::string &amp;cache_file_name)']]],
   ['create_5fmemory_5fregion',['create_memory_region',['../classgeopm_1_1_shared_memory_imp.html#aa2a6f5e24a7d8125c3f40cbd4169509b',1,'geopm::SharedMemoryImp']]],
-  ['create_5fshmem',['create_shmem',['../classgeopm_1_1_batch_server_imp.html#afd408d717e1c235d30c6e2f3e7c446d1',1,'geopm::BatchServerImp']]]
+  ['create_5fshmem',['create_shmem',['../classgeopm_1_1_batch_server_imp.html#afd408d717e1c235d30c6e2f3e7c446d1',1,'geopm::BatchServerImp']]],
+  ['cutoff',['cutoff',['../namespacegeopm.html#a96ae6e1888b001fe0aa84eec6e5c1a02',1,'geopm::cutoff()'],['../msr__data__arch_8cpp.html#aecc0aabaf716a4f93777b02a993fcf6a',1,'cutoff():&#160;msr_data_arch.cpp']]]
 ];

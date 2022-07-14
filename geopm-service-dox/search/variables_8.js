@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pid',['pid',['../structgeopm_1_1_p_o_s_i_x_signal_1_1m__info__s.html#a32ced476683349cb9481f8f762e7b219',1,'geopm::POSIXSignal::m_info_s']]],
-  ['punit_5fcpu',['punit_cpu',['../structgeopm_1_1sst__cpu__map__interface__s.html#a15cc8ba3de64196fc7d79231b37b0625',1,'geopm::sst_cpu_map_interface_s']]]
+  ['json_5ftype',['json_type',['../structgeopm_1_1json__checker.html#a4ec312b1f833bfa1fc702e70844821e4',1,'geopm::json_checker']]]
 ];

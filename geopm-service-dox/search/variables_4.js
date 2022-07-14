@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['interface_5fversion',['interface_version',['../structgeopm_1_1sst__version__s.html#a7832226e59145df49eec00ab514c08eb',1,'geopm::sst_version_s']]],
-  ['interfaces',['interfaces',['../structgeopm_1_1sst__cpu__map__interface__batch__s.html#a05d67e05d9a651e921dd2e16a6ad035f',1,'geopm::sst_cpu_map_interface_batch_s::interfaces()'],['../structgeopm_1_1sst__mmio__interface__batch__s.html#ab2fe78628146ba2b2c4dee5948351222',1,'geopm::sst_mmio_interface_batch_s::interfaces()'],['../structgeopm_1_1sst__mbox__interface__batch__s.html#ac6e1f084ef774ff5a9c4f165d7042316',1,'geopm::sst_mbox_interface_batch_s::interfaces()']]],
-  ['is_5fmbox_5fsupported',['is_mbox_supported',['../structgeopm_1_1sst__version__s.html#aa84cbb3922a1ee4c112df4314a781fd8',1,'geopm::sst_version_s']]],
-  ['is_5fmmio_5fsupported',['is_mmio_supported',['../structgeopm_1_1sst__version__s.html#a0222584024491b9a3c72a55857b8b211',1,'geopm::sst_version_s']]],
-  ['is_5fvalid',['is_valid',['../structgeopm_1_1json__checker.html#a60b87d17f252c53e3c12b7e2cfbf0b02',1,'geopm::json_checker']]],
-  ['is_5fwrite',['is_write',['../structgeopm_1_1sst__mmio__interface__s.html#a62c6cbed1febf263f66c45dc615f7477',1,'geopm::sst_mmio_interface_s']]]
+  ['description',['description',['../structgeopm_1_1signal__info__s.html#acd609c9aba68cbb975d9f41eb9771bd7',1,'geopm::signal_info_s::description()'],['../structgeopm_1_1control__info__s.html#a258c9e857fae2f7408ca859f539b9702',1,'geopm::control_info_s::description()'],['../namespacegeopm.html#ae3b3de7ab19d245baba79050ce53c9bc',1,'geopm::description()'],['../msr__data__arch_8cpp.html#af0c4c497a4861b34052841a98788238c',1,'description():&#160;msr_data_arch.cpp']]],
+  ['domain',['domain',['../structgeopm_1_1signal__info__s.html#a1a207ce78a8adf72fec56df8af2ff09c',1,'geopm::signal_info_s::domain()'],['../structgeopm_1_1control__info__s.html#ac17f9356a848c01d489e85b447488dc4',1,'geopm::control_info_s::domain()'],['../msr__data__arch_8cpp.html#a2c18d935ae5cedff1eea162645e891e2',1,'domain():&#160;msr_data_arch.cpp']]],
+  ['domain_5fidx',['domain_idx',['../structgeopm_1_1_save_control_1_1m__setting__s.html#a4843c5adcc8d7643be0af95bf9d3a259',1,'geopm::SaveControl::m_setting_s']]],
+  ['domain_5ftype',['domain_type',['../structgeopm_1_1_save_control_1_1m__setting__s.html#a0d5bbae00b00586b2d6317f611f2fe9c',1,'geopm::SaveControl::m_setting_s']]],
+  ['driver_5fversion',['driver_version',['../structgeopm_1_1sst__version__s.html#a96ae6d5cee4f92a63fad7dda5f429212',1,'geopm::sst_version_s']]]
 ];

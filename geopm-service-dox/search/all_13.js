@@ -15,5 +15,6 @@ var searchData=
   ['timesignal_2ehpp',['TimeSignal.hpp',['../_time_signal_8hpp.html',1,'']]],
   ['timezero',['TimeZero',['../classgeopm_1_1_time_zero.html',1,'geopm::TimeZero'],['../classgeopm_1_1_time_zero.html#ad6624cf8284079428b9f7d2a68a1795a',1,'geopm::TimeZero::TimeZero()']]],
   ['timezero_2ecpp',['TimeZero.cpp',['../_time_zero_8cpp.html',1,'']]],
-  ['todo_20list',['Todo List',['../todo.html',1,'']]]
+  ['todo_20list',['Todo List',['../todo.html',1,'']]],
+  ['toggled',['toggled',['../namespacegeopm.html#a237a817edff87305673eafe819649ad4',1,'geopm::toggled()'],['../msr__data__arch_8cpp.html#af1776b7b3f4cc7634ec13a3024309986',1,'toggled():&#160;msr_data_arch.cpp']]]
 ];
