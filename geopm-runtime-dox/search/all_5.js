@@ -41,7 +41,6 @@ var searchData=
   ['event_5fclaim_5fcpu',['EVENT_CLAIM_CPU',['../namespacegeopm.html#a636033eac2b29105f49668284d661327a46bd3a89cbe66d7ec5c7a1c6d38eb6d1',1,'geopm']]],
   ['event_5fe',['event_e',['../namespacegeopm.html#a636033eac2b29105f49668284d661327',1,'geopm']]],
   ['event_5fepoch_5fcount',['EVENT_EPOCH_COUNT',['../namespacegeopm.html#a636033eac2b29105f49668284d661327a901f6f746f7bea5a97ad73bfec54cba7',1,'geopm']]],
-  ['event_5fformat',['event_format',['../classgeopm_1_1_profile_tracer_imp.html#a5597c13108172dc2ad5bb93b8e299f83',1,'geopm::ProfileTracerImp']]],
   ['event_5fname',['event_name',['../namespacegeopm.html#a6c6ba0ec05b10370929f2f13c218f6b9',1,'geopm']]],
   ['event_5fname_5fmap',['EVENT_NAME_MAP',['../namespacegeopm.html#a636033eac2b29105f49668284d661327af1efb1420a2725e170034219c91d24b9',1,'geopm']]],
   ['event_5fprofile',['EVENT_PROFILE',['../namespacegeopm.html#a636033eac2b29105f49668284d661327a3046807adc69507b31708c1248a2db68',1,'geopm']]],

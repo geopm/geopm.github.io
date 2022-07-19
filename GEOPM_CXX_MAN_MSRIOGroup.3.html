@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -102,7 +103,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#class-methods">Class Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enum-type">Enum Type</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#environment">Environment</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
@@ -157,296 +158,310 @@
            <div itemprop="articleBody">
              
   <section id="geopm-msriogroup-iogroup-providing-msr-based-signals-and-controls">
-<h1>geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls<a class="headerlink" href="#geopm-msriogroup-iogroup-providing-msr-based-signals-and-controls" title="Permalink to this headline"></a></h1>
+<h1>geopm::MSRIOGroup -- IOGroup providing MSR-based signals and controls<a class="headerlink" href="#geopm-msriogroup-iogroup-providing-msr-based-signals-and-controls" title="Permalink to this heading"></a></h1>
 <section id="synopsis">
-<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm/MSRIOGroup.hpp">&lt;geopm/MSRIOGroup.hpp&gt;</a></p>
-<p><code class="docutils literal notranslate"><span class="pre">Link</span> <span class="pre">with</span> <span class="pre">-lgeopm</span> <span class="pre">(MPI)</span> <span class="pre">or</span> <span class="pre">-lgeopmpolicy</span> <span class="pre">(non-MPI)</span></code></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">set&lt;string&gt;</span> <span class="pre">signal_names(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">set&lt;string&gt;</span> <span class="pre">control_names(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">bool</span> <span class="pre">is_valid_signal(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">bool</span> <span class="pre">is_valid_control(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">signal_domain_type(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">control_domain_type(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">push_signal(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">int</span> <span class="pre">push_control(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">read_batch(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">write_batch(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">double</span> <span class="pre">sample(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _sample<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">adjust(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _control<em>idx</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">double</span></code> <em>setting</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">double</span> <span class="pre">read_signal(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">write_control(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>,`` <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>type</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">int</span></code> _domain<em>idx</em><code class="docutils literal notranslate"><span class="pre">,</span></code> <span class="raw-html-m2r"><br></span>
-<code class="docutils literal notranslate"><span class="pre">double</span></code> <em>setting</em><code class="docutils literal notranslate"><span class="pre">)</span> <span class="pre">=</span> <span class="pre">0;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">save_control(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">restore_control(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">=</span> <span class="pre">0</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">function&lt;double(const</span> <span class="pre">vector&lt;double&gt;</span> <span class="pre">&amp;)&gt;</span> <span class="pre">agg_function(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">string</span> <span class="pre">signal_description(</span></code>:
-<cite>const string &amp;`_signal*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">string</span> <span class="pre">control_description(</span></code>:
-<cite>const string &amp;`_control*name*`</cite>) const = 0;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::string</span> <span class="pre">msr_allowlist(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::string</span> <span class="pre">msr_allowlist(</span></code>:
-<cite>int `_cpuid_`</cite>) const;``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">cpuid(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const;</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">register_msr_signal(</span></code>:
-<cite>const std::string &amp;`_signal*name*`</cite>);``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">register_msr_control(</span></code>:
-<cite>const std::string &amp;`_control*name*`</cite>);``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">std::string</span> <span class="pre">plugin_name(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">std::unique_ptr&lt;IOGroup&gt;</span> <span class="pre">make_plugin(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
-</ul>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(MPI)</strong> or <code class="docutils literal notranslate"><span class="pre">-lgeopmpolicy</span></code> <strong>(non-MPI)</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MSRIOGroup</span><span class="o">::</span><span class="n">signal_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MSRIOGroup</span><span class="o">::</span><span class="n">control_names</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">MSRIOGroup::is_valid_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">MSRIOGroup::is_valid_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MSRIOGroup::signal_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MSRIOGroup::control_domain_type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MSRIOGroup::push_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                            </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MSRIOGroup::push_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                             </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                             </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::read_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::write_batch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">MSRIOGroup::sample</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">sample_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::adjust</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">control_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">MSRIOGroup::read_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                               </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                               </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::write_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                               </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                               </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">,</span><span class="w"></span>
+<span class="w">                               </span><span class="kt">double</span><span class="w"> </span><span class="n">setting</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::save_control</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::restore_control</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MSRIOGroup</span><span class="o">::</span><span class="n">agg_function</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">function</span><span class="o">&lt;</span><span class="n">string</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MSRIOGroup</span><span class="o">::</span><span class="n">format_function</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">MSRIOGroup::signal_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">MSRIOGroup::control_description</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MSRIOGroup::signal_behavior</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::save_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_path</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::restore_control</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">save_path</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">string</span><span class="w"> </span><span class="nf">MSRIOGroup::name</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MSRIOGroup::parse_json_msrs</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">str</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="nf">MSRIOGroup::msr_allowlist</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">cpuid</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">MSRIOGroup::cpuid</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="nf">MSRIOGroup::plugin_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">IOGroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MSRIOGroup</span><span class="o">::</span><span class="n">make_plugin</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
 <section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The MSRIOGroup implements the <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a> interface to
 provide hardware signals and controls using MSRs on Intel platforms.
-It relies on <strong>geopm::MSR(3)</strong> and <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a>.</p>
+It relies on <a class="reference internal" href="geopm_pio_msr.7.html"><span class="doc">geopm_pio_msr(7)</span></a> and <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a>.</p>
 </section>
 <section id="class-methods">
-<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_names</span></code>():
-Returns the list of signal names provided by this IOGroup.  This
+<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">signal_names()</span></code></dt><dd><p>Returns the list of signal names provided by this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>.  This
 includes aliases for common hardware-based signals such as
-CPU_FREQUENCY_STATUS, as well as the supported MSRs for the current platform.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">control_names</span></code>():
-Returns the list of control names provided by this IOGroup.  This
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code>, as well as the supported MSRs for the current platform.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">control_names()</span></code></dt><dd><p>Returns the list of control names provided by this <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code>.  This
 includes aliases for common hardware-based controls such as
-CPU_FREQUENCY_CONTROL, as well as the supported MSRs for the current platform.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">is_valid_signal</span></code>():
-Returns whether the given _signal<em>name</em> is supported by the
-MSRIOGroup for the current platform.  Note that different
-platforms may have different supported MSRs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">is_valid_control</span></code>():
-Returns whether the given _control<em>name</em> is supported by the
-MSRIOGroup for the current platform.  Note that different
-platforms may have different supported MSRs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_domain_type</span></code>():
-Returns the domain type for the the signal specified by
-_signal<em>name</em>.  The domain for a signal may be different on
-different platforms.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">control_domain_type</span></code>():
-Returns the domain type for the the control specified by
-_control<em>name</em>.  The domain for a control may be different on
-different platforms.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">push_signal</span></code>():
-Adds the signal specified by _signal<em>name</em> for _domain<em>type</em> at
-index _domain<em>idx</em> to the list of signals to be read during
-read_batch().  If the domain of a signal spans multiple Linux
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_CONTROL</span></code>, as well as the supported MSRs for the current platform.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">is_valid_signal()</span></code></dt><dd><p>Returns whether the given <em>signal_name</em> is supported by the
+<code class="docutils literal notranslate"><span class="pre">MSRIOGroup</span></code> for the current platform.  Note that different
+platforms may have different supported MSRs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">is_valid_control()</span></code></dt><dd><p>Returns whether the given <em>control_name</em> is supported by the
+<code class="docutils literal notranslate"><span class="pre">MSRIOGroup</span></code> for the current platform.  Note that different
+platforms may have different supported MSRs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">signal_domain_type()</span></code></dt><dd><p>Returns the domain type for the signal specified by
+<em>signal_name</em>.  The domain for a signal may be different on
+different platforms.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">control_domain_type()</span></code></dt><dd><p>Returns the domain type for the control specified by
+<em>control_name</em>.  The domain for a control may be different on
+different platforms.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">push_signal()</span></code></dt><dd><p>Adds the signal specified by <em>signal_name</em> for <em>domain_type</em> at
+index <em>domain_idx</em> to the list of signals to be read during
+<code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.  If the domain of a signal spans multiple Linux
 logical CPUs, only one CPU from that domain will be read, since
 all CPUs from the same domain and index will return the same
-value.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">push_control</span></code>():
-Adds the control specified by _control<em>name</em> for _domain<em>type</em> at
-index _domain<em>idx</em> to the list of controls to be written during
-write_batch().  If the domain of a control spans multiple Linux
+value.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">push_control()</span></code></dt><dd><p>Adds the control specified by <em>control_name</em> for <em>domain_type</em> at
+index <em>domain_idx</em> to the list of controls to be written during
+<code class="docutils literal notranslate"><span class="pre">write_batch()</span></code>.  If the domain of a control spans multiple Linux
 logical CPUs, values written to that control will be written to
-all CPUs in the domain.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">read_batch</span></code>():
-Sets up <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a> for batch reading if needed, then reads
-all pushed signals through the MSRIO::read_batch() method.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">write_batch</span></code>():
-Writes all adjusted values through the <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a>
-write_batch() method.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code>():
-Returns the value of the signal specified by a _signal<em>idx</em>
-returned from push_signal().  The value will have been updated by
-the most recent call to read_batch().</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">adjust</span></code>():
-Sets the control specified by a _control<em>idx</em> returned from
-push_control() to the value <em>setting</em>.  The value will be written
-to the underlying MSR by the next call to write_batch().</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">read_signal</span></code>():
-Immediately read and decode the underlying MSR supporting
-_signal<em>name</em> for _domain<em>type</em> at index _domain<em>idx</em> and return
-the result in SI units.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">write_control</span></code>():
-Immediately encode the SI unit value <em>setting</em> and write the
-correct bits of the MSR supporting _control<em>name</em> for
-_domain<em>type</em> at _domain<em>idx</em>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">save_control</span></code>():
-Attempts to read and save the current values of all control MSRs
+all CPUs in the domain.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">read_batch()</span></code></dt><dd><p>Sets up <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a> for batch reading if needed, then reads
+all pushed signals through the <code class="docutils literal notranslate"><span class="pre">MSRIO::read_batch()</span></code> method.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">write_batch()</span></code></dt><dd><p>Writes all adjusted values through the <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a>
+<code class="docutils literal notranslate"><span class="pre">write_batch()</span></code> method.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample()</span></code></dt><dd><p>Returns the value of the signal specified by a <em>sample_idx</em>
+returned from <code class="docutils literal notranslate"><span class="pre">push_signal()</span></code>.  The value will have been updated by
+the most recent call to <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">adjust()</span></code></dt><dd><p>Sets the control specified by a <em>control_idx</em> returned from
+<code class="docutils literal notranslate"><span class="pre">push_control()</span></code> to the value <em>setting</em>.  The value will be written
+to the underlying MSR by the next call to <code class="docutils literal notranslate"><span class="pre">write_batch()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">read_signal()</span></code></dt><dd><p>Immediately read and decode the underlying MSR supporting
+<em>signal_name</em> for <em>domain_type</em> at index <em>domain_idx</em> and return
+the result in SI units.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">write_control()</span></code></dt><dd><p>Immediately encode the SI unit value <em>setting</em> and write the
+correct bits of the MSR supporting <em>control_name</em> for
+<em>domain_type</em> at <em>domain_idx</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">save_control()</span></code></dt><dd><p>Attempts to read and save the current values of all control MSRs
 for the platform.  If any control is not able to be read, it will
-be skipped.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">restore_control</span></code>():
-Using the values saved by save_control(), attempts to write back
+be skipped.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">restore_control()</span></code></dt><dd><p>Using the values saved by <code class="docutils literal notranslate"><span class="pre">save_control()</span></code>, attempts to write back
 the original values of all control MSRs.  Any control that is not
-able to be written will be skipped.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">agg_function</span></code>():
-Returns the function that should be used to aggregate
-_signal<em>name</em>.  If one was not previously specified by this class,
-the default function is select_first from <a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html"><span class="doc">geopm::Agg(3)</span></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_description</span></code>():
-Returns a string description for _signal<em>name</em>, if defined.
-Further descriptions of MSR signals can be found in The Intel
-Software Developer's Manual at
-<a class="reference external" href="https://software.intel.com/en-us/articles/intel-sdm">https://software.intel.com/en-us/articles/intel-sdm</a></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">control_description</span></code>():
-Returns a string description for _control<em>name</em>, if defined.
-Further descriptions of MSR controls can be found in The Intel
-Software Developer's Manual at
-<a class="reference external" href="https://software.intel.com/en-us/articles/intel-sdm">https://software.intel.com/en-us/articles/intel-sdm</a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">signal_behavior</span></code>():
-Returns one of the IOGroup::signal_behavior_e values which
+able to be written will be skipped.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">agg_function()</span></code></dt><dd><p>Returns the function that should be used to aggregate
+<em>signal_name</em>.  If one was not previously specified by this class,
+the default function is <code class="docutils literal notranslate"><span class="pre">select_first()</span></code> from <a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html"><span class="doc">geopm::Agg(3)</span></a>.
+Throws an exception if the <em>signal_name</em> is not valid.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">format_function()</span></code></dt><dd><p>Returns the function that should be used to format the <em>signal_name</em>.
+If the <em>signal_name</em> string ends with a <code class="docutils literal notranslate"><span class="pre">'#'</span></code> character,
+the function returned is <code class="docutils literal notranslate"><span class="pre">string_format_raw64()</span></code>.
+Throws an exception if the <em>signal_name</em> is not valid or if
+the <em>signal_name</em> was not found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">signal_description()</span></code></dt><dd><p>Returns a string description for <em>signal_name</em>, if defined.
+Further descriptions of MSR signals can be found in
+<a class="reference external" href="https://software.intel.com/en-us/articles/intel-sdm">The Intel Software Developer's Manual</a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">control_description()</span></code></dt><dd><p>Returns a string description for <em>control_name</em>, if defined.
+Further descriptions of MSR controls can be found in
+<a class="reference external" href="https://software.intel.com/en-us/articles/intel-sdm">The Intel Software Developer's Manual</a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">signal_behavior()</span></code></dt><dd><p>Returns one of the <code class="docutils literal notranslate"><span class="pre">IOGroup::signal_behavior_e</span></code> values which
 describes about how a signal will change as a function of time.
 This can be used when generating reports to decide how to
-summarize a signal's value for the entire application run.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">msr_allowlist</span></code>():
-Fill string with the msr-safe allowlist file contents reflecting
+summarize a signal's value for the entire application run.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">parse_json_msrs()</span></code></dt><dd><p>Parse a JSON string and add any raw MSRs and
+fields as available signals and controls.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">name()</span></code></dt><dd><p>Calls <code class="docutils literal notranslate"><span class="pre">plugin_name()</span></code> internally.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">msr_allowlist()</span></code></dt><dd><p>Fill string with the <code class="docutils literal notranslate"><span class="pre">msr-safe</span></code> <code class="docutils literal notranslate"><span class="pre">allowlist</span></code> file contents reflecting
 all known MSRs for the current platform, or if <em>cpuid</em> is
 provided, for the platform specified by <em>cpuid</em>.  Returns a string
-formatted to be written to an msr-safe allowlist file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cpuid</span></code>():
-Get the cpuid of the current platform.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">register_msr_signal</span></code>():
-Register a single MSR field as a signal. This is called by
-init_msr().  The _signal<em>name</em> is a compound signal name of the
-form &quot;msr_name:field_name&quot; where msr_name is the name of the MSR
-and the field_name is the name of the signal field held in the
-MSR.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">register_msr_control</span></code>():
-Register a single MSR field as a control. This is called by
-init_msr().  The _control<em>name</em> is a compound control name of the
-form &quot;msr_name:field_name&quot; where msr_name is the name of the MSR
-and the field_name is the name of the control field held in the
-MSR.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plugin_name</span></code>():
-Returns the name of the plugin to use when this plugin is
-registered with the IOGroup factory; see
-<a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html"><span class="doc">geopm::PluginFactory(3)</span></a> for more details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make_plugin</span></code>():
-Returns a pointer to a new MSRIOGroup object; see
-<a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html"><span class="doc">geopm::PluginFactory(3)</span></a> for more details.</p></li>
-</ul>
+formatted to be written to an <code class="docutils literal notranslate"><span class="pre">msr-safe</span></code> <code class="docutils literal notranslate"><span class="pre">allowlist</span></code> file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cpuid()</span></code></dt><dd><p>Get the <code class="docutils literal notranslate"><span class="pre">cpuid</span></code> of the current platform.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">plugin_name()</span></code></dt><dd><p>Returns the name of the plugin to use when this plugin is
+registered with the <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> factory; see
+<a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html"><span class="doc">geopm::PluginFactory(3)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make_plugin()</span></code></dt><dd><p>Returns a pointer to a new <code class="docutils literal notranslate"><span class="pre">MSRIOGroup</span></code> object; see
+<a class="reference internal" href="GEOPM_CXX_MAN_PluginFactory.3.html"><span class="doc">geopm::PluginFactory(3)</span></a> for more details.</p>
+</dd>
+</dl>
 </section>
-<section id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">m_cpuid_e</span></code>:
-Contains the list of currently-supported cpuid values.  The cpuid
+<section id="enum-type">
+<h2>Enum Type<a class="headerlink" href="#enum-type" title="Permalink to this heading"></a></h2>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="nc">m_cpuid_e</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_SNB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x62D</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_IVT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x63E</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_HSX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x63F</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_BDX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x64F</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_KNL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x657</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_SKX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x655</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">M_CPUID_ICX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x66A</span><span class="p">,</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">m_cpuid_e</span></code></dt><dd><p>Contains the list of currently-supported <code class="docutils literal notranslate"><span class="pre">cpuid</span></code> values.  The <code class="docutils literal notranslate"><span class="pre">cpuid</span></code>
 can be determined by running <code class="docutils literal notranslate"><span class="pre">lscpu</span></code> and appending the CPU family
-in hex to the Model in hex.</p></li>
-</ul>
+in hex to the Model in hex.</p>
+</dd>
+</dl>
 </section>
 <section id="environment">
-<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this headline"></a></h2>
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h2>
 <p>If the <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment variable is set to a
 colon-separated list of paths, the paths will be checked for files
 starting with <code class="docutils literal notranslate"><span class="pre">msr_</span></code> and ending in <code class="docutils literal notranslate"><span class="pre">.json</span></code>.  The default plugin path
-will also be searched.  The MSRIOGroup will attempt to load additional
+will also be searched.  The <code class="docutils literal notranslate"><span class="pre">MSRIOGroup</span></code> will attempt to load additional
 MSR definitions from any JSON file it finds. The files must follow this
 schema:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;definitions&quot;</span> <span class="p">:</span> <span class="p">{</span>
-      <span class="nt">&quot;msrFields&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;end_bit&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="s2">&quot;log_half&quot;</span><span class="p">,</span> <span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span> <span class="s2">&quot;overflow&quot;</span><span class="p">]</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;units&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">,</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span> <span class="s2">&quot;watts&quot;</span><span class="p">,</span> <span class="s2">&quot;joules&quot;</span><span class="p">,</span> <span class="s2">&quot;celsius&quot;</span><span class="p">]</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;scalar&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;behavior&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;monotone&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;writeable&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;aggregation&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;logical_and&quot;</span><span class="p">,</span> <span class="s2">&quot;logical_or&quot;</span><span class="p">,</span> <span class="s2">&quot;region_hash&quot;</span><span class="p">,</span> <span class="s2">&quot;region_hint&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;stddev&quot;</span><span class="p">,</span> <span class="s2">&quot;select_first&quot;</span><span class="p">,</span> <span class="s2">&quot;expect_same&quot;</span><span class="p">]</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-          <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span> <span class="s2">&quot;end_bit&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;scalar&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="s2">&quot;writeable&quot;</span><span class="p">,</span> <span class="s2">&quot;behavior&quot;</span><span class="p">],</span>
-        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
-      <span class="p">},</span>
-      <span class="nt">&quot;msrObject&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nt">&quot;offest&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;domain&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span> <span class="s2">&quot;package&quot;</span><span class="p">,</span> <span class="s2">&quot;core&quot;</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="s2">&quot;board_memory&quot;</span><span class="p">,</span> <span class="s2">&quot;package_memory&quot;</span><span class="p">,</span> <span class="s2">&quot;board_nic&quot;</span><span class="p">,</span> <span class="s2">&quot;package_nic&quot;</span><span class="p">,</span> <span class="s2">&quot;board_accelerator&quot;</span><span class="p">,</span> <span class="s2">&quot;package_accelerator&quot;</span><span class="p">,</span> <span class="s2">&quot;board_accelerator_chip&quot;</span><span class="p">]</span>
-          <span class="p">},</span>
-          <span class="nt">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/msrFields&quot;</span>
-            <span class="p">}</span>
-          <span class="p">},</span>
-        <span class="p">},</span>
-        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">],</span>
-        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
-      <span class="p">},</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">&quot;msrs&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/msrObject&quot;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;definitions&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;msrFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;end_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log_half&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;overflow&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;seconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hertz&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;watts&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;joules&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;celsius&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;scalar&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;monotone&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;variable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;writeable&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;aggregation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;median&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_and&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_or&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hash&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hint&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;min&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;max&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;stddev&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;select_first&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;expect_same&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;end_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;scalar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;units&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;writeable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;behavior&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">      </span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;msrObject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;domain&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu_chip&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;fields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrFields&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;fields&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;msrs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrObject&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Refer to the documentation for <code class="docutils literal notranslate"><span class="pre">--geopm-plugin-path</span></code> in
 <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>.</p>
 </section>
 <section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>,
-<strong>geopm::MSR(3)</strong>,
+<a class="reference internal" href="geopm_pio_msr.7.html"><span class="doc">geopm_pio_msr(7)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_MSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a>,
 <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a></p>
 </section>

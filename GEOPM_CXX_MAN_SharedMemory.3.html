@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -156,9 +157,9 @@
            <div itemprop="articleBody">
              
   <section id="geopm-sharedmemory-3-abstractions-for-shared-memory">
-<h1>geopm::SharedMemory(3) -- abstractions for shared memory<a class="headerlink" href="#geopm-sharedmemory-3-abstractions-for-shared-memory" title="Permalink to this headline"></a></h1>
+<h1>geopm::SharedMemory(3) -- abstractions for shared memory<a class="headerlink" href="#geopm-sharedmemory-3-abstractions-for-shared-memory" title="Permalink to this heading"></a></h1>
 <section id="namespaces">
-<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> is a member of the <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">geopm</span></code>,
 but the full name <code class="docutils literal notranslate"><span class="pre">geopm::SharedMemory</span></code> has been abbreviated in this manual.
 Similarly, the <code class="docutils literal notranslate"><span class="pre">std::</span></code> namespace specifier has been omitted from the
@@ -167,7 +168,7 @@ interface definitions for the following standard types: <code class="docutils li
 better rendering of this manual.</p>
 </section>
 <section id="synopsis">
-<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm/SharedMemory.hpp">&lt;geopm/SharedMemory.hpp&gt;</a></p>
 <p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopmd</span></code></p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">SharedMemory</span><span class="o">&gt;</span><span class="w"> </span><span class="n">SharedMemory</span><span class="o">::</span><span class="n">make_unique_owner</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w">  </span><span class="o">&amp;</span><span class="n">shm_key</span><span class="p">,</span><span class="w"></span>
@@ -195,7 +196,7 @@ better rendering of this manual.</p>
 </div>
 </section>
 <section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> class encapsulates the creation and use of
 inter-process shared memory.  In the GEOPM runtime, shared memory is
 used to communicate between the user application's MPI calls and calls
@@ -204,42 +205,43 @@ running on the same node.</p>
 <p><code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> is a pure virtual abstract base class.</p>
 </section>
 <section id="class-methods">
-<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">make_unique_owner()</span></code>:
-Creates a shared memory region with key <em>shm_key</em> and <em>size</em> and
-returns a pointer to a <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> object managing it.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make_unique_owner_secure()</span></code>:
-Creates a shared memory region with key <em>shm_key</em> and <em>size</em>
+<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">make_unique_owner()</span></code></dt><dd><p>Creates a shared memory region with key <em>shm_key</em> and <em>size</em> and
+returns a pointer to a <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> object managing it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make_unique_owner_secure()</span></code></dt><dd><p>Creates a shared memory region with key <em>shm_key</em> and <em>size</em>
 without group or world permissions and
-returns a pointer to a <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> object managing it.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make_unique_user()</span></code>:
-Attempts to attach to a inter-process shared memory region with
+returns a pointer to a <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> object managing it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make_unique_user()</span></code></dt><dd><p>Attempts to attach to a inter-process shared memory region with
 key <em>shm_key</em> within <em>timeout</em> and returns a pointer to a
 <code class="docutils literal notranslate"><span class="pre">SharedMemory</span></code> object managing it. If it cannot attach within the timeout,
-throws an exception.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pointer()</span></code>:
-Returns a pointer to the shared memory region.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">key()</span></code>:
-Returns the key to the shared memory region.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">size()</span></code>:
-Returns the size of the shared memory region.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">unlink()</span></code>:
-Unlink the shared memory region.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_scoped_lock()</span></code>:
-Attempt to lock the mutex for the shared memory region and
+throws an exception.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pointer()</span></code></dt><dd><p>Returns a pointer to the shared memory region.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">key()</span></code></dt><dd><p>Returns the key to the shared memory region.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">size()</span></code></dt><dd><p>Returns the size of the shared memory region.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">unlink()</span></code></dt><dd><p>Unlink the shared memory region.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">get_scoped_lock()</span></code></dt><dd><p>Attempt to lock the mutex for the shared memory region and
 returns a temporary object that holds the mutex lock for the
 shared memory region while in scope, and releases it when it goes
 out of scope.  This method should be called before accessing the
-memory with <code class="docutils literal notranslate"><span class="pre">pointer()</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">chown()</span></code>:
-Modifies the shared memory to be owned by the specified gid
-and uid if current permissions allow for the change.</p></li>
-</ul>
+memory with <code class="docutils literal notranslate"><span class="pre">pointer()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">chown()</span></code></dt><dd><p>Modifies the shared memory to be owned by the specified gid
+and uid if current permissions allow for the change.</p>
+</dd>
+</dl>
 </section>
 <section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
-<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a></p>
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
+<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
+<a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a></p>
 </section>
 </section>
 

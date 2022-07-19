@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -155,82 +156,208 @@
            <div itemprop="articleBody">
              
   <section id="geopm-sampleaggregator-3-per-region-aggregated-signal-data">
-<h1>geopm::SampleAggregator(3) -- per-region aggregated signal data<a class="headerlink" href="#geopm-sampleaggregator-3-per-region-aggregated-signal-data" title="Permalink to this headline"></a></h1>
+<h1>geopm::SampleAggregator(3) -- per-region aggregated signal data<a class="headerlink" href="#geopm-sampleaggregator-3-per-region-aggregated-signal-data" title="Permalink to this heading"></a></h1>
 <section id="synopsis">
-<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/src/SampleAggregator.hpp">&lt;geopm/SampleAggregator.hpp&gt;</a></p>
-<p><code class="docutils literal notranslate"><span class="pre">Link</span> <span class="pre">with</span> <span class="pre">-lgeopm</span> <span class="pre">(MPI)</span> <span class="pre">or</span> <span class="pre">-lgeopmpolicy</span> <span class="pre">(non-MPI)</span></code></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">init(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">push_signal_total(</span></code>:
-<cite>const std::string &amp;`_signal*idx*`</cite>,``<span class="raw-html-m2r"><br></span>
-<cite>int `_domain*type*`</cite>,``<span class="raw-html-m2r"><br></span>
-<cite>int `_domain*idx*`</cite>);``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">double</span> <span class="pre">sample_total(</span></code>:
-<cite>int `_signal*idx*`</cite>,``<span class="raw-html-m2r"><br></span>
-<cite>uint64_t `_region*hash*`</cite>);``</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">read_batch(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void);</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::set&lt;uint64_t&gt;</span> <span class="pre">tracked_region_hash(</span></code>:
-<code class="docutils literal notranslate"><span class="pre">void)</span> <span class="pre">const;</span></code></p></li>
-</ul>
+<p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(MPI)</strong> or <code class="docutils literal notranslate"><span class="pre">-lgeopmpolicy</span></code> <strong>(non-MPI)</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">SampleAggregator</span><span class="o">&gt;</span><span class="w"> </span><span class="n">SampleAggregator</span><span class="o">::</span><span class="n">make_unique</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">SampleAggregator::push_signal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                  </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                  </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">SampleAggregator::push_signal_total</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">SampleAggregator::push_signal_average</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">signal_name</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_type</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="kt">int</span><span class="w"> </span><span class="n">domain_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">SampleAggregator::update</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">SampleAggregator::sample_application</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">SampleAggregator::sample_epoch</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">SampleAggregator::sample_region</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">region_hash</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">SampleAggregator::sample_epoch_last</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">SampleAggregator::sample_region_last</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">region_hash</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">SampleAggregator::period_duration</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">duration</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">SampleAggregator::get_period</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">SampleAggregator::sample_period_last</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signal_idx</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
 <section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
-<p>The RegionAggregator is used to store running totals of various
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">RegionAggregator</span></code> is used to store running totals of various
 signals per region.  Regions are automatically detected through
-sampling the REGION_HASH signal.  The object also accumulates data for
+sampling the <code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code> signal.  The object also accumulates data for
 the epoch.  The set of signals to be tracked is determined by pushing
 signals similar to the <code class="docutils literal notranslate"><span class="pre">push_signal()</span></code> method of
 <a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a>.</p>
 </section>
 <section id="class-methods">
-<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">init</span></code>():
-Push required PlatformIO signals (EPOCH_COUNT).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">push_signal_total</span></code>():
-Push a signal to be accumulated per-region.  It must be a valid
-signal available through PlatformIO.  The signal to sample and
-aggregate is _signal<em>name</em> and it will be collected for the domain
-_domain<em>type</em> at _domain<em>idx</em>.  The return value is an index to be
-used with sample() to refer to this signal.  This index matches
-the index returned by <a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a>::push_signal() for
-the same signal name and domain.  Note that unlike other signals
-this is a total accumulated per region by subtracting the value of
-the signal at the region exit from the region entry.  Region entry
-and exit are not exact and are determined by the value of the
-REGION_HASH signal at the time of read_batch() for the same domain
-type and index as the signal of interest.  This aggregation should
-only be used for signals that are monotonically increasing, such
-as time.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sample_total</span></code>():
-Returns the total accumulated value of a signal for one
-region. The signal must have been pushed to accumulate as
-per-region values.  The index returned from push_signal_total()
-should be passed to _signal<em>idx</em>.  The region of interest is
-passed in _region<em>hash</em>.  Note that unlike other signals this is a
-total accumulated per region by subtracting the value of the
-signal at the region exit from the region entry.  Region entry and
-exit are not exact and are determined by the value of the
-REGION_HASH signal at the time of read_batch().</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">read_batch</span></code>():
-Updates stored totals for each signal after
-PlatformIO::read_batch() has been called.  This should be called
-with every PlatformIO update because sample_total() maybe not be
-called until the end of execution.  Agents that include an
-instance of the RegionAggregator can include this call in their
-implementation of sample_platform().</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tracked_region_hash</span></code>():
-Returns the set of region IDs tracked by this object.  Note that
-very short-running regions may not be detected through sampling
-the REGION_HASH signal.</p></li>
-</ul>
+<h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">make_unique()</span></code></dt><dd><p>Returns a <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code> to a concrete object
+constructed using the underlying implementation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">push_signal()</span></code></dt><dd><p>Push a signal to be accumulated per-region.
+Check the signal behavior and call <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code> accordingly.
+The signal to sample and aggregate is <em>signal_name</em> and
+it will be collected for the domain <em>domain_type</em> at <em>domain_idx</em>
+over which the region hash and signal should be sampled.
+The return value is an index to be
+used with <code class="docutils literal notranslate"><span class="pre">sample()</span></code> to refer to this signal.
+This index matches the return value of
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a><code class="docutils literal notranslate"><span class="pre">::push_signal()</span></code> for the same signal.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code></dt><dd><p>Push a signal to be accumulated per-region as a total.
+The <em>signal_name</em> must be a valid signal available
+through <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code>.  Note that unlike other signals
+this is a total accumulated per region by subtracting
+the value of the signal at the region exit from the
+region entry.  Region entry and exit are not exact and
+are determined by the value of the <code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code> signal
+at the time of <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.  This aggregation should
+only be used for signals that are monotonically
+increasing, such as time.
+The signal to sample and aggregate is <em>signal_name</em> and
+it will be collected for the domain <em>domain_type</em> at <em>domain_idx</em>
+over which the region hash and signal should be sampled.
+The return value is an index to be
+used with <code class="docutils literal notranslate"><span class="pre">sample()</span></code> to refer to this signal.
+This index matches the return value of
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a><code class="docutils literal notranslate"><span class="pre">::push_signal()</span></code> for the same signal.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code></dt><dd><p>Push a signal to be accumulated per-region as an average.
+The <em>signal_name</em> must be a valid signal available
+through <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code>.  Note that unlike other signals
+this is an average value accumulated per region by a
+time weighted mean of the values sampled while in the
+region. Region entry and exit are not exact and are
+determined by the value of the <code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code> signal at
+the time of <code class="docutils literal notranslate"><span class="pre">read_batch()</span></code>.  This aggregation should be
+used for signals that vary up and down over time such
+as the CPU frequency.
+The signal to sample and aggregate is <em>signal_name</em> and
+it will be collected for the domain <em>domain_type</em> at <em>domain_idx</em>
+over which the region hash and signal should be sampled.
+The return value is an index to be
+used with <code class="docutils literal notranslate"><span class="pre">sample()</span></code> to refer to this signal.
+This index matches the return value of
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a><code class="docutils literal notranslate"><span class="pre">::push_signal()</span></code> for the same signal.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">update()</span></code></dt><dd><p>Update stored totals for each signal.
+This method is to be called after each call to
+<code class="docutils literal notranslate"><span class="pre">PlatformIO::read_batch()</span></code>.  This should be called with
+every <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> update because <code class="docutils literal notranslate"><span class="pre">sample_total()</span></code> maybe
+not be called until the end of execution.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample_application()</span></code></dt><dd><p>Get the aggregated value of a signal.
+The aggregation type is determined by which method was
+used to push the signal: <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>. The <em>signal_idx</em> parameter is the
+Index returned by a previous call to <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>.  The value returned is
+aggregated over all samples since the application
+start, regardless of region or epoch.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample_epoch()</span></code></dt><dd><p>Get the aggregated value of a signal since the first epoch.
+The aggregation type is determined by which method was
+used to push the signal: <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>. The <em>signal_idx</em> parameter is the
+Index returned by a previous call to <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>.  The value returned is
+aggregated over all samples since the first epoch
+observed over the domain specified when the signal was
+pushed, or <code class="docutils literal notranslate"><span class="pre">NAN</span></code> if called before first call to <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample_region()</span></code></dt><dd><p>Get the aggregated value of a signal during the
+execution of a particular region.
+The aggregation type is determined by which method was
+used to push the signal: <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>. The <em>signal_idx</em> parameter is the
+Index returned by a previous call to <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>.  The value returned is
+aggregated over all samples where the <em>region_hash</em>
+signal matched the value specified for the domain
+pushed.  The returned value is zero for
+<code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> aggregation, and <code class="docutils literal notranslate"><span class="pre">NAN</span></code> for
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code> aggregation if the region was not
+observed for any samples,
+or <code class="docutils literal notranslate"><span class="pre">NAN</span></code> if called before first call to <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample_epoch_last()</span></code></dt><dd><p>Get the aggregated value of a signal over the
+last completed epoch interval.
+The aggregation type is determined by which method was
+used to push the signal: <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>. The <em>signal_idx</em> parameter is the
+Index returned by a previous call to <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>.  The value returned is
+aggregated over all samples between the last two
+samples when the epoch count changed,
+or <code class="docutils literal notranslate"><span class="pre">NAN</span></code> if called before first call to <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample_region_last()</span></code></dt><dd><p>Get the aggregated value of a signal during the
+the last completed execution of a particular region.
+The aggregation type is determined by which method was
+used to push the signal: <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>. The <em>signal_idx</em> parameter is the
+Index returned by a previous call to <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code>.  The value returned is
+aggregated over the last contiguous set of samples
+where the <em>region_hash</em> signal matched the value
+specified for the domain pushed.  Note that if the
+region is currently executing, the value reported is
+aggregated over the last region interval, not the
+currently executing interval. The returned value is
+zero for <code class="docutils literal notranslate"><span class="pre">push_signal_total()</span></code> aggregation, and <code class="docutils literal notranslate"><span class="pre">NAN</span></code> for
+<code class="docutils literal notranslate"><span class="pre">push_signal_average()</span></code> aggregation if a completed region
+with the specified hash has not been observed, or <code class="docutils literal notranslate"><span class="pre">NAN</span></code> if called
+before first call to <code class="docutils literal notranslate"><span class="pre">update()</span></code> or if
+<code class="docutils literal notranslate"><span class="pre">period_duration()</span></code> was not called.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">period_duration()</span></code></dt><dd><p>Set the time period for <code class="docutils literal notranslate"><span class="pre">sample_period_last()</span></code>
+Calling this method prior to the first call to
+<code class="docutils literal notranslate"><span class="pre">update()</span></code> enables signals to be accumulated on a
+periodic basis.  The <code class="docutils literal notranslate"><span class="pre">sample_period_last()</span></code> method is
+used to sample an accumulated value over the last
+completed time interval, and the period of the
+interval is configured by calling this method.
+The <em>duration</em> is the time interval in seconds over
+which the <code class="docutils literal notranslate"><span class="pre">sample_region_last()</span></code> method is
+aggregated (must be greater than <code class="docutils literal notranslate"><span class="pre">0.0</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">get_period()</span></code></dt><dd><p>Get the index of the current time period.
+Provides an index of completed durations.
+Returns the number of completed durations since the
+application start. Will return
+zero if periodic sampling is not enabled (when
+<code class="docutils literal notranslate"><span class="pre">period_duration()</span></code> was not called prior to <code class="docutils literal notranslate"><span class="pre">update()</span></code>).
+When periodic sampling is enabled, the
+<code class="docutils literal notranslate"><span class="pre">sample_period_last()</span></code> method will return <code class="docutils literal notranslate"><span class="pre">0.0</span></code> until a
+full period has elapsed, this corresponds to when
+<code class="docutils literal notranslate"><span class="pre">get_period()</span></code> returns a value greater than zero.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sample_period_last()</span></code></dt><dd><p>Get the aggregated value of a signal during the
+last completed time interval.</p>
+</dd>
+</dl>
 </section>
 <section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
-<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a></p>
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
+<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
+<a class="reference internal" href="GEOPM_CXX_MAN_PlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a></p>
 </section>
 </section>
 

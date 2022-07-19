@@ -2,11 +2,6 @@ var searchData=
 [
   ['msr_2ecpp',['MSR.cpp',['../_m_s_r_8cpp.html',1,'']]],
   ['msr_2ehpp',['MSR.hpp',['../_m_s_r_8hpp.html',1,'']]],
-  ['msr_5fdata_5farch_2ecpp',['msr_data_arch.cpp',['../msr__data__arch_8cpp.html',1,'']]],
-  ['msr_5fdata_5fhsx_2ecpp',['msr_data_hsx.cpp',['../msr__data__hsx_8cpp.html',1,'']]],
-  ['msr_5fdata_5fknl_2ecpp',['msr_data_knl.cpp',['../msr__data__knl_8cpp.html',1,'']]],
-  ['msr_5fdata_5fskx_2ecpp',['msr_data_skx.cpp',['../msr__data__skx_8cpp.html',1,'']]],
-  ['msr_5fdata_5fsnb_2ecpp',['msr_data_snb.cpp',['../msr__data__snb_8cpp.html',1,'']]],
   ['msrfieldcontrol_2ecpp',['MSRFieldControl.cpp',['../_m_s_r_field_control_8cpp.html',1,'']]],
   ['msrfieldcontrol_2ehpp',['MSRFieldControl.hpp',['../_m_s_r_field_control_8hpp.html',1,'']]],
   ['msrfieldsignal_2ecpp',['MSRFieldSignal.cpp',['../_m_s_r_field_signal_8cpp.html',1,'']]],

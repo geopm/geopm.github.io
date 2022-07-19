@@ -1,21 +1,4 @@
 var searchData=
 [
-  ['edge',['EDGE',['../namespacegeopm.html#a219453725ef5e4e4ad651993aa69efff',1,'geopm::EDGE()'],['../msr__data__arch_8cpp.html#a004db9bc637ebc1e20e4b402ca520a28',1,'EDGE():&#160;msr_data_arch.cpp']]],
-  ['en',['EN',['../namespacegeopm.html#a290197c3f21569ebdf60fcf05005df63',1,'geopm::EN()'],['../msr__data__arch_8cpp.html#a5080f6b7a3b17f4f836cff68e946cf37',1,'EN():&#160;msr_data_arch.cpp']]],
-  ['en0_5fpmi',['EN0_PMI',['../msr__data__arch_8cpp.html#a6bdb1ff0d1283b65cbdac4c426f78874',1,'msr_data_arch.cpp']]],
-  ['en0_5fusr',['EN0_USR',['../msr__data__arch_8cpp.html#a49d56c70d4c855c0af070e7ae407b9b7',1,'msr_data_arch.cpp']]],
-  ['en1_5fos',['EN1_OS',['../msr__data__arch_8cpp.html#a5aa34a2b00a27d109664c82f5a6aeb3d',1,'msr_data_arch.cpp']]],
-  ['en1_5fpmi',['EN1_PMI',['../msr__data__arch_8cpp.html#af40c2b5a8274b34d217f289aae5c1821',1,'msr_data_arch.cpp']]],
-  ['en1_5fusr',['EN1_USR',['../msr__data__arch_8cpp.html#adffc7714df40db5a556c01a6e0c8ce22',1,'msr_data_arch.cpp']]],
-  ['en2_5fos',['EN2_OS',['../msr__data__arch_8cpp.html#a1fe9190f093137626a84ff63a0a1e76b',1,'msr_data_arch.cpp']]],
-  ['en2_5fpmi',['EN2_PMI',['../msr__data__arch_8cpp.html#aa3b312d24cf08021c9b59b5522feb0d6',1,'msr_data_arch.cpp']]],
-  ['en2_5fusr',['EN2_USR',['../msr__data__arch_8cpp.html#a5275868944feed42620d8af0a6ae7c06',1,'msr_data_arch.cpp']]],
-  ['en_5ffixed_5fctr0',['EN_FIXED_CTR0',['../msr__data__arch_8cpp.html#a8d7384aa7f6e35d294bc996de0ae7bba',1,'msr_data_arch.cpp']]],
-  ['en_5ffixed_5fctr1',['EN_FIXED_CTR1',['../msr__data__arch_8cpp.html#a0eb0d30c6ceca4793e7fe69bd4c76fed',1,'msr_data_arch.cpp']]],
-  ['en_5ffixed_5fctr2',['EN_FIXED_CTR2',['../msr__data__arch_8cpp.html#a5c7f84029e3cbb622376dd9ee9441fbc',1,'msr_data_arch.cpp']]],
-  ['en_5fpmc1',['EN_PMC1',['../msr__data__arch_8cpp.html#ad160e50babc5b6a2ca66db345f576217',1,'msr_data_arch.cpp']]],
-  ['en_5fpmc2',['EN_PMC2',['../msr__data__arch_8cpp.html#a103041448ef7d9f6fcb504ecc7582e31',1,'msr_data_arch.cpp']]],
-  ['en_5fpmc3',['EN_PMC3',['../msr__data__arch_8cpp.html#a6389daaef5c56fe8de23ee9a2d58d13b',1,'msr_data_arch.cpp']]],
-  ['end_5fbit',['end_bit',['../namespacegeopm.html#a7e9bd0ad2fd058ca8ecee6641ea5c562',1,'geopm::end_bit()'],['../msr__data__arch_8cpp.html#a5ac26bd5621084872169221c9e978501',1,'end_bit():&#160;msr_data_arch.cpp']]],
-  ['event',['event',['../namespacegeopm.html#abe3f278c0eee469d622639ed85f67e28',1,'geopm::event()'],['../msr__data__arch_8cpp.html#a5e998b895dc13193b51725e174840757',1,'event():&#160;msr_data_arch.cpp']]]
+  ['json_5ftype',['json_type',['../structgeopm_1_1json__checker.html#a4ec312b1f833bfa1fc702e70844821e4',1,'geopm::json_checker']]]
 ];
