@@ -2,7 +2,6 @@ var searchData=
 [
   ['m_5fagg_5ffunc',['M_AGG_FUNC',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#a40c705432f444e36edd1a398223aee4a',1,'geopm::PowerBalancerAgent::TreeRole']]],
   ['m_5falign',['m_align',['../classgeopm_1_1_all2all_model_region.html#a9b2ab2b96587a4eb8a4dfdebc7133614',1,'geopm::All2allModelRegion::m_align()'],['../classgeopm_1_1_stream_model_region.html#a6224ec7dfa862fab05b728ce80b90c06',1,'geopm::StreamModelRegion::m_align()']]],
-  ['m_5fall2all_5fregion',['m_all2all_region',['../classgeopm_1_1_nested_model_region.html#ad0b46234a2321b6c3ab089813c7f6a4e',1,'geopm::NestedModelRegion']]],
   ['m_5fall_5fnames',['m_all_names',['../classgeopm_1_1_environment_imp.html#a3e1679e8225136e38e650f61e05185c8',1,'geopm::EnvironmentImp']]],
   ['m_5farray_5fa',['m_array_a',['../classgeopm_1_1_stream_model_region.html#a1305b880770d937f84160a3096658a33',1,'geopm::StreamModelRegion']]],
   ['m_5farray_5fb',['m_array_b',['../classgeopm_1_1_stream_model_region.html#ae7d6b75dbc40902e68372e434caf48fd',1,'geopm::StreamModelRegion']]],
@@ -64,7 +63,6 @@ var searchData=
   ['m_5fsample_5fagg',['m_sample_agg',['../classgeopm_1_1_power_balancer_agent.html#a729ac9251ee9461921d0d018847cb078',1,'geopm::PowerBalancerAgent']]],
   ['m_5fscaling_5fmodel',['m_scaling_model',['../classgeopm_1_1_timed_scaling_model_region.html#ab2ef1f4e97c4f932a154c22dba92149c',1,'geopm::TimedScalingModelRegion']]],
   ['m_5fsend_5fbuffer',['m_send_buffer',['../classgeopm_1_1_all2all_model_region.html#a379fbc2a3b7f93147d0a5f9b674774b6',1,'geopm::All2allModelRegion']]],
-  ['m_5fspin_5fregion',['m_spin_region',['../classgeopm_1_1_nested_model_region.html#a585422cda60854311165fbff314197a5',1,'geopm::NestedModelRegion']]],
   ['m_5fstatus_5fsize',['M_STATUS_SIZE',['../classgeopm_1_1_application_status.html#ad967810cfd17ce958381d5246fadca99',1,'geopm::ApplicationStatus']]],
   ['m_5fstep_5fcount',['m_step_count',['../classgeopm_1_1_power_balancer_agent_1_1_role.html#a093cfb3c43ed3da57339387bba70c877',1,'geopm::PowerBalancerAgent::Role']]],
   ['m_5fstep_5fimp',['M_STEP_IMP',['../classgeopm_1_1_power_balancer_agent_1_1_role.html#a01436f7f58fc3caf93268124cc366522',1,'geopm::PowerBalancerAgent::Role']]],

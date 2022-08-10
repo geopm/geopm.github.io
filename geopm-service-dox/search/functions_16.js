@@ -9,6 +9,7 @@ var searchData=
   ['_7ebatchstatusimp',['~BatchStatusImp',['../classgeopm_1_1_batch_status_imp.html#ad00250d6faac2c319b1fe5d78cb0bf0e',1,'geopm::BatchStatusImp']]],
   ['_7ebatchstatusserver',['~BatchStatusServer',['../classgeopm_1_1_batch_status_server.html#a68b9f26b97645518f8a4ead735a7ac60',1,'geopm::BatchStatusServer']]],
   ['_7ecnliogroup',['~CNLIOGroup',['../classgeopm_1_1_c_n_l_i_o_group.html#a7bd75535a3991c488552f626b9088c83',1,'geopm::CNLIOGroup']]],
+  ['_7ecombinedcontrol',['~CombinedControl',['../classgeopm_1_1_combined_control.html#a7ae9e0f3cfd04c542a26744662b0806f',1,'geopm::CombinedControl']]],
   ['_7ecombinedsignal',['~CombinedSignal',['../classgeopm_1_1_combined_signal.html#aa726e21096acf772dae4070416d717b9',1,'geopm::CombinedSignal']]],
   ['_7econtrol',['~Control',['../classgeopm_1_1_control.html#a19a4bc5c4773d6eae0d9499ea331b13b',1,'geopm::Control']]],
   ['_7ecpuinfoiogroup',['~CpuinfoIOGroup',['../classgeopm_1_1_cpuinfo_i_o_group.html#a7a570fdbd1e33aa9ac33e8a11528a8c6',1,'geopm::CpuinfoIOGroup']]],

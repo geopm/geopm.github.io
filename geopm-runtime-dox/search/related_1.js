@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nestedmodelregion',['NestedModelRegion',['../classgeopm_1_1_all2all_model_region.html#af68ac9833cc2120d65a5cbb8718712a1',1,'geopm::All2allModelRegion::NestedModelRegion()'],['../classgeopm_1_1_spin_model_region.html#af68ac9833cc2120d65a5cbb8718712a1',1,'geopm::SpinModelRegion::NestedModelRegion()']]]
+  ['reducelimitstep',['ReduceLimitStep',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#a0d8c7c71c041d0baeeb4782b07afb7b1',1,'geopm::PowerBalancerAgent::TreeRole::ReduceLimitStep()'],['../classgeopm_1_1_power_balancer_agent_1_1_root_role.html#a0d8c7c71c041d0baeeb4782b07afb7b1',1,'geopm::PowerBalancerAgent::RootRole::ReduceLimitStep()'],['../classgeopm_1_1_power_balancer_agent_1_1_leaf_role.html#a0d8c7c71c041d0baeeb4782b07afb7b1',1,'geopm::PowerBalancerAgent::LeafRole::ReduceLimitStep()']]]
 ];

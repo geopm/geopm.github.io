@@ -52,7 +52,6 @@ var searchData=
   ['_7emodelregion',['~ModelRegion',['../classgeopm_1_1_model_region.html#a6c799b561fc95a14188876ef03341505',1,'geopm::ModelRegion']]],
   ['_7emonitoragent',['~MonitorAgent',['../classgeopm_1_1_monitor_agent.html#ae3fb435c0927ba2ad5b68fba966ce798',1,'geopm::MonitorAgent']]],
   ['_7empicomm',['~MPIComm',['../classgeopm_1_1_m_p_i_comm.html#aed5f4cd450940de89d748a51e768944b',1,'geopm::MPIComm']]],
-  ['_7enestedmodelregion',['~NestedModelRegion',['../classgeopm_1_1_nested_model_region.html#a5bf234fcea3eaa3acf8b3693da8f0935',1,'geopm::NestedModelRegion']]],
   ['_7eompt',['~OMPT',['../classgeopm_1_1_o_m_p_t.html#a7558ae6e59855f92fb00388d1454fdef',1,'geopm::OMPT']]],
   ['_7eomptimp',['~OMPTImp',['../classgeopm_1_1_o_m_p_t_imp.html#abf1ef2d5e4debe96685cfdacfe5a1b94',1,'geopm::OMPTImp']]],
   ['_7eplatformioprof',['~PlatformIOProf',['../classgeopm_1_1_platform_i_o_prof.html#a74ff51d8efb9fa7273d95714cc2f64c8',1,'geopm::PlatformIOProf']]],

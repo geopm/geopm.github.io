@@ -2,7 +2,6 @@ var searchData=
 [
   ['m_5fagg_5ffunc',['M_AGG_FUNC',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#a40c705432f444e36edd1a398223aee4a',1,'geopm::PowerBalancerAgent::TreeRole']]],
   ['m_5falign',['m_align',['../classgeopm_1_1_all2all_model_region.html#a9b2ab2b96587a4eb8a4dfdebc7133614',1,'geopm::All2allModelRegion::m_align()'],['../classgeopm_1_1_stream_model_region.html#a6224ec7dfa862fab05b728ce80b90c06',1,'geopm::StreamModelRegion::m_align()']]],
-  ['m_5fall2all_5fregion',['m_all2all_region',['../classgeopm_1_1_nested_model_region.html#ad0b46234a2321b6c3ab089813c7f6a4e',1,'geopm::NestedModelRegion']]],
   ['m_5fall_5fnames',['m_all_names',['../classgeopm_1_1_environment_imp.html#a3e1679e8225136e38e650f61e05185c8',1,'geopm::EnvironmentImp']]],
   ['m_5farray_5fa',['m_array_a',['../classgeopm_1_1_stream_model_region.html#a1305b880770d937f84160a3096658a33',1,'geopm::StreamModelRegion']]],
   ['m_5farray_5fb',['m_array_b',['../classgeopm_1_1_stream_model_region.html#ae7d6b75dbc40902e68372e434caf48fd',1,'geopm::StreamModelRegion']]],
@@ -93,7 +92,6 @@ var searchData=
   ['m_5fsample_5fsum_5fpower_5fslack',['M_SAMPLE_SUM_POWER_SLACK',['../classgeopm_1_1_power_balancer_agent.html#a007fa92f282bc6fdec51ec299d73089fae3380f8e40f852dfd6041cac1477e5de',1,'geopm::PowerBalancerAgent']]],
   ['m_5fscaling_5fmodel',['m_scaling_model',['../classgeopm_1_1_timed_scaling_model_region.html#ab2ef1f4e97c4f932a154c22dba92149c',1,'geopm::TimedScalingModelRegion']]],
   ['m_5fsend_5fbuffer',['m_send_buffer',['../classgeopm_1_1_all2all_model_region.html#a379fbc2a3b7f93147d0a5f9b674774b6',1,'geopm::All2allModelRegion']]],
-  ['m_5fspin_5fregion',['m_spin_region',['../classgeopm_1_1_nested_model_region.html#a585422cda60854311165fbff314197a5',1,'geopm::NestedModelRegion']]],
   ['m_5fsplit_5fcolor_5fe',['m_split_color_e',['../classgeopm_1_1_comm.html#a81a3dc5177c543d9c6e420cc914362bf',1,'geopm::Comm']]],
   ['m_5fsplit_5fcolor_5fundefined',['M_SPLIT_COLOR_UNDEFINED',['../classgeopm_1_1_comm.html#a81a3dc5177c543d9c6e420cc914362bfa0fc10d9e7baf5f2f9a678c7505f2bd2b',1,'geopm::Comm']]],
   ['m_5fstatus_5fabort',['M_STATUS_ABORT',['../classgeopm_1_1_control_message_imp.html#a66e7e77f56afdb48239b5a54b0b56423ab167b628c1891167217b758ad30c5edb',1,'geopm::ControlMessageImp']]],

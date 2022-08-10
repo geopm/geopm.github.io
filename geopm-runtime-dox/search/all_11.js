@@ -42,7 +42,6 @@ var searchData=
   ['setup_5ftrace',['setup_trace',['../classgeopm_1_1_controller.html#ae070f8ec904c99fd2bc3a4567abe15bf',1,'geopm::Controller']]],
   ['shm_5fpolicy_5fpostfix',['shm_policy_postfix',['../classgeopm_1_1_endpoint_imp.html#a8b229203cc2f5893ba30c4abff455c8a',1,'geopm::EndpointImp']]],
   ['shm_5fsample_5fpostfix',['shm_sample_postfix',['../classgeopm_1_1_endpoint_imp.html#a6faa270be3384762d8ec6253e7d31da8',1,'geopm::EndpointImp']]],
-  ['shmkey',['shmkey',['../classgeopm_1_1_environment.html#aaeca59f755997b7c6c839aca19ce7c4d',1,'geopm::Environment::shmkey()'],['../classgeopm_1_1_environment_imp.html#ac6d4ed0f3988065a528ed97c299e2559',1,'geopm::EnvironmentImp::shmkey()']]],
   ['short_5fregion_5fs',['short_region_s',['../structgeopm_1_1short__region__s.html',1,'geopm']]],
   ['short_5fregions',['short_regions',['../structgeopm_1_1_application_sampler_imp_1_1m__process__s.html#a5603b38cd40ab57298a3b601710e0ea7',1,'geopm::ApplicationSamplerImp::m_process_s']]],
   ['shutdown',['shutdown',['../classgeopm_1_1_profile.html#ac468508bf9dddc51b9b73b086163472a',1,'geopm::Profile::shutdown()'],['../classgeopm_1_1_profile_imp.html#ac2d2849101a9ea266d621b76d647a479',1,'geopm::ProfileImp::shutdown()']]],
