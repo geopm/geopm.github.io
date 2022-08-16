@@ -185,12 +185,6 @@
 </pre></div>
 </div>
 </section>
-<section id="print-session-info">
-<h3>Print Session Info<a class="headerlink" href="#print-session-info" title="Permalink to this heading"></a></h3>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmaccess -s SESSION_PID
-</pre></div>
-</div>
-</section>
 <section id="get-help-or-version">
 <h3>Get Help or Version<a class="headerlink" href="#get-help-or-version" title="Permalink to this heading"></a></h3>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmaccess -h | -v
@@ -209,9 +203,6 @@ line tool is to enable reading and writing of these access list files.</p>
 <dl class="option-list">
 <dt><kbd><span class="option">-c</span>, <span class="option">--controls</span></kbd></dt>
 <dd><p>Command applies to controls not signals</p>
-</dd>
-<dt><kbd><span class="option">-s</span>, <span class="option">--session</span></kbd></dt>
-<dd><p>Print session information in JSON form</p>
 </dd>
 <dt><kbd><span class="option">-u</span>, <span class="option">--default</span></kbd></dt>
 <dd><p>Print the default user access list</p>
@@ -272,49 +263,6 @@ membership.  Each Unix group on the system may have GEOPM Service
 signal and control access lists associated with it.  To read or write
 the access list for a particular Unix user group, the <code class="docutils literal notranslate"><span class="pre">-g</span></code> or
 <code class="docutils literal notranslate"><span class="pre">--group</span></code> option must be specified.</p>
-<p>An administrator that would like to query information about active
-sessions may use the <code class="docutils literal notranslate"><span class="pre">--session</span></code> option.  This will print the
-information about the active session in JSON including the signals and
-controls the session is allowed to access as well as the PID of the
-batch server associated with the session.  The output will follow this
-schema:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/active_sessions.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ActiveSession&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;client_pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;reference_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;minimum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;signals&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">              </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;controls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">              </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;watch_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;batch_server&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;client_pid&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;signals&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;controls&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-</pre></div>
-</div>
 </section>
 <section id="access-management">
 <h3>Access Management<a class="headerlink" href="#access-management" title="Permalink to this heading"></a></h3>
