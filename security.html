@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guide to Service Security &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -115,20 +117,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="guide-to-service-security">
+  <section id="guide-to-service-security">
 <h1>Guide to Service Security<a class="headerlink" href="#guide-to-service-security" title="Permalink to this heading"></a></h1>
 <p>This documentation describes the objectives, mechanisms, assets and
 threats that were considered when designing the GEOPM Service security
 architecture.  This information may be useful for system
 administrators, developers, and users who would like to better
 understand how the GEOPM Service provides security guarantees.</p>
-<div class="section" id="high-level-security-objectives">
+<section id="high-level-security-objectives">
 <h2>High Level Security Objectives<a class="headerlink" href="#high-level-security-objectives" title="Permalink to this heading"></a></h2>
 <p>The GEOPM Service provides a secure gateway to privileged hardware
 features. This section describes the security expectations of the
 system administrator who deploys and configures the GEOPM Service as
 described in the GEOPM documentation.</p>
-<div class="section" id="fine-grained-access-management-for-hardware-features">
+<section id="fine-grained-access-management-for-hardware-features">
 <h3>Fine-grained access management for hardware features<a class="headerlink" href="#fine-grained-access-management-for-hardware-features" title="Permalink to this heading"></a></h3>
 <p>The GEOPM Service provides a user gateway to privileged system
 software interfaces. In general, these system software interfaces have
@@ -184,8 +186,8 @@ granting access. The <code class="docutils literal notranslate"><span class="pre
 system administrator to query descriptions of signals and controls
 available on a system as well as managing user access to each feature
 by name.</p>
-</div>
-<div class="section" id="restore-control-configuration-after-a-writing-session-ends">
+</section>
+<section id="restore-control-configuration-after-a-writing-session-ends">
 <h3>Restore control configuration after a writing session ends<a class="headerlink" href="#restore-control-configuration-after-a-writing-session-ends" title="Permalink to this heading"></a></h3>
 <p>Users are not allowed to make persistent changes to hardware settings
 using the GEOPM Service. The lifetime of configuration changes made
@@ -204,8 +206,8 @@ for the saved state is in the directory
 <p>Note that all configuration settings are restored regardless of
 whether or not they were adjusted during the session through the
 service.</p>
-</div>
-<div class="section" id="one-writing-geopm-session-allowed-at-any-time">
+</section>
+<section id="one-writing-geopm-session-allowed-at-any-time">
 <h3>One writing GEOPM session allowed at any time<a class="headerlink" href="#one-writing-geopm-session-allowed-at-any-time" title="Permalink to this heading"></a></h3>
 <p>The GEOPM Service enforces that at most one writing user session is
 supported at any time.  This restriction enables the save/restore
@@ -217,8 +219,8 @@ is associated with the requesting process PID. Otherwise, any PID
 within the requesting Unix process session is enabled to write through
 the GEOPM Service for the duration of the process session leader PID
 lifetime.</p>
-</div>
-<div class="section" id="provide-a-low-latency-interface">
+</section>
+<section id="provide-a-low-latency-interface">
 <h3>Provide a low latency interface<a class="headerlink" href="#provide-a-low-latency-interface" title="Permalink to this heading"></a></h3>
 <p>The GEOPM Service provides a batch interface that allows users to
 configure a server process.  The batch server process is forked by
@@ -237,8 +239,8 @@ channel connecting the client to the batch server, and a second FIFO
 is used to communicate to the client when requests have been
 completed. These FIFOs are opened in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> which by default systemd
 creates as a <a class="reference external" href="https://man7.org/linux/man-pages/man5/tmpfs.5.html">tmpfs(5)</a>.</p>
-</div>
-<div class="section" id="secure-restart-of-the-geopmd-daemon-process">
+</section>
+<section id="secure-restart-of-the-geopmd-daemon-process">
 <h3>Secure restart of the <code class="docutils literal notranslate"><span class="pre">geopmd</span></code> daemon process<a class="headerlink" href="#secure-restart-of-the-geopmd-daemon-process" title="Permalink to this heading"></a></h3>
 <p>All state that is required to maintain the security guarantees of the
 GEOPM Service are stored to disk in a secure way (see
@@ -251,9 +253,9 @@ configuration option that the GEOPM Service provides. These options
 enable the GEOPM Service to be restarted immediately, and to attempt
 to restart twice in rapid succession if necessary. The first attempt
 may be used to provide a clean environment for the second restart.</p>
-</div>
-</div>
-<div class="section" id="secure-interfaces">
+</section>
+</section>
+<section id="secure-interfaces">
 <h2>Secure Interfaces<a class="headerlink" href="#secure-interfaces" title="Permalink to this heading"></a></h2>
 <p>The interfaces that enable a user to access privileged system
 resources through the GEOPM Service are limited to the GEOPM DBus
@@ -270,8 +272,8 @@ to daemon processes. The GEOPM Service relies on the systemd DBus
 interface to provide the PID, UID, and GID of the requesting client.
 These identifiers are then used with standard system calls to enforce
 access permissions defined by a system administrator.</p>
-</div>
-<div class="section" id="secure-software-dependencies">
+</section>
+<section id="secure-software-dependencies">
 <h2>Secure Software Dependencies<a class="headerlink" href="#secure-software-dependencies" title="Permalink to this heading"></a></h2>
 <p>The GEOPM Service relies on external software packages to support
 security objectives. These external packages enable secure use of the
@@ -292,8 +294,8 @@ JSON data.</p>
 </ol>
 </li>
 </ol>
-</div>
-<div class="section" id="protected-assets">
+</section>
+<section id="protected-assets">
 <h2>Protected Assets<a class="headerlink" href="#protected-assets" title="Permalink to this heading"></a></h2>
 <p>The GEOPM Service provides a security gateway to privileged hardware
 interfaces. These interfaces expose power and energy management
@@ -309,7 +311,7 @@ managing access rights of users to the assets described in this
 section.  Maintaining user privacy such that client interactions with
 the GEOPM service are not observable to other users is also a security
 priority.</p>
-<div class="section" id="model-specific-register-device-driver">
+<section id="model-specific-register-device-driver">
 <h3>Model Specific Register device driver<a class="headerlink" href="#model-specific-register-device-driver" title="Permalink to this heading"></a></h3>
 <p>The GEOPM Service may be used as a gateway to the x86 Model Specific
 Register device driver
@@ -334,8 +336,8 @@ reasons a system administrator may wish to provide MSR access through
 the GEOPM Service to processes that do not have the CAP_SYS_RAWIO
 Linux
 <a class="reference external" href="https://man7.org/linux/man-pages/man7/capabilities.7.html">capability</a>.</p>
-</div>
-<div class="section" id="intel-speed-select-device-driver">
+</section>
+<section id="intel-speed-select-device-driver">
 <h3>Intel Speed Select device driver<a class="headerlink" href="#intel-speed-select-device-driver" title="Permalink to this heading"></a></h3>
 <p>The GEOPM Service may be used as a gateway to the Intel Speed Select
 device driver which is loaded as the <code class="docutils literal notranslate"><span class="pre">/dev/isst_interface</span></code>
@@ -354,8 +356,8 @@ other users of the system. The ISST interface may also be used to
 change the hardware characteristics reported by the Linux kernel, such
 as number of cores, base frequency, and which turbo frequencies are
 achievable.</p>
-</div>
-<div class="section" id="levelzero-sysman-library-interface">
+</section>
+<section id="levelzero-sysman-library-interface">
 <h3>LevelZero sysman library interface<a class="headerlink" href="#levelzero-sysman-library-interface" title="Permalink to this heading"></a></h3>
 <p>The LevelZero sysman library interface enables users to monitor and
 control Intel GPU devices. These signals and controls include
@@ -364,8 +366,8 @@ counters from GPU devices. Access to the LevelZero sysman interface is
 restricted because it provides ability to modify the performance of
 the system and direct access to hardware metrics that reflect user
 activity.</p>
-</div>
-<div class="section" id="nvidia-nvml-device-management-library-interface">
+</section>
+<section id="nvidia-nvml-device-management-library-interface">
 <h3>Nvidia NVML device management library interface<a class="headerlink" href="#nvidia-nvml-device-management-library-interface" title="Permalink to this heading"></a></h3>
 <p>The NVML library interface enables users to monitor and control Nvidia
 GPU devices. These controls and monitors include setting bounds on GPU
@@ -373,21 +375,21 @@ operating frequency and reading performance counters from GPU devices.
 Access to some of the interfaces of the NVML library are restricted
 and some of those restrictions may be relaxed based on settings
 enabled by a system administrator.</p>
-</div>
-<div class="section" id="service-user-data">
+</section>
+<section id="service-user-data">
 <h3>Service user data<a class="headerlink" href="#service-user-data" title="Permalink to this heading"></a></h3>
 <p>Interactions with the GEOPM Service by each client are private
 information and an asset that the GEOPM Service is designed to
 protect.  Unprivileged users of the system should not be able to
 observe the calls, inputs, or outputs to the GEOPM Service by other
 users of the system.</p>
-</div>
-</div>
-<div class="section" id="attack-surface">
+</section>
+</section>
+<section id="attack-surface">
 <h2>Attack Surface<a class="headerlink" href="#attack-surface" title="Permalink to this heading"></a></h2>
 <p>This section describes the interfaces that must be protected to ensure
 the security requirements of the GEOPM Service.</p>
-<div class="section" id="system-files">
+<section id="system-files">
 <h3>System files<a class="headerlink" href="#system-files" title="Permalink to this heading"></a></h3>
 <p>The state used to manage access permissions, track open sessions, and
 store control settings for reset is stored in system files. The files
@@ -398,8 +400,8 @@ these files is paramount to the integrity of the GEOPM Service
 security model.  In general these files have root access permissions
 only, and are modified by calling into GEOPM Service interfaces, or by
 running GEOPM Service command line tools like <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code>.</p>
-</div>
-<div class="section" id="inter-process-shared-memory">
+</section>
+<section id="inter-process-shared-memory">
 <h3>Inter-process shared memory<a class="headerlink" href="#inter-process-shared-memory" title="Permalink to this heading"></a></h3>
 <p>The batch server interface of the GEOPM Service uses POSIX
 inter-process shared memory to communicate telemetry and
@@ -410,8 +412,8 @@ resources is a critical part of our security model. Access to these
 shared memory regions by a user other than the client can result in
 escalation of privileges, and subversion of the administrative access
 lists.</p>
-</div>
-<div class="section" id="fifo-special-files">
+</section>
+<section id="fifo-special-files">
 <h3>FIFO special files<a class="headerlink" href="#fifo-special-files" title="Permalink to this heading"></a></h3>
 <p>In conjunction with the inter-process shared memory, there are FIFO
 special files created in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, the temporary file system, to
@@ -421,8 +423,8 @@ inter-process shared memory go across the FIFOs which serve as a
 synchronization mechanism.  Adversarial access to these files could
 cause deadlocks in the batch server or client process or enable
 information about the client session requests to be observed.</p>
-</div>
-<div class="section" id="systemd-dbus-interface">
+</section>
+<section id="systemd-dbus-interface">
 <h3>Systemd DBus interface<a class="headerlink" href="#systemd-dbus-interface" title="Permalink to this heading"></a></h3>
 <p>The systemd DBus implementation is a standard Linux interface for
 secure communication with Linux system services.  The
@@ -442,8 +444,8 @@ the
 <a class="reference external" href="https://man7.org/linux/man-pages/man3/sd-bus.3.html">sd-bus(3)</a>
 interface.  The GEOPM Service relies on these standard Linux tools to
 provide a trusted interface and a secured attack surface.</p>
-</div>
-<div class="section" id="logging">
+</section>
+<section id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h3>
 <p>GEOPM's implementation ensures that GEOPM has sufficient logging to
 provide traceability to system administrators about user
@@ -462,9 +464,9 @@ attempting to set up or use configuration files stored in a secure
 location.  See
 <a class="reference internal" href="#system-files"><span class="std std-ref">System files</span></a>
 for more information about these secure files.</p>
-</div>
-</div>
-<div class="section" id="security-threats">
+</section>
+</section>
+<section id="security-threats">
 <h2>Security Threats<a class="headerlink" href="#security-threats" title="Permalink to this heading"></a></h2>
 <p>This section enumerates the mechanisms that an adversary may use in an
 attempt to breach the attack surface to subvert the security
@@ -472,7 +474,7 @@ guarantees of the GEOPM Service. Each threat is split out into its own
 subsection.  The threat is described in the context of how the
 mechanism might be used against the GEOPM Service attack surface, and
 how the surface is secured against this threat.</p>
-<div class="section" id="malicious-input-or-private-output">
+<section id="malicious-input-or-private-output">
 <h3>Malicious input or private output<a class="headerlink" href="#malicious-input-or-private-output" title="Permalink to this heading"></a></h3>
 <p>Each GEOPM Service interface that may be accessed by an unprivileged
 user is a threat vector.  All input received from the user is
@@ -486,8 +488,8 @@ other is the batch server interface which may be created with a
 request to the GEOPM DBus interface.  The batch server is accessed by
 the end user through inter-process shared memory, and FIFO special
 files in the temporary file system.</p>
-</div>
-<div class="section" id="file-usage-configuration">
+</section>
+<section id="file-usage-configuration">
 <h3>File usage/configuration<a class="headerlink" href="#file-usage-configuration" title="Permalink to this heading"></a></h3>
 <p>As GEOPM reads and writes configuration files to disk, it is important
 to validate that the file usage is done as securely as possible. This
@@ -546,8 +548,8 @@ UID/GID and that the file descriptor has minimal permissions
 (i.e. 0o600 or rw for the owner only).  After these assertions have
 been made, the implementation reads the entire file contents into a
 string buffer and the file descriptor is closed.</p>
-</div>
-<div class="section" id="external-dependencies">
+</section>
+<section id="external-dependencies">
 <h3>External dependencies<a class="headerlink" href="#external-dependencies" title="Permalink to this heading"></a></h3>
 <p>The GEOPM Service utilizes shared libraries to facilitate user plugins
 of the IOGroups and Agents. The service expects the plugins to reside
@@ -571,9 +573,9 @@ pip. If any issues arise, reports are automatically generated to
 detail the failure and are sent to the developers. For the C/C++ JSON
 usage, the upstream repository is periodically checked to ensure the
 code that resides in GEOPM is up-to-date.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>

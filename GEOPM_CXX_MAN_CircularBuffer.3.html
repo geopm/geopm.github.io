@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm::CircularBuffer(3) -- generic circular buffer &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,11 +16,12 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="geopm::Comm(3) -- communication abstractions" href="GEOPM_CXX_MAN_Comm.3.html" />
-    <link rel="prev" title="geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux" href="GEOPM_CXX_MAN_CNLIOGroup.3.html" /> 
+    <link rel="prev" title="geopm::CPUActivityAgent(3) -- agent for selecting CPU frequency based on CPU compute activity" href="GEOPM_CXX_MAN_CPUActivityAgent.3.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -89,6 +91,7 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html">geopm::Agent(3) -- GEOPM agent plugin interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_Agg.3.html">geopm::Agg(3) -- data aggregation functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CNLIOGroup.3.html">geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_CPUActivityAgent.3.html">geopm::CPUActivityAgent(3) -- agent for selecting CPU frequency based on CPU compute activity</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">geopm::CircularBuffer(3) -- generic circular buffer</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#namespaces">Namespaces</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
@@ -120,6 +123,7 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_SharedMemory.3.html">geopm::SharedMemory(3) -- abstractions for shared memory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- GEOPM summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_cpu_activity.7.html">geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) -- agent optimizes performance under a power cap</a></li>
@@ -156,9 +160,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="geopm-circularbuffer-3-generic-circular-buffer">
+  <section id="geopm-circularbuffer-3-generic-circular-buffer">
 <h1>geopm::CircularBuffer(3) -- generic circular buffer<a class="headerlink" href="#geopm-circularbuffer-3-generic-circular-buffer" title="Permalink to this heading"></a></h1>
-<div class="section" id="namespaces">
+<section id="namespaces">
 <h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">CircularBuffer</span></code> class is a member of the <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">geopm</span></code>,
 but the full name, <code class="docutils literal notranslate"><span class="pre">geopm::CircularBuffer</span></code>, has been abbreviated in this manual.
@@ -166,8 +170,8 @@ Similarly, the <code class="docutils literal notranslate"><span class="pre">std:
 interface definitions for the following standard types: <code class="docutils literal notranslate"><span class="pre">std::vector</span></code>,
 <code class="docutils literal notranslate"><span class="pre">std::pair</span></code>, <code class="docutils literal notranslate"><span class="pre">std::string</span></code>, <code class="docutils literal notranslate"><span class="pre">std::map</span></code>, and <code class="docutils literal notranslate"><span class="pre">std::function</span></code>, to enable
 better rendering of this manual.</p>
-</div>
-<div class="section" id="synopsis">
+</section>
+<section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm/CircularBuffer.hpp">&lt;geopm/CircularBuffer.hpp&gt;</a></p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">CircularBuffer::set_capacity</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">);</span><span class="w"></span>
@@ -180,66 +184,81 @@ better rendering of this manual.</p>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">CircularBuffer::insert</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">CircularBuffer::value</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">CircularBuffer::value</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
 <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CircularBuffer</span><span class="o">::</span><span class="n">make_vector</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 
 <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CircularBuffer</span><span class="o">::</span><span class="n">make_vector</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="description">
+</section>
+<section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The CircularBuffer container implements a fixed-size buffer. Once at
 capacity, any new insertions cause the oldest entry to be dropped.</p>
-</div>
-<div class="section" id="class-methods">
+</section>
+<section id="class-methods">
 <h2>Class Methods<a class="headerlink" href="#class-methods" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">set_capacity()</span></code>:
-Resets the capacity of the circular buffer to <em>size</em> without
-modifying its current contents.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">clear()</span></code>:
-Clears all entries from the buffer.  The size becomes <code class="docutils literal notranslate"><span class="pre">0</span></code>, but the
-capacity is unchanged.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">size()</span></code>:
-Returns the number of items in the buffer.  This value will be less
-than or equal to the current capacity of the buffer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">capacity()</span></code>:
-Returns the current size of the circular buffer at the time of the
-call.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">insert()</span></code>:
-Inserts <em>value</em> into the buffer.  If the buffer is not full, the new
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">set_capacity()</span></code></dt><dd><p>Grows or shrinks the capacity of the circular buffer.
+If the new capacity is greater than the size, then the current
+contents will not be modified.
+If the new capacity is smaller than the size, then only the newest
+elements of the difference will be retained.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">clear()</span></code></dt><dd><p>Clears all entries from the buffer.  The size becomes <code class="docutils literal notranslate"><span class="pre">0</span></code>, but the
+capacity is unchanged.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">size()</span></code></dt><dd><p>Returns the number of items in the buffer.  This value will be less
+than or equal to the current capacity of the buffer.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">capacity()</span></code></dt><dd><p>Returns the current size of the circular buffer at the time of the
+call.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">insert()</span></code></dt><dd><p>Inserts <em>value</em> into the buffer.  If the buffer is not full, the new
 value is simply added to the buffer. It the buffer is at capacity,
 The head of the buffer is <strong>dropped</strong> and moved to the next oldest entry
-and the new value is then inserted at the end of the buffer.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">value()</span></code>:
-Accesses the contents of the circular buffer at <em>index</em>. Valid
-indices range from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">[size-1]</span></code>, where <em>size</em> is the number of valid
-entries in the buffer.  An attempt to retrieve a value for an out of
+and the new value is then inserted at the end of the buffer.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">value()</span></code></dt><dd><p>Returns a constant reference to the value from the buffer.
+Accesses the contents of the circular buffer
+at a particular <em>index</em>.</p>
+<ul class="simple">
+<li><p>Valid positive indices range from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">size-1</span></code>.</p></li>
+<li><p>Valid negative indices range from <code class="docutils literal notranslate"><span class="pre">-1</span></code> to <code class="docutils literal notranslate"><span class="pre">-size</span></code>.
+Negative indices work just like <strong>python</strong> indices,
+to represent nth-most-recent insertions. For example,
+<code class="docutils literal notranslate"><span class="pre">-1</span></code> is the last element, <code class="docutils literal notranslate"><span class="pre">-2</span></code> is the second to last element, and so on.</p></li>
+</ul>
+<p>Where <code class="docutils literal notranslate"><span class="pre">size</span></code> is the number of valid entries in the buffer.</p>
+<ul class="simple">
+<li><p>An out of bounds <em>index</em> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">[size-1]</span></code> <strong>OR</strong> <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">[-size]</span></code>.
+An attempt to retrieve a value for an out of
 bound index will throw a <a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html"><span class="doc">geopm::Exception(3)</span></a> with an
 <code class="docutils literal notranslate"><span class="pre">error_value()</span></code> of <code class="docutils literal notranslate"><span class="pre">GEOPM_ERROR_INVALID</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make_vector()</span></code>:
-Create a vector from the entire circular buffer contents.
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make_vector()</span></code></dt><dd><p>Create a vector from the entire circular buffer contents.
 Or create a vector slice from the circular buffer contents,
 delimited by the <em>Start</em> index <strong>(inclusive)</strong> and <em>End</em> index <strong>(exclusive)</strong>
 such as <code class="docutils literal notranslate"><span class="pre">[start,</span> <span class="pre">end)</span></code>.
 If the range presented by these two indexes is invalid
-it will throw a <a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html"><span class="doc">geopm::Exception(3)</span></a></p></li>
-</ul>
-</div>
-<div class="section" id="see-also">
+it will throw a <a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html"><span class="doc">geopm::Exception(3)</span></a></p>
+</dd>
+</dl>
+</section>
+<section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_Exception.3.html"><span class="doc">geopm::Exception(3)</span></a></p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="GEOPM_CXX_MAN_CNLIOGroup.3.html" class="btn btn-neutral float-left" title="geopm::CNLIOGroup(3) -- IOGroup for interaction with Compute Node Linux" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GEOPM_CXX_MAN_CPUActivityAgent.3.html" class="btn btn-neutral float-left" title="geopm::CPUActivityAgent(3) -- agent for selecting CPU frequency based on CPU compute activity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="GEOPM_CXX_MAN_Comm.3.html" class="btn btn-neutral float-right" title="geopm::Comm(3) -- communication abstractions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
