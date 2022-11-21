@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm_pio_levelzero(7) -- IOGroup providing signals and controls for Intel GPUs &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +15,6 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -163,22 +161,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="geopm-pio-levelzero-7-iogroup-providing-signals-and-controls-for-intel-gpus">
+  <div class="section" id="geopm-pio-levelzero-7-iogroup-providing-signals-and-controls-for-intel-gpus">
 <h1>geopm_pio_levelzero(7) -- IOGroup providing signals and controls for Intel GPUs<a class="headerlink" href="#geopm-pio-levelzero-7-iogroup-providing-signals-and-controls-for-intel-gpus" title="Permalink to this heading"></a></h1>
-<section id="description">
+<div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The LevelZeroIOGroup implements the <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>
 interface to provide hardware signals and controls for Intel GPUs.</p>
-<section id="requirements">
+<div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
 <p>To use the GEOPM LevelZero signals and controls GEOPM must be compiled against the oneAPI LevelZero libraries and must be run on a system with discrete GPUs supported by LevelZero.  To compile against the oneAPI LevelZero libraries geopm must be configured using the --enable-levelzero flag.  The optional --with-levelzero flag may be used to indicate the path of the required libraries.  In addition the user must export ZES_ENABLE_SYSMAN=1 as specified by the Intel oneAPI Level Zero Sysman documentation.  See the Sysman specification for more info on related environment variables and their usage.</p>
 <p>Since signals and controls are exposed via the Sysman API they will be impacted by Sysman environment variables.  Please review <a class="reference external" href="https://spec.oneapi.io/level-zero/latest/sysman/PROG.html#environment-variables">oneAPI LevelZero Sysman Environment Variables</a> and <a class="reference external" href="https://spec.oneapi.io/level-zero/latest/core/PROG.html#environment-variables">oneAPI LevelZero Core Programming Guide Environment Variables</a>.</p>
-</section>
-</section>
-<section id="signals">
+</div>
+</div>
+<div class="section" id="signals">
 <h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_FREQUENCY_STATUS</span></code></dt><dd><p>The current frequency of the GPU Compute Hardware.</p>
+<ul class="simple">
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: gpu_chip</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_FREQUENCY_EFFICIENT</span></code></dt><dd><p>The efficient minimum frequency of the GPU Compute Hardware.</p>
 <ul class="simple">
 <li><p><strong>Aggregation</strong>: average</p></li>
 <li><p><strong>Domain</strong>: gpu_chip</p></li>
@@ -224,6 +230,14 @@ interface to provide hardware signals and controls for Intel GPUs.</p>
 <li><p><strong>Domain</strong>: gpu</p></li>
 <li><p><strong>Format</strong>: double</p></li>
 <li><p><strong>Unit</strong>: seconds</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_PERFORMANCE_FACTOR</span></code></dt><dd><p>Performance Factor of the GPU Compute Hardware Domain. Expresses a trade-off between energy provided to the GPU compute hardware and the supporting units.  A value of 1 indicates a compute focused energy trade-off, a value of 0 indicates a memory focused energy trade-off.  Default value is 0.5</p>
+<ul class="simple">
+<li><p><strong>Aggregation</strong>: averge</p></li>
+<li><p><strong>Domain</strong>: gpu_chip</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
 </ul>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_UNCORE_FREQUENCY_STATUS</span></code></dt><dd><p>The current frequency of the GPU Memory hardware.</p>
@@ -363,8 +377,8 @@ interface to provide hardware signals and controls for Intel GPUs.</p>
 </ul>
 </dd>
 </dl>
-</section>
-<section id="controls">
+</div>
+<div class="section" id="controls">
 <h2>Controls<a class="headerlink" href="#controls" title="Permalink to this heading"></a></h2>
 <p>Every control is exposed as a signal with the same name.  The relevant signal aggregation information is provided below.</p>
 <dl class="simple">
@@ -384,12 +398,20 @@ interface to provide hardware signals and controls for Intel GPUs.</p>
 <li><p><strong>Unit</strong>: hertz</p></li>
 </ul>
 </dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_PERFORMANCE_FACTOR_CONTROL</span></code></dt><dd><p>Performance Factor of the GPU Compute Hardware Domain. Expresses a trade-off between energy provided to the GPU compute hardware and the supporting units.  A value of 1 indicates a compute focused energy trade-off, a value of 0 indicates a memory focused energy trade-off.  Default value is 0.5</p>
+<ul class="simple">
+<li><p><strong>Aggregation</strong>: averge</p></li>
+<li><p><strong>Domain</strong>: gpu_chip</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
 </dl>
-</section>
-<section id="aliases">
+</div>
+<div class="section" id="aliases">
 <h2>Aliases<a class="headerlink" href="#aliases" title="Permalink to this heading"></a></h2>
 <p>This IOGroup provides the following high-level aliases:</p>
-<section id="signal-aliases">
+<div class="section" id="signal-aliases">
 <h3>Signal Aliases<a class="headerlink" href="#signal-aliases" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_ENERGY</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_ENERGY</span></code>.</p>
@@ -416,9 +438,13 @@ interface to provide hardware signals and controls for Intel GPUs.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MAX_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_FREQUENCY_MAX_CONTROL</span></code>.</p>
 </dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_PERFORMANCE_FACTOR_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_PERFORMANCE_FACTOR</span></code>
+Writes to performance factor may not be granted.  To confirm the actual
+control setting the signal must be read.</p>
+</dd>
 </dl>
-</section>
-<section id="control-aliases">
+</div>
+<div class="section" id="control-aliases">
 <h3>Control Aliases<a class="headerlink" href="#control-aliases" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MAX_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_FREQUENCY_MAX_CONTROL</span></code></p>
@@ -426,17 +452,17 @@ interface to provide hardware signals and controls for Intel GPUs.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MIN_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">LEVELZERO::GPU_CORE_FREQUENCY_MIN_CONTROL</span></code></p>
 </dd>
 </dl>
-</section>
-</section>
-<section id="see-also">
+</div>
+</div>
+<div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference external" href="https://spec.oneapi.io/level-zero/latest/sysman/PROG.html">oneAPI LevelZero Sysman</a>,
 <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>,
 <a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a>,
 <a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a></p>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>

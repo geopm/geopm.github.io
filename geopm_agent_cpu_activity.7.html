@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +15,6 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -122,7 +120,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#agent-name">Agent Name</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#policy-parameters">Policy Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#policy-generation">Policy Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constconfigiogroup-configuration-file-generation">ConstConfigIOGroup Configuration File Generation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-policy">Example Policy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#report-extensions">Report Extensions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#control-loop-rate">Control Loop Rate</a></li>
@@ -166,9 +164,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity">
+  <div class="section" id="geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity">
 <h1>geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity<a class="headerlink" href="#geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity" title="Permalink to this heading"></a></h1>
-<section id="description">
+<div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -198,7 +196,7 @@ high activity regions (uncore activity of 1.0) run at the <code class="docutils 
 and regions in between the extremes run at a frequency (<code class="docutils literal notranslate"><span class="pre">Fureq</span></code>) selected using
 the equation:</p>
 <p><code class="docutils literal notranslate"><span class="pre">Fureq</span> <span class="pre">=</span> <span class="pre">Fue</span> <span class="pre">+</span> <span class="pre">(Fumax</span> <span class="pre">-</span> <span class="pre">Fue)</span> <span class="pre">*</span> <span class="pre">CPU_UNCORE_ACTIVITY</span></code></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_ACTIVITY</span></code> is defined as a simple ratio of the current memory bandwdith
+<p>The <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_ACTIVITY</span></code> is defined as a simple ratio of the current memory bandwidth
 divided by the maximum possible bandwidth at the current <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_STATUS</span></code> value.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">Fe</span></code> value for all domains is intended to be an energy efficient frequency
 that is selected via system characterization.  The recommended approach to selecting
@@ -216,8 +214,8 @@ agent towards higher frequencies by increasing the <code class="docutils literal
 In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 0) <code class="docutils literal notranslate"><span class="pre">Fe</span></code> will be raised to <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>.  A <code class="docutils literal notranslate"><span class="pre">phi</span></code> value greater than
 0.5 biases the agent towards lower frequencies by reducing the <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> value provided
 by the policy.  In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 1.0) <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> will be lowered to <code class="docutils literal notranslate"><span class="pre">Fe</span></code>.</p>
-</section>
-<section id="agent-name">
+</div>
+<div class="section" id="agent-name">
 <h2>Agent Name<a class="headerlink" href="#agent-name" title="Permalink to this heading"></a></h2>
 <p>The agent described in this manual is selected in many geopm
 interfaces with the <code class="docutils literal notranslate"><span class="pre">&quot;cpu_activity&quot;</span></code> agent name.  This name can be
@@ -225,8 +223,8 @@ passed to <a class="reference internal" href="geopmlaunch.1.html"><span class="d
 option, or the <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> environment variable can be set to this
 name (see <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>).  This name can also be passed to the
 <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">'-a'</span></code> option.</p>
-</section>
-<section id="policy-parameters">
+</div>
+<div class="section" id="policy-parameters">
 <h2>Policy Parameters<a class="headerlink" href="#policy-parameters" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">Fe</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> for each domain and the <code class="docutils literal notranslate"><span class="pre">phi</span></code> input
 are policy values.
@@ -265,12 +263,12 @@ memory bandwidths for frequency steering.</p>
 </dd>
 </dl>
 </div></blockquote>
-</section>
-<section id="policy-generation">
-<h2>Policy Generation<a class="headerlink" href="#policy-generation" title="Permalink to this heading"></a></h2>
-<p>Generating a policy for the CPU Compute Activity agent requires system
-characterization using the GEOPM experiment infrastructure located in
-<code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/experiment/</span></code> and the aritmetic intensity
+</div>
+<div class="section" id="constconfigiogroup-configuration-file-generation">
+<h2>ConstConfigIOGroup Configuration File Generation<a class="headerlink" href="#constconfigiogroup-configuration-file-generation" title="Permalink to this heading"></a></h2>
+<p>Generating a ConstConfigIOGroup configuration file for the CPU Compute Activity agent requires
+system characterization using the GEOPM experiment infrastructure located in
+<code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/experiment/</span></code> and the arithmetic intensity
 benchmark located in <code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/apps/arithmetic_intensity</span></code>.
 Prior to starting, the arithmetic intensity benchmark needs to be built (use
 the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script provided in the benchmark's folder).</p>
@@ -324,14 +322,12 @@ uncore frequency sweep could take about 10 hours, for example.</p>
 <p>This will run multiple kernels of varying intensity that stress the core and
 uncore to help with system characterization.</p>
 <p>After sourcing the <code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/config/run_env.sh</span></code> file, the
-CPU compute activity agent policy can then be generated by running:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">integration</span><span class="o">/</span><span class="n">experiment</span><span class="o">/</span><span class="n">uncore_frequency_sweep</span><span class="o">/</span><span class="n">gen_cpu_activity_policy_recommendation</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="n">UNCORE_SWEEP_DIR</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">region</span><span class="o">-</span><span class="nb">list</span> <span class="s2">&quot;intensity_1&quot;</span><span class="p">,</span><span class="s2">&quot;intensity_16&quot;</span>
+CPU compute activity agent ConstConfigIOGroup configuration file can then be generated by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">integration</span><span class="o">/</span><span class="n">experiment</span><span class="o">/</span><span class="n">uncore_frequency_sweep</span><span class="o">/</span><span class="n">gen_cpu_activity_constconfig_recommendation</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="n">UNCORE_SWEEP_DIR</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">region</span><span class="o">-</span><span class="nb">list</span> <span class="s2">&quot;intensity_1&quot;</span><span class="p">,</span><span class="s2">&quot;intensity_16&quot;</span>
 </pre></div>
 </div>
-<p>This version of the agent allows a single system wide configuration to be
-passed in via the policy.</p>
-</section>
-<section id="example-policy">
+</div>
+<div class="section" id="example-policy">
 <h2>Example Policy<a class="headerlink" href="#example-policy" title="Permalink to this heading"></a></h2>
 <p>An example policy generated using a pair of workloads, one core bound
 and one uncore bound, is provided below.  Repeated NAN entries are
@@ -375,8 +371,8 @@ skipped for space:</p>
  <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_28&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
-</section>
-<section id="report-extensions">
+</div>
+<div class="section" id="report-extensions">
 <h2>Report Extensions<a class="headerlink" href="#report-extensions" title="Permalink to this heading"></a></h2>
 <blockquote>
 <div><dl class="simple">
@@ -400,14 +396,14 @@ been taken into account</p>
 </dd>
 </dl>
 </div></blockquote>
-</section>
-<section id="control-loop-rate">
+</div>
+<div class="section" id="control-loop-rate">
 <h2>Control Loop Rate<a class="headerlink" href="#control-loop-rate" title="Permalink to this heading"></a></h2>
 <blockquote>
 <div><p>The agent gates the Controller's control loop to a cadence of 10ms.</p>
 </div></blockquote>
-</section>
-<section id="see-also">
+</div>
+<div class="section" id="see-also">
 <h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>,
@@ -416,8 +412,8 @@ been taken into account</p>
 <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>,
 <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a>,
 <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a></p>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
