@@ -7,6 +7,8 @@ var searchData=
   ['short_5fregion_5fs',['short_region_s',['../structgeopm_1_1short__region__s.html',1,'geopm']]],
   ['sleepmodelregion',['SleepModelRegion',['../classgeopm_1_1_sleep_model_region.html',1,'geopm']]],
   ['spinmodelregion',['SpinModelRegion',['../classgeopm_1_1_spin_model_region.html',1,'geopm']]],
+  ['sstclosgovernor',['SSTClosGovernor',['../classgeopm_1_1_s_s_t_clos_governor.html',1,'geopm']]],
+  ['sstclosgovernorimp',['SSTClosGovernorImp',['../classgeopm_1_1_s_s_t_clos_governor_imp.html',1,'geopm']]],
   ['sstfrequencylimitdetector',['SSTFrequencyLimitDetector',['../classgeopm_1_1_s_s_t_frequency_limit_detector.html',1,'geopm']]],
   ['step',['Step',['../classgeopm_1_1_power_balancer_agent_1_1_step.html',1,'geopm::PowerBalancerAgent']]],
   ['streammodelregion',['StreamModelRegion',['../classgeopm_1_1_stream_model_region.html',1,'geopm']]],

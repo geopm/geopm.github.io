@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['event_5fe',['event_e',['../namespacegeopm.html#a636033eac2b29105f49668284d661327',1,'geopm']]]
+  ['closlevel_5fe',['ClosLevel_e',['../classgeopm_1_1_s_s_t_clos_governor.html#abaf547d650ca7dda00e6abba7e068c36',1,'geopm::SSTClosGovernor']]]
 ];

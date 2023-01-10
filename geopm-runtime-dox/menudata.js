@@ -110,6 +110,8 @@ var menudata={children:[
 {text:"v",url:"functions_vars.html#index_v"}]},
 {text:"Enumerations",url:"functions_enum.html"},
 {text:"Enumerator",url:"functions_eval.html",children:[
+{text:"h",url:"functions_eval.html#index_h"},
+{text:"l",url:"functions_eval.html#index_l"},
 {text:"m",url:"functions_eval.html#index_m"}]},
 {text:"Related Functions",url:"functions_rela.html"}]}]},
 {text:"Files",url:"files.html",children:[

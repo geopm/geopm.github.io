@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +14,6 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -164,10 +164,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity">
-<h1>geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity<a class="headerlink" href="#geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity" title="Permalink to this heading"></a></h1>
-<div class="section" id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+  <section id="geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity">
+<h1>geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity<a class="headerlink" href="#geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity" title="Permalink to this headline"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is currently an experimental agent and is only available when
@@ -180,8 +180,7 @@ combined with other agents.</p>
 based upon the compute activity of each CPU as provided by the
 CPU_COMPUTE_ACTIVITY signal and modified by the CPU_UTILIZATION signal.</p>
 <p>The agent scales the core frequency in the range of <code class="docutils literal notranslate"><span class="pre">Fce</span></code> to <code class="docutils literal notranslate"><span class="pre">Fcmax</span></code>, where
-<code class="docutils literal notranslate"><span class="pre">Fcmax</span></code> is provided via the policy as <code class="docutils literal notranslate"><span class="pre">CPU_FREQ_MAX</span></code> and <code class="docutils literal notranslate"><span class="pre">Fce</span></code> is provided via
-the policy as <code class="docutils literal notranslate"><span class="pre">CPU_FREQ_EFFICIENT</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">Fcmax</span></code> and <code class="docutils literal notranslate"><span class="pre">Fce</span></code> are provided via the MSRIOGroup and ConstConfigIOGroup respectively.</p>
 <p>Low compute activity regions (compute activity of 0.0) run at the <code class="docutils literal notranslate"><span class="pre">Fce</span></code> frequency,
 high activity regions (compute activity of 1.0) run at the <code class="docutils literal notranslate"><span class="pre">Fcmax</span></code> frequency,
 and regions in between the extremes run at a frequency (<code class="docutils literal notranslate"><span class="pre">Fcreq</span></code>) selected using the equation:</p>
@@ -189,8 +188,8 @@ and regions in between the extremes run at a frequency (<code class="docutils li
 <p>The <code class="docutils literal notranslate"><span class="pre">CPU_COMPUTE_ACTIVITY</span></code> is defined as a derivative signal based on the MSR::PPERF::PCNT
 scalability metric.</p>
 <p>The agent also scales the uncore frequency in the range of <code class="docutils literal notranslate"><span class="pre">Fue</span></code> to
-<code class="docutils literal notranslate"><span class="pre">Fumax</span></code>, where <code class="docutils literal notranslate"><span class="pre">Fumax</span></code> is provided via the policy as <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQ_MAX</span></code>
-and <code class="docutils literal notranslate"><span class="pre">Fue</span></code> is provided via the policy as <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQ_EFFICIENT</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">Fumax</span></code>, where <code class="docutils literal notranslate"><span class="pre">Fumax</span></code> and <code class="docutils literal notranslate"><span class="pre">Fue</span></code> are povided by the
+MSRIOGroup and ConstConfigIOGroup respectively.</p>
 <p>Low uncore activity regions (uncore activity of 0.0) run at the <code class="docutils literal notranslate"><span class="pre">Fue</span></code> frequency,
 high activity regions (uncore activity of 1.0) run at the <code class="docutils literal notranslate"><span class="pre">Fumax</span></code> frequency,
 and regions in between the extremes run at a frequency (<code class="docutils literal notranslate"><span class="pre">Fureq</span></code>) selected using
@@ -210,62 +209,33 @@ upon user/admin preference.</p>
 <p>The agent provides an optional input of <code class="docutils literal notranslate"><span class="pre">phi</span></code> that allows for biasing the
 frequency range for both domains used by the agent.  The default <code class="docutils literal notranslate"><span class="pre">phi</span></code> value of 0.5 provides frequency
 selection in the full range from <code class="docutils literal notranslate"><span class="pre">Fe</span></code> to <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>.  A <code class="docutils literal notranslate"><span class="pre">phi</span></code> value less than 0.5 biases the
-agent towards higher frequencies by increasing the <code class="docutils literal notranslate"><span class="pre">Fe</span></code> value provided by the policy.
+agent towards higher frequencies by increasing the <code class="docutils literal notranslate"><span class="pre">Fe</span></code> value.
 In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 0) <code class="docutils literal notranslate"><span class="pre">Fe</span></code> will be raised to <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>.  A <code class="docutils literal notranslate"><span class="pre">phi</span></code> value greater than
-0.5 biases the agent towards lower frequencies by reducing the <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> value provided
-by the policy.  In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 1.0) <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> will be lowered to <code class="docutils literal notranslate"><span class="pre">Fe</span></code>.</p>
-</div>
-<div class="section" id="agent-name">
-<h2>Agent Name<a class="headerlink" href="#agent-name" title="Permalink to this heading"></a></h2>
+0.5 biases the agent towards lower frequencies by reducing the <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> value.
+In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 1.0) <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> will be lowered to <code class="docutils literal notranslate"><span class="pre">Fe</span></code>.</p>
+</section>
+<section id="agent-name">
+<h2>Agent Name<a class="headerlink" href="#agent-name" title="Permalink to this headline"></a></h2>
 <p>The agent described in this manual is selected in many geopm
 interfaces with the <code class="docutils literal notranslate"><span class="pre">&quot;cpu_activity&quot;</span></code> agent name.  This name can be
 passed to <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code>
 option, or the <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> environment variable can be set to this
 name (see <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>).  This name can also be passed to the
 <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">'-a'</span></code> option.</p>
-</div>
-<div class="section" id="policy-parameters">
-<h2>Policy Parameters<a class="headerlink" href="#policy-parameters" title="Permalink to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">Fe</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> for each domain and the <code class="docutils literal notranslate"><span class="pre">phi</span></code> input
-are policy values.
-Setting <code class="docutils literal notranslate"><span class="pre">Fe</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> for a domain to the same value can
-be used to force the entire application to run at a fixed frequency.</p>
+</section>
+<section id="policy-parameters">
+<h2>Policy Parameters<a class="headerlink" href="#policy-parameters" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Phi</span></code> input is the only policy value.</p>
 <blockquote>
 <div><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQ_MAX</span></code>:</dt><dd><p>The maximum cpu frequency in hertz that the algorithm is
-allowed to choose.  If NAN is passed, it will use the
-maximum available frequency by default.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQ_EFFICIENT</span></code>:</dt><dd><p>The minimum cpu frequency in hertz that the algorithm is
-allowed to choose.  If NAN is passed, it will use the system
-minimum frequency by default.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQ_MAX</span></code>:</dt><dd><p>The maximum cpu uncore frequency in hertz that the algorithm is
-allowed to choose.  If NAN is passed, it will use the
-maximum available frequency by default.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQ_EFFICIENT</span></code>:</dt><dd><p>The minimum cpu uncore frequency in hertz that the algorithm is
-allowed to choose.  If NAN is passed, it will use the system
-minimum frequency by default.</p>
-</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_PHI</span></code>:</dt><dd><p>The performance bias knob.  The value must be between
 0.0 and 1.0. If NAN is passed, it will use 0.5 by default.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQ_#</span></code>:</dt><dd><p>The uncore frequency associated with the same numbered
-maximum memory bandwidth.
-Used to build a mapping of uncore frequencies to maximum
-memory bandwidths for frequency steering.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">MAX_MEMORY_BANDWIDTH_#</span></code>:</dt><dd><p>The maximum possible memory bandwidth associated with the
-same numbered uncore frequency.
-Used to build a mapping of uncore frequencies to maximum
-memory bandwidths for frequency steering.</p>
-</dd>
 </dl>
 </div></blockquote>
-</div>
-<div class="section" id="constconfigiogroup-configuration-file-generation">
-<h2>ConstConfigIOGroup Configuration File Generation<a class="headerlink" href="#constconfigiogroup-configuration-file-generation" title="Permalink to this heading"></a></h2>
+</section>
+<section id="constconfigiogroup-configuration-file-generation">
+<h2>ConstConfigIOGroup Configuration File Generation<a class="headerlink" href="#constconfigiogroup-configuration-file-generation" title="Permalink to this headline"></a></h2>
 <p>Generating a ConstConfigIOGroup configuration file for the CPU Compute Activity agent requires
 system characterization using the GEOPM experiment infrastructure located in
 <code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/experiment/</span></code> and the arithmetic intensity
@@ -288,7 +258,7 @@ srun -N ${SLURM_NNODES} geopmwrite MSR::QM_EVTSEL:RMID board 0 0
 srun -N ${SLURM_NNODES} geopmwrite MSR::QM_EVTSEL:EVENT_ID board 0 2
 </pre></div>
 </div>
-<p>Without this, the uncore bandwidth characteriztaion analysis scripts will not
+<p>Without this, the uncore bandwidth characterization analysis scripts will not
 be able to accurately determine the maximum memory bandwidth at each uncore
 frequency.</p>
 <p>Additionally the <code class="docutils literal notranslate"><span class="pre">test.sbatch</span></code> should be modified to include the following
@@ -326,54 +296,115 @@ CPU compute activity agent ConstConfigIOGroup configuration file can then be gen
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">integration</span><span class="o">/</span><span class="n">experiment</span><span class="o">/</span><span class="n">uncore_frequency_sweep</span><span class="o">/</span><span class="n">gen_cpu_activity_constconfig_recommendation</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="n">UNCORE_SWEEP_DIR</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">region</span><span class="o">-</span><span class="nb">list</span> <span class="s2">&quot;intensity_1&quot;</span><span class="p">,</span><span class="s2">&quot;intensity_16&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-policy">
-<h2>Example Policy<a class="headerlink" href="#example-policy" title="Permalink to this heading"></a></h2>
-<p>An example policy generated using a pair of workloads, one core bound
-and one uncore bound, is provided below.  Repeated NAN entries are
-skipped for space:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;CPU_FREQ_MAX&quot;</span><span class="p">:</span> <span class="mi">3700000000</span><span class="p">,</span>
- <span class="s2">&quot;CPU_FREQ_EFFICIENT&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_MAX&quot;</span><span class="p">:</span> <span class="mi">2400000000</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_EFFICIENT&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">,</span>
- <span class="s2">&quot;CPU_PHI&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="s2">&quot;SAMPLE_PERIOD&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_0&quot;</span><span class="p">:</span> <span class="mi">1200000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_0&quot;</span><span class="p">:</span> <span class="mf">45414967307.69231</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_1&quot;</span><span class="p">:</span> <span class="mi">1300000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_1&quot;</span><span class="p">:</span> <span class="mf">64326515384.61539</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_2&quot;</span><span class="p">:</span> <span class="mi">1400000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_2&quot;</span><span class="p">:</span> <span class="mf">72956528846.15384</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_3&quot;</span><span class="p">:</span> <span class="mi">1500000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_3&quot;</span><span class="p">:</span> <span class="mf">77349315384.61539</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_4&quot;</span><span class="p">:</span> <span class="mi">1600000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_4&quot;</span><span class="p">:</span> <span class="mf">82345998076.92308</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_5&quot;</span><span class="p">:</span> <span class="mi">1700000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_5&quot;</span><span class="p">:</span> <span class="mf">87738286538.46153</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_6&quot;</span><span class="p">:</span> <span class="mi">1800000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_6&quot;</span><span class="p">:</span> <span class="mf">91966364814.81482</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_7&quot;</span><span class="p">:</span> <span class="mi">1900000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_7&quot;</span><span class="p">:</span> <span class="mf">96728174074.07408</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_8&quot;</span><span class="p">:</span> <span class="mi">2000000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_8&quot;</span><span class="p">:</span> <span class="mf">100648379629.6296</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_9&quot;</span><span class="p">:</span> <span class="mi">2100000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_9&quot;</span><span class="p">:</span> <span class="mf">102409246296.2963</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_10&quot;</span><span class="p">:</span> <span class="mi">2200000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_10&quot;</span><span class="p">:</span> <span class="mf">103624103703.7037</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_11&quot;</span><span class="p">:</span> <span class="mi">2300000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_11&quot;</span><span class="p">:</span> <span class="mf">104268944444.4444</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_12&quot;</span><span class="p">:</span> <span class="mi">2400000000</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_12&quot;</span><span class="p">:</span> <span class="mf">104748888888.8889</span><span class="p">,</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_13&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_13&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">,</span>
- <span class="o">...</span>
- <span class="s2">&quot;CPU_UNCORE_FREQ_28&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">,</span>
- <span class="s2">&quot;MAX_MEMORY_BANDWIDTH_28&quot;</span><span class="p">:</span> <span class="s2">&quot;NAN&quot;</span><span class="p">}</span>
+<p>Depending on the number of runs, system noise, and other factors there may be more than one reasonable
+value for <code class="docutils literal notranslate"><span class="pre">Fe</span></code> for a given domain.  In these cases a warning similar to the following will be provided:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;Warning: Found N possible alternate Fe value(s) within 5</span><span class="si">% e</span><span class="s1">nergy consumption of Fe for &lt;Control&gt;.</span>
+ <span class="n">Consider</span> <span class="n">using</span> <span class="n">the</span> <span class="n">energy</span><span class="o">-</span><span class="n">margin</span> <span class="n">options</span><span class="o">.</span>\<span class="n">n</span><span class="s1">&#39;</span>
 </pre></div>
 </div>
+<p>If this occurs the user may choose to use the provided configuration file OR rerun the recommendation script with
+any the energy-margin options <code class="docutils literal notranslate"><span class="pre">--core-energy-margin</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">--uncore-energy-margin</span></code> along with a value such
+as 0.05 (5%). These options will attempt to identify a lower <code class="docutils literal notranslate"><span class="pre">Fe</span></code> for the respective domain that costs less than
+the energy consumed at <code class="docutils literal notranslate"><span class="pre">Fe</span></code> plus the energy-margin percentage provided.</p>
+<p>An example ConstConfigIOGroup configuration file is provided below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;CPU_FREQUENCY_EFFICIENT_HIGH_INTENSITY&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Defines the efficient core frequency to use for CPUs.  Based on a workload that scales strongly with the frequency domain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2000000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_EFFICIENT_HIGH_INTENSITY&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Defines the efficient uncore frequency to use for CPUs.  Based on a workload that scales strongly with the frequency domain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2000000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_0&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1200000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_0&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">45639800000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1400000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">73881616666.66667</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1600000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">85787733333.33333</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_3&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1800000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_3&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">97272166666.66667</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_4&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2000000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_4&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">106515333333.33333</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 </div>
-<div class="section" id="report-extensions">
-<h2>Report Extensions<a class="headerlink" href="#report-extensions" title="Permalink to this heading"></a></h2>
+</section>
+<section id="example-policy">
+<h2>Example Policy<a class="headerlink" href="#example-policy" title="Permalink to this headline"></a></h2>
+<p>An example policy is provided below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;CPU_PHI&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="report-extensions">
+<h2>Report Extensions<a class="headerlink" href="#report-extensions" title="Permalink to this headline"></a></h2>
 <blockquote>
 <div><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Core</span> <span class="pre">Frequency</span> <span class="pre">Requests</span></code></dt><dd><p>The number of core frequency requests made by the agent</p>
@@ -396,15 +427,15 @@ been taken into account</p>
 </dd>
 </dl>
 </div></blockquote>
-</div>
-<div class="section" id="control-loop-rate">
-<h2>Control Loop Rate<a class="headerlink" href="#control-loop-rate" title="Permalink to this heading"></a></h2>
+</section>
+<section id="control-loop-rate">
+<h2>Control Loop Rate<a class="headerlink" href="#control-loop-rate" title="Permalink to this headline"></a></h2>
 <blockquote>
 <div><p>The agent gates the Controller's control loop to a cadence of 10ms.</p>
 </div></blockquote>
-</div>
-<div class="section" id="see-also">
-<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html"><span class="doc">geopm::Agent(3)</span></a>,
@@ -412,8 +443,8 @@ been taken into account</p>
 <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>,
 <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a>,
 <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a></p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

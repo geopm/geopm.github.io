@@ -92,6 +92,8 @@ var searchData=
   ['_7esenddownlimitstep',['~SendDownLimitStep',['../classgeopm_1_1_power_balancer_agent_1_1_send_down_limit_step.html#a3d2a8596c60a88b3ee40f9b412f985a1',1,'geopm::PowerBalancerAgent::SendDownLimitStep']]],
   ['_7esleepmodelregion',['~SleepModelRegion',['../classgeopm_1_1_sleep_model_region.html#a7755d255e320689ccdad6972d9d9ac2f',1,'geopm::SleepModelRegion']]],
   ['_7espinmodelregion',['~SpinModelRegion',['../classgeopm_1_1_spin_model_region.html#ab76a8cfd5acf2642842c8c4982725013',1,'geopm::SpinModelRegion']]],
+  ['_7esstclosgovernor',['~SSTClosGovernor',['../classgeopm_1_1_s_s_t_clos_governor.html#a8c467729d5a098a805d3a3e563a965ed',1,'geopm::SSTClosGovernor']]],
+  ['_7esstclosgovernorimp',['~SSTClosGovernorImp',['../classgeopm_1_1_s_s_t_clos_governor_imp.html#a1e92655e2de0182fd3e504f7ec52e6cc',1,'geopm::SSTClosGovernorImp']]],
   ['_7estep',['~Step',['../classgeopm_1_1_power_balancer_agent_1_1_step.html#a62481571deb3849686abe57dd2fb4958',1,'geopm::PowerBalancerAgent::Step']]],
   ['_7estreammodelregion',['~StreamModelRegion',['../classgeopm_1_1_stream_model_region.html#abc63e8fe03706463b51304be7c304935',1,'geopm::StreamModelRegion']]],
   ['_7esumaccumulator',['~SumAccumulator',['../classgeopm_1_1_sum_accumulator.html#aea2ed73a0576eabf64617e71ebdb9bb6',1,'geopm::SumAccumulator']]],

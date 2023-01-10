@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['ompt',['ompt',['../classgeopm_1_1_o_m_p_t.html#a95de2c713d3c4ea6ca787c09c9f797e7',1,'geopm::OMPT::ompt(void)'],['../classgeopm_1_1_o_m_p_t.html#a0ae11c3179ceba76a12120dfe42ba39b',1,'geopm::OMPT::OMPT()=default']]],
+  ['ompt',['OMPT',['../classgeopm_1_1_o_m_p_t.html#a0ae11c3179ceba76a12120dfe42ba39b',1,'geopm::OMPT::OMPT()=default'],['../classgeopm_1_1_o_m_p_t.html#a95de2c713d3c4ea6ca787c09c9f797e7',1,'geopm::OMPT::ompt(void)']]],
   ['ompt_5ffinalize',['ompt_finalize',['../ompt__callback_8cpp.html#a3da8cbdd5b4f4c0d84aea148925e1744',1,'ompt_callback.cpp']]],
   ['ompt_5finitialize',['ompt_initialize',['../ompt__callback_8cpp.html#a6f78a4f3b0e45227812d7afcc8e7d665',1,'ompt_callback.cpp']]],
   ['ompt_5fstart_5ftool',['ompt_start_tool',['../ompt__callback_8cpp.html#ad430326e6489883867816778fe8b44d7',1,'ompt_callback.cpp']]],

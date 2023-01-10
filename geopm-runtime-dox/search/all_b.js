@@ -9,5 +9,5 @@ var searchData=
   ['loop_5fbegin',['loop_begin',['../classgeopm_1_1_control_message.html#af7f9be2d758a28cdc6aa2e5daa0f9f4a',1,'geopm::ControlMessage::loop_begin()'],['../classgeopm_1_1_control_message_imp.html#ad22ddf54f0856d7a2b78bee17fc73d68',1,'geopm::ControlMessageImp::loop_begin()']]],
   ['loop_5fenter',['loop_enter',['../classgeopm_1_1_model_region.html#a62c138b33fac9bf69fa50c14934384a5',1,'geopm::ModelRegion']]],
   ['loop_5fexit',['loop_exit',['../classgeopm_1_1_model_region.html#a452a691a68e261acb7f8797411611405',1,'geopm::ModelRegion']]],
-  ['low_5fpriority',['LOW_PRIORITY',['../namespacegeopm.html#a08badde092108d91158eb5e93bf4b4bca244ec6f00e713e34b01928fc29c7a878',1,'geopm']]]
+  ['low_5fpriority',['LOW_PRIORITY',['../classgeopm_1_1_s_s_t_clos_governor.html#abaf547d650ca7dda00e6abba7e068c36afc11b556a3f92e4a2d829662366a77ea',1,'geopm::SSTClosGovernor::LOW_PRIORITY()'],['../namespacegeopm.html#a08badde092108d91158eb5e93bf4b4bca244ec6f00e713e34b01928fc29c7a878',1,'geopm::LOW_PRIORITY()']]]
 ];
