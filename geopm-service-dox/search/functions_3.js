@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['dcgm_5fdevice_5fpool',['dcgm_device_pool',['../namespacegeopm.html#a9cddb2d2637c304137483acb3333ada0',1,'geopm']]],
+  ['dcgm_5fdevice_5fpool',['dcgm_device_pool',['../namespacegeopm.html#a1bf7bc1967c6a886ba48c2284661d9c1',1,'geopm']]],
   ['dcgmdevicepool',['DCGMDevicePool',['../classgeopm_1_1_d_c_g_m_device_pool.html#a71edc1f82547027d0abf05028249a0b4',1,'geopm::DCGMDevicePool']]],
   ['dcgmdevicepoolimp',['DCGMDevicePoolImp',['../classgeopm_1_1_d_c_g_m_device_pool_imp.html#a6a41cff72371dc847e534069bc39e0e9',1,'geopm::DCGMDevicePoolImp']]],
   ['dcgmiogroup',['DCGMIOGroup',['../classgeopm_1_1_d_c_g_m_i_o_group.html#a76759b0df2dbc66ad47818d3aafd9dac',1,'geopm::DCGMIOGroup::DCGMIOGroup()'],['../classgeopm_1_1_d_c_g_m_i_o_group.html#ae3adcf5238580b3b3f9eb23ff4a601c3',1,'geopm::DCGMIOGroup::DCGMIOGroup(const PlatformTopo &amp;platform_topo, DCGMDevicePool &amp;device_pool)']]],

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,6 +13,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -164,47 +164,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="geopm-agent-frequency-map-7-agent-for-running-regions-at-user-selected-frequencies">
-<h1>geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies<a class="headerlink" href="#geopm-agent-frequency-map-7-agent-for-running-regions-at-user-selected-frequencies" title="Permalink to this headline"></a></h1>
-<section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline"></a></h2>
+  <div class="section" id="geopm-agent-frequency-map-7-agent-for-running-regions-at-user-selected-frequencies">
+<h1>geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies<a class="headerlink" href="#geopm-agent-frequency-map-7-agent-for-running-regions-at-user-selected-frequencies" title="Permalink to this heading"></a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The frequency map agent adjusts CPU frequency in response to changes
 in the application region being executed on each CPU.  The agent
-policy provides a map from a GEOPM region hash to a CPU frequency; see
+policy can specify a map from a GEOPM region hash to a CPU frequency; see
 <a class="reference internal" href="geopm_hash.3.html"><span class="doc">geopm_hash(3)</span></a> for more information about the GEOPM region name
 hash function.  When a CPU is executing a region with a hash provided
 by the policy, the CPU will operate at the mapped frequency.  The
-policy also provides a default CPU frequency which is applied to all
+policy also specifies a default CPU frequency which is applied to all
 CPUs running the application while not executing a region described by
-the policy map.</p>
+the policy map. In addition, the policy can specify a default GPU frequency
+which is applied to all GPUs at the board level.</p>
 <p>Applying any control algorithm that changes CPU frequency on short
 intervals can result in undesirable interactions with the hardware
 control algorithm that dynamically selects uncore frequency.  For this
-reason, the frequency map agent policy provides an option to fix the
+reason, the frequency map agent policy can specify an option to fix the
 uncore frequency to a single value while executing the application.
 If this option is not specified, the uncore frequency is not
 controlled by the agent at all.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This agent can be used to control the application CPUs and
-optionally the uncore to run at fixed frequencies if no region
-frequency map is provided.</p>
+<p>This agent can be used to control the application CPUs, optionally
+any GPUs, and optionally the uncore to run at fixed frequencies
+if no region frequency map is provided.</p>
 </div>
-</section>
-<section id="agent-name">
-<h2>Agent Name<a class="headerlink" href="#agent-name" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="agent-name">
+<h2>Agent Name<a class="headerlink" href="#agent-name" title="Permalink to this heading"></a></h2>
 <p>The agent described in this manual is selected in many geopm
 interfaces with the <code class="docutils literal notranslate"><span class="pre">&quot;frequency_map&quot;</span></code> agent name.  This name can be
 passed to <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code>
 option, or the <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> environment variable can be set to this
 name (see <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>).  This name can also be passed to the
 <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">'-a'</span></code> option.</p>
-</section>
-<section id="policy-parameters">
-<h2>Policy Parameters<a class="headerlink" href="#policy-parameters" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="policy-parameters">
+<h2>Policy Parameters<a class="headerlink" href="#policy-parameters" title="Permalink to this heading"></a></h2>
 <blockquote>
 <div><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">FREQ_DEFAULT</span></code>:</dt><dd><p>The operating frequency in units of <em>Hz</em> set by the
+<dt><code class="docutils literal notranslate"><span class="pre">FREQ_CPU_DEFAULT</span></code>:</dt><dd><p>The operating frequency in units of <em>Hz</em> set by the
 agent on CPUs executing the application while the
 application is not within a policy-mapped region.
 The cores not associated with the application
@@ -216,9 +217,16 @@ Failure to provide this parameter, setting it to an
 out of range value or specifying NAN will result in
 a runtime error.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">FREQ_UNCORE</span></code>:</dt><dd><p>The operating frequency for the uncore clock in units
-of <em>Hz</em>.  If specified the uncore clock will operate
-the fixed frequency provided.  If the parameter is
+<dt><code class="docutils literal notranslate"><span class="pre">FREQ_GPU_DEFAULT</span></code>:</dt><dd><p>The operating frequency in units of <em>Hz</em> is set by the
+agent on GPUs. Note that the GPUs not associated with
+the application will also have their frequency adjusted.
+This policy parameter is optional. Setting the parameter
+to an out of range value or setting it on a system with
+no GPUs will result in an error.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FREQ_CPU_UNCORE</span></code>:</dt><dd><p>The operating frequency for the uncore clock in units
+of <em>Hz</em>.  If specified, the uncore clock will operate
+at the fixed frequency provided.  If the parameter is
 not specified, or the value provided is NAN, then the
 system default range of uncore frequency will be
 allowed.</p>
@@ -256,43 +264,43 @@ the comma separated list for the <code class="docutils literal notranslate"><spa
 </dd>
 </dl>
 </div></blockquote>
-</section>
-<section id="policy-requirements">
-<h2>Policy Requirements<a class="headerlink" href="#policy-requirements" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="policy-requirements">
+<h2>Policy Requirements<a class="headerlink" href="#policy-requirements" title="Permalink to this heading"></a></h2>
 <p>The frequency map index values can be in the range of 0 to 30,
 inclusive. The order of index values does not matter, and gaps in
 index values are permitted. Multiple definitions of an index are not
 permitted, and multiple mappings of a region are not permitted.  If a
-CPU or uncore frequency specified in the policy is not allowed by the
-system at runtime, an error will occur and an exception will be
+CPU, GPU, or uncore frequency specified in the policy is not allowed
+by the system at runtime, an error will occur and an exception will be
 raised.</p>
-</section>
-<section id="report-extensions">
-<h2>Report Extensions<a class="headerlink" href="#report-extensions" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="report-extensions">
+<h2>Report Extensions<a class="headerlink" href="#report-extensions" title="Permalink to this heading"></a></h2>
 <p>The assigned frequency is added to each region's section of the report
 if that region was explicitly assigned a frequency in the policy map.</p>
-</section>
-<section id="control-loop-rate">
-<h2>Control Loop Rate<a class="headerlink" href="#control-loop-rate" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="control-loop-rate">
+<h2>Control Loop Rate<a class="headerlink" href="#control-loop-rate" title="Permalink to this heading"></a></h2>
 <p>The agent gates the control loop to sample the region hash and control
-CPU frequency at 2 millisecond intervals.  If the uncore frequency is
-specified in the policy, then it is set at agent start up time.</p>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
-<p>Besides the default CPU frequency and uncore frequency parameters, the
-policy consists of the map of per-region frequencies given as pairs of
-region hash and CPU frequency values.  The recommended way to generate
-a policy file for this agent is to use the <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> command
-line tool.</p>
+CPU frequency at 2 millisecond intervals.  If the uncore and/or GPU frequency
+is specified in the policy, then it is set at agent start-up time.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>Besides the default CPU frequency, default GPU frequency, and uncore
+frequency parameters, the policy consists of the map of per-region frequencies
+given as pairs of region hash and CPU frequency values.  The recommended way
+to generate a policy file for this agent is to use the
+<a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> command line tool.</p>
 <p>To create a policy with a default frequency of <em>3 GHz</em>, an uncore
-frequency of <em>2 GHz</em> with a map of <code class="docutils literal notranslate"><span class="pre">&quot;region_1&quot;</span></code> to <em>1.5 GHz</em> and <code class="docutils literal notranslate"><span class="pre">&quot;region_2&quot;</span></code>
-to <em>2.5 GHz</em> you can specify:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmagent</span> <span class="o">-</span><span class="n">a</span> <span class="n">frequency_map</span> <span class="o">-</span><span class="n">p</span> <span class="s1">&#39;3e9,2e9,region_1,1.5e9,region_2,2.5e9&#39;</span>
+frequency of <em>2 GHz</em>, and a GPU frequency of <em>1.2 GHz</em>  with a map of
+<code class="docutils literal notranslate"><span class="pre">&quot;region_1&quot;</span></code> to <em>1.5 GHz</em> and <code class="docutils literal notranslate"><span class="pre">&quot;region_2&quot;</span></code> to <em>2.5 GHz</em> you can specify:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmagent</span> <span class="o">-</span><span class="n">a</span> <span class="n">frequency_map</span> <span class="o">-</span><span class="n">p</span> <span class="s1">&#39;3e9,2e9,1.2e9,region_1,1.5e9,region_2,2.5e9&#39;</span>
 </pre></div>
 </div>
 <p>Alternatively you can specify the regions by their hashed values:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmagent</span> <span class="o">-</span><span class="n">a</span> <span class="n">frequency_map</span> <span class="o">-</span><span class="n">p</span> <span class="s1">&#39;3e9,2e9,0xee12ee15,1.5e9,0xfd421de1,2.5e9&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmagent</span> <span class="o">-</span><span class="n">a</span> <span class="n">frequency_map</span> <span class="o">-</span><span class="n">p</span> <span class="s1">&#39;3e9,2e9,1.2e9,0xee12ee15,1.5e9,0xfd421de1,2.5e9&#39;</span>
 </pre></div>
 </div>
 <p>Although the <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> is the recommended tool for creating
@@ -300,8 +308,9 @@ the json policy string, there is one thing to note about creating the
 json string without this tool.  Since json does not support hex
 literals, the json must include the hashes in their decimal form. For
 example, the above policy json is:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;FREQ_DEFAULT&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3e9</span><span class="p">,</span><span class="w"></span>
-<span class="w"> </span><span class="nt">&quot;FREQ_UNCORE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2e9</span><span class="p">,</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;FREQ_CPU_DEFAULT&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3e9</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="nt">&quot;FREQ_CPU_UNCORE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2e9</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="nt">&quot;FREQ_GPU_DEFAULT&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">1.2e9</span><span class="p">,</span><span class="w"></span>
 <span class="w"> </span><span class="nt">&quot;HASH_0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3994218005</span><span class="p">,</span><span class="w"></span>
 <span class="w"> </span><span class="nt">&quot;FREQ_0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5e9</span><span class="p">,</span><span class="w"></span>
 <span class="w"> </span><span class="nt">&quot;HASH_1&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4248968673</span><span class="p">,</span><span class="w"></span>
@@ -321,6 +330,14 @@ $ geopmread CPU_FREQUENCY_MAX_AVAIL board <span class="m">0</span>
 <span class="m">3700000000</span>
 </pre></div>
 </div>
+<p>The minimum and maximum GPU frequencies are queried as below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geopmread GPU_CORE_FREQUENCY_MIN_AVAIL board <span class="m">0</span>
+<span class="m">1000000000</span>
+
+$ geopmread GPU_CORE_FREQUENCY_MAX_AVAIL board <span class="m">0</span>
+<span class="m">3700000000</span>
+</pre></div>
+</div>
 <p>The minimum, and maximum uncore frequencies are queried as below:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geopmread MSR::UNCORE_RATIO_LIMIT:MIN_RATIO board <span class="m">0</span>
 <span class="m">1200000000</span>
@@ -331,18 +348,19 @@ $ geopmread MSR::UNCORE_RATIO_LIMIT:MAX_RATIO board <span class="m">0</span>
 </div>
 <p>The <strong>geopmagent</strong> and <strong>geopmread</strong> command line tools can be used together
 to generate policies.  For example, to create a policy with the
-default CPU frequency set to two steps below maximum and the uncore
-frequency to the maximum the following commands can be used:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">freq_default</span><span class="o">=</span><span class="k">$(($(</span>geopmread CPU_FREQUENCY_MAX_AVAIL board <span class="m">0</span><span class="k">)</span> <span class="o">-</span> <span class="se">\</span>
+default CPU frequency set to two steps below maximum, the GPU and the uncore
+frequency to the maximum, the following commands can be used:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">freq_cpu_default</span><span class="o">=</span><span class="k">$(($(</span>geopmread CPU_FREQUENCY_MAX_AVAIL board <span class="m">0</span><span class="k">)</span> <span class="o">-</span> <span class="se">\</span>
                   <span class="m">2</span> <span class="o">*</span> <span class="k">$(</span>geopmread CPU_FREQUENCY_STEP board <span class="m">0</span><span class="k">)))</span>
-$ <span class="nv">freq_uncore</span><span class="o">=</span><span class="k">$(</span>geopmread MSR::UNCORE_RATIO_LIMIT:MAX_RATIO board <span class="m">0</span><span class="k">)</span>
-$ geopmagent -a frequency_map -p<span class="nv">$freq_default</span>,<span class="nv">$freq_uncore</span>
-  <span class="o">{</span><span class="s2">&quot;FREQ_DEFAULT&quot;</span>: <span class="m">3500000000</span>, <span class="s2">&quot;FREQ_UNCORE&quot;</span>: <span class="m">2400000000</span><span class="o">}</span>
+$ <span class="nv">freq_cpu_uncore</span><span class="o">=</span><span class="k">$(</span>geopmread MSR::UNCORE_RATIO_LIMIT:MAX_RATIO board <span class="m">0</span><span class="k">)</span>
+$ <span class="nv">freq_gpu</span><span class="o">=</span><span class="k">$(</span>geopmread GPU_CORE_FREQUENCY_MAX_AVAIL board <span class="m">0</span><span class="k">)</span>
+$ geopmagent -a frequency_map -p<span class="nv">$freq_cpu_default</span>,<span class="nv">$freq_cpu_uncore</span>,<span class="nv">$freq_gpu</span>
+  <span class="o">{</span><span class="s2">&quot;FREQ_CPU_DEFAULT&quot;</span>: <span class="m">3500000000</span>, <span class="s2">&quot;FREQ_CPU_UNCORE&quot;</span>: <span class="m">2400000000</span>, <span class="s2">&quot;FREQ_GPU_DEFAULT&quot;</span>:1500000000<span class="o">}</span>
 </pre></div>
 </div>
-</section>
-<section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">geopm_agent_power_balancer(7)</span></a>,
 <a class="reference internal" href="geopm_agent_power_governor.7.html"><span class="doc">geopm_agent_power_governor(7)</span></a>,
@@ -350,8 +368,8 @@ $ geopmagent -a frequency_map -p<span class="nv">$freq_default</span>,<span clas
 <a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a>,
 <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a>,
 <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a></p>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
@@ -364,7 +382,7 @@ $ geopmagent -a frequency_map -p<span class="nv">$freq_default</span>,<span clas
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2015 - 2022, Intel Corporation. All rights reserved..</p>
+    <p>&#169; Copyright 2015 - 2023, Intel Corporation. All rights reserved..</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
