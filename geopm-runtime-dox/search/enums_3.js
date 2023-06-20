@@ -3,7 +3,7 @@ var searchData=
   ['m_5fcomm_5fsplit_5ftype_5fe',['m_comm_split_type_e',['../classgeopm_1_1_comm.html#a602927e616fe85065b7862e1bb2dabe0',1,'geopm::Comm']]],
   ['m_5fctl_5fe',['m_ctl_e',['../classgeopm_1_1_environment.html#aa06959cfa8ad35562315163f36419ab9',1,'geopm::Environment']]],
   ['m_5fplat_5fsignal_5fe',['m_plat_signal_e',['../classgeopm_1_1_power_governor_agent.html#a7b0f19f04b0c6802efb6c6f79db8e0dc',1,'geopm::PowerGovernorAgent']]],
-  ['m_5fpolicy_5fe',['m_policy_e',['../classgeopm_1_1_power_balancer_agent.html#a2e9c4f5db0dbbe511e37c1081bfd0af2',1,'geopm::PowerBalancerAgent::m_policy_e()'],['../classgeopm_1_1_power_governor_agent.html#a666f3ae41ba769c256a3287ee68c9891',1,'geopm::PowerGovernorAgent::m_policy_e()']]],
+  ['m_5fpolicy_5fe',['m_policy_e',['../classgeopm_1_1_f_f_net_agent.html#af53fac35afbca7bc8aded20940a88f4c',1,'geopm::FFNetAgent::m_policy_e()'],['../classgeopm_1_1_power_balancer_agent.html#a2e9c4f5db0dbbe511e37c1081bfd0af2',1,'geopm::PowerBalancerAgent::m_policy_e()'],['../classgeopm_1_1_power_governor_agent.html#a666f3ae41ba769c256a3287ee68c9891',1,'geopm::PowerGovernorAgent::m_policy_e()']]],
   ['m_5fsample_5fe',['m_sample_e',['../classgeopm_1_1_power_balancer_agent.html#a007fa92f282bc6fdec51ec299d73089f',1,'geopm::PowerBalancerAgent::m_sample_e()'],['../classgeopm_1_1_power_governor_agent.html#a4dae87f9e5c52ae6bdf7bd05726d7d43',1,'geopm::PowerGovernorAgent::m_sample_e()']]],
   ['m_5fsplit_5fcolor_5fe',['m_split_color_e',['../classgeopm_1_1_comm.html#a81a3dc5177c543d9c6e420cc914362bf',1,'geopm::Comm']]],
   ['m_5fstatus_5fe',['m_status_e',['../classgeopm_1_1_control_message_imp.html#a66e7e77f56afdb48239b5a54b0b56423',1,'geopm::ControlMessageImp']]],

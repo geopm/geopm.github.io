@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['ompt',['OMPT',['../classgeopm_1_1_o_m_p_t.html',1,'geopm']]],
-  ['omptimp',['OMPTImp',['../classgeopm_1_1_o_m_p_t_imp.html',1,'geopm']]],
-  ['optionparser',['OptionParser',['../classgeopm_1_1_option_parser.html',1,'geopm']]]
+  ['nnfactory',['NNFactory',['../classgeopm_1_1_n_n_factory.html',1,'geopm']]],
+  ['nnfactoryimp',['NNFactoryImp',['../classgeopm_1_1_n_n_factory_imp.html',1,'geopm']]]
 ];

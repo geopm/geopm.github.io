@@ -22,7 +22,6 @@ var searchData=
   ['m_5fis_5fenabled',['m_is_enabled',['../classgeopm_1_1_profile_imp.html#a71304224bc4260b855b9124918e4e006',1,'geopm::ProfileImp']]],
   ['m_5fis_5fstep_5fcomplete',['m_is_step_complete',['../classgeopm_1_1_power_balancer_agent_1_1_tree_role.html#a14c8c84567ce8530dbaef4d973a512bb',1,'geopm::PowerBalancerAgent::TreeRole']]],
   ['m_5fis_5ftorn_5fdown',['m_is_torn_down',['../classgeopm_1_1_m_p_i_comm.html#a4cbb1e74223ddc901d001f7c96bad43c',1,'geopm::MPIComm']]],
-  ['m_5flast_5fwait',['m_last_wait',['../classgeopm_1_1_power_balancer_agent.html#a483887872a502d214eceec8a7cb74df3',1,'geopm::PowerBalancerAgent']]],
   ['m_5flayout_5fsize',['M_LAYOUT_SIZE',['../classgeopm_1_1_application_record_log.html#aa4604eb2faf88f782ce97f0d97cbafc0',1,'geopm::ApplicationRecordLog']]],
   ['m_5fllc_5fslop_5fsize',['m_llc_slop_size',['../classgeopm_1_1_scaling_model_region.html#a129f248accb55104e9a51cc296878808',1,'geopm::ScalingModelRegion']]],
   ['m_5fmatrix_5fa',['m_matrix_a',['../classgeopm_1_1_d_g_e_m_m_model_region.html#ada7b2114c6b1e846ab54f9dc5ceda997',1,'geopm::DGEMMModelRegion']]],
@@ -70,7 +69,8 @@ var searchData=
   ['m_5ftime_5fwindow',['M_TIME_WINDOW',['../classgeopm_1_1_power_balancer_agent.html#ae484e0fa82a29c5f6c78807829778a79',1,'geopm::PowerBalancerAgent']]],
   ['m_5fuser_5fdefined_5fnames',['m_user_defined_names',['../classgeopm_1_1_environment_imp.html#add9fd7ed21a9cb4c1dbfb6d637c1dcf2',1,'geopm::EnvironmentImp']]],
   ['m_5fverbosity',['m_verbosity',['../classgeopm_1_1_model_region.html#acb2210edcf6b42f3c02efd7e0958be56',1,'geopm::ModelRegion']]],
-  ['m_5fwait_5fsec',['M_WAIT_SEC',['../classgeopm_1_1_power_balancer_agent.html#a70a1c2e0d8675a0ab761d1f02ad212bb',1,'geopm::PowerBalancerAgent']]],
+  ['m_5fwait_5fsec',['M_WAIT_SEC',['../classgeopm_1_1_power_balancer_agent.html#aca9d3b451c5a6e0255adb0f2891b97e4',1,'geopm::PowerBalancerAgent']]],
+  ['m_5fwaiter',['m_waiter',['../classgeopm_1_1_power_balancer_agent.html#ae1e56aee43554b8b86a06330c0cde993',1,'geopm::PowerBalancerAgent']]],
   ['m_5fwindows',['m_windows',['../classgeopm_1_1_m_p_i_comm.html#a17175fb916a71c79929557af291b7382',1,'geopm::MPIComm']]],
   ['make_5fcpu_5fset',['make_cpu_set',['../namespacegeopm.html#a620df91be52dcaaa7cb7a511721067d4',1,'geopm']]]
 ];

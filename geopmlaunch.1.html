@@ -126,6 +126,7 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- GEOPM summary report file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_cpu_activity.7.html">geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_ffnet.7.html">geopm_agent_ffnet(7) -- agent for adjusting frequencies based on application behavior</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_gpu_activity.7.html">geopm_agent_gpu_activity(7) -- agent for selecting GPU frequency based on GPU compute activity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
@@ -446,8 +447,9 @@ cap), <code class="docutils literal notranslate"><span class="pre">&quot;power_g
 and <code class="docutils literal notranslate"><span class="pre">&quot;frequency_map&quot;</span></code> (runs each region at a specified
 frequency).  See <a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>,
 <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">geopm_agent_power_balancer(7)</span></a>,
-<a class="reference internal" href="geopm_agent_power_governor.7.html"><span class="doc">geopm_agent_power_governor(7)</span></a>, and
-<a class="reference internal" href="geopm_agent_frequency_map.7.html"><span class="doc">geopm_agent_frequency_map(7)</span></a> for descriptions of each
+<a class="reference internal" href="geopm_agent_power_governor.7.html"><span class="doc">geopm_agent_power_governor(7)</span></a>,
+<a class="reference internal" href="geopm_agent_frequency_map.7.html"><span class="doc">geopm_agent_frequency_map(7)</span></a> and
+<a class="reference internal" href="geopm_agent_ffnet.7.html"><span class="doc">geopm_agent_ffnet(7)</span></a> for descriptions of each
 agent.</p>
 <p>For more details on the responsibilities of an agent,
 see <a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html"><span class="doc">geopm::Agent(3)</span></a>.</p>
@@ -469,6 +471,30 @@ create this input file.</p>
 option will override any value currently set in the
 environment.  See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT section of
 geopm(7)</span></a>.</p>
+</dd>
+<dt><kbd><span class="option">--geopm-init-control <var>path</var></span></kbd></dt>
+<dd><p id="geopm-init-control-option">Initialize any available controls with the values in
+the file specified by <em>path</em>.  The file format is the
+same as that for <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code> with one control
+specified per line.  The comment character is '#'.
+It may be placed anywhere on a line to stop parsing
+of that line.  If the comment character results in
+invalid syntax an error will be raised.</p>
+<p>Files that contain only comments are valid.  They will
+be parsed but no controls will be written.  A file that
+is truly empty (i.e. contains only '0') will raise
+an error.</p>
+<p>Example file contents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CPU_POWER_LIMIT_CONTROL</span> <span class="n">board</span> <span class="mi">0</span> <span class="mi">200</span> <span class="c1"># Set a 200W power limit</span>
+<span class="c1"># Also set the time limit</span>
+<span class="n">CPU_POWER_TIME_WINDOW</span> <span class="n">board</span> <span class="mi">0</span> <span class="mf">0.015</span>
+</pre></div>
+</div>
+<p>This option is used by the launcher to set the
+<code class="docutils literal notranslate"><span class="pre">GEOPM_INIT_CONTROL</span></code> environment variable.  The
+command line option will override any value currently
+set in the environment.  See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT
+section of geopm(7)</span></a>.</p>
 </dd>
 <dt><kbd><span class="option">--geopm-affinity-disable</span></kbd></dt>
 <dd><p id="geopm-affinity-disable-option">Enable direct user control of all application CPU
@@ -637,6 +663,16 @@ launched.</p>
 <dd><p id="geopm-ompt-disable-option">Disable OMPT detection of OpenMP regions.
 See the <a class="reference internal" href="geopm.7.html#integration-with-ompt"><span class="std std-ref">INTEGRATION WITH OMPT section of geopm(7)</span></a>
 for more information about OpenMP region detection.</p>
+</dd>
+<dt><kbd><span class="option">--geopm-period</span></kbd></dt>
+<dd><p id="geopm-period-option">Override the control loop period specified by the Agent.  All
+agents have a default control loop period, and this command
+line option allows users to set a different value in units of
+seconds.  With longer control loop periods, the overhead for
+using GEOPM will be reduced, but more interpolation will be
+required when aligning the sparsely sampled hardware signals
+with the application feedback.  Additionally, agent reaction
+time is reduced with longer control loop period.</p>
 </dd>
 </dl>
 </div>

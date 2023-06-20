@@ -4,5 +4,9 @@ var searchData=
   ['daemonimp',['DaemonImp',['../classgeopm_1_1_daemon_imp.html',1,'geopm']]],
   ['debugiogroup',['DebugIOGroup',['../classgeopm_1_1_debug_i_o_group.html',1,'geopm']]],
   ['defaultprofile',['DefaultProfile',['../classgeopm_1_1_default_profile.html',1,'geopm']]],
-  ['dgemmmodelregion',['DGEMMModelRegion',['../classgeopm_1_1_d_g_e_m_m_model_region.html',1,'geopm']]]
+  ['denselayer',['DenseLayer',['../classgeopm_1_1_dense_layer.html',1,'geopm']]],
+  ['denselayerimp',['DenseLayerImp',['../classgeopm_1_1_dense_layer_imp.html',1,'geopm']]],
+  ['dgemmmodelregion',['DGEMMModelRegion',['../classgeopm_1_1_d_g_e_m_m_model_region.html',1,'geopm']]],
+  ['domainnetmap',['DomainNetMap',['../classgeopm_1_1_domain_net_map.html',1,'geopm']]],
+  ['domainnetmapimp',['DomainNetMapImp',['../classgeopm_1_1_domain_net_map_imp.html',1,'geopm']]]
 ];

@@ -78,6 +78,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#errors">Errors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -123,6 +124,7 @@
 <li class="toctree-l3"><a class="reference internal" href="GEOPM_CXX_MAN_TimeIOGroup.3.html">geopm::TimeIOGroup(3) -- IOGroup providing time signals</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) -- GEOPM summary report file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_cpu_activity.7.html">geopm_agent_cpu_activity(7) -- agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_ffnet.7.html">geopm_agent_ffnet(7) -- agent for adjusting frequencies based on application behavior</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) -- agent for running regions at user selected frequencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_gpu_activity.7.html">geopm_agent_gpu_activity(7) -- agent for selecting GPU frequency based on GPU compute activity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) -- agent implementation for aggregating statistics</a></li>
@@ -321,12 +323,49 @@ created with <code class="docutils literal notranslate"><span class="pre">geopm_
 <a class="reference internal" href="geopm_error.3.html"><span class="doc">geopm_error(3)</span></a> for a full description of the error numbers and how
 to convert them to strings.</p>
 </div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<p>The endpoint interface needs to be opened and attached to an agent. The
+following pseudocode illustrates the order of function calls that would enable
+an endpoint user to interact with an agent after a job has already started
+executing, instead of writing a static policy to a file and waiting for job
+completion to receive feedback.</p>
+<p>Error-checking is omitted from this example for brevity. See
+<a class="reference internal" href="geopm_error.3.html"><span class="doc">geopm_error(3)</span></a> for interpretation of the return values
+from these functions.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">char</span><span class="w"> </span><span class="n">agent_name</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span><span class="w"></span>
+<span class="kt">char</span><span class="w"> </span><span class="n">profile_name</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span><span class="w"></span>
+<span class="kt">char</span><span class="w"> </span><span class="n">node_name</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">num_node</span><span class="p">;</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">geopm_endpoint_c</span><span class="o">*</span><span class="w"> </span><span class="n">endpoint</span><span class="p">;</span><span class="w"></span>
+<span class="n">geopm_endpoint_create</span><span class="p">(</span><span class="s">&quot;my_endpoint&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<span class="n">geopm_endpoint_open</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<span class="n">geopm_endpoint_wait_for_agent_attach</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span><span class="w"></span>
+<span class="n">geopm_endpoint_agent</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">agent_name</span><span class="p">,</span><span class="w"> </span><span class="n">agent_name</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// Now you can look up agent properties by agent_name, such as the names of</span>
+<span class="c1">// policy and sample vector elements. See geopm_agent(3).</span>
+<span class="n">geopm_endpoint_profile_name</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">profile_name</span><span class="p">,</span><span class="w"> </span><span class="n">profile_name</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// Now you have the user-provided profile name for the job</span>
+<span class="n">geopm_endpoint_num_node</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">num_node</span><span class="p">);</span><span class="w"></span>
+<span class="n">geopm_endpoint_node_name</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">num_node</span><span class="mi">-1</span><span class="w"> </span><span class="cm">/* The last node&#39;s name */</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="k">sizeof</span><span class="w"> </span><span class="n">node_name</span><span class="p">,</span><span class="w"> </span><span class="n">node_name</span><span class="p">);</span><span class="w"></span>
+<span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* populate the array based on the agent policy */</span><span class="p">;</span><span class="w"></span>
+<span class="n">geopm_endpoint_write_policy</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="p">,</span><span class="w"> </span><span class="n">num_policy</span><span class="p">);</span><span class="w"></span>
+<span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* Allocate large enough to hold agent&#39;s samples */</span><span class="p">;</span><span class="w"></span>
+<span class="kt">double</span><span class="w"> </span><span class="n">sample_age_sec</span><span class="p">;</span><span class="w"> </span><span class="c1">// How old the sample is by the time you request it</span>
+<span class="n">geopm_endpoint_read_sample</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">num_sample</span><span class="p">,</span><span class="w"> </span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sample_age_sec</span><span class="p">);</span><span class="w"></span>
+<span class="n">geopm_endpoint_close</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<span class="n">geopm_endpoint_destroy</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="geopm_error.3.html"><span class="doc">geopm_error(3)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_Endpoint.3.html"><span class="doc">geopm::Endpoint(3)</span></a>,
-<a class="reference internal" href="geopmendpoint.1.html"><span class="doc">geopmendpoint(1)</span></a></p>
+<a class="reference internal" href="geopmendpoint.1.html"><span class="doc">geopmendpoint(1)</span></a>,
+<a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a></p>
 </div>
 </div>
 

@@ -1,13 +1,15 @@
 var searchData=
 [
-  ['timedscalingmodelregion_2ecpp',['TimedScalingModelRegion.cpp',['../_timed_scaling_model_region_8cpp.html',1,'']]],
-  ['timedscalingmodelregion_2ehpp',['TimedScalingModelRegion.hpp',['../_timed_scaling_model_region_8hpp.html',1,'']]],
-  ['tracer_2ecpp',['Tracer.cpp',['../_tracer_8cpp.html',1,'']]],
-  ['tracer_2ehpp',['Tracer.hpp',['../_tracer_8hpp.html',1,'']]],
-  ['treecomm_2ecpp',['TreeComm.cpp',['../_tree_comm_8cpp.html',1,'']]],
-  ['treecomm_2ehpp',['TreeComm.hpp',['../_tree_comm_8hpp.html',1,'']]],
-  ['treecommlevel_2ecpp',['TreeCommLevel.cpp',['../_tree_comm_level_8cpp.html',1,'']]],
-  ['treecommlevel_2ehpp',['TreeCommLevel.hpp',['../_tree_comm_level_8hpp.html',1,'']]],
-  ['trlfrequencylimitdetector_2ecpp',['TRLFrequencyLimitDetector.cpp',['../_t_r_l_frequency_limit_detector_8cpp.html',1,'']]],
-  ['trlfrequencylimitdetector_2ehpp',['TRLFrequencyLimitDetector.hpp',['../_t_r_l_frequency_limit_detector_8hpp.html',1,'']]]
+  ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['record_2ecpp',['record.cpp',['../record_8cpp.html',1,'']]],
+  ['record_2ehpp',['record.hpp',['../record_8hpp.html',1,'']]],
+  ['recordfilter_2ecpp',['RecordFilter.cpp',['../_record_filter_8cpp.html',1,'']]],
+  ['recordfilter_2ehpp',['RecordFilter.hpp',['../_record_filter_8hpp.html',1,'']]],
+  ['reducemodelregion_2ecpp',['ReduceModelRegion.cpp',['../_reduce_model_region_8cpp.html',1,'']]],
+  ['reducemodelregion_2ehpp',['ReduceModelRegion.hpp',['../_reduce_model_region_8hpp.html',1,'']]],
+  ['regionhintrecommender_2ecpp',['RegionHintRecommender.cpp',['../_region_hint_recommender_8cpp.html',1,'']]],
+  ['regionhintrecommender_2ehpp',['RegionHintRecommender.hpp',['../_region_hint_recommender_8hpp.html',1,'']]],
+  ['regionhintrecommenderimp_2ehpp',['RegionHintRecommenderImp.hpp',['../_region_hint_recommender_imp_8hpp.html',1,'']]],
+  ['reporter_2ecpp',['Reporter.cpp',['../_reporter_8cpp.html',1,'']]],
+  ['reporter_2ehpp',['Reporter.hpp',['../_reporter_8hpp.html',1,'']]]
 ];
