@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['pid',['pid',['../structgeopm_1_1_p_o_s_i_x_signal_1_1m__info__s.html#a32ced476683349cb9481f8f762e7b219',1,'geopm::POSIXSignal::m_info_s']]],
-  ['punit_5fcpu',['punit_cpu',['../structgeopm_1_1sst__cpu__map__interface__s.html#a15cc8ba3de64196fc7d79231b37b0625',1,'geopm::sst_cpu_map_interface_s']]]
+  ['read_5fvalue',['read_value',['../structgeopm_1_1sst__mbox__interface__s.html#a688422214d376c36fca4d9e87939e0bb',1,'geopm::sst_mbox_interface_s']]],
+  ['register_5foffset',['register_offset',['../structgeopm_1_1sst__mmio__interface__s.html#ad29275479fbaa7f7dd37bda99591da23',1,'geopm::sst_mmio_interface_s']]],
+  ['reserved',['reserved',['../structgeopm_1_1sst__mbox__interface__s.html#a2c09cb61ebfaa4ca10ee713631f4b3ec',1,'geopm::sst_mbox_interface_s']]]
 ];

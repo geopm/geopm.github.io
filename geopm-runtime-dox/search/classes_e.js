@@ -3,6 +3,8 @@ var searchData=
   ['sampleaggregator',['SampleAggregator',['../classgeopm_1_1_sample_aggregator.html',1,'geopm']]],
   ['sampleaggregatorimp',['SampleAggregatorImp',['../classgeopm_1_1_sample_aggregator_imp.html',1,'geopm']]],
   ['scalingmodelregion',['ScalingModelRegion',['../classgeopm_1_1_scaling_model_region.html',1,'geopm']]],
+  ['scheduler',['Scheduler',['../classgeopm_1_1_scheduler.html',1,'geopm']]],
+  ['schedulerimp',['SchedulerImp',['../classgeopm_1_1_scheduler_imp.html',1,'geopm']]],
   ['senddownlimitstep',['SendDownLimitStep',['../classgeopm_1_1_power_balancer_agent_1_1_send_down_limit_step.html',1,'geopm::PowerBalancerAgent']]],
   ['short_5fregion_5fs',['short_region_s',['../structgeopm_1_1short__region__s.html',1,'geopm']]],
   ['sleepmodelregion',['SleepModelRegion',['../classgeopm_1_1_sleep_model_region.html',1,'geopm']]],

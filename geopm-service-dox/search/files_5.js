@@ -11,6 +11,8 @@ var searchData=
   ['geopm_5fplugin_2ehpp',['geopm_plugin.hpp',['../geopm__plugin_8hpp.html',1,'']]],
   ['geopm_5fsched_2ec',['geopm_sched.c',['../geopm__sched_8c.html',1,'']]],
   ['geopm_5fsched_2eh',['geopm_sched.h',['../geopm__sched_8h.html',1,'']]],
+  ['geopm_5fshmem_2ecpp',['geopm_shmem.cpp',['../geopm__shmem_8cpp.html',1,'']]],
+  ['geopm_5fshmem_2eh',['geopm_shmem.h',['../geopm__shmem_8h.html',1,'']]],
   ['geopm_5ftime_2eh',['geopm_time.h',['../geopm__time_8h.html',1,'']]],
   ['geopm_5ftopo_2eh',['geopm_topo.h',['../geopm__topo_8h.html',1,'']]],
   ['geopm_5fversion_2ec',['geopm_version.c',['../geopm__version_8c.html',1,'']]],

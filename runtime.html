@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guide for HPC Runtime Users &mdash; GEOPM  documentation</title>
+  <title>Guide for Runtime Users &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -41,11 +41,14 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide for HPC Runtime Users</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide for Runtime Users</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#measuring-performance">1. Measuring Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-configuration">2. Hardware Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-data-analysis">3. Advanced Data Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-requirements">Build Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-the-geopm-hpc-runtime">Building the GEOPM HPC Runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-geopm-runtime">Building the GEOPM Runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-requirements">Run Requirements</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mpi-requirements">MPI Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bios-configuration">BIOS Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linux-power-management">Linux Power Management</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#geopm-application-launch-wrapper">GEOPM Application Launch Wrapper</a></li>
@@ -74,7 +77,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Guide for HPC Runtime Users</li>
+      <li>Guide for Runtime Users</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/runtime.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -84,18 +87,61 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="guide-for-hpc-runtime-users">
-<h1>Guide for HPC Runtime Users<a class="headerlink" href="#guide-for-hpc-runtime-users" title="Permalink to this heading"></a></h1>
-<p>The GEOPM HPC Runtime enables interactions between GEOPM's <a class="reference internal" href="geopm_prof.3.html"><span class="doc">application
+  <div class="section" id="guide-for-runtime-users">
+<h1>Guide for Runtime Users<a class="headerlink" href="#guide-for-runtime-users" title="Permalink to this heading"></a></h1>
+<p>The GEOPM Runtime is software designed to enhance energy efficiency of
+applications though active hardware configuration.  The architecture is
+designed to provide a secure infrastructure to support a wide range
+of tuning algorithms while solving three related challenges:</p>
+<div class="section" id="measuring-performance">
+<h2>1. Measuring Performance<a class="headerlink" href="#measuring-performance" title="Permalink to this heading"></a></h2>
+<p>The first challenge is to enable hardware tuning algorithms to derive
+a robust estimate of application performance.  This is crucial because
+measurements of energy efficiency are expressed as ratios of
+performance to power, e.g. &quot;perf per watt.&quot;  Any dynamic tuning of
+hardware power control parameters with a goal of energy efficiency
+must derive some estimate of application performance.  Without
+application feedback about the critical path, these performance
+estimates may be very inaccurate.  In this way, hardware tuning
+algorithms may interfere with application performance leading to
+longer run times which incur even higher energy costs per unit of work
+than if an adaptive algorithm were not applied.</p>
+</div>
+<div class="section" id="hardware-configuration">
+<h2>2. Hardware Configuration<a class="headerlink" href="#hardware-configuration" title="Permalink to this heading"></a></h2>
+<p>This leads to the second challenge: enabling a hardware control
+algorithm to be driven by unprivileged user input (i.e. application
+feedback) is a security risk.  Without proper guards in place, this
+can lead to escalation of privilege, denial of service, and impacts to
+quality of service for other users of the system.  The GEOPM Service
+is specifically designed to address these problems.</p>
+</div>
+<div class="section" id="advanced-data-analysis">
+<h2>3. Advanced Data Analysis<a class="headerlink" href="#advanced-data-analysis" title="Permalink to this heading"></a></h2>
+<p>The third challenge is providing a software development platform for
+control algorithms that can be safely deployed and use high level
+languages for data analysis.  To effectively gain energy efficiency
+with some applications, significant software dependencies may be
+required.  Control algorithms may rely on optimization software like
+machine learning packages, or other numerical packages.  The
+application being optimized may be composed of millions of lines of
+code, and there may be significant coupling between the application
+and control algorithm.  For these reasons, restricting the privileges
+of the processes running the control algorithm reduces software
+security audit requirements significantly.</p>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>The GEOPM Runtime enables interactions between GEOPM's <a class="reference internal" href="geopm_prof.3.html"><span class="doc">application
 instrumentation interfaces</span></a> and
 <a class="reference internal" href="geopm_pio.7.html"><span class="doc">platform monitoring/control interfaces</span></a>.</p>
-<p>By default, the GEOPM HPC runtime simply summarizes relationships between
+<p>By default, the GEOPM Runtime simply summarizes relationships between
 application instrumentation and platform-monitoring interfaces in a report.
 More complex interactions, such as dynamic control of platform settings, can
-be enabled by using different GEOPM <em>agents</em>. See the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> documentation for more information about user-facing GEOPM HPC
-runtime launch options.</p>
+be enabled by using different GEOPM <em>agents</em>. See the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> documentation for more information about user-facing GEOPM
+Runtime launch options.</p>
 <div class="figure align-center" id="id1">
-<img alt="An illustration of geopmlaunch running on 2 servers, generating a trace file per host, and one report across all hosts." src="https://geopm.github.io/images/geopm-runtime-usage.svg" /><p class="caption"><span class="caption-text">The geopmlaunch tool is the main user interface to the GEOPM HPC runtime. It
+<img alt="An illustration of geopmlaunch running on 2 servers, generating a trace file per host, and one report across all hosts." src="https://geopm.github.io/images/geopm-runtime-usage.svg" /><p class="caption"><span class="caption-text">The geopmlaunch tool is the main user interface to the GEOPM Runtime. It
 wraps a launcher application (srun in this example), generates a summarizing
 report file, and optionally generates a time-series trace per host.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
 </div>
@@ -121,10 +167,10 @@ wrapped command (e.g., <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 </div>
-<p>The <a class="reference external" href="https://github.com/geopm/geopm/tree/dev/tutorial#geopm-tutorial">GEOPM HPC Runtime tutorial</a> shows how
+<p>The <a class="reference external" href="https://github.com/geopm/geopm/tree/dev/tutorial#geopm-tutorial">GEOPM Runtime tutorial</a> shows how
 to profile unmodified applications, select and evaluate different GEOPM Agent
 algorithms, and how to add markup to an application.  The tutorial provides a
-starting point for someone trying to get familiar with the GEOPM HPC Runtime.</p>
+starting point for someone trying to get familiar with the GEOPM Runtime.</p>
 </div>
 <p>The runtime enables complex coordination between hardware settings across all
 compute nodes used by a distributed HPC application in
@@ -140,18 +186,16 @@ with the system resource manager to extend the hierarchy above the
 individual MPI application and enable the management of system power
 resources for multiple MPI jobs and multiple users by the system
 resource manager.</p>
-<p>The GEOPM HPC Runtime package provides two libraries: libgeopm for use
-with MPI applications, and libgeopmpolicy for use with applications
-that do not link to MPI.  There are several command line tools
-included in GEOPM which have dedicated manual pages.  The
-<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> command line tool is used to launch an
-MPI application while enabling the GEOPM runtime to create a GEOPM Controller
-thread on each compute node.  The Controller loads plugins and executes the
-Agent algorithm to control the compute application.  The
-<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> command is part of the geopmpy python
-package that is included in the GEOPM installation.  See the <a class="reference internal" href="geopm.7.html"><span class="doc">GEOPM
-overview man page</span></a> for further documentation and links.</p>
-<p>The GEOPM HPC Runtime provides some built-in algorithms, each as an
+<p>The GEOPM Runtime package provides the libgeopm shared object library.
+There are several command line tools included in GEOPM which have
+dedicated manual pages.  The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>
+command line tool is used to launch an MPI application while enabling
+the GEOPM runtime to create a GEOPM Controller thread on each compute
+node.  The Controller loads plugins and executes the Agent algorithm
+to control the compute application.  The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> command is part of the geopmpy python package that is
+included in the GEOPM installation.  See the <a class="reference internal" href="geopm.7.html"><span class="doc">GEOPM overview man
+page</span></a> for further documentation and links.</p>
+<p>The GEOPM Runtime provides some built-in algorithms, each as an
 &quot;Agent&quot; that implements the <a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html"><span class="doc">geopm::Agent(3)</span></a> class interface.
 A developer may extend these algorithm features by writing an Agent
 plugin.  A new implementation of this class can be dynamically loaded
@@ -174,16 +218,17 @@ interfaces.  Marking up a compute application with profiling
 information through these interfaces can enable better integration of
 the GEOPM runtime with the compute application and more precise
 control.</p>
+</div>
 <div class="section" id="build-requirements">
 <h2>Build Requirements<a class="headerlink" href="#build-requirements" title="Permalink to this heading"></a></h2>
 <p>When using the build system in the base of the GEOPM source repository
-to build the GEOPM HPC Runtime some additional requirements must be
-met.  If the user is not interested in building the GEOPM HPC Runtime,
+to build the GEOPM Runtime some additional requirements must be
+met.  If the user is not interested in building the GEOPM Runtime,
 these extra build requirements may be ignored.  The user may also opt
-out of the specific GEOPM HPC Runtime features enabled by any of these
+out of the specific GEOPM Runtime features enabled by any of these
 requirements by providing the appropriate disable flag to the base
 build configure command line.</p>
-<p>The GEOPM HPC runtime requires support for MPI, the Message Passing
+<p>The GEOPM Runtime requires support for MPI, the Message Passing
 Interface, standard 2.2 or higher.  In many cases meeting this
 requirement will depend on the specific HPC resource being targeted
 based on documentation that is site specific.  The Intel MPI
@@ -232,37 +277,30 @@ requirements see</p>
 <p>which describes some options of the form <code class="docutils literal notranslate"><span class="pre">--with-&lt;feature&gt;</span></code> that can
 be used for this purpose, e.g. <code class="docutils literal notranslate"><span class="pre">--with-mpi-bin</span></code>.</p>
 </div>
-<div class="section" id="building-the-geopm-hpc-runtime">
-<h2>Building the GEOPM HPC Runtime<a class="headerlink" href="#building-the-geopm-hpc-runtime" title="Permalink to this heading"></a></h2>
-<p>The best recommendation for building the GEOPM HPC Runtime is to follow
+<div class="section" id="building-the-geopm-runtime">
+<h2>Building the GEOPM Runtime<a class="headerlink" href="#building-the-geopm-runtime" title="Permalink to this heading"></a></h2>
+<p>The best recommendation for building the GEOPM Runtime is to follow
 the <a class="reference internal" href="devel.html#developer-build-process"><span class="std std-ref">developer build process</span></a> posted in
 the <a class="reference internal" href="devel.html"><span class="doc">developer guide</span></a>.  This will enable the use of the GEOPM
 Service and will also provide the latest development in the GEOPM repository.</p>
 </div>
 <div class="section" id="run-requirements">
 <h2>Run Requirements<a class="headerlink" href="#run-requirements" title="Permalink to this heading"></a></h2>
-<p>The GEOPM HPC Runtime has several requirements at time-of-use beyond
+<p>The GEOPM Runtime has several requirements at time-of-use beyond
 what is required for the GEOPM Service.  These requirements are
 outlined in the following subsections.  A user that is not interested in
-running the GEOPM HPC Runtime may ignore these requirements.</p>
+running the GEOPM Runtime may ignore these requirements.</p>
 <div class="contents local topic" id="categories-of-run-requirements">
 <p class="topic-title first">Categories of run requirements:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#mpi-requirements" id="id3">MPI Requirements</a></p></li>
-<li><p><a class="reference internal" href="#bios-configuration" id="id4">BIOS Configuration</a></p></li>
-<li><p><a class="reference internal" href="#linux-power-management" id="id5">Linux Power Management</a></p></li>
-<li><p><a class="reference internal" href="#geopm-application-launch-wrapper" id="id6">GEOPM Application Launch Wrapper</a></p></li>
-<li><p><a class="reference internal" href="#cpu-affinity-requirements" id="id7">CPU Affinity Requirements</a></p></li>
+<li><p><a class="reference internal" href="#bios-configuration" id="id3">BIOS Configuration</a></p></li>
+<li><p><a class="reference internal" href="#linux-power-management" id="id4">Linux Power Management</a></p></li>
+<li><p><a class="reference internal" href="#geopm-application-launch-wrapper" id="id5">GEOPM Application Launch Wrapper</a></p></li>
+<li><p><a class="reference internal" href="#cpu-affinity-requirements" id="id6">CPU Affinity Requirements</a></p></li>
 </ul>
 </div>
-<div class="section" id="mpi-requirements">
-<h3><a class="toc-backref" href="#id3">MPI Requirements</a><a class="headerlink" href="#mpi-requirements" title="Permalink to this heading"></a></h3>
-<p>The GEOPM HPC Runtime requires that the package was built
-against the same MPI implementation that is used at runtime to launch
-the user's application.</p>
-</div>
 <div class="section" id="bios-configuration">
-<h3><a class="toc-backref" href="#id4">BIOS Configuration</a><a class="headerlink" href="#bios-configuration" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id3">BIOS Configuration</a><a class="headerlink" href="#bios-configuration" title="Permalink to this heading"></a></h3>
 <p>If power governing or power balancing is the intended use case
 for GEOPM deployment, then there is an additional dependency on
 the BIOS being configured to support RAPL control. To check for
@@ -280,7 +318,7 @@ contact your BIOS vendor to obtain a BIOS that supports RAPL.</p>
 <p>For additional information, please contact the GEOPM team.</p>
 </div>
 <div class="section" id="linux-power-management">
-<h3><a class="toc-backref" href="#id5">Linux Power Management</a><a class="headerlink" href="#linux-power-management" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id4">Linux Power Management</a><a class="headerlink" href="#linux-power-management" title="Permalink to this heading"></a></h3>
 <p>Note that other Linux mechanisms for power management can interfere
 with GEOPM, and these must be disabled.  We suggest disabling the
 intel_pstate kernel driver by modifying the kernel command line
@@ -311,8 +349,8 @@ command will set the governor to performance:</p>
 information.</p>
 </div>
 <div class="section" id="geopm-application-launch-wrapper">
-<h3><a class="toc-backref" href="#id6">GEOPM Application Launch Wrapper</a><a class="headerlink" href="#geopm-application-launch-wrapper" title="Permalink to this heading"></a></h3>
-<p>The GEOPM HPC Runtime package installs the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command.
+<h3><a class="toc-backref" href="#id5">GEOPM Application Launch Wrapper</a><a class="headerlink" href="#geopm-application-launch-wrapper" title="Permalink to this heading"></a></h3>
+<p>The GEOPM Runtime package installs the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command.
 The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command is a wrapper for the MPI launch commands like <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <code class="docutils literal notranslate"><span class="pre">aprun</span></code>,
 and <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>, where the wrapper script enables the GEOPM runtime.  The
 &quot;geopmlaunch&quot; command supports exactly the same command line interface
@@ -332,7 +370,7 @@ variables used by the GEOPM runtime that are otherwise controlled by the
 wrapper script.</p>
 </div>
 <div class="section" id="cpu-affinity-requirements">
-<h3><a class="toc-backref" href="#id7">CPU Affinity Requirements</a><a class="headerlink" href="#cpu-affinity-requirements" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id6">CPU Affinity Requirements</a><a class="headerlink" href="#cpu-affinity-requirements" title="Permalink to this heading"></a></h3>
 <p>The GEOPM runtime requires that each MPI process of the application
 under control is affinitized to distinct CPUs.  This is a strict
 requirement for the runtime and must be enforced by the MPI launch
@@ -365,7 +403,7 @@ community).</p>
 </div>
 <div class="section" id="resource-manager-integration">
 <h2>Resource Manager Integration<a class="headerlink" href="#resource-manager-integration" title="Permalink to this heading"></a></h2>
-<p>The GEOPM HPC Runtime package can be integrated with a compute cluster
+<p>The GEOPM Runtime package can be integrated with a compute cluster
 resource manager by modifying the resource manager daemon running on
 the cluster compute nodes.  An example of integration with the SLURM
 resource manager via a SPANK plugin can be found in the <a class="reference external" href="https://github.com/geopm/geopm-slurm">geopm-slurm git

@@ -41,7 +41,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
-<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for HPC Runtime Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for Runtime Users</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
@@ -410,6 +410,15 @@ specified regardless of the values set in the calling environment.</p>
 <div class="section" id="geopm-environment-variables">
 <h2>GEOPM Environment Variables<a class="headerlink" href="#geopm-environment-variables" title="Permalink to this heading"></a></h2>
 <dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_NUM_PROC</span></code></dt><dd><p>The number of processes to be tracked and profiled by the controller
+on each compute node. The controller will wait until this number of
+processes request profiling before starting the control loop and
+subsequent requests for profiling will be ignored by the controller.
+This environment variable is useful when executing a non-MPI
+application without <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> and in the
+case where there is more than one process to be profiled.  The
+default value for GEOPM_NUM_PROC is one.</p>
+</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT</span></code></dt><dd><p>The path to which a GEOPM report file is saved. See the
 <code class="docutils literal notranslate"><span class="pre">--geopm-report</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-report-option"><span class="std std-ref">option description</span></a> in
 <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
@@ -485,13 +494,8 @@ in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geo
 </div>
 <div class="section" id="other-environment-variables">
 <h2>Other Environment Variables<a class="headerlink" href="#other-environment-variables" title="Permalink to this heading"></a></h2>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code></dt><dd><p>The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> tool will preload <code class="docutils literal notranslate"><span class="pre">libgeopm.so</span></code> for all
-applications, so the use of <code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code> is not required when
-using <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>.  When not using <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>
-setting <code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code> may be required, see next paragraph for
-details.</p>
-<p>When dynamically linking an application to <code class="docutils literal notranslate"><span class="pre">libgeopm</span></code> for any
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code></dt><dd><p>When dynamically linking an application to <code class="docutils literal notranslate"><span class="pre">libgeopm</span></code> for any
 features supported by the PMPI profiling of the MPI runtime it may
 be required that the <code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code> environment variable be set
 at runtime as is documented in the <a class="reference external" href="https://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so(8)</a> man page.  When

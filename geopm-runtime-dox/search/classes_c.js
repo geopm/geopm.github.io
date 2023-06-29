@@ -14,12 +14,6 @@ var searchData=
   ['profile',['Profile',['../classgeopm_1_1_profile.html',1,'geopm']]],
   ['profileimp',['ProfileImp',['../classgeopm_1_1_profile_imp.html',1,'geopm']]],
   ['profileiogroup',['ProfileIOGroup',['../classgeopm_1_1_profile_i_o_group.html',1,'geopm']]],
-  ['profileranksampler',['ProfileRankSampler',['../classgeopm_1_1_profile_rank_sampler.html',1,'geopm']]],
-  ['profileranksamplerimp',['ProfileRankSamplerImp',['../classgeopm_1_1_profile_rank_sampler_imp.html',1,'geopm']]],
-  ['profilesampler',['ProfileSampler',['../classgeopm_1_1_profile_sampler.html',1,'geopm']]],
-  ['profilesamplerimp',['ProfileSamplerImp',['../classgeopm_1_1_profile_sampler_imp.html',1,'geopm']]],
-  ['profiletable',['ProfileTable',['../classgeopm_1_1_profile_table.html',1,'geopm']]],
-  ['profiletableimp',['ProfileTableImp',['../classgeopm_1_1_profile_table_imp.html',1,'geopm']]],
   ['profiletracer',['ProfileTracer',['../classgeopm_1_1_profile_tracer.html',1,'geopm']]],
   ['profiletracerimp',['ProfileTracerImp',['../classgeopm_1_1_profile_tracer_imp.html',1,'geopm']]],
   ['proxyepochrecordfilter',['ProxyEpochRecordFilter',['../classgeopm_1_1_proxy_epoch_record_filter.html',1,'geopm']]]

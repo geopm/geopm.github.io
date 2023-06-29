@@ -10,7 +10,6 @@ var searchData=
   ['serviceiogroup_2ecpp',['ServiceIOGroup.cpp',['../_service_i_o_group_8cpp.html',1,'']]],
   ['serviceiogroup_2ehpp',['ServiceIOGroup.hpp',['../_service_i_o_group_8hpp.html',1,'']]],
   ['serviceproxy_2ecpp',['ServiceProxy.cpp',['../_service_proxy_8cpp.html',1,'']]],
-  ['serviceproxy_2ehpp',['ServiceProxy.hpp',['../_service_proxy_8hpp.html',1,'']]],
   ['sharedmemory_2ecpp',['SharedMemory.cpp',['../_shared_memory_8cpp.html',1,'']]],
   ['sharedmemoryimp_2ehpp',['SharedMemoryImp.hpp',['../_shared_memory_imp_8hpp.html',1,'']]],
   ['sharedmemoryscopedlock_2ecpp',['SharedMemoryScopedLock.cpp',['../_shared_memory_scoped_lock_8cpp.html',1,'']]],

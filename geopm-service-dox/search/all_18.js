@@ -51,8 +51,6 @@ var searchData=
   ['_7esdbusmessage',['~SDBusMessage',['../classgeopm_1_1_s_d_bus_message.html#a7214512b8a686751226b3916420d8438',1,'geopm::SDBusMessage']]],
   ['_7esdbusmessageimp',['~SDBusMessageImp',['../classgeopm_1_1_s_d_bus_message_imp.html#af2c9e0e68c347a1802762a3b946c4b34',1,'geopm::SDBusMessageImp']]],
   ['_7eserviceiogroup',['~ServiceIOGroup',['../classgeopm_1_1_service_i_o_group.html#a2fa9d363cfe2cfaf1a8ff2af21fa9387',1,'geopm::ServiceIOGroup']]],
-  ['_7eserviceproxy',['~ServiceProxy',['../classgeopm_1_1_service_proxy.html#ab8e9d0eeacf9eb16fb3c1c19c8544d20',1,'geopm::ServiceProxy']]],
-  ['_7eserviceproxyimp',['~ServiceProxyImp',['../classgeopm_1_1_service_proxy_imp.html#a5551c28d06ba790934c50f4d271ff70b',1,'geopm::ServiceProxyImp']]],
   ['_7esharedmemoryimp',['~SharedMemoryImp',['../classgeopm_1_1_shared_memory_imp.html#ab8f4799e3cea166ddfbe773476bc3dc8',1,'geopm::SharedMemoryImp']]],
   ['_7esignal',['~Signal',['../classgeopm_1_1_signal.html#a105d28a465d7a660a5427fb29f17000c',1,'geopm::Signal']]],
   ['_7esstcontrol',['~SSTControl',['../classgeopm_1_1_s_s_t_control.html#a21d688d9371859803b1943c3010f6b08',1,'geopm::SSTControl']]],
