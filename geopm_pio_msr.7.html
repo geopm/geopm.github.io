@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm_pio_msr(7) -- Signals and controls for Model Specific Registers (MSRs) &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,7 +25,6 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> GEOPM
-            <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -163,14 +159,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="geopm-pio-msr-7-signals-and-controls-for-model-specific-registers-msrs">
+  <section id="geopm-pio-msr-7-signals-and-controls-for-model-specific-registers-msrs">
 <h1>geopm_pio_msr(7) -- Signals and controls for Model Specific Registers (MSRs)<a class="headerlink" href="#geopm-pio-msr-7-signals-and-controls-for-model-specific-registers-msrs" title="Permalink to this heading"></a></h1>
-<div class="section" id="description">
+<section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
 <p>The MSR IOGroup implements the
 <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a> interface to provide
 hardware signals and controls for Model Specific Registers (MSRs).</p>
-<div class="section" id="configuration">
+<section id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h3>
 <p>The set of signals and controls supported by the MSR IOGroup is configurable,
 as the MSRs that are available depend on the architecture and the particular
@@ -180,76 +176,76 @@ including MSRs for CPU performance, temperature and power.</p>
 <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment variable is set, the paths specified there
 will be checked for any JSON files prefixed with <code class="docutils literal notranslate"><span class="pre">msr_</span></code>. The default plugin
 path will also be searched. The files must follow this schema:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;definitions&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;msrFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;end_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log_half&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;overflow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logic&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;seconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hertz&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;watts&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;joules&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;celsius&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;scalar&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;monotone&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;variable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;writeable&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;aggregation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;median&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_and&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_or&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hash&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hint&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;min&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;max&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;stddev&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;select_first&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;expect_same&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;end_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;scalar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;units&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;writeable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;behavior&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;aggregation&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;msrObject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;domain&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu_chip&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">          </span><span class="p">},</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;fields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">              </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrFields&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">          </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;fields&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;msrs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrObject&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MSR specification&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;definitions&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;msrFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;begin_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;end_bit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log_half&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;7_bit_float&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;overflow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logic&quot;</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;seconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hertz&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;watts&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;joules&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;celsius&quot;</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;scalar&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;monotone&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;variable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;writeable&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;aggregation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;median&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_and&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_or&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hash&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hint&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;min&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;max&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;stddev&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;select_first&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;expect_same&quot;</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;begin_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;end_bit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;scalar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;units&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;writeable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;behavior&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;aggregation&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;msrObject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;domain&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu_chip&quot;</span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;fields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrFields&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;domain&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;fields&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;msrs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/msrObject&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>For an example of an MSR configuration file, please see:
@@ -257,8 +253,8 @@ path will also be searched. The files must follow this schema:</p>
 <p>This guide includes a list of signals and controls that are more commonly
 available. Use geopmread and geopmwrite to query the full set of signals and
 controls that are available on a particular system.</p>
-</div>
-<div class="section" id="concurrent-access">
+</section>
+<section id="concurrent-access">
 <h3>Concurrent Access<a class="headerlink" href="#concurrent-access" title="Permalink to this heading"></a></h3>
 <p>Usage and access to most MSRs is restricted to ring 0. However, there is
 no hardware mechanism available to reserve access to MSRs, so access is on a
@@ -270,15 +266,15 @@ avoid concurrent access and unexpected results.</p>
 <p>Please consult the following for further information and guidelines for
 sharing access to MSRs: Performance Monitoring Unit Sharing Guide (Intel white
 paper).</p>
-</div>
-</div>
-<div class="section" id="signals">
+</section>
+</section>
+<section id="signals">
 <h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
 <p>Some MSR signals are available on specific miroarchitectures.
 <a class="reference internal" href="#architectural-signals"><span class="std std-ref">Architectural signals</span></a> are
 available across Intel x86 microarchitectures.</p>
-<div class="contents local topic" id="categories-of-msr-signals">
-<p class="topic-title first">Categories of MSR signals:</p>
+<nav class="contents local" id="categories-of-msr-signals">
+<p class="topic-title">Categories of MSR signals:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#architectural-signals" id="id1">Architectural Signals</a></p></li>
 <li><p><a class="reference internal" href="#knights-landing-knl-signals" id="id2">Knights Landing (KNL) Signals</a></p></li>
@@ -286,9 +282,9 @@ available across Intel x86 microarchitectures.</p>
 <li><p><a class="reference internal" href="#haswell-hsx-signals" id="id4">Haswell (HSX) Signals</a></p></li>
 <li><p><a class="reference internal" href="#skylake-skx-signals" id="id5">Skylake (SKX) Signals</a></p></li>
 </ul>
-</div>
-<div class="section" id="architectural-signals">
-<h3><a class="toc-backref" href="#id1">Architectural Signals</a><a class="headerlink" href="#architectural-signals" title="Permalink to this heading"></a></h3>
+</nav>
+<section id="architectural-signals">
+<h3><a class="toc-backref" href="#id1" role="doc-backlink">Architectural Signals</a><a class="headerlink" href="#architectural-signals" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-time-stamp-counter-timestamp-count"><span class="pre">MSR::TIME_STAMP_COUNTER:TIMESTAMP_COUNT</span></code></dt><dd><p>An always running, monotonically increasing counter that is incremented at a constant rate.  For use as a wall clock timer.</p>
 <ul class="simple">
@@ -539,9 +535,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="knights-landing-knl-signals">
-<h3><a class="toc-backref" href="#id2">Knights Landing (KNL) Signals</a><a class="headerlink" href="#knights-landing-knl-signals" title="Permalink to this heading"></a></h3>
+</section>
+<section id="knights-landing-knl-signals">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">Knights Landing (KNL) Signals</a><a class="headerlink" href="#knights-landing-knl-signals" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-platform-info-max-non-turbo-ratio"><span class="pre">MSR::PLATFORM_INFO:MAX_NON_TURBO_RATIO</span></code></dt><dd><p>The processor's maximum non-turbo frequency.</p>
 <ul class="simple">
@@ -840,9 +836,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="sandy-bridge-snb-signals">
-<h3><a class="toc-backref" href="#id3">Sandy Bridge (SNB) Signals</a><a class="headerlink" href="#sandy-bridge-snb-signals" title="Permalink to this heading"></a></h3>
+</section>
+<section id="sandy-bridge-snb-signals">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Sandy Bridge (SNB) Signals</a><a class="headerlink" href="#sandy-bridge-snb-signals" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-platform-info-max-non-turbo-ratio"><span class="pre">MSR::PLATFORM_INFO:MAX_NON_TURBO_RATIO</span></code></dt><dd><p>The processor's maximum non-turbo frequency.</p>
 <ul class="simple">
@@ -1085,9 +1081,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="haswell-hsx-signals">
-<h3><a class="toc-backref" href="#id4">Haswell (HSX) Signals</a><a class="headerlink" href="#haswell-hsx-signals" title="Permalink to this heading"></a></h3>
+</section>
+<section id="haswell-hsx-signals">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Haswell (HSX) Signals</a><a class="headerlink" href="#haswell-hsx-signals" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-platform-info-max-non-turbo-ratio"><span class="pre">MSR::PLATFORM_INFO:MAX_NON_TURBO_RATIO</span></code></dt><dd><p>The processor's maximum non-turbo frequency.</p>
 <ul class="simple">
@@ -1434,9 +1430,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="skylake-skx-signals">
-<h3><a class="toc-backref" href="#id5">Skylake (SKX) Signals</a><a class="headerlink" href="#skylake-skx-signals" title="Permalink to this heading"></a></h3>
+</section>
+<section id="skylake-skx-signals">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Skylake (SKX) Signals</a><a class="headerlink" href="#skylake-skx-signals" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-platform-info-max-non-turbo-ratio"><span class="pre">MSR::PLATFORM_INFO:MAX_NON_TURBO_RATIO</span></code></dt><dd><p>The processor's maximum non-turbo frequency.</p>
 <ul class="simple">
@@ -1866,15 +1862,15 @@ of PCNT divided by the derivative of ACNT over 8 samples.</p>
 </ul>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="controls">
+</section>
+</section>
+<section id="controls">
 <h2>Controls<a class="headerlink" href="#controls" title="Permalink to this heading"></a></h2>
 <p>Some MSR controls are available on specific miroarchitectures.
 <a class="reference internal" href="#architectural-controls"><span class="std std-ref">Architectural controls</span></a> are
 available across Intel x86 microarchitectures.</p>
-<div class="contents local topic" id="categories-of-msr-controls">
-<p class="topic-title first">Categories of MSR controls:</p>
+<nav class="contents local" id="categories-of-msr-controls">
+<p class="topic-title">Categories of MSR controls:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#architectural-controls" id="id6">Architectural Controls</a></p></li>
 <li><p><a class="reference internal" href="#knights-landing-knl-controls" id="id7">Knights Landing (KNL) Controls</a></p></li>
@@ -1882,9 +1878,9 @@ available across Intel x86 microarchitectures.</p>
 <li><p><a class="reference internal" href="#haswell-hsx-controls" id="id9">Haswell (HSX) Controls</a></p></li>
 <li><p><a class="reference internal" href="#skylake-skx-controls" id="id10">Skylake (SKX) Controls</a></p></li>
 </ul>
-</div>
-<div class="section" id="architectural-controls">
-<h3><a class="toc-backref" href="#id6">Architectural Controls</a><a class="headerlink" href="#architectural-controls" title="Permalink to this heading"></a></h3>
+</nav>
+<section id="architectural-controls">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Architectural Controls</a><a class="headerlink" href="#architectural-controls" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-therm-status-thermal-status-log"><span class="pre">MSR::THERM_STATUS:THERMAL_STATUS_LOG</span></code></dt><dd><p>Indicates whether the core's on-die sensor has read a high temperature (PROCHOT) since the last time a zero was written to this control. When reading at a higher level domain than its native domain, it aggregates as the count of all such bits that have been set.</p>
 <ul class="simple">
@@ -2543,9 +2539,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="knights-landing-knl-controls">
-<h3><a class="toc-backref" href="#id7">Knights Landing (KNL) Controls</a><a class="headerlink" href="#knights-landing-knl-controls" title="Permalink to this heading"></a></h3>
+</section>
+<section id="knights-landing-knl-controls">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Knights Landing (KNL) Controls</a><a class="headerlink" href="#knights-landing-knl-controls" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
@@ -2660,9 +2656,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="sandy-bridge-snb-controls">
-<h3><a class="toc-backref" href="#id8">Sandy Bridge (SNB) Controls</a><a class="headerlink" href="#sandy-bridge-snb-controls" title="Permalink to this heading"></a></h3>
+</section>
+<section id="sandy-bridge-snb-controls">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Sandy Bridge (SNB) Controls</a><a class="headerlink" href="#sandy-bridge-snb-controls" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
@@ -2761,9 +2757,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="haswell-hsx-controls">
-<h3><a class="toc-backref" href="#id9">Haswell (HSX) Controls</a><a class="headerlink" href="#haswell-hsx-controls" title="Permalink to this heading"></a></h3>
+</section>
+<section id="haswell-hsx-controls">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Haswell (HSX) Controls</a><a class="headerlink" href="#haswell-hsx-controls" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
@@ -2886,9 +2882,9 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="skylake-skx-controls">
-<h3><a class="toc-backref" href="#id10">Skylake (SKX) Controls</a><a class="headerlink" href="#skylake-skx-controls" title="Permalink to this heading"></a></h3>
+</section>
+<section id="skylake-skx-controls">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Skylake (SKX) Controls</a><a class="headerlink" href="#skylake-skx-controls" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
@@ -3163,12 +3159,12 @@ available across Intel x86 microarchitectures.</p>
 </ul>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="aliases">
+</section>
+</section>
+<section id="aliases">
 <h2>Aliases<a class="headerlink" href="#aliases" title="Permalink to this heading"></a></h2>
 <p>This IOGroup provides the following high-level aliases:</p>
-<div class="section" id="signal-aliases">
+<section id="signal-aliases">
 <h3>Signal Aliases<a class="headerlink" href="#signal-aliases" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">BOARD_ENERGY</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PLATFORM_ENERGY_STATUS:ENERGY</span></code></p>
@@ -3224,8 +3220,8 @@ available across Intel x86 microarchitectures.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">MSR::QM_CTR_SCALED_RATE</span></code></dt><dd><p>Maps to the rate of change in <code class="docutils literal notranslate"><span class="pre">MSR::QM_CTR_SCALED</span></code>.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="control-aliases">
+</section>
+<section id="control-aliases">
 <h3>Control Aliases<a class="headerlink" href="#control-aliases" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_DESIRED_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::HWP_REQUEST:DESIRED_PERFORMANCE</span></code></p>
@@ -3239,13 +3235,13 @@ available across Intel x86 microarchitectures.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_TIME_WINDOW</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW</span></code></p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="example">
+</section>
+</section>
+<section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <p>The following example uses geopmread and geopmwrite command-line tools.
 These steps can also be followed within an agent.</p>
-<div class="section" id="setting-frequency">
+<section id="setting-frequency">
 <h3>Setting Frequency<a class="headerlink" href="#setting-frequency" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Set target operating frequency:</p></li>
@@ -3256,8 +3252,8 @@ These steps can also be followed within an agent.</p>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">CPU_FREQUENCY_MAX_CONTROL</span> <span class="pre">core</span> <span class="pre">0</span></code>
 <code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">CPU_FREQUENCY_STATUS</span> <span class="pre">core</span> <span class="pre">0</span></code></p>
-</div>
-<div class="section" id="setting-a-power-limit">
+</section>
+<section id="setting-a-power-limit">
 <h3>Setting A Power Limit<a class="headerlink" href="#setting-a-power-limit" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Set power limit</p></li>
@@ -3268,17 +3264,17 @@ These steps can also be followed within an agent.</p>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">CPU_POWER_LIMIT_CONTROL</span> <span class="pre">package</span> <span class="pre">0</span></code>
 <code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">CPU_POWER</span> <span class="pre">package</span> <span class="pre">0</span></code></p>
-</div>
-</div>
-<div class="section" id="see-also">
+</section>
+</section>
+<section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="geopm_pio.7.html"><span class="doc">geopm_pio(7)</span></a>,
 <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
 <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>,
 <a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a>,
 <a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a></p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
