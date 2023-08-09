@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geopm_pio_profile(7) – Signals and controls for the ProfileIOGroup &mdash; GEOPM  documentation</title>
@@ -186,7 +186,7 @@ The signals <strong>cannot</strong> be queried via <code class="docutils literal
 </section>
 <section id="signals">
 <h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
-<dl class="simple">
+<dl>
 <dt><code class="docutils literal notranslate"><span class="pre">PROFILE::REGION_HASH</span></code></dt><dd><p>The hash (or ID) of the region of code (see <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>) currently being run by all ranks, otherwise
 <code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HASH_UNMARKED</span></code>.  See the enum <code class="docutils literal notranslate"><span class="pre">geopm_region_hash_e</span></code>
 defined in <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/src/geopm_hash.h">geopm_hash.h</a> for
@@ -216,11 +216,22 @@ more information.</p>
 <li><p><strong>Unit</strong>: geopm_region_hint_e</p></li>
 </ul>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">PROFILE::REGION_PROGRESS</span></code></dt><dd><p>Minimum per-rank reported progress through the current region.  The
-returned value will be on the interval [0, 1].  0 indicates no progress
-while 1 indicates the region is complete.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">PROFILE::REGION_PROGRESS</span></code></dt><dd><p>Sum of the fractional progress reported by all CPUs over the aggregated
+domain.  When utilizing OpenMP, the per-CPU returned value will be on the
+interval [0, 1 / <em>num_thread</em>] where <em>num_thread</em> is the number of
+requested OpenMP threads per rank.  When running single-threaded (i.e. not
+leveraging OpenMP), the per-CPU returned value will either be zero (no
+active threads), or on the interval [0, 1].</p>
+<p>When aggregating this signal to the board domain, the aggregated value will
+always be on the interval [0, <em>num_rank</em>] where <em>num_rank</em> is equal to the
+number of ranks (processes) in the run.  0 indicates no progress while 1 (if
+examining the per-CPU signal) or <em>num_rank</em> (if examining the board
+aggregated signal) indicates the region is complete.</p>
+<p>This signal is not valid outside of a region.  Specifically, this signal
+should be ignored any time the <code class="docutils literal notranslate"><span class="pre">REGION_HASH</span></code> signal aggregated to the
+same domain resolves to <code class="docutils literal notranslate"><span class="pre">GEOPM_REGION_HASH_UNMARKED</span></code>.</p>
 <ul class="simple">
-<li><p><strong>Aggregation</strong>: min</p></li>
+<li><p><strong>Aggregation</strong>: sum</p></li>
 <li><p><strong>Domain</strong>: cpu</p></li>
 <li><p><strong>Format</strong>: float</p></li>
 <li><p><strong>Unit</strong>: progress percentage</p></li>

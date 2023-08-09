@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['platformioimp_724',['PlatformIOImp',['../classgeopm_1_1_platform_i_o_imp.html',1,'geopm']]],
-  ['platformtopoimp_725',['PlatformTopoImp',['../classgeopm_1_1_platform_topo_imp.html',1,'geopm']]],
-  ['posixsignal_726',['POSIXSignal',['../classgeopm_1_1_p_o_s_i_x_signal.html',1,'geopm']]],
-  ['posixsignalimp_727',['POSIXSignalImp',['../classgeopm_1_1_p_o_s_i_x_signal_imp.html',1,'geopm']]]
+  ['nvmldevicepool_742',['NVMLDevicePool',['../classgeopm_1_1_n_v_m_l_device_pool.html',1,'geopm']]],
+  ['nvmldevicepoolimp_743',['NVMLDevicePoolImp',['../classgeopm_1_1_n_v_m_l_device_pool_imp.html',1,'geopm']]],
+  ['nvmlgputopo_744',['NVMLGPUTopo',['../classgeopm_1_1_n_v_m_l_g_p_u_topo.html',1,'geopm']]],
+  ['nvmliogroup_745',['NVMLIOGroup',['../classgeopm_1_1_n_v_m_l_i_o_group.html',1,'geopm']]]
 ];
