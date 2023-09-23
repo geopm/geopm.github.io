@@ -308,7 +308,7 @@ a unique name string referred to as the <em>plugin_name</em>.  An exception
 will be thrown if more than one plugin of the same name and same type
 are loaded.  The <em>plugin_name</em> is standardized to be all lower case
 letters.  The shared object file names must conform to the pattern:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libgeopm</span><span class="o">&lt;</span><span class="n">CLASS</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">NAME</span><span class="o">&gt;.</span><span class="n">so</span><span class="mf">.1.0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libgeopm</span><span class="o">&lt;</span><span class="n">CLASS</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">NAME</span><span class="o">&gt;.</span><span class="n">so</span><span class="mf">.2.0.0</span>
 </pre></div>
 </div>
 <p>Here <code class="docutils literal notranslate"><span class="pre">&lt;NAME&gt;</span></code> is the <em>plugin_name</em> and <code class="docutils literal notranslate"><span class="pre">&lt;CLASS&gt;</span></code> is one of the three
@@ -325,10 +325,11 @@ with flags appropriate for a dynamically loaded library, e.g. for
 <h2>Plugin Search Path And Load Order<a class="headerlink" href="#plugin-search-path-and-load-order" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> is a colon-separated list of directories
 that contain plugin shared object files to be loaded by the GEOPM
-runtime.  See <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a> for details about <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code>.
-Note that an Exception will be thrown by the <code class="docutils literal notranslate"><span class="pre">register_plugin()</span></code>
-method if an attempt is made to register a plugin with the same name
-as a previously registered plugin.</p>
+runtime.  Any symlink that resides in a directory specified by this
+variable will be ignored.  See <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a> for details
+about <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code>.  Note that an Exception will be thrown by
+the <code class="docutils literal notranslate"><span class="pre">register_plugin()</span></code> method if an attempt is made to register a
+plugin with the same name as a previously registered plugin.</p>
 <p>In the case of <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> plugins, the most recently loaded plugin to
 register a signal or control name provides the implementation at
 runtime, even if an earlier <code class="docutils literal notranslate"><span class="pre">IOGroup</span></code> plugin had provided a signal or
@@ -347,6 +348,15 @@ detailed example of plugin load order can be found in
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GEOPM_PLUGIN_PATH</span><span class="o">=</span><span class="nv">$GEOPM_HOME</span>/tutorial/iogroup
 <span class="nb">export</span><span class="w"> </span><span class="nv">GEOPM_PLUGIN_PATH</span><span class="o">=</span><span class="nv">$HOME</span>/plugin/iogroup:<span class="nv">$GEOPM_PLUGIN_PATH</span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is imperative that any dynamically loaded library that is a dependency
+of a plugin is available in the environment of the systemd initiated geopmd
+service.  If dependent libararies are not available on the root user’s
+LD_LIBRARY_PATH, the plugin will fail to load.
+For this reason, it is recommended that any plugins are compiled with
+system installed gcc/g++ compilers.</p>
 </div>
 </section>
 <section id="plugin-load-constructor-function">

@@ -183,9 +183,9 @@ as the MSRs that are available depend on the architecture and the particular
 CPU. The MSR IOGroup will declare a set of common signals and controls,
 including MSRs for CPU performance, temperature and power.</p>
 <p>Additional MSRs can be specified via configuration files. If the
-<code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment variable is set, the paths specified there
-will be checked for any JSON files prefixed with <code class="docutils literal notranslate"><span class="pre">msr_</span></code>. The default plugin
-path will also be searched. The files must follow this schema:</p>
+<code class="docutils literal notranslate"><span class="pre">GEOPM_MSR_CONFIG_PATH</span></code> environment variable is set, the paths specified there
+will be checked for any JSON files prefixed with <code class="docutils literal notranslate"><span class="pre">msr_</span></code>. The <code class="docutils literal notranslate"><span class="pre">/etc/geopm</span></code>
+directory will also be searched. The files must follow this schema:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://geopm.github.io/msrs.schema.json&quot;</span><span class="p">,</span>
@@ -260,6 +260,17 @@ path will also be searched. The files must follow this schema:</p>
 </div>
 <p>For an example of an MSR configuration file, please see:
 <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/examples/custom_msr/msr_reasons.json">&lt;msr_reasons.json&gt;</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before GEOPM 3.0, MSR configuration files were stored near the GEOPM
+library objects (e.g., in <code class="docutils literal notranslate"><span class="pre">/usr/lib64/geopm</span></code>), and discovered in the
+search paths from the <code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code> environment variable. Since
+version 3.0, GEOPM additionally searches <code class="docutils literal notranslate"><span class="pre">/etc/geopm</span></code> and locations from
+the <code class="docutils literal notranslate"><span class="pre">GEOPM_MSR_CONFIG_PATH</span></code> environment variable. Future releases may
+stop searching the library and plugin paths for MSR configuration data.
+If GEOPM uses a configuration from the old location, then a deprecation
+warning is emitted.</p>
+</div>
 <p>This guide includes a list of signals and controls that are more commonly
 available. Use geopmread and geopmwrite to query the full set of signals and
 controls that are available on a particular system.</p>
@@ -2555,7 +2566,7 @@ available across Intel x86 microarchitectures.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
-<li><p><strong>Aggregation</strong>: expect_same</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
 <li><p><strong>Domain</strong>: package</p></li>
 <li><p><strong>Format</strong>: integer</p></li>
 <li><p><strong>Unit</strong>: hertz</p></li>
@@ -2672,7 +2683,7 @@ available across Intel x86 microarchitectures.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
-<li><p><strong>Aggregation</strong>: expect_same</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
 <li><p><strong>Domain</strong>: package</p></li>
 <li><p><strong>Format</strong>: integer</p></li>
 <li><p><strong>Unit</strong>: hertz</p></li>
@@ -2773,7 +2784,7 @@ available across Intel x86 microarchitectures.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
-<li><p><strong>Aggregation</strong>: expect_same</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
 <li><p><strong>Domain</strong>: core</p></li>
 <li><p><strong>Format</strong>: integer</p></li>
 <li><p><strong>Unit</strong>: hertz</p></li>
@@ -2898,7 +2909,7 @@ available across Intel x86 microarchitectures.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="msr-perf-ctl-freq"><span class="pre">MSR::PERF_CTL:FREQ</span></code></dt><dd><p>Target operating frequency of the CPU based on the control register. Note: when querying at a higher domain, if NaN is returned, query at its native domain.</p>
 <ul class="simple">
-<li><p><strong>Aggregation</strong>: expect_same</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
 <li><p><strong>Domain</strong>: core</p></li>
 <li><p><strong>Format</strong>: integer</p></li>
 <li><p><strong>Unit</strong>: hertz</p></li>
@@ -3185,6 +3196,8 @@ available across Intel x86 microarchitectures.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">BOARD_POWER_TIME_WINDOW_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PLATFORM_POWER_LIMIT:PL1_TIME_WINDOW</span></code></p>
 </dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_CORE_TEMPERATURE</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::THERM_STATUS:DIGITAL_READOUT</span></code></p>
+</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_CYCLES_REFERENCE</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::FIXED_CTR2:CPU_CLK_UNHALTED_REF_TSC</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_CYCLES_THREAD</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::FIXED_CTR1:CPU_CLK_UNHALTED_THREAD</span></code></p>
@@ -3201,6 +3214,8 @@ available across Intel x86 microarchitectures.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_INSTRUCTIONS_RETIRED</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::FIXED_CTR0:INST_RETIRED_ANY</span></code></p>
 </dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_PACKAGE_TEMPERATURE</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PACKAGE_THERM_STATUS:DIGITAL_READOUT</span></code></p>
+</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code></dt><dd><p>Average package power over 40 ms or 8 control loop iterations.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_LIMIT_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_POWER_LIMIT</span></code></p>
@@ -3211,9 +3226,13 @@ available across Intel x86 microarchitectures.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_LIMIT_DEFAULT</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_INFO:THERMAL_SPEC_POWER</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_TIME_WINDOW</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_TIME_WINDOW_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_TIMESTAMP_COUNTER</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::TIME_STAMP_COUNTER:TIMESTAMP_COUNT</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_MAX_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::UNCORE_RATIO_LIMIT:MAX_RATIO</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_MIN_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::UNCORE_RATIO_LIMIT:MIN_RATIO</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_STATUS</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::UNCORE_PERF_STATUS:FREQ</span></code></p>
 </dd>
@@ -3242,7 +3261,11 @@ available across Intel x86 microarchitectures.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_LIMIT_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_POWER_LIMIT</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_TIME_WINDOW</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_POWER_TIME_WINDOW_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_MAX_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::UNCORE_RATIO_LIMIT:MAX_RATIO</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_MIN_CONTROL</span></code></dt><dd><p>Maps to <code class="docutils literal notranslate"><span class="pre">MSR::UNCORE_RATIO_LIMIT:MIN_RATIO</span></code></p>
 </dd>
 </dl>
 </section>

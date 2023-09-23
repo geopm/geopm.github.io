@@ -17,15 +17,26 @@ CPU. The MSR IOGroup will declare a set of common signals and controls,
 including MSRs for CPU performance, temperature and power.
 
 Additional MSRs can be specified via configuration files. If the
-``GEOPM_PLUGIN_PATH`` environment variable is set, the paths specified there
-will be checked for any JSON files prefixed with ``msr_``. The default plugin
-path will also be searched. The files must follow this schema:
+``GEOPM_MSR_CONFIG_PATH`` environment variable is set, the paths specified there
+will be checked for any JSON files prefixed with ``msr_``. The ``/etc/geopm``
+directory will also be searched. The files must follow this schema:
 
-.. literalinclude:: ../../json_schemas/msrs.schema.json
+.. literalinclude:: ../json_schemas/msrs.schema.json
     :language: json
 
 For an example of an MSR configuration file, please see:
 `<msr_reasons.json> <https://github.com/geopm/geopm/blob/dev/examples/custom_msr/msr_reasons.json>`_
+
+.. note::
+
+   Before GEOPM 3.0, MSR configuration files were stored near the GEOPM
+   library objects (e.g., in ``/usr/lib64/geopm``), and discovered in the
+   search paths from the ``GEOPM_PLUGIN_PATH`` environment variable. Since
+   version 3.0, GEOPM additionally searches ``/etc/geopm`` and locations from
+   the ``GEOPM_MSR_CONFIG_PATH`` environment variable. Future releases may
+   stop searching the library and plugin paths for MSR configuration data.
+   If GEOPM uses a configuration from the old location, then a deprecation
+   warning is emitted.
 
 This guide includes a list of signals and controls that are more commonly
 available. Use geopmread and geopmwrite to query the full set of signals and
@@ -57,27 +68,27 @@ available across Intel x86 microarchitectures.
 
 Architectural Signals
 ^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_arch.json
+.. geopm-msr-json:: ../json_data/msr_data_arch.json
    :no-controls:
 
 Knights Landing (KNL) Signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_knl.json
+.. geopm-msr-json:: ../json_data/msr_data_knl.json
    :no-controls:
 
 Sandy Bridge (SNB) Signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_snb.json
+.. geopm-msr-json:: ../json_data/msr_data_snb.json
    :no-controls:
 
 Haswell (HSX) Signals
 ^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_hsx.json
+.. geopm-msr-json:: ../json_data/msr_data_hsx.json
    :no-controls:
 
 Skylake (SKX) Signals
 ^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_skx.json
+.. geopm-msr-json:: ../json_data/msr_data_skx.json
    :no-controls:
 
 ``MSR::CPU_SCALABILITY_RATIO``
@@ -100,27 +111,27 @@ available across Intel x86 microarchitectures.
 
 Architectural Controls
 ^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_arch.json
+.. geopm-msr-json:: ../json_data/msr_data_arch.json
    :no-signals:
 
 Knights Landing (KNL) Controls
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_knl.json
+.. geopm-msr-json:: ../json_data/msr_data_knl.json
    :no-signals:
 
 Sandy Bridge (SNB) Controls
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_snb.json
+.. geopm-msr-json:: ../json_data/msr_data_snb.json
    :no-signals:
 
 Haswell (HSX) Controls
 ^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_hsx.json
+.. geopm-msr-json:: ../json_data/msr_data_hsx.json
    :no-signals:
 
 Skylake (SKX) Controls
 ^^^^^^^^^^^^^^^^^^^^^^
-.. geopm-msr-json:: ../../src/msr_data_skx.json
+.. geopm-msr-json:: ../json_data/msr_data_skx.json
    :no-signals:
 
 
@@ -143,6 +154,9 @@ Signal Aliases
 
 ``BOARD_POWER_TIME_WINDOW_CONTROL``
     Maps to ``MSR::PLATFORM_POWER_LIMIT:PL1_TIME_WINDOW``
+
+``CPU_CORE_TEMPERATURE``
+    Maps to ``MSR::THERM_STATUS:DIGITAL_READOUT``
 
 ``CPU_CYCLES_REFERENCE``
     Maps to ``MSR::FIXED_CTR2:CPU_CLK_UNHALTED_REF_TSC``
@@ -168,6 +182,9 @@ Signal Aliases
 ``CPU_INSTRUCTIONS_RETIRED``
     Maps to ``MSR::FIXED_CTR0:INST_RETIRED_ANY``
 
+``CPU_PACKAGE_TEMPERATURE``
+    Maps to ``MSR::PACKAGE_THERM_STATUS:DIGITAL_READOUT``
+
 ``CPU_POWER``
     Average package power over 40 ms or 8 control loop iterations.
 
@@ -183,11 +200,17 @@ Signal Aliases
 ``CPU_POWER_LIMIT_DEFAULT``
     Maps to ``MSR::PKG_POWER_INFO:THERMAL_SPEC_POWER``
 
-``CPU_POWER_TIME_WINDOW``
+``CPU_POWER_TIME_WINDOW_CONTROL``
     Maps to ``MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW``
 
 ``CPU_TIMESTAMP_COUNTER``
     Maps to ``MSR::TIME_STAMP_COUNTER:TIMESTAMP_COUNT``
+
+``CPU_UNCORE_FREQUENCY_MAX_CONTROL``
+    Maps to ``MSR::UNCORE_RATIO_LIMIT:MAX_RATIO``
+
+``CPU_UNCORE_FREQUENCY_MIN_CONTROL``
+    Maps to ``MSR::UNCORE_RATIO_LIMIT:MIN_RATIO``
 
 ``CPU_UNCORE_FREQUENCY_STATUS``
     Maps to ``MSR::UNCORE_PERF_STATUS:FREQ``
@@ -225,8 +248,14 @@ Control Aliases
 ``CPU_POWER_LIMIT_CONTROL``
     Maps to ``MSR::PKG_POWER_LIMIT:PL1_POWER_LIMIT``
 
-``CPU_POWER_TIME_WINDOW``
+``CPU_POWER_TIME_WINDOW_CONTROL``
     Maps to ``MSR::PKG_POWER_LIMIT:PL1_TIME_WINDOW``
+
+``CPU_UNCORE_FREQUENCY_MAX_CONTROL``
+    Maps to ``MSR::UNCORE_RATIO_LIMIT:MAX_RATIO``
+
+``CPU_UNCORE_FREQUENCY_MIN_CONTROL``
+    Maps to ``MSR::UNCORE_RATIO_LIMIT:MIN_RATIO``
 
 Example
 -------

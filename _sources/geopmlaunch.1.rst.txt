@@ -264,17 +264,28 @@ GEOPM Options
 --geopm-ctl CONTROL_MODE  .. _geopm-ctl option:
 
                           Use the GEOPM runtime and launch GEOPM with one of
-                          three ``CONTROL_MODE``\ s: *process*, *pthread* or
-                          *application*.
+                          three ``CONTROL_MODE``\ s: *application*, *process*,
+                          or *pthread*.
+
+                          When used with ``srun``, the *application* method of
+                          launch must be called inside an existing allocation
+                          made with ``salloc`` or ``sbatch`` and the command
+                          must request all the compute nodes assigned to the
+                          allocation. This method is the default if the
+                          ``--geopm-ctl`` option is not provided.
+
+                          When invoked with non-MPI applications, the *process*
+                          and *pthread* methods will silently fail to launch geopm.
+                          Only the *application* method will launch geopm with
+                          non-MPI applications.
 
                           The *process* method allocates one extra MPI process
-                          per node for the GEOPM controller, and this is the
-                          default method if the ``--geopm-ctl`` option is not
-                          provided. The *process* method can be used in the
-                          widest variety of cases, but some systems require
-                          that each MPI process be assigned the same number of
-                          CPUs which may waste resources by assigning more than
-                          one CPU to the GEOPM controller process.
+                          per node for the GEOPM controller. The *process* method
+                          can be used in the widest variety of cases, but some
+                          systems require that each MPI process be assigned the
+                          same number of CPUs which may waste resources by
+                          assigning more than one CPU to the GEOPM controller
+                          process.
 
                           The *pthread* method spawns a thread from one MPI
                           process per node to run the GEOPM controller.  The
@@ -284,12 +295,6 @@ GEOPM Options
                           *pthread* option requires support for
                           ``MPI_THREAD_MULTIPLE``, which is not enabled at many
                           sites.
-
-                          The *application* method of launch is not compatible
-                          with ``aprun``; with ``srun``, the call must be made
-                          inside an existing allocation made with ``salloc`` or
-                          ``sbatch`` and the command must request all the
-                          compute nodes assigned to the allocation.
 
                           The ``--geopm-ctl`` option is used by the launcher to
                           set the ``GEOPM_CTL`` environment variable.  The command
@@ -362,7 +367,7 @@ GEOPM Options
 
                               CPU_POWER_LIMIT_CONTROL board 0 200 # Set a 200W power limit
                               # Also set the time limit
-                              CPU_POWER_TIME_WINDOW board 0 0.015
+                              CPU_POWER_TIME_WINDOW_CONTROL board 0 0.015
 
                            This option is used by the launcher to set the
                            ``GEOPM_INIT_CONTROL`` environment variable.  The
@@ -370,25 +375,18 @@ GEOPM Options
                            set in the environment.  See the :ref:`ENVIRONMENT
                            section of geopm(7)<geopm.7:Environment>`.
 
---geopm-affinity-disable  .. _geopm-affinity-disable option:
+--geopm-affinity-enable  .. _geopm-affinity-enable option:
 
-                          Enable direct user control of all application CPU
-                          affinity settings.  When specified, the launcher will
-                          not emit command line arguments or environment
-                          variables related to affinity settings for the
-                          underlying launcher.  The user is free to provide
-                          whatever affinity settings are best for their
-                          application.
+                          GEOPM will choose CPU affinity settings to minimize
+			  interference between the GEOPM Runtime, the OS, and the
+			  application.  When specified, the launcher will emit
+			  command line arguments and/or environment variables
+			  related to affinity settings for the underlying
+			  launcher.  The user should refrain from using of
+			  command line options or environment variable that are
+			  known to modify application CPU affinity when
+			  specifying this option for ``geopmlaunch``.
 
-                          It is recommended that at least one core is left free
-                          for the GEOPM controller thread, and if there is a
-                          free core, the controller will automatically
-                          affinitize itself to a CPU on that core when it
-                          connects with the application.  When this option is
-                          specified the user is responsible for providing
-                          settings that affinitize MPI ranks to distinct CPUs.
-                          Note: this requirement is satisfied by the default
-                          behavior for some launchers like Intel MPI.
 --geopm-endpoint endpoint  .. _geopm-endpoint option:
 
                            Prefix for shared memory keys used by the endpoint.
@@ -555,6 +553,15 @@ GEOPM Options
                      launch the GEOPM runtime in process mode.  When this
                      option is specified, the GEOPM runtime will not be
                      launched.
+--geopm-ctl-local  .. _geopm-ctl-local option:
+
+                   Disable all communication between controllers
+                   running on different compute nodes.  This will
+                   result in one report file per host, and each report
+                   file will have the ``hostname`` appended to the file
+                   path requested by the user.  Note this option has no
+                   effect if ``--geopm-ctl`` or ``--geopm-ctl-disable``
+                   are provided.
 --geopm-ompt-disable  .. _geopm-ompt-disable option:
 
                       Disable OMPT detection of OpenMP regions.
@@ -562,14 +569,26 @@ GEOPM Options
                       for more information about OpenMP region detection.
 --geopm-period  .. _geopm-period option:
 
-               Override the control loop period specified by the Agent.  All
-	       agents have a default control loop period, and this command
-	       line option allows users to set a different value in units of
-	       seconds.  With longer control loop periods, the overhead for
-	       using GEOPM will be reduced, but more interpolation will be
-	       required when aligning the sparsely sampled hardware signals
-	       with the application feedback.  Additionally, agent reaction
-	       time is reduced with longer control loop period.
+                Override the control loop period specified by the Agent.  All
+                agents have a default control loop period, and this command
+                line option allows users to set a different value in units of
+                seconds.  With longer control loop periods, the overhead for
+                using GEOPM will be reduced, but more interpolation will be
+                required when aligning the sparsely sampled hardware signals
+                with the application feedback.  Additionally, agent reaction
+                time is reduced with longer control loop periods.
+--geopm-program-filter  .. _geopm-program-filter option:
+
+                        Only enable profiling for processes where their
+                        ``program_invocation_name`` or 
+                        ``program_invocation_name_short_name`` matches one of the names
+                        in the comma separated list provided by
+                        option.  This is especially useful when
+                        launching a bash script to avoid profiling
+                        bash or other ancillary commands that are not
+                        part of the main application process set.  See
+                        `program_invocation_name(3)` for more details.
+
 
 Examples
 --------

@@ -415,16 +415,25 @@ of geopm(7)</span></a>.</p>
 </dd>
 <dt><kbd><span class="option">--geopm-ctl <var>CONTROL_MODE</var></span></kbd></dt>
 <dd><p id="geopm-ctl-option">Use the GEOPM runtime and launch GEOPM with one of
-three <code class="docutils literal notranslate"><span class="pre">CONTROL_MODE</span></code>s: <em>process</em>, <em>pthread</em> or
-<em>application</em>.</p>
+three <code class="docutils literal notranslate"><span class="pre">CONTROL_MODE</span></code>s: <em>application</em>, <em>process</em>,
+or <em>pthread</em>.</p>
+<p>When used with <code class="docutils literal notranslate"><span class="pre">srun</span></code>, the <em>application</em> method of
+launch must be called inside an existing allocation
+made with <code class="docutils literal notranslate"><span class="pre">salloc</span></code> or <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> and the command
+must request all the compute nodes assigned to the
+allocation. This method is the default if the
+<code class="docutils literal notranslate"><span class="pre">--geopm-ctl</span></code> option is not provided.</p>
+<p>When invoked with non-MPI applications, the <em>process</em>
+and <em>pthread</em> methods will silently fail to launch geopm.
+Only the <em>application</em> method will launch geopm with
+non-MPI applications.</p>
 <p>The <em>process</em> method allocates one extra MPI process
-per node for the GEOPM controller, and this is the
-default method if the <code class="docutils literal notranslate"><span class="pre">--geopm-ctl</span></code> option is not
-provided. The <em>process</em> method can be used in the
-widest variety of cases, but some systems require
-that each MPI process be assigned the same number of
-CPUs which may waste resources by assigning more than
-one CPU to the GEOPM controller process.</p>
+per node for the GEOPM controller. The <em>process</em> method
+can be used in the widest variety of cases, but some
+systems require that each MPI process be assigned the
+same number of CPUs which may waste resources by
+assigning more than one CPU to the GEOPM controller
+process.</p>
 <p>The <em>pthread</em> method spawns a thread from one MPI
 process per node to run the GEOPM controller.  The
 <em>application</em> method launches the <a class="reference internal" href="geopmctl.1.html"><span class="doc">geopmctl(1)</span></a> application in the background which
@@ -432,11 +441,6 @@ connects to the primary compute application. The
 <em>pthread</em> option requires support for
 <code class="docutils literal notranslate"><span class="pre">MPI_THREAD_MULTIPLE</span></code>, which is not enabled at many
 sites.</p>
-<p>The <em>application</em> method of launch is not compatible
-with <code class="docutils literal notranslate"><span class="pre">aprun</span></code>; with <code class="docutils literal notranslate"><span class="pre">srun</span></code>, the call must be made
-inside an existing allocation made with <code class="docutils literal notranslate"><span class="pre">salloc</span></code> or
-<code class="docutils literal notranslate"><span class="pre">sbatch</span></code> and the command must request all the
-compute nodes assigned to the allocation.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">--geopm-ctl</span></code> option is used by the launcher to
 set the <code class="docutils literal notranslate"><span class="pre">GEOPM_CTL</span></code> environment variable.  The command
 line option will override any value currently set in
@@ -492,7 +496,7 @@ an error.</p>
 <p>Example file contents:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CPU_POWER_LIMIT_CONTROL</span> <span class="n">board</span> <span class="mi">0</span> <span class="mi">200</span> <span class="c1"># Set a 200W power limit</span>
 <span class="c1"># Also set the time limit</span>
-<span class="n">CPU_POWER_TIME_WINDOW</span> <span class="n">board</span> <span class="mi">0</span> <span class="mf">0.015</span>
+<span class="n">CPU_POWER_TIME_WINDOW_CONTROL</span> <span class="n">board</span> <span class="mi">0</span> <span class="mf">0.015</span>
 </pre></div>
 </div>
 <p>This option is used by the launcher to set the
@@ -501,23 +505,16 @@ command line option will override any value currently
 set in the environment.  See the <a class="reference internal" href="geopm.7.html#environment"><span class="std std-ref">ENVIRONMENT
 section of geopm(7)</span></a>.</p>
 </dd>
-<dt><kbd><span class="option">--geopm-affinity-disable</span></kbd></dt>
-<dd><p id="geopm-affinity-disable-option">Enable direct user control of all application CPU
-affinity settings.  When specified, the launcher will
-not emit command line arguments or environment
-variables related to affinity settings for the
-underlying launcher.  The user is free to provide
-whatever affinity settings are best for their
-application.</p>
-<p>It is recommended that at least one core is left free
-for the GEOPM controller thread, and if there is a
-free core, the controller will automatically
-affinitize itself to a CPU on that core when it
-connects with the application.  When this option is
-specified the user is responsible for providing
-settings that affinitize MPI ranks to distinct CPUs.
-Note: this requirement is satisfied by the default
-behavior for some launchers like Intel MPI.</p>
+<dt><kbd><span class="option">--geopm-affinity-enable</span></kbd></dt>
+<dd><p id="geopm-affinity-enable-option">GEOPM will choose CPU affinity settings to minimize
+interference between the GEOPM Runtime, the OS, and the
+application.  When specified, the launcher will emit
+command line arguments and/or environment variables
+related to affinity settings for the underlying
+launcher.  The user should refrain from using of
+command line options or environment variable that are
+known to modify application CPU affinity when
+specifying this option for <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>.</p>
 </dd>
 <dt><kbd><span class="option">--geopm-endpoint <var>endpoint</var></span></kbd></dt>
 <dd><p id="geopm-endpoint-option">Prefix for shared memory keys used by the endpoint.
@@ -669,6 +666,15 @@ launch the GEOPM runtime in process mode.  When this
 option is specified, the GEOPM runtime will not be
 launched.</p>
 </dd>
+<dt><kbd><span class="option">--geopm-ctl-local</span></kbd></dt>
+<dd><p id="geopm-ctl-local-option">Disable all communication between controllers
+running on different compute nodes.  This will
+result in one report file per host, and each report
+file will have the <code class="docutils literal notranslate"><span class="pre">hostname</span></code> appended to the file
+path requested by the user.  Note this option has no
+effect if <code class="docutils literal notranslate"><span class="pre">--geopm-ctl</span></code> or <code class="docutils literal notranslate"><span class="pre">--geopm-ctl-disable</span></code>
+are provided.</p>
+</dd>
 <dt><kbd><span class="option">--geopm-ompt-disable</span></kbd></dt>
 <dd><p id="geopm-ompt-disable-option">Disable OMPT detection of OpenMP regions.
 See the <a class="reference internal" href="geopm.7.html#integration-with-ompt"><span class="std std-ref">INTEGRATION WITH OMPT section of geopm(7)</span></a>
@@ -682,7 +688,18 @@ seconds.  With longer control loop periods, the overhead for
 using GEOPM will be reduced, but more interpolation will be
 required when aligning the sparsely sampled hardware signals
 with the application feedback.  Additionally, agent reaction
-time is reduced with longer control loop period.</p>
+time is reduced with longer control loop periods.</p>
+</dd>
+<dt><kbd><span class="option">--geopm-program-filter</span></kbd></dt>
+<dd><p id="geopm-program-filter-option">Only enable profiling for processes where their
+<code class="docutils literal notranslate"><span class="pre">program_invocation_name</span></code> or
+<code class="docutils literal notranslate"><span class="pre">program_invocation_name_short_name</span></code> matches one of the names
+in the comma separated list provided by
+option.  This is especially useful when
+launching a bash script to avoid profiling
+bash or other ancillary commands that are not
+part of the main application process set.  See
+<cite>program_invocation_name(3)</cite> for more details.</p>
 </dd>
 </dl>
 </section>

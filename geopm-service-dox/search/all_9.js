@@ -10,7 +10,7 @@ var searchData=
   ['iouringfallback_282',['IOUringFallback',['../classgeopm_1_1_i_o_uring_fallback.html',1,'geopm::IOUringFallback'],['../classgeopm_1_1_i_o_uring_fallback.html#a150b3c03ec15d6c556fb8c3c80945869',1,'geopm::IOUringFallback::IOUringFallback()']]],
   ['iouringfallback_2ecpp_283',['IOUringFallback.cpp',['../_i_o_uring_fallback_8cpp.html',1,'']]],
   ['iouringfallback_2ehpp_284',['IOUringFallback.hpp',['../_i_o_uring_fallback_8hpp.html',1,'']]],
-  ['iouringimp_285',['IOUringImp',['../classgeopm_1_1_i_o_uring_imp.html',1,'geopm::IOUringImp'],['../classgeopm_1_1_i_o_uring_imp.html#a5b7d6746c579b45bd953fc5c5fe53f3c',1,'geopm::IOUringImp::IOUringImp()']]],
+  ['iouringimp_285',['IOUringImp',['../classgeopm_1_1_i_o_uring_imp.html',1,'geopm::IOUringImp'],['../classgeopm_1_1_i_o_uring_imp.html#a5b7d6746c579b45bd953fc5c5fe53f3c',1,'geopm::IOUringImp::IOUringImp(unsigned entries)'],['../classgeopm_1_1_i_o_uring_imp.html#a1e8c0adcc53ef02e90255d43228685f5',1,'geopm::IOUringImp::IOUringImp(const IOUringImp &amp;other)=delete']]],
   ['iouringimp_2ecpp_286',['IOUringImp.cpp',['../_i_o_uring_imp_8cpp.html',1,'']]],
   ['iouringimp_2ehpp_287',['IOUringImp.hpp',['../_i_o_uring_imp_8hpp.html',1,'']]],
   ['is_5factive_288',['is_active',['../classgeopm_1_1_batch_server_imp.html#a2dfe79aec0d6fbca57fa0d4842aad45c',1,'geopm::BatchServerImp::is_active()'],['../classgeopm_1_1_batch_server.html#add99b27a518670db57fb9fa4c3e2eb13',1,'geopm::BatchServer::is_active()']]],
