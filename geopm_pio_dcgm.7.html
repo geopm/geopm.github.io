@@ -46,10 +46,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
-<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for Runtime Users</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">User Guide for GEOPM Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">User Guide for GEOPM Runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">GEOPM Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">GEOPM Developer Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) – Global Extensible Open Power Manager</a></li>
@@ -172,11 +172,39 @@
 <h1>geopm_pio_dcgm(7) – IOGroup providing signals and controls for NVIDIA GPUs<a class="headerlink" href="#geopm-pio-dcgm-7-iogroup-providing-signals-and-controls-for-nvidia-gpus" title="Permalink to this heading"></a></h1>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
-<p>The DCGMIOGroup implements the <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>
-interface to provide hardware signals for NVIDIA GPUs from the NVIDIA Datacenter GPU Manager.  This IO Group is intended for use with the <a class="reference internal" href="geopm_pio_nvml.7.html"><span class="doc">NVMLIOGroup</span></a></p>
+<p>The DCGMIOGroup implements the <a class="reference internal" href="GEOPM_CXX_MAN_IOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a> interface to provide hardware signals for NVIDIA GPUs
+from the NVIDIA Datacenter GPU Manager.  This IO Group is intended for use with
+the <a class="reference internal" href="geopm_pio_nvml.7.html"><span class="doc">NVMLIOGroup</span></a></p>
 <section id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
-<p>To use the GEOPM DCGM signals and controls GEOPM must be compiled against the DCGM libraries and must be run on a system with hardware supported by DCGM.To compile against the oneAPI LevelZero libraries geopm must be configured using both the –enable-nvml flag and the –enable-dcgm flag.  The optional –with-dcgm flag may be used to indicate the path of the required libraries.</p>
+<p>To use the GEOPM DCGM signals and controls GEOPM must be compiled against the
+NVML and DCGM libraries and must be run on a system with hardware supported by
+DCGM.  To compile against the NVML and DCGM libraries GEOPM must be configured
+using both the <code class="docutils literal notranslate"><span class="pre">--enable-nvml</span></code> flag and the <code class="docutils literal notranslate"><span class="pre">--enable-dcgm</span></code> flag.  The
+optional flags <code class="docutils literal notranslate"><span class="pre">--with-nvml</span></code> and <code class="docutils literal notranslate"><span class="pre">--with-dcgm</span></code> may be used to indicate the
+path of the required libraries.  See <code class="docutils literal notranslate"><span class="pre">configure</span> <span class="pre">--help</span></code> for more information
+about these flags.</p>
+<p>When enabling the DCGM signals, a small modification should be made to the
+<a class="reference external" href="https://github.com/geopm/geopm/blob/dev/service/geopm.service">geopm.service</a>
+systemd configuration file to encode the requirements on the DGCM service.  The
+three lines below should be added to the <code class="docutils literal notranslate"><span class="pre">[Unit]</span></code> section:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
+<span class="n">Wants</span><span class="o">=</span><span class="n">nvidia</span><span class="o">-</span><span class="n">dcgm</span><span class="o">.</span><span class="n">service</span>
+<span class="n">After</span><span class="o">=</span><span class="n">nvidia</span><span class="o">-</span><span class="n">dcgm</span><span class="o">.</span><span class="n">service</span>
+<span class="n">PartOf</span><span class="o">=</span><span class="n">nvidia</span><span class="o">-</span><span class="n">dcgm</span><span class="o">.</span><span class="n">service</span>
+</pre></div>
+</div>
+<p>The DCGM IOGroup requires an instance of nv-hostengine be running on the node
+prior to loading the IOGroup.  For DCGM installation and usage information see
+the <a class="reference external" href="https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/getting-started.html">DCGM Getting Started Guide</a>.
+The DCGM IOGroup will connect to a running nv-hostengine instance if it is
+available when the GEOPM service is started.  If the nv-hostengine is stopped
+the geopm DCGM Signals will throw an error of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Error getting latest values for fields in read_batch: Host engine connection invalid/disconnected&quot;</span>
+</pre></div>
+</div>
+<p>Restarting the nv-hostengine and the geopm service are required to restore
+access to DCGM signals.</p>
 </section>
 </section>
 <section id="signals">
@@ -210,7 +238,8 @@ interface to provide hardware signals for NVIDIA GPUs from the NVIDIA Datacenter
 </section>
 <section id="controls">
 <h2>Controls<a class="headerlink" href="#controls" title="Permalink to this heading"></a></h2>
-<p>Every control is exposed as a signal with the same name.  The relevant signal aggregation information is provided below.</p>
+<p>Every control is exposed as a signal with the same name.  The relevant
+signal aggregation information is provided below.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">DCGM::FIELD_UPDATE_RATE</span></code></dt><dd><p>Rate at which field data is polled.</p>
 <ul class="simple">

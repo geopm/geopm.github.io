@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guide to Service Installation &mdash; GEOPM  documentation</title>
+  <title>Installation &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Guide to Requirements" href="requires.html" />
+    <link rel="next" title="Requirements" href="requires.html" />
     <link rel="prev" title="GEOPM Service" href="service_readme.html" /> 
 </head>
 
@@ -46,24 +46,32 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="service.html">Guide for Service Users</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="service.html">User Guide for GEOPM Service</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="service_readme.html">GEOPM Service</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Guide to Service Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#level-zero-prerequisite">Level Zero Prerequisite</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#download-repositories">Download Repositories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#un-packaged-features">Un-packaged Features</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gpu-support">GPU Support</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites-for-level-zero">Prerequisites for Level Zero</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites-for-nvml">Prerequisites for NVML</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="requires.html">Guide to Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build.html">Guide to Source Builds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security.html">Guide to Service Security</a></li>
-<li class="toctree-l2"><a class="reference internal" href="admin.html">Guide for Service Administrators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client.html">Guide for Service Clients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-repositories">Download Repositories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sles-opensuse-and-centos">SLES, OpenSUSE, and CentOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="runtime.html">Guide for Runtime Users</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-the-packages-don-t-include">What the Packages Don’t Include</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="requires.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html">Source Builds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Service Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin.html">Service Administrators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client.html">Service Clients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">User Guide for GEOPM Runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">GEOPM Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">GEOPM Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
 </ul>
 
@@ -81,8 +89,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="service.html">Guide for Service Users</a></li>
-      <li class="breadcrumb-item active">Guide to Service Installation</li>
+          <li class="breadcrumb-item"><a href="service.html">User Guide for GEOPM Service</a></li>
+      <li class="breadcrumb-item active">Installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -92,82 +100,129 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="guide-to-service-installation">
-<h1>Guide to Service Installation<a class="headerlink" href="#guide-to-service-installation" title="Permalink to this heading"></a></h1>
-<p>Continuous integration creates packages for a variety of Linux
-distributions each time certain branches hosted on GitHub are updated.
-This is supported by GitHub Actions, in conjunction with the OpenSUSE
-Build Service (OBS).</p>
-<p>Packages built by OBS:</p>
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<p>Each time specified branches hosted on GitHub are updated, continuous
+integration generates packages for numerous Linux distributions. This
+process is uses GitHub Actions, combined with the OpenSUSE Build Service
+(OBS). Here are the packages curated by OBS:</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">geopm-service</span></code>:</dt><dd><p>Installs and activates the geopm systemd service</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>:</dt><dd><p>Provides the library that supports the PlatformIO interface</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code>:</dt><dd><p>Implementation of geopmd, CLI tools, and bindings for PlatformIO</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">geopm-service-devel</span></code>:</dt><dd><p>Headers and man pages for C and C++ APIs provided by <code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code></p>
-</dd>
-</dl>
-</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm-service</span></code>: Sets up and enables the geopm systemd service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>: Provides the library that supports the PlatformIO interface.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code>: Houses the implementation of geopmd, CLI utilities, and bindings for PlatformIO.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geopm-service-devel</span></code>: Provides headers and man pages for C and C++ APIs supportable by <code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>.</p></li>
 </ul>
-<p>In addition to these packages that are built each time a tracked
-branch is updated, the download repositories also provide
-<code class="docutils literal notranslate"><span class="pre">python3-dasbus</span></code> version 1.6.  This version of dasbus is required by
-<code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code>, and is not provided by the supported Linux
-distributions.</p>
-<p>Installing the <code class="docutils literal notranslate"><span class="pre">geopm-service</span></code> package will also install the
-<code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>, <code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code> and <code class="docutils literal notranslate"><span class="pre">python3-dasbus</span></code> dependency
-packages.  The <code class="docutils literal notranslate"><span class="pre">geopm-service-devel</span></code> package must be explicitly
-installed if it is required by the user.</p>
-<section id="level-zero-prerequisite">
-<h2>Level Zero Prerequisite<a class="headerlink" href="#level-zero-prerequisite" title="Permalink to this heading"></a></h2>
-<p>Before installing the GEOPM Service packages, the <code class="docutils literal notranslate"><span class="pre">level-zero</span></code>
-package must be installed.  This package enables GEOPM’s support for
-GPU metrics and controls.  The <code class="docutils literal notranslate"><span class="pre">level-zero</span></code> package is not currently
-provided upstream by the Linux distributions that GEOPM supports.
-Please follow the
-<a class="reference external" href="https://dgpu-docs.intel.com/installation-guides/index.html">Intel(R) GPGPU software package installation guide for Linux</a>
-to install the <code class="docutils literal notranslate"><span class="pre">level-zero</span></code> package on your system.  The linked
-guide shows how to add the OS appropriate package management
-repository to your system.  Once the repository has been added, use
-<code class="docutils literal notranslate"><span class="pre">yum</span></code> or <code class="docutils literal notranslate"><span class="pre">zypper</span></code> to install the <code class="docutils literal notranslate"><span class="pre">level-zero</span></code> package.  Only the
-<code class="docutils literal notranslate"><span class="pre">level-zero</span></code> package is required, there is no GEOPM requirement to
-install any of the other packages mentioned in the guides linked
-above.  Installing the <code class="docutils literal notranslate"><span class="pre">level-zero-devel</span></code> package will enable the
-user to build GEOPM from source with GPU support if that is desired.</p>
+<p>Installation of <code class="docutils literal notranslate"><span class="pre">geopm-service</span></code> will involve the dependency packages:
+<code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>, <code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code> and <code class="docutils literal notranslate"><span class="pre">python3-dasbus</span></code>. However, explicit
+installation is obligatory for anyone seeking to use <code class="docutils literal notranslate"><span class="pre">geopm-service-devel</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Besides these routinely curated packages, the download repositories also
+grant access to <code class="docutils literal notranslate"><span class="pre">python3-dasbus</span></code> version 1.6. This version is a
+prerequisite for <code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code>, but it is not included by some of
+the Linux distributions that support GEOPM.  In particular, starting with
+SLES 15.4 the necessary <code class="docutils literal notranslate"><span class="pre">python3-dasbus</span></code> version is available in the
+regular package repositories.  This support will be removed from OBS in
+a future release.</p>
+</div>
+<hr class="docutils" />
+<section id="gpu-support">
+<h2>GPU Support<a class="headerlink" href="#gpu-support" title="Permalink to this heading"></a></h2>
+<p>In order to leverage the GEOPM Service’s support for GPUs, you must install the
+necessary libraries for either Intel GPUs (levelzero) or Nvidia GPUs (NVML).</p>
+<section id="prerequisites-for-level-zero">
+<h3>Prerequisites for Level Zero<a class="headerlink" href="#prerequisites-for-level-zero" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">levelzero</span></code> allows GEOPM to read metrics and enact controls from Intel GPUs.
+Currently, none of the Linux distributions supporting GEOPM provide this
+package upstream.</p>
+<p>To install <code class="docutils literal notranslate"><span class="pre">level-zero</span></code>, use the one of the following:</p>
+<p>For up-to-date distributions (e.g. SLES 15.4 and Ubuntu 22.04):</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://dgpu-docs.intel.com/driver/installation.html">Intel(R) software for general purpose GPU capabilities</a></p></li>
+</ul>
+<p>For older, deprecated distributions (e.g. SLES 15.3 and Ubuntu 20.04):</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://dgpu-docs.intel.com/installation-guides/index.html">Intel(R) software for general purpose GPU capabilities</a></p></li>
+</ul>
+<p>Once added your system’s OS appropriate package management repository, you can
+use <code class="docutils literal notranslate"><span class="pre">yum</span></code>, <code class="docutils literal notranslate"><span class="pre">zypper</span></code>, or <code class="docutils literal notranslate"><span class="pre">apt</span></code> to install the package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">level-zero-devel</span></code> package is optional unless building GEOPM from
+source with GPU support.</p>
+</div>
 </section>
+<section id="prerequisites-for-nvml">
+<h3>Prerequisites for NVML<a class="headerlink" href="#prerequisites-for-nvml" title="Permalink to this heading"></a></h3>
+<p>To build with support for Nvidia’s GPUs please follow their installation guide
+for CUDA here:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html">NVIDIA CUDA Installation Guide for Linux</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Source builds that use <code class="docutils literal notranslate"><span class="pre">--enable-nvml</span></code> require the following package to be
+installed: <code class="docutils literal notranslate"><span class="pre">libnvidia-ml-dev</span></code></p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
 <section id="download-repositories">
 <h2>Download Repositories<a class="headerlink" href="#download-repositories" title="Permalink to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">release-v2.0</span></code> branch tracks the v2.0 release including any
-hotfix releases for v2.0.0 that could occur in the future.  This
-represents the latest stable GEOPM release.  The <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch is the
-default branch containing the most up to date stable development.  The
-builds from these two branches have the following download repository
-pages:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">release-v3.0</span></code> branch tracks the v3.0 GEOPM release, including any
+potential hotfixes that could occur in the future. It captures the latest
+stable GEOPM release.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch, however, presents the most up-to-date stable development.
+See below for download repository information for your Linux distribution.</p>
+<section id="sles-opensuse-and-centos">
+<h3>SLES, OpenSUSE, and CentOS<a class="headerlink" href="#sles-opensuse-and-centos" title="Permalink to this heading"></a></h3>
+<p>When using the below links, it is preferable to click on your desired OS and
+follow the procedure for “Add repositoriy and install manually”.  If you do
+this, installing the <code class="docutils literal notranslate"><span class="pre">geopm-service</span></code> package will automatically install the
+remaining dependencies (e.g. <code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>, etc.).  If required for source
+builds, you still must manually install <code class="docutils literal notranslate"><span class="pre">geopm-service-devel</span></code>.</p>
+<p>While you <em>can</em> download the binary packages directly and install through your
+package manager, you must specify all of the required packages at install time
+(i.e. <code class="docutils literal notranslate"><span class="pre">geopm-service</span></code>, <code class="docutils literal notranslate"><span class="pre">libgeopmd2</span></code>, <code class="docutils literal notranslate"><span class="pre">python3-geopmdpy</span></code>, and optionally
+<code class="docutils literal notranslate"><span class="pre">geopm-service-devel</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will not automatically pull updates and bug fixes unless the repository
+is added.</p>
+</div>
 <ul class="simple">
 <li><dl class="simple">
-<dt>Install Release Packages (<code class="docutils literal notranslate"><span class="pre">release-v2.0</span></code> branch)</dt><dd><ul>
-<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Arelease-v2.0&amp;package=geopm-service">geopm-service</a></p></li>
-<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Arelease-v2.0&amp;package=libgeopmd2">libgeopmd2</a></p></li>
-<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Arelease-v2.0&amp;package=python3-geopmdpy">python3-geopmdpy</a></p></li>
-<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Arelease-v2.0&amp;package=geopm-service-devel">geopm-service-devel</a></p></li>
+<dt>Release Packages (<code class="docutils literal notranslate"><span class="pre">release-v3.0</span></code> branch - Intel GPU support via levelzero)</dt><dd><ul>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease%3Asupplementary&amp;package=geopm-service">geopm-service</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease%3Asupplementary&amp;package=libgeopmd2">libgeopm2</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease%3Asupplementary&amp;package=python3-geopmdpy">python3-geopmdpy</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease%3Asupplementary&amp;package=geopm-service-devel">geopm-service-devel</a></p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Install Development Packages (<code class="docutils literal notranslate"><span class="pre">dev</span></code> branch)</dt><dd><ul>
+<dt>Release Packages (<code class="docutils literal notranslate"><span class="pre">release-v3.0</span></code> branch - no GPU support)</dt><dd><ul>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease&amp;package=geopm-service">geopm-service</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease&amp;package=libgeopmd2">libgeopm2</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease&amp;package=python3-geopmdpy">python3-geopmdpy</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org//download.html?project=home%3Ageopm%3Arelease&amp;package=geopm-service-devel">geopm-service-devel</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Development Packages (<code class="docutils literal notranslate"><span class="pre">dev</span></code> branch - Intel GPU support via levelzero)</dt><dd><ul>
+<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Asupplementary&amp;package=geopm-service">geopm-service</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Asupplementary&amp;package=libgeopmd2">libgeopmd2</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Asupplementary&amp;package=python3-geopmdpy">python3-geopmdpy</a></p></li>
+<li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm%3Asupplementary&amp;package=geopm-service-devel">geopm-service-devel</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Development Packages (<code class="docutils literal notranslate"><span class="pre">dev</span></code> branch - no GPU support)</dt><dd><ul>
 <li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm&amp;package=geopm-service">geopm-service</a></p></li>
 <li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm&amp;package=libgeopmd2">libgeopmd2</a></p></li>
 <li><p><a class="reference external" href="https://software.opensuse.org/download.html?project=home%3Ageopm&amp;package=python3-geopmdpy">python3-geopmdpy</a></p></li>
@@ -177,40 +232,61 @@ pages:</p>
 </dl>
 </li>
 </ul>
-<p>Use these links to install the GEOPM Service packages on your system.  The
-links contain instructions and examples for each of the supported operating
-systems.</p>
-<p>Note that the development branch always provides a version which is at
-least as recent as the release branch.  For this reason, updates will
-always come from the development branch download repository if both
-the development repository and the release repository are added to
-your package configuration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not add more than one of the above repositories to your system package
+manager at the same time.  Only add one, and ensure all GEOPM packages are
+completely removed from the system when changing GEOPM repo configuration in
+the package manager.</p>
+</div>
 </section>
-<section id="un-packaged-features">
-<h2>Un-packaged Features<a class="headerlink" href="#un-packaged-features" title="Permalink to this heading"></a></h2>
-<p>The packages described above do not provide the
-<a class="reference internal" href="runtime.html"><span class="doc">GEOPM HPC Runtime</span></a> features (e.g.
-<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>, <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>,
-<a class="reference internal" href="geopm_report.7.html"><span class="doc">geopm_report(7)</span></a>, <code class="docutils literal notranslate"><span class="pre">libgeopm.so</span></code>, etc.).
-The GEOPM HPC Runtime must be built against a particular implementation of the
-Message Passing Interface (MPI).  Typically the implementation of MPI is
-specific to the system where the HPC application is being run.  An exception
-to this rule is the OpenHPC distribution.  GEOPM version 1 has been packaged
-with <a class="reference external" href="http://openhpc.community/downloads/">OpenHPC releases</a>, and we hope to distribute version 2 with OpenHPC in the future.
-For users interested in GEOPM version 2, a source build is required.</p>
-<p>Support for NVIDIA GPUs with NVML or DCGM is also not provided by
-installing the packages described above.  Support for NVIDIA GPUs
-relies on libraries that are not bundled with the OpenSUSE OBS build
-system where the GEOPM packages are built and distributed.  A source
-build of the GEOPM Service is required to enable use of NVML, or DCGM.
-This build process must be done in an environment where the dependency
-libraries and headers are present.</p>
-<p>In order to access these GEOPM features which are not packaged, a user should
-build GEOPM from source.  The best recommendation for building GEOPM from
-source is to follow the <a class="reference internal" href="devel.html#developer-build-process"><span class="std std-ref">developer build process</span></a>
-posted in the <a class="reference internal" href="devel.html"><span class="doc">developer guide</span></a>.  Note that it may be of interest
-to git checkout a git tag (e.g. <code class="docutils literal notranslate"><span class="pre">v2.0.0</span></code>) to create a build based on a
-particular release.</p>
+<section id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this heading"></a></h3>
+<p>There are 2 repositories that are maintained for GEOPM support on Ubuntu: one
+corresponding to the <code class="docutils literal notranslate"><span class="pre">release-v3.0</span></code> branch while the other corresponds to the
+<code class="docutils literal notranslate"><span class="pre">dev</span></code> branch.  Both are built with Nvidia GPU support <strong>only</strong>.</p>
+<p>First, add the necessary upstream repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ONLY DO ONE OF THE FOLLOWING add-apt-repository COMMANDS:</span>
+
+<span class="c1"># Add the release repo:</span>
+$<span class="w"> </span>sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:geopm/release
+<span class="c1"># OR add the dev repo:</span>
+$<span class="w"> </span>sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:geopm/dev
+</pre></div>
+</div>
+<p>Then pull all the current updates, install GEOPM, start/enable the service, and
+configure the initial access lists:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+$<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>geopm-service<span class="w"> </span>libgeopmd-dev<span class="w"> </span>libgeopmd2<span class="w"> </span>python3-geopmdpy
+<span class="c1"># Start and enable the service</span>
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>geopm
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>geopm
+<span class="c1"># Setup initial access: all users can access all signals and controls</span>
+$<span class="w"> </span>sudo<span class="w"> </span>geopmaccess<span class="w"> </span>-a<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>geopmaccess<span class="w"> </span>-w
+$<span class="w"> </span>sudo<span class="w"> </span>geopmaccess<span class="w"> </span>-ac<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>geopmaccess<span class="w"> </span>-wc
+</pre></div>
+</div>
+<p>For more information see:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://launchpad.net/~geopm/+archive/ubuntu/release">GEOPM release repo on Launchpad</a></p></li>
+<li><p><a class="reference external" href="https://launchpad.net/~geopm/+archive/ubuntu/dev">GEOPM dev repo on Launchpad</a></p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="what-the-packages-don-t-include">
+<h2>What the Packages Don’t Include<a class="headerlink" href="#what-the-packages-don-t-include" title="Permalink to this heading"></a></h2>
+<p>Please note that the packages listed above do not offer the <a class="reference internal" href="runtime.html"><span class="doc">GEOPM Runtime</span></a> features (e.g. <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>,
+<a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>, <a class="reference internal" href="geopm_report.7.html"><span class="doc">geopm_report(7)</span></a>,
+<code class="docutils literal notranslate"><span class="pre">libgeopm.so</span></code> and others.)</p>
+<p>For information on how to install the GEOPM Runtime, see <a class="reference internal" href="runtime.html"><span class="doc">GEOPM Runtime</span></a>.</p>
+<p>For GEOPM features not included in these packages, build GEOPM from
+source. The best instructions for this process can be found in the
+<a class="reference internal" href="devel.html#developer-build-process"><span class="std std-ref">developer build process</span></a> within the
+<a class="reference internal" href="devel.html"><span class="doc">developer guide</span></a>. Keep in mind that you may need to git checkout
+a git tag (e.g. <code class="docutils literal notranslate"><span class="pre">v3.0.0</span></code>) to create a build based on a specific release.</p>
 </section>
 </section>
 
@@ -219,7 +295,7 @@ particular release.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="service_readme.html" class="btn btn-neutral float-left" title="GEOPM Service" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="requires.html" class="btn btn-neutral float-right" title="Guide to Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="requires.html" class="btn btn-neutral float-right" title="Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

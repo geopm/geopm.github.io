@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guide for Runtime Users &mdash; GEOPM  documentation</title>
+  <title>User Guide for GEOPM Runtime &mdash; GEOPM  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Guide for Contributors" href="contrib.html" />
-    <link rel="prev" title="Guide for Service Clients" href="client.html" /> 
+    <link rel="next" title="GEOPM Contributor Guide" href="contrib.html" />
+    <link rel="prev" title="Service Clients" href="client.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,11 +46,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="service.html">Guide for Service Users</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide for Runtime Users</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#measuring-performance">1. Measuring Performance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hardware-configuration">2. Hardware Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-data-analysis">3. Advanced Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">User Guide for GEOPM Service</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide for GEOPM Runtime</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-model">User Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#measuring-performance">1. Measuring Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hardware-configuration">2. Hardware Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-data-analysis">3. Advanced Data Analysis</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-requirements">Build Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#building-the-geopm-runtime">Building the GEOPM Runtime</a></li>
@@ -64,8 +67,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#resource-manager-integration">Resource Manager Integration</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="contrib.html">Guide for Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devel.html">Guide for GEOPM Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">GEOPM Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">GEOPM Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
 </ul>
 
@@ -83,7 +86,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Guide for Runtime Users</li>
+      <li class="breadcrumb-item active">User Guide for GEOPM Runtime</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/runtime.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -93,160 +96,195 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="guide-for-runtime-users">
-<h1>Guide for Runtime Users<a class="headerlink" href="#guide-for-runtime-users" title="Permalink to this heading"></a></h1>
-<p>The GEOPM Runtime is software designed to enhance energy efficiency of
-applications though active hardware configuration.  The architecture is
-designed to provide a secure infrastructure to support a wide range
-of tuning algorithms while solving three related challenges:</p>
+  <section id="user-guide-for-geopm-runtime">
+<h1>User Guide for GEOPM Runtime<a class="headerlink" href="#user-guide-for-geopm-runtime" title="Permalink to this heading"></a></h1>
+<p>The GEOPM Runtime is for software designed to enhance energy efficiency of
+applications through active hardware configuration.</p>
+<section id="user-model">
+<h2>User Model<a class="headerlink" href="#user-model" title="Permalink to this heading"></a></h2>
+<p>The architecture is designed to provide a secure infrastructure to
+support a wide range of tuning algorithms while solving three related
+challenges:</p>
 <section id="measuring-performance">
-<h2>1. Measuring Performance<a class="headerlink" href="#measuring-performance" title="Permalink to this heading"></a></h2>
-<p>The first challenge is to enable hardware tuning algorithms to derive
-a robust estimate of application performance.  This is crucial because
-measurements of energy efficiency are expressed as ratios of
-performance to power, e.g. “perf per watt.”  Any dynamic tuning of
-hardware power control parameters with a goal of energy efficiency
-must derive some estimate of application performance.  Without
-application feedback about the critical path, these performance
-estimates may be very inaccurate.  In this way, hardware tuning
-algorithms may interfere with application performance leading to
-longer run times which incur even higher energy costs per unit of work
-than if an adaptive algorithm were not applied.</p>
+<h3>1. Measuring Performance<a class="headerlink" href="#measuring-performance" title="Permalink to this heading"></a></h3>
+<p>For hardware tuning algorithms, the first challenge involves generating a
+durable estimate of application performance. In energy efficiency terms,
+performance measurements are performance-to-power ratios, for example,
+“perf per watt”. Therefore, any dynamic hardware power control tuning
+that aims for energy efficiency must formulate an estimate of application
+performance. Without specific application feedback on the critical path,
+these performance estimate might prove inaccurate, causing hardware
+tuning algorithms to potentially disrupt application performance and lead
+to elongated run times, resulting in higher energy costs per unit of work
+than without the adaptive algorithm.</p>
 </section>
 <section id="hardware-configuration">
-<h2>2. Hardware Configuration<a class="headerlink" href="#hardware-configuration" title="Permalink to this heading"></a></h2>
-<p>This leads to the second challenge: enabling a hardware control
-algorithm to be driven by unprivileged user input (i.e. application
-feedback) is a security risk.  Without proper guards in place, this
-can lead to escalation of privilege, denial of service, and impacts to
-quality of service for other users of the system.  The GEOPM Service
-is specifically designed to address these problems.</p>
+<h3>2. Hardware Configuration<a class="headerlink" href="#hardware-configuration" title="Permalink to this heading"></a></h3>
+<p>The second challenge arises from allowing hardware control algorithms to
+be influenced by unprivileged user input (like application feedback), which
+presents a security risk. Not having adequate checks can result in escalated
+privileges, service denial, and impacts on other system users’ quality of
+service. GEOPM Service is created specifically to mitigate these issues.</p>
 </section>
 <section id="advanced-data-analysis">
-<h2>3. Advanced Data Analysis<a class="headerlink" href="#advanced-data-analysis" title="Permalink to this heading"></a></h2>
-<p>The third challenge is providing a software development platform for
-control algorithms that can be safely deployed and use high level
-languages for data analysis.  To effectively gain energy efficiency
-with some applications, significant software dependencies may be
-required.  Control algorithms may rely on optimization software like
-machine learning packages, or other numerical packages.  The
-application being optimized may be composed of millions of lines of
-code, and there may be significant coupling between the application
-and control algorithm.  For these reasons, restricting the privileges
-of the processes running the control algorithm reduces software
-security audit requirements significantly.</p>
+<h3>3. Advanced Data Analysis<a class="headerlink" href="#advanced-data-analysis" title="Permalink to this heading"></a></h3>
+<p>The third challenge is to provide a software development platform suitable for
+control algorithms that can be securely deployed and use high-level languages
+for data analysis. To effectively enhance energy efficiency for certain
+applications, substantial software dependencies may be required. Control
+algorithms might lean on optimization software like machine learning
+packages or other numerical packages. The application being optimized could
+include millions of lines of code, and there may be significant coupling
+between the application and the control algorithm. Limiting the privileges
+of the process running the control algorithm significantly reduces software
+security audit requirements.</p>
+</section>
 </section>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
-<p>The GEOPM Runtime enables interactions between GEOPM’s <a class="reference internal" href="geopm_prof.3.html"><span class="doc">application
-instrumentation interfaces</span></a> and
-<a class="reference internal" href="geopm_pio.7.html"><span class="doc">platform monitoring/control interfaces</span></a>.</p>
-<p>By default, the GEOPM Runtime simply summarizes relationships between
-application instrumentation and platform-monitoring interfaces in a report.
-More complex interactions, such as dynamic control of platform settings, can
-be enabled by using different GEOPM <em>agents</em>. See the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> documentation for more information about user-facing GEOPM
-Runtime launch options.</p>
-<figure class="align-center" id="id1">
-<img alt="An illustration of geopmlaunch running on 2 servers, generating a trace file per host, and one report across all hosts." src="https://geopm.github.io/images/geopm-runtime-usage.svg" /><figcaption>
-<p><span class="caption-text">The geopmlaunch tool is the main user interface to the GEOPM Runtime. It
-wraps a launcher application (srun in this example), generates a summarizing
-report file, and optionally generates a time-series trace per host.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-<div class="admonition-quick-start admonition">
-<p class="admonition-title">Quick Start</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> with your application:</p>
+<p>The GEOPM Runtime creates a bridge between GEOPM’s <a class="reference internal" href="geopm_prof.3.html"><span class="doc">application
+instrumentation interfaces</span></a> and <a class="reference internal" href="geopm_pio.7.html"><span class="doc">platform
+monitoring/control interfaces</span></a>.</p>
+<p>By default, the GEOPM Runtime presents relationships between application
+instrumentation and platform-monitoring interfaces in a <em>report</em>. For more
+complex interactions, such as dynamic control of platform settings, different
+GEOPM <em>agents</em> can be utilized.  For more information on user-facing GEOPM
+Runtime launch options, please refer to <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>
+documentation.</p>
+<figure class="align-center">
+<img alt="An illustration of geopmlaunch running on 2 servers, generating a trace file per host, and one report across all hosts." src="https://geopm.github.io/images/geopm-runtime-usage.svg" /></figure>
+<div class="admonition-quick-start-for-mpi-applications admonition">
+<p class="admonition-title">Quick start for MPI applications</p>
+<blockquote>
+<div><p>The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> tool is the recommended user interface for GEOPM Runtime. It wraps a launcher application
+(like srun in this example), generates a summarizing report file, and optionally generates a time-series trace for each host.</p>
+<p>The steps for using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> with your MPI application are:</p>
+</div></blockquote>
 <ul class="simple">
 <li><p>Specify how many nodes and processes to use.</p></li>
 <li><p>Run the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command wherever you would normally run the
-wrapped command (e.g., <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>, etc.).</p></li>
+wrapped launcher command (e.g., <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>, etc.).</p></li>
 <li><p>Read the generated <code class="docutils literal notranslate"><span class="pre">geopm.report</span></code> file</p></li>
 </ul>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Examples using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># Launch with srun and explore the generated GEOPM report</span>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Examples using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Launch<span class="w"> </span>with<span class="w"> </span>srun<span class="w"> </span>and<span class="w"> </span>examine<span class="w"> </span>the<span class="w"> </span>generated<span class="w"> </span>GEOPM<span class="w"> </span>report
 <span class="gp">$ </span>geopmlaunch<span class="w"> </span>srun<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span><span class="w"> </span>-n<span class="w"> </span><span class="m">20</span><span class="w"> </span>--<span class="w"> </span>./my-app
 <span class="gp">$ </span>less<span class="w"> </span>geopm.report
-<span class="gp">$ </span><span class="c1"># Launch with Intel mpiexec and explore the generated GEOPM report</span>
+<span class="gp"># </span>Launch<span class="w"> </span>with<span class="w"> </span>Intel<span class="w"> </span>mpiexec<span class="w"> </span>and<span class="w"> </span>examine<span class="w"> </span>the<span class="w"> </span>generated<span class="w"> </span>GEOPM<span class="w"> </span>report
 <span class="gp">$ </span>geopmlaunch<span class="w"> </span>impi<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-ppn<span class="w"> </span><span class="m">20</span><span class="w"> </span>--<span class="w"> </span>./my-app
 <span class="gp">$ </span>less<span class="w"> </span>geopm.report
-<span class="gp">$ </span><span class="c1"># show all options and available launchers</span>
+<span class="gp"># </span>Display<span class="w"> </span>all<span class="w"> </span>options<span class="w"> </span>and<span class="w"> </span>available<span class="w"> </span>launchers
 <span class="gp">$ </span>geopmlaunch<span class="w"> </span>--help
 </pre></div>
 </div>
 </div>
-<p>The <a class="reference external" href="https://github.com/geopm/geopm/tree/dev/tutorial#geopm-tutorial">GEOPM Runtime tutorial</a> shows how
-to profile unmodified applications, select and evaluate different GEOPM Agent
-algorithms, and how to add markup to an application.  The tutorial provides a
-starting point for someone trying to get familiar with the GEOPM Runtime.</p>
 </div>
-<p>The runtime enables complex coordination between hardware settings across all
-compute nodes used by a distributed HPC application in
-response to the application’s behavior and resource manager requests. The
-dynamic coordination is implemented as a hierarchical control system
-for scalable communication and decentralized control.</p>
-<p>GEOPM <em>agents</em> can utilize the hierarchical control system to optimize for
-various objective functions including maximizing global application performance
-within a power bound (e.g., the GEOPM <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">power_balancer agent</span></a>) or
-minimizing energy consumption with marginal degradation of application
-performance.  The root of the control hierarchy tree can communicate
-with the system resource manager to extend the hierarchy above the
-individual MPI application and enable the management of system power
-resources for multiple MPI jobs and multiple users by the system
-resource manager.</p>
-<p>The GEOPM Runtime package provides the libgeopm shared object library.
-There are several command line tools included in GEOPM which have
-dedicated manual pages.  The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>
-command line tool is used to launch an MPI application while enabling
-the GEOPM runtime to create a GEOPM Controller thread on each compute
-node.  The Controller loads plugins and executes the Agent algorithm
-to control the compute application.  The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> command is part of the geopmpy python package that is
-included in the GEOPM installation.  See the <a class="reference internal" href="geopm.7.html"><span class="doc">GEOPM overview man
-page</span></a> for further documentation and links.</p>
-<p>The GEOPM Runtime provides some built-in algorithms, each as an
-“Agent” that implements the <a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html"><span class="doc">geopm::Agent(3)</span></a> class interface.
-A developer may extend these algorithm features by writing an Agent
-plugin.  A new implementation of this class can be dynamically loaded
-at runtime by the GEOPM Controller.  The Agent class defines which
-data are collected, how control decisions are made, and what messages
-are communicated between Agents in the tree hierarchy of compute
-nodes.  The reading of data and writing of controls from within a
-compute node is abstracted from the Agent through the PlatformIO
-interface.  The PlatformIO interface is provided by the GEOPM Service
-package which is contained in the service directory of the GEOPM
-repository.  The PlatformIO abstraction enables Agent implementations
-to be ported to different hardware platforms without modification.</p>
-<p>The libgeopm library can be called directly or indirectly within MPI
-applications to enable application feedback for informing the control
-decisions.  The indirect calls are facilitated by GEOPM’s integration
-with MPI and OpenMP through their profiling decorators, and the direct
-calls are made through the <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a> or
-<a class="reference internal" href="geopm_fortran.3.html"><span class="doc">geopm_fortran(3)</span></a>
-interfaces.  Marking up a compute application with profiling
-information through these interfaces can enable better integration of
-the GEOPM runtime with the compute application and more precise
-control.</p>
+<div class="admonition-quick-start-for-non-mpi-applications admonition">
+<p class="admonition-title">Quick start for Non-MPI applications</p>
+<p>In order to profile non-MPI applications, the recommended approach is to launch
+the GEOPM runtime alongside the target application. This can be done by launching
+the <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> application in the background on every host node that the non-MPI
+application is expected to run. After a clean or forced termination of the
+application being profiled, the <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> application is designed to terminate
+and generate a summarizing report file, and optionally, a time-series trace per host.</p>
+<p>The following requirements must be met while launching <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> with your
+non-MPI application:</p>
+<ul class="simple">
+<li><p>Both the <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> process and the application process must have
+the <code class="docutils literal notranslate"><span class="pre">GEOPM_PROFILE</span></code> environment variable set to the <strong>same</strong>
+value.</p></li>
+<li><p>The application process must have <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD=libgeopm.so.2</span></code> set
+in the environment, or the application binary must be linked
+directly to <code class="docutils literal notranslate"><span class="pre">libgeopm.so.2</span></code> at compile time.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT</span></code> environment variable must be set in the
+environment of the <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> process.</p></li>
+<li><p>While not necessary in this example, in case of multiple extraneous processes
+getting launched, the optional <code class="docutils literal notranslate"><span class="pre">GEOPM_PROGRAM_FILTER</span></code> environment variable
+can be set to explicitly list the program invocation name of the specific
+non-MPI process that needs to be profiled.</p></li>
+<li><p>While optional in this example, in case of launching non-MPI applications across
+multiple nodes, the <code class="docutils literal notranslate"><span class="pre">GEOPM_CTL_LOCAL</span></code> environment variable should be set in order
+to generate a unique GEOPM report file for each host node. This disables all
+intra-process MPI communication between the GEOPM controllers.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Examples using <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">GEOPM_PROFILE</span><span class="o">=</span>sleep-ten<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GEOPM_REPORT</span><span class="o">=</span>sleep-ten.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GEOPM_CTL_LOCAL</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GEOPM_TRACE</span><span class="o">=</span>sleep-ten-trace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GEOPM_PROGRAM_FILTER</span><span class="o">=</span>sleep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>geopmctl<span class="w"> </span><span class="p">&amp;</span>
+<span class="gp">$ </span><span class="nv">GEOPM_PROFILE</span><span class="o">=</span>sleep-ten<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>libgeopm.so.2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>sleep<span class="w"> </span><span class="m">10</span>
+<span class="gp">$ </span>cat<span class="w"> </span>sleep-ten.yaml
+<span class="gp">$ </span>awk<span class="w"> </span>-F<span class="se">\|</span><span class="w"> </span><span class="s1">&#39;{print $1, $6, $8}&#39;</span><span class="w"> </span>sleep-ten-trace*<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <a class="reference external" href="https://geopm.github.io/geopm.7.html#geopm-environment-variables">GEOPM Environment Variables</a> section
+includes a complete listing of the environment variables accepted by the GEOPM runtime.</p>
+<p>The <a class="reference external" href="https://github.com/geopm/geopm/tree/dev/tutorial#geopm-tutorial">GEOPM runtime tutorial</a> shows how
+to profile unmodified applications, select and evaluate different GEOPM agent
+algorithms (see below), and how to add markup to an application.  The tutorial
+provides a starting point for someone trying to get familiar with the GEOPM runtime.</p>
+<p>GEOPM <em>agents</em> can exploit this hierarchical control system to optimize
+various objective functions. Examples include maximizing application
+performance within a power limit (such as GEOPM <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">power_balancer
+agent</span></a>) or decreasing energy consumption while
+minimally affecting application performance. The control hierarchy root
+can communicate with the system resource manager to extend the hierarchy
+beyond the individual MPI application, thus facilitating multiple MPI jobs
+and multiple-user system resource management.</p>
+<p>The GEOPM Runtime package includes the libgeopm shared object library. GEOPM
+comes with numerous command-line tools, each with dedicated manual pages. The
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> command-line tool launches an MPI
+application, enabling the GEOPM runtime to create a GEOPM Controller thread on
+each compute node. The Controller loads plugins and runs the Agent algorithm
+to manage the compute application. The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>
+command is featured in the geopmpy python package that is part of the GEOPM
+installation. For more documentation and links, please visit the <a class="reference internal" href="geopm.7.html"><span class="doc">GEOPM
+overview man page</span></a>.</p>
+<p>GEOPM Runtime offers several built-in algorithms, each incorporated within an
+“Agent” implementing the <a class="reference internal" href="GEOPM_CXX_MAN_Agent.3.html"><span class="doc">geopm::Agent(3)</span></a> class
+interface. Developers can expand these algorithm features by creating an Agent
+plugin. An implementation of this class can be dynamically loaded at runtime
+by the GEOPM Controller. The Agent class determines what data is collected,
+how control decisions are made, and how messages are exchanged between
+Agents in the compute nodes’ tree hierarchy. The GEOPM Service package,
+which resides in the service directory of the GEOPM repository, provides
+the PlatformIO interface which abstracts reading signals and writing controls
+from the Agent within a compute node. This allows Agent implementations to
+be ported to various hardware platforms without modification.</p>
+<p>The libgeopm library can be called indirectly or directly within
+MPI applications, enabling application feedback to aid control
+decisions. Indirect calls are facilitated through GEOPM’s integration with
+MPI and OpenMP via their profiling decorators. Direct calls are made through
+<a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a> or <a class="reference internal" href="geopm_fortran.3.html"><span class="doc">geopm_fortran(3)</span></a>
+interfaces. The application can be better integrated with the GEOPM runtime
+and controlled more accurately by marking up the compute application with
+profiling information obtained through these interfaces.</p>
 </section>
 <section id="build-requirements">
 <h2>Build Requirements<a class="headerlink" href="#build-requirements" title="Permalink to this heading"></a></h2>
-<p>When using the build system in the base of the GEOPM source repository
-to build the GEOPM Runtime some additional requirements must be
-met.  If the user is not interested in building the GEOPM Runtime,
-these extra build requirements may be ignored.  The user may also opt
-out of the specific GEOPM Runtime features enabled by any of these
-requirements by providing the appropriate disable flag to the base
-build configure command line.</p>
-<p>The GEOPM Runtime requires support for MPI, the Message Passing
-Interface, standard 2.2 or higher.  In many cases meeting this
-requirement will depend on the specific HPC resource being targeted
-based on documentation that is site specific.  The Intel MPI
-implementation may be used to meet this requirement.  The MPI
-requirement may also be met through HPC packaging systems like OpenHPC
-or Spack.  Additionally, the OpenMPI binaries are distributed with
-most major Linux distributions, and may also be used to satisfy this
-requirement.  This requirement can be met by installing the
-<code class="docutils literal notranslate"><span class="pre">openmpi-devel</span></code> package version 1.7 or greater on RHEL and SLES
-Linux, and <code class="docutils literal notranslate"><span class="pre">libopenmpi-dev</span></code> on Ubuntu.</p>
+<p>When building the GEOPM Runtime from source, additional requirements must
+be met. Those uninterested in building the GEOPM Runtime can ignore these
+requirements, or by providing the disable flag to the configure command
+line, users may skip particular GEOPM Runtime features enabled by these
+requirements.</p>
+<p>The GEOPM Runtime provides optional support for MPI standards, Message Passing
+Interface, version 2.2 or later.  Building the Runtime with MPI support will
+add MPI related region information to the reports as well as enable Agents that
+leverage the hierarchical communications tree (just the <code class="docutils literal notranslate"><span class="pre">power_balancer</span></code> at
+the time of this writing).  If building for an HPC system, target the desired
+site-specific MPI implementation.  Otherwise the Intel MPI implementation,
+OpenHPC or Spack packaging systems, or OpenMPI binaries distributed with most
+major Linux distributions satisfy this requirement. For RHEL and SLES Linux,
+the requirement can be met by installing the <code class="docutils literal notranslate"><span class="pre">openmpi-devel</span></code> package version
+1.7 or later, and <code class="docutils literal notranslate"><span class="pre">libopenmpi-dev</span></code> on Ubuntu.</p>
 <ul>
 <li><p>Install all requirements on <strong>RHEL</strong> or <strong>CentOS</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yum<span class="w"> </span>install<span class="w"> </span>openmpi-devel<span class="w"> </span>elfutils<span class="w"> </span>libelf-devel
@@ -265,8 +303,7 @@ Linux, and <code class="docutils literal notranslate"><span class="pre">libopenm
 </div>
 </li>
 </ul>
-<p>Requirements that can be avoided by removing features with configure
-option:</p>
+<p>Requirements that can be avoided by removing features with configure option:</p>
 <ul class="simple">
 <li><p>Remove MPI compiler requirement
 <code class="docutils literal notranslate"><span class="pre">--disable-mpi</span></code></p></li>
@@ -276,28 +313,27 @@ option:</p>
 <code class="docutils literal notranslate"><span class="pre">--disable-ompt</span></code></p></li>
 </ul>
 <p>For details on how to use non-standard install locations for build
-requirements see</p>
+requirements see:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./configure<span class="w"> </span>--help
 </pre></div>
 </div>
 </div></blockquote>
-<p>which describes some options of the form <code class="docutils literal notranslate"><span class="pre">--with-&lt;feature&gt;</span></code> that can
-be used for this purpose, e.g. <code class="docutils literal notranslate"><span class="pre">--with-mpi-bin</span></code>.</p>
+<p>This provides options, for example <code class="docutils literal notranslate"><span class="pre">--with-&lt;feature&gt;</span></code>, to be used for
+this purpose, such as <code class="docutils literal notranslate"><span class="pre">--with-mpi-bin</span></code>.</p>
 </section>
 <section id="building-the-geopm-runtime">
 <h2>Building the GEOPM Runtime<a class="headerlink" href="#building-the-geopm-runtime" title="Permalink to this heading"></a></h2>
-<p>The best recommendation for building the GEOPM Runtime is to follow
-the <a class="reference internal" href="devel.html#developer-build-process"><span class="std std-ref">developer build process</span></a> posted in
-the <a class="reference internal" href="devel.html"><span class="doc">developer guide</span></a>.  This will enable the use of the GEOPM
-Service and will also provide the latest development in the GEOPM repository.</p>
+<p>The best recommendation for constructing the GEOPM Runtime is to
+follow the “developer build process” referenced in the <a class="reference internal" href="devel.html"><span class="doc">developer
+guide</span></a>. This will enable GEOPM Service use and also provide the
+latest developments in the GEOPM repository.</p>
 </section>
 <section id="run-requirements">
 <h2>Run Requirements<a class="headerlink" href="#run-requirements" title="Permalink to this heading"></a></h2>
-<p>The GEOPM Runtime has several requirements at time-of-use beyond
-what is required for the GEOPM Service.  These requirements are
-outlined in the following subsections.  A user that is not interested in
-running the GEOPM Runtime may ignore these requirements.</p>
+<p>Beyond the GEOPM Service, the GEOPM Runtime requires several additional
+features at the time of use. Users uninterested in running the GEOPM Runtime
+can ignore these requirements.</p>
 <nav class="contents local" id="categories-of-run-requirements">
 <p class="topic-title">Categories of run requirements:</p>
 <ul class="simple">
@@ -309,14 +345,14 @@ running the GEOPM Runtime may ignore these requirements.</p>
 </nav>
 <section id="bios-configuration">
 <h3><a class="toc-backref" href="#id3" role="doc-backlink">BIOS Configuration</a><a class="headerlink" href="#bios-configuration" title="Permalink to this heading"></a></h3>
-<p>If power governing or power balancing is the intended use case
-for GEOPM deployment, then there is an additional dependency on
-the BIOS being configured to support RAPL control. To check for
-BIOS support, execute the following on a compute node:</p>
+<p>If power governing or power balancing is the intended usage for GEOPM
+deployment, an additional requirement involves configuring the BIOS to
+support RAPL control. To make this check for BIOS support, execute the
+following on a compute node:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./tutorial/admin/00_test_prereqs.sh
 </pre></div>
 </div>
-<p>If the script output contains:</p>
+<p>If the script output includes:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>WARNING: The lock bit for the PKG_POWER_LIMIT MSR is set.  The power_balancer
          and power_governor agents will not function properly until this is cleared.
 </pre></div>
@@ -327,178 +363,156 @@ contact your BIOS vendor to obtain a BIOS that supports RAPL.</p>
 </section>
 <section id="linux-power-management">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink">Linux Power Management</a><a class="headerlink" href="#linux-power-management" title="Permalink to this heading"></a></h3>
-<p>Note that other Linux mechanisms for power management can interfere
-with GEOPM, and these must be disabled.  We suggest disabling the
-intel_pstate kernel driver by modifying the kernel command line
-through grub2 or the boot loader on your system by adding:</p>
+<p>It’s crucial to note that other Linux mechanisms for power management can
+interfere with GEOPM, which must be disabled. It’s recommended to disable the
+<code class="docutils literal notranslate"><span class="pre">intel_pstate</span></code> kernel driver by modifying the kernel command line through
+grub2 or your system bootloader by adding:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;intel_pstate=disable&quot;</span>
 </pre></div>
 </div>
-<p>The cpufreq driver will be enabled when the intel_pstate driver is
-disabled.  The cpufreq driver has several modes controlled by the
-scaling_governor sysfs entry.  When the performance mode is selected,
-the driver will not interfere with GEOPM.  For SLURM based systems the
-<a class="reference internal" href="#geopm-application-launch-wrapper"><span class="std std-ref">GEOPM launch wrapper</span></a> will
-attempt to set the scaling governor to “performance”.  This alleviates the need
-to manually set the governor.  Older versions of SLURM require the
-desired governors to be explicitly listed in <code class="docutils literal notranslate"><span class="pre">/etc/slurm.conf</span></code>.  In
-particular, SLURM 15.x requires the following option:</p>
+<p>The <cite>cpufreq</cite> driver will be enabled when the <code class="docutils literal notranslate"><span class="pre">intel_pstate</span></code> driver
+is disabled. It has several modes controlled by the <code class="docutils literal notranslate"><span class="pre">scaling_governor</span></code>
+sysfs entry. When the performance mode is selected, the driver will not
+interfere with GEOPM. On SLURM-based systems, the <a class="reference internal" href="#geopm-application-launch-wrapper"><span class="std std-ref">GEOPM launch wrapper</span></a> will attempt to set the scaling
+governor to “performance” automatically, eliminating the need to manually
+set the governor. On older versions of SLURM, the desired governors must be
+listed explicitly in <code class="docutils literal notranslate"><span class="pre">/etc/slurm.conf</span></code>. Specifically, SLURM 15.x requires
+the following option:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CpuFreqGovernors</span><span class="o">=</span>OnDemand,Performance
 </pre></div>
 </div>
-<p>More information on SLURM configuration can be found in the <a class="reference external" href="https://slurm.schedmd.com/slurm.conf.html">slurm.conf manual</a>.
-Non-SLURM systems must still set the scaling governor through some
-other mechanism to ensure proper GEOPM behavior.  The following
-command will set the governor to performance:</p>
+<p>For more on SLURM configuration, please see the <a class="reference external" href="https://slurm.schedmd.com/slurm.conf.html">slurm.conf manual</a>. On non-SLURM systems, the
+scaling governor should still be manually set through some other mechanism
+to ensure proper GEOPM behavior. The following command will set the governor
+to performance:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>performance<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 </pre></div>
 </div>
-<p>See the Linux Kernel documentation on <a class="reference external" href="https://www.kernel.org/doc/Documentation/cpu-freq/governors.txt">cpu-freq governors</a> for more
-information.</p>
+<p>For more information, see the Linux Kernel documentation on <a class="reference external" href="https://www.kernel.org/doc/Documentation/cpu-freq/governors.txt">cpu-freq
+governors</a>.</p>
 </section>
 <section id="geopm-application-launch-wrapper">
 <h3><a class="toc-backref" href="#id5" role="doc-backlink">GEOPM Application Launch Wrapper</a><a class="headerlink" href="#geopm-application-launch-wrapper" title="Permalink to this heading"></a></h3>
-<p>The GEOPM Runtime package installs the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command.
-The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command is a wrapper for the MPI launch commands like <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <code class="docutils literal notranslate"><span class="pre">aprun</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>, where the wrapper script enables the GEOPM runtime.  The
-“geopmlaunch” command supports exactly the same command line interface
-as the underlying launch command, but the wrapper extends the
-interface with GEOPM specific options.  The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> application
-launches the primary compute application and the GEOPM control thread
-on each compute node and manages the CPU affinity requirements for all
-processes.  The wrapper is documented in the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> man page.</p>
-<p>There are several underlying MPI application launchers that
-<code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> wrapper supports.  See the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>
-man page for information on available launchers and how to select them.  If the
-launch mechanism for your system is not supported, then affinity
-requirements must be enforced by the user and all options to the GEOPM
-runtime must be passed through environment variables.  Please consult
-the <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a> man page for documentation of the environment
-variables used by the GEOPM runtime that are otherwise controlled by the
-wrapper script.</p>
+<p>The GEOPM Runtime package installs the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command. This
+command is a wrapper for MPI launch commands such as <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <code class="docutils literal notranslate"><span class="pre">aprun</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>, where the wrapper script enables the GEOPM runtime. The
+<code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command supports the same command-line interface as the
+underlying launch command, while extending the interface with GEOPM-specific
+options. The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> application launches the primary compute
+application and the GEOPM control thread on each compute node, and manages
+all process CPU affinity requirements. This wrapper is documented in the
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> man page.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> command supports various underlying MPI application
+launchers as shown in the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> man page. If
+your system’s launch mechanism is not supported, then you must enforce affinity
+requirements, and all options to the GEOPM runtime must be passed through
+environment variables. Please consult the <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a> man page for
+documentation of the environment variables used by the GEOPM runtime that would
+otherwise be controlled by the wrapper script.</p>
 </section>
 <section id="cpu-affinity-requirements">
 <h3><a class="toc-backref" href="#id6" role="doc-backlink">CPU Affinity Requirements</a><a class="headerlink" href="#cpu-affinity-requirements" title="Permalink to this heading"></a></h3>
-<p>The GEOPM runtime requires that each MPI process of the application
-under control is affinitized to distinct CPUs.  This is a strict
-requirement for the runtime and must be enforced by the MPI launch
-command.  When using the geopmlaunch wrapper described in the previous
-section, these affinity requirements are handled by geopmlaunch when
-the <code class="docutils literal notranslate"><span class="pre">--geopm-affinity-enable</span></code> command line option is provided (see
-<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>).  Otherwise, it is required that
-the user will explicitly affinitize their application using the appropriate
-options for their desired launcher.</p>
+<p>The GEOPM runtime requires each of the application’s MPI processes to
+be affinitized to different CPUs. This is a critical requirement for
+the runtime and must be enforced by the MPI launch command. When using
+the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> wrapper, these affinity requirements are handled by
+<code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> when the <code class="docutils literal notranslate"><span class="pre">--geopm-affinity-enable</span></code> command-line option
+is provided (see <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>). Otherwise, users
+must explicitly affinitize their application using the appropriate options
+for their chosen launcher.</p>
 <p>While the GEOPM control thread connects to the application it will
-automatically affinitize itself to the highest indexed core not used
-by the application if the application is not affinitized to a CPU on
-every core.  In the case where the application is utilizing all cores
-of the system, the GEOPM control thread will be pinned to the highest
-logical CPU.</p>
-<p>There are many ways to launch an MPI application, and there is no
-single uniform way of enforcing MPI rank CPU affinities across
-different job launch mechanisms.  Additionally, OpenMP runtimes, which
-are associated with the compiler choice, have different mechanisms for
-affinitizing OpenMP threads within CPUs available to each MPI process.
-To complicate things further the GEOPM control thread can be launched
-as an application thread or a process that may be part of the primary
-MPI application or a completely separate MPI application.  For these
-reasons it is difficult to document how to correctly affinitize
-processes in all configurations.  Please refer to your site
-documentation about CPU affinity for the best solution on the system
-you are using and consider extending the geopmlaunch wrapper to
-support your system configuration (please see the <a class="reference internal" href="contrib.html"><span class="doc">Guide for Contributors</span></a>
-for information about how to share these implementations with the
-community).</p>
+automatically affinitize itself to the highest indexed core not used by the
+application if the application is not affinitized to a CPU on every core. If
+the application is using all cores of the system, the GEOPM control thread
+will be pinned to the highest logical CPU.</p>
+<p>Many ways exist to launch an MPI application, and no single uniform
+way of enforcing MPI rank CPU affinities can work across all job launch
+mechanisms. OpenMP runtimes, which are linked with compiler choice, also have
+different mechanisms for affinitizing OpenMP threads within CPUs available
+to each MPI process. The GEOPM control thread can also be launched as an
+application thread or process that can either be part of the primary MPI
+application or a completely different MPI application. Due to these factors,
+it is challenging to document the correct process affinitization across all
+configurations. Please refer to your site documentation about CPU affinity for
+the best solution for your system and consider extending the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>
+wrapper to support your system configuration. For information on how to
+share these implementations with the community, refer to <a class="reference internal" href="contrib.html"><span class="doc">GEOPM Contributor Guide</span></a>.</p>
 </section>
 </section>
 <section id="resource-manager-integration">
 <h2>Resource Manager Integration<a class="headerlink" href="#resource-manager-integration" title="Permalink to this heading"></a></h2>
-<p>The GEOPM Runtime package can be integrated with a compute cluster
-resource manager by modifying the resource manager daemon running on
-the cluster compute nodes.  An example of integration with the SLURM
-resource manager via a SPANK plugin can be found in the <a class="reference external" href="https://github.com/geopm/geopm-slurm">geopm-slurm git
-repository</a>. The implementation
-reflects what is documented below.</p>
-<p>Integration is achieved by modifying the daemon to make two
-<code class="docutils literal notranslate"><span class="pre">libgeopmd.so</span></code> function calls prior to releasing resources to the
-user (prologue), and one call after the resources have been reclaimed
-from the user (epilogue).  In the prologue, the resource manager
-compute node daemon calls:</p>
+<p>The GEOPM Runtime package can seamlessly integrate with a compute cluster
+resource manager by altering the daemon of the resource manager running on
+the cluster compute nodes. An integration example with the SLURM resource
+manager through a SPANK plugin is available in the <a class="reference external" href="https://github.com/geopm/geopm-slurm">geopm-slurm git
+repository</a>. This example aligns
+with the process described below.</p>
+<p>To integrate, the daemon requires two <code class="docutils literal notranslate"><span class="pre">libgeopmd.so</span></code> function calls before
+allocating resources to the user (prologue) and one function call after
+the resources are released (epilogue). In the prologue, the daemon initiates:</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">geopm_pio_save_control</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>which records into memory the value of all controls that can be
-written through GEOPM (see <a class="reference internal" href="geopm_pio.3.html"><span class="doc">geopm_pio(3)</span></a>).  The second call made in
-the prologue is:</p>
+<p>This function records all controllable GEOPM values into memory (refer
+to <a class="reference internal" href="geopm_pio.3.html"><span class="doc">geopm_pio(3)</span></a>). The next function called in the
+prologue is:</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">geopm_agent_enforce_policy</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>and this call (see <a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a>) enforces the configured policy
-such as a power cap or a limit on CPU frequency by a one-time
-adjustment of hardware settings.  In the epilogue, the resource
-manager calls:</p>
+<p>As detailed in <a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a>, this function enforces
+a pre-set policy like a power cap or a CPU frequency limit by making a
+one-time hardware setting adjustment. In the epilogue, the manager triggers:</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">geopm_pio_restore_control</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>which will set all GEOPM platform controls back to the values read in
-the prologue.</p>
-<p>The configuration of the policy enforced in the prologue is controlled
-by the two files:</p>
+<p>This restores all GEOPM platform controls to their original state captured
+during the prologue.</p>
+<p>The policy setup in the prologue relies on two configuration files:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/etc/geopm/environment-default.json
 /etc/geopm/environment-override.json
 </pre></div>
 </div>
-<p>which are JSON objects mapping GEOPM environment variable strings to
-string values.  The default configuration file controls values used
-when a GEOPM variable is not set in the calling environment.  The
-override configuration file enforces values for GEOPM variables
-regardless of what is specified in the calling environment.  The list
-of all GEOPM environment variables can be found in the geopm(7) man
-page.  The two GEOPM environment variables used by
-<code class="docutils literal notranslate"><span class="pre">geopm_agent_enforce_policy()</span></code> are <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> and <code class="docutils literal notranslate"><span class="pre">GEOPM_POLICY</span></code>.
-Note that it is expected that <code class="docutils literal notranslate"><span class="pre">/etc</span></code> is mounted on a node-local file
-system, so the GEOPM configuration files are typically part of the
-compute node boot image.  Also note that the <code class="docutils literal notranslate"><span class="pre">GEOPM_POLICY</span></code> value
-specifies a path to another JSON file which may be located on a
-shared file system, and this second file controls the values enforced
-(e.g. power cap value in Watts, or CPU frequency value in Hz).</p>
-<p>When configuring a cluster to use GEOPM as the site-wide power
-management solution, it is expected that one agent algorithm with one
-policy will be applied to all compute nodes within a queue partition.
-The system administrator selects the agent based on the site
-requirements.  If the site requires that the average CPU power draw
-per compute node remains under a cap across the system, then they
-would choose the <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">power_balancer agent</span></a>.
-If the site would like to restrict
-applications to run below a particular CPU frequency unless they are
-executing a high priority optimized subroutine that has been granted
-permission by the site administration to run at an elevated CPU
-frequency, they would choose the <a class="reference internal" href="geopm_agent_frequency_map.7.html"><span class="doc">frequency_map agent</span></a>.  There is also the option for a site-specific
-custom agent plugin to be deployed.  In all of these use cases, calling
-<code class="docutils literal notranslate"><span class="pre">geopm_agent_enforce_policy()</span></code> prior to releasing compute node resources to the
-end user will enforce static limits to power or CPU frequency, and these will
-impact all user applications.  In order to leverage the dynamic runtime
-features of GEOPM, the user must opt-in by launching their MPI application with
-the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> command line tool.</p>
-<p>The following example shows how a system administrator would configure
-a system to use the power_balancer agent.  This use case will enforce
-a static power limit for applications which do not use geopmlaunch,
-and will optimize power limits to balance performance when
-geopmlaunch is used.  First, the system administrator creates the
-following JSON object in the boot image of the compute node in the
-path <code class="docutils literal notranslate"><span class="pre">/etc/geopm/environment-override.json</span></code>:</p>
+<p>These files contain JSON objects that map GEOPM environment variables to
+their respective values. The default configuration holds values for any
+unset GEOPM variable in the calling environment. Meanwhile, the override
+configuration enforces values, overriding the calling environment’s
+specifications. A comprehensive list of GEOPM environment variables is
+available in the geopm(7) man page. The two primary environment variables
+that <code class="docutils literal notranslate"><span class="pre">geopm_agent_enforce_policy()</span></code> utilizes are <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> and
+<code class="docutils literal notranslate"><span class="pre">GEOPM_POLICY</span></code>. It’s important to note that <code class="docutils literal notranslate"><span class="pre">/etc</span></code> should be mounted on a
+local node file system, meaning the GEOPM configuration files typically become
+part of the compute node’s boot image. The <code class="docutils literal notranslate"><span class="pre">GEOPM_POLICY</span></code> value directs
+to another JSON file, possibly located on a shared file system, dictating
+the enforced values (like the power cap in Watts or CPU frequency in Hz).</p>
+<p>For GEOPM’s integration as the universal power management solution for
+a cluster, it’s usual for a single agent algorithm with one policy to be
+applied across all compute nodes within a partition. The choice of agent
+rests upon the site’s needs. For instance, if the aim is to keep the average
+CPU power draw for each node below a specific cap, the <a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">power_balancer
+agent</span></a> is ideal. However, if the goal is to
+limit application CPU frequencies with exceptions for specific high-priority
+processes, the <a class="reference internal" href="geopm_agent_frequency_map.7.html"><span class="doc">frequency_map agent</span></a>
+is the best fit. Sites can also deploy a custom agent plugin. In every
+scenario, invoking <code class="docutils literal notranslate"><span class="pre">geopm_agent_enforce_policy()</span></code> before releasing
+compute resources ensures the enforcement of static limits impacting all
+user applications. For dynamic runtime features, users must initiate their
+MPI application using the <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> tool.</p>
+<p>To illustrate, if a system administrator wants to use the <code class="docutils literal notranslate"><span class="pre">power_balancer</span></code>
+agent, the process would involve setting a static power cap for
+apps not utilizing <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code>, while optimizing power caps for
+performance when <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> is in use. The administrator would
+install the following JSON object in the compute node’s boot image at
+<code class="docutils literal notranslate"><span class="pre">/etc/geopm/environment-override.json</span></code>:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;GEOPM_AGENT&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;power_balancer&quot;</span><span class="p">,</span>
 <span class="w"> </span><span class="nt">&quot;GEOPM_POLICY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/shared_fs/config/geopm_power_balancer.json&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that the “CPU_POWER_LIMIT” value controlling the limit
-is specified in a secondary JSON file “geopm_power_balancer.json” that
-may be located on a shared file system and can be created with the
-<a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> command line tool.  Locating the policy file on the
-shared file system enables the limit to be modified without changing
-the compute node boot image.  Changing the policy value will impact
-all subsequently launched GEOPM processes, but it will not change the
-behavior of already running GEOPM control processes.</p>
+<p>The controlling value, <code class="docutils literal notranslate"><span class="pre">CPU_POWER_LIMIT</span></code>, is defined in a separate
+“geopm_power_balancer.json” file that could reside on a shared file
+system. This file can be generated using the <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> tool. By placing the policy file on a shared file system,
+you allow modifications to the limit without affecting the compute node
+boot image. Changing the policy value affects all new GEOPM processes but
+leaves running GEOPM processes untouched.</p>
 </section>
 </section>
 
@@ -506,8 +520,8 @@ behavior of already running GEOPM control processes.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="client.html" class="btn btn-neutral float-left" title="Guide for Service Clients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="contrib.html" class="btn btn-neutral float-right" title="Guide for Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="client.html" class="btn btn-neutral float-left" title="Service Clients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contrib.html" class="btn btn-neutral float-right" title="GEOPM Contributor Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
