@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">geopm
-   &#160;<span id="projectnumber">2.0.0+dev990g8b823c942</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">GEOPM - Global Extensible Open Power Manager</div>
   </td>
@@ -117,9 +117,9 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> (region_id &amp; <a class="code" href="_profile_8hpp.html#ad16085664507eb8e544b4bd71ba4615fac97b996d86aae1cdd290766e5f13d632">GEOPM_REGION_ID_MPI</a>) ? 1 : 0;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">static</span> <span class="keyword">inline</span> uint64_t geopm_region_id_hint(uint64_t region_id)</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">static</span> <span class="keyword">inline</span> geopm_region_hint_e geopm_region_id_hint(uint64_t region_id)</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    uint64_t ret;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    geopm_region_hint_e ret;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">if</span> (GEOPM_REGION_HASH_UNMARKED == region_id) {</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        ret = GEOPM_REGION_HINT_UNKNOWN;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
@@ -127,7 +127,7 @@ $(function() {
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        ret = GEOPM_REGION_HINT_NETWORK;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        ret = region_id &gt;&gt; 32;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        ret = (geopm_region_hint_e)(region_id &gt;&gt; 32);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">if</span> (!ret || ret &gt;= GEOPM_NUM_REGION_HINT) {</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            ret = GEOPM_REGION_HINT_UNKNOWN;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
@@ -222,7 +222,7 @@ $(function() {
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            std::shared_ptr&lt;ApplicationStatus&gt; m_app_status;</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            std::shared_ptr&lt;ApplicationRecordLog&gt; m_app_record_log;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            std::stack&lt;uint64_t&gt; m_hint_stack;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            std::stack&lt;geopm_region_hint_e&gt; m_hint_stack;</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            <span class="keywordtype">double</span> m_overhead_time;</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            <span class="keywordtype">double</span> m_overhead_time_startup;</div>
