@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['domain_5fidx_1345',['domain_idx',['../structgeopm_1_1_save_control_1_1m__setting__s.html#a4843c5adcc8d7643be0af95bf9d3a259',1,'geopm::SaveControl::m_setting_s']]],
-  ['domain_5ftype_1346',['domain_type',['../structgeopm_1_1_save_control_1_1m__setting__s.html#a0d5bbae00b00586b2d6317f611f2fe9c',1,'geopm::SaveControl::m_setting_s']]],
-  ['driver_5fversion_1347',['driver_version',['../structgeopm_1_1sst__version__s.html#a96ae6d5cee4f92a63fad7dda5f429212',1,'geopm::sst_version_s']]]
+  ['command_1443',['command',['../structgeopm_1_1sst__mbox__interface__s.html#ab2538ecbf0b34f1b20c15cf5ab417e91',1,'geopm::sst_mbox_interface_s']]],
+  ['cpu_5findex_1444',['cpu_index',['../structgeopm_1_1sst__cpu__map__interface__s.html#a1e48193cf7b4491e50265a63d4c7c220',1,'geopm::sst_cpu_map_interface_s::cpu_index()'],['../structgeopm_1_1sst__mmio__interface__s.html#a62e53099b9b8e1cc240d173c1ca94add',1,'geopm::sst_mmio_interface_s::cpu_index()'],['../structgeopm_1_1sst__mbox__interface__s.html#ae640e46e4412d5a3d844034470d0010d',1,'geopm::sst_mbox_interface_s::cpu_index()']]]
 ];

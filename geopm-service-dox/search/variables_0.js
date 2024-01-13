@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['batch_5fcommand_5flimit_1342',['batch_command_limit',['../structgeopm_1_1sst__version__s.html#a8c6b2528b0ebe51acb86f080d114be9d',1,'geopm::sst_version_s']]]
+  ['aggregation_5ffunction_1438',['aggregation_function',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a75c6617b8c80fe4c296cf6a14289142c',1,'geopm::SysfsDriver::properties_s']]],
+  ['alias_1439',['alias',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a3d53ed2caec7ad6cde339c79d664e557',1,'geopm::SysfsDriver::properties_s']]],
+  ['attribute_1440',['attribute',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a7248092192ed248e08269ba83b3d599d',1,'geopm::SysfsDriver::properties_s']]]
 ];

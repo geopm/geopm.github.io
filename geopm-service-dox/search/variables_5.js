@@ -1,17 +1,10 @@
 var searchData=
 [
-  ['m_5fagg_5ffunction_1355',['m_agg_function',['../classgeopm_1_1_combined_signal.html#af617d751231680c60456728e9f6023b4',1,'geopm::CombinedSignal']]],
-  ['m_5fdefault_5ffifo_5fprefix_1356',['M_DEFAULT_FIFO_PREFIX',['../classgeopm_1_1_batch_status_imp.html#ad12f9edb7e98ff9a4176c002db36fa4e',1,'geopm::BatchStatusImp']]],
-  ['m_5fmessage_5fcontinue_1357',['M_MESSAGE_CONTINUE',['../classgeopm_1_1_batch_status.html#aebda67c262db44befcdf8a948061e0c0',1,'geopm::BatchStatus']]],
-  ['m_5fmessage_5fquit_1358',['M_MESSAGE_QUIT',['../classgeopm_1_1_batch_status.html#a99d2ab8d59c11e0d69f8af18f85c0392',1,'geopm::BatchStatus']]],
-  ['m_5fmessage_5fread_1359',['M_MESSAGE_READ',['../classgeopm_1_1_batch_status.html#ad588d18dc5c20f21e3a9cbbf308e6b90',1,'geopm::BatchStatus']]],
-  ['m_5fmessage_5fterminate_1360',['M_MESSAGE_TERMINATE',['../classgeopm_1_1_batch_status.html#a2b9e1a93989b6536b2dd20f9a33eab5c',1,'geopm::BatchStatus']]],
-  ['m_5fmessage_5ftype_5farray_1361',['M_MESSAGE_TYPE_ARRAY',['../classgeopm_1_1_s_d_bus_message.html#a8043f60354eb375e59db998f38149a98',1,'geopm::SDBusMessage']]],
-  ['m_5fmessage_5ftype_5fstruct_1362',['M_MESSAGE_TYPE_STRUCT',['../classgeopm_1_1_s_d_bus_message.html#a5496499443df8da7687bcce8d5bc0bd8',1,'geopm::SDBusMessage']]],
-  ['m_5fmessage_5fwrite_1363',['M_MESSAGE_WRITE',['../classgeopm_1_1_batch_status.html#a1b677957f6862d10c3a16dca9f8f1f30',1,'geopm::BatchStatus']]],
-  ['m_5fread_5ffd_1364',['m_read_fd',['../classgeopm_1_1_batch_status_imp.html#ab0ee2c153558fd848e977f029ebeb898',1,'geopm::BatchStatusImp']]],
-  ['m_5fshmem_5fprefix_1365',['M_SHMEM_PREFIX',['../classgeopm_1_1_batch_server.html#a9bb1009c2928f94e1b419019bb8aac21',1,'geopm::BatchServer']]],
-  ['m_5fwrite_5ffd_1366',['m_write_fd',['../classgeopm_1_1_batch_status_imp.html#a2ad1af3aa63f1650bc8cd98c9e72190f',1,'geopm::BatchStatusImp']]],
-  ['mbox_5finterface_5fparam_1367',['mbox_interface_param',['../structgeopm_1_1sst__mbox__interface__s.html#a03d61605d37703eec08124fec59502f2',1,'geopm::sst_mbox_interface_s']]],
-  ['message_1368',['message',['../structgeopm_1_1json__checker.html#a6c08acf03289e2fc604a1939f42bdf68',1,'geopm::json_checker']]]
+  ['interface_5fversion_1450',['interface_version',['../structgeopm_1_1sst__version__s.html#a7832226e59145df49eec00ab514c08eb',1,'geopm::sst_version_s']]],
+  ['interfaces_1451',['interfaces',['../structgeopm_1_1sst__cpu__map__interface__batch__s.html#a05d67e05d9a651e921dd2e16a6ad035f',1,'geopm::sst_cpu_map_interface_batch_s::interfaces()'],['../structgeopm_1_1sst__mmio__interface__batch__s.html#ab2fe78628146ba2b2c4dee5948351222',1,'geopm::sst_mmio_interface_batch_s::interfaces()'],['../structgeopm_1_1sst__mbox__interface__batch__s.html#ac6e1f084ef774ff5a9c4f165d7042316',1,'geopm::sst_mbox_interface_batch_s::interfaces()']]],
+  ['is_5fmbox_5fsupported_1452',['is_mbox_supported',['../structgeopm_1_1sst__version__s.html#aa84cbb3922a1ee4c112df4314a781fd8',1,'geopm::sst_version_s']]],
+  ['is_5fmmio_5fsupported_1453',['is_mmio_supported',['../structgeopm_1_1sst__version__s.html#a0222584024491b9a3c72a55857b8b211',1,'geopm::sst_version_s']]],
+  ['is_5fvalid_1454',['is_valid',['../structgeopm_1_1json__checker.html#a60b87d17f252c53e3c12b7e2cfbf0b02',1,'geopm::json_checker']]],
+  ['is_5fwritable_1455',['is_writable',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a6fe8915800eaaaac5bb04618d446f00f',1,'geopm::SysfsDriver::properties_s']]],
+  ['is_5fwrite_1456',['is_write',['../structgeopm_1_1sst__mmio__interface__s.html#a62c6cbed1febf263f66c45dc615f7477',1,'geopm::sst_mmio_interface_s']]]
 ];

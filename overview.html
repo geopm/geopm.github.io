@@ -882,8 +882,12 @@ it to 200 milliseconds, up from the default 5 milliseconds, results in
 approximately 50 rows of samples in the trace file (calculated as five
 samples per second over ten seconds).</p></li>
 <li><p><strong>Specify Invocation Name</strong>: The optional <code class="docutils literal notranslate"><span class="pre">GEOPM_PROGRAM_FILTER</span></code>
-environment variable allows you to explicitly list the name of the
-non-MPI program invovation name of the non-MPI process to be profiled.</p></li>
+environment variable allows you to explicitly list program
+invovation names that will request profiling, other programs will
+not be affected by <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code> of <code class="docutils literal notranslate"><span class="pre">libgeopm.so</span></code>.  For this
+reason a user will typically set these two environment variables
+together.  This is especially important when profiling programs
+within a bash script.</p></li>
 </ol>
 <p>These three options together will inform the GEOPM runtime controller
 (<code class="docutils literal notranslate"><span class="pre">geopmctl</span></code>) to profile the <code class="docutils literal notranslate"><span class="pre">sleep</span></code> utility and generate a CSV trace
@@ -896,9 +900,9 @@ since application start (column 1), CPU energy (column 6), and CPU power
 <span class="w">  </span><span class="nv">GEOPM_CTL_LOCAL</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="nv">GEOPM_TRACE</span><span class="o">=</span>sleep-ten.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="nv">GEOPM_PERIOD</span><span class="o">=</span><span class="m">0</span>.2<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">GEOPM_PROGRAM_FILTER</span><span class="o">=</span>sleep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>geopmctl<span class="w"> </span><span class="p">&amp;</span>
 $<span class="w"> </span><span class="nv">GEOPM_PROFILE</span><span class="o">=</span>sleep-ten<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GEOPM_PROGRAM_FILTER</span><span class="o">=</span>sleep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>libgeopm.so.2<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>sleep<span class="w"> </span><span class="m">10</span>
 $<span class="w"> </span>cat<span class="w"> </span>sleep-ten.yaml-<span class="k">$(</span>hostname<span class="k">)</span>

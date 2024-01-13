@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['command_1343',['command',['../structgeopm_1_1sst__mbox__interface__s.html#ab2538ecbf0b34f1b20c15cf5ab417e91',1,'geopm::sst_mbox_interface_s']]],
-  ['cpu_5findex_1344',['cpu_index',['../structgeopm_1_1sst__cpu__map__interface__s.html#a1e48193cf7b4491e50265a63d4c7c220',1,'geopm::sst_cpu_map_interface_s::cpu_index()'],['../structgeopm_1_1sst__mmio__interface__s.html#a62e53099b9b8e1cc240d173c1ca94add',1,'geopm::sst_mmio_interface_s::cpu_index()'],['../structgeopm_1_1sst__mbox__interface__s.html#ae640e46e4412d5a3d844034470d0010d',1,'geopm::sst_mbox_interface_s::cpu_index()']]]
+  ['batch_5fcommand_5flimit_1441',['batch_command_limit',['../structgeopm_1_1sst__version__s.html#a8c6b2528b0ebe51acb86f080d114be9d',1,'geopm::sst_version_s']]],
+  ['behavior_1442',['behavior',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#abccde86ede107eba03e9d31dd66a92f5',1,'geopm::SysfsDriver::properties_s']]]
 ];

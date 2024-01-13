@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x_1382',['x',['../structcpu__set__t.html#ada08807f7e4d5a4ffcb64b0112b0cd05',1,'cpu_set_t']]]
+  ['units_1485',['units',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#ad96ceecef614cd610bf2e98134ba8678',1,'geopm::SysfsDriver::properties_s']]]
 ];
