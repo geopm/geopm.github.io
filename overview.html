@@ -850,6 +850,12 @@ option to <code class="docutils literal notranslate"><span class="pre">geopmlaun
 </section>
 <section id="profiling-non-mpi-applications">
 <h4>Profiling Non-MPI Applications<a class="headerlink" href="#profiling-non-mpi-applications" title="Permalink to this heading"></a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmlaunch(1)</span></code> command may not be best suited for your needs
+if you are running a non-MPI application, or if you are running an MPI
+application but the launch command is embedded in scripts that are
+difficult to modify.  Instead of using <code class="docutils literal notranslate"><span class="pre">geopmlaunch(1)</span></code>, the
+user may use the <code class="docutils literal notranslate"><span class="pre">geopmctl(1)</span></code> application in conjunction with
+environment variables that control the GEOPM Runtime behavior.</p>
 <p>In this simple example we run the <code class="docutils literal notranslate"><span class="pre">sleep(1)</span></code> command for 10 seconds
 and monitor the system during its execution.  Rather than using the
 <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> tool as in the above example, we will run the
@@ -860,16 +866,18 @@ generate a report:</p>
 <ol class="arabic simple">
 <li><p>Both the <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> process and the application process must have
 the <code class="docutils literal notranslate"><span class="pre">GEOPM_PROFILE</span></code> environment variable set to the <strong>same</strong>
-value.</p></li>
+value or both environments may leave this variable unset.</p></li>
 <li><p>The application process must have <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD=libgeopm.so.2</span></code> set
 in the environment or the application binary must be linked
 directly to <code class="docutils literal notranslate"><span class="pre">libgeopm.so.2</span></code> at compile time.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT</span></code> environment variable must be set in the
 environment of the <code class="docutils literal notranslate"><span class="pre">geopmctl</span></code> process.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">GEOPM_CTL_LOCAL</span></code> environment variable must be set which disables
-all intra-node MPI communication between the controllers on each node, thereby
-generating a unique report file per host node over which the non-MPI
-application processes are launched.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">GEOPM_PROGRAM_FILTER</span></code> environment variable is required and
+explicitly lists the program invovation names of any process to be
+profiled. All other programs will not be affected by <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code>
+of <code class="docutils literal notranslate"><span class="pre">libgeopm.so</span></code>.  For this reason a user will typically set
+these two environment variables together.  This is especially
+important when profiling programs within a bash script.</p></li>
 </ol>
 <p>In addition to generating a report in YAML format, the example below
 showcases two optional features of the GEOPM Runtime:</p>
@@ -881,13 +889,11 @@ allows you to modify the controller’s sampling period. For instance, setting
 it to 200 milliseconds, up from the default 5 milliseconds, results in
 approximately 50 rows of samples in the trace file (calculated as five
 samples per second over ten seconds).</p></li>
-<li><p><strong>Specify Invocation Name</strong>: The optional <code class="docutils literal notranslate"><span class="pre">GEOPM_PROGRAM_FILTER</span></code>
-environment variable allows you to explicitly list program
-invovation names that will request profiling, other programs will
-not be affected by <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code> of <code class="docutils literal notranslate"><span class="pre">libgeopm.so</span></code>.  For this
-reason a user will typically set these two environment variables
-together.  This is especially important when profiling programs
-within a bash script.</p></li>
+<li><p><strong>Disable Network Use</strong> The <code class="docutils literal notranslate"><span class="pre">GEOPM_CTL_LOCAL</span></code> environment
+variable may be set which disables all intra-node communication
+between the controllers on each node, thereby generating a unique
+report file per host node over which the application processes are
+launched.</p></li>
 </ol>
 <p>These three options together will inform the GEOPM runtime controller
 (<code class="docutils literal notranslate"><span class="pre">geopmctl</span></code>) to profile the <code class="docutils literal notranslate"><span class="pre">sleep</span></code> utility and generate a CSV trace
