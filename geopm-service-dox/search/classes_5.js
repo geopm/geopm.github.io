@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['iouring_789',['IOUring',['../classgeopm_1_1_i_o_uring.html',1,'geopm']]],
-  ['iouringfallback_790',['IOUringFallback',['../classgeopm_1_1_i_o_uring_fallback.html',1,'geopm']]],
-  ['iouringimp_791',['IOUringImp',['../classgeopm_1_1_i_o_uring_imp.html',1,'geopm']]]
+  ['geopm_5frequest_5fs_1058',['geopm_request_s',['../structgeopm__request__s.html',1,'']]],
+  ['geopm_5ftime_5fs_1059',['geopm_time_s',['../structgeopm__time__s.html',1,'']]],
+  ['gputopo_1060',['GPUTopo',['../classgeopm_1_1_g_p_u_topo.html',1,'geopm']]],
+  ['gputoponull_1061',['GPUTopoNull',['../classgeopm_1_1_g_p_u_topo_null.html',1,'geopm']]]
 ];

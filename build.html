@@ -52,7 +52,6 @@
 <li class="toctree-l2"><a class="reference internal" href="requires.html">Requirements</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Source Builds</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#building-geopm-service-rpms">Building GEOPM Service RPMs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#building-geopm-service-debian-packages">Building GEOPM Service Debian Packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installing-and-running-the-geopm-service">Installing and Running the GEOPM Service</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#removal-of-the-geopm-service">Removal of the GEOPM Service</a></li>
 </ul>
@@ -96,7 +95,7 @@
   <section id="source-builds">
 <h1>Source Builds<a class="headerlink" href="#source-builds" title="Permalink to this heading"></a></h1>
 <p>This documentation provides build instructions for administrators who are
-interested in installing the GEOPM Service based on a checkout from the GEOPM
+interested in installing the GEOPM packages based on a checkout from the GEOPM
 git repository. Following these instructions will assist users in creating RPM
 or debian packages compatible with various Linux distributions.</p>
 <p>We have tested packages created through this process on SLES 15 SP3 and SP4,
@@ -114,72 +113,60 @@ the systemd service and facilitate a clean uninstallation process.</p>
 </ul>
 <section id="building-geopm-service-rpms">
 <h2>Building GEOPM Service RPMs<a class="headerlink" href="#building-geopm-service-rpms" title="Permalink to this heading"></a></h2>
-<p>Use the following bash commands:</p>
+<p>First review the <a class="reference internal" href="requires.html"><span class="doc">requirements guide</span></a>, then use the following
+bash commands to build all of the GEOPM packages.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:geopm/geopm.git
 <span class="nb">cd</span><span class="w"> </span>geopm/service
-./autogen.sh
-./configure
-make<span class="w"> </span>rpm
+./package.sh
 </pre></div>
 </div>
-<p>These commands create the GEOPM service RPM files in your rpmbuild directory:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/geopm-service-&lt;VERSION&gt;-1.x86_64.rpm
-<span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/geopm-service-devel-&lt;VERSION&gt;-1.x86_64.rpm
-<span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/python3-geopmdpy-&lt;VERSION&gt;-1.x86_64.rpm
-<span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/libgeopmd2-&lt;VERSION&gt;-1.x86_64.rpm
+<p>These commands create the .rpm files or .deb files that package the GEOPM
+software.  On Ubuntu, these packages are build in the tree:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./docs/geopm-runtime-docs_&lt;VERSION&gt;-1_all.deb
+./docs/geopm-service-docs_&lt;VERSION&gt;-1_all.deb
+./docs/libgeopmd-docs_&lt;VERSION&gt;-1_all.deb
+./docs/libgeopm-docs_&lt;VERSION&gt;-1_all.deb
+./docs/python3-geopmdpy-docs_&lt;VERSION&gt;-1_all.deb
+./docs/python3-geopmpy-docs_&lt;VERSION&gt;-1_all.deb
+./geopmdpy/python3-geopmdpy_&lt;VERSION&gt;-1_all.deb
+./geopmpy/python3-geopmpy_&lt;VERSION&gt;-1_all.deb
+./libgeopmd/geopm-service_&lt;VERSION&gt;-1_amd64.deb
+./libgeopmd/libgeopmd2_&lt;VERSION&gt;-1_amd64.deb
+./libgeopmd/libgeopmd-dev_&lt;VERSION&gt;-1_amd64.deb
+./libgeopm/geopm-runtime_&lt;VERSION&gt;-1_amd64.deb
+./libgeopm/libgeopm2_&lt;VERSION&gt;-1_amd64.deb
+./libgeopm/libgeopm-dev_&lt;VERSION&gt;-1_amd64.deb
 </pre></div>
 </div>
-</section>
-<section id="building-geopm-service-debian-packages">
-<h2>Building GEOPM Service Debian Packages<a class="headerlink" href="#building-geopm-service-debian-packages" title="Permalink to this heading"></a></h2>
-<p>Use the following bash commands:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:geopm/geopm.git
-<span class="nb">cd</span><span class="w"> </span>geopm/service
-./autogen.sh
-./configure
-make<span class="w"> </span>deb
+<p>In RPM based operating systems the RPMs are created in the rpmbuild root
+(default is ~/rpmbuild).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./rpmbuild/RPMS/x86_64/geopm-runtime-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/geopm-runtime-devel-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/geopm-runtime-docs-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/geopm-service-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/geopm-service-devel-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/geopm-service-docs-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/libgeopm2-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/libgeopmd2-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/libgeopmd-docs-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/libgeopm-docs-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/python3-geopmdpy-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/python3-geopmdpy-docs-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/python3-geopmpy-&lt;VERSION&gt;-1.x86_64.rpm
+./rpmbuild/RPMS/x86_64/python3-geopmpy-docs-&lt;VERSION&gt;-1.x86_64.rpm
 </pre></div>
-</div>
-<p>These commands create the GEOPM service debian packages  in your current working
-directory, e.g.:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$HOME</span>/geopm/service/geopm-service_&lt;VERSION&gt;-1_amd64.deb
-<span class="nv">$HOME</span>/geopm/service/libgeopmd2_&lt;VERSION&gt;-1_amd64.deb
-<span class="nv">$HOME</span>/geopm/service/libgeopmd-dev_&lt;VERSION&gt;-1_amd64.deb
-<span class="nv">$HOME</span>/geopm/service/python3-geopmdpy_&lt;VERSION&gt;-1_amd64.deb
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Because the GEOPM Python modules are still packaged with <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>, you
-must use the package manager installed version of python3-setuptools when
-issuing <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">deb</span></code>.  At the of this writing that is version <code class="docutils literal notranslate"><span class="pre">59.6.0</span></code>.</p>
-<p>If you have a newer version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> installed via <code class="docutils literal notranslate"><span class="pre">pip</span></code>, you can
-use the following to remove it: <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">setuptools</span></code></p>
-<p>Alternatively you can force the usage of the system version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>
-with: <code class="docutils literal notranslate"><span class="pre">SETUPTOOLS_USE_DISTUTILS=stdlib</span> <span class="pre">make</span> <span class="pre">deb</span></code></p>
-<p>For more information see:</p>
-<p><a class="reference external" href="https://bugs.launchpad.net/ubuntu/+source/dput/+bug/2018519">https://bugs.launchpad.net/ubuntu/+source/dput/+bug/2018519</a></p>
-<p><a class="reference external" href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003252">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003252</a></p>
 </div>
 </section>
 <section id="installing-and-running-the-geopm-service">
 <h2>Installing and Running the GEOPM Service<a class="headerlink" href="#installing-and-running-the-geopm-service" title="Permalink to this heading"></a></h2>
 <p>Once the packaging is complete, install the RPM files by issuing your OS’s
 packaging manager (i.e. zypper or yum):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>zypper<span class="w"> </span>install<span class="w"> </span>--allow-unsigned-rpm<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/geopm-service-&lt;VERSION&gt;-1.x86_64.rpm<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/geopm-service-devel-&lt;VERSION&gt;-1.x86_64.rpm<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/python3-geopmdpy-&lt;VERSION&gt;-1.x86_64.rpm<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/libgeopmd2-&lt;VERSION&gt;-1.x86_64.rpm
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>zypper<span class="w"> </span>install<span class="w"> </span>--allow-unsigned-rpm<span class="w"> </span><span class="nv">$HOME</span>/rpmbuild/RPMS/x86_64/*geopm*.rpm
 </pre></div>
 </div>
 <p>Or the DEB files by issuing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>geopm/service
-$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>./geopm-service_&lt;VERSION&gt;-1_amd64.deb<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>./libgeopmd2_&lt;VERSION&gt;-1_amd64.deb<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>./libgeopmd-dev_&lt;VERSION&gt;-1_amd64.deb<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>./python3-geopmdpy_&lt;VERSION&gt;-1_amd64.deb
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>geopm
+$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span><span class="k">$(</span>find<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*geopm*.deb&#39;</span><span class="k">)</span>
 </pre></div>
 </div>
 <p>To start the GEOPM service and check its status issue:</p>
@@ -192,12 +179,39 @@ systemctl<span class="w"> </span>status<span class="w"> </span>geopm
 <h2>Removal of the GEOPM Service<a class="headerlink" href="#removal-of-the-geopm-service" title="Permalink to this heading"></a></h2>
 <p>To stop the GEOPM service and remove the RPMs from your system, use your OS’s
 package manager:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>zypper<span class="w"> </span>remove<span class="w"> </span>geopm-service<span class="w"> </span>libgeopmd2<span class="w"> </span>geopm-service-devel<span class="w"> </span>python3-geopmdpy
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>geopm
+sudo<span class="w"> </span>zypper<span class="w"> </span>remove<span class="w"> </span>geopm-runtime<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-runtime-devel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-runtime-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-service<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-service-devel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-service-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopm2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopmd2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopmd-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopm-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmdpy<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmdpy-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmpy<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmpy-docs
 </pre></div>
 </div>
 <p>Or for the DEB packages by issuing:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>geopm
-sudo<span class="w"> </span>apt<span class="w"> </span>remove<span class="w"> </span>geopm-service<span class="w"> </span>libgeopmd2<span class="w"> </span>libgeopmd-dev<span class="w"> </span>python3-geopmdpy
+sudo<span class="w"> </span>apt<span class="w"> </span>remove<span class="w"> </span>geopm-runtime<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-runtime-devel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-runtime-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-service<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-service-devel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geopm-service-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopm2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopmd2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopmd-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgeopm-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmdpy<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmdpy-docs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmpy<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-geopmpy-docs
 </pre></div>
 </div>
 </section>
@@ -214,7 +228,7 @@ sudo<span class="w"> </span>apt<span class="w"> </span>remove<span class="w"> </
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2015 - 2023, Intel Corporation. All rights reserved..</p>
+    <p>&#169; Copyright 2015 - 2024, Intel Corporation. All rights reserved..</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

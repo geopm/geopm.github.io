@@ -1,11 +1,16 @@
 var searchData=
 [
-  ['dcgmdevicepool_777',['DCGMDevicePool',['../classgeopm_1_1_d_c_g_m_device_pool.html',1,'geopm']]],
-  ['dcgmdevicepoolimp_778',['DCGMDevicePoolImp',['../classgeopm_1_1_d_c_g_m_device_pool_imp.html',1,'geopm']]],
-  ['dcgmiogroup_779',['DCGMIOGroup',['../classgeopm_1_1_d_c_g_m_i_o_group.html',1,'geopm']]],
-  ['deprecationwarning_780',['DeprecationWarning',['../classgeopm_1_1_deprecation_warning.html',1,'geopm']]],
-  ['derivativesignal_781',['DerivativeSignal',['../classgeopm_1_1_derivative_signal.html',1,'geopm']]],
-  ['differencesignal_782',['DifferenceSignal',['../classgeopm_1_1_difference_signal.html',1,'geopm']]],
-  ['dlregistry_783',['DLRegistry',['../classgeopm_1_1_d_l_registry.html',1,'geopm']]],
-  ['domaincontrol_784',['DomainControl',['../classgeopm_1_1_domain_control.html',1,'geopm']]]
+  ['circularbuffer_1035',['CircularBuffer',['../classgeopm_1_1_circular_buffer.html',1,'geopm']]],
+  ['circularbuffer_3c_20m_5fsample_5fs_20_3e_1036',['CircularBuffer&lt; m_sample_s &gt;',['../classgeopm_1_1_circular_buffer.html',1,'geopm']]],
+  ['cnliogroup_1037',['CNLIOGroup',['../classgeopm_1_1_c_n_l_i_o_group.html',1,'geopm']]],
+  ['combinedcontrol_1038',['CombinedControl',['../classgeopm_1_1_combined_control.html',1,'geopm']]],
+  ['combinedsignal_1039',['CombinedSignal',['../classgeopm_1_1_combined_signal.html',1,'geopm']]],
+  ['constconfigiogroup_1040',['ConstConfigIOGroup',['../classgeopm_1_1_const_config_i_o_group.html',1,'geopm']]],
+  ['control_1041',['Control',['../classgeopm_1_1_control.html',1,'geopm']]],
+  ['control_5finfo_5fs_1042',['control_info_s',['../structgeopm_1_1control__info__s.html',1,'geopm']]],
+  ['cpu_5fset_5ft_1043',['cpu_set_t',['../structcpu__set__t.html',1,'']]],
+  ['cpufreqsysfsdriver_1044',['CpufreqSysfsDriver',['../classgeopm_1_1_cpufreq_sysfs_driver.html',1,'geopm']]],
+  ['cpuid_1045',['Cpuid',['../classgeopm_1_1_cpuid.html',1,'geopm']]],
+  ['cpuidnull_1046',['CpuidNull',['../classgeopm_1_1_cpuid_null.html',1,'geopm']]],
+  ['cpuinfoiogroup_1047',['CpuinfoIOGroup',['../classgeopm_1_1_cpuinfo_i_o_group.html',1,'geopm']]]
 ];

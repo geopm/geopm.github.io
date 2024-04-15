@@ -94,70 +94,24 @@
              
   <section id="geopm-developer-guide">
 <h1>GEOPM Developer Guide<a class="headerlink" href="#geopm-developer-guide" title="Permalink to this heading"></a></h1>
-<p>If you wish to modify the source code in the GEOPM git repository, this
-guide provide instructions for the process. The GEOPM repository utilizes
-two separate autotools-based build systems, used for compiling, testing,
-and installing software components designed with C++ and Python.</p>
-<p>The <cite>service</cite> subdirectory of the GEOPM repository houses all the files
-related to the GEOPM systemd services, including the build system and all
-the source codes. In contrast, the base directory of the same repository
-supports all software components not located in the <cite>service</cite> directory and
-relies solely on the components within the <cite>service</cite> directory installed
-by the service build.</p>
-<p>Before proceeding with the build steps, it’s advisable to familiarize
-yourself with the build requirements for the <a class="reference internal" href="requires.html"><span class="doc">GEOPM service</span></a>
-and <a class="reference internal" href="runtime.html"><span class="doc">GEOPM HPC runtime</span></a>.</p>
+<p>If you wish to modify the source code in the GEOPM git repository, this guide
+provide instructions for the process.</p>
+<p>Before proceeding with the build steps, it’s advisable to familiarize yourself
+with the build requirements for the <a class="reference internal" href="requires.html"><span class="doc">GEOPM Access Service</span></a> and
+<a class="reference internal" href="runtime.html"><span class="doc">GEOPM Runtime Service</span></a>.</p>
 <section id="developer-build-process">
 <h2>Developer Build Process<a class="headerlink" href="#developer-build-process" title="Permalink to this heading"></a></h2>
 <p>To build all the software in the GEOPM repository, run the following commands
-within the base directory of the GEOPM repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>service/
-./autogen.sh
-./configure
-make
-<span class="nb">cd</span><span class="w"> </span>..
-./autogen.sh
-./configure
-make
+described in the repository README.md.</p>
+<p>Upon successful build completion, if you wish to execute unit tests, each build
+has a <cite>check</cite> target in the makefiles.  The <cite>geopmdpy</cite> and <cite>geopmpy</cite> directories
+have a README.md that describes how to run the unit tests.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>libgeopmd
+make<span class="w"> </span>-j<span class="w"> </span>check
+<span class="nb">cd</span><span class="w"> </span>../libgeopm
+make<span class="w"> </span>-j<span class="w"> </span>check
 </pre></div>
 </div>
-<p>Upon successful build completion, if you wish to execute unit tests,
-each build has a <cite>check</cite> target in the makefiles. Alternatively, the test
-programs can be built separately using the <cite>checkprogs</cite> target.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>service/
-make<span class="w"> </span>checkprogs
-make<span class="w"> </span>check
-<span class="nb">cd</span><span class="w"> </span>..
-make<span class="w"> </span>checkprogs
-make<span class="w"> </span>check
-</pre></div>
-</div>
-<p>If you want to install the build artifacts into a separate directory, you’ll
-need to provide some additional options to configure during the build process.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">GEOPM_INSTALL</span><span class="o">=</span><span class="nv">$HOME</span>/build/geopm
-<span class="nb">cd</span><span class="w"> </span>service/
-./autogen.sh
-./configure<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$GEOPM_INSTALL</span>
-make
-make<span class="w"> </span>install
-<span class="nb">cd</span><span class="w"> </span>..
-./autogen.sh
-./configure<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$GEOPM_INSTALL</span><span class="w"> </span>--with-geopmd<span class="o">=</span><span class="nv">$GEOPM_INSTALL</span>
-make
-make<span class="w"> </span>install
-</pre></div>
-</div>
-<p>When building from source and configured with the <cite>–prefix</cite> option, the
-libraries, binaries, and Python tools will not install into the standard
-system paths. At this point, you must modify your environment to specify
-the installed location.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$GEOPM_INSTALL</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$GEOPM_INSTALL</span>/bin:<span class="nv">$PATH</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="k">$(</span>ls<span class="w"> </span>-d<span class="w"> </span><span class="nv">$GEOPM_INSTALL</span>/lib/python*/site-packages<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n1<span class="k">)</span>:<span class="nv">$PYTHONPATH</span>
-</pre></div>
-</div>
-<p>If desired, you can specify a different Python version using the
-<cite>–with-python</cite> option in the configure script.</p>
 </section>
 <section id="configuring-the-build">
 <h2>Configuring the Build<a class="headerlink" href="#configuring-the-build" title="Permalink to this heading"></a></h2>
@@ -177,11 +131,13 @@ options and environment variables are listed below:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">--prefix</span></code>: Path prefix for install artifacts</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code>: Enable verbose error and warning messaging while disabling optimization.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enable-coverage</span></code>: Enable coverage report generation with gcov</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-beta</span></code>: Enable beta features, which remain in beta until their
+interfaces are considered finalized and stable for future releases.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">CC=</span></code>: Set the C compiler with environment variable</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">CXX=</span></code>: Set the C++ compiler with environment variable</p></li>
 </ul>
 <ul class="simple">
-<li><p>Service configure script</p></li>
+<li><p>libgeopmd configure script</p></li>
 </ul>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--enable-nvml</span></code>: Adds support for the Nvidia NVML library</p></li>
@@ -208,8 +164,9 @@ options and environment variables are listed below:</p>
 </ul>
 <section id="intel-compiler-and-mpi-toolchain">
 <h3>Intel Compiler and MPI Toolchain<a class="headerlink" href="#intel-compiler-and-mpi-toolchain" title="Permalink to this heading"></a></h3>
-<p>To enable the use of the Intel toolchain for both the compiler and MPI support, export
-the following variables prior to configuring the base build of the GEOPM repository:</p>
+<p>To enable the use of the Intel toolchain for both the compiler and MPI support,
+export the following variables prior to configuring the base build of the GEOPM
+repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CC</span><span class="o">=</span>icx
 <span class="nb">export</span><span class="w"> </span><span class="nv">CXX</span><span class="o">=</span>icpx
 <span class="nb">export</span><span class="w"> </span><span class="nv">FC</span><span class="o">=</span>ifx
@@ -223,22 +180,22 @@ the following variables prior to configuring the base build of the GEOPM reposit
 <span class="nb">export</span><span class="w"> </span><span class="nv">MPIFR90</span><span class="o">=</span>mpiifort
 </pre></div>
 </div>
-<p>We recommend using the system compiler toolchain for compiling the
-GEOPM service when creating an installed RPM.  The <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">rpm</span></code> target
-of the service directory uses the geopm-service spec file to ensure
-that the system GCC toolchain is used to create the RPM.</p>
+<p>We recommend using the system compiler toolchain for compiling the GEOPM service
+when creating an installed RPM.  The <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">rpm</span></code> target of the service
+directory uses the geopm-service spec file to ensure that the system GCC
+toolchain is used to create the RPM.</p>
 </section>
 </section>
 <section id="coverage-instructions">
 <h2>Coverage Instructions<a class="headerlink" href="#coverage-instructions" title="Permalink to this heading"></a></h2>
-<p>To generate a coverage report, first be sure that you have installed
-the lcov package.  Note that if you are using GCC 9 or above, you must
-use lcov v1.15 or later to work around <a class="reference external" href="https://github.com/linux-test-project/lcov/issues/58">this issue</a>.</p>
+<p>To generate a coverage report, first be sure that you have installed the lcov
+package.  Note that if you are using GCC 9 or above, you must use lcov v1.15 or
+later to work around <a class="reference external" href="https://github.com/linux-test-project/lcov/issues/58">this issue</a>.</p>
 <p>The lcov source is available here:</p>
 <p><a class="reference external" href="https://github.com/linux-test-project/lcov">https://github.com/linux-test-project/lcov</a></p>
-<p>The GEOPM build must be configured with the “–enable-coverage” option
-prior to running the tests.  Then in either the service directory or
-the root directory, simply run</p>
+<p>The GEOPM build must be configured with the “–enable-coverage” option prior to
+running the tests.  Then in either the service directory or the root directory,
+simply run</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">coverage</span>
 </pre></div>
 </div>
@@ -248,28 +205,29 @@ the root directory, simply run</p>
 </div>
 <p>Note that all tests must pass in order to generate a coverage report.
 Any help in increasing code coverage levels is appreciated.</p>
+<p>Coverage from the latest release is [posted to our web
+page](<a class="reference external" href="http://geopm.github.io/coverage/index.html">http://geopm.github.io/coverage/index.html</a>).</p>
 </section>
 <section id="coding-style">
 <h2>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this heading"></a></h2>
 <p>Python code should follow the PEP8 standard as described in
 <a class="reference external" href="https://peps.python.org/pep-0008/">https://peps.python.org/pep-0008/</a>.</p>
-<p>C++ code can be corrected to conform to the GEOPM standard
-using astyle with the following options:</p>
+<p>C++ code can be corrected to conform to the GEOPM standard using astyle with the
+following options:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">astyle</span> <span class="o">--</span><span class="n">style</span><span class="o">=</span><span class="n">linux</span> <span class="o">--</span><span class="n">indent</span><span class="o">=</span><span class="n">spaces</span><span class="o">=</span><span class="mi">4</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">S</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">N</span>
 </pre></div>
 </div>
 <p>Note that astyle is not perfect (in particular it is confused by C++11
-initializer lists), and some versions of astyle will format the code
-slightly differently.</p>
-<p>Use C style variable names with lower case and underscores.  Upper
-camel case is used exclusively for class names.  Prefix all member
-variables with “m<em>” and all global variables with “g</em>“.</p>
-<p>Please avoid global variables as much as possible and if it is
-necessary to use a global (primarily for C code) please scope them
-statically to the compilation unit.</p>
+initializer lists), and some versions of astyle will format the code slightly
+differently.</p>
+<p>Use C style variable names with lower case and underscores.  Upper camel case is
+used exclusively for class names.  Prefix all member variables with “m<em>” and
+all global variables with “g</em>“.</p>
+<p>Please avoid global variables as much as possible and if it is necessary to use
+a global (primarily for C code) please scope them statically to the compilation
+unit.</p>
 <p>Avoid preprocessor macros as much as possible (use enum not #define).
-Preprocessor usage should be reserved for expressing configure time
-options.</p>
+Preprocessor usage should be reserved for expressing configure time options.</p>
 <p>The number of columns in a source file should not exceed 70 or 80 before
 wrapping the line.  Exceptions are allowed when it is required for compilation
 or similar.  In general, follow the style in the file you are modifying.</p>
@@ -289,25 +247,16 @@ of waiting until you make a pull request to see all of them.</p>
 <section id="license-headers">
 <h2>License Headers<a class="headerlink" href="#license-headers" title="Permalink to this heading"></a></h2>
 <p>Introducing a new file requires a license comment in its header with a
-corresponding copying_headers/header.* file.  The new file path must
-be listed in the corresponding copying_headers/MANIFEST.* file.  This
-can be tested by running the copying_headers/test_license script after
-committing the new file to git, and rerunning the autogen.sh script.
-Files for which a license comment is not appropriate should be listed
-in copying_headers/MANIFEST.EXEMPT.  Any new installed files should
-also be added to geopm-runtime.spec.in or service/geopm-service.spec.in.</p>
+corresponding file.  Any new installed files should also be added to the package’s
+<cite>.spec</cite> file and a <cite>debian/*.install</cite> file.</p>
 </section>
 <section id="creating-manuals">
 <h2>Creating Manuals<a class="headerlink" href="#creating-manuals" title="Permalink to this heading"></a></h2>
 <p>Introducing a new man page requires changes in multiple files:</p>
 <ol class="arabic simple">
 <li><p>The build target (man page) should be added to rst_file in conf.py</p></li>
-<li><p>The rst source file should be added to EXTRA_DIST in service/docs/Makefile.mk</p></li>
-<li><p>The build target (man page) should be added to dist_man_MANS in service/docs/Makefile.mk</p></li>
-<li><p>The rst source file should be added to copying_headers/MANIFEST.EXEMPT as
-described above.</p></li>
 <li><p>The gzipped installed man page should be listed in the %files section of
-geopm-service.spec.in</p></li>
+geopm-docs.spec.in</p></li>
 <li><p>A link to the new html page should be added to the SEE ALSO section of
 geopm.7.rst and any other related man pages.</p></li>
 </ol>
@@ -334,7 +283,7 @@ geopm.7.rst and any other related man pages.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2015 - 2023, Intel Corporation. All rights reserved..</p>
+    <p>&#169; Copyright 2015 - 2024, Intel Corporation. All rights reserved..</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

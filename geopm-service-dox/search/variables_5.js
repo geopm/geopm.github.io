@@ -1,10 +1,20 @@
 var searchData=
 [
-  ['interface_5fversion_1466',['interface_version',['../structgeopm_1_1sst__version__s.html#a7832226e59145df49eec00ab514c08eb',1,'geopm::sst_version_s']]],
-  ['interfaces_1467',['interfaces',['../structgeopm_1_1sst__cpu__map__interface__batch__s.html#a05d67e05d9a651e921dd2e16a6ad035f',1,'geopm::sst_cpu_map_interface_batch_s::interfaces()'],['../structgeopm_1_1sst__mmio__interface__batch__s.html#ab2fe78628146ba2b2c4dee5948351222',1,'geopm::sst_mmio_interface_batch_s::interfaces()'],['../structgeopm_1_1sst__mbox__interface__batch__s.html#ac6e1f084ef774ff5a9c4f165d7042316',1,'geopm::sst_mbox_interface_batch_s::interfaces()']]],
-  ['is_5fmbox_5fsupported_1468',['is_mbox_supported',['../structgeopm_1_1sst__version__s.html#aa84cbb3922a1ee4c112df4314a781fd8',1,'geopm::sst_version_s']]],
-  ['is_5fmmio_5fsupported_1469',['is_mmio_supported',['../structgeopm_1_1sst__version__s.html#a0222584024491b9a3c72a55857b8b211',1,'geopm::sst_version_s']]],
-  ['is_5fvalid_1470',['is_valid',['../structgeopm_1_1json__checker.html#a60b87d17f252c53e3c12b7e2cfbf0b02',1,'geopm::json_checker']]],
-  ['is_5fwritable_1471',['is_writable',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a6fe8915800eaaaac5bb04618d446f00f',1,'geopm::SysfsDriver::properties_s']]],
-  ['is_5fwrite_1472',['is_write',['../structgeopm_1_1sst__mmio__interface__s.html#a62c6cbed1febf263f66c45dc615f7477',1,'geopm::sst_mmio_interface_s']]]
+  ['edge_1907',['EDGE',['../msr__data__arch_8cpp.html#a317b13cbfaa11d52a69ded7b299859ba',1,'EDGE():&#160;msr_data_arch.cpp'],['../namespacegeopm.html#a6d133041e342a116f7cba31e54abd8e7',1,'geopm::EDGE()']]],
+  ['en_1908',['EN',['../namespacegeopm.html#a4755342bb6045f77164538c1b1367362',1,'geopm::EN()'],['../msr__data__arch_8cpp.html#a0ed37ba045123a54d223d6aa196e2bf7',1,'EN():&#160;msr_data_arch.cpp']]],
+  ['en0_5fpmi_1909',['EN0_PMI',['../msr__data__arch_8cpp.html#a4067691be14104511ba2ceb54203d75e',1,'msr_data_arch.cpp']]],
+  ['en0_5fusr_1910',['EN0_USR',['../msr__data__arch_8cpp.html#af8aff48349e0cbc8b88e3c263152a565',1,'msr_data_arch.cpp']]],
+  ['en1_5fos_1911',['EN1_OS',['../msr__data__arch_8cpp.html#ae9b15c578d5ecdc463d25a84d6d39524',1,'msr_data_arch.cpp']]],
+  ['en1_5fpmi_1912',['EN1_PMI',['../msr__data__arch_8cpp.html#a40a415a684f1e3fdbd5d300b45f1ed8c',1,'msr_data_arch.cpp']]],
+  ['en1_5fusr_1913',['EN1_USR',['../msr__data__arch_8cpp.html#a031c2eb72057e3da35e508507e0e2576',1,'msr_data_arch.cpp']]],
+  ['en2_5fos_1914',['EN2_OS',['../msr__data__arch_8cpp.html#a1c1a3f5e380d8ea584df7aee6a289367',1,'msr_data_arch.cpp']]],
+  ['en2_5fpmi_1915',['EN2_PMI',['../msr__data__arch_8cpp.html#ab65bab3146cd534d47d20c18f30bdc76',1,'msr_data_arch.cpp']]],
+  ['en2_5fusr_1916',['EN2_USR',['../msr__data__arch_8cpp.html#ac8903479c277ef5c9970c3cc77fb00ea',1,'msr_data_arch.cpp']]],
+  ['en_5ffixed_5fctr0_1917',['EN_FIXED_CTR0',['../msr__data__arch_8cpp.html#a98b9945376366b234378ce38a0189423',1,'msr_data_arch.cpp']]],
+  ['en_5ffixed_5fctr1_1918',['EN_FIXED_CTR1',['../msr__data__arch_8cpp.html#afe048441eab69c552adf8f390706e045',1,'msr_data_arch.cpp']]],
+  ['en_5ffixed_5fctr2_1919',['EN_FIXED_CTR2',['../msr__data__arch_8cpp.html#a1055f918c6a9be5d84a495a8c2efc187',1,'msr_data_arch.cpp']]],
+  ['en_5fpmc1_1920',['EN_PMC1',['../msr__data__arch_8cpp.html#ada79f66e34b81e378cd0ceda7d94d571',1,'msr_data_arch.cpp']]],
+  ['en_5fpmc2_1921',['EN_PMC2',['../msr__data__arch_8cpp.html#a47a69b7a3df4750eda006a1e02b86691',1,'msr_data_arch.cpp']]],
+  ['en_5fpmc3_1922',['EN_PMC3',['../msr__data__arch_8cpp.html#a829259e024c0fd34354658720d1ca9c4',1,'msr_data_arch.cpp']]],
+  ['end_5fbit_1923',['end_bit',['../namespacegeopm.html#abd8151cb4b4164e7051e3a8cc9c33510',1,'geopm::end_bit()'],['../msr__data__arch_8cpp.html#ab6ba75ca4c4dec9acfe6685bca1bc997',1,'end_bit():&#160;msr_data_arch.cpp']]]
 ];
