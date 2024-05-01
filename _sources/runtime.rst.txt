@@ -2,7 +2,9 @@ User Guide for GEOPM Runtime
 ============================
 
 The GEOPM Runtime is software designed to enhance energy efficiency of
-applications through active hardware configuration.
+applications through active hardware configuration. See
+:ref:`Getting Started Guide <overview:|:straight_ruler:| Use the Runtime to Measure Application Performance>`
+for information on how to begin using the GEOPM Runtime.
 
 User Model
 ----------
@@ -65,84 +67,6 @@ documentation.
 .. figure:: https://geopm.github.io/images/geopm-runtime-usage.svg
    :alt: An illustration of geopmlaunch running on 2 servers, generating a trace file per host, and one report across all hosts.
    :align: center
-
-.. admonition:: Quick start for MPI applications
-
-   The ``geopmlaunch`` tool is the recommended user interface for GEOPM Runtime. It wraps a launcher application
-   (like srun in this example), generates a summarizing report file, and optionally generates a time-series trace for each host.
-
-   The steps for using ``geopmlaunch`` with your MPI application are:
-
-  * Specify how many nodes and processes to use.
-  * Run the ``geopmlaunch`` command wherever you would normally run the
-    wrapped launcher command (e.g., ``srun``, ``mpiexec``, etc.).
-  * Read the generated ``geopm.report`` file
-
-  .. code-block:: console
-    :caption: Examples using ``geopmlaunch``
-
-    # Launch with srun and examine the generated GEOPM report
-    $ geopmlaunch srun -N 1 -n 20 -- ./my-app
-    $ less geopm.report
-    # Launch with Intel mpiexec and examine the generated GEOPM report
-    $ geopmlaunch impi -n 1 -ppn 20 -- ./my-app
-    $ less geopm.report
-    # Display all options and available launchers
-    $ geopmlaunch --help
-
-.. admonition:: Quick start for Non-MPI applications
-
-   In order to profile non-MPI applications, the recommended approach is to launch
-   the GEOPM runtime alongside the target application. This can be done by launching
-   the ``geopmctl`` application in the background on every host node that the non-MPI
-   application is expected to run. After a clean or forced termination of the
-   application being profiled, the ``geopmctl`` application is designed to terminate
-   and generate a summarizing report file, and optionally, a time-series trace per host.
-
-   The following requirements must be met while launching ``geopmctl`` with your
-   non-MPI application:
-
-   * Both the ``geopmctl`` process and the application process must have
-     the ``GEOPM_PROFILE`` environment variable set to the **same**
-     value.
-   * The application process must have ``LD_PRELOAD=libgeopm.so.2`` set
-     in the environment, or the application binary must be linked
-     directly to ``libgeopm.so.2`` at compile time.
-   * The ``GEOPM_REPORT`` environment variable must be set in the
-     environment of the ``geopmctl`` process.
-   * While not necessary in this example, in case of multiple extraneous processes
-     getting launched, the optional ``GEOPM_PROGRAM_FILTER`` environment variable
-     can be set to explicitly list the program invocation name of the specific
-     non-MPI process that needs to be profiled.
-   * While optional in this example, in case of launching non-MPI applications across
-     multiple nodes, the ``GEOPM_CTL_LOCAL`` environment variable should be set in order
-     to generate a unique GEOPM report file for each host node. This disables all
-     intra-process MPI communication between the GEOPM controllers.
-
-   .. code-block:: console
-     :caption: Examples using ``geopmctl``
-
-     $ GEOPM_PROFILE=sleep-ten \
-       GEOPM_REPORT=sleep-ten.yaml \
-       GEOPM_CTL_LOCAL=true \
-       GEOPM_TRACE=sleep-ten-trace \
-       GEOPM_PROGRAM_FILTER=sleep \
-       geopmctl &
-     $ GEOPM_PROFILE=sleep-ten \
-       LD_PRELOAD=libgeopm.so.2 \
-       sleep 10
-     $ cat sleep-ten.yaml
-     $ awk -F\| '{print $1, $6, $8}' sleep-ten-trace* | less
-
-The `GEOPM Environment Variables
-<https://geopm.github.io/geopm.7.html#geopm-environment-variables>`_ section
-includes a complete listing of the environment variables accepted by the GEOPM runtime.
-
-The `GEOPM runtime tutorial
-<https://github.com/geopm/geopm/tree/dev/tutorial#geopm-tutorial>`_ shows how
-to profile unmodified applications, select and evaluate different GEOPM agent
-algorithms (see below), and how to add markup to an application.  The tutorial
-provides a starting point for someone trying to get familiar with the GEOPM runtime.
 
 GEOPM *agents* can exploit this hierarchical control system to optimize
 various objective functions. Examples include maximizing application
@@ -275,7 +199,7 @@ following on a compute node:
 
 .. code-block:: bash
 
-    ./tutorial/admin/00_test_prereqs.sh
+    ./integration/tutorial/admin/00_test_prereqs.sh
 
 If the script output includes:
 
@@ -292,24 +216,28 @@ For additional information, please contact the GEOPM team.
 Linux Power Management
 ^^^^^^^^^^^^^^^^^^^^^^
 
-It's crucial to note that other Linux mechanisms for power management can
-interfere with GEOPM, which must be disabled. It's recommended to disable the
-``intel_pstate`` kernel driver by modifying the kernel command line through
-grub2 or your system bootloader by adding:
+It's important to note that other Linux mechanisms for CPU power management may
+interfere with performance optimization objectives of GEOPM Agents. To achieve
+optimal performance when deploying a GEOPM Agent that controls CPU frequency or
+power limits it's recommended that the generic scaling governor ``userspace``
+is selected while the GEOPM Agent is active.  If ``userspace`` is not available
+on your system, it may be preferred to select ``performance`` mode while the
+GEOPM Agent is active.
 
-.. code-block:: bash
+For more information, see the Linux Kernel documentation on
+`generic scaling governors <https://docs.kernel.org/admin-guide/pm/cpufreq.html#generic-scaling-governors>`_.
 
-   "intel_pstate=disable"
 
-The `cpufreq` driver will be enabled when the ``intel_pstate`` driver
-is disabled. It has several modes controlled by the ``scaling_governor``
-sysfs entry. When the performance mode is selected, the driver will not
+Using Slurm to control the Linux CPU governor
+"""""""""""""""""""""""""""""""""""""""""""""
+
+When the ``userspace`` or ``performance`` mode is selected, the driver will not
 interfere with GEOPM. On SLURM-based systems, the :ref:`GEOPM launch wrapper
 <runtime:geopm application launch wrapper>` will attempt to set the scaling
-governor to "performance" automatically, eliminating the need to manually
-set the governor. On older versions of SLURM, the desired governors must be
-listed explicitly in ``/etc/slurm.conf``. Specifically, SLURM 15.x requires
-the following option:
+governor to ``performance`` automatically, eliminating the need to manually set
+the governor. On older versions of SLURM, the desired governors must be listed
+explicitly in ``/etc/slurm.conf``. Specifically, SLURM 15.x requires the
+following option:
 
 .. code-block:: bash
 
@@ -319,47 +247,45 @@ For more on SLURM configuration, please see the `slurm.conf manual
 <https://slurm.schedmd.com/slurm.conf.html>`_. On non-SLURM systems, the
 scaling governor should still be manually set through some other mechanism
 to ensure proper GEOPM behavior. The following command will set the governor
-to performance:
+to ``userspace``:
 
 .. code-block:: bash
 
-   echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+   echo userspace | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
-For more information, see the Linux Kernel documentation on `cpu-freq
-governors <https://www.kernel.org/doc/Documentation/cpu-freq/governors.txt>`_.
+Launching the GEOPM Runtime
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
 
 GEOPM Application Launch Wrapper
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""
 
-The GEOPM Runtime package installs the ``geopmlaunch`` command. This
-command is a wrapper for MPI launch commands such as ``srun``, ``aprun``,
-and ``mpiexec``, where the wrapper script enables the GEOPM runtime. The
+The GEOPM Runtime package installs the ``geopmlaunch`` command. This command is
+a wrapper for MPI launch commands such as ``srun``, ``aprun``, and
+``mpiexec.hydra``, where the wrapper script enables the GEOPM runtime. The
 ``geopmlaunch`` command supports the same command-line interface as the
 underlying launch command, while extending the interface with GEOPM-specific
 options. The ``geopmlaunch`` application launches the primary compute
-application and the GEOPM control thread on each compute node, and manages
-all process CPU affinity requirements. This wrapper is documented in the
-:doc:`geopmlaunch(1)<geopmlaunch.1>` man page.
+application and the GEOPM control thread on each compute node.  This wrapper is
+documented in the :doc:`geopmlaunch(1)<geopmlaunch.1>` man page.
 
-The ``geopmlaunch`` command supports various underlying MPI application
-launchers as shown in the :doc:`geopmlaunch(1)<geopmlaunch.1>` man page. If
-your system's launch mechanism is not supported, then you must enforce affinity
-requirements, and all options to the GEOPM runtime must be passed through
-environment variables. Please consult the :doc:`geopm(7)<geopm.7>` man page for
+If your system's launch mechanism is not supported then options to the GEOPM
+runtime must be passed through environment variables and some features of the
+``geopmlaunch`` command (such as process CPU affinity management) will not be
+available.  Please consult the :doc:`geopm(7)<geopm.7>` man page for
 documentation of the environment variables used by the GEOPM runtime that would
-otherwise be controlled by the wrapper script.
+otherwise be controlled by the wrapper script and see :ref:`overview:Profiling Applications without ``geopmlaunch```
+for details.
 
 CPU Affinity Requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The GEOPM runtime requires each of the application's MPI processes to
-be affinitized to different CPUs. This is a critical requirement for
-the runtime and must be enforced by the MPI launch command. When using
-the ``geopmlaunch`` wrapper, these affinity requirements are handled by
-``geopmlaunch`` when the ``--geopm-affinity-enable`` command-line option
-is provided (see :doc:`geopmlaunch(1)<geopmlaunch.1>`). Otherwise, users
-must explicitly affinitize their application using the appropriate options
-for their chosen launcher.
+When using the ``geopmlaunch`` wrapper, the user may optionally provide the
+``--geopm-affinity-enable`` command-line option (see
+:doc:`geopmlaunch(1)<geopmlaunch.1>`). This will enable hardware metrics to be
+more accurately measured on a per-application-region basis by restricting
+process migration.
 
 While the GEOPM control thread connects to the application it will
 automatically affinitize itself to the highest indexed core not used by the
@@ -367,18 +293,6 @@ application if the application is not affinitized to a CPU on every core. If
 the application is using all cores of the system, the GEOPM control thread
 will be pinned to the highest logical CPU.
 
-Many ways exist to launch an MPI application, and no single uniform
-way of enforcing MPI rank CPU affinities can work across all job launch
-mechanisms. OpenMP runtimes, which are linked with compiler choice, also have
-different mechanisms for affinitizing OpenMP threads within CPUs available
-to each MPI process. The GEOPM control thread can also be launched as an
-application thread or process that can either be part of the primary MPI
-application or a completely different MPI application. Due to these factors,
-it is challenging to document the correct process affinitization across all
-configurations. Please refer to your site documentation about CPU affinity for
-the best solution for your system and consider extending the ``geopmlaunch``
-wrapper to support your system configuration. For information on how to
-share these implementations with the community, refer to :doc:`contrib`.
 
 Resource Manager Integration
 ----------------------------

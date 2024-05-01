@@ -173,6 +173,11 @@
 <h1>geopmaccess(1) – Access management for the GEOPM Service<a class="headerlink" href="#geopmaccess-1-access-management-for-the-geopm-service" title="Permalink to this heading"></a></h1>
 <section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmaccess [-h] [-v] [-c] [-u | -g GROUP | -a | -l | -s] [-w | -e | -D] [-n | -F] [-x]
+</pre></div>
+</div>
+<p>Access management for the GEOPM Service. Command line tool for reading and
+writing the access management lists for the GEOPM Service signals and controls.</p>
 <section id="read-access-list">
 <h3>Read Access List<a class="headerlink" href="#read-access-list" title="Permalink to this heading"></a></h3>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmaccess [-c] [-u | -g GROUP | -a | -l]
@@ -206,57 +211,56 @@
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
-<p>The GEOPM service uses the <code class="docutils literal notranslate"><span class="pre">/etc/geopm</span></code> directory to store
-files that control which signals and controls may be accessed by a
-user through the service.  The purpose of the <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> command
-line tool is to enable reading and writing of these access list files.</p>
+<p>The GEOPM service uses the <code class="docutils literal notranslate"><span class="pre">/etc/geopm</span></code> directory to store files that control
+which signals and controls may be accessed by a user through the service.  The
+purpose of the <code class="docutils literal notranslate"><span class="pre">geopmaccess</span></code> command line tool is to enable reading and
+writing of these access list files.</p>
 <section id="options">
 <h3>Options<a class="headerlink" href="#options" title="Permalink to this heading"></a></h3>
 <dl class="option-list">
-<dt><kbd><span class="option">-c</span>, <span class="option">--controls</span></kbd></dt>
-<dd><p>Command applies to controls not signals</p>
-</dd>
-<dt><kbd><span class="option">-u</span>, <span class="option">--default</span></kbd></dt>
-<dd><p>Print the default user access list</p>
-</dd>
-<dt><kbd><span class="option">-g</span>, <span class="option">--group</span></kbd></dt>
-<dd><p>Read or write the access list for a specific Unix GROUP</p>
-</dd>
-<dt><kbd><span class="option">-a</span>, <span class="option">--all</span></kbd></dt>
-<dd><p>Print all signals or controls supported by the service system</p>
-</dd>
-<dt><kbd><span class="option">-w</span>, <span class="option">--write</span></kbd></dt>
-<dd><p>Use standard input to write an access list</p>
-</dd>
-<dt><kbd><span class="option">-e</span>, <span class="option">--edit</span></kbd></dt>
-<dd><p>Edit an access list using EDITOR environment variable, default
-<code class="docutils literal notranslate"><span class="pre">vi</span></code></p>
-</dd>
-<dt><kbd><span class="option">-D</span>, <span class="option">--delete</span></kbd></dt>
-<dd><p>Remove an access list for default user or a particular Unix Group</p>
-</dd>
-<dt><kbd><span class="option">-n</span>, <span class="option">--dry-run</span></kbd></dt>
-<dd><p>Do error checking on all user input, but do not modify
-configuration files</p>
-</dd>
-<dt><kbd><span class="option">-F</span>, <span class="option">--force</span></kbd></dt>
-<dd><p>Write access list without validating GEOPM Service support for
-names</p>
-</dd>
-<dt><kbd><span class="option">-l</span>, <span class="option">--log</span></kbd></dt>
-<dd><p>Print a log of all signals or controls that have been accessed
-since the service was last restarted.</p>
-</dd>
-<dt><kbd><span class="option">-s</span>, <span class="option">--msr-safe</span></kbd></dt>
-<dd><p>Print the minimal msr-safe allowlist required by GEOPM.</p>
-</dd>
 <dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
-<dd><p>Print brief summary of the command line usage information, then
-exit</p>
+<dd><p id="help-option">Print help message and exit</p>
 </dd>
 <dt><kbd><span class="option">-v</span>, <span class="option">--version</span></kbd></dt>
-<dd><p>Print version of <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a> to standard output,
-then exit</p>
+<dd><p id="version-option">Print version and exit</p>
+</dd>
+<dt><kbd><span class="option">-c</span>, <span class="option">--controls</span></kbd></dt>
+<dd><p id="controls-option">Command applies to controls not signals</p>
+</dd>
+<dt><kbd><span class="option">-u</span>, <span class="option">--default</span></kbd></dt>
+<dd><p id="default-option">Print the default user access list</p>
+</dd>
+<dt><kbd><span class="option">-g <var>GROUP</var></span>, <span class="option">--group <var>GROUP</var></span></kbd></dt>
+<dd><p id="group-option">Read or write the access list for a specific Unix GROUP</p>
+</dd>
+<dt><kbd><span class="option">-a</span>, <span class="option">--all</span></kbd></dt>
+<dd><p id="all-option">Print all signals or controls supported by the service system</p>
+</dd>
+<dt><kbd><span class="option">-l</span>, <span class="option">--log</span></kbd></dt>
+<dd><p id="log-option">Print list of used signals or controls used since last restart of the
+service</p>
+</dd>
+<dt><kbd><span class="option">-s</span>, <span class="option">--msr-safe</span></kbd></dt>
+<dd><p id="msr-safe-option">Generate an allowlist for msr-safe</p>
+</dd>
+<dt><kbd><span class="option">-w</span>, <span class="option">--write</span></kbd></dt>
+<dd><p id="write-option">Use standard input to write an access list. Implies -u unless -g is
+provided.</p>
+</dd>
+<dt><kbd><span class="option">-e</span>, <span class="option">--edit</span></kbd></dt>
+<dd><p id="edit-option">Edit an access list using EDITOR environment variable, default vi</p>
+</dd>
+<dt><kbd><span class="option">-D</span>, <span class="option">--delete</span></kbd></dt>
+<dd><p id="delete-option">Remove an access list for default user or a particular Unix Group</p>
+</dd>
+<dt><kbd><span class="option">-n</span>, <span class="option">--dry-run</span></kbd></dt>
+<dd><p id="dry-run-option">Do error checking on all user input, but do not modify configuration files</p>
+</dd>
+<dt><kbd><span class="option">-F</span>, <span class="option">--force</span></kbd></dt>
+<dd><p id="force-option">Write access list without validating GEOPM Service support for names</p>
+</dd>
+<dt><kbd><span class="option">-x</span>, <span class="option">--direct</span></kbd></dt>
+<dd><p id="direct-option">Write directly to files, do not use DBus</p>
 </dd>
 </dl>
 </section>
