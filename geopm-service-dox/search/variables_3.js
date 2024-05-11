@@ -1,13 +1,8 @@
 var searchData=
 [
-  ['clear_5fovf_5ffixed_5fctr0_1896',['CLEAR_OVF_FIXED_CTR0',['../msr__data__arch_8cpp.html#a3360381ff2632a3f8d37ecee2d6f3746',1,'msr_data_arch.cpp']]],
-  ['clear_5fovf_5ffixed_5fctr1_1897',['CLEAR_OVF_FIXED_CTR1',['../msr__data__arch_8cpp.html#a7f515d77d6653e6ea4e387b8989510a5',1,'msr_data_arch.cpp']]],
-  ['clear_5fovf_5ffixed_5fctr2_1898',['CLEAR_OVF_FIXED_CTR2',['../msr__data__arch_8cpp.html#ad2ec4122cccb28285d17729f64cb8cd5',1,'msr_data_arch.cpp']]],
-  ['clear_5fovf_5fpmc1_1899',['CLEAR_OVF_PMC1',['../msr__data__arch_8cpp.html#a94ed4fdb26cf14715fb66e6bac4b4647',1,'msr_data_arch.cpp']]],
-  ['clear_5fovf_5fpmc2_1900',['CLEAR_OVF_PMC2',['../msr__data__arch_8cpp.html#a0f50d0b33ed8994692582572a1c23d90',1,'msr_data_arch.cpp']]],
-  ['clear_5fovf_5fpmc3_1901',['CLEAR_OVF_PMC3',['../msr__data__arch_8cpp.html#a9efcf8c8a65964476051d4854dd15f66',1,'msr_data_arch.cpp']]],
-  ['cmask_1902',['CMASK',['../namespacegeopm.html#aa2124c705b2fe9ea4e20d7cb648a46e6',1,'geopm::CMASK()'],['../msr__data__arch_8cpp.html#af5b809456b8fc504ca8f9e0c059ffabe',1,'CMASK():&#160;msr_data_arch.cpp']]],
-  ['command_1903',['command',['../structgeopm_1_1sst__mbox__interface__s.html#ab2538ecbf0b34f1b20c15cf5ab417e91',1,'geopm::sst_mbox_interface_s']]],
-  ['cpu_5findex_1904',['cpu_index',['../structgeopm_1_1sst__cpu__map__interface__s.html#a1e48193cf7b4491e50265a63d4c7c220',1,'geopm::sst_cpu_map_interface_s::cpu_index()'],['../structgeopm_1_1sst__mmio__interface__s.html#a62e53099b9b8e1cc240d173c1ca94add',1,'geopm::sst_mmio_interface_s::cpu_index()'],['../structgeopm_1_1sst__mbox__interface__s.html#ae640e46e4412d5a3d844034470d0010d',1,'geopm::sst_mbox_interface_s::cpu_index()']]],
-  ['cutoff_1905',['cutoff',['../namespacegeopm.html#ada745c7e0133963abab4aa8a6322d3c5',1,'geopm::cutoff()'],['../msr__data__arch_8cpp.html#a7ad377943bbd3f6ee0dcba27a0c9fc5f',1,'cutoff():&#160;msr_data_arch.cpp']]]
+  ['description_1791',['description',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a56505d607d014de8edbfa0474125f709',1,'geopm::SysfsDriver::properties_s::description()'],['../structgeopm_1_1signal__info__s.html#acd609c9aba68cbb975d9f41eb9771bd7',1,'geopm::signal_info_s::description()'],['../structgeopm_1_1control__info__s.html#a258c9e857fae2f7408ca859f539b9702',1,'geopm::control_info_s::description()']]],
+  ['domain_1792',['domain',['../structgeopm_1_1signal__info__s.html#a1a207ce78a8adf72fec56df8af2ff09c',1,'geopm::signal_info_s::domain()'],['../structgeopm_1_1control__info__s.html#ac17f9356a848c01d489e85b447488dc4',1,'geopm::control_info_s::domain()']]],
+  ['domain_5fidx_1793',['domain_idx',['../structgeopm__request__s.html#a8ad1dd3f549148c27eec463aa5a53546',1,'geopm_request_s::domain_idx()'],['../structgeopm_1_1_save_control_1_1m__setting__s.html#a4843c5adcc8d7643be0af95bf9d3a259',1,'geopm::SaveControl::m_setting_s::domain_idx()']]],
+  ['domain_5ftype_1794',['domain_type',['../structgeopm__request__s.html#acab80971061d111eef66432c99381981',1,'geopm_request_s::domain_type()'],['../structgeopm_1_1_save_control_1_1m__setting__s.html#a0d5bbae00b00586b2d6317f611f2fe9c',1,'geopm::SaveControl::m_setting_s::domain_type()']]],
+  ['driver_5fversion_1795',['driver_version',['../structgeopm_1_1sst__version__s.html#a96ae6d5cee4f92a63fad7dda5f429212',1,'geopm::sst_version_s']]]
 ];

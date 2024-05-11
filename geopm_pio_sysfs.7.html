@@ -203,6 +203,8 @@ interpret those attributes.</p>
 <span class="w">          </span><span class="nt">&quot;attribute&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Name of the sysfs attribute&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"> </span><span class="p">},</span>
 <span class="w">          </span><span class="nt">&quot;scalar&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Scaling factor to multiply after reads and divide before writes to sysfs&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"> </span><span class="p">},</span>
 <span class="w">          </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Description of what the attribute represents&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;doc_domain&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Which GEOPM domain to note as the expected domain for this attribute in the documentation. The actual domain may differ based on platform interrogation at execution time.&quot;</span><span class="p">,</span>
+<span class="w">                          </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;board&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_memory&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_nic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package_integrated_gpu&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gpu_chip&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
 <span class="w">          </span><span class="nt">&quot;aggregation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;How to aggregate sampled values across domains&quot;</span><span class="p">,</span>
 <span class="w">                           </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;median&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_and&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;logical_or&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hash&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;region_hint&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;min&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;max&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;stddev&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;select_first&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;expect_same&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
 <span class="w">          </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;How to interpret differences between read values&quot;</span><span class="p">,</span>
@@ -233,20 +235,30 @@ may expose additional signals and controls (e.g., if you have configured
 additional instances of SysfsIOGroup that are not bundled with GEOPM). Use
 <code class="docutils literal notranslate"><span class="pre">geopmread</span></code> and <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code> to query the full set of signals and controls
 that are available on a particular system.</p>
+<p>Signals and controls in this IOGroup come from multiple drivers that provide
+sysfs attributes. Some signals and controls come from the <code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> driver.
+For more information, see the <a class="reference external" href="https://docs.kernel.org/admin-guide/pm/cpufreq.html">cpufreq documentation</a>.</p>
+<p>Some signals and controls are made available to GEOPM through the sysfs interface
+to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> (Direct Rendering Manager) driver. For more information, see the
+<a class="reference external" href="https://www.kernel.org/doc/html/next/gpu/i915.html">i915 documentation</a> and the
+<a class="reference external" href="https://www.intel.com/content/www/us/en/docs/oneapi/optimization-guide-gpu/2024-0/configuring-gpu-device.html">oneAPI GPU Optimization Guide</a>.
+The i915 driver is available in <a class="reference external" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/i915">upstream Linux</a>.
+Additional features are available in the <a class="reference external" href="https://github.com/intel-gpu/intel-gpu-i915-backports">out-of-tree version of the driver</a>.
+This IOGroup is intended for use with either version of the driver.</p>
 </section>
 <section id="signals">
 <h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
 <nav class="contents local" id="categories-of-sysfs-signals">
 <p class="topic-title">Categories of sysfs signals:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#cpufreq-signals" id="id2">Cpufreq Signals</a></p></li>
+<li><p><a class="reference internal" href="#cpufreq-signals" id="id1">Cpufreq Signals</a></p></li>
+<li><p><a class="reference internal" href="#i915-drm-signals" id="id2">i915 DRM Signals</a></p></li>
 </ul>
 </nav>
 <section id="cpufreq-signals">
-<h3><a class="toc-backref" href="#id2" role="doc-backlink">Cpufreq Signals</a><a class="headerlink" href="#cpufreq-signals" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id1" role="doc-backlink">Cpufreq Signals</a><a class="headerlink" href="#cpufreq-signals" title="Permalink to this heading"></a></h3>
 <p>The following signals are made available to GEOPM through the sysfs interface
-to the <code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> driver. For more information, see the
-<a class="reference external" href="https://docs.kernel.org/admin-guide/pm/cpufreq.html">cpufreq documentation</a>.</p>
+to the <code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> driver.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="cpufreq-bios-limit"><span class="pre">CPUFREQ::BIOS_LIMIT</span></code></dt><dd><p>Maximum CPU frequency, limited by BIOS settings.</p>
 <ul class="simple">
@@ -304,6 +316,301 @@ to the <code class="docutils literal notranslate"><span class="pre">cpufreq</spa
 </dd>
 </dl>
 </section>
+<section id="i915-drm-signals">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">i915 DRM Signals</a><a class="headerlink" href="#i915-drm-signals" title="Permalink to this heading"></a></h3>
+<p>The following signals are made available to GEOPM through the sysfs interface
+to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> driver.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate" id="drm-rps-min-freq-default"><span class="pre">DRM::RPS_MIN_FREQ_DEFAULT</span></code></dt><dd><p>The platform’s default setting for <a class="reference internal" href="#drm-rps-min-freq"><span class="std std-ref">DRM::RPS_MIN_FREQ</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: .defaults/rps_min_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-max-freq-default"><span class="pre">DRM::RPS_MAX_FREQ_DEFAULT</span></code></dt><dd><p>The platform’s default setting for <a class="reference internal" href="#drm-rps-max-freq"><span class="std std-ref">DRM::RPS_MAX_FREQ</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: .defaults/rps_max_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-cur-freq"><span class="pre">DRM::RPS_CUR_FREQ</span></code></dt><dd><p>Latest GPU frequency cached by the driver</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_cur_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-act-freq"><span class="pre">DRM::RPS_ACT_FREQ</span></code></dt><dd><p>Actual latest GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_act_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-boost-freq"><span class="pre">DRM::RPS_BOOST_FREQ</span></code></dt><dd><p>GPU boost frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_boost_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-base-act-freq"><span class="pre">DRM::BASE_ACT_FREQ</span></code></dt><dd><p>Actual GPU base-die frequency selected by the power manager</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: base_act_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-media-act-freq"><span class="pre">DRM::MEDIA_ACT_FREQ</span></code></dt><dd><p>Actual GPU media frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: media_act_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-base-freq-factor-step-default"><span class="pre">DRM::BASE_FREQ_FACTOR_STEP_DEFAULT</span></code></dt><dd><p>The platform’s default setting for <a class="reference internal" href="#drm-base-freq-factor-step"><span class="std std-ref">DRM::BASE_FREQ_FACTOR_STEP</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: .defaults/base_freq_factor</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-base-freq-factor-scale"><span class="pre">DRM::BASE_FREQ_FACTOR_SCALE</span></code></dt><dd><p>Scaling factor for <a class="reference internal" href="#drm-base-freq-factor-step"><span class="std std-ref">DRM::BASE_FREQ_FACTOR_STEP</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: base_freq_factor.scale</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-media-freq-factor-step-default"><span class="pre">DRM::MEDIA_FREQ_FACTOR_STEP_DEFAULT</span></code></dt><dd><p>The platform’s default setting for <a class="reference internal" href="#drm-media-freq-factor-step"><span class="std std-ref">DRM::MEDIA_FREQ_FACTOR_STEP</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: .defaults/media_freq_factor</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-media-freq-factor-scale"><span class="pre">DRM::MEDIA_FREQ_FACTOR_SCALE</span></code></dt><dd><p>Scaling factor for <a class="reference internal" href="#drm-media-freq-factor-step"><span class="std std-ref">DRM::MEDIA_FREQ_FACTOR_STEP</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: media_freq_factor.scale</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-rp0-freq"><span class="pre">DRM::RPS_RP0_FREQ</span></code></dt><dd><p>Maximum non-overclocked GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_RP0_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-base-rp0-freq"><span class="pre">DRM::BASE_RP0_FREQ</span></code></dt><dd><p>GPU base-die RP0 frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: base_RP0_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-media-rp0-freq"><span class="pre">DRM::MEDIA_RP0_FREQ</span></code></dt><dd><p>GPU media RP0 frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: media_RP0_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-mem-rp0-freq"><span class="pre">DRM::MEM_RP0_FREQ</span></code></dt><dd><p>GPU memory-die RP0 frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: mem_RP0_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-rp1-freq"><span class="pre">DRM::RPS_RP1_FREQ</span></code></dt><dd><p>GPU RP1 nominal frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_RP1_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-base-rpn-freq"><span class="pre">DRM::BASE_RPN_FREQ</span></code></dt><dd><p>GPU base-die RPn frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: base_RPn_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-rpn-freq"><span class="pre">DRM::RPS_RPN_FREQ</span></code></dt><dd><p>GPU minimum requestable frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_RPn_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-media-rpn-freq"><span class="pre">DRM::MEDIA_RPN_FREQ</span></code></dt><dd><p>GPU media RPn frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: media_RPn_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-mem-rpn-freq"><span class="pre">DRM::MEM_RPN_FREQ</span></code></dt><dd><p>GPU memory-die RPn frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: mem_RPn_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-punit-req-freq"><span class="pre">DRM::PUNIT_REQ_FREQ</span></code></dt><dd><p>PUnit requested GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: punit_req_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rapl-pl1-freq"><span class="pre">DRM::RAPL_PL1_FREQ</span></code></dt><dd><p>GPU RAPL PL1 frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rapl_PL1_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rc6-residency"><span class="pre">DRM::RC6_RESIDENCY</span></code></dt><dd><p>Time spent in RC6 state</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rc6_residency_ms</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: seconds</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-pl1"><span class="pre">DRM::THROTTLE_REASON_PL1</span></code></dt><dd><p>Whether the GPU is currently being throttled due to PL1 (average power)</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_pl1</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-pl2"><span class="pre">DRM::THROTTLE_REASON_PL2</span></code></dt><dd><p>Whether the GPU is currently being throttled due to PL2 (burst power)</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_pl2</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-pl4"><span class="pre">DRM::THROTTLE_REASON_PL4</span></code></dt><dd><p>Whether the GPU is currently being throttled due to PL4 (current)</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_pl4</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-prochot"><span class="pre">DRM::THROTTLE_REASON_PROCHOT</span></code></dt><dd><p>Whether the GPU is currently being throttled due to prochot</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_prochot</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-ratl"><span class="pre">DRM::THROTTLE_REASON_RATL</span></code></dt><dd><p>Whether the GPU is currently being throttled due to RATL</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_ratl</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-status"><span class="pre">DRM::THROTTLE_REASON_STATUS</span></code></dt><dd><p>Whether the GPU is currently being throttled for any reason</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_status</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-thermal"><span class="pre">DRM::THROTTLE_REASON_THERMAL</span></code></dt><dd><p>Whether the GPU is currently being throttled for thermal reasons</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_thermal</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-vr-tdc"><span class="pre">DRM::THROTTLE_REASON_VR_TDC</span></code></dt><dd><p>Whether the GPU is currently being throttled for VR TDC reasons</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_vr_tdc</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-throttle-reason-vr-thermalert"><span class="pre">DRM::THROTTLE_REASON_VR_THERMALERT</span></code></dt><dd><p>Whether the GPU is currently being throttled for VR thermal alert reasons</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: throttle_reason_thermalert</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+</dl>
+</section>
 </section>
 <section id="controls">
 <h2>Controls<a class="headerlink" href="#controls" title="Permalink to this heading"></a></h2>
@@ -311,13 +618,13 @@ to the <code class="docutils literal notranslate"><span class="pre">cpufreq</spa
 <p class="topic-title">Categories of SYSFS controls:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#cpufreq-controls" id="id3">Cpufreq Controls</a></p></li>
+<li><p><a class="reference internal" href="#i915-drm-controls" id="id4">i915 DRM Controls</a></p></li>
 </ul>
 </nav>
 <section id="cpufreq-controls">
 <h3><a class="toc-backref" href="#id3" role="doc-backlink">Cpufreq Controls</a><a class="headerlink" href="#cpufreq-controls" title="Permalink to this heading"></a></h3>
 <p>The following controls are made available to GEOPM through the sysfs interface
-to the <code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> driver. For more information, see the
-<a class="reference external" href="https://docs.kernel.org/admin-guide/pm/cpufreq.html">cpufreq documentation</a>.</p>
+to the <code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> driver.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="cpufreq-scaling-max-freq"><span class="pre">CPUFREQ::SCALING_MAX_FREQ</span></code></dt><dd><p>The maximum frequency allowed by the cpufreq scaling driver.</p>
 <ul class="simple">
@@ -348,6 +655,58 @@ to the <code class="docutils literal notranslate"><span class="pre">cpufreq</spa
 </dd>
 </dl>
 </section>
+<section id="i915-drm-controls">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">i915 DRM Controls</a><a class="headerlink" href="#i915-drm-controls" title="Permalink to this heading"></a></h3>
+<p>The following controls are made available to GEOPM through the sysfs interface
+to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> driver.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate" id="drm-rps-min-freq"><span class="pre">DRM::RPS_MIN_FREQ</span></code></dt><dd><p>User-configured requested power state (RPS) for minimum GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_min_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rps-max-freq"><span class="pre">DRM::RPS_MAX_FREQ</span></code></dt><dd><p>User-configured requested power state (RPS) for maximum GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rps_max_freq_mhz</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-base-freq-factor-step"><span class="pre">DRM::BASE_FREQ_FACTOR_STEP</span></code></dt><dd><p>GPU base-die frequency factor scaled by 1/<a class="reference internal" href="#drm-base-freq-factor-scale"><span class="std std-ref">DRM::BASE_FREQ_FACTOR_SCALE</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: base_freq_factor</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-media-freq-factor-step"><span class="pre">DRM::MEDIA_FREQ_FACTOR_STEP</span></code></dt><dd><p>GPU media frequency factor scaled by 1/<a class="reference internal" href="#drm-media-freq-factor-scale"><span class="std std-ref">DRM::MEDIA_FREQ_FACTOR_SCALE</span></a></p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: media_freq_factor</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rc6-enable"><span class="pre">DRM::RC6_ENABLE</span></code></dt><dd><p>Enable RC6</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: rc6_enable</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: none</p></li>
+</ul>
+</dd>
+</dl>
+</section>
 </section>
 <section id="aliases">
 <h2>Aliases<a class="headerlink" href="#aliases" title="Permalink to this heading"></a></h2>
@@ -365,6 +724,8 @@ attribute to a given alias, depending on the driver’s configuration. Use
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#cpufreq-scaling-cur-freq"><span class="std std-ref">CPUFREQ::SCALING_CUR_FREQ</span></a></p>
 </dd>
 </dl>
+<dl class="simple">
+</dl>
 </section>
 <section id="control-aliases">
 <h3>Control Aliases<a class="headerlink" href="#control-aliases" title="Permalink to this heading"></a></h3>
@@ -375,6 +736,8 @@ attribute to a given alias, depending on the driver’s configuration. Use
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_DESIRED_CONTROL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#cpufreq-scaling-setspeed"><span class="std std-ref">CPUFREQ::SCALING_SETSPEED</span></a></p>
 </dd>
+</dl>
+<dl class="simple">
 </dl>
 </section>
 </section>
@@ -416,7 +779,7 @@ These steps can also be followed within an agent.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2015 - 2024, Intel Corporation. All rights reserved..</p>
+    <p>&#169; Copyright 2015 - 2024 Intel Corporation. All rights reserved..</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

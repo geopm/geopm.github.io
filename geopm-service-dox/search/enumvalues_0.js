@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['array_2022',['ARRAY',['../classjson11_1_1_json.html#a51a2f5c0508c32c3336bcf42ae0233e5a1558e6ad0efafefef26518c663ef3fcd',1,'json11::Json']]]
+  ['comments_1858',['COMMENTS',['../namespacejson11.html#a8ed5b6b8d6e11e5cdf2e213e192a817baa6ebcf8f567daa77a193499dd04bea22',1,'json11']]]
 ];

@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['name_1968',['name',['../structgeopm_1_1_save_control_1_1m__setting__s.html#a77a2acb57d2f5eb4ee52d3876f7f88fa',1,'geopm::SaveControl::m_setting_s::name()'],['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a249094c494612894ca0be2ba1aae04cc',1,'geopm::SysfsDriver::properties_s::name()'],['../structgeopm__request__s.html#a508fe442aaaecdddbf3acc50c9c6a45e',1,'geopm_request_s::name()'],['../structgeopm_1_1signal__info__s.html#a9b6a28e5c7bb966a372542f94616cfd4',1,'geopm::signal_info_s::name()'],['../structgeopm_1_1control__info__s.html#a024e84391a1f42f29d912cd1ac0c7901',1,'geopm::control_info_s::name()']]],
-  ['num_5fentries_1969',['num_entries',['../structgeopm_1_1sst__cpu__map__interface__batch__s.html#af452acbd9f5dbae663ba3c3e1263a5ad',1,'geopm::sst_cpu_map_interface_batch_s::num_entries()'],['../structgeopm_1_1sst__mmio__interface__batch__s.html#adfde42775ce77bbea8a95362ae5045b6',1,'geopm::sst_mmio_interface_batch_s::num_entries()'],['../structgeopm_1_1sst__mbox__interface__batch__s.html#a3753c35ad603b82874b18051537317b8',1,'geopm::sst_mbox_interface_batch_s::num_entries()']]]
+  ['rdt_5fsupport_1826',['rdt_support',['../structgeopm_1_1_cpuid_1_1rdt__info__s.html#a2a9195920deb212ab2b34942896f74d7',1,'geopm::Cpuid::rdt_info_s']]],
+  ['read_5fvalue_1827',['read_value',['../structgeopm_1_1sst__mbox__interface__s.html#a688422214d376c36fca4d9e87939e0bb',1,'geopm::sst_mbox_interface_s']]],
+  ['register_5foffset_1828',['register_offset',['../structgeopm_1_1sst__mmio__interface__s.html#ad29275479fbaa7f7dd37bda99591da23',1,'geopm::sst_mmio_interface_s']]],
+  ['reserved_1829',['reserved',['../structgeopm_1_1sst__mbox__interface__s.html#a2c09cb61ebfaa4ca10ee713631f4b3ec',1,'geopm::sst_mbox_interface_s']]],
+  ['rmid_5fbit_5fwidth_1830',['rmid_bit_width',['../structgeopm_1_1_cpuid_1_1rdt__info__s.html#ac1d36f53cb7a2bbfec064b4ce884680b',1,'geopm::Cpuid::rdt_info_s']]]
 ];

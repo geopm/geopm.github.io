@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['controltype_2003',['ControlType',['../classgeopm_1_1_s_s_t_control.html#abbf8516abfedcf3ba1e3af0ad35eea65',1,'geopm::SSTControl']]]
+  ['controltype_1840',['ControlType',['../classgeopm_1_1_s_s_t_control.html#abbf8516abfedcf3ba1e3af0ad35eea65',1,'geopm::SSTControl']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['key_1528',['key',['../classgeopm_1_1_shared_memory_imp.html#ace424fee3cc2e21f0314e483e41769f1',1,'geopm::SharedMemoryImp::key()'],['../classgeopm_1_1_shared_memory.html#a5b16cccaccbc0cabcf1865839f512205',1,'geopm::SharedMemory::key()']]],
-  ['knl_5fmsr_5fjson_1529',['knl_msr_json',['../namespacegeopm.html#af919d6005584b60c7d51f9649f0f6117',1,'geopm']]]
+  ['json_1430',['json',['../classgeopm_1_1_save_control.html#a5b4541bb3b7d8793d53db1251445f0b2',1,'geopm::SaveControl::json()'],['../classgeopm_1_1_save_control_imp.html#af5cdbbd1fb5195d42a6cac1466b1c249',1,'geopm::SaveControlImp::json(void) const override'],['../classgeopm_1_1_save_control_imp.html#a12e1634afb00787113621716bdf1b96d',1,'geopm::SaveControlImp::json(const std::vector&lt; m_setting_s &gt; &amp;settings)']]]
 ];
