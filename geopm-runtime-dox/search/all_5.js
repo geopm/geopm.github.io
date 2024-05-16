@@ -44,7 +44,7 @@ var searchData=
   ['epochiogroup_199',['EpochIOGroup',['../classgeopm_1_1_epoch_i_o_group.html#a8318790401f1fdfc7b59e4cf00065c84',1,'geopm::EpochIOGroup::EpochIOGroup()'],['../classgeopm_1_1_epoch_i_o_group.html#a54dcb10bf5a5d1079ccd53c7d0f383e9',1,'geopm::EpochIOGroup::EpochIOGroup(const PlatformTopo &amp;topo, ApplicationSampler &amp;app)'],['../classgeopm_1_1_epoch_i_o_group.html',1,'geopm::EpochIOGroup']]],
   ['epochiogroup_2ecpp_200',['EpochIOGroup.cpp',['../_epoch_i_o_group_8cpp.html',1,'']]],
   ['epochiogroup_2ehpp_201',['EpochIOGroup.hpp',['../_epoch_i_o_group_8hpp.html',1,'']]],
-  ['event_202',['event',['../structgeopm_1_1record__s.html#a3a4b2565f7b22375d4e5301ab0edb5be',1,'geopm::record_s']]],
+  ['event_202',['event',['../structgeopm_1_1record__s.html#a70f0a0c78b7ecfa38ca5683cada04c43',1,'geopm::record_s']]],
   ['event_5faffinity_203',['EVENT_AFFINITY',['../namespacegeopm.html#a636033eac2b29105f49668284d661327a4a7e5c7e2ae3491aef5cfa51a61558c7',1,'geopm']]],
   ['event_5fe_204',['event_e',['../namespacegeopm.html#a636033eac2b29105f49668284d661327',1,'geopm']]],
   ['event_5fepoch_5fcount_205',['EVENT_EPOCH_COUNT',['../namespacegeopm.html#a636033eac2b29105f49668284d661327a901f6f746f7bea5a97ad73bfec54cba7',1,'geopm']]],
