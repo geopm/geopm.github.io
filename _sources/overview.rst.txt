@@ -13,47 +13,77 @@ For in-depth information see: :doc:`service` or :doc:`runtime`.
 
 ----
 
-.. toctree::
-   :maxdepth: 0
-
-   use_cases
-   publications
-
-----
-
-How to...
----------
-
 |:computer:| Install GEOPM
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------
 
-ALCF
-""""
+There are two recommended ways to install the GEOPM software: one is to install
+the pre-built packages provided for various Linux distributions while the other
+is to build from source code using Spack.
 
-For users leveraging the Aurora/Sunspot computing resources at the Argonne
-Leadership Computing Facility (ALCF), the GEOPM Service is installed in the base
-compute image.  The userspace components of both the Service and the Runtime
-are available via environment modules.  These components can be loaded on the
-command-line via:
+Packages for Linux Distributions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: bash
+Pre-built binaries of the GEOPM Service and Runtime are available for download
+using the openSUSE Build Service for RPM-based Linux distributions and through
+Launchpad for Debian-based distributions.  For information on how to configure
+those repositories with your system package manager or directly download the
+binaries see: :doc:`install`
 
-    $ module load geopm
+Building with Spack
+^^^^^^^^^^^^^^^^^^^
 
-To list all of the available GEOPM versions issue:
+.. note::
 
-.. code-block:: bash
+    Recipes for the v3.1 release of GEOPM are currently work-in-progress.
 
-    $ module avail geopm
+For users that leverage `Spack <https://spack.io/>`_ to distribute software,
+recipes to build the `geopm-service
+<https://github.com/spack/spack/blob/v0.22.0/var/spack/repos/builtin/packages/geopm-service/package.py>`_
+and `geopm-runtime
+<https://github.com/spack/spack/blob/v0.22.0/var/spack/repos/builtin/packages/geopm-runtime/package.py>`_
+have been included in their `v0.22.0 release
+<https://github.com/spack/spack/tree/v0.22.0>`_.  These recipes currently allow
+for building both the v3.0.1 release of GEOPM and our main development branch.
 
-General Users (non-ALCF)
-""""""""""""""""""""""""
+For deploying GEOPM's layers to a compute image in an HPC system context (i.e.
+PXE booted via warewulf or similar), a typical configuration would be to have a
+system install of the service RPMs baked into the compute image, and use spack
+to install ``geopm-runtime``.  This is required as the GEOPM Service will be
+launched via systemd, and thus must run against the system installed Python
+runtime.
 
-For users who are running one of our supported Linux distributions, see the
-following for installation instructions: :doc:`install`.
+For GEOPM v3.0.1, system install ``geopm-service``, ``geopm-service-devel``,
+``libgeopmd2``, and ``python3-geopmdpy``
+
+For GEOPM v3.1, system install ``geopm-service``, ``geopm-service-doc``,
+``geopm-service-devel``, ``libgeopmd2``, ``libgeopmd-doc``,
+``python3-geopmdpy``, and ``python3-geopmdpy-doc``
+
+In order to build with spack this way, ``geopm-service`` must be configured as an
+external package in ``~/.spack/packages.yaml``:
+
+.. code-block:: yaml
+
+    packages:
+      geopm-service:
+        externals:
+        - spec: "geopm-service@3.0.1"
+          prefix: /usr
+        - spec: "geopm-service@3.1.0"
+          prefix: /usr
+        - spec: "geopm-service@develop"
+          prefix: /usr
+        version:
+        - 3.0.1
+        - 3.1.0
+        - develop
+        buildable: False
+
+Afterwards, ``geopm-runtime`` can be installed normally with ``spack install
+geopm-runtime``.
 
 Admin Configuration
-"""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^
 
 After the Service has been installed, it must be configured properly before
 non-root users will be able to leverage it.
@@ -83,8 +113,8 @@ pages: :doc:`admin` and :doc:`geopmaccess.1`.
 
 ----
 
-|:card_file_box:| Understand the Platform Topology
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+|:card_file_box:| Platform Topology
+-----------------------------------
 
 .. _topo-diagram:
 .. figure:: https://geopm.github.io/images/platform-topo-diagram.svg
@@ -109,7 +139,7 @@ has support for the following domains:
 For more information on the domain types, see: :ref:`geopm_topo.3:Domain Types`.
 
 Code Examples
-"""""""""""""
+^^^^^^^^^^^^^
 
 All of the code examples require linking against ``libgeopmd`` for C/C++.  The
 Python examples require that your ``PYTHONPATH`` contains the ``geopmdpy``
@@ -184,8 +214,8 @@ topology.
 
 ----
 
-|:microscope:| Read Telemetry from the Platform
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+|:microscope:| Reading Telemetry
+--------------------------------
 
 We refer to any bit of telemetry that can be read with the Service as a
 *signal*.  Each signal has a native domain.  For example, the native domain of
@@ -200,14 +230,14 @@ and the :doc:`C <geopm_pio.3>`, :doc:`C++ <geopm::PlatformIO.3>`, and :doc:`Pyth
 <geopmdpy.7>` APIs for ``PlatformIO`` in their respective languages.
 
 Listing All Available Signals
-"""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
     $ geopmread
 
 Listing Signal Information
-""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
 
@@ -238,7 +268,7 @@ Listing Signal Information
         iogroup: MSRIOGroup
 
 Reading Signals
-"""""""""""""""
+^^^^^^^^^^^^^^^
 
 .. tabs::
 
@@ -309,7 +339,7 @@ Reading Signals
 
 
 Understanding Aggregation
-"""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The telemetry that is output from ``geopmread`` or the APIs will automatically
 be aggregated based on the requested domain and the aggregation
@@ -341,15 +371,15 @@ consumed by all packages, cores, and CPUs in the system, one would issue a
 For more information about aggregation types, see: :doc:`geopm::Agg.3`.
 
 Video Demo: Using ``geopmread``
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. raw:: html
 
-    <video src="images/geopmread.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>
+    <video src="https://geopm.github.io/images/geopmread.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>
 
 ----
 
 Reading Multiple Signals
-""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^
 To fetch platform telemetry and output it to the console or a file:
 
 - From the command-line: Use `geopmsession`. Its input arguments are similar to `geopmread`,
@@ -465,7 +495,7 @@ To fetch platform telemetry and output it to the console or a file:
 For more information on ``geopmsession`` see: :doc:`geopmsession.1`.
 
 Capturing Telemetry Over Time
-"""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``geopmsession`` can also capture data over time with the ``-p`` and ``-t``
 options. This behavior is easily implemented in code along with the batch read
@@ -597,15 +627,15 @@ interface.
 Again, for more information on ``geopmsession`` see :doc:`geopmsession.1`.
 
 Video Demo: Using ``geopmsession``
-""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. raw:: html
 
-    <video src="images/geopmsession.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>
+    <video src="https://geopm.github.io/images/geopmsession.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>
 
 ----
 
 |:gear:| Enact Hardware-based Settings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------
 
 We refer to any hardware setting that can be manipulated through the Service as
 a *control*.  Like signals, each control has a native domain.  Any control can
@@ -619,14 +649,14 @@ APIs for ``PlatformIO`` to enact hardware controls in their respective
 languages.
 
 Listing All Available Controls
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
     $ geopmwrite
 
 Listing Control Information
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -648,7 +678,7 @@ Listing Control Information
         iogroup: MSRIOGroup
 
 Writing Controls
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 .. tabs::
 
@@ -721,7 +751,7 @@ Writing Controls
         $ geopmread CPU_FREQUENCY_MAX_CONTROL core 0
 
 Understanding Disaggregation
-""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Just as signals can be aggregated to a more coarse domain from their native
 one, controls can be disaggregated from a coarse domain to their native domain.
@@ -764,18 +794,18 @@ at the ``board`` domain will result in each ``package`` receiving a limit of
 100 W.
 
 Video Demo: Using ``geopmwrite``
-""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. raw:: html
 
-    <video src="images/geopmwrite.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>
+    <video src="https://geopm.github.io/images/geopmwrite.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>
 
 ----
 
-|:straight_ruler:| Use the Runtime to Measure Application Performance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+|:straight_ruler:| Measure Performance
+--------------------------------------
 
 The GEOPM Runtime offers capabilities for collecting telemetry throughout an
-application's execution. If you're aiming to measure a particular segment of an
+application's execution. If you want to measure a particular segment of an
 application, you can annotate the application code using GEOPM markup.
 
 To integrate the Runtime with an application, you have two options:
@@ -792,7 +822,7 @@ separate application (useful for non-MPI applications).  For more information,
 see the ``--geopm-ctl`` :ref:`option description <geopm-ctl option>`.
 
 Using ``geopmlaunch`` with MPI Applications
-"""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -816,7 +846,7 @@ option to ``geopmlaunch``.  For more information about ``geompmlaunch`` see:
 
 
 Profiling Applications without ``geopmlaunch``
-""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``geopmlaunch(1)`` command may not be best suited for your needs if you are
 running a non-MPI application, or if you are running an MPI application but the
@@ -892,7 +922,7 @@ runtime, please refer to the `GEOPM Environment Variables
 the GEOPM documentation.
 
 Profiling Specific Parts of an Application
-""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Runtime supports the automatic profiling of various application regions through several methods:
 
@@ -959,10 +989,10 @@ our GitHub repository <https://github.com/geopm/geopm/tree/dev/tutorial>`__.
 ----
 
 |:alembic:| Advanced Topics
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
 Breaking Down Signal/Control Names
-""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Signal and control names in GEOPM are categorized into two types: low-level and high-level.
 
@@ -1012,7 +1042,7 @@ For more information about the currently supported aliases and IOGroups, see:
 .. WIP
 
 Using the Programmable Counters
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The programmable counters available on various CPUs can be read with
 ``geopmread`` from the command-line and through the use of the
