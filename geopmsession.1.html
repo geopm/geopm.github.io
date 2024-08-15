@@ -39,7 +39,7 @@
               <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                3.1.1.dev47+g6e066589
+                3.1.1.dev126+g05f63793
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -84,6 +84,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gathering-reports-using-mpi">Gathering Reports using MPI</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -179,69 +180,97 @@
 <h1>geopmsession(1) – Command line interface for the GEOPM service batch read features<a class="headerlink" href="#geopmsession-1-command-line-interface-for-the-geopm-service-batch-read-features" title="Link to this heading"></a></h1>
 <section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmsession [-h] [-v] [-t TIME] [-p PERIOD] [--pid PID] [--print-header]
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage:<span class="w"> </span>geopmsession<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>-t<span class="w"> </span>TIME<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PERIOD<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pid<span class="w"> </span>PID<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>--print-header<span class="w"> </span><span class="p">|</span><span class="w"> </span>-n<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span>DELIMITER<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>REPORT_OUT<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>-o<span class="w"> </span>TRACE_OUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable-mpi<span class="o">]</span>
 </pre></div>
 </div>
-<p>Command line interface for the geopm service batch read features. This command
-can be used to read signals by opening a session with the geopm service.</p>
 <section id="read-a-signal">
 <h3>Read a signal<a class="headerlink" href="#read-a-signal" title="Link to this heading"></a></h3>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>echo &quot;SIGNAL_NAME DOMAIN DOMAIN_IDX&quot; | geopmsession
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;SIGNAL_NAME DOMAIN DOMAIN_IDX&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession
 </pre></div>
 </div>
 </section>
 <section id="read-a-signal-at-a-specific-period-for-a-specific-timeout">
 <h3>Read a signal at a specific period for a specific timeout<a class="headerlink" href="#read-a-signal-at-a-specific-period-for-a-specific-timeout" title="Link to this heading"></a></h3>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmsession -p PERIOD_IN_SECONDS -t TIMEOUT_IN_SECONDS
-geopmsession --period PERIOD_IN_SECONDS --time TIMEOUT_IN_SECONDS
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmsession<span class="w"> </span>-p<span class="w"> </span>PERIOD_IN_SECONDS<span class="w"> </span>-t<span class="w"> </span>TIMEOUT_IN_SECONDS
+geopmsession<span class="w"> </span>--period<span class="w"> </span>PERIOD_IN_SECONDS<span class="w"> </span>--time<span class="w"> </span>TIMEOUT_IN_SECONDS
 </pre></div>
 </div>
 </section>
 <section id="read-a-set-of-signals">
 <h3>Read a set of signals<a class="headerlink" href="#read-a-set-of-signals" title="Link to this heading"></a></h3>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>echo -e &#39;TIME board 0\nCPU_FREQUENCY_STATUS package 0&#39; | geopmsession
-70.250978379,2434090909.090909
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_FREQUENCY_STATUS package 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
 </pre></div>
 </div>
 </section>
 <section id="get-help-or-version">
 <h3>Get Help or Version<a class="headerlink" href="#get-help-or-version" title="Link to this heading"></a></h3>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geopmsession -h
-geopmsession --help
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmsession<span class="w"> </span>-h
+geopmsession<span class="w"> </span>--help
 </pre></div>
 </div>
 </section>
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<p>Command line interface for the GEOPM service read features.</p>
-<p>This command can be used to read signals by opening a session with the
-geopm service.  The user specifies which signals to read with standard
-input. When no command line options are provided, a single read of the
-signals requested though standard input is made and the results are
-printed to the screen.</p>
+<p>Command line interface for the GEOPM service batch read features. The input to
+the command line tool has one request per line. A request for reading is made
+of up of three strings separated by white space. The first string is the signal
+name, the second string is the domain name, and the third string is the domain
+index.</p>
+<p>Unless the <code class="docutils literal notranslate"><span class="pre">-n</span></code> option is specified, a descriptive header is written
+first and then the output from reading the requests.  Unless <code class="docutils literal notranslate"><span class="pre">-p</span></code> is
+specified, only one line of output after the header is printed.</p>
 </section>
 <section id="options">
 <h2>Options<a class="headerlink" href="#options" title="Link to this heading"></a></h2>
 <dl class="option-list">
 <dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
-<dd><p id="help-option">Print help message and exit</p>
+<dd><p id="help-option">Print help message and exit.</p>
 </dd>
 <dt><kbd><span class="option">-v</span>, <span class="option">--version</span></kbd></dt>
-<dd><p id="version-option">Print version and exit</p>
+<dd><p id="version-option">Print version and exit.</p>
 </dd>
 <dt><kbd><span class="option">-t <var>TIME</var></span>, <span class="option">--time <var>TIME</var></span></kbd></dt>
-<dd><p id="time-option">Total run time of the session to be opened in seconds</p>
+<dd><p id="time-option">Total run time of the session to be opened in seconds.</p>
 </dd>
 <dt><kbd><span class="option">-p <var>PERIOD</var></span>, <span class="option">--period <var>PERIOD</var></span></kbd></dt>
 <dd><p id="period-option">When used with a read mode session reads all values out periodically with
-the specified period in seconds</p>
+the specified period in seconds.</p>
 </dd>
 <dt><kbd><span class="option">--pid <var>PID</var></span></kbd></dt>
-<dd><p id="pid-option">Stop the session when the given process PID ends</p>
+<dd><p id="pid-option">Stop the session when the given process PID ends.</p>
 </dd>
 <dt><kbd><span class="option">--print-header</span></kbd></dt>
-<dd><p id="header-option">Print a CSV header before printing any sampled values</p>
+<dd><p id="printheader-option">Deprecated. Now this option is the default, see –no-header.</p>
+</dd>
+<dt><kbd><span class="option">-n</span>, <span class="option">--no-header</span></kbd></dt>
+<dd><p id="header-option">Do not print the CSV header before printing any sampled values.</p>
+</dd>
+<dt><kbd><span class="option">-d</span>, <span class="option">--delimiter</span></kbd></dt>
+<dd><p id="delimiter-delimiter-option">Delimiter used to separate values in CSV output. Default: “,”.</p>
+</dd>
+<dt><kbd><span class="option">-r</span>, <span class="option">--report-out</span></kbd></dt>
+<dd><p id="reportout-report-out-option">Output summary statistics into a yaml file. Note if <code class="docutils literal notranslate"><span class="pre">--report-out=-</span></code> is
+specified, the report will output to stdout. When used with the
+<code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code> option, reports from all hosts will be combined using the
+<code class="docutils literal notranslate"><span class="pre">---</span></code> document separator, and the output is written (stdout or to file) solely
+by the MPI process “rank 0”.</p>
+</dd>
+<dt><kbd><span class="option">-o</span>, <span class="option">--trace-out</span></kbd></dt>
+<dd><p id="traceout-trace-out-option">Output trace data into a CSV file. Note if <code class="docutils literal notranslate"><span class="pre">--trace_out=-</span></code> is specified,
+the trace will output to stdout which is also the default behavior. To avoid
+gathering trace data, set this parameter to <code class="docutils literal notranslate"><span class="pre">/dev/null</span></code>.  When used with
+the <code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code> option, trace file names will be appended with the
+hostname combined with the <code class="docutils literal notranslate"><span class="pre">-</span></code> separator.  It is not possible to write the
+trace output to stdout when specifying <code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code>, this will result in
+an error.</p>
+</dd>
+<dt><kbd><span class="option">--enable-mpi</span></kbd></dt>
+<dd><p id="enablempi-option">Gather reports over MPI and write to a single file. Append hostname to trace
+output file if specified (trace output to stdout not permitted). Requires
+mpi4py module.</p>
 </dd>
 </dl>
 </section>
@@ -257,8 +286,8 @@ space.  The first string is the signal name, the second string is the
 domain name, and the third string is the domain index.  An example
 where the entire <code class="docutils literal notranslate"><span class="pre">THERM_STATUS</span></code> model specific register is read from
 core zero:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;MSR::THERM_STATUS# core 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession
-0x0000000088430800
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;MSR::THERM_STATUS# core 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
+<span class="go">0x0000000088430800</span>
 </pre></div>
 </div>
 <p>This will execute one read of the signal.</p>
@@ -268,22 +297,153 @@ core zero:</p>
 <p>Both a polling period and timeout must be specified.
 The polling period must be shorter than the timeout specified.</p>
 <p>A 100ms polling period with a 300ms timeout is shown below:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>echo -e &#39;MSR::THERM_STATUS# core 0&#39; | geopmsession -p 0.1 -t 0.3
-0x0000000088410000
-0x0000000088420000
-0x0000000088420000
-0x0000000088420000
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;MSR::THERM_STATUS# core 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>-n
+<span class="go">0x0000000088410000</span>
+<span class="go">0x0000000088420000</span>
+<span class="go">0x0000000088420000</span>
+<span class="go">0x0000000088420000</span>
 </pre></div>
 </div>
 </section>
 <section id="reading-a-set-of-signals">
 <h3>Reading a set of signals<a class="headerlink" href="#reading-a-set-of-signals" title="Link to this heading"></a></h3>
 <p>Multiple signals may be specified by separating them with a newline.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>echo -e &#39;TIME board 0\nCPU_FREQUENCY_STATUS package 0\nCPU_FREQUENCY_STATUS package 1\nCPU_ENERGY package 0\nCPU_ENERGY package 1&#39; | geopmsession
-70.250978379,2434090909.090909,2775000000,198575.8842163086,88752.19470214844
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_FREQUENCY_STATUS package 0\nCPU_FREQUENCY_STATUS package 1\nCPU_ENERGY package 0\nCPU_ENERGY package 1&#39;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
+<span class="w">    </span>geopmsession<span class="w"> </span>-n
+<span class="go">70.250978379,2434090909.090909,2775000000,198575.8842163086,88752.19470214844</span>
 </pre></div>
 </div>
 </section>
+<section id="reading-a-set-of-signals-and-getting-summary-statistics">
+<h3>Reading a set of signals and getting summary statistics<a class="headerlink" href="#reading-a-set-of-signals-and-getting-summary-statistics" title="Link to this heading"></a></h3>
+<p>Summary statistics may be output to stdout by setting <code class="docutils literal notranslate"><span class="pre">--report-out=-</span></code>.
+Otherwise, the statistics will be output to the specified file path. If
+unspecified, no statistics will be gathered.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_POWER board 0\nCPU_FREQUENCY_STATUS board 0\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
+<span class="w">    </span>geopmsession<span class="w"> </span>-t<span class="w"> </span><span class="m">10</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.005<span class="w"> </span>--report-out<span class="o">=</span>-<span class="w"> </span>--trace-out<span class="o">=</span>/dev/null
+</pre></div>
+</div>
+<p>An example report is shown below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T18:23:58.545153099-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.99976</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00499988</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.43807e-05</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">TIME</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0825453</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0823</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0825453</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0823</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.08268</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88873</span>
+<span class="w">  </span><span class="nt">CPU_POWER</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">71.9161</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">54.9997</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">36.8681</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">75.2159</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50.1323</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.61714</span>
+<span class="w">  </span><span class="nt">CPU_FREQUENCY_STATUS</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.69773e+09</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.75341e+09</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e+09</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.49659e+09</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.5542e+09</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.72332e+08</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="gathering-reports-using-mpi">
+<h2>Gathering Reports using MPI<a class="headerlink" href="#gathering-reports-using-mpi" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code> command line option can be used to aggregate reports using
+an MPI communicator.  This can be helpful when running sessions on more than one
+compute node in an MPI enabled environment.  The user must install the optional
+<code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> package to use the <code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code> command line option .  This can
+be done using the OS package manager or PyPi.  When running in this way the
+<code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> command line tool must be launched with an MPI launch wrapper
+like <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> or <code class="docutils literal notranslate"><span class="pre">mpirun</span></code>.  The user should run this command specifying one
+<code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> process per compute node.  When using this option, trace output
+to stdout is disabled.  The aggregated report is created by the “rank 0” process
+of the geopmsession MPI communicator.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;TIME board 0\nCPU_POWER board 0\nCPU_FREQUENCY_STATUS board 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
+<span class="w">      </span>srun<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>-N<span class="w"> </span><span class="m">2</span><span class="w"> </span>geopmsession<span class="w"> </span>-t<span class="w"> </span><span class="m">10</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.005<span class="w">  </span>-r-<span class="w"> </span>-o
+<span class="go">      /dev/null --enable-mpi</span>
+</pre></div>
+</div>
+<p>An example report is shown below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T17:50:00.895968647-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.99973</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00499987</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.22108e-05</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">TIME</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0849912</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0847</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0849912</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0847</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.08514</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88873</span>
+<span class="w">  </span><span class="nt">CPU_POWER</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">58.2713</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63.4941</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">41.1496</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">89.1348</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">55.8502</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.41338</span>
+<span class="w">  </span><span class="nt">CPU_FREQUENCY_STATUS</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.17727e+09</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.75341e+09</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e+09</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.58636e+09</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.55674e+09</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.7101e+08</span>
+
+<span class="nn">---</span>
+
+<span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-12&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T17:50:01.033367154-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0003</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00500015</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.06152e-05</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">TIME</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0846359</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0849</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0846359</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0849</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.085</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88887</span>
+<span class="w">  </span><span class="nt">CPU_POWER</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60.455</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70.6912</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">46.394</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">89.6428</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">61.7341</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.20186</span>
+<span class="w">  </span><span class="nt">CPU_FREQUENCY_STATUS</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.70568e+09</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.69773e+09</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e+09</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.56136e+09</span>
+<span class="w">    </span><span class="nt">mean-arithmetic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.54734e+09</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.63195e+08</span>
+</pre></div>
+</div>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>

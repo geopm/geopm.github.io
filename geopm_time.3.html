@@ -39,7 +39,7 @@
               <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                3.1.1.dev47+g6e066589
+                3.1.1.dev126+g05f63793
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -100,7 +100,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structure-type">Structure Type</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#singleton-accessor">Singleton Accessor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -181,10 +180,13 @@
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/libgeopmd/include/geopm_time.h">&lt;geopm_time.h&gt;</a></p>
 <p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(MPI)</strong> or <code class="docutils literal notranslate"><span class="pre">-lgeopm</span></code> <strong>(non-MPI)</strong></p>
+<p>C interfaces:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time_string</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span>
 <span class="w">                                    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">);</span>
 
 <span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">time</span><span class="p">);</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time_real</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">time</span><span class="p">);</span>
 
 <span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">geopm_time_diff</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">begin</span><span class="p">,</span>
 <span class="w">                                     </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="p">);</span>
@@ -199,20 +201,62 @@
 <span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">geopm_time_since</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">begin</span><span class="p">);</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time_zero</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">zero_time</span><span class="p">);</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time_to_string</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">);</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time_real_to_iso_string</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">);</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_time_string</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">buf_size</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">);</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">geopm_time_since</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="o">*</span><span class="n">begin</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>C++ interfaces:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="n">geopm</span><span class="o">::</span><span class="n">time_curr</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="n">geopm</span><span class="o">::</span><span class="n">time_curr_real</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">geopm::time_curr_string</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">geopm_time_s</span><span class="w"> </span><span class="n">geopm</span><span class="o">::</span><span class="n">time_zero</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">geopm::time_zero_reset</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">geopm_time_s</span><span class="w"> </span><span class="o">&amp;</span><span class="n">zero</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<p>The <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/libgeopmd/include/geopm_time.h">geopm_time.h</a> header defines GEOPM interfaces for measuring time
-in seconds relative to a fixed arbitrary reference point. The <code class="docutils literal notranslate"><span class="pre">geopm_time_s</span></code>
-structure is used to hold time values.</p>
+<p>The <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/libgeopmd/include/geopm_time.h">geopm_time.h</a>
+header defines GEOPM interfaces for measuring time in seconds relative to a
+fixed arbitrary reference point. The <code class="docutils literal notranslate"><span class="pre">geopm_time_s</span></code> structure is used to hold
+time values.</p>
+<p>The default clock used is Linux <code class="docutils literal notranslate"><span class="pre">CLOCK_MONTONIC_RAW</span></code>.  In general, these
+interfaces use this as the time reference.  This clock is the most precise for
+calculating time differences.</p>
+<p>There are some times when absolute time accuracy is preferred over time
+difference accuracy. For these cases, GEOPM provides time functions that use
+<code class="docutils literal notranslate"><span class="pre">CLOCK_REALTIME</span></code> as the reference time.  There is a C accessor for real time:
+<code class="docutils literal notranslate"><span class="pre">geopm_time_real()</span></code>, and there is also a C++ accessor:
+<code class="docutils literal notranslate"><span class="pre">geopm::time_curr_real()</span></code>.  Only <code class="docutils literal notranslate"><span class="pre">geopm_time_s</span></code> values created with these
+accessors may be passed to <code class="docutils literal notranslate"><span class="pre">geopm_time_to_iso_string()</span></code> which provides a
+nano-second precision absolute date string.</p>
+<p>The last time reference is useful when comparing against the values returned by
+PlatformIO for the <code class="docutils literal notranslate"><span class="pre">TIME</span></code> signal.  The reference time (0.0) for this signal is
+a <code class="docutils literal notranslate"><span class="pre">CLOCK_MONOTONIC_RAW</span></code> time value that can be accessed in C with
+<code class="docutils literal notranslate"><span class="pre">geopm_time_zero()</span></code> and in C++ with <code class="docutils literal notranslate"><span class="pre">geopm::time_zero()</span></code>.  There is also a
+way to reset this reference with <code class="docutils literal notranslate"><span class="pre">geopm_time_zero_reset()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">geopm:time_zero_reset()</span></code> by providing a <code class="docutils literal notranslate"><span class="pre">CLOCK_MONOTONIC_RAW</span></code> time value.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_time_string()</span></code></dt><dd><p>Fills <em>buf</em> with the current date and time as a string.  The
 string will be null-terminated and truncated to <em>buf_size</em>, which
 must be at least 26 characters as required by <a class="reference external" href="https://man7.org/linux/man-pages/man3/asctime_r.3.html">asctime_r(3)</a>.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">geopm_time()</span></code></dt><dd><p>Sets <em>time</em> to the current time.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_time()</span></code></dt><dd><p>Sets <em>time</em> to the current time using Linux CLOCK_MONOTONIC_RAW clock. This
+can be used with geopm_time_to_string() to get a an approximate date string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_time_real()</span></code></dt><dd><p>Sets <em>time</em> to the current time using the Linux CLOCK_REALTIME clock.
+This can be used with geopm_time_real_to_iso_string() for an accurate ISO
+8601 standard date string representation.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_time_diff()</span></code></dt><dd><p>Returns the difference in seconds between <em>begin</em> and <em>end</em>.</p>
 </dd>
@@ -221,6 +265,37 @@ must be at least 26 characters as required by <a class="reference external" href
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_time_add()</span></code></dt><dd><p>Sets <em>end</em> to <em>elapsed</em> seconds after <em>begin</em>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_time_since()</span></code></dt><dd><p>Returns the number of seconds elapsed between the current time and <em>begin</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_time_zero()</span></code></dt><dd><p>Return the time since the first call to this interface or
+the <code class="docutils literal notranslate"><span class="pre">geopm::time_zero()</span></code> interface by the calling process.
+See also: <code class="docutils literal notranslate"><span class="pre">geopm::time_zero_reset()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_time_to_string()</span></code></dt><dd><p>Convert a CLOCK_MONOTONIC_RAW time representation returned by <code class="docutils literal notranslate"><span class="pre">geopm_time()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">geopm::time_curr()</span></code> into an approximate date string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_time_real_to_iso_string()</span></code></dt><dd><p>Convert a CLOCK_REALTIME time representation returned by <code class="docutils literal notranslate"><span class="pre">geopm_time_real()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">geopm::time_curr_real()</span></code> into an ISO 8601 standard date string with
+nanosecond resolution.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm_time_string()</span></code></dt><dd><p>Provide a date string for the current time in the format returned by
+geopm_time_to_string().</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm::time_zero()</span></code></dt><dd><p>Return the time since the first call to this interface or the
+<code class="docutils literal notranslate"><span class="pre">geopm_time_zero()</span></code> interface by the calling process.
+See also: <code class="docutils literal notranslate"><span class="pre">geopm::time_zero_reset()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm::time_curr()</span></code></dt><dd><p>Returns the current time using Linux CLOCK_MONOTONIC_RAW clock. This can be
+used with geopm_time_to_string() to get a an approximate date string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm::time_curr_real()</span></code></dt><dd><p>Returns the current time using the Linux CLOCK_REALTIME clock.  This can be
+used with geopm_time_real_to_iso_string() for an accurate ISO 8601 standard
+date string representation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm::time_curr_string()</span></code></dt><dd><p>Returns an accurate ISO 8601 standard date string representation of
+the current time using Linux CLOCK_REALTIME clock..</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geopm::time_zero_reset()</span></code></dt><dd><p>Override the reference time for the <code class="docutils literal notranslate"><span class="pre">geopm_time_zero()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">geopm::time_zero()</span></code> with the value <em>zero</em>.</p>
 </dd>
 </dl>
 </section>
@@ -235,14 +310,6 @@ This is like a <code class="docutils literal notranslate"><span class="pre">stru
 <span class="p">};</span>
 </pre></div>
 </div>
-</section>
-<section id="singleton-accessor">
-<h2>Singleton Accessor<a class="headerlink" href="#singleton-accessor" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">geopm_time_zero()</span></code></dt><dd><p>Is the accessor for the <code class="docutils literal notranslate"><span class="pre">TimeZero</span></code> singleton.
-It records the earliest time request for the process.</p>
-</dd>
-</dl>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
