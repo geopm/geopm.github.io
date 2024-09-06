@@ -39,7 +39,7 @@
               <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                3.1.1.dev154+g7bb0b5ec
+                3.1.1.dev160+ge40c873e
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -97,7 +97,8 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">geopm_prof(3) – application profiling interfaces</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#omp-integration">OMP Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#errors">Errors</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
@@ -200,33 +201,26 @@
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <p>The functions described here enable application feedback to the GEOPM
-control algorithm for identifying regions of code, progress within
-regions, and iterations through loops that contain inter-node
-synchronization points in the application.  Regions of code define
-periods in the application during which control parameters are tuned
-with the expectation that control parameters for a region can be
-optimized independently of other regions.  In this way a region is
-associated with a set of control parameters which can be optimized,
-and future time intervals associated with the same region will benefit
-from the application of control parameters which were determined from
-tuning within previous occurrences of the region.  There are two
-competing motivations for defining a region within the application.
-The first is to identify a section of code that has distinct compute,
-memory or network characteristics.  The second is to avoid defining
-these regions such that they are nested within each other, as nested
-regions are ignored, and only the outer most region is used for tuning
-when nesting occurs.  Identifying progress within a region can be used
-to alleviate load imbalance in the application under the assumption
-that the region is bulk synchronous.  Under the assumption that the
-application employs an iterative algorithm which synchronizes
-periodically the user can alleviate load imbalance on larger time
-scales than the regions provide.  This is done by marking iterations
-through an outer loop in the application, the <em>epoch</em>.</p>
-<p><strong>WARNING:</strong> All of the functions described herein require that MPI has
-been initialized (via <code class="docutils literal notranslate"><span class="pre">MPI_Init()</span></code> or <code class="docutils literal notranslate"><span class="pre">MPI_Init_thread()</span></code>) and is properly
-functioning before they are invoked.  These functions make use of various
-MPI calls in their implementations and will return errors if MPI is not
-initialized.</p>
+control algorithm for:</p>
+<ul class="simple">
+<li><p>Identifying regions of code</p></li>
+<li><p>Determining progress within regions</p></li>
+<li><p>Counting iterations through loops that contain inter-node synchronization
+points in the application</p></li>
+</ul>
+<p>A region is defined here as a demarcated section of code, typically
+with distinct compute, memory, or network characteristics. Defining
+regions of code can be useful for: understanding the behavior of a section
+of code, tuning control parameters to optimize the behavior of a region
+independently of the rest of the code, to alleviate load imbalance in the
+application (under the assumption that the region is bulk synchronous), etc.
+Often, a set of regions will be marked up within an <em>epoch</em> (i.e. outer loop), and
+will execute a fixed number of times per <em>epoch</em>. This can be leveraged to learn and optimize
+control parameters, e.g. employing an iterative algorithm which synchronizes
+periodically to alleviate load imbalance at a larger timescale. It is important
+to avoid defining regions so that they are nested, as nested regions are ignored,
+and only the outermost region is used for tuning when nesting occurs.</p>
+<p><strong>Note:</strong> The functions described herein do not require MPI.</p>
 <dl>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_prof_region()</span></code></dt><dd><p>Registers an application region.  The <em>region_name</em> and <em>hint</em> are
 input parameters, and the <em>region_id</em> is output.  The <em>region_id</em>
@@ -302,8 +296,46 @@ of the total passed to <code class="docutils literal notranslate"><span class="p
 </dd>
 </dl>
 </section>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<section id="omp-integration">
+<h2>OMP Integration<a class="headerlink" href="#omp-integration" title="Link to this heading"></a></h2>
+<p>GEOPM is able to track OMP offload calls from OMP enabled applications
+via the OMPT interface.  OMPT integration in GEOPM provides automation
+for region identification, entry, and exit. With OMPT support, a GEOPM
+report can provide per-region metrics (such as region runtime, CPU/GPU
+frequency, power/energy consumption, etc, without the need to mark up the
+application. However, for each region where region progress is desired, the
+application must be explicitly marked up with <code class="docutils literal notranslate"><span class="pre">geopm_tprof_post()</span></code>.</p>
+<p>Examples of progress markup with/without OMP are provided here.
+<a class="reference external" href="https://github.com/geopm/geopm/blob/dev/integration/test/test_progress.cpp">geopm/integration/test/test_progress.cpp</a></p>
+<p>Note that there can be a non-negligible overhead for using OMPT callbacks on
+regions that are quick to execute, particularly when using
+<code class="docutils literal notranslate"><span class="pre">geopm_tprof_post()</span></code></p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>Obtaining region progress, identification, entry, and exit while using OpenMP:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma omp parallel for</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_iter</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">example_function</span><span class="p">();</span>
+<span class="w">            </span><span class="n">geopm_tprof_post</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Obtaining region progress, identification, entry, and exit without OpenMP:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">region_id</span>
+<span class="n">geopm_prof_region</span><span class="p">(</span><span class="s">&quot;region_name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_REGION_HINT_COMPUTE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">region_id</span><span class="p">);</span>
+<span class="n">geopm_tprof_init</span><span class="p">(</span><span class="n">num_iter</span><span class="p">);</span>
+
+<span class="n">geopm_prof_enter</span><span class="p">(</span><span class="n">region_id</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_iter</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">example_function</span><span class="p">();</span>
+<span class="w">    </span><span class="n">geopm_tprof_post</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="n">geopm_prof_exit</span><span class="p">(</span><span class="n">region_id</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Full example:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
