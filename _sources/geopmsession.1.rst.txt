@@ -9,7 +9,8 @@ Synopsis
 
    usage: geopmsession [-h] [-v] [-t TIME] [-p PERIOD] [--pid PID]
                        [--print-header | -n] [-d DELIMITER] [-r REPORT_OUT]
-                       [-o TRACE_OUT] [--enable-mpi]
+                       [-o TRACE_OUT] [--enable-mpi] [-f REPORT_FORMAT]
+                       [-s REPORT_SAMPLES]
 
 Read a signal
 ~~~~~~~~~~~~~
@@ -46,14 +47,18 @@ Description
 -----------
 
 Command line interface for the GEOPM service batch read features. The input to
-the command line tool has one request per line. A request for reading is made
-up of three strings separated by white space. The first string is the signal
-name, the second string is the domain name, and the third string is the domain
-index.
+the command line tool has one request per line. A request for reading is made up
+of three strings separated by white space. The first string is the signal name,
+the second string is the domain name, and the third string is the domain index.
+Provide the "``*``" character as the third string to request all domains
+available on the system.
 
-Unless the ``-n`` option is specified, a descriptive header is written
-first and then the output from reading the requests.  Unless ``-p`` is
-specified, only one line of output after the header is printed.
+A descriptive header is written first, unless the ``-n`` option is specified, in
+which case the header omitted.  The output from reading values is printed
+subsequently in CSV format.  By default, only one line of CSV will be generated.
+Use ``-p`` to create a CSV with multiple rows providing a time series of
+measurements.
+
 
 Options
 -------
@@ -114,6 +119,18 @@ Options
     Gather reports over MPI and write to a single file. Append hostname to trace
     output file if specified (trace output to stdout not permitted). Requires
     mpi4py module.
+
+-f, --report-format  .. _reporformat REPORT_FORMAT option:
+
+    Generate reports in the specified format, either "csv" or "yaml".
+    Default: "yaml".
+
+-s, --report-samples  .. _reportsamples REPORT_SAMPLES option:
+
+    Create reports each time the specified number of periods have
+    elapsed.  When in YAML format, the reports are YAML documents
+    separated with the document separator string: ``"---"``.  When
+    in CSV format, each report is one line of the CSV output.
 
 Examples
 --------
@@ -190,7 +207,7 @@ An example report is shown below:
        last: 10.0823
        min: 0.0825453
        max: 10.0823
-       mean-arithmetic: 5.08268
+       mean: 5.08268
        std: 2.88873
      CPU_POWER:
        count: 2000
@@ -198,7 +215,7 @@ An example report is shown below:
        last: 54.9997
        min: 36.8681
        max: 75.2159
-       mean-arithmetic: 50.1323
+       mean: 50.1323
        std: 6.61714
      CPU_FREQUENCY_STATUS:
        count: 2001
@@ -206,7 +223,7 @@ An example report is shown below:
        last: 1.75341e+09
        min: 1e+09
        max: 2.49659e+09
-       mean-arithmetic: 1.5542e+09
+       mean: 1.5542e+09
        std: 3.72332e+08
 
 
@@ -228,8 +245,7 @@ of the geopmsession MPI communicator.
 .. code-block:: shell-session
 
    $ printf "TIME board 0\nCPU_POWER board 0\nCPU_FREQUENCY_STATUS board 0" |\
-         srun -n 2 -N 2 geopmsession -t 10 -p 0.005  -r- -o
-	 /dev/null --enable-mpi
+        srun -n 2 -N 2 geopmsession -t 10 -p 0.005  -r- -o /dev/null --enable-mpi
 
 An example report is shown below:
 
@@ -248,7 +264,7 @@ An example report is shown below:
        last: 10.0847
        min: 0.0849912
        max: 10.0847
-       mean-arithmetic: 5.08514
+       mean: 5.08514
        std: 2.88873
      CPU_POWER:
        count: 2000
@@ -256,7 +272,7 @@ An example report is shown below:
        last: 63.4941
        min: 41.1496
        max: 89.1348
-       mean-arithmetic: 55.8502
+       mean: 55.8502
        std: 6.41338
      CPU_FREQUENCY_STATUS:
        count: 2001
@@ -264,7 +280,7 @@ An example report is shown below:
        last: 1.75341e+09
        min: 1e+09
        max: 2.58636e+09
-       mean-arithmetic: 1.55674e+09
+       mean: 1.55674e+09
        std: 3.7101e+08
 
    ---
@@ -282,7 +298,7 @@ An example report is shown below:
        last: 10.0849
        min: 0.0846359
        max: 10.0849
-       mean-arithmetic: 5.085
+       mean: 5.085
        std: 2.88887
      CPU_POWER:
        count: 2000
@@ -290,7 +306,7 @@ An example report is shown below:
        last: 70.6912
        min: 46.394
        max: 89.6428
-       mean-arithmetic: 61.7341
+       mean: 61.7341
        std: 5.20186
      CPU_FREQUENCY_STATUS:
        count: 2001
@@ -298,7 +314,7 @@ An example report is shown below:
        last: 1.69773e+09
        min: 1e+09
        max: 2.56136e+09
-       mean-arithmetic: 1.54734e+09
+       mean: 1.54734e+09
        std: 3.63195e+08
 
 See Also

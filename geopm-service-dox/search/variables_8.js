@@ -1,5 +1,24 @@
 var searchData=
 [
-  ['name_1933',['name',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#a249094c494612894ca0be2ba1aae04cc',1,'geopm::SysfsDriver::properties_s::name()'],['../structgeopm__request__s.html#a508fe442aaaecdddbf3acc50c9c6a45e',1,'geopm_request_s::name()'],['../structgeopm_1_1_save_control_1_1m__setting__s.html#a77a2acb57d2f5eb4ee52d3876f7f88fa',1,'geopm::SaveControl::m_setting_s::name()'],['../structgeopm_1_1signal__info__s.html#a9b6a28e5c7bb966a372542f94616cfd4',1,'geopm::signal_info_s::name()'],['../structgeopm_1_1control__info__s.html#a024e84391a1f42f29d912cd1ac0c7901',1,'geopm::control_info_s::name()']]],
-  ['num_5fentries_1934',['num_entries',['../structgeopm_1_1sst__cpu__map__interface__batch__s.html#af452acbd9f5dbae663ba3c3e1263a5ad',1,'geopm::sst_cpu_map_interface_batch_s::num_entries()'],['../structgeopm_1_1sst__mmio__interface__batch__s.html#adfde42775ce77bbea8a95362ae5045b6',1,'geopm::sst_mmio_interface_batch_s::num_entries()'],['../structgeopm_1_1sst__mbox__interface__batch__s.html#a3753c35ad603b82874b18051537317b8',1,'geopm::sst_mbox_interface_batch_s::num_entries()']]]
+  ['m_5fagg_5ffunction_1954',['m_agg_function',['../classgeopm_1_1_combined_signal.html#af617d751231680c60456728e9f6023b4',1,'geopm::CombinedSignal']]],
+  ['m_5fcard_5fpaths_1955',['m_card_paths',['../structhwmon__paths__s.html#a337f90016f492f8c360e74ec5eccdaf7',1,'hwmon_paths_s']]],
+  ['m_5fdefault_5ffifo_5fprefix_1956',['M_DEFAULT_FIFO_PREFIX',['../classgeopm_1_1_batch_status_imp.html#ad12f9edb7e98ff9a4176c002db36fa4e',1,'geopm::BatchStatusImp']]],
+  ['m_5fgt_5fpaths_1957',['m_gt_paths',['../structhwmon__paths__s.html#ad956c254a721ce55f960585d3239927d',1,'hwmon_paths_s']]],
+  ['m_5fio_5fbuffer_5fsize_1958',['M_IO_BUFFER_SIZE',['../classgeopm_1_1_sysfs_driver.html#aa4a4362b5bc647531227b5bc4be33820',1,'geopm::SysfsDriver']]],
+  ['m_5fmessage_5fcontinue_1959',['M_MESSAGE_CONTINUE',['../classgeopm_1_1_batch_status.html#aebda67c262db44befcdf8a948061e0c0',1,'geopm::BatchStatus']]],
+  ['m_5fmessage_5fquit_1960',['M_MESSAGE_QUIT',['../classgeopm_1_1_batch_status.html#a99d2ab8d59c11e0d69f8af18f85c0392',1,'geopm::BatchStatus']]],
+  ['m_5fmessage_5fread_1961',['M_MESSAGE_READ',['../classgeopm_1_1_batch_status.html#ad588d18dc5c20f21e3a9cbbf308e6b90',1,'geopm::BatchStatus']]],
+  ['m_5fmessage_5fterminate_1962',['M_MESSAGE_TERMINATE',['../classgeopm_1_1_batch_status.html#a2b9e1a93989b6536b2dd20f9a33eab5c',1,'geopm::BatchStatus']]],
+  ['m_5fmessage_5ftype_5farray_1963',['M_MESSAGE_TYPE_ARRAY',['../classgeopm_1_1_s_d_bus_message.html#a8043f60354eb375e59db998f38149a98',1,'geopm::SDBusMessage']]],
+  ['m_5fmessage_5ftype_5fstruct_1964',['M_MESSAGE_TYPE_STRUCT',['../classgeopm_1_1_s_d_bus_message.html#a5496499443df8da7687bcce8d5bc0bd8',1,'geopm::SDBusMessage']]],
+  ['m_5fmessage_5fwrite_1965',['M_MESSAGE_WRITE',['../classgeopm_1_1_batch_status.html#a1b677957f6862d10c3a16dca9f8f1f30',1,'geopm::BatchStatus']]],
+  ['m_5fplugin_5fprefix_1966',['M_PLUGIN_PREFIX',['../classgeopm_1_1_i_o_group.html#adf85363d6f47208cdb1232d95570d6fb',1,'geopm::IOGroup']]],
+  ['m_5fread_5ffd_1967',['m_read_fd',['../classgeopm_1_1_batch_status_imp.html#ab0ee2c153558fd848e977f029ebeb898',1,'geopm::BatchStatusImp']]],
+  ['m_5fshmem_5fprefix_1968',['M_SHMEM_PREFIX',['../classgeopm_1_1_batch_server.html#a9bb1009c2928f94e1b419019bb8aac21',1,'geopm::BatchServer']]],
+  ['m_5fwrite_5ffd_1969',['m_write_fd',['../classgeopm_1_1_batch_status_imp.html#a2ad1af3aa63f1650bc8cd98c9e72190f',1,'geopm::BatchStatusImp']]],
+  ['mbm_5fscalar_1970',['mbm_scalar',['../structgeopm_1_1_cpuid_1_1rdt__info__s.html#a73fa82843ce668344fc64c88c136f13b',1,'geopm::Cpuid::rdt_info_s']]],
+  ['mbox_5finterface_5fparam_1971',['mbox_interface_param',['../structgeopm_1_1sst__mbox__interface__s.html#a03d61605d37703eec08124fec59502f2',1,'geopm::sst_mbox_interface_s']]],
+  ['message_1972',['message',['../structgeopm_1_1json__checker.html#a6c08acf03289e2fc604a1939f42bdf68',1,'geopm::json_checker']]],
+  ['metric_5fnames_1973',['metric_names',['../structgeopm_1_1_stats_collector_1_1report__s.html#a1b41b570bd32203a070d22deefce0f3e',1,'geopm::StatsCollector::report_s']]],
+  ['metric_5fstats_1974',['metric_stats',['../structgeopm_1_1_stats_collector_1_1report__s.html#a46afba4528ab48159408e920bb067dd6',1,'geopm::StatsCollector::report_s::metric_stats()'],['../structgeopm__report__s.html#ae1250aec3f76ea37c651b1f84ac560b1',1,'geopm_report_s::metric_stats()']]]
 ];

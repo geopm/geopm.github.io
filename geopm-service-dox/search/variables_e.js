@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_1949',['value',['../structgeopm_1_1_p_o_s_i_x_signal_1_1m__info__s.html#afc2934173c322e4608cc6f54fb1bcaba',1,'geopm::POSIXSignal::m_info_s::value()'],['../structgeopm_1_1sst__mmio__interface__s.html#a547d14f2de1a96aadebc82524b6aa310',1,'geopm::sst_mmio_interface_s::value()']]]
+  ['units_1994',['units',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#ad96ceecef614cd610bf2e98134ba8678',1,'geopm::SysfsDriver::properties_s']]]
 ];

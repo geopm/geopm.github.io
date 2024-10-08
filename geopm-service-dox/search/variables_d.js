@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['units_1948',['units',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#ad96ceecef614cd610bf2e98134ba8678',1,'geopm::SysfsDriver::properties_s']]]
+  ['t_1993',['t',['../structgeopm__time__s.html#acb1eaa1bbc844a3c6853b5849fb1c8a6',1,'geopm_time_s']]]
 ];
