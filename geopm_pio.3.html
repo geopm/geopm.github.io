@@ -178,7 +178,9 @@
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <p>#include <a class="reference external" href="https://github.com/geopm/geopm/blob/dev/libgeopmd/include/geopm_pio.h">&lt;geopm_pio.h&gt;</a></p>
 <p>Link with <code class="docutils literal notranslate"><span class="pre">-lgeopmd</span></code></p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_num_signal_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define GEOPM_NAME_MAX 255ULL</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_num_signal_name</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">geopm_pio_signal_name</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">name_idx</span><span class="p">,</span>
 <span class="w">                          </span><span class="kt">size_t</span><span class="w"> </span><span class="n">result_max</span><span class="p">,</span>
@@ -278,6 +280,8 @@ enum for the <em>domain_type</em> parameter to many functions in the
 <code class="docutils literal notranslate"><span class="pre">geopm_pio_*()</span></code> interface.  The return value from
 <code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_domain_type()</span></code> and <code class="docutils literal notranslate"><span class="pre">geopm_pio_control_domain_type()</span></code>
 is also a value from the <code class="docutils literal notranslate"><span class="pre">geopm_domain_e</span></code> enum.</p>
+<p>The constant <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> defines the maximum string size for signals
+names, control names, agent names.</p>
 </section>
 <section id="inspection-functions">
 <h2>Inspection Functions<a class="headerlink" href="#inspection-functions" title="Link to this heading"></a></h2>
@@ -292,7 +296,7 @@ code describing the failure.</p>
 <em>result</em> string.  The value of <em>name_idx</em> must be greater than
 zero and less than the return value from
 <code class="docutils literal notranslate"><span class="pre">geopm_pio_num_signal_name()</span></code> or else an error will occur.
-Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be
+Providing a string of <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">geopm_pio.h</span></code>) will be
 sufficient for storing any <em>result</em>.  If <em>result_max</em> is too small
 to contain the signal name an error will occur.  Zero is returned
 on success and a negative error code is returned if any error
@@ -308,7 +312,7 @@ code describing the failure.</p>
 <em>result</em> string.  The value of <em>name_idx</em> must be greater than
 zero and less than the return value from
 <code class="docutils literal notranslate"><span class="pre">geopm_pio_num_control_name()</span></code> or else an error will occur.
-Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be
+Providing a string of <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">geopm_pio.h</span></code>) will be
 sufficient for storing any <em>result</em>.  If <em>result_max</em> is too small
 to contain the control name an error will occur.  Zero is returned
 on success and a negative error code is returned if any error
@@ -316,16 +320,16 @@ occurs.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_signal_description()</span></code></dt><dd><p>Sets the <em>description</em> string to the signal description associated with
 <em>signal_name</em>.  At most <em>description_max</em> bytes are written to the
-<em>description</em> string.  Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from
-<code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any description.  If
+<em>description</em> string.  Providing a string of <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> length (from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio.h</span></code>) will be sufficient for storing any description.  If
 <em>description_max</em> is too small to contain the description an error will
 occur.  Zero is returned on success and a negative error code is
 returned if any error occurs.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_control_description()</span></code></dt><dd><p>Sets the <em>description</em> string to the control description associated with
 <em>control_name</em>.  At most <em>description_max</em> bytes are written to the
-<em>description</em> string.  Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from
-<code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any description.  If
+<em>description</em> string.  Providing a string of <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> length (from
+<code class="docutils literal notranslate"><span class="pre">geopm_pio.h</span></code>) will be sufficient for storing any description.  If
 <em>description_max</em> is too small to contain the description an error will
 occur.  Zero is returned on success and a negative error code is
 returned if any error occurs.</p>
@@ -363,7 +367,7 @@ The parameters:
 <strong>in</strong> <em>result_max</em> At most <em>result_max</em> bytes are written to the <em>result</em> string.
 If <em>result_max</em> is too small  to contain the written output string an error will occur.
 <strong>out</strong> <em>result</em> Sets the <em>result</em> string to the value of the signal formatted as specified by the <em>format_type</em>.
-Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any <em>result</em>.
+Providing a string of <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">geopm_pio.h</span></code>) will be sufficient for storing any <em>result</em>.
 Returns zero on success, error value on failure.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">geopm_pio_reset()</span></code></dt><dd><p>Reset the GEOPM platform interface causing resources to be freed.
@@ -539,7 +543,7 @@ If the batch server is created successfully, it will populate the <em>server_pid
 and the <em>server_key</em> with a key used to identify the server connection:
 a substring in interprocess shared memory keys used for communication.
 At most <em>key_size</em> bytes are written to the <em>server_key</em> string.
-Providing a string of <code class="docutils literal notranslate"><span class="pre">NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">limits.h</span></code>) will be sufficient for storing any <em>server_key</em>.
+Providing a string of <code class="docutils literal notranslate"><span class="pre">GEOPM_NAME_MAX</span></code> length (from <code class="docutils literal notranslate"><span class="pre">geopm_pio.h</span></code>) will be sufficient for storing any <em>server_key</em>.
 If <em>key_size</em> is too small to contain the <em>server_key</em> an error will
 occur.  Zero is returned on success and a negative error code is
 returned if any error occurs.</p>
