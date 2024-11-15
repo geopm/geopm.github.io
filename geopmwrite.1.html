@@ -204,6 +204,9 @@
 </pre></div>
 </div>
 </section>
+<section id="write-multiple-controls">
+<h3>Write Multiple Controls<a class="headerlink" href="#write-multiple-controls" title="Link to this heading"></a></h3>
+</section>
 <section id="create-cache">
 <h3>Create Cache<a class="headerlink" href="#create-cache" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmwrite<span class="w"> </span>--cache
@@ -291,6 +294,14 @@ permissions no operation will be performed.  To force the
 creation of a new cache file, remove the existing cache file
 prior to executing this command.</p>
 </dd>
+<dt><kbd><span class="option">-f</span>, <span class="option">--config</span></kbd></dt>
+<dd><p>Read control name, control domain, control index and control value
+from a configuration file rather than using the positional
+arguments.  These four parameters are provided on each line of
+the file separated by white space.  The file may have many lines
+specifying multiple controls to be written. Providing <code class="docutils literal notranslate"><span class="pre">-</span></code> for this
+option specifies to read the configuration from standard input.</p>
+</dd>
 <dt><kbd><span class="option">-e</span>, <span class="option">--enable-fixed</span></kbd></dt>
 <dd><p>Write to the registers that enable the fixed counters.  Enabling
 the fixed counters is required for the signals starting with
@@ -350,6 +361,15 @@ $ geopmread CPU_FREQUENCY_MAX_CONTROL cpu 2
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geopmwrite CPU_FREQUENCY_MAX_CONTROL package 0 1.5e9
 $ geopmread CPU_FREQUENCY_MAX_CONTROL cpu 1
 1.5e9
+</pre></div>
+</div>
+<p>Set the uncore frequency of all CPUs to 1.5 GHz. Perform the operation in a
+single GEOPM batch-write request instead of across multiple <cite>geopmwrite</cite>
+commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ printf &#39;CPU_UNCORE_FREQUENCY_MAX_CONTROL board 0 1.5e9\nCPU_UNCORE_FREQUENCY_MIN_CONTROL board 0 1.5e9\n&#39; | geopmwrite --config=-
+$ printf &#39;CPU_UNCORE_FREQUENCY_MAX_CONTROL board 0\nCPU_UNCORE_FREQUENCY_MIN_CONTROL board 0\n&#39; | geopmsession
+&quot;CPU_UNCORE_FREQUENCY_MAX_CONTROL&quot;,&quot;CPU_UNCORE_FREQUENCY_MIN_CONTROL&quot;
+1500000000,1500000000
 </pre></div>
 </div>
 </section>
