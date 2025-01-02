@@ -291,7 +291,9 @@ permissions are extended for each user based on Unix user group
 membership.  Each Unix group on the system may have GEOPM Service
 signal and control access lists associated with it.  To read or write
 the access list for a particular Unix user group, the <code class="docutils literal notranslate"><span class="pre">-g</span></code> or
-<code class="docutils literal notranslate"><span class="pre">--group</span></code> option must be specified.</p>
+<code class="docutils literal notranslate"><span class="pre">--group</span></code> option must be specified.  The user may specify a Unix
+user group name or a Unix user group ID number.  If the user specifies
+a Unix grouip name, then the ID number will be queried from the OS.</p>
 </section>
 <section id="access-management">
 <h3>Access Management<a class="headerlink" href="#access-management" title="Link to this heading"></a></h3>
@@ -339,6 +341,9 @@ access list correspond to signals or controls supported by the active
 GEOPM Service.  This enables the creation of the configuration file on
 a system where the GEOPM Service does not support some signals or
 controls.</p>
+<p>To avoid any issues due to differences in OS user group name/ID look up on
+shared file systems, it may be preferred to specify the Unix user group ID
+number rather than the name when using the <code class="docutils literal notranslate"><span class="pre">-g</span></code> / <code class="docutils literal notranslate"><span class="pre">--group</span></code> option.</p>
 <p>Note that having signal or control names in an access list in
 <code class="docutils literal notranslate"><span class="pre">/etc/geopm</span></code> which are not valid on a particular system is
 not an error.  This enables access list files to be mounted on
@@ -376,11 +381,11 @@ geopmaccess<span class="w"> </span>--default
 <span class="c1"># PRINT DEFAULT CONTROL ACCESS LIST</span>
 geopmaccess<span class="w"> </span>--default<span class="w"> </span>--controls
 
-<span class="c1"># PRINT SIGNAL ACCESS FOR UNIX GROUP &quot;power&quot;</span>
+<span class="c1"># PRINT SIGNAL ACCESS FOR UNIX GROUP NAME &quot;power&quot;</span>
 geopmaccess<span class="w"> </span>--group<span class="w"> </span>power
 
-<span class="c1"># PRINT CONTROL ACCESS FOR UNIX GROUP &quot;power&quot;</span>
-geopmaccess<span class="w"> </span>--controls<span class="w"> </span>--group<span class="w"> </span>power
+<span class="c1"># PRINT CONTROL ACCESS FOR UNIX GROUP ID 101</span>
+geopmaccess<span class="w"> </span>--controls<span class="w"> </span>--group<span class="w"> </span><span class="m">101</span>
 </pre></div>
 </div>
 </section>
