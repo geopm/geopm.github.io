@@ -10,7 +10,7 @@ var indexSectionsWithContent =
   7: "cgjms",
   8: "cgms",
   9: "j",
-  10: "_dg",
+  10: "_g",
   11: "t"
 };
 
