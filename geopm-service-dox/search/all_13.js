@@ -23,7 +23,7 @@ var searchData=
   ['timezero_2ecpp_20',['TimeZero.cpp',['../_time_zero_8cpp.html',1,'']]],
   ['to_20install_20geopm_21',['How to Install GEOPM',['../index.html#autotoc_md3',1,'']]],
   ['todo_20list_22',['Todo List',['../todo.html',1,'']]],
-  ['topo_5fget_5fcache_23',['topo_get_cache',['../classgeopm_1_1_service_proxy.html#a0d8651ef7b7e2f7728b7b8c4323ae3f3',1,'geopm::ServiceProxy::topo_get_cache()'],['../classgeopm_1_1_service_proxy_imp.html#a1e64e3a38d1ebf40f7a8165aea340b0e',1,'geopm::ServiceProxyImp::topo_get_cache()']]],
+  ['topo_5fget_5fcache_23',['topo_get_cache',['../classgeopm_1_1_g_r_p_c_service_proxy.html#a826f2d70b288e958f486b8504af43ef8',1,'geopm::GRPCServiceProxy::topo_get_cache()'],['../classgeopm_1_1_service_proxy.html#a0d8651ef7b7e2f7728b7b8c4323ae3f3',1,'geopm::ServiceProxy::topo_get_cache()'],['../classgeopm_1_1_service_proxy_imp.html#a1e64e3a38d1ebf40f7a8165aea340b0e',1,'geopm::ServiceProxyImp::topo_get_cache()']]],
   ['type_24',['type',['../classjson11_1_1_json_value.html#abad3377adfead681fdf42c5c6aec6b2a',1,'json11::JsonValue::type() const =0'],['../classjson11_1_1_json_value.html#abad3377adfead681fdf42c5c6aec6b2a',1,'json11::JsonValue::type() const =0']]],
   ['type_5fto_5ffunction_25',['type_to_function',['../classgeopm_1_1_agg.html#a309688e43ea2cdefcdbb9e539b0fc34d',1,'geopm::Agg']]],
   ['type_5fto_5fname_26',['type_to_name',['../classgeopm_1_1_agg.html#aeca7343d4b8fbe727403077bb7662be5',1,'geopm::Agg']]]

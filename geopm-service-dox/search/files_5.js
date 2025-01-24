@@ -21,9 +21,12 @@ var searchData=
   ['geopm_5ftopo_2eh_18',['geopm_topo.h',['../geopm__topo_8h.html',1,'']]],
   ['geopm_5fversion_2ecpp_19',['geopm_version.cpp',['../geopm__version_8cpp.html',1,'']]],
   ['geopm_5fversion_2eh_20',['geopm_version.h',['../geopm__version_8h.html',1,'']]],
-  ['geopmhint_2ecpp_21',['GEOPMHint.cpp',['../_g_e_o_p_m_hint_8cpp.html',1,'']]],
-  ['gputopo_2ecpp_22',['GPUTopo.cpp',['../_g_p_u_topo_8cpp.html',1,'']]],
-  ['gputopo_2ehpp_23',['GPUTopo.hpp',['../_g_p_u_topo_8hpp.html',1,'']]],
-  ['gputoponull_2ecpp_24',['GPUTopoNull.cpp',['../_g_p_u_topo_null_8cpp.html',1,'']]],
-  ['gputoponull_2ehpp_25',['GPUTopoNull.hpp',['../_g_p_u_topo_null_8hpp.html',1,'']]]
+  ['geopmbatch_5fmain_2ecpp_21',['geopmbatch_main.cpp',['../geopmbatch__main_8cpp.html',1,'']]],
+  ['geopmhint_2ecpp_22',['GEOPMHint.cpp',['../_g_e_o_p_m_hint_8cpp.html',1,'']]],
+  ['gputopo_2ecpp_23',['GPUTopo.cpp',['../_g_p_u_topo_8cpp.html',1,'']]],
+  ['gputopo_2ehpp_24',['GPUTopo.hpp',['../_g_p_u_topo_8hpp.html',1,'']]],
+  ['gputoponull_2ecpp_25',['GPUTopoNull.cpp',['../_g_p_u_topo_null_8cpp.html',1,'']]],
+  ['gputoponull_2ehpp_26',['GPUTopoNull.hpp',['../_g_p_u_topo_null_8hpp.html',1,'']]],
+  ['grpcserviceproxy_2ecpp_27',['GRPCServiceProxy.cpp',['../_g_r_p_c_service_proxy_8cpp.html',1,'']]],
+  ['grpcserviceproxy_2ehpp_28',['GRPCServiceProxy.hpp',['../_g_r_p_c_service_proxy_8hpp.html',1,'']]]
 ];
