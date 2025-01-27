@@ -11,8 +11,9 @@ var searchData=
   ['error_8',['error',['../classgeopm_1_1_time_zero.html#a65f999a20faa8b87fd9567bbc3fff3d8',1,'geopm::TimeZero']]],
   ['error_5fmessage_9',['error_message',['../namespacegeopm.html#a9aa67189ce4ccab40498adedc9396f70',1,'geopm']]],
   ['errormessage_10',['ErrorMessage',['../classgeopm_1_1_error_message.html#af2ab9659880aa6e6f78675dc6cd9eab2',1,'geopm::ErrorMessage']]],
-  ['exception_11',['exception',['../classgeopm_1_1_exception.html#a3e7da64e5eb1db72ff2e486931c33049',1,'geopm::Exception::Exception()'],['../classgeopm_1_1_exception.html#a9353582049b7be5c2fec24e2da8a27e3',1,'geopm::Exception::Exception(const Exception &amp;other)'],['../classgeopm_1_1_exception.html#ad8fa11d8b3b9e5f0bdf583effe3ce1f5',1,'geopm::Exception::Exception(const std::string &amp;what, int err, const char *file, int line)']]],
-  ['exception_5fhandler_12',['exception_handler',['../namespacegeopm.html#a8d247c71b1371a81fd440be9a54c4118',1,'geopm']]],
-  ['exit_5fcontainer_13',['exit_container',['../classgeopm_1_1_s_d_bus_message.html#a77c59f5706c58bbe3c9e13dd543b6f86',1,'geopm::SDBusMessage::exit_container()'],['../classgeopm_1_1_s_d_bus_message_imp.html#aab32b40725af29c5daa0d6d34af03587',1,'geopm::SDBusMessageImp::exit_container()']]],
-  ['expect_5fsame_14',['expect_same',['../classgeopm_1_1_agg.html#a2669e223e014d3c94910ac92c0fd12cf',1,'geopm::Agg']]]
+  ['event_5floop_11',['event_loop',['../classgeopm_1_1_batch_server_imp.html#a6a8b92d898f14cc645fe14ab375bf558',1,'geopm::BatchServerImp']]],
+  ['exception_12',['exception',['../classgeopm_1_1_exception.html#a3e7da64e5eb1db72ff2e486931c33049',1,'geopm::Exception::Exception()'],['../classgeopm_1_1_exception.html#a9353582049b7be5c2fec24e2da8a27e3',1,'geopm::Exception::Exception(const Exception &amp;other)'],['../classgeopm_1_1_exception.html#ad8fa11d8b3b9e5f0bdf583effe3ce1f5',1,'geopm::Exception::Exception(const std::string &amp;what, int err, const char *file, int line)']]],
+  ['exception_5fhandler_13',['exception_handler',['../namespacegeopm.html#a8d247c71b1371a81fd440be9a54c4118',1,'geopm']]],
+  ['exit_5fcontainer_14',['exit_container',['../classgeopm_1_1_s_d_bus_message.html#a77c59f5706c58bbe3c9e13dd543b6f86',1,'geopm::SDBusMessage::exit_container()'],['../classgeopm_1_1_s_d_bus_message_imp.html#aab32b40725af29c5daa0d6d34af03587',1,'geopm::SDBusMessageImp::exit_container()']]],
+  ['expect_5fsame_15',['expect_same',['../classgeopm_1_1_agg.html#a2669e223e014d3c94910ac92c0fd12cf',1,'geopm::Agg']]]
 ];

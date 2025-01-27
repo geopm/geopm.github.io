@@ -11,11 +11,12 @@ var searchData=
   ['error_8',['error',['../classgeopm_1_1_time_zero.html#a65f999a20faa8b87fd9567bbc3fff3d8',1,'geopm::TimeZero']]],
   ['error_5fmessage_9',['error_message',['../namespacegeopm.html#a9aa67189ce4ccab40498adedc9396f70',1,'geopm']]],
   ['errormessage_10',['errormessage',['../classgeopm_1_1_error_message.html#af2ab9659880aa6e6f78675dc6cd9eab2',1,'geopm::ErrorMessage::ErrorMessage()'],['../classgeopm_1_1_error_message.html',1,'geopm::ErrorMessage']]],
-  ['exception_11',['exception',['../classgeopm_1_1_exception.html',1,'geopm::Exception'],['../classgeopm_1_1_exception.html#ad8fa11d8b3b9e5f0bdf583effe3ce1f5',1,'geopm::Exception::Exception(const std::string &amp;what, int err, const char *file, int line)'],['../classgeopm_1_1_exception.html#a9353582049b7be5c2fec24e2da8a27e3',1,'geopm::Exception::Exception(const Exception &amp;other)'],['../classgeopm_1_1_exception.html#a3e7da64e5eb1db72ff2e486931c33049',1,'geopm::Exception::Exception()']]],
-  ['exception_2ecpp_12',['Exception.cpp',['../_exception_8cpp.html',1,'']]],
-  ['exception_2ehpp_13',['Exception.hpp',['../_exception_8hpp.html',1,'']]],
-  ['exception_5fhandler_14',['exception_handler',['../namespacegeopm.html#a8d247c71b1371a81fd440be9a54c4118',1,'geopm']]],
-  ['exit_5fcontainer_15',['exit_container',['../classgeopm_1_1_s_d_bus_message.html#a77c59f5706c58bbe3c9e13dd543b6f86',1,'geopm::SDBusMessage::exit_container()'],['../classgeopm_1_1_s_d_bus_message_imp.html#aab32b40725af29c5daa0d6d34af03587',1,'geopm::SDBusMessageImp::exit_container()']]],
-  ['expect_5fsame_16',['expect_same',['../classgeopm_1_1_agg.html#a2669e223e014d3c94910ac92c0fd12cf',1,'geopm::Agg']]],
-  ['extensible_20open_20power_20manager_17',['GEOPM - Global Extensible Open Power Manager',['../index.html#autotoc_md0',1,'']]]
+  ['event_5floop_11',['event_loop',['../classgeopm_1_1_batch_server_imp.html#a6a8b92d898f14cc645fe14ab375bf558',1,'geopm::BatchServerImp']]],
+  ['exception_12',['exception',['../classgeopm_1_1_exception.html',1,'geopm::Exception'],['../classgeopm_1_1_exception.html#ad8fa11d8b3b9e5f0bdf583effe3ce1f5',1,'geopm::Exception::Exception(const std::string &amp;what, int err, const char *file, int line)'],['../classgeopm_1_1_exception.html#a9353582049b7be5c2fec24e2da8a27e3',1,'geopm::Exception::Exception(const Exception &amp;other)'],['../classgeopm_1_1_exception.html#a3e7da64e5eb1db72ff2e486931c33049',1,'geopm::Exception::Exception()']]],
+  ['exception_2ecpp_13',['Exception.cpp',['../_exception_8cpp.html',1,'']]],
+  ['exception_2ehpp_14',['Exception.hpp',['../_exception_8hpp.html',1,'']]],
+  ['exception_5fhandler_15',['exception_handler',['../namespacegeopm.html#a8d247c71b1371a81fd440be9a54c4118',1,'geopm']]],
+  ['exit_5fcontainer_16',['exit_container',['../classgeopm_1_1_s_d_bus_message.html#a77c59f5706c58bbe3c9e13dd543b6f86',1,'geopm::SDBusMessage::exit_container()'],['../classgeopm_1_1_s_d_bus_message_imp.html#aab32b40725af29c5daa0d6d34af03587',1,'geopm::SDBusMessageImp::exit_container()']]],
+  ['expect_5fsame_17',['expect_same',['../classgeopm_1_1_agg.html#a2669e223e014d3c94910ac92c0fd12cf',1,'geopm::Agg']]],
+  ['extensible_20open_20power_20manager_18',['GEOPM - Global Extensible Open Power Manager',['../index.html#autotoc_md0',1,'']]]
 ];
