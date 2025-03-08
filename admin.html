@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Service Clients" href="client.html" />
-    <link rel="prev" title="Service Security" href="security.html" /> 
+    <link rel="next" title="Development Snapshot Install Guide" href="install_rolling.html" />
+    <link rel="prev" title="geopmaccess(1) – Access management for the GEOPM Service" href="geopmaccess.1.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,18 +45,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="user_guides.html">User Guides</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="service.html">User Guide for GEOPM Service</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="service_readme.html">GEOPM Service</a></li>
-<li class="toctree-l3"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="requires.html">Requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="build.html">Source Builds</a></li>
 <li class="toctree-l3"><a class="reference internal" href="security.html">Service Security</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Service Administrators</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#linux-integration">Linux Integration</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#geopm-service-files">GEOPM Service Files</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#configuring-access-lists">Configuring Access Lists</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#configuring-systemd-unit-file">Configuring Systemd Unit File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-msr-driver">The MSR Driver</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="client.html">Service Clients</a></li>
@@ -86,8 +85,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="user_guides.html">User Guides</a></li>
-          <li class="breadcrumb-item"><a href="service.html">User Guide for GEOPM Service</a></li>
+          <li class="breadcrumb-item"><a href="install.html">Install Guide</a></li>
       <li class="breadcrumb-item active">Service Administrators</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/admin.rst.txt" rel="nofollow"> View page source</a>
@@ -176,14 +174,42 @@ expected signals or controls are not available.</p>
 <p>The scope of messages printed when <code class="docutils literal notranslate"><span class="pre">GEOPM_VERBOSITY</span></code> is non-zero may increase
 in the future.</p>
 </section>
+<section id="the-msr-driver">
+<h2>The MSR Driver<a class="headerlink" href="#the-msr-driver" title="Link to this heading"></a></h2>
+<p>Access to MSRs enhances the capabilities of the GEOPM Access Service by
+providing additional hardware telemetry and controls. While the <strong>GEOPM Access
+Service</strong> can function without access to MSRs, it provides a limited set of CPU
+features. For the <strong>GEOPM Runtime</strong> to function correctly, these MSR-related
+CPU features are necessary. Hence, MSR support is a hard requirement for
+the GEOPM Runtime which may be relaxed in a future release.</p>
+<p>One of two drivers may be used by the GEOPM Access Service to enable the MSR
+features: the standard Linux (in-tree) MSR driver or the msr-safe kernel driver
+maintained by LLNL.  The msr-safe driver is preferred by GEOPM if both kernel
+modules are loaded because it provides low latency interface for reading and
+writing many MSR values at once through an <a class="reference external" href="https://man7.org/linux/man-pages/man2/ioctl.2.html">ioctl(2)</a> system call, possibly
+improving the performance of GEOPM Runtime or other MSR usages.</p>
+<p>The msr-safe kernel driver source code can be found <a class="reference external" href="https://github.com/LLNL/msr-safe">here</a>.  It’s distributed with the <a class="reference external" href="https://download.opensuse.org/repositories/hardware/">OpenSUSE
+Hardware Repository</a> and
+can be installed from the RPMs provided there.  For more information about the
+necessary configuration of msr-safe see: <a class="reference internal" href="geopmaccess.1.html#configuring-msr-safe"><span class="std std-ref">Configuring msr-safe</span></a> and <a class="reference internal" href="install.html#enable-service"><span class="std std-ref">the install guide</span></a>.  Note that subsequent to
+v1.7.0 of msr-safe, it is required that the msr-safe allow list be configured
+prior to starting the GEOPM Access Service.</p>
+<p>In the absence of the msr-safe kernel driver, users may access MSRs using the
+standard Linux MSR driver. This can be loaded with the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>modprobe<span class="w"> </span>msr
+</pre></div>
+</div>
+<p>The standard MSR driver be loaded to enable MSR access through the GEOPM Systemd
+Service when msr-safe is not installed.</p>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="security.html" class="btn btn-neutral float-left" title="Service Security" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="client.html" class="btn btn-neutral float-right" title="Service Clients" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="geopmaccess.1.html" class="btn btn-neutral float-left" title="geopmaccess(1) – Access management for the GEOPM Service" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="install_rolling.html" class="btn btn-neutral float-right" title="Development Snapshot Install Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
