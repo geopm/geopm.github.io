@@ -81,6 +81,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reading-signals-during-a-job-execution">Reading signals during a job execution</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gathering-reports-using-mpi">Gathering Reports using MPI</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
@@ -181,7 +182,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage:<span class="w"> </span>geopmsession<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>-t<span class="w"> </span>TIME<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PERIOD<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pid<span class="w"> </span>PID<span class="o">]</span>
 <span class="w">                    </span><span class="o">[</span>--print-header<span class="w"> </span><span class="p">|</span><span class="w"> </span>-n<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span>DELIMITER<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>REPORT_OUT<span class="o">]</span>
 <span class="w">                    </span><span class="o">[</span>-o<span class="w"> </span>TRACE_OUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable-mpi<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="w"> </span>REPORT_FORMAT<span class="o">]</span>
-<span class="w">                    </span><span class="o">[</span>-s<span class="w"> </span>REPORT_SAMPLES<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>-s<span class="w"> </span>REPORT_SAMPLES<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>CONFIG_PATH<span class="o">]</span>
 </pre></div>
 </div>
 <section id="read-a-signal">
@@ -285,6 +286,10 @@ elapsed.  When in YAML format, the reports are YAML documents
 separated with the document separator string: <code class="docutils literal notranslate"><span class="pre">&quot;---&quot;</span></code>.  When
 in CSV format, each report is one line of the CSV output.</p>
 </dd>
+<dt><kbd><span class="option">-i</span>, <span class="option">--signal-config</span></kbd></dt>
+<dd><p id="configpath-config-path-option">Input file containing GEOPM signal requests, specify “-” to use
+standard input which is also the default.</p>
+</dd>
 </dl>
 </section>
 <section id="examples">
@@ -296,14 +301,24 @@ provided.</p>
 <p>The input to the command line tool has one request per line.  A
 request for reading is made of up three strings separated by white
 space.  The first string is the signal name, the second string is the
-domain name, and the third string is the domain index.  An example
-where the entire <code class="docutils literal notranslate"><span class="pre">THERM_STATUS</span></code> model specific register is read from
+domain name, and the third string is the domain index.  An asterisk <code class="docutils literal notranslate"><span class="pre">*</span></code>
+in place of the domain name will evaluate to the native domain of the signal.
+An asterisk <code class="docutils literal notranslate"><span class="pre">*</span></code> in place of the domain index will result in the signal being
+read for all available domain indices on the system for the specified domain type.</p>
+<p>An example where the entire <code class="docutils literal notranslate"><span class="pre">THERM_STATUS</span></code> model specific register is read from
 core zero:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;MSR::THERM_STATUS# core 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
 <span class="go">0x0000000088430800</span>
 </pre></div>
 </div>
 <p>This will execute one read of the signal.</p>
+<p>A couple of examples reading <code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code> using <code class="docutils literal notranslate"><span class="pre">*</span></code>:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER * 1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
+<span class="go">173.4394938352482</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER * *&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
+<span class="go">302.1005171817655,218.0933036104828</span>
+</pre></div>
+</div>
 </section>
 <section id="reading-a-signal-periodically">
 <h3>Reading a signal periodically<a class="headerlink" href="#reading-a-signal-periodically" title="Link to this heading"></a></h3>
@@ -326,17 +341,22 @@ The polling period must be shorter than the timeout specified.</p>
 <span class="go">70.250978379,2434090909.090909,2775000000,198575.8842163086,88752.19470214844</span>
 </pre></div>
 </div>
+<p>Signals may also be specified in a separate file using the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option.</p>
 </section>
 <section id="reading-a-set-of-signals-and-getting-summary-statistics">
 <h3>Reading a set of signals and getting summary statistics<a class="headerlink" href="#reading-a-set-of-signals-and-getting-summary-statistics" title="Link to this heading"></a></h3>
 <p>Summary statistics may be output to stdout by setting <code class="docutils literal notranslate"><span class="pre">--report-out=-</span></code>.
 Otherwise, the statistics will be output to the specified file path. If
 unspecified, no statistics will be gathered.</p>
+<p>The resulting report will be in yaml by default. To output as a csv, use the
+<code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">csv</span></code> option. Hostname and sample information will be output at the top.
+Summary statistics (count/first/last/min/max/mean/std) will be output
+for each of the specified signals at the specified domains/domain indices.</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_POWER board 0\nCPU_FREQUENCY_STATUS board 0\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
 <span class="w">    </span>geopmsession<span class="w"> </span>-t<span class="w"> </span><span class="m">10</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.005<span class="w"> </span>--report-out<span class="o">=</span>-<span class="w"> </span>--trace-out<span class="o">=</span>/dev/null
 </pre></div>
 </div>
-<p>An example report is shown below:</p>
+<p>An example yaml report is shown below:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
 <span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T18:23:58.545153099-0700&quot;</span>
 <span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.99976</span>
@@ -370,7 +390,114 @@ unspecified, no statistics will be gathered.</p>
 <span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.72332e+08</span>
 </pre></div>
 </div>
+<p>The same report rendered into csv format:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;host&quot;,&quot;sample-time-first&quot;,&quot;sample-time-total&quot;,&quot;sample-count&quot;,&quot;sample-period-mean&quot;,&quot;sample-period-std&quot;,&quot;CPU_FREQUENCY_STATUS-count&quot;,&quot;CPU_FREQUENCY_STATUS-first&quot;,&quot;CPU_FREQUENCY_STATUS-last&quot;,&quot;CPU_FREQUENCY_STATUS-min&quot;,&quot;CPU_FREQUENCY_STATUS-max&quot;,&quot;CPU_FREQUENCY_STATUS-mean&quot;,&quot;CPU_FREQUENCY_STATUS-std&quot;,&quot;CPU_POWER-count&quot;,&quot;CPU_POWER-first&quot;,&quot;CPU_POWER-last&quot;,&quot;CPU_POWER-min&quot;,&quot;CPU_POWER-max&quot;,&quot;CPU_POWER-mean&quot;,&quot;CPU_POWER-std&quot;,&quot;TIME-count&quot;,&quot;TIME-first&quot;,&quot;TIME-last&quot;,&quot;TIME-min&quot;,&quot;TIME-max&quot;,&quot;TIME-mean&quot;,&quot;TIME-std&quot;
+&quot;cluster-node-11&quot;,&quot;2025-03-10T21:51:23.189529258-0700&quot;,10.001955031000001,2001,0.0050009775155000005,0.00010043535451280228,2001,847115384.6153846,850000000.0,821153846.1538461,873076923.0769231,847851314.7272667,3590132.1103830505,2001,399.14601612728563,300.103422331257,274.8583842263399,399.14601612728563,321.0146130526503,17.236293555024577,2001,6.143247742,16.145202773,6.143247742,16.145202773,11.144727482043468,2.8891493308338507
+</pre></div>
+</div>
 </section>
+</section>
+<section id="reading-signals-during-a-job-execution">
+<h2>Reading signals during a job execution<a class="headerlink" href="#reading-signals-during-a-job-execution" title="Link to this heading"></a></h2>
+<p>Signals can be read and summary statistics gathered during job execution using
+the <code class="docutils literal notranslate"><span class="pre">--pid</span></code> option. If both the <code class="docutils literal notranslate"><span class="pre">--pid</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code> options are used,
+geopmsession will end when either the process ends or when the specified time
+elapses, whichever is shorter. Below is an example gathering <code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code>
+while running <code class="docutils literal notranslate"><span class="pre">sleep</span></code>.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">1</span>
+<span class="go">[1] 862433</span>
+<span class="go">nan</span>
+<span class="go">223.9936557537629</span>
+<span class="go">216.5137820024834</span>
+<span class="go">213.0681419975341</span>
+<span class="go">213.0355731062416</span>
+<span class="go">212.6023058240874</span>
+</pre></div>
+</div>
+<p>An example gathering summary statistics while executing a job:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span>-
+<span class="go">[1] 863118</span>
+<span class="go">&quot;CPU_POWER-package-0&quot;</span>
+<span class="go">192.0918491664253</span>
+<span class="go">229.5852100126677</span>
+<span class="go">228.7564573775396</span>
+<span class="go">host: &quot;cluster-node-11&quot;</span>
+<span class="go">sample-time-first: &quot;2025-03-11T11:44:16.347674498-0700&quot;</span>
+<span class="go">sample-time-total: 2.00134</span>
+<span class="go">sample-count: 3</span>
+<span class="go">sample-period-mean: 1.00067</span>
+<span class="go">sample-period-std: 0.000850531</span>
+<span class="go">metrics:</span>
+<span class="go">  CPU_POWER-package-0:</span>
+<span class="go">    count: 3</span>
+<span class="go">    first: 192.092</span>
+<span class="go">    last: 228.756</span>
+<span class="go">    min: 192.092</span>
+<span class="go">    max: 229.585</span>
+<span class="go">    mean: 216.811</span>
+<span class="go">    std: 21.4116</span>
+</pre></div>
+</div>
+<p>Note that the samples are output followed by summary statistics. To output the
+sample trace to a file, use <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">[filename]</span></code>. To output the summary statistics
+report to a file, use <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">[filename]</span></code>. To suppress the trace, set the output
+parameter to <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">/dev/null</span></code>. Reports will not output if <code class="docutils literal notranslate"><span class="pre">-r</span></code> is not specified.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">[REPORT_SAMPLES]</span></code> option will generate statistics after the
+specified number of samples. In default yaml format, sets of statistics will
+be separated by “—”. In csv format, each set of statistics will be output as
+a row.</p>
+<p>Example:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
+<span class="w">  </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>-r<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span><span class="m">10</span>
+</pre></div>
+</div>
+<p>In the yaml output below, note that each report is appended, separated by
+“—“.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="w"> </span><span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-03-13T13:48:17.484751575-0700&quot;</span>
+<span class="w"> </span><span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.001</span>
+<span class="w"> </span><span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span>
+<span class="w"> </span><span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1001</span>
+<span class="w"> </span><span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.000300337</span>
+<span class="w"> </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
+<span class="w">     </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span>
+<span class="w">     </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">57.3536</span>
+<span class="w">     </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">158.705</span>
+<span class="w">     </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">57.3536</span>
+<span class="w">     </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">160.906</span>
+<span class="w">     </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">149.869</span>
+<span class="w">     </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30.7383</span>
+
+<span class="nn">---</span>
+
+<span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-03-13T13:48:18.585712016-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.200019</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.10001</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.89358e-06</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.354</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.576</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.354</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">160.12</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.683</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.394004</span>
+<span class="w">  </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">]</span><span class="l l-Scalar l-Scalar-Plain">+  Done                    sleep 5</span>
+</pre></div>
+</div>
+<p>Sample csv output below shows each statistics sample output on a new row:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
+<span class="w">  </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>-r<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span><span class="m">10</span><span class="w"> </span>-f<span class="w"> </span>csv
+<span class="go">&quot;host&quot;,&quot;sample-time-first&quot;,&quot;sample-time-total&quot;,&quot;sample-count&quot;,&quot;sample-period-mean&quot;,&quot;sample-period-std&quot;,&quot;CPU_POWER-package-0-count&quot;,&quot;CPU_POWER-package-0-first&quot;,&quot;CPU_POWER-package-0-last&quot;,&quot;CPU_POWER-package-0-min&quot;,&quot;CPU_POWER-package-0-max&quot;,&quot;CPU_POWER-package-0-mean&quot;,&quot;CPU_POWER-package-0-std&quot;</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-03-13T13:55:06.330688844-0700&quot;,1.0008504780000003,11,0.10008504780000002,0.00022674563801204308,11,280.7375126848722,193.37615094901133,193.37615094901133,280.7375126848722,208.08585636276703,24.588834377550775</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-03-13T13:55:07.431262159-0700&quot;,0.8999735640000002,10,0.09999706266666669,8.698831894196923e-05,10,191.878186704736,175.91600106253898,175.91600106253898,191.878186704736,185.4971100742497,5.352722675096535</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-03-13T13:55:08.431459737-0700&quot;,0.200098412,3,0.100049206,7.587538605975476e-05,3,172.07603810585476,166.7683539071519,166.7683539071519,172.07603810585476,169.3263499495176,2.6590293883676446</span>
+</pre></div>
+</div>
 </section>
 <section id="gathering-reports-using-mpi">
 <h2>Gathering Reports using MPI<a class="headerlink" href="#gathering-reports-using-mpi" title="Link to this heading"></a></h2>

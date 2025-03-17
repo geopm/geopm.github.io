@@ -10,7 +10,7 @@ Synopsis
    usage: geopmsession [-h] [-v] [-t TIME] [-p PERIOD] [--pid PID]
                        [--print-header | -n] [-d DELIMITER] [-r REPORT_OUT]
                        [-o TRACE_OUT] [--enable-mpi] [-f REPORT_FORMAT]
-                       [-s REPORT_SAMPLES]
+                       [-s REPORT_SAMPLES] [-i CONFIG_PATH]
 
 Read a signal
 ~~~~~~~~~~~~~
@@ -133,6 +133,11 @@ Options
     separated with the document separator string: ``"---"``.  When
     in CSV format, each report is one line of the CSV output.
 
+-i, --signal-config  .. _configpath CONFIG_PATH option:
+
+    Input file containing GEOPM signal requests, specify "-" to use
+    standard input which is also the default.
+
 Examples
 --------
 
@@ -144,8 +149,12 @@ Reading a signal
 The input to the command line tool has one request per line.  A
 request for reading is made of up three strings separated by white
 space.  The first string is the signal name, the second string is the
-domain name, and the third string is the domain index.  An example
-where the entire ``THERM_STATUS`` model specific register is read from
+domain name, and the third string is the domain index.  An asterisk ``*``
+in place of the domain name will evaluate to the native domain of the signal.
+An asterisk ``*`` in place of the domain index will result in the signal being
+read for all available domain indices on the system for the specified domain type.
+
+An example where the entire ``THERM_STATUS`` model specific register is read from
 core zero:
 
 .. code-block:: shell-session
@@ -154,6 +163,15 @@ core zero:
     0x0000000088430800
 
 This will execute one read of the signal.
+
+A couple of examples reading ``CPU_POWER`` using ``*``:
+
+.. code-block:: shell-session
+
+    $ echo "CPU_POWER * 1" | geopmsession -n
+    173.4394938352482
+    $ echo "CPU_POWER * *" | geopmsession -n
+    302.1005171817655,218.0933036104828
 
 Reading a signal periodically
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -180,18 +198,26 @@ Multiple signals may be specified by separating them with a newline.
         geopmsession -n
     70.250978379,2434090909.090909,2775000000,198575.8842163086,88752.19470214844
 
+Signals may also be specified in a separate file using the ``-i`` option.
+
+
 Reading a set of signals and getting summary statistics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Summary statistics may be output to stdout by setting ``--report-out=-``.
 Otherwise, the statistics will be output to the specified file path. If
 unspecified, no statistics will be gathered.
 
+The resulting report will be in yaml by default. To output as a csv, use the
+``-f csv`` option. Hostname and sample information will be output at the top.
+Summary statistics (count/first/last/min/max/mean/std) will be output
+for each of the specified signals at the specified domains/domain indices.
+
 .. code-block:: shell-session
 
     $ printf 'TIME board 0\nCPU_POWER board 0\nCPU_FREQUENCY_STATUS board 0\n' |\
         geopmsession -t 10 -p 0.005 --report-out=- --trace-out=/dev/null
 
-An example report is shown below:
+An example yaml report is shown below:
 
 .. code-block:: yaml
 
@@ -226,6 +252,129 @@ An example report is shown below:
        max: 2.49659e+09
        mean: 1.5542e+09
        std: 3.72332e+08
+
+The same report rendered into csv format:
+
+.. code-block:: text
+
+    "host","sample-time-first","sample-time-total","sample-count","sample-period-mean","sample-period-std","CPU_FREQUENCY_STATUS-count","CPU_FREQUENCY_STATUS-first","CPU_FREQUENCY_STATUS-last","CPU_FREQUENCY_STATUS-min","CPU_FREQUENCY_STATUS-max","CPU_FREQUENCY_STATUS-mean","CPU_FREQUENCY_STATUS-std","CPU_POWER-count","CPU_POWER-first","CPU_POWER-last","CPU_POWER-min","CPU_POWER-max","CPU_POWER-mean","CPU_POWER-std","TIME-count","TIME-first","TIME-last","TIME-min","TIME-max","TIME-mean","TIME-std"
+    "cluster-node-11","2025-03-10T21:51:23.189529258-0700",10.001955031000001,2001,0.0050009775155000005,0.00010043535451280228,2001,847115384.6153846,850000000.0,821153846.1538461,873076923.0769231,847851314.7272667,3590132.1103830505,2001,399.14601612728563,300.103422331257,274.8583842263399,399.14601612728563,321.0146130526503,17.236293555024577,2001,6.143247742,16.145202773,6.143247742,16.145202773,11.144727482043468,2.8891493308338507
+
+Reading signals during a job execution
+--------------------------------------
+
+Signals can be read and summary statistics gathered during job execution using
+the ``--pid`` option. If both the ``--pid`` and ``-t`` options are used,
+geopmsession will end when either the process ends or when the specified time
+elapses, whichever is shorter. Below is an example gathering ``CPU_POWER``
+while running ``sleep``. 
+
+
+.. code-block:: shell-session
+
+    $ sleep 5 & apppid=$!; echo "CPU_POWER package 0" | geopmsession --pid $apppid -p 1
+    [1] 862433
+    nan
+    223.9936557537629
+    216.5137820024834
+    213.0681419975341
+    213.0355731062416
+    212.6023058240874
+
+An example gathering summary statistics while executing a job:
+
+.. code-block:: shell-session
+
+    $ sleep 5 & apppid=$!; echo "CPU_POWER package 0" | geopmsession --pid $apppid -p 1 -r -
+    [1] 863118
+    "CPU_POWER-package-0"
+    192.0918491664253
+    229.5852100126677
+    228.7564573775396
+    host: "cluster-node-11"
+    sample-time-first: "2025-03-11T11:44:16.347674498-0700"
+    sample-time-total: 2.00134
+    sample-count: 3
+    sample-period-mean: 1.00067
+    sample-period-std: 0.000850531
+    metrics:
+      CPU_POWER-package-0:
+        count: 3
+        first: 192.092
+        last: 228.756
+        min: 192.092
+        max: 229.585
+        mean: 216.811
+        std: 21.4116
+
+
+Note that the samples are output followed by summary statistics. To output the
+sample trace to a file, use ``-o [filename]``. To output the summary statistics
+report to a file, use ``-r [filename]``. To suppress the trace, set the output
+parameter to ``-o /dev/null``. Reports will not output if ``-r`` is not specified.
+
+Using the ``-s [REPORT_SAMPLES]`` option will generate statistics after the
+specified number of samples. In default yaml format, sets of statistics will
+be separated by "---". In csv format, each set of statistics will be output as
+a row.
+
+Example:
+
+.. code-block:: shell-session
+
+     $ sleep 5 & apppid=$!; echo "CPU_POWER package 0" |\
+       geopmsession --pid $apppid -p 0.1 -r - -o /dev/null -s 10
+
+In the yaml output below, note that each report is appended, separated by
+"---".
+
+.. code-block:: yaml
+
+     host: "cluster-node-11"
+     sample-time-first: "2025-03-13T13:48:17.484751575-0700"
+     sample-time-total: 1.001
+     sample-count: 11
+     sample-period-mean: 0.1001
+     sample-period-std: 0.000300337
+     metrics:
+       CPU_POWER-package-0:
+         count: 11
+         first: 57.3536
+         last: 158.705
+         min: 57.3536
+         max: 160.906
+         mean: 149.869
+         std: 30.7383
+
+    ---
+
+    host: "cluster-node-11"
+    sample-time-first: "2025-03-13T13:48:18.585712016-0700"
+    sample-time-total: 0.200019
+    sample-count: 3
+    sample-period-mean: 0.10001
+    sample-period-std: 6.89358e-06
+    metrics:
+      CPU_POWER-package-0:
+        count: 3
+        first: 159.354
+        last: 159.576
+        min: 159.354
+        max: 160.12
+        mean: 159.683
+        std: 0.394004
+      [1]+  Done                    sleep 5
+
+Sample csv output below shows each statistics sample output on a new row:
+
+.. code-block:: shell-session
+
+     $ sleep 5 & apppid=$!; echo "CPU_POWER package 0" |\
+       geopmsession --pid $apppid -p 0.1 -r - -o /dev/null -s 10 -f csv
+     "host","sample-time-first","sample-time-total","sample-count","sample-period-mean","sample-period-std","CPU_POWER-package-0-count","CPU_POWER-package-0-first","CPU_POWER-package-0-last","CPU_POWER-package-0-min","CPU_POWER-package-0-max","CPU_POWER-package-0-mean","CPU_POWER-package-0-std"
+     "cluster-node-11","2025-03-13T13:55:06.330688844-0700",1.0008504780000003,11,0.10008504780000002,0.00022674563801204308,11,280.7375126848722,193.37615094901133,193.37615094901133,280.7375126848722,208.08585636276703,24.588834377550775
+     "cluster-node-11","2025-03-13T13:55:07.431262159-0700",0.8999735640000002,10,0.09999706266666669,8.698831894196923e-05,10,191.878186704736,175.91600106253898,175.91600106253898,191.878186704736,185.4971100742497,5.352722675096535
+     "cluster-node-11","2025-03-13T13:55:08.431459737-0700",0.200098412,3,0.100049206,7.587538605975476e-05,3,172.07603810585476,166.7683539071519,166.7683539071519,172.07603810585476,169.3263499495176,2.6590293883676446
 
 
 Gathering Reports using MPI
