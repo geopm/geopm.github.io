@@ -242,16 +242,17 @@ that are available on a particular system.</p>
 <p>Signals and controls in this IOGroup come from multiple drivers that provide
 sysfs attributes. Some signals and controls come from the <code class="docutils literal notranslate"><span class="pre">cpufreq</span></code> driver.
 For more information, see the <a class="reference external" href="https://docs.kernel.org/admin-guide/pm/cpufreq.html">cpufreq documentation</a>.</p>
-<p>Some signals and controls are made available to GEOPM through the sysfs interface
-to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> (Direct Rendering Manager) driver. For more information, see the
-<a class="reference external" href="https://www.kernel.org/doc/html/next/gpu/i915.html">i915 documentation</a> and the
-<a class="reference external" href="https://www.intel.com/content/www/us/en/docs/oneapi/optimization-guide-gpu/2024-0/configuring-gpu-device.html">oneAPI GPU Optimization Guide</a>.
-Furthermore, the i915 DRM devices may link to i915 hwmon devices. If the hwmon
-links are present, this IOGroup also exposes signals and controls from the
-<a class="reference external" href="https://www.kernel.org/doc/html/latest/admin-guide/abi-testing.html#file-testing-sysfs-driver-intel-i915-hwmon">i915 hwmon interface</a>.</p>
-<p>The i915 driver is available in <a class="reference external" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/i915">upstream Linux</a>.
+<p>Some signals and controls are made available to GEOPM through the sysfs
+interface to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> or <code class="docutils literal notranslate"><span class="pre">Xe</span> <span class="pre">DRM</span></code> (Direct Rendering Manager)
+driver. For more information, see the <a class="reference external" href="https://www.kernel.org/doc/html/next/gpu/i915.html">i915 documentation</a>, <a class="reference external" href="https://www.kernel.org/doc/html/next/gpu/driver-uapi.html#drm-xe-uapi">Xe documentation</a>, and
+the <a class="reference external" href="https://www.intel.com/content/www/us/en/docs/oneapi/optimization-guide-gpu/2024-0/configuring-gpu-device.html">oneAPI GPU Optimization Guide</a>.
+Furthermore, the DRM devices may link to hwmon devices. If the hwmon
+links are present, this IOGroup also exposes signals and controls from the <a class="reference external" href="https://www.kernel.org/doc/html/latest/admin-guide/abi-testing.html#file-testing-sysfs-driver-intel-i915-hwmon">i915 hwmon interface</a>
+and the <a class="reference external" href="https://www.kernel.org/doc/html/latest/admin-guide/abi-testing.html#file-testing-sysfs-driver-intel-xe-hwmon">xe hwmon interface</a>
+The i915 driver is available in <a class="reference external" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/i915">upstream Linux i915</a>.
 Additional features are available in the <a class="reference external" href="https://github.com/intel-gpu/intel-gpu-i915-backports">out-of-tree version of the driver</a>.
-This IOGroup is intended for use with either version of the driver.</p>
+The Xe driver is available in <a class="reference external" href="https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/xe">upstream Linux Xe</a>.
+This IOGroup is intended for use with any of these driver interfaces.</p>
 <p>If a GEOPM sysfs-based signal came from the DRM system, then its name begins
 with <code class="docutils literal notranslate"><span class="pre">DRM</span></code>. The driver (e.g., <code class="docutils literal notranslate"><span class="pre">i915</span></code> that made that signal available to
 <code class="docutils literal notranslate"><span class="pre">DRM</span></code> can be viewed by running <code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">--info</span> <span class="pre">SIGNAL_NAME</span></code>. For example:</p>
@@ -271,7 +272,7 @@ with <code class="docutils literal notranslate"><span class="pre">DRM</span></co
 <p class="topic-title">Categories of sysfs signals:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#cpufreq-signals" id="id1">Cpufreq Signals</a></p></li>
-<li><p><a class="reference internal" href="#i915-drm-signals" id="id2">i915 DRM Signals</a></p></li>
+<li><p><a class="reference internal" href="#drm-signals" id="id2">DRM Signals</a></p></li>
 </ul>
 </nav>
 <section id="cpufreq-signals">
@@ -335,10 +336,10 @@ to the <code class="docutils literal notranslate"><span class="pre">cpufreq</spa
 </dd>
 </dl>
 </section>
-<section id="i915-drm-signals">
-<h3><a class="toc-backref" href="#id2" role="doc-backlink">i915 DRM Signals</a><a class="headerlink" href="#i915-drm-signals" title="Link to this heading"></a></h3>
+<section id="drm-signals">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">DRM Signals</a><a class="headerlink" href="#drm-signals" title="Link to this heading"></a></h3>
 <p>The following signals are made available to GEOPM through the sysfs interface
-to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> driver.</p>
+to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> and <code class="docutils literal notranslate"><span class="pre">Xe</span> <span class="pre">DRM</span></code> drivers.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="drm-hwmon-in0-input"><span class="pre">DRM::HWMON::IN0_INPUT</span></code></dt><dd><p>The current voltage</p>
 <ul class="simple">
@@ -351,7 +352,7 @@ to the <code class="docutils literal notranslate"><span class="pre">i915</span> 
 </dd>
 <dt><code class="docutils literal notranslate" id="drm-hwmon-power1-rated-max"><span class="pre">DRM::HWMON::POWER1_RATED_MAX</span></code></dt><dd><p>Default thermal design power limit</p>
 <ul class="simple">
-<li><p><strong>Maps to attribute</strong>: power1_max</p></li>
+<li><p><strong>Maps to attribute</strong>: power1_rated_max</p></li>
 <li><p><strong>Aggregation</strong>: sum</p></li>
 <li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu)</p></li>
 <li><p><strong>Format</strong>: double</p></li>
@@ -664,6 +665,78 @@ to the <code class="docutils literal notranslate"><span class="pre">i915</span> 
 <li><p><strong>Unit</strong>: none</p></li>
 </ul>
 </dd>
+<dt><code class="docutils literal notranslate" id="drm-act-freq"><span class="pre">DRM::ACT_FREQ</span></code></dt><dd><p>Actual GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/act_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-cur-freq"><span class="pre">DRM::CUR_FREQ</span></code></dt><dd><p>Current GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/cur_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rp0-freq"><span class="pre">DRM::RP0_FREQ</span></code></dt><dd><p>Maximum non-overclocked GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/rp0_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rpa-freq"><span class="pre">DRM::RPA_FREQ</span></code></dt><dd><p>Achievable GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/rpa_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rpe-freq"><span class="pre">DRM::RPE_FREQ</span></code></dt><dd><p>Efficient GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/rpe_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-rpn-freq"><span class="pre">DRM::RPN_FREQ</span></code></dt><dd><p>Minimum requestable GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/rpn_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-idle-residency"><span class="pre">DRM::IDLE_RESIDENCY</span></code></dt><dd><p>Time spent in idle state</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: gtidle/idle_residency_ms</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: seconds</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-hwmon-energy2-input"><span class="pre">DRM::HWMON::ENERGY2_INPUT</span></code></dt><dd><p>GPU package energy counter</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: energy2_input</p></li>
+<li><p><strong>Aggregation</strong>: sum</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: joules</p></li>
+</ul>
+</dd>
 </dl>
 </section>
 </section>
@@ -673,7 +746,7 @@ to the <code class="docutils literal notranslate"><span class="pre">i915</span> 
 <p class="topic-title">Categories of SYSFS controls:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#cpufreq-controls" id="id3">Cpufreq Controls</a></p></li>
-<li><p><a class="reference internal" href="#i915-drm-controls" id="id4">i915 DRM Controls</a></p></li>
+<li><p><a class="reference internal" href="#drm-controls" id="id4">DRM Controls</a></p></li>
 </ul>
 </nav>
 <section id="cpufreq-controls">
@@ -710,10 +783,10 @@ to the <code class="docutils literal notranslate"><span class="pre">cpufreq</spa
 </dd>
 </dl>
 </section>
-<section id="i915-drm-controls">
-<h3><a class="toc-backref" href="#id4" role="doc-backlink">i915 DRM Controls</a><a class="headerlink" href="#i915-drm-controls" title="Link to this heading"></a></h3>
+<section id="drm-controls">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">DRM Controls</a><a class="headerlink" href="#drm-controls" title="Link to this heading"></a></h3>
 <p>The following controls are made available to GEOPM through the sysfs interface
-to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> driver.</p>
+to the <code class="docutils literal notranslate"><span class="pre">i915</span> <span class="pre">DRM</span></code> and <code class="docutils literal notranslate"><span class="pre">Xe</span> <span class="pre">DRM</span></code> drivers.</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate" id="drm-hwmon-power1-max"><span class="pre">DRM::HWMON::POWER1_MAX</span></code></dt><dd><p>Requested power limit, sustained on average over <a class="reference internal" href="#drm-hwmon-power1-max-interval"><span class="std std-ref">DRM::HWMON::POWER1_MAX_INTERVAL</span></a></p>
 <ul class="simple">
@@ -796,6 +869,33 @@ to the <code class="docutils literal notranslate"><span class="pre">i915</span> 
 <li><p><strong>Unit</strong>: none</p></li>
 </ul>
 </dd>
+<dt><code class="docutils literal notranslate" id="drm-max-freq"><span class="pre">DRM::MAX_FREQ</span></code></dt><dd><p>Maximum GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/max_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-min-freq"><span class="pre">DRM::MIN_FREQ</span></code></dt><dd><p>Minimum GPU frequency</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: freq0/min_freq</p></li>
+<li><p><strong>Aggregation</strong>: average</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu_chip)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: hertz</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate" id="drm-hwmon-power2-crit"><span class="pre">DRM::HWMON::POWER2_CRIT</span></code></dt><dd><p>Critical power limit, influencing the power manager’s throttling decisions</p>
+<ul class="simple">
+<li><p><strong>Maps to attribute</strong>: power2_crit</p></li>
+<li><p><strong>Aggregation</strong>: sum</p></li>
+<li><p><strong>Domain</strong>: Determined by GEOPM at time of query (Expected: gpu)</p></li>
+<li><p><strong>Format</strong>: double</p></li>
+<li><p><strong>Unit</strong>: watts</p></li>
+</ul>
+</dd>
 </dl>
 </section>
 </section>
@@ -822,6 +922,14 @@ attribute to a given alias, depending on the driver’s configuration. Use
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_CHIP_ENERGY</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-hwmon-energy1-input-gpu-chip"><span class="std std-ref">DRM::HWMON::ENERGY1_INPUT::GPU_CHIP</span></a></p>
 </dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MIN_AVAIL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-rps-min-freq-default"><span class="std std-ref">DRM::RPS_MIN_FREQ_DEFAULT</span></a>, <a class="reference internal" href="#drm-rpn-freq"><span class="std std-ref">DRM::RPN_FREQ</span></a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MAX_AVAIL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-rps-max-freq-default"><span class="std std-ref">DRM::RPS_MAX_FREQ_DEFAULT</span></a>, <a class="reference internal" href="#drm-rp0-freq"><span class="std std-ref">DRM::RP0_FREQ</span></a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_STATUS</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-rps-cur-freq"><span class="std std-ref">DRM::RPS_CUR_FREQ</span></a>, <a class="reference internal" href="#drm-cur-freq"><span class="std std-ref">DRM::CUR_FREQ</span></a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_ENERGY</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-hwmon-energy2-input"><span class="std std-ref">DRM::HWMON::ENERGY2_INPUT</span></a></p>
+</dd>
 </dl>
 </section>
 <section id="control-aliases">
@@ -838,6 +946,10 @@ attribute to a given alias, depending on the driver’s configuration. Use
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_POWER_LIMIT_CONTROL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-hwmon-power1-max"><span class="std std-ref">DRM::HWMON::POWER1_MAX</span></a></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">GPU_POWER_TIME_WINDOW_CONTROL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-hwmon-power1-max-interval"><span class="std std-ref">DRM::HWMON::POWER1_MAX_INTERVAL</span></a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MIN_CONTROL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-rps-min-freq"><span class="std std-ref">DRM::RPS_MIN_FREQ</span></a>, <a class="reference internal" href="#drm-min-freq"><span class="std std-ref">DRM::MIN_FREQ</span></a></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MAX_CONTROL</span></code></dt><dd><p>Maps to: <a class="reference internal" href="#drm-rps-max-freq"><span class="std std-ref">DRM::RPS_MAX_FREQ</span></a>, <a class="reference internal" href="#drm-max-freq"><span class="std std-ref">DRM::MAX_FREQ</span></a></p>
 </dd>
 </dl>
 </section>
