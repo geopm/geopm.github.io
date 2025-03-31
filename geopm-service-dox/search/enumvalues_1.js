@@ -56,5 +56,11 @@ var searchData=
   ['geopm_5fsample_5fperiod_5fmean_53',['GEOPM_SAMPLE_PERIOD_MEAN',['../geopm__stats__collector_8h.html#a4619e09027022f929345ddf1571c448da9f8953ee31347fbcfab466c162620531',1,'geopm_stats_collector.h']]],
   ['geopm_5fsample_5fperiod_5fstd_54',['GEOPM_SAMPLE_PERIOD_STD',['../geopm__stats__collector_8h.html#a4619e09027022f929345ddf1571c448dae6fad99c8e91374c64a287cebc72baf3',1,'geopm_stats_collector.h']]],
   ['geopm_5fsample_5ftime_5ftotal_55',['GEOPM_SAMPLE_TIME_TOTAL',['../geopm__stats__collector_8h.html#a4619e09027022f929345ddf1571c448dabe9a84967ea01ddede1181f7931588d0',1,'geopm_stats_collector.h']]],
-  ['geopm_5fu64_5fsentinel_5fregion_5fhash_56',['GEOPM_U64_SENTINEL_REGION_HASH',['../geopm__hash_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a2761aa3e36f4fdf081107682e0e75777',1,'geopm_hash.h']]]
+  ['geopm_5fu64_5fsentinel_5fregion_5fhash_56',['GEOPM_U64_SENTINEL_REGION_HASH',['../geopm__hash_8h.html#a7fa2496a74d4cc2ae20ee21ba0b78a54a2761aa3e36f4fdf081107682e0e75777',1,'geopm_hash.h']]],
+  ['governor_5fconservative_57',['GOVERNOR_CONSERVATIVE',['../classgeopm_1_1_cpufreq_sysfs_driver.html#a7567ff6731b2d6f2281740f8d80a713aa739650acd159c627f88f6e3cd2832223',1,'geopm::CpufreqSysfsDriver']]],
+  ['governor_5fondemand_58',['GOVERNOR_ONDEMAND',['../classgeopm_1_1_cpufreq_sysfs_driver.html#a7567ff6731b2d6f2281740f8d80a713aa0960b337012bc58b2d651813cfd34854',1,'geopm::CpufreqSysfsDriver']]],
+  ['governor_5fperformance_59',['GOVERNOR_PERFORMANCE',['../classgeopm_1_1_cpufreq_sysfs_driver.html#a7567ff6731b2d6f2281740f8d80a713aac111bc402623832043e8cc6f08b70bac',1,'geopm::CpufreqSysfsDriver']]],
+  ['governor_5fpowersave_60',['GOVERNOR_POWERSAVE',['../classgeopm_1_1_cpufreq_sysfs_driver.html#a7567ff6731b2d6f2281740f8d80a713aa84192f4dc6c753d3f074cd5781c9382d',1,'geopm::CpufreqSysfsDriver']]],
+  ['governor_5fschedutil_61',['GOVERNOR_SCHEDUTIL',['../classgeopm_1_1_cpufreq_sysfs_driver.html#a7567ff6731b2d6f2281740f8d80a713aa6caaacd0dbc7f8f2a130974575974b23',1,'geopm::CpufreqSysfsDriver']]],
+  ['governor_5fuserspace_62',['GOVERNOR_USERSPACE',['../classgeopm_1_1_cpufreq_sysfs_driver.html#a7567ff6731b2d6f2281740f8d80a713aa50a1d4166e0e489a7704d889eb38ea45',1,'geopm::CpufreqSysfsDriver']]]
 ];
