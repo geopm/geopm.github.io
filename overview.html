@@ -67,6 +67,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#listing-all-available-controls">Listing All Available Controls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#listing-control-information">Listing Control Information</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#writing-controls">Writing Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing-multiple-controls">Writing Multiple Controls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#understanding-disaggregation">Understanding Disaggregation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#video-demo-using-geopmwrite">Video Demo: Using <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code></a></li>
 </ul>
@@ -78,7 +79,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#alembic-advanced-topics">⚗️ Advanced Topics</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#breaking-down-signal-control-names">Breaking Down Signal/Control Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#breaking-down-signal-control-names">Breaking Down Signal/Control Names</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nuances-in-setting-cpu-frequency">Nuances in Setting CPU Frequency</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#using-the-programmable-counters">Using the Programmable Counters</a></li>
 </ul>
 </li>
@@ -859,6 +863,157 @@ corresponding <code class="docutils literal notranslate"><span class="pre">Platf
 </div>
 </div>
 </section>
+<section id="writing-multiple-controls">
+<h3>Writing Multiple Controls<a class="headerlink" href="#writing-multiple-controls" title="Link to this heading"></a></h3>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-QmFzaA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-QmFzaA==" name="QmFzaA==" role="tab" tabindex="0">Bash</button><button aria-controls="panel-5-Qw==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button><button aria-controls="panel-5-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-R28=" name="R28=" role="tab" tabindex="-1">Go</button></div><div aria-labelledby="tab-5-QmFzaA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-5-QmFzaA==" name="QmFzaA==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write the core 0 frequency to 1 GHz and core 1 frequency to 1.8 GHz</span>
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;CPU_FREQUENCY_MAX_CONTROL core 0 1e9\</span>
+<span class="s2">           \nCPU_CORE_FREQUENCY_MAX_CONTROL core 0 1.8e9&quot;</span><span class="se">\</span>
+<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-<span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-Qw==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Write the core 0 frequency to 1 GHz and core 1 frequency to 1.8 GHz</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;limits.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm_topo.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm_pio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm_error.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">err_msg</span><span class="p">[</span><span class="n">GEOPM_MESSAGE_MAX</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ctl0_idx</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ctl1_idx</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Push controls for each core</span>
+<span class="w">    </span><span class="n">ctl0_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm_pio_push_control</span><span class="p">(</span><span class="s">&quot;CPU_FREQUENCY_MAX_CONTROL&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_DOMAIN_CORE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ctl1_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm_pio_push_control</span><span class="p">(</span><span class="s">&quot;CPU_FREQUENCY_MAX_CONTROL&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_DOMAIN_CORE</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Adjust the controls to the target frequencies</span>
+<span class="w">    </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm_pio_adjust</span><span class="p">(</span><span class="n">ctl0_idx</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0e9</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">geopm_error_message</span><span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">err_msg</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_MESSAGE_MAX</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error adjusting core 0: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err_msg</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm_pio_adjust</span><span class="p">(</span><span class="n">ctl1_idx</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8e9</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">geopm_error_message</span><span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">err_msg</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_MESSAGE_MAX</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error adjusting core 1: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err_msg</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Write the batch of controls</span>
+<span class="w">    </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm_pio_write_batch</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">geopm_error_message</span><span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">err_msg</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_MESSAGE_MAX</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error writing batch: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err_msg</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Write the core 0 frequency to 1 GHz and core 1 frequency to 1.8 GHz</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm/PlatformIO.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;geopm/PlatformTopo.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">geopm</span><span class="o">::</span><span class="n">PlatformIO</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geopm</span><span class="o">::</span><span class="n">platform_io</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Push controls for each core</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ctl0_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pio</span><span class="p">.</span><span class="n">push_control</span><span class="p">(</span><span class="s">&quot;CPU_FREQUENCY_MAX_CONTROL&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_DOMAIN_CORE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ctl1_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pio</span><span class="p">.</span><span class="n">push_control</span><span class="p">(</span><span class="s">&quot;CPU_FREQUENCY_MAX_CONTROL&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GEOPM_DOMAIN_CORE</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Adjust the controls to the target frequencies</span>
+<span class="w">    </span><span class="n">pio</span><span class="p">.</span><span class="n">adjust</span><span class="p">(</span><span class="n">ctl0_idx</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0e9</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pio</span><span class="p">.</span><span class="n">adjust</span><span class="p">(</span><span class="n">ctl1_idx</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8e9</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Write the batch of controls</span>
+<span class="w">    </span><span class="n">pio</span><span class="p">.</span><span class="n">write_batch</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write the core 0 frequency to 1 GHz and core 1 frequency to 1.8 GHz</span>
+
+<span class="kn">import</span> <span class="nn">geopmdpy.topo</span> <span class="k">as</span> <span class="nn">topo</span>
+<span class="kn">import</span> <span class="nn">geopmdpy.pio</span> <span class="k">as</span> <span class="nn">pio</span>
+
+<span class="c1"># Define target frequencies for each core</span>
+<span class="n">freqs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0e9</span><span class="p">,</span> <span class="mf">1.8e9</span><span class="p">]</span>
+<span class="n">ctl_idxs</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Push controls for each core</span>
+<span class="n">ctl_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pio</span><span class="o">.</span><span class="n">push_control</span><span class="p">(</span><span class="s1">&#39;CPU_FREQUENCY_MAX_CONTROL&#39;</span><span class="p">,</span> <span class="n">topo</span><span class="o">.</span><span class="n">DOMAIN_CORE</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">ctl_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pio</span><span class="o">.</span><span class="n">push_control</span><span class="p">(</span><span class="s1">&#39;CPU_FREQUENCY_MAX_CONTROL&#39;</span><span class="p">,</span> <span class="n">topo</span><span class="o">.</span><span class="n">DOMAIN_CORE</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># Adjust the controls to the target frequencies</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ctl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ctl_idxs</span><span class="p">):</span>
+    <span class="n">pio</span><span class="o">.</span><span class="n">adjust</span><span class="p">(</span><span class="n">ctl</span><span class="p">,</span> <span class="n">freqs</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+<span class="c1"># Write the batch of controls</span>
+<span class="n">pio</span><span class="o">.</span><span class="n">write_batch</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// Write the core 0 frequency to 1 GHz and core 1 frequency to 1.8 GHz</span>
+
+<span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;github.com/geopm/geopmdgo/geopmdgo&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Push controls for each core</span>
+<span class="w">    </span><span class="nx">ctl0Idx</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">PushControl</span><span class="p">(</span><span class="s">&quot;CPU_FREQUENCY_MAX_CONTROL&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">DOMAIN_CORE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error pushing control for core 0:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">ctl1Idx</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">PushControl</span><span class="p">(</span><span class="s">&quot;CPU_FREQUENCY_MAX_CONTROL&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">DOMAIN_CORE</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error pushing control for core 1:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Adjust the controls to the target frequencies</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">Adjust</span><span class="p">(</span><span class="nx">ctl0Idx</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0e9</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error adjusting core 0:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">Adjust</span><span class="p">(</span><span class="nx">ctl1Idx</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8e9</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error adjusting core 1:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Write the batch of controls</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">geopmdgo</span><span class="p">.</span><span class="nx">WriteBatch</span><span class="p">()</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error writing batch:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To determine the initial value of any control, use <code class="docutils literal notranslate"><span class="pre">geopmread</span></code> or the
+corresponding <code class="docutils literal notranslate"><span class="pre">PlatformIO</span></code> APIs at the desired domain.  E.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_MAX_CONTROL<span class="w"> </span>core<span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+</div>
+</section>
 <section id="understanding-disaggregation">
 <h3>Understanding Disaggregation<a class="headerlink" href="#understanding-disaggregation" title="Link to this heading"></a></h3>
 <p>Just as signals can be aggregated to a more coarse domain from their native
@@ -1102,6 +1257,13 @@ CPU_FREQUENCY_STATUS:
 </div>
 <p>For more information about the currently supported aliases and IOGroups, see:
 <a class="reference internal" href="geopm_pio.7.html#aliasing-signals-and-controls"><span class="std std-ref">Aliasing Signals And Controls</span></a>.</p>
+<section id="nuances-in-setting-cpu-frequency">
+<h4>Nuances in Setting CPU Frequency<a class="headerlink" href="#nuances-in-setting-cpu-frequency" title="Link to this heading"></a></h4>
+<p>GEOPM supports multiple interfaces to manipulate frequency and there are
+nuanced interactions with OS drivers. See the
+<a class="reference internal" href="frequency_guide.html"><span class="doc">User Guide for Frequency Control</span></a> for full details on
+how and when to use these interfaces.</p>
+</section>
 </section>
 <section id="using-the-programmable-counters">
 <h3>Using the Programmable Counters<a class="headerlink" href="#using-the-programmable-counters" title="Link to this heading"></a></h3>
