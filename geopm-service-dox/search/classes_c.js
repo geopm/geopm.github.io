@@ -8,5 +8,6 @@ var searchData=
   ['pluginfactory_3c_20iogroup_20_3e_5',['PluginFactory&lt; IOGroup &gt;',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
   ['posixsignal_6',['POSIXSignal',['../classgeopm_1_1_p_o_s_i_x_signal.html',1,'geopm']]],
   ['posixsignalimp_7',['POSIXSignalImp',['../classgeopm_1_1_p_o_s_i_x_signal_imp.html',1,'geopm']]],
-  ['properties_5fs_8',['properties_s',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html',1,'geopm::SysfsDriver']]]
+  ['powercapsysfsdriver_8',['PowercapSysfsDriver',['../classgeopm_1_1_powercap_sysfs_driver.html',1,'geopm']]],
+  ['properties_5fs_9',['properties_s',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html',1,'geopm::SysfsDriver']]]
 ];
