@@ -1345,7 +1345,7 @@ or ends without closing all sessions.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.close_session">
-<span class="sig-name descname"><span class="pre">close_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.close_session" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">close_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.close_session" title="Link to this definition"></a></dt>
 <dd><p>Close an active session for the client process.</p>
 <p>After closing a session, the client process is required to
 call open_session() again before using any of the client-facing
@@ -1373,7 +1373,7 @@ open session.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.close_session_admin">
-<span class="sig-name descname"><span class="pre">close_session_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.close_session_admin" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">close_session_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.close_session_admin" title="Link to this definition"></a></dt>
 <dd><p>Close an active session for the client process completely.</p>
 <p>This administrative function is used to forcibly close an
 active session regardless of the client’s reference count.
@@ -1442,28 +1442,23 @@ granularity for the control.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.get_group_access">
-<span class="sig-name descname"><span class="pre">get_group_access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.get_group_access" title="Link to this definition"></a></dt>
-<dd><p>Get the signal and control access lists</p>
-<p>Read the list of allowed signals and controls for the
-specified group.  If the group is None or the empty string
-then the default lists of allowed signals and controls are
-returned.</p>
-<p>The values are securely read from files located in
-/etc/geopm using the secure_read_file() interface.</p>
-<p>If no secure file exist for the specified group, then two
-empty lists are returned.</p>
+<span class="sig-name descname"><span class="pre">get_group_access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.get_group_access" title="Link to this definition"></a></dt>
+<dd><p>Get the signal and control access lists for a group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of group</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the group.</p></li>
+<li><p><strong>client_pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Linux PID of the client thread.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Signal and control allowed lists, both in sorted order.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>)</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – The group name is not valid on the system.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If the client lacks necessary permissions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1574,7 +1569,7 @@ the session.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.lock_control">
-<span class="sig-name descname"><span class="pre">lock_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.lock_control" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">lock_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.lock_control" title="Link to this definition"></a></dt>
 <dd><p>Block all write-mode sessions.</p>
 <p>A call to this method will end any currently running
 write-mode session and block the creation of any new
@@ -1719,71 +1714,55 @@ of all controls, which is recorded at the beginning of the session.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.set_group_access">
-<span class="sig-name descname"><span class="pre">set_group_access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_controls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.set_group_access" title="Link to this definition"></a></dt>
-<dd><p>Set signals and controls in the allowed lists</p>
-<p>Write the list of allowed signals and controls for the
-specified group.  If the group is None or the empty string
-then the default lists of allowed signals and controls are
-updated.</p>
-<p>The values are securely written atomically to files located in
-/etc/geopm using the secure_make_dirs() and
-secure_make_file() interfaces.</p>
+<span class="sig-name descname"><span class="pre">set_group_access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.set_group_access" title="Link to this definition"></a></dt>
+<dd><p>Set the signal and control access lists for a group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of group</p></li>
-<li><p><strong>allowed_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>)</em>) – Signal names that are allowed</p></li>
-<li><p><strong>allowed_controls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>)</em>) – Control names that are allowed</p></li>
+<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the group.</p></li>
+<li><p><strong>allowed_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – List of allowed signal names.</p></li>
+<li><p><strong>allowed_controls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – List of allowed control names.</p></li>
+<li><p><strong>client_pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Linux PID of the client thread.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – The group name is not valid on the system.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If the client lacks necessary permissions.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.set_group_access_controls">
-<span class="sig-name descname"><span class="pre">set_group_access_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_controls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.set_group_access_controls" title="Link to this definition"></a></dt>
-<dd><p>Set controls in the allowed lists</p>
-<p>Write the list of allowed controls for the specified group.  If
-the group is None or the empty string then the default lists
-of allowed control are updated.</p>
-<p>The values are securely written atomically to files located in
-/etc/geopm using the secure_make_dirs() and
-secure_make_file() interfaces.</p>
+<span class="sig-name descname"><span class="pre">set_group_access_controls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.set_group_access_controls" title="Link to this definition"></a></dt>
+<dd><p>Set the control access list for a group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of group</p></li>
-<li><p><strong>allowed_controls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>)</em>) – Control names that are allowed</p></li>
+<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the group.</p></li>
+<li><p><strong>allowed_controls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – List of allowed control names.</p></li>
+<li><p><strong>client_pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Linux PID of the client thread.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – The group name is not valid on the system.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If the client lacks necessary permissions.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.set_group_access_signals">
-<span class="sig-name descname"><span class="pre">set_group_access_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_signals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.set_group_access_signals" title="Link to this definition"></a></dt>
-<dd><p>Set signals in the allowed lists</p>
-<p>Write the list of allowed signals for the specified group.  If
-the group is None or the empty string then the default lists
-of allowed signal are updated.</p>
-<p>The values are securely written atomically to files located in
-/etc/geopm using the secure_make_dirs() and
-secure_make_file() interfaces.</p>
+<span class="sig-name descname"><span class="pre">set_group_access_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.set_group_access_signals" title="Link to this definition"></a></dt>
+<dd><p>Set the signal access list for a group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of group</p></li>
-<li><p><strong>allowed_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>)</em>) – Signal names that are allowed</p></li>
+<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the group.</p></li>
+<li><p><strong>allowed_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – List of allowed signal names.</p></li>
+<li><p><strong>client_pid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Linux PID of the client thread.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – The group name is not valid on the system.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If the client lacks necessary permissions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1911,7 +1890,7 @@ the session.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geopmdpy.service.PlatformService.unlock_control">
-<span class="sig-name descname"><span class="pre">unlock_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.unlock_control" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">unlock_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geopmdpy.service.PlatformService.unlock_control" title="Link to this definition"></a></dt>
 <dd><p>Unblock access to create new write-mode sessions.</p>
 <p>A call to this method will re-enable write-mode sessions to be
 created after they were previously disabled by a call to
