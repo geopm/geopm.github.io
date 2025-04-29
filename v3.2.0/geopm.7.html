@@ -1,0 +1,652 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopm(7) – Global Extensible Open Power Manager &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopm_pio(7) – GEOPM PlatformIO interface" href="geopm_pio.7.html" />
+    <link rel="prev" title="Reference Manual" href="reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEOPM
+              <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guides.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopm(7) – Global Extensible Open Power Manager</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#job-launch">Job Launch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#application-profiling">Application Profiling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-tools">Analysis Tools</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#built-in-agents">Built-In Agents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plugin-extension">Plugin Extension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#integration-with-pmpi">Integration With PMPI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#integration-with-ompt">Integration With OMPT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#choosing-an-agent-and-policy">Choosing An Agent And Policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interpreting-the-report">Interpreting The Report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interpreting-the-trace">Interpreting The Trace</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environment">Environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geopm-environment-variables">GEOPM Environment Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-environment-variables">Other Environment Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#misc">Misc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.7.html">geopm_pio(7) – GEOPM PlatformIO interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cnl.7.html">geopm_pio_cnl(7) – Signals and controls for Compute Node Linux Board-Level Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_const_config.7.html">geopm_pio_const_config(7) – Signals for ConstConfigIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cpuinfo.7.html">geopm_pio_cpuinfo(7) – Signals and controls for the CPUInfoIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_dcgm.7.html">geopm_pio_dcgm(7) – IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_levelzero.7.html">geopm_pio_levelzero(7) – IOGroup providing signals and controls for Intel GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_msr.7.html">geopm_pio_msr(7) – Signals and controls for Model Specific Registers (MSRs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_nvml.7.html">geopm_pio_nvml(7) – IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_profile.7.html">geopm_pio_profile(7) – Signals and controls for the ProfileIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_service.7.html">geopm_pio_service(7) – Signals and controls for the ServiceIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sst.7.html">geopm_pio_sst(7) – Signals and controls for Intel Speed Select Technology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sysfs.7.html">geopm_pio_sysfs(7) – Signals and controls for sysfs attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_time.7.html">geopm_pio_time(7) – Signals and controls for Time IO Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) – Access management for the GEOPM Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) – tool for GEOPM system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) – query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbatch.1.html">geopmbatch(1) – Command line interface for the GEOPM batch server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) – synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) – GEOPM runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) – command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmexporter.1.html">geopmexporter(1) – Prometheus exporter for GEOPM metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) – application launch wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) – query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) – Command line interface for the GEOPM service batch read features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) – modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) – global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) – global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent.3.html">geopm_agent(3) – query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl.3.html">geopm_ctl(3) – GEOPM runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon.3.html">geopm_daemon(3) – helpers for GEOPM daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint.3.html">geopm_endpoint(3) – dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) – error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_field.3.html">geopm_agent(3) – query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) – GEOPM fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash(3) – helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer(3) – set artificial runtime imbalance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.3.html">geopm_pio(3) – interfaces to query and modify platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore.3.html">geopm_policystore(3) – GEOPM resource policy store interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_prof.3.html">geopm_prof(3) – application profiling interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched(3) – interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time(3) – helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo.3.html">geopm_topo(3) – query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) – GEOPM library version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AAgent.3.html">geopm::Agent(3) – GEOPM agent plugin interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AAgg.3.html">geopm::Agg(3) – data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACNLIOGroup.3.html">geopm::CNLIOGroup(3) – IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACPUActivityAgent.3.html">geopm::CPUActivityAgent(3) – agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACircularBuffer.3.html">geopm::CircularBuffer(3) – generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AComm.3.html">geopm::Comm(3) – communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) – IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ADaemon.3.html">geopm::Daemon(3) – GEOPM daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AEndpoint.3.html">geopm::Endpoint(3) – GEOPM endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AException.3.html">geopm::Exception(3) – custom GEOPM exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AGPUActivityAgent.3.html">geopm::GPUActivityAgent(3) – agent for selecting GPU frequency based on GPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AHelper.3.html">geopm::Helper – common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AIOGroup.3.html">geopm::IOGroup(3) – provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMPIComm.3.html">geopm::MPIComm(3) – implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMSRIO.3.html">geopm::MSRIO(3) – methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMSRIOGroup.3.html">geopm::MSRIOGroup – IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMonitorAgent.3.html">geopm::MonitorAgent – agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APlatformIO.3.html">geopm::PlatformIO(3) – GEOPM platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APlatformTopo.3.html">geopm::PlatformTopo(3) – platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APluginFactory.3.html">geopm::PluginFactory(3) – abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerBalancer.3.html">geopm::PowerBalancer(3) – balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) – agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerGovernor.3.html">geopm::PowerGovernor(3) – enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) – agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AProfileIOGroup.3.html">geopm::ProfileIOGroup(3) – IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ASampleAggregator.3.html">geopm::SampleAggregator(3) – per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ASharedMemory.3.html">geopm::SharedMemory(3) – abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ATimeIOGroup.3.html">geopm::TimeIOGroup(3) – IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) – GEOPM summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_cpu_activity.7.html">geopm_agent_cpu_activity(7) – agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_ffnet.7.html">geopm_agent_ffnet(7) – agent for adjusting frequencies based on application behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_balancer.7.html">geopm_agent_frequency_balancer(7) – Agent reduces imbalance across CPU cores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) – agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_gpu_activity.7.html">geopm_agent_gpu_activity(7) – agent for selecting GPU frequency based on GPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) – agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) – agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) – agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#doxygen-pages">Doxygen Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">Reference Manual</a></li>
+      <li class="breadcrumb-item active">geopm(7) – Global Extensible Open Power Manager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geopm.7.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopm-7-global-extensible-open-power-manager">
+<h1>geopm(7) – Global Extensible Open Power Manager<a class="headerlink" href="#geopm-7-global-extensible-open-power-manager" title="Link to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>The Global Extensible Open Power Manager (GEOPM) is a framework for
+exploring power and energy optimizations on heterogeneous platforms. This
+manual page outlines key tools and interfaces to configure and use GEOPM
+software. The rest of this description outlines the features that are described
+by sections of this manual page.</p>
+<p>The GEOPM HPC runtime monitors platform-level metrics (e.g., CPU power, average
+core frequency, elapsed time) while an application executes on the platform.
+GEOPM provides <a class="reference internal" href="#job-launch"><span class="std std-ref">Job Launch</span></a> tools to execute an application with
+the GEOPM HPC runtime and to read the platform-level metrics. GEOPM can also
+report metrics with respect to application-specific regions or checkpoints by
+utilizing optional <a class="reference internal" href="#application-profiling"><span class="std std-ref">Application Profiling</span></a> interfaces. Several
+<a class="reference internal" href="#analysis-tools"><span class="std std-ref">Analysis Tools</span></a> provide the means to directly query and modify
+platform state.</p>
+<p>The GEOPM HPC runtime interacts with a C++ framework to enable
+custom power management algorithms (called <em>agents</em>) that utilize the analysis
+tools. Some <a class="reference internal" href="#built-in-agents"><span class="std std-ref">Built-In Agents</span></a> are available by default. Additional
+agents and platform input/output interfaces (called <em>IOGroups</em>) can be added to
+the GEOPM HPC runtime by creating a <a class="reference internal" href="#plugin-extension"><span class="std std-ref">Plugin Extension</span></a>.</p>
+<p>Although GEOPM supports manual instrumentation through
+<a class="reference internal" href="#application-profiling"><span class="std std-ref">Application Profiling</span></a> interfaces. Some automatic instrumentation
+is also supported. <a class="reference internal" href="#integration-with-pmpi"><span class="std std-ref">Integration With PMPI</span></a> enables GEOPM to
+automatically account for time spent inside MPI function calls by default.
+<a class="reference internal" href="#integration-with-ompt"><span class="std std-ref">Integration With OMPT</span></a> enables GEOPM to account for time spent in
+individual OpenMP parallel regions.</p>
+</section>
+<section id="job-launch">
+<h2>Job Launch<a class="headerlink" href="#job-launch" title="Link to this heading"></a></h2>
+<p>The <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> script is the recommended method for
+launching the GEOPM HPC runtime. Unless modified by command-line arguments or
+environment variables, GEOPM will create a <code class="docutils literal notranslate"><span class="pre">geopm.report</span></code> file with a summary
+of metrics from application execution. See <a class="reference internal" href="geopm_report.7.html"><span class="doc">geopmreport(7)</span></a>: for documentation about the output file format.</p>
+<p>If <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> does not provide an application
+launcher supported by your system, please make a change request to support the
+job launch method used on your system at the github issues page:</p>
+<p><a class="reference external" href="https://github.com/geopm/geopm/issues">https://github.com/geopm/geopm/issues</a></p>
+<p>Also, consider porting your job launch command into the
+<a class="reference internal" href="geopmpy.7.html#module-geopmpy.launcher" title="geopmpy.launcher"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geopmpy.launcher</span></code></a> module and submitting a change request as described
+in <a class="reference internal" href="contrib.html"><span class="doc">Contributor Guide</span></a>.</p>
+<p>If the job launch application is not supported by the <a class="reference internal" href="geopmpy.7.html#module-geopmpy.launcher" title="geopmpy.launcher"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geopmpy.launcher</span></code></a>
+the recommended method is to use the environment variables described
+in this man page including the <code class="docutils literal notranslate"><span class="pre">GEOPM_CTL</span></code> environment variable.
+If you use the <em>application</em> launch method, then you also need to launch the
+<a class="reference internal" href="geopmctl.1.html"><span class="doc">geopmctl(1)</span></a> application in parallel to the application you
+wish to run with GEOPM.</p>
+<p>There are legacy methods for launching the runtime programmatically.
+These are documented in <a class="reference internal" href="geopm_ctl.3.html"><span class="doc">geopm_ctl(3)</span></a>, but are deprecated as an
+application-facing interface because their use within an application
+is incompatible with the GEOPM launcher script.</p>
+</section>
+<section id="application-profiling">
+<h2>Application Profiling<a class="headerlink" href="#application-profiling" title="Link to this heading"></a></h2>
+<p>GEOPM’s provides application profiling interfaces for the C and Fortran
+programming languages, documented in <a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>
+and <a class="reference internal" href="geopm_fortran.3.html"><span class="doc">geopm_fortran(3)</span></a>, respectively. These interfaces
+enable an application to inform GEOPM of key monitoring events, such as entry
+or exit from regions of interest, entry to a new iteration of a key looping
+construct, and hints about the nature of the active region of code (e.g.,
+whether the code is expected to be compute-bound, network-bound, or something
+else).</p>
+<p>The GEOPM HPC runtime profiles applications while executing as a separate
+process or thread within the launched application, or as a separate
+<a class="reference internal" href="geopmctl.1.html"><span class="doc">geopmctl(1)</span></a> application. C interfaces to drive the GEOPM
+controller are documented in <a class="reference internal" href="geopm_ctl.3.html"><span class="doc">geopm_ctl(3)</span></a>.</p>
+</section>
+<section id="analysis-tools">
+<h2>Analysis Tools<a class="headerlink" href="#analysis-tools" title="Link to this heading"></a></h2>
+<p>GEOPM may also be used as a tooling interface for system analysis.</p>
+<p>The <a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a> application reports the current values of
+platform <em>signals</em> at varying levels of scope (<em>domains</em>). The
+<a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a> application enables modulation of platform
+<em>controls</em> at varying domains. Information about signals and controls
+is documented at <a class="reference internal" href="geopm_pio.7.html"><span class="doc">geopm_pio(7)</span></a>. Programmatic interfaces for
+read and write operations are available through <a class="reference internal" href="geopm_pio.3.html"><span class="doc">geopm_pio(3)</span></a>.</p>
+<p>The types of domains and their relationships with each other can be
+programmatically queried through <a class="reference internal" href="geopm_topo.3.html"><span class="doc">geopm_topo(3)</span></a>.</p>
+<p>GEOPM comes bundled with a synthetic benchmark application <a class="reference internal" href="geopmbench.1.html"><span class="doc">geopmbench(1)</span></a>, which can be used as an application workload for basic analysis
+and to experiment with the impact that signals and controls have on applications
+under GEOPM.</p>
+</section>
+<section id="built-in-agents">
+<h2>Built-In Agents<a class="headerlink" href="#built-in-agents" title="Link to this heading"></a></h2>
+<p>GEOPM comes packaged with several built-in power management algorithms (<em>agents</em>):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>: An agent implementation that enforces no policies.</p></li>
+<li><p><a class="reference internal" href="geopm_agent_frequency_map.7.html"><span class="doc">geopm_agent_frequency_map(7)</span></a>: An agent that applies user-selected frequencies at specific regions in the launched application.</p></li>
+<li><p><a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">geopm_agent_power_balancer(7)</span></a>: An agent that optimizes performance under a power cap across multiple CPU packages.</p></li>
+<li><p><a class="reference internal" href="geopm_agent_power_governor.7.html"><span class="doc">geopm_agent_power_governor(7)</span></a>: An agent that enforces a power cap.</p></li>
+<li><p><a class="reference internal" href="geopm_agent_gpu_activity.7.html"><span class="doc">geopm_agent_gpu_activity(7)</span></a> : An agent that sets GPU frequency based on GPU compute activity</p></li>
+<li><p><a class="reference internal" href="geopm_agent_frequency_balancer.7.html"><span class="doc">geopm_agent_frequency_balancer(7)</span></a>: An agent that reduces imbalance through CPU core frequency controls.</p></li>
+</ul>
+<p>Use the <a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> application or the
+<a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a> C interface to query agent
+information and create static policies.</p>
+</section>
+<section id="plugin-extension">
+<h2>Plugin Extension<a class="headerlink" href="#plugin-extension" title="Link to this heading"></a></h2>
+<p>If you wish to monitor or control platform interfaces (<em>IOGroups</em>) that are not part of the
+core GEOPM distribution, or if you wish to execute GEOPM agents that are not
+part of the core distribution, then you can extend GEOPM with additional
+IOGroup and agent plugins.</p>
+<p>Agents and IOGroups are defined as C++ classes, documented in
+<a class="reference internal" href="geopm%3A%3AAgent.3.html"><span class="doc">geopm::Agent(3)</span></a> and <a class="reference internal" href="geopm%3A%3AIOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>, respectively. Both can be registered with GEOPM
+through the <a class="reference internal" href="geopm%3A%3APluginFactory.3.html"><span class="doc">geopm::PluginFactory(3)</span></a>
+interface. The <a class="reference internal" href="geopm%3A%3APlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a>
+interface provides a channel through which agents and GEOPM tools can interact
+with IOGroups.</p>
+</section>
+<section id="integration-with-pmpi">
+<h2>Integration With PMPI<a class="headerlink" href="#integration-with-pmpi" title="Link to this heading"></a></h2>
+<p>Linking to <code class="docutils literal notranslate"><span class="pre">libgeopm</span></code> will define symbols that intercept calls to the MPI
+interface through PMPI.  This can be disabled with the configure time
+option <code class="docutils literal notranslate"><span class="pre">--disable-mpi</span></code>, but is enabled by default.  See the
+<code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code> environment variable description below for the
+runtime requirements of the PMPI design.  When using the GEOPM PMPI
+interposition other profilers which use the same method will be in
+conflict.  The GEOPM runtime can create an application performance
+profile report and a trace of the application runtime.  As such, GEOPM
+serves the role of an application profiler in addition to management
+of power resources.  The report and trace generation are controlled by
+the environment variables <code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT</span></code> and <code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE</span></code>; see
+description below.</p>
+</section>
+<section id="integration-with-ompt">
+<h2>Integration With OMPT<a class="headerlink" href="#integration-with-ompt" title="Link to this heading"></a></h2>
+<p>Unless the GEOPM runtime is configured to disable OpenMP, the library
+is compiled against the OpenMP runtime.  If the OpenMP implementation
+that GEOPM is compiled against supports the OMPT callbacks, then GEOPM
+will use the OMPT callbacks to wrap OpenMP parallel regions with calls
+to <code class="docutils literal notranslate"><span class="pre">geopm_prof_enter()</span></code> and <code class="docutils literal notranslate"><span class="pre">geopm_prof_exit()</span></code>.  In this way, any
+OpenMP parallel region not within another application-defined region
+will be reported to the GEOPM runtime.  This will appear in the report
+as a region name beginning with <code class="docutils literal notranslate"><span class="pre">&quot;[OMPT]&quot;</span></code> and referencing the object
+file and function name containing the OpenMP parallel region e.g.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[OMPT]geopmbench:geopm::StreamModelRegion::run()</span></code></p>
+<p>To expressly enable this feature, pass the <code class="docutils literal notranslate"><span class="pre">--enable-ompt</span></code> configure
+flag at GEOPM configure time.  This will build and install the LLVM OpenMP
+runtime configured to support OMPT if the default OpenMP runtime does
+not support the OMPT callbacks.  Note that your compiler must be
+compatible with the LLVM OpenMP ABI for extending it in this way.</p>
+<p>This feature can be enabled on a per-run basis by setting the
+<code class="docutils literal notranslate"><span class="pre">GEOPM_OMPT_ENABLE</span></code> environment variable, or by using the
+<code class="docutils literal notranslate"><span class="pre">--geopm-ompt-enable</span></code> option in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a></p>
+</section>
+<section id="choosing-an-agent-and-policy">
+<h2>Choosing An Agent And Policy<a class="headerlink" href="#choosing-an-agent-and-policy" title="Link to this heading"></a></h2>
+<p>The Agent determines the optimization algorithm performed by the
+runtime, and can be specified with the <code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code> option for the
+launcher.  If not specified, by default the <a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>
+is used to collect runtime statistics only, which will be summarized
+in the report.</p>
+<p>The constraints for the Agent algorithm are determined by the policy.
+The policy can be provided as a file, through the <code class="docutils literal notranslate"><span class="pre">--geopm-policy</span></code>
+option for the launcher.  Policy files can be generated with the
+<a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> tool.  The values of the policy will be printed
+in the header of the report.</p>
+<p>If GEOPM has been configured with <code class="docutils literal notranslate"><span class="pre">--enable-beta</span></code>, policies can also
+be set through the endpoint, which should be manipulated by a system
+administrator through an authority such as the resource manager.  Use
+of the endpoint is described in <a class="reference internal" href="geopm_endpoint.3.html"><span class="doc">geopm_endpoint(3)</span></a>.  In this
+scenario, users launching GEOPM may not be required or allowed to
+specify the Agent or policy, if it has been set through the default
+environment as described in the <code class="docutils literal notranslate"><span class="pre">ENVIRONMENT</span></code> section below.  If not
+specified in the default environment, the location of the endpoint
+should be provided through <code class="docutils literal notranslate"><span class="pre">--geopm-endpoint</span></code>; this option supersedes
+the use of <code class="docutils literal notranslate"><span class="pre">--geopm-policy</span></code>.  When GEOPM receives the policy through
+the endpoint, the report will contain <code class="docutils literal notranslate"><span class="pre">&quot;DYNAMIC&quot;</span></code> for the value of the
+policy.  The specific values received over time can be viewed through
+use of the optional trace file enabled by
+<code class="docutils literal notranslate"><span class="pre">--geopm-trace-endpoint-policy</span></code>.</p>
+<p>Refer to <a class="reference internal" href="geopm%3A%3AAgent.3.html"><span class="doc">geopm::Agent(3)</span></a> and the individual agent man pages for more
+details on the behavior of the agents and their policies.  See
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details on the <code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--geopm-policy</span></code>, <code class="docutils literal notranslate"><span class="pre">--geopm-endpoint</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">--geopm-trace-endpoint-policy</span></code> options.</p>
+</section>
+<section id="interpreting-the-report">
+<h2>Interpreting The Report<a class="headerlink" href="#interpreting-the-report" title="Link to this heading"></a></h2>
+<p>If the <code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT</span></code> environment variable is set then a report will
+be generated.  There is one report file generated for each run.  The
+format of the report, the data contained in it, and the controller’s
+sampling are described in <a class="reference internal" href="geopm_report.7.html"><span class="doc">geopm_report(7)</span></a>.</p>
+</section>
+<section id="interpreting-the-trace">
+<h2>Interpreting The Trace<a class="headerlink" href="#interpreting-the-trace" title="Link to this heading"></a></h2>
+<p>If the <code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE</span></code> environment variable is set (see below) then a
+trace file with time ordered information about the application runtime
+is generated.  A separate trace file is generated for each compute
+node and each file is a pipe (the <code class="docutils literal notranslate"><span class="pre">|</span></code> character) delimited <strong>ASCII</strong>
+table. The file begins with a header that is marked by lines that
+start with the <code class="docutils literal notranslate"><span class="pre">#</span></code> character.  The header contains information about
+the GEOPM version, job start time, profile name (job description), and
+agent that were used during the run.</p>
+<p>The first row following the header gives a description of each field.
+A simple method for selecting fields from the trace file is with the
+<code class="docutils literal notranslate"><span class="pre">awk</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;^#&#39;</span><span class="w"> </span>geopm.trace-host0<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span>-F<span class="se">\|</span><span class="w"> </span><span class="s1">&#39;{print $1, $2, $11}&#39;</span>
+</pre></div>
+</div>
+<p>will print a subset of the fields in the trace file called
+<code class="docutils literal notranslate"><span class="pre">&quot;geopm.trace-host0&quot;</span></code>.</p>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Link to this heading"></a></h2>
+<p>When using the launcher wrapper script <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>, the
+interface to the GEOPM runtime is controlled by the launcher command
+line options.  The launcher script sets the environment variables
+described in this section according to the options specified on the
+command line.  Direct use of these environment variables is only
+recommended when launching the GEOPM runtime <em>without</em>
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>.  If launching the GEOPM controller in application
+mode without <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>, the environment variables documented
+below must be set to the same values in the contexts where
+<a class="reference internal" href="geopmctl.1.html"><span class="doc">geopmctl(1)</span></a> and the compute application are executed.</p>
+<p>In addition to the environment, there are two node-local configuration
+files that will impact the way the GEOPM behaves.  The location of
+these files can be configured at compile time, but the default
+locations are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">geopm</span><span class="o">/</span><span class="n">environment</span><span class="o">-</span><span class="n">default</span><span class="o">.</span><span class="n">json</span>
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">geopm</span><span class="o">/</span><span class="n">environment</span><span class="o">-</span><span class="n">override</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="geopmadmin.1.html"><span class="doc">geopmadmin(1)</span></a> tool can be used to display the location of
+these files for your installation of GEOPM or to check the validity of
+the system configuration.  These files contain JSON objects that map
+GEOPM environment variables to default or override values.  The
+<code class="docutils literal notranslate"><span class="pre">environment-default.json</span></code> file will determine default values for the
+GEOPM runtime in the case where the values are not set in the calling
+environment.  The <code class="docutils literal notranslate"><span class="pre">environment-override.json</span></code> file will enforce that
+any GEOPM process running on the compute node will use the values
+specified regardless of the values set in the calling environment.</p>
+</section>
+<section id="geopm-environment-variables">
+<h2>GEOPM Environment Variables<a class="headerlink" href="#geopm-environment-variables" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_NUM_PROC</span></code></dt><dd><p>The number of processes to be tracked and profiled by the controller on each
+compute node. The controller will wait until this number of processes request
+profiling before starting the control loop and subsequent requests for
+profiling will be ignored by the controller.  If not set, the controller will
+wait until at least one process has registered for profiling before beginning
+the control loop.  The default value for GEOPM_NUM_PROC is one except when
+using the <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> CLI.  The <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> tool will infer this
+parameter based on the values passed to the underlying launch command, so the
+user does not have to set it explicitly.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_PROGRAM_FILTER</span></code></dt><dd><p>Required comma separated list of program invocation names of
+processes which are intended to be profiled and tracked by the
+controller.  See the <code class="docutils literal notranslate"><span class="pre">--geopm-program-filter</span></code>
+<a class="reference internal" href="geopmlaunch.1.html#geopm-program-filter-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT</span></code></dt><dd><p>The path to which a GEOPM report file is saved. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-report</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-report-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_REPORT_SIGNALS</span></code></dt><dd><p>Additional signals that are included in a GEOPM report. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-report-signals</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-report-signals-option"><span class="std std-ref">option description</span></a> in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE</span></code></dt><dd><p>The path and base name to which each per-host GEOPM trace file is saved. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-trace</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-trace-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE_SIGNALS</span></code></dt><dd><p>Additional signals that are included in a GEOPM trace. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-trace-signals</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-trace-signals-option"><span class="std std-ref">option description</span></a> in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE_PROFILE</span></code></dt><dd><p>The path and base name to which each per-host GEOPM profile trace file is
+saved. See the <code class="docutils literal notranslate"><span class="pre">--geopm-trace-profile</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-trace-profile-option"><span class="std std-ref">option description</span></a> in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for
+more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_TRACE_ENDPOINT_POLICY</span></code></dt><dd><p>The path to an endpoint policy trace file is generated. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-trace-endpoint-policy</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-trace-endpoint-policy-option"><span class="std std-ref">option description</span></a> in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_PROFILE</span></code></dt><dd><p>The name of the profile written in the GEOPM report file. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-profile</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-profile-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_CTL</span></code></dt><dd><p>The type of GEOPM controller to use. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-ctl</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-ctl-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code></dt><dd><p>The type of agent to run in the GEOPM HPC runtime. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-agent-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_POLICY</span></code></dt><dd><p>The path to the GEOPM policy JSON file to use for the selected agent. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-policy</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-policy-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_ENDPOINT</span></code></dt><dd><p>The prefix for shared memory keys used by the GEOPM endpoint. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-endpoint</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-endpoint-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_TIMEOUT</span></code></dt><dd><p>The count of seconds that the application will wait for the GEOPM controller
+to connect over shared memory before timing out. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-timeout</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-timeout-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_PLUGIN_PATH</span></code></dt><dd><p>The colon-separated list of search paths for GEOPM plugins. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-plugin-path</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-plugin-path-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_DEBUG_ATTACH</span></code></dt><dd><p>An MPI rank number to wait in MPI_Init for a debugger to attach. See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-debug-attach</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-debug-attach-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_DISABLE_HYPERTHREADS</span></code></dt><dd><p>Set to any value to prevent the launcher from pinning to multiple
+hyperthreads per CPU core. See the <code class="docutils literal notranslate"><span class="pre">--geopm-hyperthreads-disable</span></code>
+<a class="reference internal" href="geopmlaunch.1.html#geopm-hyperthreads-disable-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_OMPT_ENABLE</span></code></dt><dd><p>Set to any value to enable OpenMP region detection as described in
+<a class="reference internal" href="#integration-with-ompt"><span class="std std-ref">Integration With OMPT</span></a>.  See the <code class="docutils literal notranslate"><span class="pre">--geopm-ompt-enable</span></code>
+<a class="reference internal" href="geopmlaunch.1.html#geopm-ompt-enable-option"><span class="std std-ref">option description</span></a> in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_INIT_CONTROL</span></code></dt><dd><p>The path to the control initialization file.  See the <code class="docutils literal notranslate"><span class="pre">--geopm-init-control</span></code>
+<a class="reference internal" href="geopmlaunch.1.html#geopm-init-control-option"><span class="std std-ref">option description</span></a> in
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_PERIOD</span></code></dt><dd><p>The control loop period in seconds, if not specified this is determined by
+the Agent. See the <code class="docutils literal notranslate"><span class="pre">--geopm-period</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-period-option"><span class="std std-ref">option description</span></a>
+in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_MSR_CONFIG_PATH</span></code></dt><dd><p>The colon-separated list of search paths for additional MSR definitions. See
+<a class="reference internal" href="geopm_pio_msr.7.html"><span class="doc">geopm_pio_msr(7)</span></a> for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GEOPM_CTL_LOCAL</span></code></dt><dd><p>Disable communication between controllers running on different
+compute nodes and produce one report file per host.  Enabled by
+default when MPI is not compiled into the GEOPM Runtime.  See the
+<code class="docutils literal notranslate"><span class="pre">--geopm-ctl-local</span></code> <a class="reference internal" href="geopmlaunch.1.html#geopm-ctl-local-option"><span class="std std-ref">option description</span></a>
+in <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> for details.</p>
+</dd>
+</dl>
+</section>
+<section id="other-environment-variables">
+<h2>Other Environment Variables<a class="headerlink" href="#other-environment-variables" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code></dt><dd><p>When dynamically linking an application to <code class="docutils literal notranslate"><span class="pre">libgeopm</span></code> for any
+features supported by the PMPI profiling of the MPI runtime it may
+be required that the <code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code> environment variable be set
+at runtime as is documented in the <a class="reference external" href="https://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so(8)</a> man page.  When
+dynamically linking an application, if care is taken to link the
+<code class="docutils literal notranslate"><span class="pre">libgeopm</span></code> library before linking the library providing the weak MPI
+symbols, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;-lgeopm</span> <span class="pre">-lmpi&quot;</span></code>, linking order precedence will
+enforce the required override of the MPI interface symbols and the
+<code class="docutils literal notranslate"><span class="pre">LD_DYNAMIC_WEAK</span></code> environment variable is not required at runtime.</p>
+</dd>
+</dl>
+</section>
+<section id="misc">
+<h2>Misc<a class="headerlink" href="#misc" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><a class="reference internal" href="geopmadmin.1.html"><span class="doc">geopmadmin(1)</span></a></dt><dd><p>Configure and check system wide GEOPM settings</p>
+</dd>
+<dt><a class="reference internal" href="geopm_error.3.html"><span class="doc">geopm_error(3)</span></a></dt><dd><p>Error code descriptions</p>
+</dd>
+<dt><a class="reference internal" href="geopm_version.3.html"><span class="doc">geopm_version(3)</span></a></dt><dd><p>GEOPM library version</p>
+</dd>
+<dt><a class="reference internal" href="geopm_sched.3.html"><span class="doc">geopm_sched(3)</span></a></dt><dd><p>Interface with Linux scheduler</p>
+</dd>
+<dt><a class="reference internal" href="geopm_time.3.html"><span class="doc">geopm_time(3)</span></a></dt><dd><p>Time related helper functions</p>
+</dd>
+<dt><a class="reference internal" href="geopm_hash.3.html"><span class="doc">geopm_hash(3)</span></a></dt><dd><p>Numerical encoding helper functions</p>
+</dd>
+</dl>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="geopmpy.7.html"><span class="doc">geopmpy(7)</span></a>,
+<a class="reference internal" href="geopmdpy.7.html"><span class="doc">geopmdpy(7)</span></a>,
+<a class="reference internal" href="geopm_agent_frequency_map.7.html"><span class="doc">geopm_agent_frequency_map(7)</span></a>,
+<a class="reference internal" href="geopm_agent_ffnet.7.html"><span class="doc">geopm_agent_ffnet(7)</span></a>,
+<a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>,
+<a class="reference internal" href="geopm_agent_gpu_activity.7.html"><span class="doc">geopm_agent_gpu_activity(7)</span></a>,
+<a class="reference internal" href="geopm_agent_power_balancer.7.html"><span class="doc">geopm_agent_power_balancer(7)</span></a>,
+<a class="reference internal" href="geopm_agent_power_governor.7.html"><span class="doc">geopm_agent_power_governor(7)</span></a>,
+<a class="reference internal" href="geopm_agent_frequency_balancer.7.html"><span class="doc">geopm_agent_frequency_balancer(7)</span></a>,
+<a class="reference internal" href="geopm_pio.7.html"><span class="doc">geopm_pio(7)</span></a>,
+<a class="reference internal" href="geopm_pio_const_config.7.html"><span class="doc">geopm_pio_const_config(7)</span></a>,
+<a class="reference internal" href="geopm_pio_cnl.7.html"><span class="doc">geopm_pio_cnl(7)</span></a>,
+<a class="reference internal" href="geopm_pio_cpuinfo.7.html"><span class="doc">geopm_pio_cpuinfo(7)</span></a>,
+<a class="reference internal" href="geopm_pio_dcgm.7.html"><span class="doc">geopm_pio_dcgm(7)</span></a>,
+<a class="reference internal" href="geopm_pio_levelzero.7.html"><span class="doc">geopm_pio_levelzero(7)</span></a>,
+<a class="reference internal" href="geopm_pio_msr.7.html"><span class="doc">geopm_pio_msr(7)</span></a>,
+<a class="reference internal" href="geopm_pio_nvml.7.html"><span class="doc">geopm_pio_nvml(7)</span></a>,
+<a class="reference internal" href="geopm_pio_sst.7.html"><span class="doc">geopm_pio_sst(7)</span></a>,
+<a class="reference internal" href="geopm_pio_time.7.html"><span class="doc">geopm_pio_time(7)</span></a>,
+<a class="reference internal" href="geopm_report.7.html"><span class="doc">geopm_report(7)</span></a>,
+<a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a>,
+<a class="reference internal" href="geopm_ctl.3.html"><span class="doc">geopm_ctl(3)</span></a>,
+<a class="reference internal" href="geopm_error.3.html"><span class="doc">geopm_error(3)</span></a>,
+<a class="reference internal" href="geopm_field.3.html"><span class="doc">geopm_field(3)</span></a>,
+<a class="reference internal" href="geopm_fortran.3.html"><span class="doc">geopm_fortran(3)</span></a>,
+<a class="reference internal" href="geopm_hash.3.html"><span class="doc">geopm_hash(3)</span></a>,
+<a class="reference internal" href="geopm_policystore.3.html"><span class="doc">geopm_policystore(3)</span></a>,
+<a class="reference internal" href="geopm_pio.3.html"><span class="doc">geopm_pio(3)</span></a>,
+<a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>,
+<a class="reference internal" href="geopm_sched.3.html"><span class="doc">geopm_sched(3)</span></a>,
+<a class="reference internal" href="geopm_time.3.html"><span class="doc">geopm_time(3)</span></a>,
+<a class="reference internal" href="geopm_version.3.html"><span class="doc">geopm_version(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AAgent.3.html"><span class="doc">geopm::Agent(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AAgg.3.html"><span class="doc">geopm::Agg(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3ACircularBuffer.3.html"><span class="doc">geopm::CircularBuffer(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3ACpuinfoIOGroup.3.html"><span class="doc">geopm::CpuinfoIOGroup(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AException.3.html"><span class="doc">geopm::Exception(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AHelper.3.html"><span class="doc">geopm::Helper(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AIOGroup.3.html"><span class="doc">geopm::IOGroup(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AMSRIO.3.html"><span class="doc">geopm::MSRIO(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AMSRIOGroup.3.html"><span class="doc">geopm::MSRIOGroup(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3APlatformIO.3.html"><span class="doc">geopm::PlatformIO(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3APlatformTopo.3.html"><span class="doc">geopm::PlatformTopo(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3APluginFactory.3.html"><span class="doc">geopm::PluginFactory(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3APowerBalancer.3.html"><span class="doc">geopm::PowerBalancer(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3APowerGovernor.3.html"><span class="doc">geopm::PowerGovernor(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3AProfileIOGroup.3.html"><span class="doc">geopm::ProfileIOGroup(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3ASampleAggregator.3.html"><span class="doc">geopm::SampleAggregator(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3ASharedMemory.3.html"><span class="doc">geopm::SharedMemory(3)</span></a>,
+<a class="reference internal" href="geopm%3A%3ATimeIOGroup.3.html"><span class="doc">geopm::TimeIOGroup(3)</span></a>,
+<a class="reference internal" href="geopmadmin.1.html"><span class="doc">geopmadmin(1)</span></a>,
+<a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a>,
+<a class="reference internal" href="geopmbench.1.html"><span class="doc">geopmbench(1)</span></a>,
+<a class="reference internal" href="geopmctl.1.html"><span class="doc">geopmctl(1)</span></a>,
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a>,
+<a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a>,
+<a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a>,
+<a class="reference internal" href="geopmaccess.1.html"><span class="doc">geopmaccess(1)</span></a>,
+<a class="reference internal" href="geopmexporter.1.html"><span class="doc">geopmexporter(1)</span></a>,
+<a class="reference internal" href="geopmsession.1.html"><span class="doc">geopmsession(1)</span></a>,
+<a class="reference external" href="https://man7.org/linux/man-pages/man8/ld.so.8.html">ld.so(8)</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reference.html" class="btn btn-neutral float-left" title="Reference Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geopm_pio.7.html" class="btn btn-neutral float-right" title="geopm_pio(7) – GEOPM PlatformIO interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2025 Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

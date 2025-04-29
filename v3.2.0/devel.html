@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Guide &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GEOPM Documentation Guidelines" href="docu.html" />
+    <link rel="prev" title="Source Builds" href="build.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEOPM
+              <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="install.html">Install Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="install.html#install-latest-stable-release">Install Latest Stable Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#enable-the-geopm-access-service">Enable the GEOPM Access Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#guides-for-specialized-install">Guides for Specialized Install</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="install.html#further-documentation">Further Documentation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) – Access management for the GEOPM Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="admin.html">Service Administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install_rolling.html">Development Snapshot Install Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html">Source Builds</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#developer-build-process">Developer Build Process</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-the-build">Configuring the Build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#coverage-instructions">Coverage Instructions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#coding-style">Coding Style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pre-commit-checks">Pre-Commit Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#license-headers">License Headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-manuals">Creating Manuals</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="spack.html">Spack Guide</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_guides.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributor Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#developer-build-process">Developer Build Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-the-build">Configuring the Build</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#intel-compiler-and-mpi-toolchain">Intel Compiler and MPI Toolchain</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#coverage-instructions">Coverage Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coding-style">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-commit-checks">Pre-Commit Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license-headers">License Headers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-manuals">Creating Manuals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docu.html">GEOPM Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="install.html">Install Guide</a></li>
+      <li class="breadcrumb-item active">Developer Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/devel.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-guide">
+<h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading"></a></h1>
+<p>If you wish to modify the source code in the GEOPM git repository, this guide
+provide instructions for the process.</p>
+<section id="developer-build-process">
+<h2>Developer Build Process<a class="headerlink" href="#developer-build-process" title="Link to this heading"></a></h2>
+<p>To build all the software in the GEOPM repository, run the following commands
+described in the repository README.md.</p>
+<p>Upon successful build completion, if you wish to execute unit tests, each build
+has a <cite>check</cite> target in the makefiles.  The <cite>geopmdpy</cite> and <cite>geopmpy</cite> directories
+have a README.md that describes how to run the unit tests.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>libgeopmd
+make<span class="w"> </span>-j<span class="w"> </span>check
+<span class="nb">cd</span><span class="w"> </span>../libgeopm
+make<span class="w"> </span>-j<span class="w"> </span>check
+</pre></div>
+</div>
+</section>
+<section id="configuring-the-build">
+<h2>Configuring the Build<a class="headerlink" href="#configuring-the-build" title="Link to this heading"></a></h2>
+<p>Several options can be passed to each of the two configure scripts that
+determine the build process. The files managed by the scripts are responsible
+for GEOPM’s version embedding in build artifacts and create two <cite>configure</cite>
+scripts using the autotools package.</p>
+<p>The configure scripts output several files, including the <cite>Makefile</cite> used
+for further build steps. These scripts also accept various command line
+options and environmental variables that customize behavior. For detailed
+user documentation, refer to the <cite>./configure –help</cite> command. Some notable
+options and environment variables are listed below:</p>
+<ul class="simple">
+<li><p>Both configure scripts</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--prefix</span></code>: Path prefix for install artifacts</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code>: Enable verbose error and warning messaging while disabling optimization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-coverage</span></code>: Enable coverage report generation with gcov</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-build-gtest</span></code>: Use system install of gtest and gmock, do not download or build (version &gt;=1.12.1 required)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-beta</span></code>: Enable beta features, which remain in beta until their
+interfaces are considered finalized and stable for future releases.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">CC=</span></code>: Set the C compiler with environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">CXX=</span></code>: Set the C++ compiler with environment variable</p></li>
+</ul>
+<ul class="simple">
+<li><p>libgeopmd configure script</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-nvml</span></code>: Adds support for the Nvidia NVML library</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-dcgm</span></code>: Adds support for the Nvidia DCGM library</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-levelzero</span></code>: Adds support for OneAPI LevelZero</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-systemd</span></code>: Excludes GEOPM service access from PlatformIO</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-io-uring</span></code>: Disable support for libiouring for batch IO operations</p></li>
+</ul>
+<ul class="simple">
+<li><p>Base configure script</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--with-geopmd=</span></code>: Specify the installation location of the service build</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-mpi</span></code>: Excludes MPI dependencies from the base directory build</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-fortran</span></code>: Excludes Fortran dependencies from the base directory build</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-openmp</span></code>: Excludes OpenMP dependencies from the base directory build</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--disable-geopmd-local</span></code>: Use system installed geopmd package, do not use local service build</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FC=</span></code>: Set the Fortran compiler with an environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">F77=</span></code>: Set the Fortran 77 compiler with an environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">MPICC=</span></code>: Set the MPI C compiler wrapper with an environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">MPICXX=</span></code>: Set the MPI C++ compiler wrapper with an environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">MPIFC=</span></code>: Set the Fortran compiler wrapper with environmental variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">MPIF77=</span></code>: Set the Fortran 77 compiler</p></li>
+</ul>
+<section id="intel-compiler-and-mpi-toolchain">
+<h3>Intel Compiler and MPI Toolchain<a class="headerlink" href="#intel-compiler-and-mpi-toolchain" title="Link to this heading"></a></h3>
+<p>To enable the use of the Intel toolchain for both the compiler and MPI support,
+export the following variables prior to configuring the base build of the GEOPM
+repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CC</span><span class="o">=</span>icx
+<span class="nb">export</span><span class="w"> </span><span class="nv">CXX</span><span class="o">=</span>icpx
+<span class="nb">export</span><span class="w"> </span><span class="nv">FC</span><span class="o">=</span>ifx
+<span class="nb">export</span><span class="w"> </span><span class="nv">F77</span><span class="o">=</span>ifx
+<span class="nb">export</span><span class="w"> </span><span class="nv">F90</span><span class="o">=</span>ifx
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPICC</span><span class="o">=</span>mpiicc
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPICXX</span><span class="o">=</span>mpiicpc
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPIFORT</span><span class="o">=</span>mpiifort
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPIFC</span><span class="o">=</span>mpiifort
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPIF77</span><span class="o">=</span>mpiifort
+<span class="nb">export</span><span class="w"> </span><span class="nv">MPIFR90</span><span class="o">=</span>mpiifort
+</pre></div>
+</div>
+<p>We recommend using the system compiler toolchain for compiling the GEOPM service
+when creating an installed RPM.  The <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">rpm</span></code> target of the service
+directory uses the geopm-service spec file to ensure that the system GCC
+toolchain is used to create the RPM.</p>
+</section>
+</section>
+<section id="coverage-instructions">
+<h2>Coverage Instructions<a class="headerlink" href="#coverage-instructions" title="Link to this heading"></a></h2>
+<p>To generate a coverage report, first be sure that you have installed the lcov
+package.  Note that if you are using GCC 9 or above, you must use lcov v1.15 or
+later to work around <a class="reference external" href="https://github.com/linux-test-project/lcov/issues/58">this issue</a>.</p>
+<p>The lcov source is available here:</p>
+<p><a class="reference external" href="https://github.com/linux-test-project/lcov">https://github.com/linux-test-project/lcov</a></p>
+<p>The GEOPM build must be configured with the “–enable-coverage” option prior to
+running the tests.  Then in either the service directory or the root directory,
+simply run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">coverage</span>
+</pre></div>
+</div>
+<p>which runs the corresponding unit tests and produces a coverage report in</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">coverage</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>Note that all tests must pass in order to generate a coverage report.
+Any help in increasing code coverage levels is appreciated.</p>
+<p>Coverage from the latest release is [posted to our web
+page](<a class="reference external" href="https://geopm.github.io/coverage/index.html">https://geopm.github.io/coverage/index.html</a>).</p>
+</section>
+<section id="coding-style">
+<h2>Coding Style<a class="headerlink" href="#coding-style" title="Link to this heading"></a></h2>
+<p>Python code should follow the PEP8 standard as described in
+<a class="reference external" href="https://peps.python.org/pep-0008/">https://peps.python.org/pep-0008/</a>.</p>
+<p>C++ code can be corrected to conform to the GEOPM standard using astyle with the
+following options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">astyle</span> <span class="o">--</span><span class="n">style</span><span class="o">=</span><span class="n">linux</span> <span class="o">--</span><span class="n">indent</span><span class="o">=</span><span class="n">spaces</span><span class="o">=</span><span class="mi">4</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">S</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">N</span>
+</pre></div>
+</div>
+<p>Note that astyle is not perfect (in particular it is confused by C++11
+initializer lists), and some versions of astyle will format the code slightly
+differently.</p>
+<p>Use C style variable names with lower case and underscores.  Upper camel case is
+used exclusively for class names.  Prefix all member variables with “m<em>“ and
+all global variables with “g</em>“.</p>
+<p>Please avoid global variables as much as possible and if it is necessary to use
+a global (primarily for C code) please scope them statically to the compilation
+unit.</p>
+<p>Avoid preprocessor macros as much as possible (use enum not #define).
+Preprocessor usage should be reserved for expressing configure time options.</p>
+<p>The number of columns in a source file should not exceed 70 or 80 before
+wrapping the line.  Exceptions are allowed when it is required for compilation
+or similar.  In general, follow the style in the file you are modifying.</p>
+</section>
+<section id="pre-commit-checks">
+<h2>Pre-Commit Checks<a class="headerlink" href="#pre-commit-checks" title="Link to this heading"></a></h2>
+<p>This repository includes a configuration for <a class="reference external" href="https://pre-commit.com/">pre-commit</a> that uses some of their standard hooks that are
+relevant to GEOPM, and adds a hook that performs the GEOPM license checks.</p>
+<p>To install the pre-commit infrastructure and our configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+<span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Now you will automatically run some checks whenever you make a commit, instead
+of waiting until you make a pull request to see all of them.</p>
+</section>
+<section id="license-headers">
+<h2>License Headers<a class="headerlink" href="#license-headers" title="Link to this heading"></a></h2>
+<p>Introducing a new file requires a license comment in its header with a
+corresponding file.  Any new installed files should also be added to the package’s
+<cite>.spec</cite> file and a <cite>debian/*.install</cite> file.</p>
+</section>
+<section id="creating-manuals">
+<h2>Creating Manuals<a class="headerlink" href="#creating-manuals" title="Link to this heading"></a></h2>
+<p>Introducing a new man page requires changes in multiple files:</p>
+<ol class="arabic simple">
+<li><p>The build target (man page) should be added to rst_file in conf.py</p></li>
+<li><p>The gzipped installed man page should be listed in the %files section of
+geopm-doc.spec.in</p></li>
+<li><p>A link to the new html page should be added to the SEE ALSO section of
+geopm.7.rst and any other related man pages.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In addition, new documentation should follow the style guidelines defined here:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docu.html">GEOPM Documentation Guidelines</a></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="build.html" class="btn btn-neutral float-left" title="Source Builds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="docu.html" class="btn btn-neutral float-right" title="GEOPM Documentation Guidelines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2025 Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

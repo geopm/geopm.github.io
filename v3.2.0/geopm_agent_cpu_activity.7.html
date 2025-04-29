@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopm_agent_cpu_activity(7) – agent for selecting CPU frequency based on CPU compute activity &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopm_agent_ffnet(7) – agent for adjusting frequencies based on application behavior" href="geopm_agent_ffnet.7.html" />
+    <link rel="prev" title="geopm_report(7) – GEOPM summary report file" href="geopm_report.7.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEOPM
+              <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guides.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) – Global Extensible Open Power Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.7.html">geopm_pio(7) – GEOPM PlatformIO interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cnl.7.html">geopm_pio_cnl(7) – Signals and controls for Compute Node Linux Board-Level Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_const_config.7.html">geopm_pio_const_config(7) – Signals for ConstConfigIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cpuinfo.7.html">geopm_pio_cpuinfo(7) – Signals and controls for the CPUInfoIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_dcgm.7.html">geopm_pio_dcgm(7) – IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_levelzero.7.html">geopm_pio_levelzero(7) – IOGroup providing signals and controls for Intel GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_msr.7.html">geopm_pio_msr(7) – Signals and controls for Model Specific Registers (MSRs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_nvml.7.html">geopm_pio_nvml(7) – IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_profile.7.html">geopm_pio_profile(7) – Signals and controls for the ProfileIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_service.7.html">geopm_pio_service(7) – Signals and controls for the ServiceIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sst.7.html">geopm_pio_sst(7) – Signals and controls for Intel Speed Select Technology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sysfs.7.html">geopm_pio_sysfs(7) – Signals and controls for sysfs attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_time.7.html">geopm_pio_time(7) – Signals and controls for Time IO Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) – Access management for the GEOPM Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) – tool for GEOPM system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) – query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbatch.1.html">geopmbatch(1) – Command line interface for the GEOPM batch server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) – synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) – GEOPM runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) – command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmexporter.1.html">geopmexporter(1) – Prometheus exporter for GEOPM metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) – application launch wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) – query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) – Command line interface for the GEOPM service batch read features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) – modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) – global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) – global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent.3.html">geopm_agent(3) – query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl.3.html">geopm_ctl(3) – GEOPM runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon.3.html">geopm_daemon(3) – helpers for GEOPM daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint.3.html">geopm_endpoint(3) – dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) – error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_field.3.html">geopm_agent(3) – query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) – GEOPM fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash(3) – helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer(3) – set artificial runtime imbalance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.3.html">geopm_pio(3) – interfaces to query and modify platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore.3.html">geopm_policystore(3) – GEOPM resource policy store interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_prof.3.html">geopm_prof(3) – application profiling interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched(3) – interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time(3) – helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo.3.html">geopm_topo(3) – query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) – GEOPM library version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AAgent.3.html">geopm::Agent(3) – GEOPM agent plugin interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AAgg.3.html">geopm::Agg(3) – data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACNLIOGroup.3.html">geopm::CNLIOGroup(3) – IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACPUActivityAgent.3.html">geopm::CPUActivityAgent(3) – agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACircularBuffer.3.html">geopm::CircularBuffer(3) – generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AComm.3.html">geopm::Comm(3) – communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) – IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ADaemon.3.html">geopm::Daemon(3) – GEOPM daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AEndpoint.3.html">geopm::Endpoint(3) – GEOPM endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AException.3.html">geopm::Exception(3) – custom GEOPM exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AGPUActivityAgent.3.html">geopm::GPUActivityAgent(3) – agent for selecting GPU frequency based on GPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AHelper.3.html">geopm::Helper – common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AIOGroup.3.html">geopm::IOGroup(3) – provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMPIComm.3.html">geopm::MPIComm(3) – implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMSRIO.3.html">geopm::MSRIO(3) – methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMSRIOGroup.3.html">geopm::MSRIOGroup – IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMonitorAgent.3.html">geopm::MonitorAgent – agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APlatformIO.3.html">geopm::PlatformIO(3) – GEOPM platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APlatformTopo.3.html">geopm::PlatformTopo(3) – platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APluginFactory.3.html">geopm::PluginFactory(3) – abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerBalancer.3.html">geopm::PowerBalancer(3) – balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) – agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerGovernor.3.html">geopm::PowerGovernor(3) – enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) – agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AProfileIOGroup.3.html">geopm::ProfileIOGroup(3) – IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ASampleAggregator.3.html">geopm::SampleAggregator(3) – per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ASharedMemory.3.html">geopm::SharedMemory(3) – abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ATimeIOGroup.3.html">geopm::TimeIOGroup(3) – IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) – GEOPM summary report file</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopm_agent_cpu_activity(7) – agent for selecting CPU frequency based on CPU compute activity</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#agent-name">Agent Name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#policy-parameters">Policy Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constconfigiogroup-configuration-file-generation">ConstConfigIOGroup Configuration File Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-policy">Example Policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#report-extensions">Report Extensions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-loop-rate">Control Loop Rate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_ffnet.7.html">geopm_agent_ffnet(7) – agent for adjusting frequencies based on application behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_balancer.7.html">geopm_agent_frequency_balancer(7) – Agent reduces imbalance across CPU cores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) – agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_gpu_activity.7.html">geopm_agent_gpu_activity(7) – agent for selecting GPU frequency based on GPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) – agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) – agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) – agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#doxygen-pages">Doxygen Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">Reference Manual</a></li>
+      <li class="breadcrumb-item active">geopm_agent_cpu_activity(7) – agent for selecting CPU frequency based on CPU compute activity</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geopm_agent_cpu_activity.7.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity">
+<h1>geopm_agent_cpu_activity(7) – agent for selecting CPU frequency based on CPU compute activity<a class="headerlink" href="#geopm-agent-cpu-activity-7-agent-for-selecting-cpu-frequency-based-on-cpu-compute-activity" title="Link to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>The goal of <strong>CPUActivityAgent</strong> is to save CPU energy by scaling CPU frequency
+based upon the compute activity of each CPU as provided by the
+CPU_COMPUTE_ACTIVITY signal and modified by the CPU_UTILIZATION signal.</p>
+<p>The agent scales the core frequency in the range of <code class="docutils literal notranslate"><span class="pre">Fce</span></code> to <code class="docutils literal notranslate"><span class="pre">Fcmax</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">Fcmax</span></code> and <code class="docutils literal notranslate"><span class="pre">Fce</span></code> are provided via the MSRIOGroup and ConstConfigIOGroup respectively.</p>
+<p>Low compute activity regions (compute activity of 0.0) run at the <code class="docutils literal notranslate"><span class="pre">Fce</span></code> frequency,
+high activity regions (compute activity of 1.0) run at the <code class="docutils literal notranslate"><span class="pre">Fcmax</span></code> frequency,
+and regions in between the extremes run at a frequency (<code class="docutils literal notranslate"><span class="pre">Fcreq</span></code>) selected using the equation:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Fcreq</span> <span class="pre">=</span> <span class="pre">Fce</span> <span class="pre">+</span> <span class="pre">(Fcmax</span> <span class="pre">-</span> <span class="pre">Fce)</span> <span class="pre">*</span> <span class="pre">CPU_COMPUTE_ACTIVITY</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPU_COMPUTE_ACTIVITY</span></code> is defined as a derivative signal based on the MSR::PPERF::PCNT
+scalability metric.</p>
+<p>The agent also scales the uncore frequency in the range of <code class="docutils literal notranslate"><span class="pre">Fue</span></code> to
+<code class="docutils literal notranslate"><span class="pre">Fumax</span></code>, where <code class="docutils literal notranslate"><span class="pre">Fumax</span></code> and <code class="docutils literal notranslate"><span class="pre">Fue</span></code> are povided by the
+MSRIOGroup and ConstConfigIOGroup respectively.</p>
+<p>Low uncore activity regions (uncore activity of 0.0) run at the <code class="docutils literal notranslate"><span class="pre">Fue</span></code> frequency,
+high activity regions (uncore activity of 1.0) run at the <code class="docutils literal notranslate"><span class="pre">Fumax</span></code> frequency,
+and regions in between the extremes run at a frequency (<code class="docutils literal notranslate"><span class="pre">Fureq</span></code>) selected using
+the equation:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Fureq</span> <span class="pre">=</span> <span class="pre">Fue</span> <span class="pre">+</span> <span class="pre">(Fumax</span> <span class="pre">-</span> <span class="pre">Fue)</span> <span class="pre">*</span> <span class="pre">CPU_UNCORE_ACTIVITY</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_ACTIVITY</span></code> is defined as a simple ratio of the current memory bandwidth
+divided by the maximum possible bandwidth at the current <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_STATUS</span></code> value.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Fe</span></code> value for all domains is intended to be an energy efficient frequency
+that is selected via system characterization.  The recommended approach to selecting
+<code class="docutils literal notranslate"><span class="pre">Fe</span></code> for a given domain is to perform a frequency sweep of that domain (CPU or UNCORE)
+using a workload that scales strongly with the domain frequency.
+Using this approach <code class="docutils literal notranslate"><span class="pre">Fe</span></code> will be the frequency that provides the lowest
+energy consumption for the workload.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Fmax</span></code> is intended to be the maximum allowable frequency for the domain,
+and may be set as the domain’s default maximum frequency, or limited based
+upon user/admin preference.</p>
+<p>The agent provides an optional input of <code class="docutils literal notranslate"><span class="pre">phi</span></code> that allows for biasing the
+frequency range for both domains used by the agent.  The default <code class="docutils literal notranslate"><span class="pre">phi</span></code> value of 0.5 provides frequency
+selection in the full range from <code class="docutils literal notranslate"><span class="pre">Fe</span></code> to <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>.  A <code class="docutils literal notranslate"><span class="pre">phi</span></code> value less than 0.5 biases the
+agent towards higher frequencies by increasing the <code class="docutils literal notranslate"><span class="pre">Fe</span></code> value.
+In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 0) <code class="docutils literal notranslate"><span class="pre">Fe</span></code> will be raised to <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>.  A <code class="docutils literal notranslate"><span class="pre">phi</span></code> value greater than
+0.5 biases the agent towards lower frequencies by reducing the <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> value.
+In the extreme case (<code class="docutils literal notranslate"><span class="pre">phi</span></code> of 1.0) <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> will be lowered to <code class="docutils literal notranslate"><span class="pre">Fe</span></code>.</p>
+</section>
+<section id="agent-name">
+<h2>Agent Name<a class="headerlink" href="#agent-name" title="Link to this heading"></a></h2>
+<p>The agent described in this manual is selected in many geopm
+interfaces with the <code class="docutils literal notranslate"><span class="pre">&quot;cpu_activity&quot;</span></code> agent name.  This name can be
+passed to <a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">--geopm-agent</span></code>
+option, or the <code class="docutils literal notranslate"><span class="pre">GEOPM_AGENT</span></code> environment variable can be set to this
+name (see <a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>).  This name can also be passed to the
+<a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a> as the argument to the <code class="docutils literal notranslate"><span class="pre">'-a'</span></code> option.</p>
+</section>
+<section id="policy-parameters">
+<h2>Policy Parameters<a class="headerlink" href="#policy-parameters" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Phi</span></code> input is the only policy value.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CPU_PHI</span></code>:</dt><dd><p>The performance bias knob.  The value must be between
+0.0 and 1.0. If NAN is passed, it will use 0.5 by default.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="constconfigiogroup-configuration-file-generation">
+<h2>ConstConfigIOGroup Configuration File Generation<a class="headerlink" href="#constconfigiogroup-configuration-file-generation" title="Link to this heading"></a></h2>
+<p>Generating a ConstConfigIOGroup configuration file for the CPU Compute Activity agent requires
+system characterization using the GEOPM experiment infrastructure located in
+<code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/experiment/</span></code> and the arithmetic intensity
+benchmark located in <code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/apps/arithmetic_intensity</span></code>.
+Prior to starting, the arithmetic intensity benchmark needs to be built (use
+the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script provided in the benchmark’s folder).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before performing the system characterization, please ensure the
+system is quiesced (i.e. not running other heavy processes/workloads).</p>
+</div>
+<p>The automated method of characterization requires running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>PYTHONPATH=${GEOPM_SOURCE}:\
+${GEOPM_SOURCE}/integration/experiment:${PYTHONPATH} \
+python3 ${GEOPM_SOURCE}/integration/test/test_cpu_characterization.py
+</pre></div>
+</div>
+<p>This will generate a file named <code class="docutils literal notranslate"><span class="pre">const_config_io-characterization.json</span></code>
+in the current working directory containing configuration information for
+the node.  If successful, this is all that is required.</p>
+<p>The manual method of characterization consists of several steps.
+The first step is to generate the execution script by running
+the following for SLURM based systems:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gen_slurm</span><span class="o">.</span><span class="n">sh</span> <span class="mi">1</span> <span class="n">arithmetic_intensity</span> <span class="n">uncore_frequency_sweep</span>
+</pre></div>
+</div>
+<p>Or if you’re running a PBS based system run the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gen_pbs</span><span class="o">.</span><span class="n">sh</span> <span class="mi">1</span> <span class="n">arithmetic_intensity</span> <span class="n">uncore_frequency_sweep</span>
+</pre></div>
+</div>
+<p>The generated <code class="docutils literal notranslate"><span class="pre">test.sbatch</span></code>  or <code class="docutils literal notranslate"><span class="pre">test.pbs</span></code> should be modified to enable
+Memory Bandwidth Monitoring by adding the following above the experiment
+script invocation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>srun -N ${SLURM_NNODES} geopmwrite MSR::PQR_ASSOC:RMID board 0 0
+srun -N ${SLURM_NNODES} geopmwrite MSR::QM_EVTSEL:RMID board 0 0
+srun -N ${SLURM_NNODES} geopmwrite MSR::QM_EVTSEL:EVENT_ID board 0 2
+</pre></div>
+</div>
+<p>Without this, the uncore bandwidth characterization analysis scripts will not
+be able to accurately determine the maximum memory bandwidth at each uncore
+frequency.</p>
+<p>Additionally the <code class="docutils literal notranslate"><span class="pre">test.sbatch</span></code> should be modified to include the following
+experiment options, where the text within angle brackets (<code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code>) needs to be
+replaced with relevant system (or administrator chosen) values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">geopm</span><span class="o">-</span><span class="n">report</span><span class="o">-</span><span class="n">signals</span><span class="o">=</span><span class="s2">&quot;MSR::QM_CTR_SCALED_RATE@package,CPU_UNCORE_FREQUENCY_STATUS@package,MSR::CPU_SCALABILITY_RATIO@package,CPU_FREQUENCY_MAX_CONTROL@package,CPU_UNCORE_FREQUENCY_MIN_CONTROL@package,CPU_UNCORE_FREQUENCY_MAX_CONTROL@package&quot;</span> \
+<span class="o">--</span><span class="nb">min</span><span class="o">-</span><span class="n">frequency</span><span class="o">=&lt;</span><span class="nb">min</span><span class="o">.</span> <span class="n">core</span> <span class="n">frequency</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span><span class="o">=&lt;</span><span class="nb">max</span><span class="o">.</span> <span class="n">core</span> <span class="n">frequency</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">step</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">100000000</span> \
+<span class="o">--</span><span class="nb">min</span><span class="o">-</span><span class="n">uncore</span><span class="o">-</span><span class="n">frequency</span><span class="o">=&lt;</span><span class="nb">min</span> <span class="n">uncore</span> <span class="n">frequency</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">uncore</span><span class="o">-</span><span class="n">frequency</span><span class="o">=&lt;</span><span class="nb">max</span> <span class="n">uncore</span> <span class="n">frequency</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">step</span><span class="o">-</span><span class="n">uncore</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">100000000</span> \
+<span class="o">--</span><span class="n">trial</span><span class="o">-</span><span class="n">count</span><span class="o">=</span><span class="mi">5</span> \
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">geopmread</span></code> can be used to derive the frequencies required in the experiment
+options. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geopmread</span> <span class="n">CPU_FREQUENCY_MAX_AVAIL</span> <span class="n">board</span> <span class="mi">0</span>
+<span class="n">geopmread</span> <span class="n">CPU_FREQUENCY_MIN_AVAIL</span> <span class="n">board</span> <span class="mi">0</span>
+<span class="n">geopmread</span> <span class="n">CPU_UNCORE_FREQUENCY_MAX_CONTROL</span> <span class="n">board</span> <span class="mi">0</span>
+<span class="n">geopmread</span> <span class="n">CPU_UNCORE_FREQUENCY_MAX_CONTROL</span> <span class="n">board</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">test.sbatch</span></code> script should also be modified to increase the run time to
+a sufficiently large value. This will depend on the system, but a full core and
+uncore frequency sweep could take about 10 hours, for example.</p>
+<p>Then the <code class="docutils literal notranslate"><span class="pre">test.sbatch</span></code> script should be run on the node of interest using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="o">-</span><span class="n">w</span> <span class="o">&lt;</span><span class="n">node</span> <span class="n">of</span> <span class="n">interest</span><span class="o">&gt;</span> <span class="n">test</span><span class="o">.</span><span class="n">sbatch</span>
+</pre></div>
+</div>
+<p>This will run multiple kernels of varying intensity that stress the core and
+uncore to help with system characterization.</p>
+<p>After sourcing the <code class="docutils literal notranslate"><span class="pre">$GEOPM_SOURCE/integration/config/run_env.sh</span></code> file, the
+CPU compute activity agent ConstConfigIOGroup configuration file can then be generated by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">integration</span><span class="o">/</span><span class="n">experiment</span><span class="o">/</span><span class="n">uncore_frequency_sweep</span><span class="o">/</span><span class="n">gen_cpu_activity_constconfig_recommendation</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="n">UNCORE_SWEEP_DIR</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">region</span><span class="o">-</span><span class="nb">list</span> <span class="s2">&quot;intensity_1&quot;</span><span class="p">,</span><span class="s2">&quot;intensity_16&quot;</span>
+</pre></div>
+</div>
+<p>Depending on the number of runs, system noise, and other factors there may be more than one reasonable
+value for <code class="docutils literal notranslate"><span class="pre">Fe</span></code> for a given domain.  In these cases a warning similar to the following will be provided:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;Warning: Found N possible alternate Fe value(s) within 5</span><span class="si">% e</span><span class="s1">nergy consumption of Fe for &lt;Control&gt;.</span>
+ <span class="n">Consider</span> <span class="n">using</span> <span class="n">the</span> <span class="n">energy</span><span class="o">-</span><span class="n">margin</span> <span class="n">options</span><span class="o">.</span>\<span class="n">n</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>If this occurs the user may choose to use the provided configuration file OR rerun the recommendation script with
+any the energy-margin options <code class="docutils literal notranslate"><span class="pre">--core-energy-margin</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">--uncore-energy-margin</span></code> along with a value such
+as 0.05 (5%). These options will attempt to identify a lower <code class="docutils literal notranslate"><span class="pre">Fe</span></code> for the respective domain that costs less than
+the energy consumed at <code class="docutils literal notranslate"><span class="pre">Fe</span></code> plus the energy-margin percentage provided.</p>
+<p>An example ConstConfigIOGroup configuration file is provided below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;CPU_FREQUENCY_EFFICIENT_HIGH_INTENSITY&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Defines the efficient core frequency to use for CPUs.  Based on a workload that scales strongly with the frequency domain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2000000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_EFFICIENT_HIGH_INTENSITY&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Defines the efficient uncore frequency to use for CPUs.  Based on a workload that scales strongly with the frequency domain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2000000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_0&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1200000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_0&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">45639800000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1400000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">73881616666.66667</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1600000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">85787733333.33333</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_3&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1800000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_3&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">97272166666.66667</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_FREQUENCY_4&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CPU Uncore Frequency associated with CPU_UNCORE_MAX_MEMORY_BANDWIDTH_4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;hertz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2000000000.0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;CPU_UNCORE_MAX_MEMORY_BANDWIDTH_4&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum memory bandwidth in bytes perf second associated with CPU_UNCORE_FREQUENCY_4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aggregation&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">106515333333.33333</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-policy">
+<h2>Example Policy<a class="headerlink" href="#example-policy" title="Link to this heading"></a></h2>
+<p>An example policy is provided below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;CPU_PHI&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="report-extensions">
+<h2>Report Extensions<a class="headerlink" href="#report-extensions" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Core</span> <span class="pre">Frequency</span> <span class="pre">Requests</span></code></dt><dd><p>The number of core frequency requests made by the agent</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Uncore</span> <span class="pre">Frequency</span> <span class="pre">Requests</span></code></dt><dd><p>The number of uncore frequency requests made by the agent</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolved</span> <span class="pre">Maximum</span> <span class="pre">Core</span> <span class="pre">Frequency</span></code>:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Fcmax</span></code> after <code class="docutils literal notranslate"><span class="pre">phi</span></code> has been taken into account</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolved</span> <span class="pre">Efficient</span> <span class="pre">Core</span> <span class="pre">Frequency</span></code>:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Fce</span></code> after <code class="docutils literal notranslate"><span class="pre">phi</span></code> has been taken into account</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolved</span> <span class="pre">Core</span> <span class="pre">Frequency</span> <span class="pre">Range</span></code>:</dt><dd><p>The core frequency selection range of the agent after <code class="docutils literal notranslate"><span class="pre">phi</span></code> has
+been taken into account</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolved</span> <span class="pre">Maximum</span> <span class="pre">Uncore</span> <span class="pre">Frequency</span></code>:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Fumax</span></code> after <code class="docutils literal notranslate"><span class="pre">phi</span></code> has been taken into account</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolved</span> <span class="pre">Efficient</span> <span class="pre">Uncore</span> <span class="pre">Frequency</span></code>:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Fue</span></code> after <code class="docutils literal notranslate"><span class="pre">phi</span></code> has been taken into account</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolved</span> <span class="pre">Uncore</span> <span class="pre">Frequency</span> <span class="pre">Range</span></code>:</dt><dd><p>The uncore frequency selection range of the agent after <code class="docutils literal notranslate"><span class="pre">phi</span></code> has
+been taken into account</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="control-loop-rate">
+<h2>Control Loop Rate<a class="headerlink" href="#control-loop-rate" title="Link to this heading"></a></h2>
+<blockquote>
+<div><p>The agent gates the Controller’s control loop to a cadence of 10ms.</p>
+</div></blockquote>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
+<a class="reference internal" href="geopm_agent_monitor.7.html"><span class="doc">geopm_agent_monitor(7)</span></a>,
+<a class="reference internal" href="geopm%3A%3AAgent.3.html"><span class="doc">geopm::Agent(3)</span></a>,
+<a class="reference internal" href="geopm_agent.3.html"><span class="doc">geopm_agent(3)</span></a>,
+<a class="reference internal" href="geopm_prof.3.html"><span class="doc">geopm_prof(3)</span></a>,
+<a class="reference internal" href="geopmagent.1.html"><span class="doc">geopmagent(1)</span></a>,
+<a class="reference internal" href="geopmlaunch.1.html"><span class="doc">geopmlaunch(1)</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geopm_report.7.html" class="btn btn-neutral float-left" title="geopm_report(7) – GEOPM summary report file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geopm_agent_ffnet.7.html" class="btn btn-neutral float-right" title="geopm_agent_ffnet(7) – agent for adjusting frequencies based on application behavior" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2025 Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
