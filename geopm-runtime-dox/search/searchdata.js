@@ -10,7 +10,7 @@ var indexSectionsWithContent =
   7: "cegmp",
   8: "eghlm",
   9: "mrs",
-  10: "_gh",
+  10: "_dgho",
   11: "fgi",
   12: "glt"
 };
