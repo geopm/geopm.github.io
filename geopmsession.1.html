@@ -80,9 +80,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#launch-option">Launch Option</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#agent-support">Agent Support</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#reading-signals-during-a-job-execution">Reading signals during a job execution</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gathering-reports-using-mpi">Gathering Reports using MPI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#writing-a-custom-agent">Writing a Custom Agent</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -183,6 +185,7 @@
 <span class="w">                    </span><span class="o">[</span>--print-header<span class="w"> </span><span class="p">|</span><span class="w"> </span>-n<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span>DELIMITER<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>REPORT_OUT<span class="o">]</span>
 <span class="w">                    </span><span class="o">[</span>-o<span class="w"> </span>TRACE_OUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable-mpi<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="w"> </span>REPORT_FORMAT<span class="o">]</span>
 <span class="w">                    </span><span class="o">[</span>-s<span class="w"> </span>REPORT_SAMPLES<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>CONFIG_PATH<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>--<span class="w"> </span>LAUNCH<span class="w"> </span>...<span class="o">]</span>
 </pre></div>
 </div>
 <section id="read-a-signal">
@@ -292,6 +295,43 @@ standard input which is also the default.</p>
 </dd>
 </dl>
 </section>
+<section id="launch-option">
+<h2>Launch Option<a class="headerlink" href="#launch-option" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> tool may be used to launch and monitor a subprocess, terminating
+the session when the process exits. To use this feature, provide a command after
+a double dash (<code class="docutils literal notranslate"><span class="pre">--</span></code>). For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>TIME<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">1</span><span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">5</span>
+<span class="s2">&quot;TIME&quot;</span>
+<span class="m">0</span>.001785301
+<span class="m">1</span>.008901696
+<span class="m">2</span>.008939004
+<span class="m">3</span>.009074361
+<span class="m">4</span>.009136714
+<span class="m">5</span>.009231953
+<span class="m">6</span>.009308985
+</pre></div>
+</div>
+<p>This will launch <code class="docutils literal notranslate"><span class="pre">sleep</span> <span class="pre">5</span></code> as a subprocess and monitor the TIME signal until
+the process exits. Using the <code class="docutils literal notranslate"><span class="pre">--pid</span></code> and the launch option at the same
+time is forbidden.</p>
+<p>If the geopmsession process receives a SIGTERM and SIGINT or fails dues to an
+unmanaged exception, the signal is forwarded to the subprocess and all of its
+children followed by SIGKILL after 1 second.  If the geopmsession command fails
+due to an exception then the first signal sent is SIGINT.</p>
+<p>If using <code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code> with the launch option, note that each MPI rank will
+launch its own subprocess, which may not be the intended behavior for MPI
+applications.</p>
+</section>
+<section id="agent-support">
+<h2>Agent Support<a class="headerlink" href="#agent-support" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> tool supports Python agent plugins that can customize session
+behavior. An agent is a Python class derived from the <code class="docutils literal notranslate"><span class="pre">Agent</span></code> base class in
+<code class="docutils literal notranslate"><span class="pre">geopmdpy.session</span></code>. Agents can add custom command-line arguments, override the
+default signal configuration, and provide additional trace columns.  The agent
+can also implement custom logic for each sampling period including the ability
+to modify control knobs dynamically. The agent implementation uses the <code class="docutils literal notranslate"><span class="pre">main()</span></code>
+function from the <code class="docutils literal notranslate"><span class="pre">geopmdpy.session</span></code> module as the entry point.</p>
+</section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <p>Some examples of how to use the <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> command line tool are
@@ -314,9 +354,9 @@ core zero:</p>
 <p>This will execute one read of the signal.</p>
 <p>A couple of examples reading <code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code> using <code class="docutils literal notranslate"><span class="pre">*</span></code>:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER * 1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
-<span class="go">173.4394938352482</span>
+<span class="go">62.95697469659621</span>
 <span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER * *&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-n
-<span class="go">302.1005171817655,218.0933036104828</span>
+<span class="go">69.16105633883998,74.9419453995438</span>
 </pre></div>
 </div>
 </section>
@@ -326,22 +366,23 @@ core zero:</p>
 The polling period must be shorter than the timeout specified.</p>
 <p>A 100ms polling period with a 300ms timeout is shown below:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;MSR::THERM_STATUS# core 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>-n
-<span class="go">0x0000000088410000</span>
-<span class="go">0x0000000088420000</span>
-<span class="go">0x0000000088420000</span>
-<span class="go">0x0000000088420000</span>
+<span class="go">0x0000000088350800</span>
+<span class="go">0x0000000088350800</span>
+<span class="go">0x0000000088350800</span>
+<span class="go">0x0000000088360800</span>
 </pre></div>
 </div>
 </section>
 <section id="reading-a-set-of-signals">
 <h3>Reading a set of signals<a class="headerlink" href="#reading-a-set-of-signals" title="Link to this heading"></a></h3>
 <p>Multiple signals may be specified by separating them with a newline.</p>
-<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_FREQUENCY_STATUS package 0\nCPU_FREQUENCY_STATUS package 1\nCPU_ENERGY package 0\nCPU_ENERGY package 1&#39;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
-<span class="w">    </span>geopmsession<span class="w"> </span>-n
-<span class="go">70.250978379,2434090909.090909,2775000000,198575.8842163086,88752.19470214844</span>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_FREQUENCY_STATUS package *\nCPU_ENERGY package *\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>session.config
+<span class="gp">$ </span>geopmsession<span class="w"> </span>-i<span class="w"> </span>config.txt
+<span class="go">&quot;TIME&quot;,&quot;CPU_FREQUENCY_STATUS-package-0&quot;,&quot;CPU_FREQUENCY_STATUS-package-1&quot;,&quot;CPU_ENERGY-package-0&quot;,&quot;CPU_ENERGY-package-1&quot;</span>
+<span class="go">0.658525605,1000000000,1105000000,51985.06903076172,216490.1282958984</span>
 </pre></div>
 </div>
-<p>Signals may also be specified in a separate file using the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option.</p>
+<p>Signals may be specified in a separate file using the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option.</p>
 </section>
 <section id="reading-a-set-of-signals-and-getting-summary-statistics">
 <h3>Reading a set of signals and getting summary statistics<a class="headerlink" href="#reading-a-set-of-signals-and-getting-summary-statistics" title="Link to this heading"></a></h3>
@@ -358,84 +399,119 @@ for each of the specified signals at the specified domains/domain indices.</p>
 </div>
 <p>An example yaml report is shown below:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
-<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T18:23:58.545153099-0700&quot;</span>
-<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.99976</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:08:53.160991796-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0013</span>
 <span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00499988</span>
-<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.43807e-05</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00500067</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.000494084</span>
 <span class="nt">metrics</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">TIME</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0825453</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0823</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0825453</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0823</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.08268</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88873</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.13225</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11.1336</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.13225</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11.1336</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.13339</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88899</span>
 <span class="w">  </span><span class="nt">CPU_POWER</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">71.9161</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">54.9997</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">36.8681</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">75.2159</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50.1323</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.61714</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">81.3372</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">114.556</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">81.3372</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">145.638</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">117.871</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.55413</span>
 <span class="w">  </span><span class="nt">CPU_FREQUENCY_STATUS</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.69773e+09</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.75341e+09</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0775e+09</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0375e+09</span>
 <span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e+09</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.49659e+09</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.5542e+09</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.72332e+08</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.3325e+09</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.07005e+09</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.80748e+07</span>
 </pre></div>
 </div>
 <p>The same report rendered into csv format:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;host&quot;,&quot;sample-time-first&quot;,&quot;sample-time-total&quot;,&quot;sample-count&quot;,&quot;sample-period-mean&quot;,&quot;sample-period-std&quot;,&quot;CPU_FREQUENCY_STATUS-count&quot;,&quot;CPU_FREQUENCY_STATUS-first&quot;,&quot;CPU_FREQUENCY_STATUS-last&quot;,&quot;CPU_FREQUENCY_STATUS-min&quot;,&quot;CPU_FREQUENCY_STATUS-max&quot;,&quot;CPU_FREQUENCY_STATUS-mean&quot;,&quot;CPU_FREQUENCY_STATUS-std&quot;,&quot;CPU_POWER-count&quot;,&quot;CPU_POWER-first&quot;,&quot;CPU_POWER-last&quot;,&quot;CPU_POWER-min&quot;,&quot;CPU_POWER-max&quot;,&quot;CPU_POWER-mean&quot;,&quot;CPU_POWER-std&quot;,&quot;TIME-count&quot;,&quot;TIME-first&quot;,&quot;TIME-last&quot;,&quot;TIME-min&quot;,&quot;TIME-max&quot;,&quot;TIME-mean&quot;,&quot;TIME-std&quot;
-&quot;cluster-node-11&quot;,&quot;2025-03-10T21:51:23.189529258-0700&quot;,10.001955031000001,2001,0.0050009775155000005,0.00010043535451280228,2001,847115384.6153846,850000000.0,821153846.1538461,873076923.0769231,847851314.7272667,3590132.1103830505,2001,399.14601612728563,300.103422331257,274.8583842263399,399.14601612728563,321.0146130526503,17.236293555024577,2001,6.143247742,16.145202773,6.143247742,16.145202773,11.144727482043468,2.8891493308338507
+&quot;cluster-node-11&quot;,&quot;2025-05-16T09:09:16.559516035-0700&quot;,10.000596301,2001,0.0050002981505,0.0004777162996813195,2001,1085000000.0,1172500000.0,1000000000.0,1282500000.0,1071716016.9915042,38699360.87433021,2001,134.5205438626066,132.45502415239116,104.55274444442776,148.3458434284852,119.53508979088977,5.258855212642797,2001,1.574881395,11.575477696,1.574881395,11.575477696,6.576009187958503,2.888976620038315
 </pre></div>
 </div>
 </section>
+<section id="launching-a-process-and-monitoring-signals">
+<h3>Launching a process and monitoring signals<a class="headerlink" href="#launching-a-process-and-monitoring-signals" title="Link to this heading"></a></h3>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>TIME<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">5</span>
+<span class="go">&quot;TIME&quot;</span>
+<span class="go">0.005026064</span>
+<span class="go">0.513985594</span>
+<span class="go">1.013916775</span>
+<span class="go">1.513919136</span>
+<span class="go">2.013917347</span>
+<span class="go">2.513900635</span>
+<span class="go">3.0139143</span>
+<span class="go">3.513901374</span>
+<span class="go">4.013907436</span>
+<span class="go">4.513900239</span>
+<span class="go">5.013895239</span>
+<span class="go">5.513876408</span>
+</pre></div>
+</div>
+<p>This launches <code class="docutils literal notranslate"><span class="pre">sleep</span> <span class="pre">5</span></code> and monitors the TIME signal until it detects that the
+<code class="docutils literal notranslate"><span class="pre">sleep</span></code> command has exited.</p>
 </section>
 <section id="reading-signals-during-a-job-execution">
-<h2>Reading signals during a job execution<a class="headerlink" href="#reading-signals-during-a-job-execution" title="Link to this heading"></a></h2>
+<h3>Reading signals during a job execution<a class="headerlink" href="#reading-signals-during-a-job-execution" title="Link to this heading"></a></h3>
 <p>Signals can be read and summary statistics gathered during job execution using
-the <code class="docutils literal notranslate"><span class="pre">--pid</span></code> option. If both the <code class="docutils literal notranslate"><span class="pre">--pid</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code> options are used,
+the launch or <code class="docutils literal notranslate"><span class="pre">--pid</span></code> option. If both the <code class="docutils literal notranslate"><span class="pre">--pid</span></code> and <code class="docutils literal notranslate"><span class="pre">-t</span></code> options are used,
 geopmsession will end when either the process ends or when the specified time
 elapses, whichever is shorter. Below is an example gathering <code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code>
 while running <code class="docutils literal notranslate"><span class="pre">sleep</span></code>.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">1</span><span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">5</span>
+<span class="go">&quot;CPU_POWER-package-0&quot;</span>
+<span class="go">62.54857725485511</span>
+<span class="go">50.5686841290089</span>
+<span class="go">57.63407322142274</span>
+<span class="go">61.1508168939381</span>
+<span class="go">60.71903156269835</span>
+<span class="go">59.50978494274343</span>
+<span class="go">58.25752970206295</span>
+</pre></div>
+</div>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">1</span>
-<span class="go">[1] 862433</span>
-<span class="go">nan</span>
-<span class="go">223.9936557537629</span>
-<span class="go">216.5137820024834</span>
-<span class="go">213.0681419975341</span>
-<span class="go">213.0355731062416</span>
-<span class="go">212.6023058240874</span>
+<span class="go">   [1] 3100339</span>
+<span class="go">   &quot;CPU_POWER-package-0&quot;</span>
+<span class="go">   30.59618629083503</span>
+<span class="go">   40.73598509986576</span>
+<span class="go">   38.79754643472621</span>
+<span class="go">   39.32981634681103</span>
+<span class="go">   38.70242242812028</span>
+<span class="go">   [1]+  Done                    sleep 5</span>
 </pre></div>
 </div>
 <p>An example gathering summary statistics while executing a job:</p>
-<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span>-
-<span class="go">[1] 863118</span>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span>-<span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">5</span>
 <span class="go">&quot;CPU_POWER-package-0&quot;</span>
-<span class="go">192.0918491664253</span>
-<span class="go">229.5852100126677</span>
-<span class="go">228.7564573775396</span>
+<span class="go">39.15323231457158</span>
+<span class="go">39.9597792259686</span>
+<span class="go">40.38713156571379</span>
+<span class="go">40.3391948981358</span>
+<span class="go">40.10173665761857</span>
+<span class="go">39.93951912781292</span>
+<span class="go">39.83074165703577</span>
 <span class="go">host: &quot;cluster-node-11&quot;</span>
-<span class="go">sample-time-first: &quot;2025-03-11T11:44:16.347674498-0700&quot;</span>
-<span class="go">sample-time-total: 2.00134</span>
-<span class="go">sample-count: 3</span>
-<span class="go">sample-period-mean: 1.00067</span>
-<span class="go">sample-period-std: 0.000850531</span>
+<span class="go">sample-time-first: &quot;2025-05-16T09:19:42.253776983-0700&quot;</span>
+<span class="go">sample-time-total: 6.00905</span>
+<span class="go">sample-count: 7</span>
+<span class="go">sample-period-mean: 1.00151</span>
+<span class="go">sample-period-std: 0.00372384</span>
 <span class="go">metrics:</span>
 <span class="go">  CPU_POWER-package-0:</span>
-<span class="go">    count: 3</span>
-<span class="go">    first: 192.092</span>
-<span class="go">    last: 228.756</span>
-<span class="go">    min: 192.092</span>
-<span class="go">    max: 229.585</span>
-<span class="go">    mean: 216.811</span>
-<span class="go">    std: 21.4116</span>
+<span class="go">    count: 7</span>
+<span class="go">    first: 39.1532</span>
+<span class="go">    last: 39.8307</span>
+<span class="go">    min: 39.1532</span>
+<span class="go">    max: 40.3871</span>
+<span class="go">    mean: 39.9588</span>
+<span class="go">    std: 0.411159</span>
 </pre></div>
 </div>
 <p>Note that the samples are output followed by summary statistics. To output the
@@ -453,51 +529,88 @@ a row.</p>
 </div>
 <p>In the yaml output below, note that each report is appended, separated by
 “—“.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
-<span class="w"> </span><span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-03-13T13:48:17.484751575-0700&quot;</span>
-<span class="w"> </span><span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.001</span>
-<span class="w"> </span><span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span>
-<span class="w"> </span><span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1001</span>
-<span class="w"> </span><span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.000300337</span>
-<span class="w"> </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">   </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
-<span class="w">     </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span>
-<span class="w">     </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">57.3536</span>
-<span class="w">     </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">158.705</span>
-<span class="w">     </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">57.3536</span>
-<span class="w">     </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">160.906</span>
-<span class="w">     </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">149.869</span>
-<span class="w">     </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30.7383</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:21:12.854647716-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0005</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.10005</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00017891</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">26.1087</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">41.1297</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">26.1087</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42.36</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">37.5301</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.85142</span>
 
 <span class="nn">---</span>
 
 <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
-<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-03-13T13:48:18.585712016-0700&quot;</span>
-<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.200019</span>
-<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.10001</span>
-<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.89358e-06</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:21:13.955151931-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.899985</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0999983</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.34092e-05</span>
 <span class="nt">metrics</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.354</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.576</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.354</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">160.12</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">159.683</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.394004</span>
-<span class="w">  </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">]</span><span class="l l-Scalar l-Scalar-Plain">+  Done                    sleep 5</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">39.0531</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">39.4301</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">35.197</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40.6032</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">38.1963</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.09879</span>
+
+<span class="nn">---</span>
+
+<span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:21:14.955165125-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.899977</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0999974</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.01953e-05</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">37.8657</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">41.0475</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">36.256</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44.8203</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40.6383</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.36432</span>
+
+<span class="nn">---</span>
+
+<span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:21:15.955163708-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.600004</span>
+<span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.100001</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.000118453</span>
+<span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">CPU_POWER-package-0</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">38.3654</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">39.4388</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">34.8214</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">39.4388</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">36.8331</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.82103</span>
 </pre></div>
 </div>
 <p>Sample csv output below shows each statistics sample output on a new row:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sleep<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">apppid</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU_POWER package 0&quot;</span><span class="w"> </span><span class="p">|</span><span class="se">\</span>
-<span class="w">  </span>geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>-r<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span><span class="m">10</span><span class="w"> </span>-f<span class="w"> </span>csv
+geopmsession<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$apppid</span><span class="w"> </span>-p<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span>-r<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span><span class="m">10</span><span class="w"> </span>-f<span class="w"> </span>csv
 <span class="go">&quot;host&quot;,&quot;sample-time-first&quot;,&quot;sample-time-total&quot;,&quot;sample-count&quot;,&quot;sample-period-mean&quot;,&quot;sample-period-std&quot;,&quot;CPU_POWER-package-0-count&quot;,&quot;CPU_POWER-package-0-first&quot;,&quot;CPU_POWER-package-0-last&quot;,&quot;CPU_POWER-package-0-min&quot;,&quot;CPU_POWER-package-0-max&quot;,&quot;CPU_POWER-package-0-mean&quot;,&quot;CPU_POWER-package-0-std&quot;</span>
-<span class="go">&quot;cluster-node-11&quot;,&quot;2025-03-13T13:55:06.330688844-0700&quot;,1.0008504780000003,11,0.10008504780000002,0.00022674563801204308,11,280.7375126848722,193.37615094901133,193.37615094901133,280.7375126848722,208.08585636276703,24.588834377550775</span>
-<span class="go">&quot;cluster-node-11&quot;,&quot;2025-03-13T13:55:07.431262159-0700&quot;,0.8999735640000002,10,0.09999706266666669,8.698831894196923e-05,10,191.878186704736,175.91600106253898,175.91600106253898,191.878186704736,185.4971100742497,5.352722675096535</span>
-<span class="go">&quot;cluster-node-11&quot;,&quot;2025-03-13T13:55:08.431459737-0700&quot;,0.200098412,3,0.100049206,7.587538605975476e-05,3,172.07603810585476,166.7683539071519,166.7683539071519,172.07603810585476,169.3263499495176,2.6590293883676446</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-05-16T09:23:33.620790309-0700&quot;,1.000574921,11,0.10005749209999999,0.0001964757920469247,11,39.44969148140212,41.9486178974159,34.84014539393113,41.9486178974159,36.49265394626341,2.465552738326359</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-05-16T09:23:34.721404331-0700&quot;,0.899903938,10,0.09998932644444444,3.917289581063831e-05,10,43.77618495751115,39.447376090215,35.07951019074365,44.37725410303373,39.60711256469672,3.6046116965994814</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-05-16T09:23:35.721373075-0700&quot;,0.8999950860000001,10,0.09999945400000002,0.00010700698475670486,10,40.55431660299817,39.64840048680215,34.56523283529788,40.81876798613059,38.042165265899925,2.384395315318058</span>
+<span class="go">&quot;cluster-node-11&quot;,&quot;2025-05-16T09:23:36.721240770-0700&quot;,0.6000795879999998,7,0.10001326466666664,7.467743569208487e-05,7,40.97335095740563,34.912491389496914,34.912491389496914,41.4496234018482,38.75680603826903,2.716795748688028</span>
 </pre></div>
 </div>
+</section>
 </section>
 <section id="gathering-reports-using-mpi">
 <h2>Gathering Reports using MPI<a class="headerlink" href="#gathering-reports-using-mpi" title="Link to this heading"></a></h2>
@@ -517,70 +630,120 @@ of the geopmsession MPI communicator.</p>
 </div>
 <p>An example report is shown below:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-11&quot;</span>
-<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T17:50:00.895968647-0700&quot;</span>
-<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.99973</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:26:37.114177564-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0011</span>
 <span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00499987</span>
-<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.22108e-05</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00500056</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.000493951</span>
 <span class="nt">metrics</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">TIME</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0849912</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0847</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0849912</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0847</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.08514</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88873</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.668767</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.6699</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.668767</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.6699</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.66989</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88899</span>
 <span class="w">  </span><span class="nt">CPU_POWER</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">58.2713</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63.4941</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">41.1496</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">89.1348</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">55.8502</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.41338</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">84.186</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">117.827</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">77.7429</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">141.491</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">118.953</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.03585</span>
 <span class="w">  </span><span class="nt">CPU_FREQUENCY_STATUS</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.17727e+09</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.75341e+09</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.04375e+09</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.035e+09</span>
 <span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e+09</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.58636e+09</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.55674e+09</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.7101e+08</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.25625e+09</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.07255e+09</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.91874e+07</span>
 
 <span class="nn">---</span>
 
 <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-node-12&quot;</span>
-<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-08-14T17:50:01.033367154-0700&quot;</span>
-<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0003</span>
+<span class="nt">sample-time-first</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-05-16T09:26:37.112549059-0700&quot;</span>
+<span class="nt">sample-time-total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0012</span>
 <span class="nt">sample-count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00500015</span>
-<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.06152e-05</span>
+<span class="nt">sample-period-mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.00500062</span>
+<span class="nt">sample-period-std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.000465038</span>
 <span class="nt">metrics</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">TIME</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0846359</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0849</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0846359</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0849</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.085</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88887</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.10684</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11.1081</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.10684</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11.1081</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.10793</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.88901</span>
 <span class="w">  </span><span class="nt">CPU_POWER</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60.455</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70.6912</span>
-<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">46.394</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">89.6428</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">61.7341</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.20186</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">76.1151</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">118.133</span>
+<span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">76.1151</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">142.527</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">119.894</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.05624</span>
 <span class="w">  </span><span class="nt">CPU_FREQUENCY_STATUS</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001</span>
-<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.70568e+09</span>
-<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.69773e+09</span>
+<span class="w">    </span><span class="nt">first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.045e+09</span>
+<span class="w">    </span><span class="nt">last</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.045e+09</span>
 <span class="w">    </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e+09</span>
-<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.56136e+09</span>
-<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.54734e+09</span>
-<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.63195e+08</span>
+<span class="w">    </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.28e+09</span>
+<span class="w">    </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.07346e+09</span>
+<span class="w">    </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.24776e+07</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-a-custom-agent">
+<h2>Writing a Custom Agent<a class="headerlink" href="#writing-a-custom-agent" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> command line tool supports Python agent plugins that can
+customize session behavior. This example shows a simple agent that monitors the
+<code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code> signal at high or low resolution.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># File: cpu_power_agent.py</span>
+<span class="kn">from</span> <span class="nn">geopmdpy.session</span> <span class="kn">import</span> <span class="n">main</span>
+<span class="kn">from</span> <span class="nn">geopmdpy.session</span> <span class="kn">import</span> <span class="n">Agent</span>
+
+<span class="k">class</span> <span class="nc">CPUPowerAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent for monitoring CPU power.</span>
+
+<span class="sd">    The CPUPowerAgent provides a --hi-res option to read CPU power at the</span>
+<span class="sd">    finest granularity available. This allows users to measure CPU power from</span>
+<span class="sd">    all domains and indices. By default, CPU power is sampled at the board</span>
+<span class="sd">    domain.</span>
+
+<span class="sd">    Command-line options:</span>
+<span class="sd">      --hi-res   Measure at finest granularity (all domains/indices).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        python3 cpu_power_agent.py --hi-res -- sleep 5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hi_res</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Measure CPU_POWER as default signal configuration&#39;</span>
+
+    <span class="k">def</span> <span class="nf">update_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--hi-res&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Measure power at finest granularity (all domains/indices)&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span>
+
+    <span class="k">def</span> <span class="nf">update_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hi_res</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">hi_res</span>
+        <span class="k">return</span> <span class="n">args</span>
+
+    <span class="k">def</span> <span class="nf">signal_config_override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hi_res</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;CPU_POWER * *&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;CPU_POWER board 0&quot;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">CPUPowerAgent</span><span class="p">())</span>
 </pre></div>
 </div>
 </section>
