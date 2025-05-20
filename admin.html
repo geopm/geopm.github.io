@@ -99,20 +99,52 @@
              
   <section id="service-administrators">
 <h1>Service Administrators<a class="headerlink" href="#service-administrators" title="Link to this heading"></a></h1>
-<p>This guide covers GEOPM’s integration with the Linux OS, directories
-influenced by GEOPM, the utilization of files within those directories, and a
-command-line tool for configuring the GEOPM Service. For further details,
-explore the subsequent sections:</p>
+<p>This guide covers GEOPM’s integration with the Linux OS, directories influenced
+by GEOPM, the utilization of files within those directories, and a command-line
+tool for configuring the GEOPM Service. For further details, explore the
+subsequent sections:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="install.html"><span class="doc">Install Guide</span></a></p></li>
 <li><p><a class="reference internal" href="security.html"><span class="doc">Security Guide</span></a></p></li>
 </ul>
 <section id="linux-integration">
 <h2>Linux Integration<a class="headerlink" href="#linux-integration" title="Link to this heading"></a></h2>
-<p>The GEOPM Service integrates seamlessly with the Linux OS through Systemd. It
-is packaged within the geopm-service binary package, and administrators can install it
-using their respective package management systems. Use <code class="docutils literal notranslate"><span class="pre">systemctl</span></code>
-to interact with <code class="docutils literal notranslate"><span class="pre">geopm</span></code> Systemd Unit.</p>
+<p>The GEOPM Service integrates seamlessly with the Linux OS through Systemd. It is
+packaged within the <code class="docutils literal notranslate"><span class="pre">geopmd</span></code> binary package, and administrators can install it
+using their respective package management systems. Use <code class="docutils literal notranslate"><span class="pre">systemctl</span></code> to interact
+with the <code class="docutils literal notranslate"><span class="pre">geopm</span></code> Systemd Unit.</p>
+<p><strong>Systemctl Command Behavior</strong></p>
+<ul>
+<li><p><strong>start</strong>:</p>
+<p>Starts the GEOPM Access Service. All required state files in <cite>/run/geopm</cite> are
+initialized, and the service begins accepting client connections. Any stale
+session files from previous runs are cleaned up as part of startup.</p>
+</li>
+<li><p><strong>stop</strong>:</p>
+<p>Stops the GEOPM Access Service. All active client sessions are closed
+gracefully before the service terminates. This includes restoring any hardware
+controls (such as power limits) to their default or saved state, and cleaning
+up session files in <cite>/run/geopm</cite>. The write-mode session (if any) is closed
+first to ensure hardware state is restored.</p>
+</li>
+<li><p><strong>restart</strong>:</p>
+<p>Re-initialize the service.  Similar to running <code class="docutils literal notranslate"><span class="pre">stop</span></code> followed by <code class="docutils literal notranslate"><span class="pre">start</span></code>,
+except that all sessions remain open through the process and controls are not
+restored.</p>
+</li>
+<li><p><strong>enable</strong>:</p>
+<p>Configures the GEOPM Access Service to start automatically at boot. This does
+not immediately start the service, but ensures it will be started on the next
+system boot.</p>
+</li>
+</ul>
+<p><strong>Note:</strong>
+The service is robust to unexpected shutdowns. If the geopmd process ends for
+any reason, all state required to restart is preserved.  To be certain that all
+controls are restored to their original configuration, the administrator should
+run <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">stop</span> <span class="pre">geopm</span></code>. Administrators can monitor the system journal for
+info and warning messages about session closure and hardware state restoration
+during these operations.</p>
 </section>
 <section id="geopm-service-files">
 <h2>GEOPM Service Files<a class="headerlink" href="#geopm-service-files" title="Link to this heading"></a></h2>
@@ -159,7 +191,7 @@ specific Unix groups.</p>
 <section id="configuring-systemd-unit-file">
 <h2>Configuring Systemd Unit File<a class="headerlink" href="#configuring-systemd-unit-file" title="Link to this heading"></a></h2>
 <p>The GEOPM Systemd unit is configured with the <code class="docutils literal notranslate"><span class="pre">geopm.service</span></code> file that is
-installed as part of the <code class="docutils literal notranslate"><span class="pre">geopm-service</span></code> package.  This configuration file may
+installed as part of the <code class="docutils literal notranslate"><span class="pre">geopmd</span></code> package.  This configuration file may
 be amended using the command <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">edit</span> <span class="pre">geopm.service</span></code>. See
 <a class="reference external" href="https://man7.org/linux/man-pages/man1/systemctl.1.html">systemctl(1)</a> for
 more details.</p>
