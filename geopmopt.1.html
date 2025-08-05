@@ -1,0 +1,635 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geopmopt(1) – Bayesian optimization for GEOPM control parameters &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geopmread(1) – query platform information" href="geopmread.1.html" />
+    <link rel="prev" title="geopmlaunch(1) – application launch wrapper" href="geopmlaunch.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEOPM
+              <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guides.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html#geopm-manual-pages">GEOPM Manual Pages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geopm.7.html">geopm(7) – Global Extensible Open Power Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.7.html">geopm_pio(7) – GEOPM PlatformIO interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cnl.7.html">geopm_pio_cnl(7) – Signals and controls for Compute Node Linux Board-Level Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_const_config.7.html">geopm_pio_const_config(7) – Signals for ConstConfigIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_cpuinfo.7.html">geopm_pio_cpuinfo(7) – Signals and controls for the CPUInfoIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_dcgm.7.html">geopm_pio_dcgm(7) – IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_levelzero.7.html">geopm_pio_levelzero(7) – IOGroup providing signals and controls for Intel GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_msr.7.html">geopm_pio_msr(7) – Signals and controls for Model Specific Registers (MSRs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_nvml.7.html">geopm_pio_nvml(7) – IOGroup providing signals and controls for NVIDIA GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_profile.7.html">geopm_pio_profile(7) – Signals and controls for the ProfileIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_service.7.html">geopm_pio_service(7) – Signals and controls for the ServiceIOGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sst.7.html">geopm_pio_sst(7) – Signals and controls for Intel Speed Select Technology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_sysfs.7.html">geopm_pio_sysfs(7) – Signals and controls for sysfs attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio_time.7.html">geopm_pio_time(7) – Signals and controls for Time IO Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmaccess.1.html">geopmaccess(1) – Access management for the GEOPM Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmadmin.1.html">geopmadmin(1) – tool for GEOPM system administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmagent.1.html">geopmagent(1) – query agent information and create static policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbatch.1.html">geopmbatch(1) – Command line interface for the GEOPM batch server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmbench.1.html">geopmbench(1) – synthetic benchmark application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmctl.1.html">geopmctl(1) – GEOPM runtime control application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmendpoint.1.html">geopmendpoint(1) – command line tool for dynamic policy control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmexporter.1.html">geopmexporter(1) – Prometheus exporter for GEOPM metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmgrid.1.html">geopmgrid(1) – define control parameter grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmlaunch.1.html">geopmlaunch(1) – application launch wrapper</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geopmopt(1) – Bayesian optimization for GEOPM control parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metric-extraction">Metric Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optimization-algorithm">Optimization Algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#integration">Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geopmread.1.html">geopmread(1) – query platform information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmsession.1.html">geopmsession(1) – sample platform information over time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmwrite.1.html">geopmwrite(1) – modify platform state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmdpy.7.html">geopmdpy(7) – global extensible open power manager python daemon package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopmpy.7.html">geopmpy(7) – global extensible open power manager python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent.3.html">geopm_agent(3) – query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_ctl.3.html">geopm_ctl(3) – GEOPM runtime control thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_daemon.3.html">geopm_daemon(3) – helpers for GEOPM daemons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_endpoint.3.html">geopm_endpoint(3) – dynamic policy control for resource management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_error.3.html">geopm_error(3) – error code descriptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_field.3.html">geopm_agent(3) – query information about available agents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_fortran.3.html">geopm_fortran(3) – GEOPM fortran interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_hash.3.html">geopm_hash(3) – helper methods for encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_imbalancer.3.html">geopm_imbalancer(3) – set artificial runtime imbalance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_pio.3.html">geopm_pio(3) – interfaces to query and modify platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_policystore.3.html">geopm_policystore(3) – GEOPM resource policy store interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_prof.3.html">geopm_prof(3) – application profiling interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_sched.3.html">geopm_sched(3) – interface with Linux scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_time.3.html">geopm_time(3) – helper methods for time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_topo.3.html">geopm_topo(3) – query platform component topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_version.3.html">geopm_version(3) – GEOPM library version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AAgent.3.html">geopm::Agent(3) – GEOPM agent plugin interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AAgg.3.html">geopm::Agg(3) – data aggregation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACNLIOGroup.3.html">geopm::CNLIOGroup(3) – IOGroup for interaction with Compute Node Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACPUActivityAgent.3.html">geopm::CPUActivityAgent(3) – agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACircularBuffer.3.html">geopm::CircularBuffer(3) – generic circular buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AComm.3.html">geopm::Comm(3) – communication abstractions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ACpuinfoIOGroup.3.html">geopm::CpuinfoIOGroup(3) – IOGroup for CPU frequency limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ADaemon.3.html">geopm::Daemon(3) – GEOPM daemon helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AEndpoint.3.html">geopm::Endpoint(3) – GEOPM endpoint interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AException.3.html">geopm::Exception(3) – custom GEOPM exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AGPUActivityAgent.3.html">geopm::GPUActivityAgent(3) – agent for selecting GPU frequency based on GPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AHelper.3.html">geopm::Helper – common helper methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AIOGroup.3.html">geopm::IOGroup(3) – provides system values and settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMPIComm.3.html">geopm::MPIComm(3) – implementation of Comm using MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMSRIO.3.html">geopm::MSRIO(3) – methods for reading and writing MSRs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMSRIOGroup.3.html">geopm::MSRIOGroup – IOGroup providing MSR-based signals and controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AMonitorAgent.3.html">geopm::MonitorAgent – agent that enforces no policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APlatformIO.3.html">geopm::PlatformIO(3) – GEOPM platform interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APlatformTopo.3.html">geopm::PlatformTopo(3) – platform topology information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APluginFactory.3.html">geopm::PluginFactory(3) – abstract factory for plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerBalancer.3.html">geopm::PowerBalancer(3) – balances power according to epoch runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerBalancerAgent.3.html">geopm::PowerBalancerAgent(3) – agent optimizing performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerGovernor.3.html">geopm::PowerGovernor(3) – enforces a power limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3APowerGovernorAgent.3.html">geopm::PowerGovernorAgent(3) – agent that enforces a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3AProfileIOGroup.3.html">geopm::ProfileIOGroup(3) – IOGroup providing application signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ASampleAggregator.3.html">geopm::SampleAggregator(3) – per-region aggregated signal data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ASharedMemory.3.html">geopm::SharedMemory(3) – abstractions for shared memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm%3A%3ATimeIOGroup.3.html">geopm::TimeIOGroup(3) – IOGroup providing time signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_report.7.html">geopm_report(7) – GEOPM summary report file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_cpu_activity.7.html">geopm_agent_cpu_activity(7) – agent for selecting CPU frequency based on CPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_ffnet.7.html">geopm_agent_ffnet(7) – agent for adjusting frequencies based on application behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_balancer.7.html">geopm_agent_frequency_balancer(7) – Agent reduces imbalance across CPU cores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_frequency_map.7.html">geopm_agent_frequency_map(7) – agent for running regions at user selected frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_gpu_activity.7.html">geopm_agent_gpu_activity(7) – agent for selecting GPU frequency based on GPU compute activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_monitor.7.html">geopm_agent_monitor(7) – agent implementation for aggregating statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_balancer.7.html">geopm_agent_power_balancer(7) – agent optimizes performance under a power cap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geopm_agent_power_governor.7.html">geopm_agent_power_governor(7) – agent enforces a power cap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#doxygen-pages">Doxygen Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">Reference Manual</a></li>
+      <li class="breadcrumb-item active">geopmopt(1) – Bayesian optimization for GEOPM control parameters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geopmopt.1.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geopmopt-1-bayesian-optimization-for-geopm-control-parameters">
+<h1>geopmopt(1) – Bayesian optimization for GEOPM control parameters<a class="headerlink" href="#geopmopt-1-bayesian-optimization-for-geopm-control-parameters" title="Link to this heading"></a></h1>
+<section id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage:<span class="w"> </span>geopmopt<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>--cpu-frequency<span class="w"> </span>CPU_FREQUENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-uncore-frequency<span class="w"> </span>CPU_UNCORE_FREQUENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-power<span class="w"> </span>CPU_POWER_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-frequency<span class="w"> </span>GPU_FREQUENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-power<span class="w"> </span>GPU_POWER_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--board-power<span class="w"> </span>BOARD_POWER_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--trials<span class="w"> </span>TRIALS<span class="o">]</span><span class="w"> </span><span class="o">[</span>--n-initial-points<span class="w"> </span>N_INITIAL_POINTS<span class="o">]</span>
+<span class="w">                </span>--metric-regex<span class="w"> </span>METRIC_REGEX<span class="w"> </span><span class="o">[</span>--minimize<span class="o">]</span><span class="w"> </span><span class="o">[</span>--random-seed<span class="w"> </span>RANDOM_SEED<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--application-timeout<span class="w"> </span>APPLICATION_TIMEOUT<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--output-file<span class="w"> </span>OUTPUT_FILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbosity<span class="w"> </span><span class="o">{</span><span class="m">0</span>,1,2,3<span class="o">}]</span>
+<span class="w">                </span><span class="o">[</span>--print-stdout<span class="o">]</span><span class="w"> </span><span class="o">[</span>--defer-write<span class="o">]</span><span class="w"> </span><span class="o">[</span>--efficiency<span class="w"> </span>EFFICENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--<span class="w"> </span>LAUNCH<span class="w"> </span>...<span class="o">]</span>
+</pre></div>
+</div>
+<section id="optimize-cpu-frequency-for-performance">
+<h3>Optimize CPU frequency for performance<a class="headerlink" href="#optimize-cpu-frequency-for-performance" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmopt<span class="w"> </span>--verbosity<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--cpu-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--cpu-uncore-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Performance: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--<span class="w"> </span>./dgemm_bench.sh
+</pre></div>
+</div>
+</section>
+<section id="optimize-multiple-cpu-parameters-with-efficiency-focus">
+<h3>Optimize multiple CPU parameters with efficiency focus<a class="headerlink" href="#optimize-multiple-cpu-parameters-with-efficiency-focus" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmopt<span class="w"> </span>--cpu-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--cpu-power<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Elapsed time: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--efficiency<span class="w"> </span>cpu<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--<span class="w"> </span>./mixed_workload.sh
+</pre></div>
+</div>
+</section>
+<section id="minimize-energy-consumption-and-tune-each-cpu-package-independently">
+<h3>Minimize energy consumption and tune each CPU package independently<a class="headerlink" href="#minimize-energy-consumption-and-tune-each-cpu-package-independently" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmopt<span class="w"> </span>--cpu-frequency<span class="w"> </span>package<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--metric-regex<span class="w"> </span><span class="s2">&quot;Energy: ([0-9.]+)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--<span class="w"> </span>energy_app
+</pre></div>
+</div>
+</section>
+<section id="get-help">
+<h3>Get Help<a class="headerlink" href="#get-help" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmopt<span class="w"> </span>-h
+geopmopt<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>Command line interface for Bayesian optimization of GEOPM control parameters.
+The tool uses advanced optimization algorithms to automatically find optimal
+control settings that maximize (or minimize) application performance metrics.</p>
+<p>The optimizer works by:</p>
+<ol class="arabic simple">
+<li><p><strong>Parameter Space Definition</strong>: Uses the same grid system as <code class="docutils literal notranslate"><span class="pre">geopmgrid</span></code>
+to define the search space for control parameters.</p></li>
+<li><p><strong>Application Evaluation</strong>: Launches the specified application with different
+control configurations and extracts performance metrics from its output.</p></li>
+<li><p><strong>Bayesian Optimization</strong>: Uses Gaussian Process models and acquisition
+functions to intelligently explore the parameter space, focusing on
+promising regions.</p></li>
+<li><p><strong>Metric Extraction</strong>: Parses application output using Python regular
+expressions to extract numeric performance metrics.</p></li>
+</ol>
+<p>The tool requires the <code class="docutils literal notranslate"><span class="pre">scikit-optimize</span></code> package for Bayesian optimization
+functionality: <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">scikit-optimize</span></code></p>
+</section>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Link to this heading"></a></h2>
+<section id="control-parameters">
+<h3>Control Parameters<a class="headerlink" href="#control-parameters" title="Link to this heading"></a></h3>
+<dl class="option-list">
+<dt><kbd><span class="option">--cpu-frequency <var>CPU_FREQUENCY_DOMAIN</var></span></kbd></dt>
+<dd><p id="cpu-frequency-option">Include CPU frequency control in the optimization space for the specified
+domain. The optimizer will explore different CPU frequency settings to
+find optimal performance.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-uncore-frequency <var>CPU_UNCORE_FREQUENCY_DOMAIN</var></span></kbd></dt>
+<dd><p id="cpu-uncore-frequency-option">Include CPU uncore frequency control in the optimization space. Useful
+for memory-intensive applications where uncore frequency affects performance.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-power <var>CPU_POWER_DOMAIN</var></span></kbd></dt>
+<dd><p id="cpu-power-option">Include CPU power limit control in the optimization space. Allows the
+optimizer to find optimal power-performance trade-offs.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-frequency <var>GPU_FREQUENCY_DOMAIN</var></span></kbd></dt>
+<dd><p id="gpu-frequency-option">Include GPU frequency control in the optimization space for GPU-accelerated
+applications.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-power <var>GPU_POWER_DOMAIN</var></span></kbd></dt>
+<dd><p id="gpu-power-option">Include GPU power limit control in the optimization space.</p>
+</dd>
+<dt><kbd><span class="option">--board-power <var>board</var></span></kbd></dt>
+<dd><p id="board-power-option">Include system-level power limit control in the optimization space for
+comprehensive power management. The only valid domain for this option is
+<code class="docutils literal notranslate"><span class="pre">board</span></code> and this option is only available on some platforms that support
+the <code class="docutils literal notranslate"><span class="pre">BOARD_POWER_LIMIT_CONTROL</span></code> PlatformIO control.</p>
+</dd>
+</dl>
+</section>
+<section id="optimization-configuration">
+<h3>Optimization Configuration<a class="headerlink" href="#optimization-configuration" title="Link to this heading"></a></h3>
+<dl class="option-list">
+<dt><kbd><span class="option">--trials <var>TRIALS</var></span></kbd></dt>
+<dd><p id="trials-option">Number of optimization iterations to perform. More trials generally lead to
+better results but take longer. Default: 50.</p>
+</dd>
+<dt><kbd><span class="option">--n-initial-points <var>N_INITIAL_POINTS</var></span></kbd></dt>
+<dd><p id="n-initial-points-option">Number of random initial evaluations before starting Bayesian optimization.
+These provide initial data for the Gaussian Process model. Default: 10.</p>
+</dd>
+<dt><kbd><span class="option">--metric-regex <var>METRIC_REGEX</var></span></kbd></dt>
+<dd><p id="metric-regex-option">Python-style regular expression to extract the performance metric from
+application output. The regex must capture the numeric value in a group.
+Required option.</p>
+</dd>
+<dt><kbd><span class="option">--minimize</span></kbd></dt>
+<dd><p id="minimize-option">Minimize the extracted metric instead of maximizing it. Useful for
+optimizing energy consumption, execution time, or error rates.</p>
+</dd>
+<dt><kbd><span class="option">--random-seed <var>RANDOM_SEED</var></span></kbd></dt>
+<dd><p id="random-seed-option">Random seed for reproducible optimization results. Default: 42.</p>
+</dd>
+<dt><kbd><span class="option">--application-timeout <var>APPLICATION_TIMEOUT</var></span></kbd></dt>
+<dd><p id="application-timeout-option">Timeout in seconds for application execution. Applications exceeding this
+timeout are terminated. Default: 300.</p>
+</dd>
+<dt><kbd><span class="option">--efficiency <var>EFFICIENCY_DOMAIN</var></span></kbd></dt>
+<dd><p id="efficiency-option">Optimize for efficiency by dividing the extracted metric by average power
+consumption. This finds configurations that maximize performance per watt.
+When the <code class="docutils literal notranslate"><span class="pre">--minimize</span> <span class="pre">option</span></code> is provided, the average power consumption is
+multiplied rather than divided.  This will minimize energy to completion if
+the metric is time to completion.  The EFFICIENCY_DOMAIN determines the
+components included in the power calculation and valid values are ‘board’,
+‘cpu’, or ‘gpu’.</p>
+</dd>
+</dl>
+</section>
+<section id="output-and-logging">
+<h3>Output and Logging<a class="headerlink" href="#output-and-logging" title="Link to this heading"></a></h3>
+<dl class="option-list">
+<dt><kbd><span class="option">--output-file <var>OUTPUT_FILE</var></span></kbd></dt>
+<dd><p id="output-file-option">Write the best configuration to a file in geopmwrite format. Use ‘-’ for
+stdout (default). The configuration can be applied later with
+<code class="docutils literal notranslate"><span class="pre">geopmwrite</span> <span class="pre">--config</span></code> or through <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span> <span class="pre">--geopm-init-control</span></code>.</p>
+</dd>
+</dl>
+<p>–verbosity {0,1,2,3}  .. _verbosity option:</p>
+<blockquote>
+<div><p>Control logging verbosity: 0=ERROR, 1=WARNING, 2=INFO, 3=DEBUG.
+Default: 1.</p>
+</div></blockquote>
+<dl class="option-list">
+<dt><kbd><span class="option">--print-stdout</span></kbd></dt>
+<dd><p id="print-stdout-option">Print application stdout to the log at info level. Useful for debugging
+metric extraction or application issues.</p>
+</dd>
+<dt><kbd><span class="option">--defer-write</span></kbd></dt>
+<dd><p id="defer-write-option">Defer writing control configurations to another tool such as <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code>
+or <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span> <span class="pre">--geopm-init-control</span></code>. This is especially useful for
+running in a distributed environment or avoiding configuration conflicts
+between process sessions. Requires <code class="docutils literal notranslate"><span class="pre">--output-file</span></code> which is updated prior
+to each application trial and then after the last trial the optimal
+configuration is written to the same file path.</p>
+</dd>
+</dl>
+</section>
+<section id="application-launch">
+<h3>Application Launch<a class="headerlink" href="#application-launch" title="Link to this heading"></a></h3>
+<p>LAUNCH …  .. _launch option:</p>
+<blockquote>
+<div><p>Command and arguments to launch the application for evaluation. These may be
+specified after a double dash (<code class="docutils literal notranslate"><span class="pre">--</span></code>) to avoid any parser option
+conflicts. The application should produce the target metric in its standard
+output.  To generate the target metric, it may be useful to wrap the
+application in a bash script that derives and prints the figure of merit.</p>
+</div></blockquote>
+<dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p id="help-option">Print help message and exit.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="basic-cpu-frequency-optimization">
+<h3>Basic CPU frequency optimization<a class="headerlink" href="#basic-cpu-frequency-optimization" title="Link to this heading"></a></h3>
+<p>Optimize CPU frequency for a compute-intensive benchmark:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;loop-count&quot;: 300,&quot;region&quot;: [&quot;dgemm&quot;],&quot;big-o&quot;: [0.1]}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>geopmbench.conf
+<span class="gp">$ </span>geopmopt<span class="w"> </span>--verbosity<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-uncore-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Elapsed time: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;/usr/bin/time -f&#39;Elapsed time: %e&#39; geopmbench geopmbench.conf |&amp; cat&quot;</span>
+<span class="go">INFO: Starting Bayesian optimization with 30 evaluations...</span>
+<span class="go">INFO: Evaluation 1: coordinate=[22, 1], metric=54.33</span>
+<span class="go">INFO: Evaluation 2: coordinate=[21, 4], metric=49.52</span>
+<span class="go">INFO: Evaluation 3: coordinate=[12, 1], metric=54.35</span>
+<span class="go">INFO: Evaluation 4: coordinate=[12, 2], metric=50.78</span>
+<span class="go">...</span>
+<span class="go">INFO: Evaluation 30: coordinate=[4, 3], metric=51.66</span>
+<span class="go">INFO: Optimization completed!</span>
+<span class="go">INFO: Best metric: 45.81</span>
+<span class="go">INFO: Best coordinate: [18, 6]</span>
+<span class="go">INFO: Number of evaluations: 30</span>
+<span class="go">Best configuration:</span>
+<span class="go">CPU_FREQUENCY_MAX_CONTROL board 0 2800000000.0</span>
+<span class="go">CPU_UNCORE_FREQUENCY_MAX_CONTROL board 0 1600000000.0</span>
+<span class="go">CPU_UNCORE_FREQUENCY_MIN_CONTROL board 0 1600000000.0</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-parameter-optimization">
+<h3>Multi-parameter optimization<a class="headerlink" href="#multi-parameter-optimization" title="Link to this heading"></a></h3>
+<p>Optimize both CPU frequency and power for maximum performance:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;loop-count&quot;: 300,&quot;region&quot;: [&quot;dgemm&quot;],&quot;big-o&quot;: [0.1]}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>geopmbench.conf
+<span class="gp">$ </span>geopmopt<span class="w"> </span>--verbosity<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-uncore-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-power<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Elapsed time: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;/usr/bin/time -f&#39;Elapsed time: %e&#39; geopmbench geopmbench.conf |&amp; cat&quot;</span>
+<span class="go">INFO: Starting Bayesian optimization with 30 evaluations...</span>
+<span class="go">INFO: Evaluation 1: coordinate=[22, 3, 120], metric=51.0</span>
+<span class="go">INFO: Evaluation 2: coordinate=[16, 6, 15], metric=81.11</span>
+<span class="go">INFO: Evaluation 3: coordinate=[12, 5, 22], metric=77.08</span>
+<span class="go">INFO: Evaluation 4: coordinate=[18, 1, 111], metric=55.49</span>
+<span class="go">...</span>
+<span class="go">INFO: Evaluation 30: coordinate=[21, 10, 9], metric=85.8</span>
+<span class="go">INFO: Optimization completed!</span>
+<span class="go">INFO: Best metric: 45.05</span>
+<span class="go">INFO: Best coordinate: [27, 14, 154]</span>
+<span class="go">INFO: Number of evaluations: 30</span>
+<span class="go">Best configuration:</span>
+<span class="go">CPU_FREQUENCY_MAX_CONTROL board 0 3700000000.0</span>
+<span class="go">CPU_UNCORE_FREQUENCY_MAX_CONTROL board 0 2400000000.0</span>
+<span class="go">CPU_UNCORE_FREQUENCY_MIN_CONTROL board 0 2400000000.0</span>
+<span class="go">CPU_POWER_LIMIT_CONTROL board 0 300.0</span>
+</pre></div>
+</div>
+<p>The resulting configuration file can be applied with:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>best_config.txt
+</pre></div>
+</div>
+</section>
+<section id="minimization-optimization">
+<h3>Minimization optimization<a class="headerlink" href="#minimization-optimization" title="Link to this heading"></a></h3>
+<p>Minimize execution time or energy consumption:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmopt<span class="w"> </span>--cpu-frequency<span class="w"> </span>package<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s2">&quot;Runtime: ([0-9.]+) seconds&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">40</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./timed_benchmark
+</pre></div>
+</div>
+</section>
+<section id="energy-efficiency-optimization">
+<h3>Energy efficiency optimization<a class="headerlink" href="#energy-efficiency-optimization" title="Link to this heading"></a></h3>
+<p>Find the most energy-efficient configuration:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;loop-count&quot;: 300,&quot;region&quot;: [&quot;dgemm&quot;],&quot;big-o&quot;: [0.1]}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>geopmbench.conf
+<span class="gp">$ </span>geopmopt<span class="w"> </span>--verbosity<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-uncore-frequency<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--cpu-power<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Elapsed time: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--efficiency<span class="w"> </span>cpu<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;/usr/bin/time -f&#39;Elapsed time: %e&#39; geopmbench geopmbench.conf |&amp; cat&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--efficiency</span></code> flag automatically measures power consumption and optimizes
+for operations per watt rather than raw performance.  In the above example the
+<cite>–minimize</cite> option is also provided and the reported metric is
+time-to-completion, so this will minimize total energy consumed.</p>
+</section>
+<section id="debug-mode-with-application-output">
+<h3>Debug mode with application output<a class="headerlink" href="#debug-mode-with-application-output" title="Link to this heading"></a></h3>
+<p>Use high verbosity and stdout logging for troubleshooting:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmopt<span class="w"> </span>--cpu-frequency<span class="w"> </span>package<span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>--metric-regex<span class="w"> </span><span class="s2">&quot;Performance: ([0-9.]+)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>--verbosity<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>--print-stdout<span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>--trials<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>--<span class="w"> </span>./debug_app
+</pre></div>
+</div>
+<p>This shows detailed optimization progress and application output to help
+debug metric extraction issues.</p>
+</section>
+<section id="gpu-optimization">
+<h3>GPU optimization<a class="headerlink" href="#gpu-optimization" title="Link to this heading"></a></h3>
+<p>Optimize GPU parameters for machine learning workloads:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmopt<span class="w"> </span>--gpu-frequency<span class="w"> </span>gpu<span class="w"> </span>--gpu-power<span class="w"> </span>gpu<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s2">&quot;Training speed: ([0-9.]+) samples/sec&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--application-timeout<span class="w"> </span><span class="m">600</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>python<span class="w"> </span>train_model.py
+</pre></div>
+</div>
+</section>
+<section id="complex-multi-dimensional-optimization">
+<h3>Complex multi-dimensional optimization<a class="headerlink" href="#complex-multi-dimensional-optimization" title="Link to this heading"></a></h3>
+<p>Optimize across all available control dimensions:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmopt<span class="w"> </span>--cpu-frequency<span class="w"> </span>package<span class="w"> </span>--cpu-power<span class="w"> </span>package<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--gpu-frequency<span class="w"> </span>gpu<span class="w"> </span>--board-power<span class="w"> </span>board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s2">&quot;Overall score: ([0-9.]+)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--n-initial-points<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--random-seed<span class="w"> </span><span class="m">123</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./comprehensive_benchmark
+</pre></div>
+</div>
+</section>
+</section>
+<section id="metric-extraction">
+<h2>Metric Extraction<a class="headerlink" href="#metric-extraction" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">--metric-regex</span></code> option uses Python regular expressions to extract
+performance metrics from application output. The regex must capture the
+numeric value in a parenthesized group.</p>
+<p>Valid regex examples:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;GFLOPS: ([0-9.]+)&quot;                    # Floating point after &quot;GFLOPS: &quot;
+&quot;Time: ([0-9]+) seconds&quot;               # Integer time value
+&quot;Score: ([0-9]*\.?[0-9]+)&quot;             # Decimal with optional point
+&quot;Throughput: ([0-9.]+e[+-]?[0-9]+)&quot;    # Scientific notation
+&quot;Performance: ([0-9,]+\.?[0-9]*)&quot;      # Numbers with commas
+</pre></div>
+</div>
+<p>The extracted value is automatically converted to a floating-point number
+for optimization.</p>
+</section>
+<section id="optimization-algorithm">
+<h2>Optimization Algorithm<a class="headerlink" href="#optimization-algorithm" title="Link to this heading"></a></h2>
+<p>The tool uses Gaussian Process-based Bayesian optimization from scikit-optimize:</p>
+<p><strong>Gaussian Process Model:</strong> Learns a probabilistic model of the objective
+function from previous evaluations.</p>
+<p><strong>Acquisition Function:</strong> Uses Expected Improvement (EI) to balance exploration
+of uncertain regions with exploitation of promising areas.</p>
+<p><strong>Initial Sampling:</strong> Starts with random evaluations to build initial model data.</p>
+<p><strong>Convergence:</strong> Iteratively refines the model and selects the most promising
+configurations to evaluate next.</p>
+<p>This approach is much more efficient than grid search or random search,
+especially for expensive function evaluations.</p>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>The optimizer handles various failure scenarios:</p>
+<p><strong>Application Timeouts:</strong> Applications exceeding <code class="docutils literal notranslate"><span class="pre">--application-timeout</span></code> are
+terminated and receive a penalty score.</p>
+<p><strong>Configuration Errors:</strong> Invalid control parameters are detected early using
+the GEOPM PIO interface.</p>
+<p><strong>Regex Failures:</strong> Missing or invalid metric patterns are reported with
+suggestions for debugging.</p>
+<p><strong>Application Failures:</strong> Non-zero exit codes and stderr output are captured
+and logged.</p>
+<p><strong>Optimization Failures:</strong> Issues with the Bayesian optimization algorithm
+are reported with diagnostic information.</p>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<p><strong>Start Small:</strong> Begin with 20-30 trials to validate your setup before running
+longer optimizations.</p>
+<p><strong>Validate Metrics:</strong> Test your regex pattern on sample application output
+before starting optimization.</p>
+<p><strong>Choose Appropriate Domains:</strong> Select control domains that have measurable
+impact on your application’s performance.</p>
+<p><strong>Monitor Progress:</strong> Use verbosity level 2 or higher to watch optimization
+convergence.</p>
+<p><strong>Set Reasonable Timeouts:</strong> Allow enough time for application execution but
+prevent runaway processes.</p>
+<p><strong>Use Seeds:</strong> Set <code class="docutils literal notranslate"><span class="pre">--random-seed</span></code> for reproducible experiments and
+comparison studies.</p>
+<p><strong>Baseline First:</strong> Run your application without optimization to establish
+baseline performance metrics.</p>
+</section>
+<section id="integration">
+<h2>Integration<a class="headerlink" href="#integration" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> tool integrates with the broader GEOPM ecosystem:</p>
+<p><strong>ControlGrid Integration:</strong> Uses the same parameter space definition as
+<code class="docutils literal notranslate"><span class="pre">geopmgrid</span></code> for consistency.</p>
+<p><strong>GEOPM Service:</strong> Leverages the PIO interface for hardware control and
+energy measurement.</p>
+<p><strong>Configuration Output:</strong> Generates standard geopmwrite configurations that can
+be saved and reused.</p>
+<p><strong>Session Monitoring:</strong> Can be combined with <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> for detailed
+performance analysis during optimization.</p>
+<p><strong>GEOPM Runtime:</strong> When using the <code class="docutils literal notranslate"><span class="pre">--defer-write</span></code> option <code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> can be
+combined with <code class="docutils literal notranslate"><span class="pre">geopmlauch</span> <span class="pre">--geopm-init-control</span></code> to obtain per region metrics
+or distribute write commands across a multi-node allocation.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
+<a class="reference internal" href="geopm_pio.7.html"><span class="doc">geopm_pio(7)</span></a>,
+<a class="reference internal" href="geopmgrid.1.html"><span class="doc">geopmgrid(1)</span></a>,
+<a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a>,
+<a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a>,
+<a class="reference internal" href="geopmsession.1.html"><span class="doc">geopmsession(1)</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geopmlaunch.1.html" class="btn btn-neutral float-left" title="geopmlaunch(1) – application launch wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geopmread.1.html" class="btn btn-neutral float-right" title="geopmread(1) – query platform information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2025 Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
