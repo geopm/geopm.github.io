@@ -132,6 +132,7 @@ best. If computation on a given node is heterogeneous (i.e. some CPUs are given
 more work or more critical work than others), SST features are likely to work
 best.</p>
 </section>
+<hr class="docutils" />
 <section id="linux-frequency-drivers">
 <h2>Linux Frequency Drivers<a class="headerlink" href="#linux-frequency-drivers" title="Link to this heading"></a></h2>
 <p>Linux CPU driver information can be found using <code class="docutils literal notranslate"><span class="pre">cpupower</span></code> as shown in the
@@ -164,6 +165,7 @@ systems that support that feature. The <code class="docutils literal notranslate
 to adhere to GEOPM frequency decisions. The <code class="docutils literal notranslate"><span class="pre">powersave</span></code> governor tends to
 lower CPU frequency when cores are running idle.</p>
 </section>
+<hr class="docutils" />
 <section id="direct-frequency-requests">
 <h2>Direct Frequency Requests<a class="headerlink" href="#direct-frequency-requests" title="Link to this heading"></a></h2>
 <p>This is the most straightforward mechanism for selecting a specific frequency.</p>
@@ -182,34 +184,38 @@ no guarantee that the specified frequencies will be achieved, as the system may
 be limited by hardware constraints.</p>
 <section id="gpu-frequency">
 <h3>GPU Frequency<a class="headerlink" href="#gpu-frequency" title="Link to this heading"></a></h3>
-<p>Similar to CPU uncore frequency, GPU frequencies are specified via a min and max.
-Some hardware has underlying logic that require
+<p>Similar to CPU uncore frequency, GPU frequencies are specified via a min and max.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some hardware has underlying logic that requires
 <code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MIN_CONTROL</span></code> to always be less than
 <code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MAX_CONTROL</span></code>. If you try to set the min control greater
 than the max or the max control less than the min, it will result in a failure.
 To avoid this issue, use the batch interface on geopmwrite.</p>
+</div>
 <p>Example: Set GPU 0 frequency to 1.0 GHz</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MAX_CONTROL gpu 0 1e9\</span>
-<span class="s2">           \nGPU_CORE_FREQUENCY_MIN_CONTROL gpu 0 1e9&quot;</span><span class="se">\</span>
-<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-<span class="s2">&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL gpu 0 1e9 \n\</span>
+<span class="s2">           GPU_CORE_FREQUENCY_MAX_CONTROL gpu 0 1e9&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-
 </pre></div>
 </div>
 <p>Example: Let GPU 1 frequency float between 800 MHz and 1.2 GHz</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MAX_CONTROL gpu 1 8e8\</span>
-<span class="s2">           \nGPU_CORE_FREQUENCY_MIN_CONTROL gpu 1 1.2e9&quot;</span><span class="se">\</span>
-<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-<span class="s2">&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL gpu 1 8e8 \n\</span>
+<span class="s2">           GPU_CORE_FREQUENCY_MAX_CONTROL gpu 1 1.2e9&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-
 </pre></div>
 </div>
 <p>Example: Set all GPU frequencies to use the full frequency range.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL board 0\</span>
-<span class="s2">           `geopmread GPU_CORE_FREQUENCY_MIN_AVAIL board 0`\</span>
-<span class="s2">           \nGPU_CORE_FREQUENCY_MAX_CONTROL board 0\</span>
-<span class="s2">           `geopmread GPU_CORE_FREQUENCY_MAX_AVAIL board 0`&quot;</span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL board 0 \</span>
+<span class="s2">           </span><span class="k">$(</span>geopmread<span class="w"> </span>GPU_CORE_FREQUENCY_MIN_AVAIL<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="k">)</span><span class="s2"> \</span>
+<span class="s2">           \nGPU_CORE_FREQUENCY_MAX_CONTROL board 0 \</span>
+<span class="s2">           </span><span class="k">$(</span>geopmread<span class="w"> </span>GPU_CORE_FREQUENCY_MAX_AVAIL<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-
 </pre></div>
 </div>
 </section>
 </section>
+<hr class="docutils" />
 <section id="intel-hardware-p-states-hwp">
 <h2>Intel Hardware P-States (HWP)<a class="headerlink" href="#intel-hardware-p-states-hwp" title="Link to this heading"></a></h2>
 <p>Users of Intel Hardware P-States (HWP) can set per-CPU or per-socket hints,
@@ -264,6 +270,7 @@ $<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<s
 </div>
 </section>
 </section>
+<hr class="docutils" />
 <section id="intel-speed-select-technology-sst">
 <h2>Intel Speed Select Technology (SST)<a class="headerlink" href="#intel-speed-select-technology-sst" title="Link to this heading"></a></h2>
 <p>Intel Speed Select Technology (SST) includes a multitude of features for
