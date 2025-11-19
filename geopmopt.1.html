@@ -188,12 +188,31 @@
 <h1>geopmopt(1) – Bayesian optimization for GEOPM control parameters<a class="headerlink" href="#geopmopt-1-bayesian-optimization-for-geopm-control-parameters" title="Link to this heading"></a></h1>
 <section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage:<span class="w"> </span>geopmopt<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>--cpu-frequency<span class="w"> </span>CPU_FREQUENCY_DOMAIN<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage:<span class="w"> </span>geopmopt<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-frequency<span class="w"> </span>CPU_FREQUENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-frequency-min<span class="w"> </span>CPU_FREQUENCY_MIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-frequency-max<span class="w"> </span>CPU_FREQUENCY_MAX<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-frequency-step<span class="w"> </span>CPU_FREQUENCY_STEP<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--cpu-uncore-frequency<span class="w"> </span>CPU_UNCORE_FREQUENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-uncore-frequency-min<span class="w"> </span>CPU_UNCORE_FREQUENCY_MIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-uncore-frequency-max<span class="w"> </span>CPU_UNCORE_FREQUENCY_MAX<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-uncore-frequency-step<span class="w"> </span>CPU_UNCORE_FREQUENCY_STEP<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--cpu-power<span class="w"> </span>CPU_POWER_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-power-min<span class="w"> </span>CPU_POWER_MIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-power-max<span class="w"> </span>CPU_POWER_MAX<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--cpu-power-step<span class="w"> </span>CPU_POWER_STEP<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--gpu-frequency<span class="w"> </span>GPU_FREQUENCY_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-frequency-min<span class="w"> </span>GPU_FREQUENCY_MIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-frequency-max<span class="w"> </span>GPU_FREQUENCY_MAX<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-frequency-step<span class="w"> </span>GPU_FREQUENCY_STEP<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--gpu-power<span class="w"> </span>GPU_POWER_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-power-min<span class="w"> </span>GPU_POWER_MIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-power-max<span class="w"> </span>GPU_POWER_MAX<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--gpu-power-step<span class="w"> </span>GPU_POWER_STEP<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--board-power<span class="w"> </span>BOARD_POWER_DOMAIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--board-power-min<span class="w"> </span>BOARD_POWER_MIN<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--board-power-max<span class="w"> </span>BOARD_POWER_MAX<span class="o">]</span>
+<span class="w">                </span><span class="o">[</span>--board-power-step<span class="w"> </span>BOARD_POWER_STEP<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--trials<span class="w"> </span>TRIALS<span class="o">]</span><span class="w"> </span><span class="o">[</span>--n-initial-points<span class="w"> </span>N_INITIAL_POINTS<span class="o">]</span>
 <span class="w">                </span>--metric-regex<span class="w"> </span>METRIC_REGEX<span class="w"> </span><span class="o">[</span>--minimize<span class="o">]</span><span class="w"> </span><span class="o">[</span>--random-seed<span class="w"> </span>RANDOM_SEED<span class="o">]</span>
 <span class="w">                </span><span class="o">[</span>--application-timeout<span class="w"> </span>APPLICATION_TIMEOUT<span class="o">]</span>
@@ -273,26 +292,93 @@ functionality: <code class="docutils literal notranslate"><span class="pre">pyth
 domain. The optimizer will explore different CPU frequency settings to
 find optimal performance.</p>
 </dd>
+<dt><kbd><span class="option">--cpu-frequency-min <var>CPU_FREQUENCY_MIN</var></span></kbd></dt>
+<dd><p id="cpu-frequency-min-option">Override the automatically detected CPU frequency minimum before creating the
+optimization grid. This narrows the candidate settings explored by the optimizer.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-frequency-max <var>CPU_FREQUENCY_MAX</var></span></kbd></dt>
+<dd><p id="cpu-frequency-max-option">Override the automatically detected CPU frequency maximum before creating the
+optimization grid. This narrows the candidate settings explored by the optimizer.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-frequency-step <var>CPU_FREQUENCY_STEP</var></span></kbd></dt>
+<dd><p id="cpu-frequency-step-option">Override the step size used to enumerate CPU frequency settings. This controls
+the resolution of the optimization grid.</p>
+</dd>
 <dt><kbd><span class="option">--cpu-uncore-frequency <var>CPU_UNCORE_FREQUENCY_DOMAIN</var></span></kbd></dt>
 <dd><p id="cpu-uncore-frequency-option">Include CPU uncore frequency control in the optimization space. Useful
 for memory-intensive applications where uncore frequency affects performance.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-uncore-frequency-min <var>CPU_UNCORE_FREQUENCY_MIN</var></span></kbd></dt>
+<dd><p id="cpu-uncore-frequency-min-option">Override the automatically detected minimum for CPU uncore frequency when
+constructing the optimization grid.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-uncore-frequency-max <var>CPU_UNCORE_FREQUENCY_MAX</var></span></kbd></dt>
+<dd><p id="cpu-uncore-frequency-max-option">Override the automatically detected maximum for CPU uncore frequency when
+constructing the optimization grid.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-uncore-frequency-step <var>CPU_UNCORE_FREQUENCY_STEP</var></span></kbd></dt>
+<dd><p id="cpu-uncore-frequency-step-option">Override the step size used to enumerate CPU uncore frequency settings.</p>
 </dd>
 <dt><kbd><span class="option">--cpu-power <var>CPU_POWER_DOMAIN</var></span></kbd></dt>
 <dd><p id="cpu-power-option">Include CPU power limit control in the optimization space. Allows the
 optimizer to find optimal power-performance trade-offs.</p>
 </dd>
+<dt><kbd><span class="option">--cpu-power-min <var>CPU_POWER_MIN</var></span></kbd></dt>
+<dd><p id="cpu-power-min-option">Override the automatically detected minimum CPU power limit before the
+optimization grid is created.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-power-max <var>CPU_POWER_MAX</var></span></kbd></dt>
+<dd><p id="cpu-power-max-option">Override the automatically detected maximum CPU power limit before the
+optimization grid is created.</p>
+</dd>
+<dt><kbd><span class="option">--cpu-power-step <var>CPU_POWER_STEP</var></span></kbd></dt>
+<dd><p id="cpu-power-step-option">Override the step size used to enumerate CPU power limit settings.</p>
+</dd>
 <dt><kbd><span class="option">--gpu-frequency <var>GPU_FREQUENCY_DOMAIN</var></span></kbd></dt>
 <dd><p id="gpu-frequency-option">Include GPU frequency control in the optimization space for GPU-accelerated
 applications.</p>
 </dd>
+<dt><kbd><span class="option">--gpu-frequency-min <var>GPU_FREQUENCY_MIN</var></span></kbd></dt>
+<dd><p id="gpu-frequency-min-option">Override the automatically detected minimum GPU frequency prior to building
+the optimization grid.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-frequency-max <var>GPU_FREQUENCY_MAX</var></span></kbd></dt>
+<dd><p id="gpu-frequency-max-option">Override the automatically detected maximum GPU frequency prior to building
+the optimization grid.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-frequency-step <var>GPU_FREQUENCY_STEP</var></span></kbd></dt>
+<dd><p id="gpu-frequency-step-option">Override the step size used to enumerate GPU frequency settings.</p>
+</dd>
 <dt><kbd><span class="option">--gpu-power <var>GPU_POWER_DOMAIN</var></span></kbd></dt>
 <dd><p id="gpu-power-option">Include GPU power limit control in the optimization space.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-power-min <var>GPU_POWER_MIN</var></span></kbd></dt>
+<dd><p id="gpu-power-min-option">Override the automatically detected minimum GPU power limit before the
+optimization grid is created.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-power-max <var>GPU_POWER_MAX</var></span></kbd></dt>
+<dd><p id="gpu-power-max-option">Override the automatically detected maximum GPU power limit before the
+optimization grid is created.</p>
+</dd>
+<dt><kbd><span class="option">--gpu-power-step <var>GPU_POWER_STEP</var></span></kbd></dt>
+<dd><p id="gpu-power-step-option">Override the step size used to enumerate GPU power limit settings.</p>
 </dd>
 <dt><kbd><span class="option">--board-power <var>board</var></span></kbd></dt>
 <dd><p id="board-power-option">Include system-level power limit control in the optimization space for
 comprehensive power management. The only valid domain for this option is
 <code class="docutils literal notranslate"><span class="pre">board</span></code> and this option is only available on some platforms that support
 the <code class="docutils literal notranslate"><span class="pre">BOARD_POWER_LIMIT_CONTROL</span></code> PlatformIO control.</p>
+</dd>
+<dt><kbd><span class="option">--board-power-min <var>BOARD_POWER_MIN</var></span></kbd></dt>
+<dd><p id="board-power-min-option">Override the automatically detected minimum board-level power limit before
+the optimization grid is created.</p>
+</dd>
+<dt><kbd><span class="option">--board-power-max <var>BOARD_POWER_MAX</var></span></kbd></dt>
+<dd><p id="board-power-max-option">Override the automatically detected maximum board-level power limit before
+the optimization grid is created.</p>
+</dd>
+<dt><kbd><span class="option">--board-power-step <var>BOARD_POWER_STEP</var></span></kbd></dt>
+<dd><p id="board-power-step-option">Override the step size used to enumerate board-level power settings.</p>
 </dd>
 </dl>
 </section>
