@@ -188,9 +188,10 @@
 <section id="synopsis">
 <h2>Synopsis<a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage:<span class="w"> </span>geopmsession<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>-t<span class="w"> </span>TIME<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PERIOD<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pid<span class="w"> </span>PID<span class="o">]</span>
-<span class="w">                    </span><span class="o">[</span>--print-header<span class="w"> </span><span class="p">|</span><span class="w"> </span>-n<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span>DELIMITER<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>REPORT_OUT<span class="o">]</span>
-<span class="w">                    </span><span class="o">[</span>-o<span class="w"> </span>TRACE_OUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable-mpi<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="w"> </span>REPORT_FORMAT<span class="o">]</span>
-<span class="w">                    </span><span class="o">[</span>-s<span class="w"> </span>REPORT_SAMPLES<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>CONFIG_PATH<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>--print-header<span class="w"> </span><span class="p">|</span><span class="w"> </span>-n<span class="o">]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span>DELIMITER<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>-r<span class="w"> </span>REPORT_OUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>TRACE_OUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="w"> </span>REPORT_FORMAT<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>-s<span class="w"> </span>REPORT_SAMPLES<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>CONFIG_PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>-a<span class="o">]</span>
+<span class="w">                    </span><span class="o">[</span>--daemon<span class="w"> </span>DAEMON_PID_FILE<span class="w"> </span><span class="p">|</span><span class="w"> </span>--enable-mpi<span class="o">]</span>
 <span class="w">                    </span><span class="o">[</span>--<span class="w"> </span>LAUNCH<span class="w"> </span>...<span class="o">]</span>
 </pre></div>
 </div>
@@ -280,11 +281,6 @@ hostname combined with the <code class="docutils literal notranslate"><span clas
 trace output to stdout when specifying <code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code>, this will result in
 an error.</p>
 </dd>
-<dt><kbd><span class="option">--enable-mpi</span></kbd></dt>
-<dd><p id="enablempi-option">Gather reports over MPI and write to a single file. Append hostname to trace
-output file if specified (trace output to stdout not permitted). Requires
-mpi4py module.</p>
-</dd>
 <dt><kbd><span class="option">-f</span>, <span class="option">--report-format</span></kbd></dt>
 <dd><p id="reporformat-report-format-option">Generate reports in the specified format, either “csv” or “yaml”.
 Default: “yaml”.</p>
@@ -298,6 +294,23 @@ in CSV format, each report is one line of the CSV output.</p>
 <dt><kbd><span class="option">-i</span>, <span class="option">--signal-config</span></kbd></dt>
 <dd><p id="configpath-config-path-option">Input file containing GEOPM signal requests, specify “-” to use
 standard input which is also the default.</p>
+</dd>
+<dt><kbd><span class="option">--daemon</span></kbd></dt>
+<dd><p id="daemon-daemon-pid-file-option">Run geopmsession as a background daemon. The daemon PID is written to the
+specified file after startup and the invoking command returns immediately
+once the session is ready. A signal configuration file must be provided
+(standard input is not supported when using this option). Using
+<code class="docutils literal notranslate"><span class="pre">--enable-mpi</span></code> is not allowed when specifying this option, consider
+using <code class="docutils literal notranslate"><span class="pre">--append-hostname</span></code> instead.</p>
+</dd>
+<dt><kbd><span class="option">-a</span>, <span class="option">--append-hostname</span></kbd></dt>
+<dd><p id="appendhostname-option">Append the local hostname to report and trace file paths when they are
+regular files. This keeps per-host outputs unique on shared filesystems.</p>
+</dd>
+<dt><kbd><span class="option">--enable-mpi</span></kbd></dt>
+<dd><p id="enablempi-option">Gather reports over MPI and write to a single file. Append hostname to trace
+output file if specified (trace output to stdout not permitted). Requires
+mpi4py module.</p>
 </dd>
 </dl>
 </section>
