@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Guide for Frequency Control &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/colon_scheme_fix.js?v=ca089989"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributor Guide" href="contrib.html" />
+    <link rel="prev" title="User Guide for GEOPM Runtime" href="runtime.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEOPM
+              <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_guides.html">User Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="service.html">User Guide for GEOPM Access Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client.html">User Guide for Client APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html">User Guide for GEOPM Runtime</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">User Guide for Frequency Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-frequency-drivers">Linux Frequency Drivers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-frequency-requests">Direct Frequency Requests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gpu-frequency">GPU Frequency</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#intel-hardware-p-states-hwp">Intel Hardware P-States (HWP)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-geopm-with-hwp">Using GEOPM with HWP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#intel-speed-select-technology-sst">Intel Speed Select Technology (SST)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="user_guides.html">User Guides</a></li>
+      <li class="breadcrumb-item active">User Guide for Frequency Control</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/frequency_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="user-guide-for-frequency-control">
+<h1>User Guide for Frequency Control<a class="headerlink" href="#user-guide-for-frequency-control" title="Link to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>GEOPM supports many interfaces to manipulate frequency. This guide provides
+specifics on each of these interfaces including suggested use, implementation
+nuances, and common pitfalls. Supported interfaces include:</p>
+<ul class="simple">
+<li><p>Direct frequency requests on CPU core/uncore and GPU</p></li>
+<li><p>Hardware P-States (HWP) on CPU</p></li>
+<li><p>Speed Select Technology - Core Priority (SST-CP) and Turbo Frequency (SST-TF)
+on Intel CPUs ICX+</p></li>
+</ul>
+<p>GEOPM frequency decisions interact with the OS frequency drivers. This
+interaction is detailed below. At a high level, frequency drivers may include
+settings to drive frequency with the objective of achieving greater performance
+or to lower power consumption, while other frequency driver settings may adhere
+more strictly to user frequency requests. The interaction between driver and
+GEOPM-driven frequency setting will vary depending upon the interface used.
+Generally speaking, if a <code class="docutils literal notranslate"><span class="pre">userspace</span></code> governor is available on a given driver,
+it is more likely to play nicely with GEOPM.</p>
+<p>The ideal mechanism of frequency control depends of course on the use case and
+priorities of the user. If performance repeatability is critical or the user
+knows of ideal frequency settings, direct frequency requests are likely ideal.
+If the user wishes to leverage as much of the power headroom as possible, SST
+or HWP interfaces are useful. If the user also wishes the system to steer power
+intelligently between cores and uncore based on internal telemetry, HWP will work
+best. If computation on a given node is heterogeneous (i.e. some CPUs are given
+more work or more critical work than others), SST features are likely to work
+best.</p>
+</section>
+<hr class="docutils" />
+<section id="linux-frequency-drivers">
+<h2>Linux Frequency Drivers<a class="headerlink" href="#linux-frequency-drivers" title="Link to this heading"></a></h2>
+<p>Linux CPU driver information can be found using <code class="docutils literal notranslate"><span class="pre">cpupower</span></code> as shown in the
+example below. If the driver has a <code class="docutils literal notranslate"><span class="pre">userspace</span></code> CPU governor available, that will
+generally not interfere with GEOPM frequency decisions.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cpupower<span class="w"> </span>frequency-info
+analyzing<span class="w"> </span>CPU<span class="w"> </span><span class="m">0</span>:
+<span class="w">  </span>driver:<span class="w"> </span>acpi-cpufreq
+<span class="w">  </span>CPUs<span class="w"> </span>which<span class="w"> </span>run<span class="w"> </span>at<span class="w"> </span>the<span class="w"> </span>same<span class="w"> </span>hardware<span class="w"> </span>frequency:<span class="w"> </span><span class="m">0</span>
+<span class="w">  </span>CPUs<span class="w"> </span>which<span class="w"> </span>need<span class="w"> </span>to<span class="w"> </span>have<span class="w"> </span>their<span class="w"> </span>frequency<span class="w"> </span>coordinated<span class="w"> </span>by<span class="w"> </span>software:<span class="w"> </span><span class="m">0</span>
+<span class="w">  </span>maximum<span class="w"> </span>transition<span class="w"> </span>latency:<span class="w"> </span><span class="m">10</span>.0<span class="w"> </span>us
+<span class="w">  </span>hardware<span class="w"> </span>limits:<span class="w"> </span><span class="m">1000</span><span class="w"> </span>MHz<span class="w"> </span>-<span class="w"> </span><span class="m">2</span>.10<span class="w"> </span>GHz
+<span class="w">  </span>available<span class="w"> </span>frequency<span class="w"> </span>steps:<span class="w">  </span><span class="m">2</span>.10<span class="w"> </span>GHz,<span class="w"> </span><span class="m">2</span>.10<span class="w"> </span>GHz,<span class="w"> </span><span class="m">2</span>.00<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.90<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.80<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.70<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.60<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.50<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.40<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.30<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.20<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1</span>.10<span class="w"> </span>GHz,<span class="w"> </span><span class="m">1000</span><span class="w"> </span>MHz
+<span class="w">  </span>available<span class="w"> </span>cpufreq<span class="w"> </span>governors:<span class="w"> </span>ondemand<span class="w"> </span>performance<span class="w"> </span>schedutil
+<span class="w">  </span>current<span class="w"> </span>policy:<span class="w"> </span>frequency<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>within<span class="w"> </span><span class="m">1000</span><span class="w"> </span>MHz<span class="w"> </span>and<span class="w"> </span><span class="m">2</span>.10<span class="w"> </span>GHz.
+<span class="w">                  </span>The<span class="w"> </span>governor<span class="w"> </span><span class="s2">&quot;performance&quot;</span><span class="w"> </span>may<span class="w"> </span>decide<span class="w"> </span>which<span class="w"> </span>speed<span class="w"> </span>to<span class="w"> </span>use
+<span class="w">                  </span>within<span class="w"> </span>this<span class="w"> </span>range.
+<span class="w">  </span>current<span class="w"> </span>CPU<span class="w"> </span>frequency:<span class="w"> </span>Unable<span class="w"> </span>to<span class="w"> </span>call<span class="w"> </span>hardware
+<span class="w">  </span>current<span class="w"> </span>CPU<span class="w"> </span>frequency:<span class="w"> </span><span class="m">1</span>.02<span class="w"> </span>GHz<span class="w"> </span><span class="o">(</span>asserted<span class="w"> </span>by<span class="w"> </span>call<span class="w"> </span>to<span class="w"> </span>kernel<span class="o">)</span>
+<span class="w">  </span>boost<span class="w"> </span>state<span class="w"> </span>support:
+<span class="w">    </span>Supported:<span class="w"> </span>yes
+<span class="w">    </span>Active:<span class="w"> </span>yes
+</pre></div>
+</div>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">userspace</span></code> or <code class="docutils literal notranslate"><span class="pre">performance</span></code> governor, the <code class="docutils literal notranslate"><span class="pre">acpi-cpufreq</span></code>
+driver will not interfere with frequency decisions made by GEOPM. Other
+governors may interfere with GEOPM frequency settings.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">intel_pstate</span></code> driver allows users access to <code class="docutils literal notranslate"><span class="pre">Hardware</span> <span class="pre">P-States</span></code> on
+systems that support that feature. The <code class="docutils literal notranslate"><span class="pre">performance</span></code> governor is more likely
+to adhere to GEOPM frequency decisions. The <code class="docutils literal notranslate"><span class="pre">powersave</span></code> governor tends to
+lower CPU frequency when cores are running idle.</p>
+</section>
+<hr class="docutils" />
+<section id="direct-frequency-requests">
+<h2>Direct Frequency Requests<a class="headerlink" href="#direct-frequency-requests" title="Link to this heading"></a></h2>
+<p>This is the most straightforward mechanism for selecting a specific frequency.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>core<span class="w"> </span><span class="m">0</span>
+<span class="m">3400000000</span>
+
+$<span class="w"> </span>geopmwrite<span class="w"> </span>MSR::PERF_CTL:FREQ<span class="w"> </span>core<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span>.2e9
+$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>core<span class="w"> </span><span class="m">0</span>
+<span class="m">1200000000</span>
+</pre></div>
+</div>
+<p>To set CPU uncore frequency, both min and max can be specified. To fix
+uncore frequency to a specific value, set <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_MAX_CONTROL</span></code>
+and <code class="docutils literal notranslate"><span class="pre">CPU_UNCORE_FREQUENCY_MIN_CONTROL</span></code> to the same value. Note that there is
+no guarantee that the specified frequencies will be achieved, as the system may
+be limited by hardware constraints.</p>
+<section id="gpu-frequency">
+<h3>GPU Frequency<a class="headerlink" href="#gpu-frequency" title="Link to this heading"></a></h3>
+<p>Similar to CPU uncore frequency, GPU frequencies are specified via a min and max.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some hardware has underlying logic that requires
+<code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MIN_CONTROL</span></code> to always be less than
+<code class="docutils literal notranslate"><span class="pre">GPU_CORE_FREQUENCY_MAX_CONTROL</span></code>. If you try to set the min control greater
+than the max or the max control less than the min, it will result in a failure.
+To avoid this issue, use the batch interface on geopmwrite.</p>
+</div>
+<p>Example: Set GPU 0 frequency to 1.0 GHz</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL gpu 0 1e9 \n\</span>
+<span class="s2">           GPU_CORE_FREQUENCY_MAX_CONTROL gpu 0 1e9&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-
+</pre></div>
+</div>
+<p>Example: Let GPU 1 frequency float between 800 MHz and 1.2 GHz</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL gpu 1 8e8 \n\</span>
+<span class="s2">           GPU_CORE_FREQUENCY_MAX_CONTROL gpu 1 1.2e9&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-
+</pre></div>
+</div>
+<p>Example: Set all GPU frequencies to use the full frequency range.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;GPU_CORE_FREQUENCY_MIN_CONTROL board 0 \</span>
+<span class="s2">           </span><span class="k">$(</span>geopmread<span class="w"> </span>GPU_CORE_FREQUENCY_MIN_AVAIL<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="k">)</span><span class="s2"> \</span>
+<span class="s2">           \nGPU_CORE_FREQUENCY_MAX_CONTROL board 0 \</span>
+<span class="s2">           </span><span class="k">$(</span>geopmread<span class="w"> </span>GPU_CORE_FREQUENCY_MAX_AVAIL<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span><span class="p">|</span><span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>-
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="intel-hardware-p-states-hwp">
+<h2>Intel Hardware P-States (HWP)<a class="headerlink" href="#intel-hardware-p-states-hwp" title="Link to this heading"></a></h2>
+<p>Users of Intel Hardware P-States (HWP) can set per-CPU or per-socket hints,
+like desired energy-perf bias and suggested min/max frequency range. These
+hints are ingested along with hardware telemetry and used to allow the CPU
+to steer its own frequency setting dynamically. This allows the system to
+respond more rapidly than the OS could to changes in workload behavior while
+maintaining power requirements and desired user priority.</p>
+<p>The main control mechanism with HWP is the per-core
+<code class="docutils literal notranslate"><span class="pre">ENERGY_PERFORMANCE_PREFERENCE</span></code> or EPP. This is a value 0-15, where 0 is
+higher performance and 15 is higher energy efficiency. The user can also
+specify a frequency range per-core. Typically, a core with an EPP of 0 will
+try to reach the higher end of the frequency range while a core with an EPP of
+15 will try to remain at the lower end of its frequency range. If no frequency
+range is specified, the core will have access to the full frequency range. Note
+that setting min and max frequencies does not guarantee performance. Cores are still bound by
+power/thermal/current limits and can be restricted beyond the minimum frequency
+if required to do so by hardware limitations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">HWP_CAPABILITIES</span></code> includes frequencies of interest. The full frequency range
+is [<code class="docutils literal notranslate"><span class="pre">LOWEST_PERFORMANCE</span></code>, <code class="docutils literal notranslate"><span class="pre">HIGHEST_PERFORMANCE</span></code>], and
+<code class="docutils literal notranslate"><span class="pre">GUARANTEED_PERFORMANCE</span></code> is the frequency that all cores should be able to
+reach simultaneously when running a typical power-hungry workload.</p>
+<section id="using-geopm-with-hwp">
+<h3>Using GEOPM with HWP<a class="headerlink" href="#using-geopm-with-hwp" title="Link to this heading"></a></h3>
+<p>Enabling HWP on a system cannot be done using GEOPM. This is because a system
+reset is required to disable it once it has been enabled. Thus, it interferes
+with GEOPM’s save/restore capabilities.</p>
+<p>The instructions below assume that the <code class="docutils literal notranslate"><span class="pre">intel_pstate</span></code> driver is active.</p>
+<p>To check the status of HWP, use <code class="docutils literal notranslate"><span class="pre">HWP_ENABLE</span></code>. A return value of 0 indicates
+HWP is disabled.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>geopmread<span class="w"> </span>MSR::PM_ENABLE:HWP_ENABLE<span class="w"> </span>package<span class="w"> </span><span class="m">0</span>
+<span class="m">1</span>
+</pre></div>
+</div>
+<p>Set a core’s HWP parameters (and check frequency to see the change reflected).
+Here we will try to make core 0 be more power hungry and core 4 be more energy
+efficient.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="c1"># Check core 0 and 4 frequency (running idle)</span>
+$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>cpu<span class="w"> </span><span class="m">0</span>
+<span class="m">1000000000</span>
+$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>cpu<span class="w"> </span><span class="m">4</span>
+<span class="m">1000000000</span>
+$<span class="w"> </span>geopmwrite<span class="w"> </span>MSR::HWP_REQUEST:ENERGY_PERFORMANCE_PREFERENCE<span class="w"> </span>cpu<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">15</span>
+$<span class="w"> </span>geopmwrite<span class="w"> </span>MSR::HWP_REQUEST:MAXIMUM_PERFORMANCE<span class="w"> </span>cpu<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">1</span>.4e9
+$<span class="w"> </span>geopmwrite<span class="w"> </span>MSR::HWP_REQUEST:ENERGY_PERFORMANCE_PREFERENCE<span class="w"> </span>cpu<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+$<span class="w"> </span>geopmwrite<span class="w"> </span>MSR::HWP_REQUEST:MINIMUM_PERFORMANCE<span class="w"> </span>cpu<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">2</span>.2e9
+$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>cpu<span class="w"> </span><span class="m">0</span>
+<span class="m">2200000000</span>
+$<span class="w"> </span>geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>cpu<span class="w"> </span><span class="m">4</span>
+<span class="m">1000000000</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="intel-speed-select-technology-sst">
+<h2>Intel Speed Select Technology (SST)<a class="headerlink" href="#intel-speed-select-technology-sst" title="Link to this heading"></a></h2>
+<p>Intel Speed Select Technology (SST) includes a multitude of features for
+heterogeneous power steering on CPUs. GEOPM supports SST-CP (Core Priority) and
+SST-TF (Turbo Frequency). SST-CP is used to assign cores to different priority
+buckets numbered 0-3, where 0 is highest priority and 3 is lowest priority for power
+distribution. This feature uses similar controls as HWP. If the power budget is
+exceeded, the frequency of lower priority cores is decreased more than the frequency
+of higher priority cores.</p>
+<p>SST-TF allows cores in high priority buckets 0/1 to achieve higher turbo
+frequencies than is typically allowed by reducing the maximum turbo frequencies
+of the lower priority cores. That way, even in power constrained scenarios
+where all cores are active, cores with high priority work can be granted a
+higher proportion of the power budget. This is achieved without violating any
+hardware constraints, unlike overclocking.</p>
+<p>These features are described in detail in the
+<a class="reference internal" href="geopm_pio_sst.7.html"><span class="doc">geopm_pio_sst(7)</span></a> man page.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="runtime.html" class="btn btn-neutral float-left" title="User Guide for GEOPM Runtime" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contrib.html" class="btn btn-neutral float-right" title="Contributor Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2025 Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
