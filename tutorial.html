@@ -70,6 +70,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#video-demo-using-geopmwrite">Video Demo: Using <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#dart-optimize-control-settings">🎯 Optimize Control Settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inspecting-the-search-space">Inspecting the Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minimizing-runtime">Minimizing Runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tuning-several-controls-and-saving-the-result">Tuning Several Controls and Saving the Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizing-an-application-figure-of-merit">Optimizing an Application Figure of Merit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizing-for-energy-and-efficiency">Optimizing for Energy and Efficiency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#composing-objectives-with-constraints">Composing Objectives with Constraints</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#straight-ruler-measure-performance">📏 Measure Performance</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-geopmlaunch-with-mpi-applications">Using <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code> with MPI Applications</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#profiling-applications-without-geopmlaunch">Profiling Applications without <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span></code></a></li>
@@ -1032,6 +1041,147 @@ at the <code class="docutils literal notranslate"><span class="pre">board</span>
 <section id="video-demo-using-geopmwrite">
 <h3>Video Demo: Using <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code><a class="headerlink" href="#video-demo-using-geopmwrite" title="Link to this heading"></a></h3>
 <video src="https://geopm.github.io/images/geopmwrite.webm" type="video/webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video><hr class="docutils" />
+</section>
+</section>
+<section id="dart-optimize-control-settings">
+<span id="tutorial-optimize-control-settings"></span><h2>🎯 Optimize Control Settings<a class="headerlink" href="#dart-optimize-control-settings" title="Link to this heading"></a></h2>
+<p>Reading telemetry and writing controls by hand answers the question “what does
+this setting do?”  The <a class="reference internal" href="geopmopt.1.html"><span class="doc">geopmopt</span></a> tool answers the follow-up
+question “which settings are best for <em>my</em> application?” automatically.  It uses
+Bayesian optimization to search a grid of GEOPM controls: for each trial it
+applies a candidate configuration to a scoped session (auto-reverted like every
+other control change), runs your application, scores an objective derived from
+the application’s output or from measured hardware signals, and uses the result
+to choose the next configuration to try.  When the search finishes it prints the
+best configuration in <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code> format so you can apply or save it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> builds on the optional <code class="docutils literal notranslate"><span class="pre">optimize</span></code> dependencies
+(<code class="docutils literal notranslate"><span class="pre">scikit-optimize</span></code> and <code class="docutils literal notranslate"><span class="pre">pyyaml</span></code>), which are not pulled in by a base
+<code class="docutils literal notranslate"><span class="pre">geopmdpy</span></code> install or by the OS packages. Install <code class="docutils literal notranslate"><span class="pre">geopmdpy</span></code> with the
+<code class="docutils literal notranslate"><span class="pre">optimize</span></code> extra, ideally into a personal virtual environment as described in
+<a class="reference internal" href="install.html#installing-client-tools-with-pip"><span class="std std-ref">Installing client tools with pip</span></a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;geopmdpy[optimize]&#39;</span>
+</pre></div>
+</div>
+<section id="inspecting-the-search-space">
+<h3>Inspecting the Search Space<a class="headerlink" href="#inspecting-the-search-space" title="Link to this heading"></a></h3>
+<p>Before optimizing, list the controls that can be swept and, for signal-based
+objectives, the metrics that can be measured:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Controls available as --sweep dimensions, with their detected ranges</span>
+$<span class="w"> </span>geopmopt<span class="w"> </span>--list-controls
+
+<span class="c1"># Reserved metrics plus any signals referenced by --metric</span>
+$<span class="w"> </span>geopmopt<span class="w"> </span>--list-metrics<span class="w"> </span>--metric<span class="w"> </span><span class="nv">power</span><span class="o">=</span>signal:CPU_POWER@board:mean
+</pre></div>
+</div>
+<p>Each <code class="docutils literal notranslate"><span class="pre">--sweep</span></code> dimension uses the <code class="docutils literal notranslate"><span class="pre">CONTROL[&#64;DOMAIN][=MIN:MAX:STEP]</span></code> grammar
+shared with <a class="reference internal" href="geopmgrid.1.html"><span class="doc">geopmgrid</span></a>, so <code class="docutils literal notranslate"><span class="pre">cpu-freq&#64;board</span></code> sweeps the CPU
+frequency cap over the whole board and <code class="docutils literal notranslate"><span class="pre">cpu-freq&#64;board=1.2GHz:3GHz:100MHz</span></code>
+narrows the range explored.</p>
+</section>
+<section id="minimizing-runtime">
+<h3>Minimizing Runtime<a class="headerlink" href="#minimizing-runtime" title="Link to this heading"></a></h3>
+<p>The simplest run sweeps a single control and optimizes wall-clock runtime.  With
+no <code class="docutils literal notranslate"><span class="pre">--metric-regex</span></code> the objective is the launch command’s total runtime, so
+the application does not need to print anything:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;loop-count&quot;: 300,&quot;region&quot;: [&quot;dgemm&quot;],&quot;big-o&quot;: [0.1]}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>geopmbench.conf
+$<span class="w"> </span>geopmopt<span class="w"> </span>--verbosity<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>geopmbench<span class="w"> </span>geopmbench.conf
+...
+INFO:<span class="w"> </span>Optimization<span class="w"> </span>completed!
+INFO:<span class="w"> </span>Best<span class="w"> </span>metric:<span class="w"> </span><span class="m">45</span>.81
+Best<span class="w"> </span>configuration:
+CPU_FREQUENCY_MAX_CONTROL<span class="w"> </span>board<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">2800000000</span>.0
+</pre></div>
+</div>
+<p>Higher <code class="docutils literal notranslate"><span class="pre">--trials</span></code> counts explore more configurations at the cost of more
+application runs; start with 20-30 to validate the setup.</p>
+</section>
+<section id="tuning-several-controls-and-saving-the-result">
+<h3>Tuning Several Controls and Saving the Result<a class="headerlink" href="#tuning-several-controls-and-saving-the-result" title="Link to this heading"></a></h3>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">--sweep</span></code> more than once to tune several controls jointly, and use
+<code class="docutils literal notranslate"><span class="pre">--output-file</span></code> to save the winning configuration for reuse:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--sweep<span class="w"> </span>uncore-freq@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--sweep<span class="w"> </span>cpu-power@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--output-file<span class="w"> </span>best_config.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>geopmbench<span class="w"> </span>geopmbench.conf
+
+<span class="c1"># Apply the saved configuration to the current session later</span>
+$<span class="w"> </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>best_config.txt
+</pre></div>
+</div>
+<p>Because the configuration is plain <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code> text, it can also be applied
+through <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span> <span class="pre">--geopm-init-control</span></code> for a whole job.</p>
+</section>
+<section id="optimizing-an-application-figure-of-merit">
+<h3>Optimizing an Application Figure of Merit<a class="headerlink" href="#optimizing-an-application-figure-of-merit" title="Link to this heading"></a></h3>
+<p>When the application prints a figure of merit, scrape it with a capturing
+regular expression.  The scraped value is maximized by default; add
+<code class="docutils literal notranslate"><span class="pre">--minimize</span></code> for a quantity that should be smaller, such as a reported time:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Maximize a throughput the application prints</span>
+$<span class="w"> </span>geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span>--sweep<span class="w"> </span>uncore-freq@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s1">&#39;GFLOPS: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./dgemm_bench.sh
+
+<span class="c1"># Minimize a runtime the application prints</span>
+$<span class="w"> </span>geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@package<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Runtime: ([0-9.]+) seconds&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--minimize<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">40</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./timed_benchmark
+</pre></div>
+</div>
+</section>
+<section id="optimizing-for-energy-and-efficiency">
+<h3>Optimizing for Energy and Efficiency<a class="headerlink" href="#optimizing-for-energy-and-efficiency" title="Link to this heading"></a></h3>
+<p>Add <code class="docutils literal notranslate"><span class="pre">--efficiency</span> <span class="pre">DOMAIN</span></code> to bring measured power into the objective from a
+<code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> energy trace.  With a <code class="docutils literal notranslate"><span class="pre">--metric-regex</span></code> the objective becomes
+the figure of merit per watt; with no regex it becomes total energy over the
+domain:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Maximize performance per watt over the cpu domain</span>
+$<span class="w"> </span>geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span>--sweep<span class="w"> </span>uncore-freq@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric-regex<span class="w"> </span><span class="s1">&#39;Throughput: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--efficiency<span class="w"> </span>cpu<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./throughput_app
+
+<span class="c1"># Minimize total cpu energy (no figure of merit needed)</span>
+$<span class="w"> </span>geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@package<span class="w"> </span>--sweep<span class="w"> </span>uncore-freq@package<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--efficiency<span class="w"> </span>cpu<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--trials<span class="w"> </span><span class="m">40</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./compute_kernel
+</pre></div>
+</div>
+</section>
+<section id="composing-objectives-with-constraints">
+<h3>Composing Objectives with Constraints<a class="headerlink" href="#composing-objectives-with-constraints" title="Link to this heading"></a></h3>
+<p>For finer control, the general objective interface names any number of metrics,
+selects one to optimize with <code class="docutils literal notranslate"><span class="pre">--maximize</span></code>/<code class="docutils literal notranslate"><span class="pre">--minimize</span> <span class="pre">NAME</span></code>, and adds
+feasibility <code class="docutils literal notranslate"><span class="pre">--constraint</span></code> bounds.  Metrics come from three providers:
+<code class="docutils literal notranslate"><span class="pre">regex:</span></code> (scraped from stdout), <code class="docutils literal notranslate"><span class="pre">signal:</span></code> (a GEOPM signal sampled with
+<code class="docutils literal notranslate"><span class="pre">geopmsession</span></code>), and <code class="docutils literal notranslate"><span class="pre">expr:</span></code> (arithmetic over previously named metrics).
+This maximizes a scraped figure of merit while holding measured CPU power and
+energy within bounds:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span>--sweep<span class="w"> </span>cpu-power@board<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric<span class="w"> </span><span class="nv">fom</span><span class="o">=</span>regex:<span class="s1">&#39;GFLOPS: ([0-9.]+)&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric<span class="w"> </span><span class="nv">power</span><span class="o">=</span>signal:CPU_POWER@board:mean<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--metric<span class="w"> </span><span class="nv">energy</span><span class="o">=</span>signal:CPU_ENERGY@board:delta<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--maximize<span class="w"> </span>fom<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--constraint<span class="w"> </span><span class="s1">&#39;power &lt;= 250W&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--constraint<span class="w"> </span><span class="s1">&#39;energy &lt;= 5000J&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--<span class="w"> </span>./app
+</pre></div>
+</div>
+<p>Configurations that violate a constraint are treated as infeasible, and the best
+<em>feasible</em> configuration is reported.  Use <code class="docutils literal notranslate"><span class="pre">--list-metrics</span></code> to confirm a signal
+is available and how it will be aggregated before committing to a long run.  The
+full option list, provider grammar, and legacy-flag equivalences are documented
+in <a class="reference internal" href="geopmopt.1.html"><span class="doc">geopmopt(1)</span></a>.</p>
+<hr class="docutils" />
 </section>
 </section>
 <section id="straight-ruler-measure-performance">

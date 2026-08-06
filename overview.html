@@ -54,6 +54,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#card-file-box-platform-topology">🗃️ Platform Topology</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#microscope-reading-telemetry">🔬 Reading Telemetry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gear-enact-hardware-based-settings">⚙️ Enact Hardware-based Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dart-optimize-control-settings">🎯 Optimize Control Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#straight-ruler-measure-performance">📏 Measure Performance</a></li>
 </ul>
 </li>
@@ -279,6 +280,40 @@ frequencies) safely and securely. See the section below for examples and the
 <div><ul class="simple">
 <li><p><a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite</span></a></p></li>
 <li><p>See the <a class="reference internal" href="tutorial.html#tutorial-enact-hardware-based-settings"><span class="std std-ref">Enact Hardware-based Settings section of the Tutorial</span></a> for example usage in Bash, C, C++, Python, and Golang..</p></li>
+</ul>
+</div></blockquote>
+</div>
+</section>
+<hr class="docutils" />
+<section id="dart-optimize-control-settings">
+<h2>🎯 Optimize Control Settings<a class="headerlink" href="#dart-optimize-control-settings" title="Link to this heading"></a></h2>
+<p>Rather than tuning controls by hand, GEOPM can search for the best settings for
+your application automatically. The <a class="reference internal" href="geopmopt.1.html"><span class="doc">geopmopt</span></a> tool uses
+Bayesian optimization to sweep a grid of controls (CPU/uncore/GPU frequency,
+power limits, and more), applies each candidate to a scoped session, runs your
+application, and reports the configuration that best optimizes your objective —
+runtime, energy, a scraped figure of merit, or a custom objective with
+feasibility constraints.</p>
+<p><strong>Example: Minimize an application’s runtime over CPU frequency</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Requires the optimize extra: python3 -m pip install &#39;geopmdpy[optimize]&#39;</span>
+geopmopt<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--verbosity<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--output-file<span class="w"> </span>best_config.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>--<span class="w"> </span>./my_workload.sh
+
+<span class="c1"># Apply the winning configuration to the current session</span>
+geopmwrite<span class="w"> </span>-f<span class="w"> </span>best_config.txt
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more information, see:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="geopmopt.1.html"><span class="doc">geopmopt</span></a></p></li>
+<li><p><a class="reference internal" href="install.html#installing-client-tools-with-pip"><span class="std std-ref">Installing client tools with pip</span></a> for setting up <code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> in a virtual environment.</p></li>
+<li><p>See the <a class="reference internal" href="tutorial.html#tutorial-optimize-control-settings"><span class="std std-ref">Optimize Control Settings section of the Tutorial</span></a> for a step-by-step walkthrough.</p></li>
 </ul>
 </div></blockquote>
 </div>

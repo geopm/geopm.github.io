@@ -57,6 +57,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#enable-the-geopm-access-service">Enable the GEOPM Access Service</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#guides-for-specialized-install">Guides for Specialized Install</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-client-tools-with-pip">Installing client tools with pip</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#install-latest-development-snapshot">Install latest development snapshot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#packaging-local-changes">Packaging local changes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installing-for-a-single-user">Installing for a single user</a></li>
@@ -113,6 +114,16 @@ GEOPM for all users of a system, either using the latest stable release of GEOPM
 or a development snapshot. The stable release packages are created as part of
 the Git repository tag/release process. The development snapshot packages are
 built by GEOPM’s GitHub CI process each time the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch is updated.</p>
+<p>These OS packages are the right choice for <strong>system administrators</strong> deploying
+the <a class="reference internal" href="service.html"><span class="doc">GEOPM Access Service</span></a> for all users of a system. The
+<code class="docutils literal notranslate"><span class="pre">geopmd</span></code> daemon runs as <code class="docutils literal notranslate"><span class="pre">root</span></code>, so it is installed from a stable, tagged
+release and deliberately omits the optional Python dependencies that only
+client-side tools require. <strong>Clients</strong> of an already-deployed Access Service who
+want to run tools such as <a class="reference internal" href="geopmopt.1.html"><span class="doc">geopmopt</span></a> – particularly on a
+system where they do not have administrative privileges – can instead install
+the <code class="docutils literal notranslate"><span class="pre">geopmdpy</span></code> Python package, which provides <code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> and the other
+client command-line tools, into a personal virtual environment with <code class="docutils literal notranslate"><span class="pre">pip</span></code>;
+see <a class="reference internal" href="#installing-client-tools-with-pip">Installing client tools with pip</a> below.</p>
 <p>GEOPM works with Intel GPUs when GEOPM is built with LevelZero support and
 NVIDIA GPUs when GEOPM is built with NVML support. Additional limited support
 for GPUs exists when the GPUs are visible in a Linux Direct Rendering Manager
@@ -819,6 +830,39 @@ signal names).</p>
 <p>There are other installation scenarios that are not covered on this page which
 may be preferred in certain circumstances. See links below to supporting
 documentation if these situations apply to you.</p>
+<section id="installing-client-tools-with-pip">
+<h3>Installing client tools with pip<a class="headerlink" href="#installing-client-tools-with-pip" title="Link to this heading"></a></h3>
+<p>The OS packages above install the root-owned <a class="reference internal" href="service.html"><span class="doc">GEOPM Access
+Service</span></a> daemon, which does not require the optional Python
+dependencies used by client tools. A <strong>client</strong> of an already-deployed Access
+Service – for example a user running <a class="reference internal" href="geopmopt.1.html"><span class="doc">geopmopt</span></a> – can install
+the <code class="docutils literal notranslate"><span class="pre">geopmdpy</span></code> Python package into a personal virtual environment instead.
+The <code class="docutils literal notranslate"><span class="pre">geopmdpy</span></code> package provides <code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> along with the <code class="docutils literal notranslate"><span class="pre">geopmread</span></code>,
+<code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code>, and <code class="docutils literal notranslate"><span class="pre">geopmsession</span></code> client tools. Installing it this way does
+not require administrative privileges, and it lets a client:</p>
+<ul class="simple">
+<li><p>pull in optional dependencies, such as the <code class="docutils literal notranslate"><span class="pre">optimize</span></code> extra that enables
+<code class="docutils literal notranslate"><span class="pre">geopmopt</span></code> (<code class="docutils literal notranslate"><span class="pre">scikit-optimize</span></code> and <code class="docutils literal notranslate"><span class="pre">pyyaml</span></code>); and</p></li>
+<li><p>run a development snapshot of the client tools on top of a stable, tagged
+Access Service release, so the root-owned daemon keeps executing vetted code
+while the client experiments with newer features.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and activate a virtual environment</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>geopm-venv
+<span class="nb">source</span><span class="w"> </span>geopm-venv/bin/activate
+
+<span class="c1"># Install the latest release of the client tools with the optimize extra</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;geopmdpy[optimize]&#39;</span>
+
+<span class="c1"># ...or install a development snapshot from the dev branch instead</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;geopmdpy[optimize] @ git+https://github.com/geopm/geopm.git#subdirectory=geopmdpy&#39;</span>
+</pre></div>
+</div>
+<p>Client tools installed this way communicate with whatever GEOPM Access Service
+is already running on the system; the virtual environment affects only the
+user-space client, not the <code class="docutils literal notranslate"><span class="pre">root</span></code>-owned daemon.</p>
+</section>
 <section id="install-latest-development-snapshot">
 <h3>Install latest development snapshot<a class="headerlink" href="#install-latest-development-snapshot" title="Link to this heading"></a></h3>
 <p>See the <a class="reference internal" href="install_rolling.html"><span class="doc">dev snapshot install guide</span></a> for instructions on
