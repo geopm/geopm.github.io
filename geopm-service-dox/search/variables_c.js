@@ -9,5 +9,6 @@ var searchData=
   ['source_5fsignal_6',['source_signal',['../structgeopm_1_1_sysfs_driver_1_1derived__signal__info__s.html#a1497f69b25cdcfe26e1fbb2c699ca834',1,'geopm::SysfsDriver::derived_signal_info_s']]],
   ['stats_7',['stats',['../structgeopm__metric__stats__s.html#a7e404fa683edda68834d984cecfe1aab',1,'geopm_metric_stats_s']]],
   ['string_5fformat_8',['string_format',['../structgeopm_1_1signal__info__s.html#a1c89eb585cbaf5381966304fcabe9078',1,'geopm::signal_info_s']]],
-  ['subcommand_9',['subcommand',['../structgeopm_1_1sst__mbox__interface__s.html#a1a210ba819a735ac6e72fcfe12a3c9a0',1,'geopm::sst_mbox_interface_s']]]
+  ['subcommand_9',['subcommand',['../structgeopm_1_1sst__mbox__interface__s.html#a1a210ba819a735ac6e72fcfe12a3c9a0',1,'geopm::sst_mbox_interface_s']]],
+  ['sum_10',['sum',['../structgeopm_1_1_level_zero_imp_1_1m__subdevice__s_1_1m__metric__aggregate.html#aab24d2665577f4984cf52d7a8f99319f',1,'geopm::LevelZeroImp::m_subdevice_s::m_metric_aggregate']]]
 ];

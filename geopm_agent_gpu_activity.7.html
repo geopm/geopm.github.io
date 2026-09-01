@@ -189,7 +189,8 @@
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <p>The goal of <strong>GPUActivityAgent</strong> is to save GPU energy by scaling GPU frequency
 based upon the compute activity of each GPU as provided by the
-<code class="docutils literal notranslate"><span class="pre">GPU_CORE_ACTIVITY</span></code> signal and modified by the <code class="docutils literal notranslate"><span class="pre">GPU_UTILIZATION</span></code> signal.</p>
+<code class="docutils literal notranslate"><span class="pre">GPU_CORE_ACTIVITY</span></code> signal, modified by the <code class="docutils literal notranslate"><span class="pre">GPU_UTILIZATION</span></code> signal and,
+where available, discounted by the <code class="docutils literal notranslate"><span class="pre">LEVELZERO::METRIC:XVE_STALL</span></code> signal.</p>
 <p>The agent scales frequency in the range of <code class="docutils literal notranslate"><span class="pre">Fe</span></code> to <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>, where <code class="docutils literal notranslate"><span class="pre">Fmax</span></code>
 is provided by the NVMLIOGroup or LevelZeroIOGroup and <code class="docutils literal notranslate"><span class="pre">Fe</span></code> is provided by the
 ConstConfigIOGroup or LevelZeroIOGroup.</p>
@@ -197,8 +198,18 @@ ConstConfigIOGroup or LevelZeroIOGroup.</p>
 of 0.0) run at the <code class="docutils literal notranslate"><span class="pre">Fe</span></code> frequency, high activity regions (compute activity of 1.0)
 run at the <code class="docutils literal notranslate"><span class="pre">Fmax</span></code> frequency, and regions in between the extremes run at a frequency (F)
 selected using the equation:</p>
-<p><code class="docutils literal notranslate"><span class="pre">F</span> <span class="pre">=</span> <span class="pre">Fe</span> <span class="pre">+</span> <span class="pre">(Fmax</span> <span class="pre">-</span> <span class="pre">Fe)</span> <span class="pre">*</span> <span class="pre">GPU_CORE_ACTIVITY/GPU_UTILIZATION</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">GPU_UTILIZATION</span></code> is used to scale the <code class="docutils literal notranslate"><span class="pre">GPU_CORE_ACTIVITY</span></code> in order
+<p><code class="docutils literal notranslate"><span class="pre">F</span> <span class="pre">=</span> <span class="pre">Fe</span> <span class="pre">+</span> <span class="pre">(Fmax</span> <span class="pre">-</span> <span class="pre">Fe)</span> <span class="pre">*</span> <span class="pre">A/GPU_UTILIZATION</span></code></p>
+<p>where <code class="docutils literal notranslate"><span class="pre">A</span></code> is the compute activity used for the frequency decision.  On systems
+that expose the Level Zero <code class="docutils literal notranslate"><span class="pre">LEVELZERO::METRIC:XVE_STALL</span></code> metric (a stall ratio
+in the range 0.0 to 1.0), the raw <code class="docutils literal notranslate"><span class="pre">GPU_CORE_ACTIVITY</span></code> is discounted by the
+stall ratio so that stalled cycles do not drive frequency up:</p>
+<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">GPU_CORE_ACTIVITY</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">-</span> <span class="pre">XVE_STALL)</span></code></p>
+<p>When <code class="docutils literal notranslate"><span class="pre">XVE_STALL</span></code> is not available (for example on NVIDIA systems, or when the
+Level Zero metrics are not exposed) the agent falls back to the raw activity,
+<code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">GPU_CORE_ACTIVITY</span></code>.  The stall adjustment only affects the frequency
+decision; the region and on-time tracking always use the raw
+<code class="docutils literal notranslate"><span class="pre">GPU_CORE_ACTIVITY</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GPU_UTILIZATION</span></code> is used to scale <code class="docutils literal notranslate"><span class="pre">A</span></code> in order
 to scale frequency selection with the percentage of time a kernel is running on
 the GPU.  This tends to help with workloads that contain short but highly
 scalable GPU phases.</p>
