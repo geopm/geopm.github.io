@@ -46,6 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Guide</a></li>
@@ -285,6 +286,20 @@ auto-detected value, for example <code class="docutils literal notranslate"><spa
 in the control’s canonical unit (Hz for frequency, W for power). The
 <code class="docutils literal notranslate"><span class="pre">prefetch</span></code> control takes non-negative integer levels and rejects unit
 suffixes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> sweep the auto-detected maximum is
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STICKER</span></code> (the base/nominal frequency), not the turbo
+maximum. Above the sticker frequency <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX_CONTROL</span></code> is
+only an upper bound the hardware need not honor, so multiple requests
+can resolve to the same achieved frequency. Override the range
+explicitly (for example <code class="docutils literal notranslate"><span class="pre">=:3.7GHz</span></code>) to search into the turbo region.
+Whenever <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> is swept the generated configuration also forces
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_GOVERNOR_CONTROL</span> <span class="pre">board</span> <span class="pre">0</span> <span class="pre">0</span></code> (the <code class="docutils literal notranslate"><span class="pre">performance</span></code>
+governor), because <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX_CONTROL</span></code> is only a cap under
+other governors. This governor line is emitted first in every generated
+configuration and is applied by <code class="docutils literal notranslate"><span class="pre">--write</span></code>.</p>
+</div>
 </dd>
 <dt><kbd><span class="option">--list-controls</span></kbd></dt>
 <dd><p id="list-controls-option">Print a table of the available control names, their native domain, units,
@@ -345,12 +360,14 @@ through 27.</p>
 <h3>Generating configuration commands<a class="headerlink" href="#generating-configuration-commands" title="Link to this heading"></a></h3>
 <p>Generate geopmwrite commands for a specific grid point:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmgrid<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@package<span class="w"> </span>--coordinate<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">15</span>
+<span class="go">CPU_FREQUENCY_GOVERNOR_CONTROL board 0 0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL package 0 2000000000.0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL package 1 2500000000.0</span>
 </pre></div>
 </div>
 <p>This generates a <code class="docutils literal notranslate"><span class="pre">geopmwrite(1)</span></code> configuration file that sets package 0 to 2 GHz
-and package 1 to 2.5 GHz.</p>
+and package 1 to 2.5 GHz. The leading <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_GOVERNOR_CONTROL</span> <span class="pre">board</span> <span class="pre">0</span> <span class="pre">0</span></code>
+line forces the <code class="docutils literal notranslate"><span class="pre">performance</span></code> governor so the requested frequencies take effect.</p>
 </section>
 <section id="multi-dimensional-grid-exploration">
 <h3>Multi-dimensional grid exploration<a class="headerlink" href="#multi-dimensional-grid-exploration" title="Link to this heading"></a></h3>
@@ -359,6 +376,7 @@ and package 1 to 2.5 GHz.</p>
 <span class="go">28 28 155 155</span>
 
 <span class="gp">$ </span>geopmgrid<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@package<span class="w"> </span>--sweep<span class="w"> </span>cpu-power@package<span class="w"> </span>--coordinate<span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="m">17</span><span class="w"> </span><span class="m">125</span><span class="w"> </span><span class="m">101</span>
+<span class="go">CPU_FREQUENCY_GOVERNOR_CONTROL board 0 0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL package 0 2200000000.0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL package 1 2700000000.0</span>
 <span class="go">CPU_POWER_LIMIT_CONTROL package 0 271.0</span>
@@ -373,6 +391,7 @@ and generates commands for coordinate (12, 17, 125, 101).</p>
 <p>Store coordinates in a file for repeated use:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">18</span><span class="w"> </span><span class="m">14</span><span class="w"> </span><span class="m">122</span><span class="w"> </span><span class="m">96</span><span class="w"> </span>&gt;<span class="w"> </span>my_config.coord
 <span class="gp">$ </span>geopmgrid<span class="w"> </span>--sweep<span class="w"> </span>cpu-freq@package<span class="w"> </span>--sweep<span class="w"> </span>cpu-power@package<span class="w"> </span>--coordinate-file<span class="w"> </span>my_config.coord
+<span class="go">CPU_FREQUENCY_GOVERNOR_CONTROL board 0 0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL package 0 2800000000.0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL package 1 2400000000.0</span>
 <span class="go">CPU_POWER_LIMIT_CONTROL package 0 268.0</span>
@@ -446,9 +465,16 @@ configurations for comprehensive system optimization.</p>
 <p>The tool automatically determines parameter ranges using the GEOPM PIO interface:</p>
 <p><strong>Minimum Values:</strong> Read from <code class="docutils literal notranslate"><span class="pre">*_MIN_AVAIL</span></code> signals where available,
 otherwise use safe default values.</p>
-<p><strong>Maximum Values:</strong> Read from <code class="docutils literal notranslate"><span class="pre">*_MAX_AVAIL</span></code> signals or current limit controls.</p>
+<p><strong>Maximum Values:</strong> Read from <code class="docutils literal notranslate"><span class="pre">*_MAX_AVAIL</span></code> signals or current limit controls.
+For <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> the default maximum is <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STICKER</span></code> (the base
+frequency) rather than the turbo maximum; pass an explicit <code class="docutils literal notranslate"><span class="pre">=MIN:MAX:STEP</span></code>
+range to sweep into the turbo region.</p>
 <p><strong>Step Sizes:</strong> Read from <code class="docutils literal notranslate"><span class="pre">*_STEP</span></code> signals or use appropriate defaults
 based on control type.</p>
+<p><strong>Performance governor:</strong> When a <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> dimension is present, the
+generated configuration prepends <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_GOVERNOR_CONTROL</span> <span class="pre">board</span> <span class="pre">0</span> <span class="pre">0</span></code> so
+that the requested frequency is honored rather than treated as a cap under
+another governor.</p>
 <p>The grid covers the full available range with uniform step sizes, ensuring
 all generated coordinates correspond to valid hardware settings.</p>
 </section>

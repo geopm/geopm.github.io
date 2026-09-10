@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concepts &mdash; GEOPM  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/colon_scheme_fix.js?v=ca089989"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Getting Started" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEOPM
+              <img src="https://geopm.github.io/images/geopm-logo-clear.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#signal">Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#control">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#domain">Domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#session">Session</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#privileged-and-unprivileged-writes">Privileged and unprivileged writes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#access-list">Access list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#putting-it-together">Putting it together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guides.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devel.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEOPM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Concepts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/concepts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="concepts">
+<h1>Concepts<a class="headerlink" href="#concepts" title="Link to this heading"></a></h1>
+<p>The vocabulary used throughout the GEOPM documentation and command line tools.
+Everything else in these guides builds on the five ideas below, so this page is
+the right place to start if you have not used GEOPM before.</p>
+<section id="signal">
+<h2>Signal<a class="headerlink" href="#signal" title="Link to this heading"></a></h2>
+<p>A <strong>signal</strong> is something GEOPM can read: a measurement or a status value
+reported by the platform. Examples are <code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code> (Watts), <code class="docutils literal notranslate"><span class="pre">CPU_ENERGY</span></code>
+(Joules), <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STATUS</span></code> (Hz), and <code class="docutils literal notranslate"><span class="pre">TIME</span></code> (seconds).</p>
+<p>Signal names are the stable public interface to the platform. The same name
+means the same thing on every system GEOPM supports, even when the underlying
+mechanism differs between vendors or hardware generations.</p>
+<p>List every signal your platform provides, with a description of each:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmread<span class="w"> </span>--info-all
+</pre></div>
+</div>
+</section>
+<section id="control">
+<h2>Control<a class="headerlink" href="#control" title="Link to this heading"></a></h2>
+<p>A <strong>control</strong> is something GEOPM can write: a hardware setting that changes how
+the platform behaves. Examples are <code class="docutils literal notranslate"><span class="pre">CPU_POWER_LIMIT_CONTROL</span></code> (a package power
+cap in Watts) and <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX_CONTROL</span></code> (a maximum core frequency in
+Hz).</p>
+<p>Every control is also readable, so you can always ask what a setting currently
+is before changing it. Controls are generally exposed as a signal of the same
+name, which is why <code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">CPU_POWER_LIMIT_CONTROL</span> <span class="pre">package</span> <span class="pre">0</span></code> works. List
+the controls available to you:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geopmwrite<span class="w"> </span>--info-all
+</pre></div>
+</div>
+<p>Not every signal has a matching control. Reading <code class="docutils literal notranslate"><span class="pre">CPU_POWER</span></code> tells you what
+the processor is consuming; it does not imply you can set the power consumption
+directly.</p>
+</section>
+<section id="domain">
+<h2>Domain<a class="headerlink" href="#domain" title="Link to this heading"></a></h2>
+<p>Hardware settings and measurements apply at different scopes. GEOPM calls these
+scopes <strong>domains</strong>, and arranges them in a hierarchy: <code class="docutils literal notranslate"><span class="pre">board</span></code> contains
+<code class="docutils literal notranslate"><span class="pre">package</span></code>, a package contains <code class="docutils literal notranslate"><span class="pre">core</span></code>, a core contains <code class="docutils literal notranslate"><span class="pre">cpu</span></code>, and so on.
+Other domain types include <code class="docutils literal notranslate"><span class="pre">memory</span></code>, <code class="docutils literal notranslate"><span class="pre">gpu</span></code>, and <code class="docutils literal notranslate"><span class="pre">nic</span></code>.</p>
+<p>Every read and write names both a <strong>domain type</strong> and a <strong>domain index</strong>. The
+index selects which instance of that domain type you mean — <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">0</span></code> is the
+first processor socket, <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">1</span></code> the second.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Power for the whole board</span>
+geopmread<span class="w"> </span>CPU_POWER<span class="w"> </span>board<span class="w"> </span><span class="m">0</span>
+
+<span class="c1"># Frequency of the first socket only</span>
+geopmread<span class="w"> </span>CPU_FREQUENCY_STATUS<span class="w"> </span>package<span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<p>Each signal and control has a <strong>native domain</strong>: the finest scope at which the
+hardware actually implements it. Requesting a coarser domain aggregates the
+underlying values, using an aggregation function appropriate to the signal
+(power sums, frequency averages). Requesting a finer domain than the native one
+is an error.</p>
+<p>Two wildcards are accepted in the tools that take request lines, such as
+<a class="reference internal" href="geopmsession.1.html"><span class="doc">geopmsession(1)</span></a>. A <code class="docutils literal notranslate"><span class="pre">*</span></code> in the domain-type field means
+“use this signal’s native domain”, and a <code class="docutils literal notranslate"><span class="pre">*</span></code> in the domain-index field means
+“every index of that domain”.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Energy for every package on the system</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;CPU_ENERGY package *&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession
+</pre></div>
+</div>
+<p>For the full list of domain types and how they nest, see
+<a class="reference internal" href="geopm_topo.3.html#domain-types"><span class="std std-ref">Domain Types</span></a>. To inspect your own machine’s topology, run
+<code class="docutils literal notranslate"><span class="pre">geopmread</span> <span class="pre">--domain</span></code>.</p>
+</section>
+<section id="session">
+<h2>Session<a class="headerlink" href="#session" title="Link to this heading"></a></h2>
+<p>A <strong>session</strong> is the lifetime of your connection to the GEOPM Access Service.
+It opens when a GEOPM tool first contacts the service and closes when your
+process ends.</p>
+<p>Sessions are what make GEOPM safe for unprivileged users. The first time a
+session writes a control, the service records the previous value. When the
+session closes — normally, or because the process was killed, or because the
+shell exited — the service <strong>restores every control that session changed</strong>.</p>
+<p>This means a tuning experiment cannot permanently misconfigure the machine, and
+an interrupted run leaves nothing behind to clean up. It also means a setting
+you apply with <a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a> will not outlive the command
+unless you keep a session open, for example with
+<code class="docutils literal notranslate"><span class="pre">geopmsession</span> <span class="pre">--control-config</span></code>.</p>
+<section id="privileged-and-unprivileged-writes">
+<h3>Privileged and unprivileged writes<a class="headerlink" href="#privileged-and-unprivileged-writes" title="Link to this heading"></a></h3>
+<p>The save/restore guarantee is a property of the Access Service, so it applies
+only to writes that pass <strong>through</strong> the service. Whether a given write does
+depends on the privilege of the writer:</p>
+<ul class="simple">
+<li><p>An <strong>unprivileged</strong> user cannot reach the hardware directly. GEOPM routes
+every read and write through <code class="docutils literal notranslate"><span class="pre">geopmd</span></code>, opening a session on first contact,
+records each control the session writes, and restores it when the session
+ends. This is the safe, and usual, way to run an experiment.</p></li>
+<li><p>A <strong>privileged</strong> writer (<code class="docutils literal notranslate"><span class="pre">root</span></code>, or any process holding <code class="docutils literal notranslate"><span class="pre">CAP_SYS_ADMIN</span></code>)
+is given the direct hardware interfaces instead, and the service-backed layer
+that would open a session is not loaded at all. Writes go straight to the MSR
+or sysfs attribute: they take effect immediately, outlive the command, and
+are <strong>not</strong> restored. A <code class="docutils literal notranslate"><span class="pre">root</span></code> <code class="docutils literal notranslate"><span class="pre">geopmwrite</span></code> leaves the setting in place
+until something changes it back.</p></li>
+</ul>
+<p>Two consequences follow. First, the <code class="docutils literal notranslate"><span class="pre">SERVICE::</span></code> name prefix, which selects
+the service-backed interface explicitly, is only available to an unprivileged
+process; under <code class="docutils literal notranslate"><span class="pre">root</span></code> those names do not resolve, because that layer was
+never loaded. Second, if you want a change reverted automatically, make it as
+an unprivileged user that has been granted the control rather than as <code class="docutils literal notranslate"><span class="pre">root</span></code>.
+Write as <code class="docutils literal notranslate"><span class="pre">root</span></code> only when you intend a change to persist, and then save and
+restore the prior value yourself.</p>
+</section>
+</section>
+<section id="access-list">
+<h2>Access list<a class="headerlink" href="#access-list" title="Link to this heading"></a></h2>
+<p>By default an ordinary user may read and write nothing. An administrator uses
+<a class="reference internal" href="geopmaccess.1.html"><span class="doc">geopmaccess(1)</span></a> to grant access to specific signals and
+controls, either as a system-wide default or per user and per group.</p>
+<p>The practical consequence: a command that fails with a permission error is
+usually missing an access-list entry rather than encountering a bug. Check what
+you have been granted with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Signals and controls available to you</span>
+geopmaccess
+geopmaccess<span class="w"> </span>--controls
+</pre></div>
+</div>
+<p>An administrator can see everything the platform is capable of, whether or not
+it has been granted, by adding <code class="docutils literal notranslate"><span class="pre">--all</span></code>.</p>
+</section>
+<section id="putting-it-together">
+<h2>Putting it together<a class="headerlink" href="#putting-it-together" title="Link to this heading"></a></h2>
+<p>A short worked example that uses all five ideas — read a signal at a domain,
+change a control, and let the session revert it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># What is the current package power cap?</span>
+geopmread<span class="w"> </span>CPU_POWER_LIMIT_CONTROL<span class="w"> </span>package<span class="w"> </span><span class="m">0</span>
+
+<span class="c1"># Trace board power once per second for ten seconds</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;TIME board 0\nCPU_POWER board 0\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>geopmsession<span class="w"> </span>-p<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span>-t<span class="w"> </span><span class="m">10</span>.0
+
+<span class="c1"># Apply a 200 W cap to package 0 for the duration of a run,</span>
+<span class="c1"># reverted automatically when the session ends</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;CPU_POWER_LIMIT_CONTROL package 0 200&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>cap.conf
+geopmsession<span class="w"> </span>-c<span class="w"> </span>cap.conf<span class="w"> </span>--<span class="w"> </span>./my_workload.sh
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="geopm.7.html"><span class="doc">geopm(7)</span></a>,
+<a class="reference internal" href="geopm_pio.7.html"><span class="doc">geopm_pio(7)</span></a>,
+<a class="reference internal" href="geopm_topo.3.html"><span class="doc">geopm_topo(3)</span></a>,
+<a class="reference internal" href="geopmread.1.html"><span class="doc">geopmread(1)</span></a>,
+<a class="reference internal" href="geopmwrite.1.html"><span class="doc">geopmwrite(1)</span></a>,
+<a class="reference internal" href="geopmsession.1.html"><span class="doc">geopmsession(1)</span></a>,
+<a class="reference internal" href="geopmaccess.1.html"><span class="doc">geopmaccess(1)</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015 - 2025 Intel Corporation. All rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

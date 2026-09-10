@@ -46,6 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Guide</a></li>
@@ -327,6 +328,20 @@ and may be left empty to keep its auto-detected value, for example
 in the control’s canonical unit (Hz for frequency, W for power). The
 <code class="docutils literal notranslate"><span class="pre">prefetch</span></code> control takes non-negative integer levels and rejects unit
 suffixes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> sweep the auto-detected maximum is
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STICKER</span></code> (the base/nominal frequency), not the turbo
+maximum. Above the sticker frequency <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_MAX_CONTROL</span></code> is
+only an upper bound the hardware need not honor, so distinct candidates
+can resolve to the same achieved frequency and waste trials. Pass an
+explicit range (for example <code class="docutils literal notranslate"><span class="pre">cpu-freq&#64;board=:3.7GHz</span></code>) to search into
+the turbo region. Whenever <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> is optimized the configuration
+applied for each trial, and the best configuration reported and saved,
+forces <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_GOVERNOR_CONTROL</span> <span class="pre">board</span> <span class="pre">0</span> <span class="pre">0</span></code> (the <code class="docutils literal notranslate"><span class="pre">performance</span></code>
+governor) so the requested frequency is honored rather than treated as a
+cap under another governor.</p>
+</div>
 </dd>
 <dt><kbd><span class="option">--list-controls</span></kbd></dt>
 <dd><p id="list-controls-option">Print a table of the available control names, their native domain, units,
@@ -479,7 +494,10 @@ node) are shown as <code class="docutils literal notranslate"><span class="pre">
 <dt><kbd><span class="option">--output-file <var>OUTPUT_FILE</var></span></kbd></dt>
 <dd><p id="output-file-option">Write the best configuration to a file in geopmwrite format. Use ‘-’ for
 stdout (default). The configuration can be applied later with
-<code class="docutils literal notranslate"><span class="pre">geopmwrite</span> <span class="pre">--config</span></code> or through <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span> <span class="pre">--geopm-init-control</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">geopmwrite</span> <span class="pre">--config</span></code> or through <code class="docutils literal notranslate"><span class="pre">geopmlaunch</span> <span class="pre">--geopm-init-control</span></code>.
+For a <code class="docutils literal notranslate"><span class="pre">cpu-freq</span></code> sweep the file begins with
+<code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_GOVERNOR_CONTROL</span> <span class="pre">board</span> <span class="pre">0</span> <span class="pre">0</span></code> so that reapplying it restores
+the <code class="docutils literal notranslate"><span class="pre">performance</span></code> governor and the recorded frequency takes effect.</p>
 </dd>
 </dl>
 <p>–verbosity {0,1,2,3}  .. _verbosity option:</p>
@@ -544,6 +562,7 @@ need not print a figure of merit:</p>
 <span class="go">INFO: Best coordinate: [18]</span>
 <span class="go">INFO: Number of evaluations: 30</span>
 <span class="go">Best configuration:</span>
+<span class="go">CPU_FREQUENCY_GOVERNOR_CONTROL board 0 0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL board 0 2800000000.0</span>
 </pre></div>
 </div>
@@ -568,12 +587,16 @@ minimizing runtime, and the best configuration is written to a file for reuse:</
 <span class="go">INFO: Best coordinate: [27, 14, 154]</span>
 <span class="go">INFO: Number of evaluations: 30</span>
 <span class="go">Best configuration:</span>
+<span class="go">CPU_FREQUENCY_GOVERNOR_CONTROL board 0 0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL board 0 3700000000.0</span>
 <span class="go">CPU_UNCORE_FREQUENCY_MAX_CONTROL board 0 2400000000.0</span>
 <span class="go">CPU_UNCORE_FREQUENCY_MIN_CONTROL board 0 2400000000.0</span>
 <span class="go">CPU_POWER_LIMIT_CONTROL board 0 300.0</span>
 </pre></div>
 </div>
+<p>(The 3.7 GHz maximum above assumes the frequency dimension was swept into the
+turbo region with an explicit range such as <code class="docutils literal notranslate"><span class="pre">cpu-freq&#64;board=:3.7GHz</span></code>; with the
+default range the ceiling is the <code class="docutils literal notranslate"><span class="pre">CPU_FREQUENCY_STICKER</span></code> base frequency.)</p>
 <p>Apply the saved configuration to the current session at any time with:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>geopmwrite<span class="w"> </span>-f<span class="w"> </span>best_config.txt
 </pre></div>
