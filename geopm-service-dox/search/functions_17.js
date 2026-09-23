@@ -94,5 +94,6 @@ var searchData=
   ['_7etimeiogroup_91',['~TimeIOGroup',['../classgeopm_1_1_time_i_o_group.html#ac524e94e110ddab811cc5eeab271564c',1,'geopm::TimeIOGroup']]],
   ['_7etimesignal_92',['~TimeSignal',['../classgeopm_1_1_time_signal.html#ad6119793d8937b869b598b5f2c36e158',1,'geopm::TimeSignal']]],
   ['_7etimezero_93',['~TimeZero',['../classgeopm_1_1_time_zero.html#ac79fb6b607ac9d5c4bb520607594a1ab',1,'geopm::TimeZero']]],
-  ['_7euniquefd_94',['~UniqueFd',['../classgeopm_1_1_unique_fd.html#a09652e72f4369ead751555256f565844',1,'geopm::UniqueFd']]]
+  ['_7euncorefreqsysfsdriver_94',['~UncoreFreqSysfsDriver',['../classgeopm_1_1_uncore_freq_sysfs_driver.html#a852f4a509b98ecf315406bed02acc803',1,'geopm::UncoreFreqSysfsDriver']]],
+  ['_7euniquefd_95',['~UniqueFd',['../classgeopm_1_1_unique_fd.html#a09652e72f4369ead751555256f565844',1,'geopm::UniqueFd']]]
 ];

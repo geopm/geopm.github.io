@@ -68,9 +68,10 @@ var searchData=
   ['get_5fsd_5fptr_65',['get_sd_ptr',['../classgeopm_1_1_s_d_bus_message_imp.html#a5b97895c7d075a496294fddb701fd145',1,'geopm::SDBusMessageImp::get_sd_ptr()'],['../classgeopm_1_1_s_d_bus_message.html#a657bb70de0166fd45230f2d8dc304662',1,'geopm::SDBusMessage::get_sd_ptr()']]],
   ['get_5fsignal_5fshmem_5fkey_66',['get_signal_shmem_key',['../classgeopm_1_1_batch_server.html#a78f0f92488f93eb07c877aab960c09c6',1,'geopm::BatchServer']]],
   ['get_5fsqe_5for_5fthrow_67',['get_sqe_or_throw',['../classgeopm_1_1_i_o_uring_imp.html#a69b8becb4ee09b2a398faa1e6367b5c1',1,'geopm::IOUringImp']]],
-  ['gpu_5ftopo_68',['gpu_topo',['../namespacegeopm.html#a501e4b3a773d3f11bed433614a1584a8',1,'geopm']]],
-  ['gputopo_69',['GPUTopo',['../classgeopm_1_1_g_p_u_topo.html#a8aedf798ac6fdb9e23dadb3c77201629',1,'geopm::GPUTopo']]],
-  ['gputoponull_70',['GPUTopoNull',['../classgeopm_1_1_g_p_u_topo_null.html#aca2517518e096ea818fefbea6fa029b3',1,'geopm::GPUTopoNull']]],
-  ['grpcserviceproxy_71',['GRPCServiceProxy',['../classgeopm_1_1_g_r_p_c_service_proxy.html#ad038530c0de1795f465cadc2657b19cc',1,'geopm::GRPCServiceProxy']]],
-  ['gt_5fpath_72',['gt_path',['../classgeopm_1_1_drm_gpu_topo.html#aac99a31967391357d1c03e27f5e2c2d3',1,'geopm::DrmGpuTopo']]]
+  ['gnr_5fmsr_5fjson_68',['gnr_msr_json',['../namespacegeopm.html#af3c71f78f4f571ad847d980ce3d3433b',1,'geopm']]],
+  ['gpu_5ftopo_69',['gpu_topo',['../namespacegeopm.html#a501e4b3a773d3f11bed433614a1584a8',1,'geopm']]],
+  ['gputopo_70',['GPUTopo',['../classgeopm_1_1_g_p_u_topo.html#a8aedf798ac6fdb9e23dadb3c77201629',1,'geopm::GPUTopo']]],
+  ['gputoponull_71',['GPUTopoNull',['../classgeopm_1_1_g_p_u_topo_null.html#aca2517518e096ea818fefbea6fa029b3',1,'geopm::GPUTopoNull']]],
+  ['grpcserviceproxy_72',['GRPCServiceProxy',['../classgeopm_1_1_g_r_p_c_service_proxy.html#ad038530c0de1795f465cadc2657b19cc',1,'geopm::GRPCServiceProxy']]],
+  ['gt_5fpath_73',['gt_path',['../classgeopm_1_1_drm_gpu_topo.html#aac99a31967391357d1c03e27f5e2c2d3',1,'geopm::DrmGpuTopo']]]
 ];
