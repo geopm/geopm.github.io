@@ -3,7 +3,7 @@ var searchData=
   ['geopm_0',['geopm',['../index.html',1,'geopm'],['../namespacegeopm.html',1,'geopm']]],
   ['geopm_20global_20extensible_20open_20power_20manager_1',['GEOPM - Global Extensible Open Power Manager',['../index.html#autotoc_md0',1,'']]],
   ['geopm_20install_20guide_2',['GEOPM Install Guide',['../index.html#autotoc_md4',1,'']]],
-  ['geopm_20versions_3',['Major GEOPM Versions',['../index.html#autotoc_md6',1,'']]],
+  ['geopm_20versions_3',['Major GEOPM Versions',['../index.html#autotoc_md7',1,'']]],
   ['geopm_2fjson11_2ehpp_4',['json11.hpp',['../geopm_2json11_8hpp.html',1,'']]],
   ['geopm_5faccess_2eh_5',['geopm_access.h',['../geopm__access_8h.html',1,'']]],
   ['geopm_5fallowlist_6',['geopm_allowlist',['../_m_s_r_i_o_group_8cpp.html#afc1d0a0c0d603ee185a53a76ae894eda',1,'MSRIOGroup.cpp']]],
@@ -199,5 +199,5 @@ var searchData=
   ['grpcserviceproxy_2ehpp_196',['GRPCServiceProxy.hpp',['../_g_r_p_c_service_proxy_8hpp.html',1,'']]],
   ['gt_5fpath_197',['gt_path',['../classgeopm_1_1_drm_gpu_topo.html#aac99a31967391357d1c03e27f5e2c2d3',1,'geopm::DrmGpuTopo']]],
   ['guide_198',['guide',['../index.html#autotoc_md3',1,'Examples from Getting Started Guide'],['../index.html#autotoc_md5',1,'Examples from Install Guide'],['../index.html#autotoc_md4',1,'GEOPM Install Guide'],['../index.html#autotoc_md2',1,'Getting Started Guide']]],
-  ['guide_20for_20contributors_199',['Guide for Contributors',['../index.html#autotoc_md8',1,'']]]
+  ['guide_20for_20contributors_199',['Guide for Contributors',['../index.html#autotoc_md9',1,'']]]
 ];

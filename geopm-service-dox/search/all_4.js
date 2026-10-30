@@ -21,7 +21,7 @@ var searchData=
   ['differencesignal_18',['differencesignal',['../classgeopm_1_1_difference_signal.html#adfe1357fa6f31865812b99b54f471d88',1,'geopm::DifferenceSignal::DifferenceSignal(const DifferenceSignal &amp;other)=delete'],['../classgeopm_1_1_difference_signal.html#aed12536b4df6ca8144c9ce91d10ebdc9',1,'geopm::DifferenceSignal::DifferenceSignal(std::shared_ptr&lt; Signal &gt; minuend, std::shared_ptr&lt; Signal &gt; subtrahend)'],['../classgeopm_1_1_difference_signal.html',1,'geopm::DifferenceSignal']]],
   ['differencesignal_2ecpp_19',['DifferenceSignal.cpp',['../_difference_signal_8cpp.html',1,'']]],
   ['differencesignal_2ehpp_20',['DifferenceSignal.hpp',['../_difference_signal_8hpp.html',1,'']]],
-  ['directories_21',['Repository Directories',['../index.html#autotoc_md7',1,'']]],
+  ['directories_21',['Repository Directories',['../index.html#autotoc_md8',1,'']]],
   ['dl_5fregistry_22',['dl_registry',['../classgeopm_1_1_d_l_registry.html#a08665b80d77896483c2e45274aeee80d',1,'geopm::DLRegistry']]],
   ['dlregistry_23',['dlregistry',['../classgeopm_1_1_d_l_registry.html',1,'geopm::DLRegistry'],['../classgeopm_1_1_d_l_registry.html#a874003e9c67e1b11f25119431de0df04',1,'geopm::DLRegistry::DLRegistry()']]],
   ['dmr_5fmsr_5fjson_24',['dmr_msr_json',['../namespacegeopm.html#a5e85cb50e675b01a2d3113c02c94acfb',1,'geopm']]],

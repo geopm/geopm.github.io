@@ -6,7 +6,7 @@ var searchData=
   ['geopm_3',['geopm',['../group__fortran.html',1,'Fortran interfaces for GEOPM'],['../index.html',1,'geopm'],['../namespacegeopm.html',1,'geopm']]],
   ['geopm_20global_20extensible_20open_20power_20manager_4',['GEOPM - Global Extensible Open Power Manager',['../index.html#autotoc_md0',1,'']]],
   ['geopm_20install_20guide_5',['GEOPM Install Guide',['../index.html#autotoc_md4',1,'']]],
-  ['geopm_20versions_6',['Major GEOPM Versions',['../index.html#autotoc_md6',1,'']]],
+  ['geopm_20versions_6',['Major GEOPM Versions',['../index.html#autotoc_md7',1,'']]],
   ['geopm_5fagent_2eh_7',['geopm_agent.h',['../geopm__agent_8h.html',1,'']]],
   ['geopm_5fagent_5fenforce_5fpolicy_8',['geopm_agent_enforce_policy',['../_controller_8cpp.html#a71319abb6603a777bb4fd5a7a2b2fc47',1,'geopm_agent_enforce_policy(void):&#160;Controller.cpp'],['../geopm__agent_8h.html#ad0732eaa497f7eec87dfd3c89ed59d6a',1,'geopm_agent_enforce_policy(void):&#160;Controller.cpp']]],
   ['geopm_5fagent_5fname_9',['geopm_agent_name',['../_agent_8cpp.html#adebe6e964ea6f9fbf99afb0d1f4cb78e',1,'geopm_agent_name(int agent_idx, size_t agent_name_max, char *agent_name):&#160;Agent.cpp'],['../geopm__agent_8h.html#a40d4f3e3e6ff2344ce7ad3df16407e1a',1,'geopm_agent_name(int agent_idx, size_t agent_name_max, char *agent_name):&#160;Agent.cpp']]],
@@ -156,5 +156,5 @@ var searchData=
   ['gpuactivityagent_2ecpp_153',['GPUActivityAgent.cpp',['../_g_p_u_activity_agent_8cpp.html',1,'']]],
   ['gpuactivityagent_2ehpp_154',['GPUActivityAgent.hpp',['../_g_p_u_activity_agent_8hpp.html',1,'']]],
   ['guide_155',['guide',['../index.html#autotoc_md3',1,'Examples from Getting Started Guide'],['../index.html#autotoc_md5',1,'Examples from Install Guide'],['../index.html#autotoc_md4',1,'GEOPM Install Guide'],['../index.html#autotoc_md2',1,'Getting Started Guide']]],
-  ['guide_20for_20contributors_156',['Guide for Contributors',['../index.html#autotoc_md8',1,'']]]
+  ['guide_20for_20contributors_156',['Guide for Contributors',['../index.html#autotoc_md9',1,'']]]
 ];

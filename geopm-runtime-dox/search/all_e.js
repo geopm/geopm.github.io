@@ -10,7 +10,7 @@ var searchData=
   ['omptimp_7',['omptimp',['../classgeopm_1_1_o_m_p_t_imp.html',1,'geopm::OMPTImp'],['../classgeopm_1_1_o_m_p_t_imp.html#a5d1bb952931d10b3c6037d4cf118e0c4',1,'geopm::OMPTImp::OMPTImp()'],['../classgeopm_1_1_o_m_p_t_imp.html#a59b0237647a003c4b44728f9260adf6b',1,'geopm::OMPTImp::OMPTImp(bool do_ompt)']]],
   ['open_8',['open',['../classgeopm_1_1_endpoint_imp.html#acaf1073210f1ebf47a3ea61c9f51df7c',1,'geopm::EndpointImp::open()'],['../classgeopm_1_1_endpoint.html#a27865754f9c451d7c46c520cdba73bf3',1,'geopm::Endpoint::open()']]],
   ['open_20power_20manager_9',['GEOPM - Global Extensible Open Power Manager',['../index.html#autotoc_md0',1,'']]],
-  ['operation_10',['STATE MACHINE OPERATION',['../classgeopm_1_1_edit_dist_epoch_record_filter.html#autotoc_md12',1,'']]],
+  ['operation_10',['STATE MACHINE OPERATION',['../classgeopm_1_1_edit_dist_epoch_record_filter.html#autotoc_md13',1,'']]],
   ['operator_28_29_11',['operator()',['../classgeopm_1_1_local_neural_net.html#afd350db72a0f8f8417a455c43d90c250',1,'geopm::LocalNeuralNet::operator()()'],['../classgeopm_1_1_dense_layer.html#afec8573029de337d90687a7add753b06',1,'geopm::DenseLayer::operator()()']]],
   ['operator_2a_12',['operator*',['../classgeopm_1_1_tensor_two_d.html#ab4d4d28a97ffd25bc0b0e8d9c1e386e5',1,'geopm::TensorTwoD::operator*()'],['../classgeopm_1_1_tensor_one_d.html#a949f878242d508aaae5f94c43d27212f',1,'geopm::TensorOneD::operator*(const TensorOneD &amp;other) const']]],
   ['operator_2b_13',['operator+',['../classgeopm_1_1_tensor_one_d.html#a517e2eeb1e5441107dd251ccc2d836c4',1,'geopm::TensorOneD']]],
