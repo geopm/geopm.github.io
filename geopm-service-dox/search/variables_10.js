@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['write_5fvalue_0',['write_value',['../structgeopm_1_1sst__mbox__interface__s.html#a16b312d2d8038708f0fa222cce1a174c',1,'geopm::sst_mbox_interface_s']]]
+  ['units_0',['units',['../structgeopm_1_1_sysfs_driver_1_1properties__s.html#ad96ceecef614cd610bf2e98134ba8678',1,'geopm::SysfsDriver::properties_s']]]
 ];
