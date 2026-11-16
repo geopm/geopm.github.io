@@ -356,11 +356,16 @@ whose range cannot be read on the current platform are shown as <code class="doc
 <dl class="option-list">
 <dt><kbd><span class="option">--trials <var>TRIALS</var></span></kbd></dt>
 <dd><p id="trials-option">Number of optimization iterations to perform. More trials generally lead to
-better results but take longer. Default: 50.</p>
+better results but take longer. When the grid has no more points than
+<code class="docutils literal notranslate"><span class="pre">TRIALS</span></code> (the product of the number of settings in each dimension),
+Bayesian optimization is skipped and each grid point is evaluated exactly
+once instead, so the run takes as many trials as the grid has points. A
+warning reports the switch. Default: 50.</p>
 </dd>
 <dt><kbd><span class="option">--n-initial-points <var>N_INITIAL_POINTS</var></span></kbd></dt>
 <dd><p id="n-initial-points-option">Number of random initial evaluations before starting Bayesian optimization.
-These provide initial data for the Gaussian Process model. Default: 10.</p>
+These provide initial data for the Gaussian Process model. Ignored when each
+grid point is evaluated (see <code class="docutils literal notranslate"><span class="pre">--trials</span></code>). Default: 10.</p>
 </dd>
 <dt><kbd><span class="option">--metric-regex <var>METRIC_REGEX</var></span></kbd></dt>
 <dd><p id="metric-regex-option">Python-style regular expression to extract the figure of merit from the
@@ -382,7 +387,9 @@ mutually exclusive with <code class="docutils literal notranslate"><span class="
 </div></blockquote>
 <dl class="option-list">
 <dt><kbd><span class="option">--random-seed <var>RANDOM_SEED</var></span></kbd></dt>
-<dd><p id="random-seed-option">Random seed for reproducible optimization results. Default: 42.</p>
+<dd><p id="random-seed-option">Random seed for reproducible optimization results. It also fixes the order
+in which grid points are evaluated when each point is evaluated once (see
+<code class="docutils literal notranslate"><span class="pre">--trials</span></code>). Default: 42.</p>
 </dd>
 <dt><kbd><span class="option">--application-timeout <var>APPLICATION_TIMEOUT</var></span></kbd></dt>
 <dd><p id="application-timeout-option">Timeout in seconds for application execution. Applications exceeding this
@@ -556,20 +563,22 @@ need not print a figure of merit:</p>
 <span class="w">           </span>--sweep<span class="w"> </span>cpu-freq@board<span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>--trials<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>--<span class="w"> </span>geopmbench<span class="w"> </span>geopmbench.conf
-<span class="go">INFO: Starting Bayesian optimization with 30 evaluations...</span>
-<span class="go">INFO: Evaluation 1: coordinate=[22], score=54.33</span>
-<span class="go">INFO: Evaluation 2: coordinate=[21], score=49.52</span>
+<span class="go">WARNING: Grid has 23 points, no more than --trials 30: skipping Bayesian optimization and evaluating each point once (23 trials)</span>
 <span class="go">...</span>
-<span class="go">INFO: Evaluation 30: coordinate=[18], score=45.81</span>
+<span class="go">INFO: Evaluation 18: coordinate=[18], score=45.81</span>
+<span class="go">...</span>
 <span class="go">INFO: Optimization completed!</span>
 <span class="go">INFO: Best metric: 45.81</span>
 <span class="go">INFO: Best coordinate: [18]</span>
-<span class="go">INFO: Number of evaluations: 30</span>
+<span class="go">INFO: Number of evaluations: 23</span>
 <span class="go">Best configuration:</span>
 <span class="go">CPU_FREQUENCY_GOVERNOR_CONTROL board 0 0</span>
 <span class="go">CPU_FREQUENCY_MAX_CONTROL board 0 2800000000.0</span>
 </pre></div>
 </div>
+<p>Here the frequency grid has 23 points, no more than <code class="docutils literal notranslate"><span class="pre">--trials</span></code>, so the tool
+evaluates each point once instead of running Bayesian optimization (see
+<code class="docutils literal notranslate"><span class="pre">--trials</span></code>).</p>
 </section>
 <section id="tune-several-controls-together">
 <h3>Tune several controls together<a class="headerlink" href="#tune-several-controls-together" title="Link to this heading"></a></h3>
@@ -996,6 +1005,11 @@ of uncertain regions with exploitation of promising areas.</p>
 configurations to evaluate next.</p>
 <p>This approach is much more efficient than grid search or random search,
 especially for expensive function evaluations.</p>
+<p><strong>Small grids:</strong> When the grid has no more points than <code class="docutils literal notranslate"><span class="pre">--trials</span></code>, no search
+can do better than evaluating every point, so the tool skips Bayesian
+optimization and evaluates each grid point exactly once, in a random order fixed
+by <code class="docutils literal notranslate"><span class="pre">--random-seed</span></code>. The run then takes as many trials as the grid has points,
+which can be fewer than <code class="docutils literal notranslate"><span class="pre">--trials</span></code>.</p>
 </section>
 <section id="error-handling">
 <h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
