@@ -2,7 +2,7 @@ var searchData=
 [
   ['platformio_0',['PlatformIO',['../classgeopm_1_1_platform_i_o.html',1,'geopm']]],
   ['platformioimp_1',['PlatformIOImp',['../classgeopm_1_1_platform_i_o_imp.html',1,'geopm']]],
-  ['platformtopo_2',['PlatformTopo',['../classgeopm_1_1_platform_topo.html',1,'geopm']]],
+  ['platformtopo_2',['PlatformTopo',['../classgeopm_1_1_platform_topo.html',1,'geopm::PlatformTopo'],['../class_platform_topo.html',1,'PlatformTopo']]],
   ['platformtopoimp_3',['PlatformTopoImp',['../classgeopm_1_1_platform_topo_imp.html',1,'geopm']]],
   ['pluginfactory_4',['PluginFactory',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
   ['pluginfactory_3c_20iogroup_20_3e_5',['PluginFactory&lt; IOGroup &gt;',['../classgeopm_1_1_plugin_factory.html',1,'geopm']]],
